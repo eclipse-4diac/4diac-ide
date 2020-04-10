@@ -41,7 +41,6 @@ public class VirtualDNSTagProvider implements ITagProvider {
 	/** The Constant ENCODING_UTF_8. */
 	private static final String ENCODING_UTF_8 = "UTF-8";//$NON-NLS-1$
 
-	
 	public VirtualDNSTagProvider() {
 		virtualResSet = new ResourceSetImpl();
 		virtualResSet.getAdapterFactories().add(new VirtualDNSAdapterFactory());
@@ -49,14 +48,11 @@ public class VirtualDNSTagProvider implements ITagProvider {
 		options.put(XMLResource.OPTION_ENCODING, ENCODING_UTF_8);
 		options.put(XMLResource.OPTION_DISABLE_NOTIFY, true);
 		// TODO check whether the following options are faster
-		options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED,
-				Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
-		options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF,
-				XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
+		options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
+		options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
 		// options.put(XMLResource.OPTION_ZIP, Boolean.TRUE)
 	}
 
-	
 	@Override
 	public boolean loadTagConfiguration(IPath loadPath) {
 		IPath path = loadPath.append(VIRTUAL_DNS_FILE_NAME);
@@ -104,18 +100,15 @@ public class VirtualDNSTagProvider implements ITagProvider {
 		return ok;
 	}
 
-
 	@Override
 	public Object getModelObject() {
 		return virtualDNSManagement;
 	}
 
-
 	@Override
 	public String getReplacedString(String value) {
 		return virtualDNSManagement.getReplacedString(value);
 	}
-
 
 	@Override
 	public void initialzeNewTagProvider() {

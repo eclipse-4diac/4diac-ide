@@ -31,12 +31,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
-
 public class Analyzer {
-	
+
 	private CommunicationModel communicationModel;
-	
-	public CommunicationModel analyze(Application application) {	
+
+	public CommunicationModel analyze(Application application) {
 		communicationModel = new CommunicationModel();
 		for (EventConnection connection : application.getFBNetwork().getEventConnections()) {
 			collectChannels(connection);
@@ -47,28 +46,28 @@ public class Analyzer {
 		collectMediaInformation();
 		return communicationModel;
 	}
-	
-	
+
 	public void collectChannels(Connection connection) {
-		if(connection.getSourceElement().isMapped() && connection.getDestinationElement().isMapped() &&
-				connection.getSourceElement().getResource() != connection.getDestinationElement().getResource()) {
-			//we only not to add this connection if both ends are mapped to two different resources		
-			
-			List<Event> sourceEvents = getSourceEvents(connection); 
+		if (connection.getSourceElement().isMapped() && connection.getDestinationElement().isMapped()
+				&& connection.getSourceElement().getResource() != connection.getDestinationElement().getResource()) {
+			// we only not to add this connection if both ends are mapped to two different
+			// resources
+
+			List<Event> sourceEvents = getSourceEvents(connection);
 			Resource sourceResource = connection.getSourceElement().getResource();
-			Resource destinationResource = connection.getDestinationElement().getResource();	
-			
+			Resource destinationResource = connection.getDestinationElement().getResource();
+
 			FBNetworkElement mappedElement = connection.getDestinationElement().getOpposite();
 			boolean local = sourceResource.getDevice() == destinationResource.getDevice();
-			
+
 			for (Event sourceEvent : sourceEvents) {
 				CommunicationChannel channel = getComChannel(local, sourceEvent, connection);
-				if(null != channel) {
+				if (null != channel) {
 					CommunicationChannelDestination destination = channel.getDestination(destinationResource);
-					
+
 					destination.getConnection().add(connection);
 					int portIndex = getPortIndex(connection, sourceEvent);
-					
+
 					List<IInterfaceElement> destinationPortList = destination.getDestinationPorts().get(portIndex);
 					if (null == destinationPortList) {
 						destinationPortList = new ArrayList<>();
@@ -80,9 +79,8 @@ public class Analyzer {
 		}
 	}
 
-
 	private static int getPortIndex(Connection connection, Event sourceEvent) {
-		int portIndex = -2;			
+		int portIndex = -2;
 		if (connection instanceof EventConnection) {
 			portIndex = -1;
 		} else if (connection instanceof DataConnection) {
@@ -97,61 +95,61 @@ public class Analyzer {
 		return portIndex;
 	}
 
-
 	private static List<Event> getSourceEvents(Connection connection) {
-		List<Event> sourceEvents =  new ArrayList<>();		
+		List<Event> sourceEvents = new ArrayList<>();
 		FBNetworkElement mappedElement = connection.getSourceElement().getOpposite();
 		if (connection instanceof EventConnection) {
 			sourceEvents.add((Event) mappedElement.getInterfaceElement(connection.getSource().getName()));
 		} else if (connection instanceof DataConnection) {
-			for (With with : ((VarDeclaration)connection.getSource()).getWiths()) {
+			for (With with : ((VarDeclaration) connection.getSource()).getWiths()) {
 				if (with.eContainer() instanceof Event) {
-					sourceEvents.add((Event) mappedElement.getInterfaceElement(((Event)with.eContainer()).getName()));
+					sourceEvents.add((Event) mappedElement.getInterfaceElement(((Event) with.eContainer()).getName()));
 				}
 			}
 		}
 		return sourceEvents;
 	}
 
-
 	private CommunicationChannel getComChannel(boolean local, Event sourceEvent, Connection connection) {
 		CommunicationChannel channel = communicationModel.getChannels().get(sourceEvent);
 		if (null == channel) {
-			if(connection instanceof EventConnection) {
-				//currently only add a channel if an event, data connection should attach to existing channels
+			if (connection instanceof EventConnection) {
+				// currently only add a channel if an event, data connection should attach to
+				// existing channels
 				channel = new CommunicationChannel();
 				channel.setSourceEvent(sourceEvent);
 				channel.setLocal(local);
 				communicationModel.getChannels().put(sourceEvent, channel);
 			}
 		} else if (!local) {
-			//force non local if needed
+			// force non local if needed
 			channel.setLocal(false);
 		}
 		return channel;
 	}
-	
+
 	private void collectMediaInformation() {
 		for (CommunicationChannel channel : communicationModel.getChannels().values()) {
 			collectMediaInformation(channel);
 		}
 	}
-	
+
 	private static void collectMediaInformation(CommunicationChannel channel) {
 		for (CommunicationChannelDestination destination : channel.getDestinations()) {
 			collectMediaInformation(destination);
 		}
 	}
-	
+
 	private static void collectMediaInformation(CommunicationChannelDestination destination) {
-		Device sourceDevice = (Device) destination.getCommunicationChannel().getSourceResource().eContainer();	
+		Device sourceDevice = (Device) destination.getCommunicationChannel().getSourceResource().eContainer();
 		Device destinationDevice = (Device) destination.getDestinationResource().eContainer();
 		for (Link sourceLink : sourceDevice.getInConnections()) {
 			for (Link destinationLink : destinationDevice.getInConnections()) {
 				if (sourceLink.getSegment() == destinationLink.getSegment()) {
-					destination.getAvailableMedia().add(new CommunicationMediaInfo(sourceLink, destinationLink, sourceLink.getSegment()));
+					destination.getAvailableMedia()
+							.add(new CommunicationMediaInfo(sourceLink, destinationLink, sourceLink.getSegment()));
 				}
 			}
-		}	
+		}
 	}
 }

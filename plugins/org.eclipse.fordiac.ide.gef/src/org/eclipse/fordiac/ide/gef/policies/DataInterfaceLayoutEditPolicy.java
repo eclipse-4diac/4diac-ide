@@ -32,12 +32,14 @@ public class DataInterfaceLayoutEditPolicy extends LayoutEditPolicy {
 
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
-		if ((getHost() instanceof InterfaceEditPart) && (!(request.getNewObjectType() instanceof ResourceTypeEntry))){
-			//TODO think of a better check that allows only appropriate request object types
+		if ((getHost() instanceof InterfaceEditPart) && (!(request.getNewObjectType() instanceof ResourceTypeEntry))) {
+			// TODO think of a better check that allows only appropriate request object
+			// types
 			InterfaceEditPart host = (InterfaceEditPart) getHost();
 			if ((host.getModel() instanceof VarDeclaration) && (!(host.getModel() instanceof AdapterDeclaration))) {
 				VarDeclaration v = (VarDeclaration) host.getModel();
-				return new ChangeValueCommand(v, request.getNewObject() != null ? request.getNewObject().toString():""); //$NON-NLS-1$
+				return new ChangeValueCommand(v,
+						request.getNewObject() != null ? request.getNewObject().toString() : ""); //$NON-NLS-1$
 			}
 		}
 		return null;

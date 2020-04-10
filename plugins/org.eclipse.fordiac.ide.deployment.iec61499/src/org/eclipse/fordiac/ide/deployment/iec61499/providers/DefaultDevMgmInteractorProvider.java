@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
 public class DefaultDevMgmInteractorProvider implements IDeviceManagementInteractorProvider {
 	private static final String PROFILE_NAME = "HOLOBLOC"; //$NON-NLS-1$
-	
+
 	@Override
 	public boolean supports(final String profile) {
 		return getProfileName().equals(profile);
@@ -32,7 +32,8 @@ public class DefaultDevMgmInteractorProvider implements IDeviceManagementInterac
 	}
 
 	@Override
-	public IDeviceManagementInteractor createInteractor(Device dev, IDeviceManagementCommunicationHandler overrideHandler) {
+	public IDeviceManagementInteractor createInteractor(Device dev,
+			IDeviceManagementCommunicationHandler overrideHandler) {
 		return new DeploymentExecutor(dev, overrideHandler);
 	}
 

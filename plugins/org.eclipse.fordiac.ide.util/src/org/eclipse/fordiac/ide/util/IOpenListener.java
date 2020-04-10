@@ -24,23 +24,28 @@ import org.eclipse.ui.IObjectActionDelegate;
  * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
  */
 public interface IOpenListener extends IObjectActionDelegate {
-	/** Gets the open listener action.
+	/**
+	 * Gets the open listener action.
 	 * 
 	 * @return the open listener action
 	 */
 	Action getOpenListenerAction();
-	
+
 	IEditorPart getOpenedEditor();
 
-	/** Get the Text to be printed in the Actions menu
+	/**
+	 * Get the Text to be printed in the Actions menu
 	 */
 	String getActionText();
 
-	/** Get the class this open listner handles
+	/**
+	 * Get the class this open listner handles
 	 */
 	Class<? extends I4DIACElement> getHandledClass();
 
-	/** Get the id of the open listener as it is registered in the plugin's extension point.
+	/**
+	 * Get the id of the open listener as it is registered in the plugin's extension
+	 * point.
 	 */
 	String getOpenListenerID();
 

@@ -32,12 +32,11 @@ public class MoveBendpointCommand extends Command {
 	private int oldX;
 	private int oldY;
 
-
 	/**
 	 * Instantiates a new move bendpoint command.
 	 * 
 	 * @param transition the transition
-	 * @param point the point
+	 * @param point      the point
 	 */
 	public MoveBendpointCommand(final ECTransition transition, final Point point) {
 		super();

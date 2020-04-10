@@ -44,84 +44,96 @@ public abstract class AbstractFBTypeRuntimeModule extends DefaultRuntimeModule {
 		properties = tryBindProperties(binder, "org/eclipse/fordiac/ide/model/xtext/fbt/FBType.properties");
 		super.configure(binder);
 	}
-	
+
 	public void configureLanguageName(Binder binder) {
-		binder.bind(String.class).annotatedWith(Names.named(Constants.LANGUAGE_NAME)).toInstance("org.eclipse.fordiac.ide.model.xtext.fbt.FBType");
+		binder.bind(String.class).annotatedWith(Names.named(Constants.LANGUAGE_NAME))
+				.toInstance("org.eclipse.fordiac.ide.model.xtext.fbt.FBType");
 	}
-	
+
 	public void configureFileExtensions(Binder binder) {
 		if (properties == null || properties.getProperty(Constants.FILE_EXTENSIONS) == null)
 			binder.bind(String.class).annotatedWith(Names.named(Constants.FILE_EXTENSIONS)).toInstance("xtextfbt");
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.grammarAccess.GrammarAccessFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.grammarAccess.GrammarAccessFragment2
 	public ClassLoader bindClassLoaderToInstance() {
 		return getClass().getClassLoader();
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.grammarAccess.GrammarAccessFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.grammarAccess.GrammarAccessFragment2
 	public Class<? extends IGrammarAccess> bindIGrammarAccess() {
 		return FBTypeGrammarAccess.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends IParser> bindIParser() {
 		return FBTypeParser.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	@Override
 	public Class<? extends ITokenToStringConverter> bindITokenToStringConverter() {
 		return AntlrTokenToStringConverter.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends IAntlrTokenFileProvider> bindIAntlrTokenFileProvider() {
 		return FBTypeAntlrTokenFileProvider.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends Lexer> bindLexer() {
 		return InternalFBTypeLexer.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	@Override
 	public Class<? extends ITokenDefProvider> bindITokenDefProvider() {
 		return AntlrTokenDefProvider.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Provider<? extends InternalFBTypeLexer> provideInternalFBTypeLexer() {
 		return LexerProvider.create(InternalFBTypeLexer.class);
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public void configureRuntimeLexer(Binder binder) {
-		binder.bind(Lexer.class)
-			.annotatedWith(Names.named(LexerBindings.RUNTIME))
-			.to(InternalFBTypeLexer.class);
+		binder.bind(Lexer.class).annotatedWith(Names.named(LexerBindings.RUNTIME)).to(InternalFBTypeLexer.class);
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends ITokenSerializer.IKeywordSerializer> bindITokenSerializer$IKeywordSerializer() {
 		return IgnoreCaseKeywordSerializer.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends IKeywordSerializer> bindIKeywordSerializer() {
 		return org.eclipse.xtext.serializer.tokens.IgnoreCaseKeywordSerializer.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends AbstractIDValueConverter> bindAbstractIDValueConverter() {
 		return IgnoreCaseIDValueConverter.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.exporting.SimpleNamesFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.exporting.SimpleNamesFragment2
 	@Override
 	public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
 		return SimpleNameProvider.class;
 	}
-	
+
 }

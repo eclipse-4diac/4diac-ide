@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
  * The Class ChangeCompilerInfoClassdef.
  */
 public class ChangeCompilerInfoClassdefCommand extends ChangeCompilerInfoCommand {
-	
+
 	/** The new ApplicationDomain value. */
 	private String newClassdef;
 

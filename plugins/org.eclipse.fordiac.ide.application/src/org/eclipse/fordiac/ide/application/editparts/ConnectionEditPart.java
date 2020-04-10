@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
- * 							 Johannes Kepler University
+ * 				 2018 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,8 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Gerd Kainz,
  *   Filip Pröstl-Andren
  *   - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - added separate colors for different data types
+ *               - fixed hide event and data connection issues
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -21,7 +23,7 @@ import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
 import org.eclipse.fordiac.ide.application.policies.ConnectionGraphicalNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
@@ -35,13 +37,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
-import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 
 public class ConnectionEditPart extends AbstractConnectionEditPart {
@@ -57,30 +58,27 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		return (Connection) super.getModel();
 	}
 
-	private final IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
-		@Override
-		public void propertyChange(PropertyChangeEvent event) {
-			if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
-					&& getModel() instanceof EventConnection) {
-				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
-			}
-			if (event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)
-					&& getModel() instanceof AdapterConnection) {
-				getFigure()
-						.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
-			}
-			if (event.getProperty().equals(PreferenceConstants.P_DATA_CONNECTOR_COLOR)
-					&& getModel() instanceof DataConnection) {
-				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_DATA_CONNECTOR_COLOR));
-			}
-			if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON)
-					&& getModel() instanceof DataConnection) {
-				getFigure().setVisible(!((Boolean) event.getNewValue()));
-			}
-			if (event.getProperty().equals(PreferenceConstants.P_HIDE_EVENT_CON)
-					&& getModel() instanceof EventConnection) {
-				getFigure().setVisible(!((Boolean) event.getNewValue()));
-			}
+	private final IPropertyChangeListener propertyChangeListener = event -> {
+		if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
+				&& (getModel() instanceof EventConnection)) {
+			getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
+		}
+		if (event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)
+				&& (getModel() instanceof AdapterConnection)) {
+			getFigure()
+					.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
+		}
+		if (PreferenceConstants.isDataConnectorProperty(event.getProperty())
+				&& (getModel() instanceof DataConnection)) {
+			getFigure().setForegroundColor(PreferenceGetter.getDataColor(getModel().getSource().getTypeName()));
+		}
+		if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON)
+				&& (getModel() instanceof DataConnection)) {
+			getFigure().setVisible(!((Boolean) event.getNewValue()));
+		}
+		if (event.getProperty().equals(PreferenceConstants.P_HIDE_EVENT_CON)
+				&& (getModel() instanceof EventConnection)) {
+			getFigure().setVisible(!((Boolean) event.getNewValue()));
 		}
 	};
 
@@ -109,8 +107,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 		String status = getModel().getAttributeValue(HIDEN_CON);
 		if (connection instanceof HideableConnection) {
-			((HideableConnection) connection).setHidden(status != null && status.equalsIgnoreCase(HIDDEN));
-			if (getModel() != null && getModel().getSourceElement() != null) {
+			((HideableConnection) connection).setHidden((status != null) && status.equalsIgnoreCase(HIDDEN));
+			if ((getModel() != null) && (getModel().getSourceElement() != null)) {
 				((HideableConnection) connection)
 						.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
 			}
@@ -122,14 +120,10 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		arrow.setScale(7, 4);
 		connection.setTargetDecoration(arrow);
 
-		PolygonDecoration arrow1 = new PolygonDecoration();
-		arrow1.setTemplate(PolygonDecoration.INVERTED_TRIANGLE_TIP);
-		arrow1.setScale(7, 4);
-		arrow1.setLocation(new org.eclipse.draw2d.geometry.Point(10, 10));
-		connection.setSourceDecoration(arrow1);
-
 		if (getModel() instanceof EventConnection) {
 			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
+			connection.setVisible(
+					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON));
 		}
 
 		if (getModel() instanceof AdapterConnection) {
@@ -140,7 +134,10 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		}
 
 		if (getModel() instanceof DataConnection) {
-			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_DATA_CONNECTOR_COLOR));
+			connection.setForegroundColor(PreferenceGetter.getDataColor(getModel().getSource().getTypeName()));
+			connection.setVisible(
+					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON));
+
 		}
 		connection.setToolTip(new ConnectionTooltipFigure(getModel()));
 		return connection;
@@ -164,16 +161,16 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+			UIPlugin.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 			getModel().eAdapters().add(getContentAdapter());
 		}
 	}
 
-	private EContentAdapter contentAdapter;
+	private Adapter contentAdapter;
 
 	private Adapter getContentAdapter() {
 		if (contentAdapter == null) {
-			contentAdapter = new EContentAdapter() {
+			contentAdapter = new AdapterImpl() {
 				@Override
 				public void notifyChanged(Notification notification) {
 					Object feature = notification.getFeature();
@@ -197,7 +194,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+			UIPlugin.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 			getModel().eAdapters().remove(getContentAdapter());
 		}
 	}

@@ -34,22 +34,20 @@ class EditorInput extends CompareEditorInput {
 	 * Instantiates a new editor input.
 	 * 
 	 * @param configuration the configuration
-	 * @param original the original
-	 * @param generated the generated
+	 * @param original      the original
+	 * @param generated     the generated
 	 */
-	public EditorInput(CompareConfiguration configuration, File original,
-			File generated) {
+	public EditorInput(CompareConfiguration configuration, File original, File generated) {
 		super(configuration);
 		this.original = original;
 		this.generated = generated;
 	}
 
 	@Override
-	protected Object prepareInput(IProgressMonitor monitor)
-			throws InvocationTargetException, InterruptedException {
+	protected Object prepareInput(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		Differencer d = new Differencer();
-		Object diff = d.findDifferences(false, new NullProgressMonitor(), null,
-				null, new Input(generated), new Input(original));
+		Object diff = d.findDifferences(false, new NullProgressMonitor(), null, null, new Input(generated),
+				new Input(original));
 
 		return diff;
 	}

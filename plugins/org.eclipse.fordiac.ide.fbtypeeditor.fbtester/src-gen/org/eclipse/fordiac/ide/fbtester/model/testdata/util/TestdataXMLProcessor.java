@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtester.model.testdata.util;
 
-
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EPackage;
@@ -23,27 +22,27 @@ import org.eclipse.fordiac.ide.fbtester.model.testdata.TestdataPackage;
 
 /**
  * This class contains helper methods to serialize and deserialize XML documents
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class TestdataXMLProcessor extends XMLProcessor {
 
 	/**
-	 * Public constructor to instantiate the helper.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Public constructor to instantiate the helper. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TestdataXMLProcessor() {
 		super((EPackage.Registry.INSTANCE));
 		TestdataPackage.eINSTANCE.eClass();
 	}
-	
+
 	/**
-	 * Register for "*" and "xml" file extensions the TestdataResourceFactoryImpl factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Register for "*" and "xml" file extensions the TestdataResourceFactoryImpl
+	 * factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -56,4 +55,4 @@ public class TestdataXMLProcessor extends XMLProcessor {
 		return registrations;
 	}
 
-} //TestdataXMLProcessor
+} // TestdataXMLProcessor

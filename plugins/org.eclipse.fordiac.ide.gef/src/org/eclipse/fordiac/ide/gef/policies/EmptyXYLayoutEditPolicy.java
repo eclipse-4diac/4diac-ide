@@ -21,7 +21,6 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.geometry.Transposer;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -30,14 +29,12 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * An non abstract ConstrainedLayoutEditPolicy.
  */
 public class EmptyXYLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	private static final Dimension DEFAULT_SIZE = new Dimension(-1, -1);
-
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
@@ -51,12 +48,8 @@ public class EmptyXYLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
-		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
-		if (cornerDim > 1) {
-			cornerDim = cornerDim / 2;
-		}
-		return new ModifiedNonResizeableEditPolicy(cornerDim, new Insets(1));
+
+		return new ModifiedNonResizeableEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1));
 	}
 
 	/**
@@ -85,22 +78,22 @@ public class EmptyXYLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		return new Rectangle(r);
 	}
 
-	protected EditPart getInsertionReference(Point mousePoint){
+	protected EditPart getInsertionReference(Point mousePoint) {
 		@SuppressWarnings("unchecked")
 		List<EditPart> children = getHost().getChildren();
-		if(!children.isEmpty()){
+		if (!children.isEmpty()) {
 			Transposer transposer = new Transposer();
 			transposer.setEnabled(false);
-			Point requestPoint = transposer.t(mousePoint);	
+			Point requestPoint = transposer.t(mousePoint);
 			Rectangle parentBoundCopy = ((AbstractGraphicalEditPart) getHost()).getFigure().getBounds().getCopy();
-			((AbstractGraphicalEditPart)getHost()).getFigure().translateToAbsolute(parentBoundCopy);
+			((AbstractGraphicalEditPart) getHost()).getFigure().translateToAbsolute(parentBoundCopy);
 			Rectangle parentBound = transposer.t(parentBoundCopy);
-			for(EditPart child : children){
-				Rectangle childBoundCopy = ((AbstractGraphicalEditPart)child).getFigure().getBounds().getCopy();
-				((AbstractGraphicalEditPart)child).getFigure().translateToAbsolute(childBoundCopy);
+			for (EditPart child : children) {
+				Rectangle childBoundCopy = ((AbstractGraphicalEditPart) child).getFigure().getBounds().getCopy();
+				((AbstractGraphicalEditPart) child).getFigure().translateToAbsolute(childBoundCopy);
 				Rectangle childBound = transposer.t(childBoundCopy);
-				if((requestPoint.y > parentBound.y) && (requestPoint.y <= childBound.bottom())){
-						return child;
+				if ((requestPoint.y > parentBound.y) && (requestPoint.y <= childBound.bottom())) {
+					return child;
 				}
 			}
 		}

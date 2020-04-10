@@ -53,7 +53,7 @@ public class WarningAnnotation extends Annotation {
 	 * @param text the text
 	 */
 	public WarningAnnotation(final int line, final String text) {
-		super("download_warning", true, null);
+		super("download_warning", true, null); //$NON-NLS-1$
 		this.marker = null;
 		this.line = line;
 		this.text = text;

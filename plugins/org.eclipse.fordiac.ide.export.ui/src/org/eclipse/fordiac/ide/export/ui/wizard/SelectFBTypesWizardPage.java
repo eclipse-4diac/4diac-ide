@@ -22,6 +22,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -42,26 +43,27 @@ import org.eclipse.ui.dialogs.WizardExportResourcesPage;
  */
 public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
+	private static final String NAME = "name"; //$NON-NLS-1$
+
+	private static final String SORT_INDEX = "sortIndex"; //$NON-NLS-1$
+
 	/** The dcc. */
 	private Combo destinationNameField;
 
 	/** The overwrite. */
 	private Button overwrite;
-	
-    // dialog store id constants
-    private static final String STORE_DIRECTORY_NAMES_ID = "SelectFBTypesWizardPage.STORE_DIRECTORY_NAMES_ID"; //$NON-NLS-1$
 
-    private static final String STORE_CURRENT_FILTER_SELECTION_ID = "SelectFBTypesWizardPage.STORE_CURRENT_FILTER_SELECTION_ID"; //$NON-NLS-1$
+	// dialog store id constants
+	private static final String STORE_DIRECTORY_NAMES_ID = "SelectFBTypesWizardPage.STORE_DIRECTORY_NAMES_ID"; //$NON-NLS-1$
 
+	private static final String STORE_CURRENT_FILTER_SELECTION_ID = "SelectFBTypesWizardPage.STORE_CURRENT_FILTER_SELECTION_ID"; //$NON-NLS-1$
 
 	/**
 	 * Instantiates a new SelectFBTypesWizardPage.
 	 * 
-	 * @param pageName
-	 *            the page name
+	 * @param pageName the page name
 	 */
-	protected SelectFBTypesWizardPage(final String pageName,
-			IStructuredSelection selection) {
+	protected SelectFBTypesWizardPage(final String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
 	}
 
@@ -78,13 +80,13 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 			public int compare(IConfigurationElement o1, IConfigurationElement o2) {
 				int sortIndex1 = 0;
 				try {
-					sortIndex1 = Integer.parseInt(o1.getAttribute("sortIndex"));
-				} catch(NumberFormatException e) {
+					sortIndex1 = Integer.parseInt(o1.getAttribute(SORT_INDEX));
+				} catch (NumberFormatException e) {
 				}
 				int sortIndex2 = 0;
 				try {
-					sortIndex2 = Integer.parseInt(o2.getAttribute("sortIndex"));
-				} catch(NumberFormatException e) {
+					sortIndex2 = Integer.parseInt(o2.getAttribute(SORT_INDEX));
+				} catch (NumberFormatException e) {
 				}
 				return sortIndex1 - sortIndex2;
 			}
@@ -96,23 +98,21 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		composite.setLayout(layout);
-		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL
-				| GridData.VERTICAL_ALIGN_FILL));
+		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
 
 		Label label = new Label(composite, SWT.NONE);
-		label.setText("Exporter:");
+		label.setText(Messages.SelectFBTypesWizardPage_Exporter);
 
 		filters = new Combo(composite, SWT.NONE);
-		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL
-				| GridData.GRAB_HORIZONTAL);
+		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 		filters.setLayoutData(data);
 
 		for (IConfigurationElement exportFilter : exportFilters) {
-			filters.add(exportFilter.getAttribute("name"));
+			filters.add(exportFilter.getAttribute(NAME));
 		}
 
-		filters.addListener( SWT.Selection, event -> updatePageCompletion());
+		filters.addListener(SWT.Selection, event -> updatePageCompletion());
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 		if (getDirectory() == null || getDirectory().equals("") //$NON-NLS-1$
 				|| !new File(getDirectory()).isDirectory()) {
-			setErrorMessage("Destination directory needs to be choosen!");
+			setErrorMessage(Messages.SelectFBTypesWizardPage_DestinationDirectoryNeedsToBeChosen);
 			return false;
 		}
 		return super.validateDestinationGroup();
@@ -138,7 +138,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	@Override
 	protected boolean validateOptionsGroup() {
 		if (filters.getSelectionIndex() == -1) {
-			setErrorMessage("Exportfilter needs to be selected!");
+			setErrorMessage(Messages.SelectFBTypesWizardPage_ExportfilterNeedsToBeSelected);
 			return false;
 		}
 		return super.validateOptionsGroup();
@@ -147,7 +147,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	@Override
 	protected boolean validateSourceGroup() {
 		if (getSelectedResources().isEmpty()) {
-			setErrorMessage("No type selected!");
+			setErrorMessage(Messages.SelectFBTypesWizardPage_NoTypeSelected);
 			return false;
 		}
 		return super.validateSourceGroup();
@@ -180,14 +180,12 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	/**
 	 * Sets the directory.
 	 * 
-	 * @param dir
-	 *            the new directory
+	 * @param dir the new directory
 	 */
 	public void setDirectory(final String dir) {
 		destinationNameField.setText(dir);
 	}
 
-	
 	@Override
 	protected void restoreWidgetValues() {
 		loadTargetDirctories();
@@ -199,19 +197,18 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	 */
 	private void loadTargetDirctories() {
 		IDialogSettings settings = getDialogSettings();
-        if (settings != null) {
-	        String[] directoryNames = settings
-	                .getArray(STORE_DIRECTORY_NAMES_ID);
-	        if (directoryNames == null) {
+		if (settings != null) {
+			String[] directoryNames = settings.getArray(STORE_DIRECTORY_NAMES_ID);
+			if (directoryNames == null) {
 				return; // ie.- no settings stored
 			}
-	
-	        // destination
-	        setDirectory(directoryNames[0]);
-	        for (int i = 0; i < directoryNames.length; i++) {
-	        	destinationNameField.add(directoryNames[i]);
+
+			// destination
+			setDirectory(directoryNames[0]);
+			for (int i = 0; i < directoryNames.length; i++) {
+				destinationNameField.add(directoryNames[i]);
 			}
-        }
+		}
 	}
 
 	/**
@@ -222,8 +219,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 			String currentFilterSelectionName = getDialogSettings().get(STORE_CURRENT_FILTER_SELECTION_ID);
 			if (currentFilterSelectionName != null) {
 				for (IConfigurationElement filter : exportFilters) {
-					if (filter.getAttribute("name").equals(
-							currentFilterSelectionName)) {
+					if (filter.getAttribute(NAME).equals(currentFilterSelectionName)) {
 						filters.select(exportFilters.indexOf(filter));
 						break;
 					}
@@ -232,12 +228,11 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		}
 	}
 
-
 	@Override
 	protected void internalSaveWidgetValues() {
 		IDialogSettings settings = getDialogSettings();
 		if (settings != null) {
-			//Saves current directory for next session.
+			// Saves current directory for next session.
 			String[] directoryNames = settings.getArray(STORE_DIRECTORY_NAMES_ID);
 			if (directoryNames == null) {
 				directoryNames = new String[0];
@@ -247,8 +242,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 			settings.put(STORE_DIRECTORY_NAMES_ID, directoryNames);
 
 			// Saves current export filter for next session.
-			getDialogSettings().put(STORE_CURRENT_FILTER_SELECTION_ID,
-					getSelectedExportFilter().getAttribute("name"));
+			getDialogSettings().put(STORE_CURRENT_FILTER_SELECTION_ID, getSelectedExportFilter().getAttribute(NAME));
 		}
 	}
 
@@ -261,43 +255,39 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 3;
 		destinationSelectionGroup.setLayout(layout);
-		destinationSelectionGroup.setLayoutData(new GridData(
-				GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
+		destinationSelectionGroup
+				.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
 		destinationSelectionGroup.setFont(font);
 
 		Label destinationLabel = new Label(destinationSelectionGroup, SWT.NONE);
-		destinationLabel.setText("Export Destination:");
+		destinationLabel.setText(Messages.SelectFBTypesWizardPage_ExportDestination);
 		destinationLabel.setFont(font);
 
 		// destination name entry field
-		destinationNameField = new Combo(destinationSelectionGroup, SWT.SINGLE
-				| SWT.BORDER);
+		destinationNameField = new Combo(destinationSelectionGroup, SWT.SINGLE | SWT.BORDER);
 		destinationNameField.addListener(SWT.Modify, this);
 		destinationNameField.addListener(SWT.Selection, this);
-		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL
-				| GridData.GRAB_HORIZONTAL);
+		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 		destinationNameField.setLayoutData(data);
 		destinationNameField.setFont(font);
 
 		// destination browse button
-		Button destinationBrowseButton = new Button(destinationSelectionGroup,
-				SWT.PUSH);
-		destinationBrowseButton.setText("B&rowse...");
-		destinationBrowseButton.addListener( SWT.Selection, event -> {
-				DirectoryDialog dialog = new DirectoryDialog(getContainer()
-						.getShell(), SWT.SAVE | SWT.SHEET);
-				dialog.setMessage("Select a directory to export to.");
-				dialog.setText("Export to Directory");
-				dialog.setFilterPath(getDirectory());
-				String selectedDirectoryName = dialog.open();
+		Button destinationBrowseButton = new Button(destinationSelectionGroup, SWT.PUSH);
+		destinationBrowseButton.setText(Messages.SelectFBTypesWizardPage_Browse);
+		destinationBrowseButton.addListener(SWT.Selection, event -> {
+			DirectoryDialog dialog = new DirectoryDialog(getContainer().getShell(), SWT.SAVE | SWT.SHEET);
+			dialog.setMessage(Messages.SelectFBTypesWizardPage_SelectADirectoryToExportTo);
+			dialog.setText(Messages.SelectFBTypesWizardPage_ExportToDirectory);
+			dialog.setFilterPath(getDirectory());
+			String selectedDirectoryName = dialog.open();
 
-				if (selectedDirectoryName != null) {
-					setErrorMessage(null);
-					setDirectory(selectedDirectoryName);
-				}
-				updatePageCompletion();
-			});
+			if (selectedDirectoryName != null) {
+				setErrorMessage(null);
+				setDirectory(selectedDirectoryName);
+			}
+			updatePageCompletion();
+		});
 
 		destinationBrowseButton.setFont(font);
 		setButtonLayoutData(destinationBrowseButton);
@@ -311,7 +301,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		addAvailableExportFilter(optionsGroup);
 
 		overwrite = new Button(optionsGroup, SWT.CHECK);
-		overwrite.setText("Overwrite without warning");
+		overwrite.setText(Messages.SelectFBTypesWizardPage_OverwriteWithoutWarning);
 		GridData twoColumns = new GridData();
 		twoColumns.grabExcessHorizontalSpace = true;
 		twoColumns.grabExcessVerticalSpace = false;
@@ -324,8 +314,8 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	@Override
 	public void handleEvent(Event event) {
 	}
-	
-	@Override  //this overide is needed to make it public for access by the wizard
+
+	@Override // this overide is needed to make it public for access by the wizard
 	public void saveWidgetValues() {
 		super.saveWidgetValues();
 	}

@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.contentprovider;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -32,7 +33,7 @@ public class EventLabelProvider extends LabelProvider implements ITableLabelProv
 			case 0:
 				return ((Event) element).getName();
 			case 1:
-				return "Event";
+				return FordiacMessages.Event;
 			case 2:
 				return ((Event) element).getComment();
 			default:

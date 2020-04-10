@@ -18,18 +18,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 public class ECActionAlgorithm {
 
 	private ECAction action;
-	
-	public ECAction getAction(){
+
+	public ECAction getAction() {
 		return action;
 	}
-	
+
 	public ECActionAlgorithm(ECAction action) {
 		this.action = action;
 	}
-	
-	String getLabel(){
+
+	String getLabel() {
 		return action.getAlgorithm().getName();
 	}
-	
-	
+
 }

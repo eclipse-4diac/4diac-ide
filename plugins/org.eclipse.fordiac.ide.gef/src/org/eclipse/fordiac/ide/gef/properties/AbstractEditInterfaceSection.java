@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
@@ -38,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
@@ -79,7 +81,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		EVENT, DATA, ADAPTER
 	}
 
-	protected abstract CreateInterfaceElementCommand newCreateCommand(boolean isInput);
+	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
 	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);
 
@@ -155,7 +157,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	}
 
 	private void configureButtonList(AddDeleteReorderListWidget buttons, TableViewer viewer, boolean inputs) {
-		buttons.bindToTableViewer(viewer, this, ref -> newCreateCommand(inputs),
+		buttons.bindToTableViewer(viewer, this, ref -> newCreateCommand((IInterfaceElement) ref, inputs),
 				ref -> newDeleteCommand((IInterfaceElement) ref),
 				ref -> newOrderCommand((IInterfaceElement) ref, inputs, true),
 				ref -> newOrderCommand((IInterfaceElement) ref, inputs, false));
@@ -285,7 +287,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 					result = ((IInterfaceElement) element).getName();
 					break;
 				case 1:
-					result = element instanceof Event ? "Event" : ((IInterfaceElement) element).getTypeName();
+					result = element instanceof Event ? FordiacMessages.Event
+							: ((IInterfaceElement) element).getTypeName();
 					break;
 				case 2:
 					result = ((IInterfaceElement) element).getComment() != null
@@ -304,7 +307,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		if (getType() instanceof SubApp) {
 			return ((SubApp) getType()).getFbNetwork().getApplication().getAutomationSystem().getPalette();
 		} else if (getType() instanceof FBType) {
-			return ((FBType) getType()).getPaletteEntry().getGroup().getPallete();
+			return ((FBType) getType()).getPaletteEntry().getPalette();
 		}
 		return null;
 	}
@@ -377,4 +380,13 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		}
 	}
 
+	protected int getInsertingIndex(IInterfaceElement interfaceElement, EList interfaceList) {
+		return interfaceList.indexOf(interfaceElement) + 1;
+	}
+
+	protected abstract int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput);
+
+	protected String getCreationName(IInterfaceElement interfaceElement) {
+		return (null != interfaceElement) ? interfaceElement.getName() : null;
+	}
 }

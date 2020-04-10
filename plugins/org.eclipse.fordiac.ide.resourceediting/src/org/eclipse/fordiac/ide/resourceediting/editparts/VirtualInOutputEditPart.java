@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,8 +22,9 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
@@ -45,11 +46,10 @@ import org.eclipse.jface.util.IPropertyChangeListener;
  * This class implements an EditPart for an "VirtualInOutput". It is required if
  * a connection is "brocken" when mapped. (fbs distributed to different
  * resources)
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
-public class VirtualInOutputEditPart extends AbstractViewEditPart implements
-		NodeEditPart {
+public class VirtualInOutputEditPart extends AbstractViewEditPart implements NodeEditPart {
 
 	@Override
 	public void activate() {
@@ -58,8 +58,8 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	}
 
 	@Override
-	protected EContentAdapter createContentAdapter() {
-		return new EContentAdapter() {
+	protected Adapter createContentAdapter() {
+		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
@@ -76,7 +76,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 		getFigure().setToolTip(new VirtualIOTooltipFigure());
 
 	}
-	
+
 	private void updatePos() {
 		if (getParent() instanceof FBNetworkContainerEditPart) {
 			IInterfaceElement element = getIInterfaceElement();
@@ -96,14 +96,13 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 			x = bounds.x - 20 - FigureUtilities.getTextWidth(label, getFigure().getFont());
 		} else {
 			x = bounds.x + bounds.width + 1;
-		}				
-		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), 
-				new Rectangle(x, bounds.y, -1, -1));
+		}
+		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), new Rectangle(x, bounds.y, -1, -1));
 	}
 
 	/**
 	 * Gets the casted model.
-	 * 
+	 *
 	 * @return the casted model
 	 */
 	@Override
@@ -121,7 +120,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
 	@Override
@@ -133,7 +132,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.gef.editparts.AbstractEditPart#understandsRequest(org.eclipse
 	 * .gef.Request)
@@ -143,8 +142,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 		if (request.getType() == RequestConstants.REQ_MOVE) {
 			return false;
 		}
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN) {
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
 			return false;
 		}
 		return super.understandsRequest(request);
@@ -152,8 +150,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 
 	@Override
 	public void performRequest(Request request) {
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN) {
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
 			return;
 		}
 		super.performRequest(request);
@@ -215,7 +212,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 			}
 
 			add(new Label(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
-					+ fbNetElement.getName() + "." + getIInterfaceElement().getName()),BorderLayout.TOP); //$NON-NLS-1$
+					+ fbNetElement.getName() + "." + getIInterfaceElement().getName()), BorderLayout.TOP); //$NON-NLS-1$
 
 		}
 	}
@@ -231,8 +228,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	}
 
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(
-			final ConnectionEditPart connection) {
+	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
@@ -242,8 +238,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(
-			final ConnectionEditPart connection) {
+	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
@@ -261,9 +256,9 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	public IPropertyChangeListener getPreferenceChangeListener() {
 		return null;
 	}
-	
+
 	@Override
 	protected void refreshName() {
-		//we don't have a name to refresh and therfore nothing todo here
+		// we don't have a name to refresh and therfore nothing todo here
 	}
 }

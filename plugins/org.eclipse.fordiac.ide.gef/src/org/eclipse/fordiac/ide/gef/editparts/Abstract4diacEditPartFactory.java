@@ -21,13 +21,13 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 
-	private GraphicalEditor editor; 
-	
+	private GraphicalEditor editor;
+
 	public Abstract4diacEditPartFactory(GraphicalEditor editor) {
 		super();
 		this.editor = editor;
 	}
-	
+
 	public GraphicalEditor getEditor() {
 		return editor;
 	}
@@ -38,12 +38,13 @@ public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 		EditPart part = null;
 		try {
 			if (modelElement instanceof IEditPartCreator) {
-				//this if needs be the first check so that plugins can more easily provide special behavior for derived classes 
-				//(e.g., interface elements for monitored adapters)			
+				// this if needs be the first check so that plugins can more easily provide
+				// special behavior for derived classes
+				// (e.g., interface elements for monitored adapters)
 				part = ((IEditPartCreator) modelElement).createEditPart();
 			} else if (modelElement instanceof IConnectionEditPartCreator) {
 				part = ((IConnectionEditPartCreator) modelElement).createEditPart();
-			} else {			
+			} else {
 				part = getPartForElement(context, modelElement);
 			}
 			if (null != part) {
@@ -59,14 +60,13 @@ public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 	/**
 	 * Maps an object to an EditPart.
 	 * 
-	 * @throws RuntimeException
-	 *           if no match was found (programming error)
+	 * @throws RuntimeException if no match was found (programming error)
 	 */
 	protected abstract EditPart getPartForElement(EditPart context, Object modelElement);
 
-	
-	protected RuntimeException createEditpartCreationException(final Object modelElement) {		
-		return new RuntimeException(MessageFormat.format(Messages.Abstract4diacEditPartFactory_LABEL_RUNTIMEException_CantCreateModelForElement,
-			new Object[] { ((modelElement != null) ? modelElement.getClass().getName() : "null") })); //$NON-NLS-1$
+	protected RuntimeException createEditpartCreationException(final Object modelElement) {
+		return new RuntimeException(MessageFormat.format(
+				Messages.Abstract4diacEditPartFactory_LABEL_RUNTIMEException_CantCreateModelForElement,
+				new Object[] { ((modelElement != null) ? modelElement.getClass().getName() : "null") })); //$NON-NLS-1$
 	}
 }

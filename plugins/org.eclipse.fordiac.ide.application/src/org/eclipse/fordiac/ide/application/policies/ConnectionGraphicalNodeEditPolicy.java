@@ -24,8 +24,10 @@ public class ConnectionGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy {
 	@Override
 	protected Command getConnectionCompleteCommand(CreateConnectionRequest request) {
 		AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
-		command.setDestination(command.getSource().isIsInput() ?  //if the source is an input we need to deliver our source i.e., the output				
-				((ConnectionEditPart)getHost()).getModel().getSource() : ((ConnectionEditPart)getHost()).getModel().getDestination());
+		command.setDestination(command.getSource().isIsInput() ? // if the source is an input we need to deliver our
+																	// source i.e., the output
+				((ConnectionEditPart) getHost()).getModel().getSource()
+				: ((ConnectionEditPart) getHost()).getModel().getDestination());
 		return command;
 	}
 

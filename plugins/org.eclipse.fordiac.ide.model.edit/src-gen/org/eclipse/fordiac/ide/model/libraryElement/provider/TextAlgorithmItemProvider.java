@@ -15,7 +15,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -29,17 +28,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm} object.
+ * <!-- begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
-public class TextAlgorithmItemProvider
-	extends AlgorithmItemProvider {
+public class TextAlgorithmItemProvider extends AlgorithmItemProvider {
 	/**
-	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public TextAlgorithmItemProvider(AdapterFactory adapterFactory) {
@@ -47,9 +46,9 @@ public class TextAlgorithmItemProvider
 	}
 
 	/**
-	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -63,46 +62,39 @@ public class TextAlgorithmItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Text feature.
-	 * <!-- begin-user-doc -->
+	 * This adds a property descriptor for the Text feature. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addTextPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_TextAlgorithm_text_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_TextAlgorithm_text_feature", "_UI_TextAlgorithm_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.TEXT_ALGORITHM__TEXT,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_TextAlgorithm_text_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_TextAlgorithm_text_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_TextAlgorithm_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.TEXT_ALGORITHM__TEXT, true, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((TextAlgorithm)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_TextAlgorithm_type") : //$NON-NLS-1$
-			getString("_UI_TextAlgorithm_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((TextAlgorithm) object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_TextAlgorithm_type") : //$NON-NLS-1$
+				getString("_UI_TextAlgorithm_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -110,18 +102,18 @@ public class TextAlgorithmItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(TextAlgorithm.class)) {
-			case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
+		case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+			return;
 		}
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

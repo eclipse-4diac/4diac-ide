@@ -32,8 +32,7 @@ import org.eclipse.ui.IWorkbenchPart;
 /**
  * The Class UnmapAction.
  */
-public class UnmapAction extends SelectionAction implements
-		IObjectActionDelegate {
+public class UnmapAction extends SelectionAction implements IObjectActionDelegate {
 
 	/** The Constant ID. */
 	public static final String ID = "Unmap"; //$NON-NLS-1$
@@ -63,7 +62,7 @@ public class UnmapAction extends SelectionAction implements
 			Command unmapCmd = new UnmapCommand(element);
 			if (unmapCmd.canExecute()) {
 				cmd.add(unmapCmd);
-			} 
+			}
 		}
 		if (stack != null) {
 			stack.execute(cmd);
@@ -73,12 +72,12 @@ public class UnmapAction extends SelectionAction implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.IAction,
-	 *      org.eclipse.ui.IWorkbenchPart)
+	 * @see
+	 * org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.
+	 * IAction, org.eclipse.ui.IWorkbenchPart)
 	 */
 	@Override
-	public void setActivePart(final IAction action,
-			final IWorkbenchPart targetPart) {
+	public void setActivePart(final IAction action, final IWorkbenchPart targetPart) {
 		// not used
 
 	}
@@ -96,18 +95,18 @@ public class UnmapAction extends SelectionAction implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction,
-	 *      org.eclipse.jface.viewers.ISelection)
+	 * @see
+	 * org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.
+	 * IAction, org.eclipse.jface.viewers.ISelection)
 	 */
 	@Override
-	public void selectionChanged(final IAction action,
-			final ISelection selection) {
+	public void selectionChanged(final IAction action, final ISelection selection) {
 		// not used
 	}
 
 	/** The selected f bs. */
 	private final List<FBNetworkElement> selectedNetworkElements = new ArrayList<>();
-	
+
 	public List<FBNetworkElement> getSelectedNetworkElements() {
 		return selectedNetworkElements;
 	}
@@ -131,9 +130,10 @@ public class UnmapAction extends SelectionAction implements
 	}
 
 	protected void checkSelectedModelElement(FBNetworkElement model) {
-		if(model.isMapped()){
+		if (model.isMapped()) {
 			selectedNetworkElements.add(model);
 		}
-		//TODO model refactoring - check in else part if elements of the subapp are mapped to different entities 
+		// TODO model refactoring - check in else part if elements of the subapp are
+		// mapped to different entities
 	}
 }

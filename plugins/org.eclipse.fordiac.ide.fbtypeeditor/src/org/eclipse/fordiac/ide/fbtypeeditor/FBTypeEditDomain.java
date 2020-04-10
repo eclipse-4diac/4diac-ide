@@ -23,7 +23,8 @@ public class FBTypeEditDomain extends DefaultEditDomain {
 	public FBTypeEditDomain(IEditorPart editorPart, CommandStack commandStack) {
 		super(editorPart);
 		this.commandStack = commandStack;
-		loadDefaultTool(); //redo this here as the first invocation in the super constructor will not work as the command stack is not correctly set the first time
+		loadDefaultTool(); // redo this here as the first invocation in the super constructor will not work
+							// as the command stack is not correctly set the first time
 	}
 
 	@Override
@@ -33,7 +34,7 @@ public class FBTypeEditDomain extends DefaultEditDomain {
 
 	@Override
 	public void loadDefaultTool() {
-		if(null != commandStack){
+		if (null != commandStack) {
 			super.loadDefaultTool();
 		}
 	}

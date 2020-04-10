@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtester.model.testdata.impl;
 
+import java.text.MessageFormat;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -23,37 +24,38 @@ import org.eclipse.fordiac.ide.fbtester.model.testdata.TestData;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.TestdataFactory;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.TestdataPackage;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.ValuedVarDecl;
+import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Messages;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>Factory</b>.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
+ * end-user-doc -->
+ * 
  * @generated
  */
 public class TestdataFactoryImpl extends EFactoryImpl implements TestdataFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static TestdataFactory init() {
 		try {
-			TestdataFactory theTestdataFactory = (TestdataFactory)EPackage.Registry.INSTANCE.getEFactory("at.ffg4iac.fbtester.model.testdata"); 
+			TestdataFactory theTestdataFactory = (TestdataFactory) EPackage.Registry.INSTANCE
+					.getEFactory("at.ffg4iac.fbtester.model.testdata"); //$NON-NLS-1$
 			if (theTestdataFactory != null) {
 				return theTestdataFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new TestdataFactoryImpl();
 	}
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	public TestdataFactoryImpl() {
@@ -61,23 +63,26 @@ public class TestdataFactoryImpl extends EFactoryImpl implements TestdataFactory
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case TestdataPackage.TEST_DATA: return createTestData();
-			case TestdataPackage.VALUED_VAR_DECL: return createValuedVarDecl();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		case TestdataPackage.TEST_DATA:
+			return createTestData();
+		case TestdataPackage.VALUED_VAR_DECL:
+			return createValuedVarDecl();
+		default:
+			throw new IllegalArgumentException(
+					MessageFormat.format(Messages.TestdataFactoryImpl_TheClassIsNotAValidClassifier, eClass.getName()));
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -87,8 +92,8 @@ public class TestdataFactoryImpl extends EFactoryImpl implements TestdataFactory
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -98,18 +103,18 @@ public class TestdataFactoryImpl extends EFactoryImpl implements TestdataFactory
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public TestdataPackage getTestdataPackage() {
-		return (TestdataPackage)getEPackage();
+		return (TestdataPackage) getEPackage();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @deprecated
 	 * @generated
 	 */
@@ -118,4 +123,4 @@ public class TestdataFactoryImpl extends EFactoryImpl implements TestdataFactory
 		return TestdataPackage.eINSTANCE;
 	}
 
-} //TestdataFactoryImpl
+} // TestdataFactoryImpl

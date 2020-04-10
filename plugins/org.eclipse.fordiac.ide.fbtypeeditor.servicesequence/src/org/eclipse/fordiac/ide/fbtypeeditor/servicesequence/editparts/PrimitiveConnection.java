@@ -22,15 +22,15 @@ public class PrimitiveConnection {
 		this.inputPrimitive = isInputPrimitive;
 		this.isLeft = true;
 	}
-	
-	public void setPrimitiveType(final boolean isInputPrimitive){
+
+	public void setPrimitiveType(final boolean isInputPrimitive) {
 		this.inputPrimitive = isInputPrimitive;
 	}
 
-	public void setInputDirection(final boolean isLeft){
+	public void setInputDirection(final boolean isLeft) {
 		this.isLeft = isLeft;
 	}
-	
+
 	public boolean isInputPrimitive() {
 		return inputPrimitive;
 	}

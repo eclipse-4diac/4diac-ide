@@ -22,24 +22,24 @@ public class ResourceEditorInput extends PersistableUntypedEditorInput {
 	public ResourceEditorInput(Resource res) {
 		super(res, getResourceEditorName(res));
 	}
-	
+
 	@Override
 	public void saveState(IMemento memento) {
 		ResourceEditorInputFactory.saveState(memento, this);
-		
+
 	}
 
 	@Override
 	public String getFactoryId() {
 		return ResourceEditorInputFactory.getFactoryId();
 	}
-	
+
 	@Override
-	public Resource getContent(){
-		return (Resource)super.getContent();
+	public Resource getContent() {
+		return (Resource) super.getContent();
 	}
-	
-	public static String getResourceEditorName(Resource res){
+
+	public static String getResourceEditorName(Resource res) {
 		return res.getDevice().getName() + "." + res.getName(); //$NON-NLS-1$
 	}
 

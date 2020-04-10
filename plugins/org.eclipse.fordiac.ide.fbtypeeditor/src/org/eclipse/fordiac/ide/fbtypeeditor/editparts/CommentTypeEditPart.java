@@ -23,8 +23,9 @@ import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.EditPart;
@@ -38,7 +39,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart 
 
 	InterfaceEditPart referencedInterface;
 
-	private EContentAdapter contentAdapter = new EContentAdapter() {
+	private Adapter contentAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);

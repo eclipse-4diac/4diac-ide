@@ -20,21 +20,57 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.export.ui.messages"; //$NON-NLS-1$
-	
-	/** The Fordiac export wizard_ descriptio n_ wizard page. */
+
+	public static String ExportStatusMessageDialog_4diacIDETypeExportErrors;
+
+	public static String ExportStatusMessageDialog_DuringTypeExportTheFollowingIssuesHaveBeenIdentified;
+
+	public static String ExportStatusMessageDialog_ErrorsNotEmpty;
+
+	public static String ExportStatusMessageDialog_ExportStatusMessageDialog;
+
+	public static String ExportStatusMessageDialog_WarningsNotEmpty;
+
+	public static String FordiacExportWizard_Class;
+
 	public static String FordiacExportWizard_DESCRIPTION_WizardPage;
-	
-	/** The Fordiac export wizard_ error. */
+
 	public static String FordiacExportWizard_ERROR;
-	
-	/** The Fordiac export wizard_ labe l_ window_ title. */
+
+	public static String FordiacExportWizard_ExportingSelectedTypesUsingExporter;
+
+	public static String FordiacExportWizard_ExportingType;
+
 	public static String FordiacExportWizard_LABEL_Window_Title;
-	
-	/** The Fordiac export wizard_ titl e_ wizard page. */
+
 	public static String FordiacExportWizard_TITLE_WizardPage;
-	
-	/** The Fordiac export wizard_ wizard page. */
+
 	public static String FordiacExportWizard_WizardPage;
+
+	public static String FORTEExportPreferences_CompareEditorForMerging;
+
+	public static String FORTEExportPreferences_DefaultCompareEditorOpener;
+
+	public static String PreferenceInitializer_InitializeDefaultPreferences;
+
+	public static String SelectFBTypesWizardPage_Browse;
+
+	public static String SelectFBTypesWizardPage_ExportDestination;
+
+	public static String SelectFBTypesWizardPage_Exporter;
+
+	public static String SelectFBTypesWizardPage_ExportToDirectory;
+
+	public static String SelectFBTypesWizardPage_ExportfilterNeedsToBeSelected;
+
+	public static String SelectFBTypesWizardPage_DestinationDirectoryNeedsToBeChosen;
+
+	public static String SelectFBTypesWizardPage_NoTypeSelected;
+
+	public static String SelectFBTypesWizardPage_OverwriteWithoutWarning;
+
+	public static String SelectFBTypesWizardPage_SelectADirectoryToExportTo;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -23,9 +23,9 @@ import org.eclipse.swt.graphics.Pattern;
 import org.eclipse.swt.widgets.Display;
 
 public class GradientLabel extends Label {
-	
+
 	private final ZoomManager zoomManger;
-	
+
 	public GradientLabel(ZoomManager zoomManger) {
 		super();
 		this.zoomManger = zoomManger;
@@ -36,7 +36,7 @@ public class GradientLabel extends Label {
 		Display display = Display.getCurrent();
 		Rectangle boundingRect = getBounds().getCopy();
 		boundingRect.scale(zoomManger.getZoom());
-		
+
 		Point topLeft = boundingRect.getTopLeft();
 		Point bottomRight = boundingRect.getBottomRight();
 		Color first = FigureUtilities.lighter(getBackgroundColor());

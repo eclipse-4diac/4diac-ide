@@ -14,9 +14,8 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Algorithm</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Algorithm</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAlgorithm()

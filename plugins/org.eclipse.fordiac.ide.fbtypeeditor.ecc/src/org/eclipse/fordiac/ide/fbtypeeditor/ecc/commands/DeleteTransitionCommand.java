@@ -31,7 +31,7 @@ public class DeleteTransitionCommand extends Command {
 
 	/** The source. */
 	private ECState source;
-	
+
 	private int oldSourcePos;
 	private int oldTransitionPos;
 

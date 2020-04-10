@@ -23,8 +23,9 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
@@ -45,7 +46,6 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.graphics.FontMetrics;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
@@ -149,7 +149,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		}
 	}
 
-	private final EContentAdapter contentAdapter = new EContentAdapter() {
+	private final Adapter contentAdapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -340,10 +340,8 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 */
 	public DirectEditManager getManager() {
 		if (manager == null) {
-			Label l = getFigure();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
+			manager = new LabelDirectEditManager(this, getFigure());
 		}
-
 		return manager;
 	}
 

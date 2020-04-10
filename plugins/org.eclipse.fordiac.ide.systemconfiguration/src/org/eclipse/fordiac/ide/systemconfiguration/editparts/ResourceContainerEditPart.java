@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,15 +18,16 @@ import java.util.List;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.ResourceContainerLayoutEditPolicy;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public class ResourceContainerEditPart extends AbstractGraphicalEditPart {
 
-	private EContentAdapter contentAdapter = new EContentAdapter() {
+	private Adapter contentAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);

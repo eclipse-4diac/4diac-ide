@@ -83,9 +83,8 @@ public final class SourceViewerColorProvider {
 	private static Color createColor(String symbolicName) {
 		IPreferenceStore store = getPreferenceStore();
 		if (store.contains(symbolicName)) {
-			RGB rgb =  (store.isDefault(symbolicName)) ?
-				PreferenceConverter.getDefaultColor(store, symbolicName) :
-				PreferenceConverter.getColor(store, symbolicName);
+			RGB rgb = (store.isDefault(symbolicName)) ? PreferenceConverter.getDefaultColor(store, symbolicName)
+					: PreferenceConverter.getColor(store, symbolicName);
 
 			if (null != rgb) {
 				JFaceResources.getColorRegistry().put(symbolicName, rgb);

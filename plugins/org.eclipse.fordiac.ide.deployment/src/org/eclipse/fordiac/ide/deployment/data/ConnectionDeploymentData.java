@@ -13,14 +13,14 @@ package org.eclipse.fordiac.ide.deployment.data;
 
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class ConnectionDeploymentData{
-	private final String sourcePrefix;       
+public class ConnectionDeploymentData {
+	private final String sourcePrefix;
 	private final IInterfaceElement source;
-	private final String destinationPrefix;       
+	private final String destinationPrefix;
 	private final IInterfaceElement destination;
-	
-	public ConnectionDeploymentData(final String sourcePrefix, final IInterfaceElement source, final String destinationPrefix,
-			final IInterfaceElement destination) {
+
+	public ConnectionDeploymentData(final String sourcePrefix, final IInterfaceElement source,
+			final String destinationPrefix, final IInterfaceElement destination) {
 		this.sourcePrefix = sourcePrefix;
 		this.source = source;
 		this.destinationPrefix = destinationPrefix;
@@ -42,5 +42,5 @@ public class ConnectionDeploymentData{
 	public IInterfaceElement getDestination() {
 		return destination;
 	}
-	
+
 }

@@ -21,10 +21,11 @@ public class OnlineCreateFBHandler extends AbstractOnlineFBHandler {
 
 	@Override
 	protected void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
-		executor.createFBInstance(new FBDeploymentData("", getResFB()), getResource()); //$NON-NLS-1$  //TODO correctly determine prefix
+		executor.createFBInstance(new FBDeploymentData("", getResFB()), getResource()); //$NON-NLS-1$ //TODO correctly
+																						// determine prefix
 	}
-	
-	@Override	
+
+	@Override
 	protected String getErrorMessageHeader() {
 		return "Online Create Function Block Error";
 	}

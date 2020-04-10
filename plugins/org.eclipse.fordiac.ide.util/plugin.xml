@@ -1,30 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="openListener" name="openListener" schema="schema/openListener.exsd"/> 
-   <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="org.eclipse.fordiac.ide.application.actionSet1"
-            label="4diac IDE"
-            visible="true">
-         <action
-               class="org.eclipse.fordiac.ide.util.action.HideDataConnectionsAction"
-               icon="fordiacimage://ICON_HIDE_DATA"
-               id="org.eclipse.fordiac.ide.util.action.HideDataConnectionsAction"
-               label="Hide Data Connections"
-               style="toggle"
-               toolbarPath="Normal">
-         </action>
-         <action
-               class="org.eclipse.fordiac.ide.util.action.HideEventConnectionsAction"
-               icon="fordiacimage://ICON_HIDE_EVENT"
-               id="org.eclipse.fordiac.ide.util.action.HideEventConnectionsAction"
-               label="Hide Event Connections"
-               style="toggle"
-               toolbarPath="Normal">
-         </action>
-      </actionSet>
-   </extension>
-
+   <extension-point id="openListener" name="openListener" schema="schema/openListener.exsd"/>
 </plugin>

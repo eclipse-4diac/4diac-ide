@@ -18,16 +18,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Sub App Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Sub App
+ * Type</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class SubAppTypeImpl extends CompositeFBTypeImpl implements SubAppType {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SubAppTypeImpl() {
@@ -35,8 +34,8 @@ public class SubAppTypeImpl extends CompositeFBTypeImpl implements SubAppType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -44,4 +43,4 @@ public class SubAppTypeImpl extends CompositeFBTypeImpl implements SubAppType {
 		return LibraryElementPackage.Literals.SUB_APP_TYPE;
 	}
 
-} //SubAppTypeImpl
+} // SubAppTypeImpl

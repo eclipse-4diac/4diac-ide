@@ -19,15 +19,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * The Class ChangeCommentCommand.
  */
 public class ChangeStandardCommand extends ChangeIdentificationCommand {
-	
+
 	/** The new standard value. */
 	private String newStandard;
 
 	/** The old standard value. */
 	private String oldStandard;
 
-	public ChangeStandardCommand(LibraryElement type,
-			final String newStandard) {
+	public ChangeStandardCommand(LibraryElement type, final String newStandard) {
 		super(type);
 		this.newStandard = newStandard;
 	}

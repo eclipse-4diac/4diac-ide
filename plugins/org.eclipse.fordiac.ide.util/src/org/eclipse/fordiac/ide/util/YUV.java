@@ -17,27 +17,28 @@ package org.eclipse.fordiac.ide.util;
 
 import org.eclipse.swt.graphics.RGB;
 
-/** simple class for representing colors in YUV color space
+/**
+ * simple class for representing colors in YUV color space
  * 
  */
 public class YUV {
-	
+
 	private double y;
 	private double u;
 	private double v;
-	
-	public YUV(RGB rgb){
+
+	public YUV(RGB rgb) {
 		y = 0.299 * rgb.red + 0.587 * rgb.green + 0.114 * rgb.blue;
 		u = -0.14713 * rgb.red - 0.28886 * rgb.green + 0.436 * rgb.blue;
 		v = 0.615 * rgb.red - 0.51499 * rgb.green - 0.10001 * rgb.blue;
 	}
 
 	public boolean nearbyColor(YUV yuv) {
-		double diffY = y - yuv.y; 
+		double diffY = y - yuv.y;
 		double diffU = u - yuv.u;
 		double diffV = v - yuv.v;
-		
-		double squaredDistance =  (diffY * diffY + diffU * diffU + diffV * diffV);		
+
+		double squaredDistance = (diffY * diffY + diffU * diffU + diffV * diffV);
 		return (squaredDistance < 600);
 	}
 

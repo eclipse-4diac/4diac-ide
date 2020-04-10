@@ -23,23 +23,23 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Composite FB Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Composite FB Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompositeFBTypeImpl#getFBNetwork <em>FB Network</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompositeFBTypeImpl#getFBNetwork
+ * <em>FB Network</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 	/**
-	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getFBNetwork()
 	 * @generated
 	 * @ordered
@@ -47,8 +47,8 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 	protected FBNetwork fBNetwork;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected CompositeFBTypeImpl() {
@@ -56,8 +56,8 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -66,8 +66,8 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -76,23 +76,27 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetFBNetwork(FBNetwork newFBNetwork, NotificationChain msgs) {
 		FBNetwork oldFBNetwork = fBNetwork;
 		fBNetwork = newFBNetwork;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK, oldFBNetwork, newFBNetwork);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK, oldFBNetwork, newFBNetwork);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -100,86 +104,89 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 		if (newFBNetwork != fBNetwork) {
 			NotificationChain msgs = null;
 			if (fBNetwork != null)
-				msgs = ((InternalEObject)fBNetwork).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK, null, msgs);
+				msgs = ((InternalEObject) fBNetwork).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK, null, msgs);
 			if (newFBNetwork != null)
-				msgs = ((InternalEObject)newFBNetwork).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK, null, msgs);
+				msgs = ((InternalEObject) newFBNetwork).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK, null, msgs);
 			msgs = basicSetFBNetwork(newFBNetwork, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK, newFBNetwork, newFBNetwork));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK,
+					newFBNetwork, newFBNetwork));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
-				return basicSetFBNetwork(null, msgs);
+		case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
+			return basicSetFBNetwork(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
-				return getFBNetwork();
+		case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
+			return getFBNetwork();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
-				setFBNetwork((FBNetwork)newValue);
-				return;
+		case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
+			setFBNetwork((FBNetwork) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
-				setFBNetwork((FBNetwork)null);
-				return;
+		case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
+			setFBNetwork((FBNetwork) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
-				return fBNetwork != null;
+		case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
+			return fBNetwork != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //CompositeFBTypeImpl
+} // CompositeFBTypeImpl

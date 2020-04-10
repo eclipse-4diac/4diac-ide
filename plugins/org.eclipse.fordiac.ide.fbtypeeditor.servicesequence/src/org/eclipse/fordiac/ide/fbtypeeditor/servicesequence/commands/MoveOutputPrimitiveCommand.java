@@ -23,44 +23,43 @@ public class MoveOutputPrimitiveCommand extends Command {
 	private OutputPrimitive moveElement;
 	private final OutputPrimitive refElement;
 	private int oldIndex;
-	
-	public MoveOutputPrimitiveCommand(ServiceTransaction transaction, OutputPrimitive element, OutputPrimitive refElement) {
+
+	public MoveOutputPrimitiveCommand(ServiceTransaction transaction, OutputPrimitive element,
+			OutputPrimitive refElement) {
 		this.parent = transaction;
 		this.moveElement = element;
 		this.refElement = refElement;
 		this.oldIndex = parent.getOutputPrimitive().indexOf(moveElement);
 	}
-	
+
 	@Override
 	public boolean canExecute() {
 		return ((parent != null) && (moveElement != null));
 	}
-	
+
 	@Override
 	public void execute() {
 		move();
 	}
-	
+
 	@Override
 	public void undo() {
-		if(null == refElement){
+		if (null == refElement) {
 			parent.getOutputPrimitive().move(parent.getOutputPrimitive().size() + 1, moveElement);
-		}
-		else{
+		} else {
 			parent.getOutputPrimitive().move(oldIndex, moveElement);
 		}
 	}
-	
+
 	@Override
 	public void redo() {
 		move();
 	}
-	
-	private void move(){
-		if(null == refElement){
+
+	private void move() {
+		if (null == refElement) {
 			parent.getOutputPrimitive().move(parent.getOutputPrimitive().size() - 1, moveElement);
-		}
-		else{
+		} else {
 			int index = parent.getOutputPrimitive().indexOf(refElement);
 			parent.getOutputPrimitive().move(index, moveElement);
 		}

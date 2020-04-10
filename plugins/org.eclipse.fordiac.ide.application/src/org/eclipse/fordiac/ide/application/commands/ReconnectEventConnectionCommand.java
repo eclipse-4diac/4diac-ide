@@ -38,11 +38,11 @@ public class ReconnectEventConnectionCommand extends AbstractReconnectConnection
 
 	@Override
 	protected boolean checkSourceAndTarget(IInterfaceElement sourceIE, IInterfaceElement targetIE) {
-		if((sourceIE instanceof Event) && (targetIE instanceof Event)){
-			return LinkConstraints.canExistEventConnection((Event)sourceIE, (Event)targetIE);
+		if ((sourceIE instanceof Event) && (targetIE instanceof Event)) {
+			return LinkConstraints.canExistEventConnection((Event) sourceIE, (Event) targetIE);
 		}
 		return false;
-	}	
+	}
 
 	@Override
 	protected AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent) {

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2020 fortiss GmbH
+                  
+ This program and the accompanying materials are made available under the
+ terms of the Eclipse Public License 2.0 which is available at
+ http://www.eclipse.org/legal/epl-2.0.
+
+ SPDX-License-Identifier: EPL-2.0
+ 
+ Contributors:
+    Jose Cabral
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <title>Building 4diac FORTE docker images</title>
+      <link rel="stylesheet" type="text/css" href="../help.css">
+   </head>
+
+   <body>
+      <h1 id="topOfPage">Building 4diac FORTE docker images</h1>
+      
+      <p>Two Docker files are provided in the <span class="folderLocation">./docker/</span> folder of the 4diac FORTE repository. The first one is a docker image that runs 4diac FORTE in it. The second one is a docker image that is used to build 4diac FORTE for many architectures and devices. Currently it builds for:
+
+      	<ul>
+      		<li>linux32</li>
+      		<li>raspberry pi (and BeagleBone Black). Not valid for the raspberry pi zero</li>
+      		<li>embrick</li>
+      		<li>(COMMING SOON) RevPi</li>
+      		<li>(COMMING SOON) WAGO</li>
+      	</ul>
+
+       <p>In both docker images 4diac FORTE is built with the following modules:</p>
+
+      <ul>
+      	<li>UTILS</li>
+      	<li>CONVERT</li>
+      	<li>IEC61131</li>
+      	<li>Arrowhead</li>
+      	<li>HTTP (port 8080)</li>
+      	<li>LUA</li>
+      	<li>MQTT</li>
+      	<li>OPC UA (with security)</li>
+      </ul>
+
+     <p>and the devices with their corresponding IO module.</p>
+
+      <p>The docker image of 4diac FORTE has the binary located in <span class="folderLocation">/usr/forte_output/linux32/forte</span></p>
+
+      <p>The builder docker image has the binaries located in <span class="folderLocation">/usr/forte_output/</span></p>
+
+      <p>To build the docker images, you need to go to the root folder of the 4diac FORTE repository and execute (don't forget the point at the end):</p>
+
+
+		<div class="code">docker build -t forte -f docker/Dockerfile_forte .</div>
+
+		<p>and</p>
+      
+		<div class="code">docker build -t forte_builder -f docker/Dockerfile_builder .</div>
+
+		<h1>Start containers</h1>
+
+		<p>To start a 4diac FORTE instance, just execute:</p>
+
+		<div class="code">docker run -d -p 61499:61499 -p 4840:4840 forte:latest</div>
+		
+		<p>the -d option starts the container in the background. The -p options maps the outside port to the inside. </p>
+
+		<p>To start 4diac FORTE with other listening port, execute:</p>
+
+		<div class="code">docker run -d -p 61500:61500 -p 4840:4840 forte:latest /usr/forte_output/linux32/forte -c localhost:61500</div>
+		
+		<p>The most common way of start the forte_builder image is as follow:</p>
+
+		<div class="code">docker run -it forte_builder:latest</div>
+		
+		<p>You'll then be inside the container and can browse it.</p>
+
+		<p>To copy the 4diac FORTE binaries to the local folder, execute:</p>
+
+		<div class="code">docker create --name temp_container forte_builder:latest && docker cp temp_container:/usr/forte_output/ ./ && docker rm temp_container</div>
+
+		
+
+
+
+		<h1 id="whereToGoFromHere">Where to go from here?</h1>
+
+		<p>Now that you installed the required tools, it's time to start using them. Take a look at the following page:</p>
+
+		<p><a href="../../html/4diacIDE/overview.html">Step by step tutorial</a></p>
+
+		<p>If you want to build a 4diac FORTE, here is a quick link back:</p>
+
+		<p><a href="../../html/installation/install.html">Install Eclipse 4diac</a></p>
+
+		<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+		<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
+
+		<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+</body>
+</html>
+

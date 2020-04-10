@@ -20,12 +20,12 @@ import org.eclipse.gef.commands.Command;
 public class AttributeDeleteCommand extends Command {
 	private ConfigurableObject configurableObject;
 	private Attribute attribute;
-	
+
 	public AttributeDeleteCommand(ConfigurableObject configurableObject, Attribute attribute) {
 		this.configurableObject = configurableObject;
 		this.attribute = attribute;
 	}
-	
+
 	@Override
 	public boolean canExecute() {
 		return null != configurableObject && null != attribute;

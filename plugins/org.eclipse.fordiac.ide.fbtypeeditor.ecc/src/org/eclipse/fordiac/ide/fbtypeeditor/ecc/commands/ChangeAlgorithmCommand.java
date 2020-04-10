@@ -34,11 +34,10 @@ public class ChangeAlgorithmCommand extends Command {
 	/**
 	 * Instantiates a new change algorithm command.
 	 * 
-	 * @param action the action
+	 * @param action    the action
 	 * @param algorithm the algorithm
 	 */
-	public ChangeAlgorithmCommand(final ECAction action,
-			final Algorithm algorithm) {
+	public ChangeAlgorithmCommand(final ECAction action, final Algorithm algorithm) {
 		super();
 		this.ecAction = action;
 		this.algorithm = algorithm;

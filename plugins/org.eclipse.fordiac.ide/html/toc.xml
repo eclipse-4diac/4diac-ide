@@ -75,6 +75,8 @@
           <topic href="html/installation/cygwin.html" label="Windows - Cygwin compiler"/>
           <topic href="html/installation/minGW.html" label="Windows - MinGW-w64 compiler"/>
         </topic>
+        <topic href="html/installation/docker.html" label="4diac FORTE as docker">
+        </topic>
     </topic>
 
 <!--********************************************************************************************-->	

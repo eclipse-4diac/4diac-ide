@@ -25,31 +25,29 @@ public class AdapterFBEditPart extends FBEditPart {
 	public AdapterFBEditPart(ZoomManager zoomManager) {
 		super(zoomManager);
 	}
-	
+
 	@Override
-	public AdapterFB getModel(){
-		return (AdapterFB)super.getModel();
+	public AdapterFB getModel() {
+		return (AdapterFB) super.getModel();
 	}
 
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
-		
+
 		removeEditPolicy(EditPolicy.COMPONENT_ROLE);
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy(){
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
 			@Override
 			protected Command createDeleteCommand(GroupRequest deleteRequest) {
 				if (getHost() instanceof AdapterFBEditPart) {
-					AdapterFB adapter = ((AdapterFBEditPart)getHost()).getModel();					
+					AdapterFB adapter = ((AdapterFBEditPart) getHost()).getModel();
 					return new DeleteInterfaceCommand(adapter.getAdapterDecl());
 				}
-				
+
 				return super.createDeleteCommand(deleteRequest);
 			}
 		});
-		
+
 	}
-	
-	
 
 }

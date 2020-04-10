@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
+ * 				 2020 Andrea Zoitl
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl
+ *	   - Externalized translatable strings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fmu;
 
@@ -21,67 +24,50 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fmu.messages"; //$NON-NLS-1$
 
-	/** The Annotation marker access_ labe l_ error annotation. */
 	public static String AnnotationMarkerAccess_LABEL_ErrorAnnotation;
-
-	/** The Annotation marker access_ labe l_ warning annotation. */
 	public static String AnnotationMarkerAccess_LABEL_WarningAnnotation;
-
-	/** The Download selection tree view_ collaps e_ all. */
+	public static String CreateFMUWizard_FMUCreationError;
+	public static String CreateFMUWizardPage_DestinationNotSelecte;
+	public static String CreateFMUWizardPage_IncludeTheFollowingLibrariesInExportedFMU;
+	public static String CreateFMUWizardPage_NoLibrariesSelectedToInclude;
+	public static String CreateFMUWizardPage_NothingselectedForFMUGeneration;
+	public static String CreateFMUWizardPage_SaveSelectedLibrariesForFutureFMUExports;
 	public static String DownloadSelectionTreeView_COLLAPSE_ALL;
-
-	/** The Download selection tree view_ expan d_ all. */
 	public static String DownloadSelectionTreeView_EXPAND_ALL;
-
-	/** The Download selection tree view_ labe l_ popup menu. */
 	public static String DownloadSelectionTreeView_LABEL_PopupMenu;
-
-	/** The Download selection tree view_ refresh. */
 	public static String DownloadSelectionTreeView_Refresh;
-
-	/** The Error annotation_ download error. */
 	public static String ErrorAnnotation_DownloadError;
-
-	/** The Log listener_ malformed error. */
-	public static String LogListener_MalformedError;
-
-	/** The Log listener_ returned error. */
-	public static String LogListener_ReturnedError;
-
-	/** The Mode_ download button label. */
-	public static String Mode_DownloadButtonLabel;
-
-	/** The Output_ clear action label. */
-	public static String Output_ClearActionLabel;
-
-	/** The Output_ clear description. */
-	public static String Output_ClearDescription;
-
-	/** The Output_ clear tooltip. */
-	public static String Output_ClearTooltip;
-
-	/** The Output_ comment. */
-	public static String Output_Comment;
-
-	/** The Output_ download error. */
-	public static String Output_DownloadError;
-
-	/** The Output_ download warning. */
-	public static String Output_DownloadWarning;
-	
-	/** Title of the create FMU wizard */  
+	public static String FMUDeviceManagementCommunicationHandler_BinaryDirectoryDoesNotExist;
+	public static String FMUDeviceManagementCommunicationHandler_CouldNotCreateTheComponentsInsideTheTemporaryFolder;
+	public static String FMUDeviceManagementCommunicationHandler_CouldNotCreateFolderInTheTemporaryFolder;
+	public static String FMUDeviceManagementCommunicationHandler_CouldNotCreateTheTemporaryFolder;
+	public static String FMUDeviceManagementCommunicationHandler_DoYouWantToRetry;
+	public static String FMUDeviceManagementCommunicationHandler_GeneratingFMUsForDevice;
+	public static String FMUDeviceManagementCommunicationHandler_InternalCopyingError;
+	public static String FMUDeviceManagementCommunicationHandler_LibraryCouldNotBeFound;
+	public static String FMUDeviceManagementCommunicationHandler_NoSelectedLibrariesWereFound;
+	public static String FMUDeviceManagementCommunicationHandler_OutputFMUFileExistsOverwriteIt;
+	public static String FMUDeviceManagementCommunicationHandler_OutputFolderDoesNotExistAndCouldNotBeCreated;
+	public static String FMUDeviceManagementCommunicationHandler_TheDirectoryIsInvalid;
+	public static String FMUDeviceManagementCommunicationHandler_UnableToCreateFolder;
+	public static String FMUPreferencePage_BinariesLocation;
+	public static String FMUPreferencePage_FMUPreferencesPage;
+	public static String FMUPreferencePage_IncludeTheFollowingLibrariesInExportedFMU;
+	public static String FMUPreferencePage_InsideTheSelectedPathTheFilesSearchedFor;
 	public static String FordiacCreateFMUWizard_LABEL_Window_Title;
-	
-	/** Page name of the create FMU wizard page*/  
-	public static String FordiacCreateFMUWizard_PageName;
-	
-	/** Description of the create FMU page */  
 	public static String FordiacCreateFMUWizard_PageDESCRIPTION;
-	
-	/** Title of the create FMU wizard page*/  
+	public static String FordiacCreateFMUWizard_PageName;
 	public static String FordiacCreateFMUWizard_PageTITLE;
-		
-	
+	public static String LogListener_MalformedError;
+	public static String LogListener_ReturnedError;
+	public static String Mode_DownloadButtonLabel;
+	public static String Output_ClearActionLabel;
+	public static String Output_ClearDescription;
+	public static String Output_ClearTooltip;
+	public static String Output_Comment;
+	public static String Output_DownloadError;
+	public static String Output_DownloadWarning;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

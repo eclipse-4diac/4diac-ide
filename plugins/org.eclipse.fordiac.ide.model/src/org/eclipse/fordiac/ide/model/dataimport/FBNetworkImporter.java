@@ -1,7 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2016 - 2017  fortiss GmbH
- * 				 2019 Johannes Kepler University, Linz
- * 
+ * 				 2019 - 2020 Johannes Kepler University, Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -12,39 +12,37 @@
  *   Alois Zoitl
  *    - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export
+ *   			 - Changed XML parsing to Staxx cursor interface for improved
+ *  			   parsing performance
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-class FBNetworkImporter {
+class FBNetworkImporter extends CommonElementImporter {
 
 	private final Palette palette;
 	private final FBNetwork fbNetwork;
@@ -54,23 +52,24 @@ class FBNetworkImporter {
 
 	protected final Map<String, FBNetworkElement> fbNetworkElementMap = new HashMap<>();
 
-	public FBNetworkImporter(Palette palette) {
+	public FBNetworkImporter(Palette palette, XMLStreamReader reader) {
 		// so we need an empty interface list
 		// this is a type with no external interface (currently only application)
 		this(palette, LibraryElementFactory.eINSTANCE.createFBNetwork(),
-				LibraryElementFactory.eINSTANCE.createInterfaceList());
+				LibraryElementFactory.eINSTANCE.createInterfaceList(), reader);
 	}
 
-	public FBNetworkImporter(Palette palette, FBNetwork fbNetwork, InterfaceList interfaceList) {
-		super();
+	public FBNetworkImporter(Palette palette, FBNetwork fbNetwork, InterfaceList interfaceList,
+			XMLStreamReader reader) {
+		super(reader);
 		this.palette = palette;
 		this.fbNetwork = fbNetwork;
 		this.interfaceList = interfaceList;
 		fbNetwork.getNetworkElements().forEach(element -> fbNetworkElementMap.put(element.getName(), element));
 	}
 
-	protected FBNetworkImporter(Palette palette, FBNetwork fbNetwork) {
-		this(palette, fbNetwork, LibraryElementFactory.eINSTANCE.createInterfaceList());
+	protected FBNetworkImporter(Palette palette, FBNetwork fbNetwork, XMLStreamReader reader) {
+		this(palette, fbNetwork, LibraryElementFactory.eINSTANCE.createInterfaceList(), reader);
 	}
 
 	public Palette getPalette() {
@@ -81,59 +80,54 @@ class FBNetworkImporter {
 		return fbNetwork;
 	}
 
-	FBNetwork parseFBNetwork(Node fbNetworkNode) throws TypeImportException {
-		if (null != fbNetworkNode) {
-			NodeList childNodes = fbNetworkNode.getChildNodes();
-
-			for (int i = 0; i < childNodes.getLength(); i++) {
-				Node n = childNodes.item(i);
-				parseFBNetworkEntryNode(n);
+	public FBNetwork parseFBNetwork(String networkNodeName) throws TypeImportException, XMLStreamException {
+		processChildren(networkNodeName, name -> {
+			switch (name) {
+			case LibraryElementTags.FB_ELEMENT:
+				parseFB();
+				break;
+			case LibraryElementTags.EVENT_CONNECTIONS_ELEMENT:
+				parseConnectionList(LibraryElementPackage.eINSTANCE.getEventConnection(),
+						fbNetwork.getEventConnections(), LibraryElementTags.EVENT_CONNECTIONS_ELEMENT);
+				break;
+			case LibraryElementTags.DATA_CONNECTIONS_ELEMENT:
+				parseConnectionList(LibraryElementPackage.eINSTANCE.getDataConnection(), fbNetwork.getDataConnections(),
+						LibraryElementTags.DATA_CONNECTIONS_ELEMENT);
+				break;
+			case LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT:
+				parseConnectionList(LibraryElementPackage.eINSTANCE.getAdapterConnection(),
+						fbNetwork.getAdapterConnections(), LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT);
+				break;
+			default:
+				return false;
 			}
-		}
+			return true;
+		});
 		return fbNetwork;
 	}
 
-	protected void parseFBNetworkEntryNode(Node n) throws TypeImportException {
-		if (n.getNodeName().equals(LibraryElementTags.FB_ELEMENT)) {
-			parseFB(n);
-		}
-		if (n.getNodeName().equals(LibraryElementTags.EVENT_CONNECTIONS_ELEMENT)) {
-			parseConnectionList(n, LibraryElementFactory.eINSTANCE.createEventConnection(),
-					fbNetwork.getEventConnections());
-		}
-		if (n.getNodeName().equals(LibraryElementTags.DATA_CONNECTIONS_ELEMENT)) {
-			parseConnectionList(n, LibraryElementFactory.eINSTANCE.createDataConnection(),
-					fbNetwork.getDataConnections());
-		}
-		if (n.getNodeName().equals(LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT)) {
-			parseConnectionList(n, LibraryElementFactory.eINSTANCE.createAdapterConnection(),
-					fbNetwork.getAdapterConnections());
-		}
-		checkDataConnections();
-	}
-
-	private void parseFB(Node fbNode) throws TypeImportException {
+	protected void parseFB() throws TypeImportException, XMLStreamException {
 		FB fb = LibraryElementFactory.eINSTANCE.createFB();
-		NamedNodeMap mapFbElement = fbNode.getAttributes();
-		CommonElementImporter.readNameCommentAttributes(fb, mapFbElement);
 
-		PaletteEntry entry = getTypeEntry(mapFbElement);
+		readNameCommentAttributes(fb);
 
-		if (entry instanceof FBTypePaletteEntry) {
+		FBTypePaletteEntry entry = getTypeEntry();
+
+		if (null != entry) {
 			fb.setPaletteEntry(entry);
 			fb.setInterface(EcoreUtil.copy(fb.getType().getInterfaceList()));
 		} else {
 //TODO model refactoring - think about where and if such markers should be created maybe move to validator
 //				createFBTypeProblemMarker(IMarker.SEVERITY_ERROR, Messages.FBTImporter_REQUIRED_FB_TYPE_EXCEPTION + typeFbElement.getNodeValue() + " not available");
-			// as we don't have type information we create an empty
-			// interface list
-			InterfaceList interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
-			fb.setInterface(interfaceList);
+			// as we don't have type information we create an empty interface list
+			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 			// TODO add attribute value for missing instance name and
 			// indicate that FB is missing for usage in outline views
 		}
 
-		configureParameters(fb.getInterface(), fbNode.getChildNodes());
+		getXandY(fb);
+
+		configureParameters(fb.getInterface(), LibraryElementTags.FB_ELEMENT);
 
 		for (VarDeclaration var : fb.getInterface().getInputVars()) {
 			if (null == var.getValue()) {
@@ -141,22 +135,20 @@ class FBNetworkImporter {
 			}
 		}
 
-		CommonElementImporter.getXandY(mapFbElement, fb);
 		fbNetwork.getNetworkElements().add(fb);
 		fbNetworkElementMap.put(fb.getName(), fb);
 	}
 
-	private PaletteEntry getTypeEntry(NamedNodeMap mapFbElement) {
-		Node typeFbElement = mapFbElement.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE);
+	private FBTypePaletteEntry getTypeEntry() {
+		String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeFbElement) {
-			// FIXME this can lead to problems if typename exists several times!
-			return palette.getTypeEntry(typeFbElement.getNodeValue());
+			return palette.getFBTypeEntry(typeFbElement);
 		}
 		return null;
 	}
 
 //	private IMarker createFBTypeProblemMarker(int severity, String message) {
-//		IMarker marker = null;		
+//		IMarker marker = null;
 //		if(null != file){
 //			try {
 //				marker = file.createMarker(IMarker.PROBLEM);
@@ -169,128 +161,101 @@ class FBNetworkImporter {
 //		return marker;
 //	}
 
-	protected static void configureParameters(InterfaceList interfaceList, NodeList childNodes)
-			throws TypeImportException {
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(LibraryElementTags.PARAMETER_ELEMENT)) {
-				VarDeclaration paramter;
-				paramter = ImportUtils.parseParameter(n);
+	protected void configureParameters(InterfaceList interfaceList, String parentNodeName)
+			throws TypeImportException, XMLStreamException {
+		processChildren(parentNodeName, name -> {
+			if (LibraryElementTags.PARAMETER_ELEMENT.equals(name)) {
+				VarDeclaration paramter = parseParameter();
 				VarDeclaration vInput = getVarNamed(interfaceList, paramter.getName(), true);
 				if (null != vInput) {
 					vInput.setValue(paramter.getValue());
 				}
+				return true;
+			}
+			return false;
+		});
+	}
+
+	protected <T extends Connection> void parseConnectionList(EClass conType, EList<T> connectionlist,
+			String parentNodeName) throws XMLStreamException, TypeImportException {
+		processChildren(parentNodeName, name -> {
+			if (LibraryElementTags.CONNECTION_ELEMENT.equals(LibraryElementTags.CONNECTION_ELEMENT)) {
+				T connection = parseConnection(conType);
+				if (null != connection) {
+					connectionlist.add(connection);
+				}
+				proceedToEndElementNamed(LibraryElementTags.CONNECTION_ELEMENT);
+				return true;
+			}
+			return false;
+		});
+
+	}
+
+	private <T extends Connection> T parseConnection(EClass conType) {
+		T connection = (T) LibraryElementFactory.eINSTANCE.create(conType);
+		connection.setResTypeConnection(false);
+
+		String destinationElement = getAttributeValue(LibraryElementTags.DESTINATION_ATTRIBUTE);
+		if (null != destinationElement) {
+			IInterfaceElement destination = getConnectionEndPoint(destinationElement, conType, true);
+			if (null != destination) {
+				connection.setDestination(destination);
+			} else {
+				// TODO model refactoring - this connection is missing an endpoint. add error
+				// markers or dummy connection points so that the conenction can be handled in
+				// the according FBNetowrk editor
+				Activator.getDefault().logError("Connection destination not found: " + destinationElement);
+				return null;
 			}
 		}
-	}
-
-	private <T extends Connection> void parseConnectionList(Node n, T conTemplate, EList<T> connectionlist) {
-		NodeList childNodes = n.getChildNodes();
-
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node connectionNode = childNodes.item(i);
-			if (LibraryElementTags.CONNECTION_ELEMENT.equals(connectionNode.getNodeName())) {
-				T connection = EcoreUtil.copy(conTemplate);
-				connection.setResTypeConnection(false);
-				NamedNodeMap connectionAttributeMap = connectionNode.getAttributes();
-
-				Node destinationElement = connectionAttributeMap.getNamedItem(LibraryElementTags.DESTINATION_ATTRIBUTE);
-				if (destinationElement != null) {
-					IInterfaceElement destination = getConnectionEndPoint(destinationElement.getNodeValue());
-					if (null != destination) {
-						// TODO check if IInterfaceElement is of correct type
-						connection.setDestination(destination);
-					} else {
-						// TODO model refactoring - this connection is missing an endpoint. add error
-						// markers or dummy connection points so that the conenction can be handled in
-						// the according FBNetowrk editor
-						Activator.getDefault()
-								.logError("Connection destination not found: " + destinationElement.getNodeValue());
-						continue;
-					}
-				}
-				Node sourceElement = connectionAttributeMap.getNamedItem(LibraryElementTags.SOURCE_ATTRIBUTE);
-				if (null != sourceElement) {
-					IInterfaceElement source = getConnectionEndPoint(sourceElement.getNodeValue());
-					if (null != source) {
-						// TODO check if IInterfaceElement is of correct type
-						connection.setSource(source);
-					} else {
-						Activator.getDefault().logError("Connection source not found: " + sourceElement.getNodeValue());
-						continue;
-					}
-				}
-				Node commentElement = connectionAttributeMap.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
-				if (null != commentElement) {
-					connection.setComment(commentElement.getNodeValue());
-				}
-
-				parseConnectionRouting(connectionAttributeMap, connection);
-
-				connectionlist.add(connection);
+		String sourceElement = getAttributeValue(LibraryElementTags.SOURCE_ATTRIBUTE);
+		if (null != sourceElement) {
+			IInterfaceElement source = getConnectionEndPoint(sourceElement, conType, false);
+			if (null != source) {
+				connection.setSource(source);
+			} else {
+				Activator.getDefault().logError("Connection source not found: " + sourceElement);
+				return null;
 			}
 		}
+
+		String commentElement = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+		if (null != commentElement) {
+			connection.setComment(commentElement);
+		}
+
+		parseConnectionRouting(connection);
+		return connection;
 	}
 
-	private static void parseConnectionRouting(NamedNodeMap connectionAttributeMap, Connection connection) {
-		Node dx1Element = connectionAttributeMap.getNamedItem(LibraryElementTags.DX1_ATTRIBUTE);
-		if (dx1Element != null) {
-			connection.setDx1(parseConnectionValue(dx1Element.getNodeValue()));
+	private void parseConnectionRouting(Connection connection) {
+		String dx1Element = getAttributeValue(LibraryElementTags.DX1_ATTRIBUTE);
+		if (null != dx1Element) {
+			connection.setDx1(parseConnectionValue(dx1Element));
 		}
-		Node dx2Element = connectionAttributeMap.getNamedItem(LibraryElementTags.DX2_ATTRIBUTE);
-		if (dx2Element != null) {
-			connection.setDx2(parseConnectionValue(dx2Element.getNodeValue()));
+		String dx2Element = getAttributeValue(LibraryElementTags.DX2_ATTRIBUTE);
+		if (null != dx2Element) {
+			connection.setDx2(parseConnectionValue(dx2Element));
 		}
-		Node dyElement = connectionAttributeMap.getNamedItem(LibraryElementTags.DY_ATTRIBUTE);
-		if (dyElement != null) {
-			connection.setDy(parseConnectionValue(dyElement.getNodeValue()));
+		String dyElement = getAttributeValue(LibraryElementTags.DY_ATTRIBUTE);
+		if (null != dyElement) {
+			connection.setDy(parseConnectionValue(dyElement));
 		}
 	}
 
-	/**
-	 * In old 4diac project adapter connections are part of the data connections
-	 * this functions checks this and moves these to the adapter connection list.
-	 */
-	private void checkDataConnections() {
-		List<DataConnection> toDelete = new ArrayList<>();
-		for (DataConnection con : fbNetwork.getDataConnections()) {
-			if (con.getSource() instanceof AdapterDeclaration) {
-				toDelete.add(con);
-				AdapterConnection adpCon = LibraryElementFactory.eINSTANCE.createAdapterConnection();
-				adpCon.setSource(con.getSource());
-				adpCon.setDestination(con.getDestination());
-				adpCon.setComment(con.getComment());
-				adpCon.setDx1(con.getDx1());
-				adpCon.setDx2(con.getDx2());
-				adpCon.setDy(con.getDy());
-				fbNetwork.getAdapterConnections().add(adpCon);
-				con.setSource(null);
-				con.setDestination(null);
-			}
-		}
-		fbNetwork.getDataConnections().removeAll(toDelete);
-	}
-
-	private IInterfaceElement getConnectionEndPoint(String path) {
+	private IInterfaceElement getConnectionEndPoint(String path, EClass conType, boolean isInput) {
 		String[] split = path.split("\\."); //$NON-NLS-1$
-		String fbName = ""; //$NON-NLS-1$
-		String interfaceElement = ""; //$NON-NLS-1$
-		if (split.length == 1) {
-			interfaceElement = path;
-		}
-		if (split.length == 2) {
-			fbName = split[0];
-			interfaceElement = split[1];
-		}
-		if (!fbName.equals("") && !interfaceElement.equals("")) {//$NON-NLS-1$ //$NON-NLS-2$
-			FBNetworkElement element = findFBNetworkElement(fbName);
-			if (null != element) {
-				return element.getInterfaceElement(interfaceElement);
-			}
-		} else if (fbName.equals("")) { //$NON-NLS-1$
-			return getContainingInterfaceElement(interfaceElement);
-		}
 
+		if (1 == split.length) {
+			return getContainingInterfaceElement(path, conType, isInput);
+		}
+		if (2 == split.length) {
+			FBNetworkElement element = findFBNetworkElement(split[0]);
+			if (null != element) {
+				return getInterfaceElement(element.getInterface(), split[1], conType, isInput);
+			}
+		}
 		return null;
 	}
 
@@ -298,15 +263,55 @@ class FBNetworkImporter {
 	 * Check if the element that contains the fbnetwork has an interface element
 	 * with the given name. this is needed for subapps, cfbs, devices and resources
 	 */
-	protected IInterfaceElement getContainingInterfaceElement(String interfaceElement) {
-		return interfaceList.getInterfaceElement(interfaceElement);
+	protected IInterfaceElement getContainingInterfaceElement(String interfaceElement, EClass conType,
+			boolean isInput) {
+		return getInterfaceElement(interfaceList, interfaceElement, conType, !isInput); // for connections to the
+																						// interface inputs are the
+																						// outputs of the FB
+	}
+
+	private static IInterfaceElement getInterfaceElement(InterfaceList il, String interfaceElement, EClass conType,
+			boolean isInput) {
+		EList<? extends IInterfaceElement> ieList = getInterfaceElementList(il, conType, isInput);
+		for (IInterfaceElement ie : ieList) {
+			if (ie.getName().equals(interfaceElement)) {
+				return ie;
+			}
+		}
+		return null;
+	}
+
+	private static EList<? extends IInterfaceElement> getInterfaceElementList(InterfaceList il, EClass conType,
+			boolean isInput) {
+		if (isInput) {
+			if (LibraryElementPackage.eINSTANCE.getEventConnection() == conType) {
+				return il.getEventInputs();
+			}
+			if (LibraryElementPackage.eINSTANCE.getDataConnection() ==  conType) {
+				return il.getInputVars();
+			}
+			if (LibraryElementPackage.eINSTANCE.getAdapterConnection().equals(conType)) {
+				return il.getSockets();
+			}
+		} else {
+			if (LibraryElementPackage.eINSTANCE.getEventConnection() == conType) {
+				return il.getEventOutputs();
+			}
+			if (LibraryElementPackage.eINSTANCE.getDataConnection() == conType) {
+				return il.getOutputVars();
+			}
+			if (LibraryElementPackage.eINSTANCE.getAdapterConnection().equals(conType)) {
+				return il.getPlugs();
+			}
+		}
+		return null;
 	}
 
 	protected FBNetworkElement findFBNetworkElement(String fbName) {
 		return fbNetworkElementMap.get(fbName);
 	}
 
-	private static VarDeclaration getVarNamed(InterfaceList interfaceList, String varName, boolean input) {
+	protected static VarDeclaration getVarNamed(InterfaceList interfaceList, String varName, boolean input) {
 		VarDeclaration retVal;
 		boolean hasType = true;
 
@@ -342,7 +347,7 @@ class FBNetworkImporter {
 
 	/**
 	 * returns an valid dx, dy integer value
-	 * 
+	 *
 	 * @param value
 	 * @return if value is valid the converted int of that otherwise 0
 	 */

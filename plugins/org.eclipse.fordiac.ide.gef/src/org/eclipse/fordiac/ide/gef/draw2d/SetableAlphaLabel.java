@@ -41,8 +41,8 @@ public class SetableAlphaLabel extends Label implements ITransparencyFigure {
 	}
 
 	/**
-	 * Sets the alpha to the given value. Values may range from 0 to 255. A
-	 * value of 0 is completely transparent.
+	 * Sets the alpha to the given value. Values may range from 0 to 255. A value of
+	 * 0 is completely transparent.
 	 * 
 	 * @param alpha
 	 */
@@ -69,14 +69,14 @@ public class SetableAlphaLabel extends Label implements ITransparencyFigure {
 	public int getTransparency() {
 		return getAlpha();
 	}
-	
+
 	/**
 	 * @see Figure#paintFigure(Graphics)
 	 */
 	@Override
 	protected void paintFigure(Graphics graphics) {
 		graphics.setAlpha(getAlpha());
-		if(isOpaque()){
+		if (isOpaque()) {
 			graphics.fillRectangle(getBounds());
 		}
 
@@ -95,6 +95,5 @@ public class SetableAlphaLabel extends Label implements ITransparencyFigure {
 		graphics.drawText(getSubStringText(), getTextLocation());
 		graphics.translate(-bounds.x, -bounds.y);
 	}
-
 
 }

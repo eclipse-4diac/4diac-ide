@@ -11,7 +11,6 @@
  */
 package org.eclipse.fordiac.ide.model.data.provider;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -21,17 +20,17 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.model.data.ValueType;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.data.ValueType} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.data.ValueType} object. <!--
+ * begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
-public class ValueTypeItemProvider
-	extends DataTypeItemProvider {
+public class ValueTypeItemProvider extends DataTypeItemProvider {
 	/**
-	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ValueTypeItemProvider(AdapterFactory adapterFactory) {
@@ -39,9 +38,9 @@ public class ValueTypeItemProvider
 	}
 
 	/**
-	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -54,9 +53,8 @@ public class ValueTypeItemProvider
 	}
 
 	/**
-	 * This returns ValueType.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns ValueType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -65,24 +63,23 @@ public class ValueTypeItemProvider
 	}
 
 	/**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ValueType)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_ValueType_type") : //$NON-NLS-1$
-			getString("_UI_ValueType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((ValueType) object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_ValueType_type") : //$NON-NLS-1$
+				getString("_UI_ValueType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -92,10 +89,10 @@ public class ValueTypeItemProvider
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

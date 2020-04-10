@@ -45,11 +45,10 @@ public class DirectoryChooserControl extends Composite {
 	 * Instantiates a new directory chooser control.
 	 * 
 	 * @param parent the parent
-	 * @param style the style
-	 * @param label the label
+	 * @param style  the style
+	 * @param label  the label
 	 */
-	public DirectoryChooserControl(final Composite parent, final int style,
-			final String label) {
+	public DirectoryChooserControl(final Composite parent, final int style, final String label) {
 		super(parent, style);
 		this.labelText = label;
 		initialize(false);
@@ -71,38 +70,34 @@ public class DirectoryChooserControl extends Composite {
 		if (useLabel) {
 			cLabel.setText(this.labelText);
 		} else {
-			cLabel.setText(Messages.DirectoryChooserControl_LABEL_ChooseDirectory);
+			cLabel.setText(FordiacMessages.DirectoryChooserControl_LABEL_ChooseDirectory);
 		}
 		text = new Text(this, SWT.BORDER);
 		text.setLayoutData(gridData);
 		Button button = new Button(this, SWT.NONE);
-		button.setText(Messages.DirectoryChooserControl_LABEL_Browse);
-		button
-				.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-					@Override
-					public void widgetSelected(
-							final org.eclipse.swt.events.SelectionEvent e) {
-						DirectoryDialog dialog = new DirectoryDialog(Display
-								.getDefault().getActiveShell(), SWT.SAVE);
-						String dir = text.getText();
+		button.setText(FordiacMessages.DirectoryChooserControl_LABEL_Browse);
+		button.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+			@Override
+			public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
+				DirectoryDialog dialog = new DirectoryDialog(Display.getDefault().getActiveShell(), SWT.SAVE);
+				String dir = text.getText();
 
-						dialog.setText(labelText);
-						dialog
-								.setMessage(Messages.DirectoryChooserControl_LABEL_SelectdDirectoryDialogMessage);
+				dialog.setText(labelText);
+				dialog.setMessage(FordiacMessages.DirectoryChooserControl_LABEL_SelectdDirectoryDialogMessage);
 
-						if (!dir.equals("")) { //$NON-NLS-1$
-							dialog.setFilterPath(dir);
-						}
+				if (!dir.equals("")) { //$NON-NLS-1$
+					dialog.setFilterPath(dir);
+				}
 
-						String selectedDirectory = dialog.open();
+				String selectedDirectory = dialog.open();
 
-						if (selectedDirectory != null) {
-							text.setText(selectedDirectory);
-							notifyDirectoryListeners();
-						}
+				if (selectedDirectory != null) {
+					text.setText(selectedDirectory);
+					notifyDirectoryListeners();
+				}
 
-					}
-				});
+			}
+		});
 
 		text.addTraverseListener(e -> {
 			if (e.detail == SWT.TRAVERSE_RETURN) {
@@ -116,8 +111,7 @@ public class DirectoryChooserControl extends Composite {
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see
-			 * org.eclipse.swt.events.FocusListener#focusLost(org.eclipse.swt
+			 * @see org.eclipse.swt.events.FocusListener#focusLost(org.eclipse.swt
 			 * .events.FocusEvent)
 			 */
 			@Override
@@ -159,8 +153,7 @@ public class DirectoryChooserControl extends Composite {
 	 * Notify directory listeners.
 	 */
 	private void notifyDirectoryListeners() {
-		for (Iterator<IDirectoryChanged> iter = listeners.iterator(); iter
-				.hasNext();) {
+		for (Iterator<IDirectoryChanged> iter = listeners.iterator(); iter.hasNext();) {
 			IDirectoryChanged l = iter.next();
 			l.directoryChanged(text.getText());
 		}

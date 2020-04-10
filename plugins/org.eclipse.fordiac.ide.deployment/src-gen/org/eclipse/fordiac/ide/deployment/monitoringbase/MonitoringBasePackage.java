@@ -31,47 +31,43 @@ import org.eclipse.emf.ecore.EReference;
  * <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * 
  * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseFactory
  * @model kind="package"
  * @generated
  */
 public interface MonitoringBasePackage extends EPackage {
 	/**
-	 * The package name. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The package name.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNAME = "monitoringbase";
+	String eNAME = "monitoringbase"; //$NON-NLS-1$
 
 	/**
-	 * The package namespace URI. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The package namespace URI.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "org.eclipse.fordiac.depolyment.monitoringbase";
+	String eNS_URI = "org.eclipse.fordiac.depolyment.monitoringbase"; //$NON-NLS-1$
 
 	/**
-	 * The package namespace name. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The package namespace name.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_PREFIX = "monitoringbase";
+	String eNS_PREFIX = "monitoringbase"; //$NON-NLS-1$
 
 	/**
-	 * The singleton instance of the package. <!-- begin-user-doc --> <!--
+	 * The singleton instance of the package.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	MonitoringBasePackage eINSTANCE = org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBasePackageImpl
-			.init();
+	MonitoringBasePackage eINSTANCE = org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBasePackageImpl.init();
 
 	/**
-	 * The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part
-	 * Creator</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part Creator</em>}' class.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBasePackageImpl#getIEditPartCreator()
 	 * @generated
@@ -81,17 +77,14 @@ public interface MonitoringBasePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>IEdit Part Creator</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
 	int IEDIT_PART_CREATOR_FEATURE_COUNT = 0;
 
 	/**
-	 * The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl
-	 * <em>Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl <em>Element</em>}' class.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBasePackageImpl#getMonitoringBaseElement()
 	 * @generated
@@ -99,9 +92,9 @@ public interface MonitoringBasePackage extends EPackage {
 	int MONITORING_BASE_ELEMENT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference. <!-- begin-user-doc
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
@@ -126,10 +119,8 @@ public interface MonitoringBasePackage extends EPackage {
 	int MONITORING_BASE_ELEMENT_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl
-	 * <em>Port Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl <em>Port Element</em>}' class.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBasePackageImpl#getPortElement()
 	 * @generated
@@ -137,9 +128,9 @@ public interface MonitoringBasePackage extends EPackage {
 	int PORT_ELEMENT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Fb</b></em>' reference. <!-- begin-user-doc
+	 * The feature id for the '<em><b>Fb</b></em>' reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
@@ -182,10 +173,8 @@ public interface MonitoringBasePackage extends EPackage {
 	int PORT_ELEMENT_FEATURE_COUNT = 4;
 
 	/**
-	 * Returns the meta object for class
-	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement
-	 * <em>Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement <em>Element</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Element</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement
 	 * @generated
@@ -193,10 +182,8 @@ public interface MonitoringBasePackage extends EPackage {
 	EClass getMonitoringBaseElement();
 
 	/**
-	 * Returns the meta object for the reference
-	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#getPort
-	 * <em>Port</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Port</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#getPort()
 	 * @see #getMonitoringBaseElement()
@@ -205,10 +192,8 @@ public interface MonitoringBasePackage extends EPackage {
 	EReference getMonitoringBaseElement_Port();
 
 	/**
-	 * Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#isOffline
-	 * <em>Offline</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#isOffline <em>Offline</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Offline</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#isOffline()
 	 * @see #getMonitoringBaseElement()
@@ -217,10 +202,8 @@ public interface MonitoringBasePackage extends EPackage {
 	EAttribute getMonitoringBaseElement_Offline();
 
 	/**
-	 * Returns the meta object for class
-	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement
-	 * <em>Port Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement <em>Port Element</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Port Element</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement
 	 * @generated
@@ -228,10 +211,8 @@ public interface MonitoringBasePackage extends EPackage {
 	EClass getPortElement();
 
 	/**
-	 * Returns the meta object for the reference
-	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getFb
-	 * <em>Fb</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getFb <em>Fb</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Fb</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getFb()
 	 * @see #getPortElement()
@@ -240,10 +221,8 @@ public interface MonitoringBasePackage extends EPackage {
 	EReference getPortElement_Fb();
 
 	/**
-	 * Returns the meta object for the reference
-	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getInterfaceElement
-	 * <em>Interface Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getInterfaceElement <em>Interface Element</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Interface Element</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getInterfaceElement()
 	 * @see #getPortElement()
@@ -252,10 +231,8 @@ public interface MonitoringBasePackage extends EPackage {
 	EReference getPortElement_InterfaceElement();
 
 	/**
-	 * Returns the meta object for the reference
-	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getResource
-	 * <em>Resource</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getResource <em>Resource</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Resource</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getResource()
 	 * @see #getPortElement()
@@ -264,10 +241,8 @@ public interface MonitoringBasePackage extends EPackage {
 	EReference getPortElement_Resource();
 
 	/**
-	 * Returns the meta object for the attribute list
-	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getHierarchy
-	 * <em>Hierarchy</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for the attribute list '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getHierarchy <em>Hierarchy</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the attribute list '<em>Hierarchy</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getHierarchy()
 	 * @see #getPortElement()
@@ -276,10 +251,8 @@ public interface MonitoringBasePackage extends EPackage {
 	EAttribute getPortElement_Hierarchy();
 
 	/**
-	 * Returns the meta object for class
-	 * '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part
-	 * Creator</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part Creator</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>IEdit Part Creator</em>'.
 	 * @see org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator
 	 * @model instanceClass="org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator"
@@ -305,15 +278,12 @@ public interface MonitoringBasePackage extends EPackage {
 	 * <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl
-		 * <em>Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl <em>Element</em>}' class.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl
 		 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBasePackageImpl#getMonitoringBaseElement()
 		 * @generated
@@ -323,7 +293,6 @@ public interface MonitoringBasePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
 		 * @generated
 		 */
 		EReference MONITORING_BASE_ELEMENT__PORT = eINSTANCE.getMonitoringBaseElement_Port();
@@ -331,16 +300,13 @@ public interface MonitoringBasePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Offline</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
 		 * @generated
 		 */
 		EAttribute MONITORING_BASE_ELEMENT__OFFLINE = eINSTANCE.getMonitoringBaseElement_Offline();
 
 		/**
-		 * The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl
-		 * <em>Port Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl <em>Port Element</em>}' class.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl
 		 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBasePackageImpl#getPortElement()
 		 * @generated
@@ -356,9 +322,8 @@ public interface MonitoringBasePackage extends EPackage {
 		EReference PORT_ELEMENT__FB = eINSTANCE.getPortElement_Fb();
 
 		/**
-		 * The meta object literal for the '<em><b>Interface Element</b></em>' reference
-		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * The meta object literal for the '<em><b>Interface Element</b></em>' reference feature.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference PORT_ELEMENT__INTERFACE_ELEMENT = eINSTANCE.getPortElement_InterfaceElement();
@@ -366,24 +331,20 @@ public interface MonitoringBasePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Resource</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
 		 * @generated
 		 */
 		EReference PORT_ELEMENT__RESOURCE = eINSTANCE.getPortElement_Resource();
 
 		/**
-		 * The meta object literal for the '<em><b>Hierarchy</b></em>' attribute list
-		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * The meta object literal for the '<em><b>Hierarchy</b></em>' attribute list feature.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute PORT_ELEMENT__HIERARCHY = eINSTANCE.getPortElement_Hierarchy();
 
 		/**
-		 * The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part
-		 * Creator</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part Creator</em>}' class.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator
 		 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBasePackageImpl#getIEditPartCreator()
 		 * @generated

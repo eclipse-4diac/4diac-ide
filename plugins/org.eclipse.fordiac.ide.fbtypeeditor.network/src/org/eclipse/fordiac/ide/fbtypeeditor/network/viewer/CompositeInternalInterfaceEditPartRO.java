@@ -27,17 +27,16 @@ public class CompositeInternalInterfaceEditPartRO extends InterfaceEditPart {
 		super();
 		setConnectable(false);
 	}
-	
+
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
 		return null;
 	}
 
-	
 	@Override
 	protected IFigure createFigure() {
 		InterfaceFigure figure = new InterfaceFigure();
-		figure.setBorder(new ConnectorBorder(getModel()){
+		figure.setBorder(new ConnectorBorder(getModel()) {
 			@Override
 			public boolean isInput() {
 				return !super.isInput();
@@ -45,10 +44,10 @@ public class CompositeInternalInterfaceEditPartRO extends InterfaceEditPart {
 		});
 		return figure;
 	}
-	
+
 	@Override
 	public boolean isInput() {
 		return !super.isInput();
 	}
-	
+
 }

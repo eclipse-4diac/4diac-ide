@@ -19,8 +19,8 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 public class VersionContentProvider implements IStructuredContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
-		if(inputElement instanceof FBType){
-			return ((FBType)inputElement).getVersionInfo().toArray();
+		if (inputElement instanceof FBType) {
+			return ((FBType) inputElement).getVersionInfo().toArray();
 		}
 		return new Object[] {};
 	}

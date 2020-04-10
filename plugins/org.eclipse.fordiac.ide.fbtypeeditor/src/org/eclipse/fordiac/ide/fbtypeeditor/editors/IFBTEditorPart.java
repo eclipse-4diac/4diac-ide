@@ -20,17 +20,21 @@ import org.eclipse.ui.ISelectionListener;
 public interface IFBTEditorPart extends ISelectionListener, IEditorPart {
 
 	/**
-	 * Inform the FBTEditorPart that an element has been selected in the outline view. 
-	 * If the selected element is handled by the FBTEditorPart the FBTEditorPart has to perform
-	 * measure to show the selected element. By returning true the FBTypeEditor can perform
-	 * measure to activate the correct tab.
+	 * Inform the FBTEditorPart that an element has been selected in the outline
+	 * view. If the selected element is handled by the FBTEditorPart the
+	 * FBTEditorPart has to perform measure to show the selected element. By
+	 * returning true the FBTypeEditor can perform measure to activate the correct
+	 * tab.
 	 * 
-	 * @param selectedElement  the element that has been selected in the FB outline view
+	 * @param selectedElement the element that has been selected in the FB outline
+	 *                        view
 	 * @return true if the selected element is handled in this editor part
 	 */
 	boolean outlineSelectionChanged(Object selectedElement);
-	
-	/**This allows to coordinating multipageeditpart to share a command stack among all sub-editor pages
+
+	/**
+	 * This allows to coordinating multipageeditpart to share a command stack among
+	 * all sub-editor pages
 	 * 
 	 * @param commandStack the shared command stack
 	 */

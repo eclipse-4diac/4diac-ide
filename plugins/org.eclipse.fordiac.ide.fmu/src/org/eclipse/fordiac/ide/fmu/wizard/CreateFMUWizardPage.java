@@ -13,10 +13,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fmu.wizard;
 
+import org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTree;
 import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferencePage;
 import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.ui.DirectoryChooserControl;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -29,20 +35,14 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
-import org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTree;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.ui.DirectoryChooserControl;
-
 public class CreateFMUWizardPage extends WizardPage {
 
 	private IStructuredSelection selection;
 	private DirectoryChooserControl dcc;
 	private DownloadSelectionTree systemTree;
-	
+
 	private static final String CURRENT_DIR_SETTING_ID = "currentDir"; //$NON-NLS-1$
-	
+
 	public Button getWin32Field() {
 		return win32Field;
 	}
@@ -54,7 +54,6 @@ public class CreateFMUWizardPage extends WizardPage {
 	public Button getLinux32Field() {
 		return linux32Field;
 	}
-
 
 	public Button getLinux64Field() {
 		return linux64Field;
@@ -69,12 +68,12 @@ public class CreateFMUWizardPage extends WizardPage {
 	private Button linux32Field;
 	private Button linux64Field;
 	private Button storeSelectedLibaries;
-	
+
 	public CreateFMUWizardPage(IStructuredSelection selection) {
 		super(Messages.FordiacCreateFMUWizard_PageName);
-		
+
 		this.selection = selection;
-		
+
 		setDescription(Messages.FordiacCreateFMUWizard_PageDESCRIPTION);
 		setTitle(Messages.FordiacCreateFMUWizard_PageTITLE);
 	}
@@ -88,11 +87,11 @@ public class CreateFMUWizardPage extends WizardPage {
 
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		createSystemsContainer(composite);
 		createDestinationGroup(composite);
 		createSelectionLibrariesGroup(composite);
-		
+
 		setPageComplete(validatePage());
 		// Show description on opening
 		setErrorMessage(null);
@@ -100,37 +99,33 @@ public class CreateFMUWizardPage extends WizardPage {
 		setControl(composite);
 
 	}
-	
-	
-	public Object[] getSelectedElements(){
+
+	public Object[] getSelectedElements() {
 		return systemTree.getCheckedElements();
 	}
 
-
 	private void createSystemsContainer(Composite composite) {
-		systemTree = new DownloadSelectionTree( composite, SWT.FULL_SELECTION
-						| SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
-		
+		systemTree = new DownloadSelectionTree(composite,
+				SWT.FULL_SELECTION | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
+
 		GridData fillBoth = new GridData();
 		fillBoth.horizontalAlignment = GridData.FILL;
 		fillBoth.grabExcessHorizontalSpace = true;
 		fillBoth.verticalAlignment = GridData.FILL;
 		fillBoth.grabExcessVerticalSpace = true;
 		systemTree.getTree().setLayoutData(fillBoth);
-		
-		
-		systemTree.setInput(this); //the systemTree needs this only as reference
-		
+
+		systemTree.setInput(this); // the systemTree needs this only as reference
+
 		systemTree.addCheckStateListener(event -> setPageComplete(validatePage()));
-		
+
 		checkSelectedElements();
 	}
-	
+
 	/**
 	 * Creates the file name group.
 	 * 
-	 * @param composite
-	 *          the composite
+	 * @param composite the composite
 	 */
 	private void createDestinationGroup(final Composite composite) {
 
@@ -138,28 +133,26 @@ public class CreateFMUWizardPage extends WizardPage {
 		stretch.grabExcessHorizontalSpace = true;
 		stretch.horizontalAlignment = SWT.FILL;
 
-		dcc = new DirectoryChooserControl(composite, SWT.NONE, "Destination: ");
-		dcc.addDirectoryChangedListener(newDirectory ->  {
-				saveDir(newDirectory);
-				setPageComplete(validatePage());
+		dcc = new DirectoryChooserControl(composite, SWT.NONE, FordiacMessages.Destination + ":"); //$NON-NLS-1$
+		dcc.addDirectoryChangedListener(newDirectory -> {
+			saveDir(newDirectory);
+			setPageComplete(validatePage());
 		});
 
 		dcc.setLayoutData(stretch);
 		loadDir();
 	}
-	
-	
+
 	/**
 	 * Creates the selection libraries group.
 	 * 
-	 * @param composite
-	 *          the composite
+	 * @param composite the composite
 	 */
 	private void createSelectionLibrariesGroup(final Composite composite) {
-		
+
 		Group librariesGroup = new Group(composite, SWT.NONE);
-		librariesGroup.setText("Include the following libraries in exported FMU");
-		
+		librariesGroup.setText(Messages.CreateFMUWizardPage_IncludeTheFollowingLibrariesInExportedFMU);
+
 		GridLayout gridLayout = new GridLayout(1, false);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
@@ -170,49 +163,49 @@ public class CreateFMUWizardPage extends WizardPage {
 		linux32Field = new Button(librariesGroup, SWT.CHECK);
 		linux64Field = new Button(librariesGroup, SWT.CHECK);
 		storeSelectedLibaries = new Button(librariesGroup, SWT.CHECK);
-		Button[] buttons = { win32Field, win64Field, linux32Field, linux64Field, storeSelectedLibaries};
-		String[] preferences = {PreferenceConstants.P_FMU_WIN32, PreferenceConstants.P_FMU_WIN64, PreferenceConstants.P_FMU_LIN32, PreferenceConstants.P_FMU_LIN64, "Save selected libraries for future FMU exports"};
-		
-		for(int i = 0; i < buttons.length; i++) {
+		Button[] buttons = { win32Field, win64Field, linux32Field, linux64Field, storeSelectedLibaries };
+		String[] preferences = { PreferenceConstants.P_FMU_WIN32, PreferenceConstants.P_FMU_WIN64,
+				PreferenceConstants.P_FMU_LIN32, PreferenceConstants.P_FMU_LIN64,
+				Messages.CreateFMUWizardPage_SaveSelectedLibrariesForFutureFMUExports };
+
+		for (int i = 0; i < buttons.length; i++) {
 			buttons[i].setText(preferences[i]);
 			buttons[i].setEnabled(false);
 			buttons[i].setSelection(false);
 		}
-		
+
 		storeSelectedLibaries.setEnabled(true);
-		
-		//Enable the found libraries
-		for (String found : FMUPreferencePage.getFoundLibraries()){
-			if (found.equals(PreferenceConstants.P_FMU_WIN32)){
+
+		// Enable the found libraries
+		for (String found : FMUPreferencePage.getFoundLibraries()) {
+			if (found.equals(PreferenceConstants.P_FMU_WIN32)) {
 				win32Field.setEnabled(true);
-			}else if(found.equals(PreferenceConstants.P_FMU_WIN64)){
+			} else if (found.equals(PreferenceConstants.P_FMU_WIN64)) {
 				win64Field.setEnabled(true);
-			}
-			else if(found.equals(PreferenceConstants.P_FMU_LIN32)){
+			} else if (found.equals(PreferenceConstants.P_FMU_LIN32)) {
 				linux32Field.setEnabled(true);
-			}
-			else if(found.equals(PreferenceConstants.P_FMU_LIN64)){
+			} else if (found.equals(PreferenceConstants.P_FMU_LIN64)) {
 				linux64Field.setEnabled(true);
 			}
 		}
-		
+
 		SelectionListener listener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setPageComplete(validatePage());
-			}	
-		}; 
-			
-		//Check the selected libraries from preferences
-		for(int i = 0; i < buttons.length; i++) {
+			}
+		};
+
+		// Check the selected libraries from preferences
+		for (int i = 0; i < buttons.length; i++) {
 			buttons[i].setSelection(Activator.getDefault().getPreferenceStore().getBoolean(preferences[i]));
 			buttons[i].addSelectionListener(listener);
 		}
-		
+
 		librariesGroup.setLayoutData(gridData);
 		librariesGroup.setLayout(gridLayout);
 	}
-	
+
 	/**
 	 * Returns whether this page's controls currently all contain valid values.
 	 * 
@@ -220,48 +213,46 @@ public class CreateFMUWizardPage extends WizardPage {
 	 *         if at least one is invalid
 	 */
 	private boolean validatePage() {
-		if ("".equals(dcc.getDirectory())){ //$NON-NLS-1$
-			setErrorMessage("Destination not selected!");
+		if ("".equals(dcc.getDirectory())) { //$NON-NLS-1$
+			setErrorMessage(Messages.CreateFMUWizardPage_DestinationNotSelecte);
 			return false;
 		}
-				
-		if(0 == systemTree.getCheckedElements().length){
-			setErrorMessage("Nothing selected for FMU generation!");
+
+		if (0 == systemTree.getCheckedElements().length) {
+			setErrorMessage(Messages.CreateFMUWizardPage_NothingselectedForFMUGeneration);
 			return false;
 		}
-		
-		if (!isSomeLibrarySelected()){
-			setErrorMessage("No libraries selected to include");
+
+		if (!isSomeLibrarySelected()) {
+			setErrorMessage(Messages.CreateFMUWizardPage_NoLibrariesSelectedToInclude);
 			return false;
 		}
 
 		setErrorMessage(null);
 		return true;
 	}
-	
+
 	private boolean isSomeLibrarySelected() {
-		return (isSelected(win32Field) 
-				|| isSelected(win64Field) 
-				|| isSelected(linux32Field) 
+		return (isSelected(win32Field) || isSelected(win64Field) || isSelected(linux32Field)
 				|| isSelected(linux64Field));
 	}
-	
+
 	private boolean isSelected(Button toCheck) {
 		return (toCheck.isEnabled() && toCheck.getSelection());
 	}
-	
+
 	/**
 	 * Loads cached directory, if available.
 	 */
 	private void loadDir() {
 		if (getDialogSettings() != null) {
-			String cachedDir = getDialogSettings().get(CURRENT_DIR_SETTING_ID); 
+			String cachedDir = getDialogSettings().get(CURRENT_DIR_SETTING_ID);
 			if (cachedDir != null) {
 				setDirectory(cachedDir);
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the directory.
 	 * 
@@ -270,36 +261,34 @@ public class CreateFMUWizardPage extends WizardPage {
 	public void setDirectory(final String dir) {
 		dcc.setDirectory(dir);
 	}
-	
+
 	public String getDirectory() {
 		return dcc.getDirectory();
 	}
-	
+
 	/**
 	 * Saves current directory for next session.
 	 * 
-	 * @param currentDir
-	 *          the current dir
+	 * @param currentDir the current dir
 	 */
 	private void saveDir(final String currentDir) {
 		getDialogSettings().put(CURRENT_DIR_SETTING_ID, currentDir);
 	}
 
-	
 	private void checkSelectedElements() {
-		
-		//first expand all selected elements
+
+		// first expand all selected elements
 		for (Object obj : selection.toArray()) {
-			if(obj instanceof AutomationSystem){
-				expandSystem((AutomationSystem)obj);
-			}else if(obj instanceof Device){
-				expandDevice((Device)obj);
-			}else if(obj instanceof Resource){
-				expandResource((Resource)obj);
-			}			
+			if (obj instanceof AutomationSystem) {
+				expandSystem((AutomationSystem) obj);
+			} else if (obj instanceof Device) {
+				expandDevice((Device) obj);
+			} else if (obj instanceof Resource) {
+				expandResource((Resource) obj);
+			}
 		}
-		
-		//second select them and then check them.
+
+		// second select them and then check them.
 		systemTree.setSelection(selection);
 
 		systemTree.setCheckedElements(selection.toArray());
@@ -318,5 +307,4 @@ public class CreateFMUWizardPage extends WizardPage {
 		systemTree.setExpandedState(obj, true);
 	}
 
-	
 }

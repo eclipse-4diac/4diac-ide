@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeServiceInterfaceCommentCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeServiceInterfaceNameCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
@@ -91,11 +92,11 @@ public class ServiceSection extends AbstractServiceSection {
 	}
 
 	private void createServiceSection(Composite parent) {
-		Group serviceGroup1 = getWidgetFactory().createGroup(parent, "Left Interface");
-		serviceGroup1.setLayout(new GridLayout(2, false));
-		serviceGroup1.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		getWidgetFactory().createCLabel(serviceGroup1, "Name:");
-		leftNameText = createGroupText(serviceGroup1, true);
+		Group leftServiceGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSection_LeftInterface);
+		leftServiceGroup.setLayout(new GridLayout(2, false));
+		leftServiceGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		getWidgetFactory().createCLabel(leftServiceGroup, Messages.ServiceSection_LeftInterface_Name);
+		leftNameText = createGroupText(leftServiceGroup, true);
 		leftNameText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
@@ -104,8 +105,8 @@ public class ServiceSection extends AbstractServiceSection {
 				addContentAdapter();
 			}
 		});
-		getWidgetFactory().createCLabel(serviceGroup1, "Comment:");
-		leftCommentText = createGroupText(serviceGroup1, true);
+		getWidgetFactory().createCLabel(leftServiceGroup, Messages.ServiceSection_LeftInterface_Comment);
+		leftCommentText = createGroupText(leftServiceGroup, true);
 		leftCommentText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
@@ -116,11 +117,11 @@ public class ServiceSection extends AbstractServiceSection {
 			}
 		});
 
-		Group serviceGroup2 = getWidgetFactory().createGroup(parent, "Right Interface");
-		serviceGroup2.setLayout(new GridLayout(2, false));
-		serviceGroup2.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		getWidgetFactory().createCLabel(serviceGroup2, "Name:");
-		rightNameText = createGroupText(serviceGroup2, true);
+		Group rightServiceGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSection_RightInterface);
+		rightServiceGroup.setLayout(new GridLayout(2, false));
+		rightServiceGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		getWidgetFactory().createCLabel(rightServiceGroup, Messages.ServiceSection_RightInterface_Name);
+		rightNameText = createGroupText(rightServiceGroup, true);
 		rightNameText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
@@ -129,8 +130,8 @@ public class ServiceSection extends AbstractServiceSection {
 				addContentAdapter();
 			}
 		});
-		getWidgetFactory().createCLabel(serviceGroup2, "Comment:");
-		rightCommentText = createGroupText(serviceGroup2, true);
+		getWidgetFactory().createCLabel(rightServiceGroup, Messages.ServiceSection_RightInterface_Comment);
+		rightCommentText = createGroupText(rightServiceGroup, true);
 		rightCommentText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
@@ -143,7 +144,7 @@ public class ServiceSection extends AbstractServiceSection {
 	}
 
 	private void createSequencesSection(Composite parent) {
-		Group transactionGroup = getWidgetFactory().createGroup(parent, "Service Sequences");
+		Group transactionGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSection_ServiceSequences);
 		transactionGroup.setLayout(new GridLayout(2, false));
 		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
@@ -176,7 +177,7 @@ public class ServiceSection extends AbstractServiceSection {
 
 		Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		sequenceNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
+		sequenceNew = getWidgetFactory().createButton(buttonComp, Messages.ServiceSection_New, SWT.PUSH);
 		sequenceNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		sequenceNew.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -190,7 +191,7 @@ public class ServiceSection extends AbstractServiceSection {
 			}
 		});
 
-		sequenceDelete = getWidgetFactory().createButton(buttonComp, "Delete", SWT.PUSH);
+		sequenceDelete = getWidgetFactory().createButton(buttonComp, Messages.ServiceSection_Delete, SWT.PUSH);
 		sequenceDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		sequenceDelete.addSelectionListener(new SelectionAdapter() {
 			@Override

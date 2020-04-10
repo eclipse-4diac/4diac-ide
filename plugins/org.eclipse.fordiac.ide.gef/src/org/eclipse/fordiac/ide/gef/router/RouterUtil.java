@@ -41,8 +41,7 @@ public final class RouterUtil {
 	public static ConnectionRouter getConnectionRouter(IFigure container) {
 		return getConnectionRouterFactory(container).getConnectionRouter(container);
 	}
-	
-	
+
 	/**
 	 * Gets the connection router factory
 	 * 
@@ -54,8 +53,8 @@ public final class RouterUtil {
 		Map<String, IConnectionRouterFactory> connectionRouter = new HashMap<>();
 
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				Activator.PLUGIN_ID, "ConnectionRouterProvider"); //$NON-NLS-1$
+		IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
+				"ConnectionRouterProvider"); //$NON-NLS-1$
 		for (int i = 0; i < elems.length; i++) {
 			IConfigurationElement element = elems[i];
 			try {
@@ -69,8 +68,7 @@ public final class RouterUtil {
 				Activator.getDefault().logError("Error loading ConnectionRouter", corex); //$NON-NLS-1$
 			}
 		}
-		String router = Activator.getDefault().getPreferenceStore().getString(
-				DiagramPreferences.CONNECTION_ROUTER);
+		String router = Activator.getDefault().getPreferenceStore().getString(DiagramPreferences.CONNECTION_ROUTER);
 
 		IConnectionRouterFactory factory = connectionRouter.get(router);
 		if (factory == null) { // the prefered router does not exist - use default
@@ -79,9 +77,9 @@ public final class RouterUtil {
 		}
 		return factory;
 	}
-	
+
 	private RouterUtil() {
 		throw new UnsupportedOperationException("RouterUtil utility class should not be instantiated!"); //$NON-NLS-1$
 	}
-	
+
 }

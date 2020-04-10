@@ -18,16 +18,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Service Interface FB Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Service
+ * Interface FB Type</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class ServiceInterfaceFBTypeImpl extends FBTypeImpl implements ServiceInterfaceFBType {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ServiceInterfaceFBTypeImpl() {
@@ -35,8 +34,8 @@ public class ServiceInterfaceFBTypeImpl extends FBTypeImpl implements ServiceInt
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -44,4 +43,4 @@ public class ServiceInterfaceFBTypeImpl extends FBTypeImpl implements ServiceInt
 		return LibraryElementPackage.Literals.SERVICE_INTERFACE_FB_TYPE;
 	}
 
-} //ServiceInterfaceFBTypeImpl
+} // ServiceInterfaceFBTypeImpl

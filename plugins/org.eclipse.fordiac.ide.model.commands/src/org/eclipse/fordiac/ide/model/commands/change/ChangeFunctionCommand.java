@@ -19,15 +19,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * The Class ChangeFunctionCommand.
  */
 public class ChangeFunctionCommand extends ChangeIdentificationCommand {
-	
+
 	/** The new Function value. */
 	private String newFunction;
 
 	/** The old Function value. */
 	private String oldFunction;
 
-	public ChangeFunctionCommand(LibraryElement type,
-			final String newFunction) {
+	public ChangeFunctionCommand(LibraryElement type, final String newFunction) {
 		super(type);
 		this.newFunction = newFunction;
 	}

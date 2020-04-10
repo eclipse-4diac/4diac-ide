@@ -33,36 +33,36 @@ public class TransactionContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
 		if (inputElement instanceof ServiceTransaction) {
-			switch(type){
-				case ServiceInterfacePaletteFactory.LEFT_OUTPUT_PRIMITIVE:
-					return getLeftOutputs(inputElement);
-				case ServiceInterfacePaletteFactory.RIGHT_OUTPUT_PRIMITIVE:
-					return getRightOutputs(inputElement);
-				default:
-					if(null != ((ServiceTransaction)inputElement).getInputPrimitive()){
-						return new Object[] {((ServiceTransaction)inputElement).getInputPrimitive()};
-					}
+			switch (type) {
+			case ServiceInterfacePaletteFactory.LEFT_OUTPUT_PRIMITIVE:
+				return getLeftOutputs(inputElement);
+			case ServiceInterfacePaletteFactory.RIGHT_OUTPUT_PRIMITIVE:
+				return getRightOutputs(inputElement);
+			default:
+				if (null != ((ServiceTransaction) inputElement).getInputPrimitive()) {
+					return new Object[] { ((ServiceTransaction) inputElement).getInputPrimitive() };
+				}
 			}
 		}
 		return new Object[] {};
 	}
-	
-	private Object[] getLeftOutputs(final Object inputElement){
+
+	private Object[] getLeftOutputs(final Object inputElement) {
 		EList<Primitive> list = new BasicEList<Primitive>();
-		Service service = (Service) ((ServiceTransaction)inputElement).eContainer().eContainer();
-		for(OutputPrimitive primitive : ((ServiceTransaction)inputElement).getOutputPrimitive()){
-			if(primitive.getInterface().getName().equals(service.getLeftInterface().getName())){
+		Service service = (Service) ((ServiceTransaction) inputElement).eContainer().eContainer();
+		for (OutputPrimitive primitive : ((ServiceTransaction) inputElement).getOutputPrimitive()) {
+			if (primitive.getInterface().getName().equals(service.getLeftInterface().getName())) {
 				list.add(primitive);
 			}
 		}
 		return list.toArray();
 	}
-	
-	private Object[] getRightOutputs(final Object inputElement){
+
+	private Object[] getRightOutputs(final Object inputElement) {
 		EList<Primitive> list = new BasicEList<Primitive>();
-		Service service = (Service) ((ServiceTransaction)inputElement).eContainer().eContainer();
-		for(OutputPrimitive primitive : ((ServiceTransaction)inputElement).getOutputPrimitive()){
-			if(primitive.getInterface().getName().equals(service.getRightInterface().getName())){
+		Service service = (Service) ((ServiceTransaction) inputElement).eContainer().eContainer();
+		for (OutputPrimitive primitive : ((ServiceTransaction) inputElement).getOutputPrimitive()) {
+			if (primitive.getInterface().getName().equals(service.getRightInterface().getName())) {
 				list.add(primitive);
 			}
 		}
@@ -79,10 +79,10 @@ public class TransactionContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if(parentElement instanceof ServiceTransaction){
+		if (parentElement instanceof ServiceTransaction) {
 			EList<Primitive> list = new BasicEList<Primitive>();
-			list.add(((ServiceTransaction)parentElement).getInputPrimitive());
-			list.addAll(((ServiceTransaction)parentElement).getOutputPrimitive());
+			list.add(((ServiceTransaction) parentElement).getInputPrimitive());
+			list.addAll(((ServiceTransaction) parentElement).getOutputPrimitive());
 			return list.toArray();
 		}
 		return null;
@@ -90,16 +90,16 @@ public class TransactionContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object getParent(Object element) {
-		if(element instanceof ServiceTransaction){
-			return ((ServiceTransaction)element).eContainer();
+		if (element instanceof ServiceTransaction) {
+			return ((ServiceTransaction) element).eContainer();
 		}
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if(element instanceof ServiceTransaction){
-			return ((ServiceTransaction)element).getOutputPrimitive().size() > 0 ? true : false;
+		if (element instanceof ServiceTransaction) {
+			return ((ServiceTransaction) element).getOutputPrimitive().size() > 0 ? true : false;
 		}
 		return false;
 	}

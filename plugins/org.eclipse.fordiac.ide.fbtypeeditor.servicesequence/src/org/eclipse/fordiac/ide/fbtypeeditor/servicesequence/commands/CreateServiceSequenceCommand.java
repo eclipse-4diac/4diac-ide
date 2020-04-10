@@ -31,9 +31,9 @@ public class CreateServiceSequenceCommand extends Command {
 
 	public CreateServiceSequenceCommand(FBType fbType) {
 		this.fbType = fbType;
-		name = "Service Sequence";
-		leftInterfaceName = "left interface";
-		rightInterfaceName = "right interface";
+		name = "Service Sequence"; //$NON-NLS-1$
+		leftInterfaceName = "left interface"; //$NON-NLS-1$
+		rightInterfaceName = "right interface"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class CreateServiceSequenceCommand extends Command {
 
 	@Override
 	public void execute() {
-		if(null == fbType.getService()){
+		if (null == fbType.getService()) {
 			fbType.setService(LibraryElementFactory.eINSTANCE.createService());
 		}
 		sq = LibraryElementFactory.eINSTANCE.createServiceSequence();
@@ -71,9 +71,9 @@ public class CreateServiceSequenceCommand extends Command {
 			fbType.getService().setRightInterface(null);
 		}
 		fbType.getService().getServiceSequence().remove(sq);
-		
+
 	}
-	
+
 	@Override
 	public void redo() {
 		if (leftInterface != null) {

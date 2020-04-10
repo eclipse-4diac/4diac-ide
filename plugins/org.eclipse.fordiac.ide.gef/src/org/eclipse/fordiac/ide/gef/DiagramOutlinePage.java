@@ -37,8 +37,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 /**
  * Shows a Thumbnail of the content in the outline.
  */
-class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
-		IContentOutlinePage, IAdaptable {
+class DiagramOutlinePage extends org.eclipse.ui.part.Page implements IContentOutlinePage, IAdaptable {
 	// Shows a "Thumbnail" of the current "drawing"
 	/** The page book. */
 	private PageBook pageBook;
@@ -59,8 +58,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.part.Page#createControl(org.eclipse.swt.widgets.Composite
+	 * @see org.eclipse.ui.part.Page#createControl(org.eclipse.swt.widgets.Composite
 	 * )
 	 */
 	@Override
@@ -110,8 +108,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 			ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart) rep;
 			thumbnail = new ScrollableThumbnail((Viewport) root.getFigure());
 			thumbnail.setBorder(new MarginBorder(3));
-			thumbnail.setSource(root
-					.getLayer(LayerConstants.PRINTABLE_LAYERS));
+			thumbnail.setSource(root.getLayer(LayerConstants.PRINTABLE_LAYERS));
 			lws.setContents(thumbnail);
 			getEditor().addDisposeListener(e -> {
 				if (thumbnail != null) {
@@ -150,13 +147,11 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener
+	 * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener
 	 * (org.eclipse.jface.viewers.ISelectionChangedListener)
 	 */
 	@Override
-	public void addSelectionChangedListener(
-			final ISelectionChangedListener listener) {
+	public void addSelectionChangedListener(final ISelectionChangedListener listener) {
 		// not used
 
 	}
@@ -180,8 +175,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 	 * (org.eclipse.jface.viewers.ISelectionChangedListener)
 	 */
 	@Override
-	public void removeSelectionChangedListener(
-			final ISelectionChangedListener listener) {
+	public void removeSelectionChangedListener(final ISelectionChangedListener listener) {
 		// not used
 
 	}
@@ -189,8 +183,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse
+	 * @see org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse
 	 * .jface.viewers.ISelection)
 	 */
 	@Override
@@ -198,11 +191,11 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 		// not used
 
 	}
-	
+
 	protected GraphicalViewer getGraphicalViewer() {
 		return graphicalViewer;
 	}
-	
+
 	protected FigureCanvas getEditor() {
 		return (FigureCanvas) getGraphicalViewer().getControl();
 	}

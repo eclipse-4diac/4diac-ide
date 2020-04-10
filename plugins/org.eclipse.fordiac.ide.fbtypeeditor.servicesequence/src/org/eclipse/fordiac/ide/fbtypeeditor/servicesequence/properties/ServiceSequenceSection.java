@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceNameCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateTransactionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteInputPrimitiveCommand;
@@ -85,7 +86,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Name:");
+		getWidgetFactory().createCLabel(composite, Messages.ServiceSequenceSection_Name);
 		nameText = createGroupText(composite, true);
 		nameText.addModifyListener(new ModifyListener() {
 			@Override
@@ -95,7 +96,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 				addContentAdapter();
 			}
 		});
-		getWidgetFactory().createCLabel(composite, "Comment:");
+		getWidgetFactory().createCLabel(composite, Messages.ServiceSequenceSection_Comment);
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(new ModifyListener() {
 			@Override
@@ -108,7 +109,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 	}
 
 	private void createTransactionSection(Composite parent) {
-		Group transactionGroup = getWidgetFactory().createGroup(parent, "Transaction");
+		Group transactionGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSequenceSection_Transaction);
 		transactionGroup.setLayout(new GridLayout(2, false));
 		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
@@ -138,7 +139,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 
 		Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		transactionNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
+		transactionNew = getWidgetFactory().createButton(buttonComp, Messages.ServiceSequenceSection_New, SWT.PUSH);
 		transactionNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		transactionNew.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -147,7 +148,8 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 				transactionViewer.refresh();
 			}
 		});
-		transactionDelete = getWidgetFactory().createButton(buttonComp, "Delete", SWT.PUSH);
+		transactionDelete = getWidgetFactory().createButton(buttonComp, Messages.ServiceSequenceSection_Delete,
+				SWT.PUSH);
 		transactionDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		transactionDelete.addSelectionListener(new SelectionAdapter() {
 			@Override

@@ -29,9 +29,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-
-public class TestDataLabelProvider extends LabelProvider implements
-		ITableLabelProvider, ITableColorProvider, ILabelDecorator {
+public class TestDataLabelProvider extends LabelProvider
+		implements ITableLabelProvider, ITableColorProvider, ILabelDecorator {
 
 	private final Table table;
 
@@ -42,8 +41,7 @@ public class TestDataLabelProvider extends LabelProvider implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.
+	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.
 	 * Object, int)
 	 */
 	@Override
@@ -51,7 +49,7 @@ public class TestDataLabelProvider extends LabelProvider implements
 		if (columnIndex == 0) {
 
 			DecorationOverlayIcon overlay = FordiacImage.createOverlayImage(FordiacImage.ICON_TesterTemplate.getImage(),
-					FordiacImage.ICON_OK.getImageDescriptor());			
+					FordiacImage.ICON_OK.getImageDescriptor());
 			return overlay.createImage();
 		}
 		return null;
@@ -89,7 +87,7 @@ public class TestDataLabelProvider extends LabelProvider implements
 
 		if (element instanceof TestData) {
 			String result = getLabel((TestData) element, columnIndex);
-			return result != null ? result : "";
+			return result != null ? result : ""; //$NON-NLS-1$
 		}
 		return element.toString();
 	}

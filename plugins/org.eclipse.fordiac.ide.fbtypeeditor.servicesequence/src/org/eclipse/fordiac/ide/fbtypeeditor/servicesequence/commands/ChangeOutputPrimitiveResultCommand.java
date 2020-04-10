@@ -37,6 +37,7 @@ public class ChangeOutputPrimitiveResultCommand extends Command {
 	public void undo() {
 		primitive.setTestResult(oldResults);
 	}
+
 	@Override
 	public void redo() {
 		primitive.setTestResult(results);

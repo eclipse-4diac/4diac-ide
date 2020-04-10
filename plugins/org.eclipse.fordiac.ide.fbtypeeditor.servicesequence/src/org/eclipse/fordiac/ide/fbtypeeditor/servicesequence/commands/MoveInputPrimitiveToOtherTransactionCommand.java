@@ -22,15 +22,14 @@ public class MoveInputPrimitiveToOtherTransactionCommand extends Command {
 	private ServiceTransaction srcTransaction;
 	private ServiceTransaction dstTransaction;
 	private InputPrimitive element;
-	
+
 	public MoveInputPrimitiveToOtherTransactionCommand(ServiceTransaction srcTransaction,
 			ServiceTransaction dstTransaction, InputPrimitive element) {
 		this.srcTransaction = srcTransaction;
 		this.dstTransaction = dstTransaction;
 		this.element = element;
 	}
-	
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -40,8 +39,10 @@ public class MoveInputPrimitiveToOtherTransactionCommand extends Command {
 	public boolean canExecute() {
 		return ((srcTransaction != null) && (dstTransaction != null) && (element != null));
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -50,5 +51,5 @@ public class MoveInputPrimitiveToOtherTransactionCommand extends Command {
 		dstTransaction.setInputPrimitive(element);
 		super.execute();
 	}
-	
+
 }

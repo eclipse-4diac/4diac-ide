@@ -15,7 +15,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -27,17 +26,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive} object.
+ * <!-- begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
-public class InputPrimitiveItemProvider
-	extends PrimitiveItemProvider {
+public class InputPrimitiveItemProvider extends PrimitiveItemProvider {
 	/**
-	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public InputPrimitiveItemProvider(AdapterFactory adapterFactory) {
@@ -45,9 +44,9 @@ public class InputPrimitiveItemProvider
 	}
 
 	/**
-	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -60,46 +59,44 @@ public class InputPrimitiveItemProvider
 	}
 
 	/**
-	 * This returns InputPrimitive.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns InputPrimitive.gif. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated not
 	 */
 	@Override
 	public Object getImage(Object object) {
-		if(((Service)((InputPrimitive)object).eContainer().eContainer().eContainer()).getLeftInterface().equals( 
-		    		((InputPrimitive)object).getInterface())){
+		if (((Service) ((InputPrimitive) object).eContainer().eContainer().eContainer()).getLeftInterface()
+				.equals(((InputPrimitive) object).getInterface())) {
 			return overlayImage(object, FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage());
 		}
 		return overlayImage(object, FordiacImage.ICON_RIGHT_INPUT_PRIMITIVE.getImage());
 	}
 
 	/**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated not
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((InputPrimitive)object).getEvent();
-		String retVal = ((label == null) || (label.length() == 0)) ?
-			getString("_UI_InputPrimitive_type") :
-			label;
-			
-		String parameters = ((InputPrimitive)object).getParameters();
-		if((parameters != null) && (parameters.length() != 0)){
-			retVal += " (" + parameters + ")";
+		String label = ((InputPrimitive) object).getEvent();
+		String retVal = ((label == null) || (label.length() == 0)) ? getString("_UI_InputPrimitive_type") : label; //$NON-NLS-1$
+
+		String parameters = ((InputPrimitive) object).getParameters();
+		if ((parameters != null) && (parameters.length() != 0)) {
+			retVal += " (" + parameters + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
-			
-		return retVal;	
+
+		return retVal;
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -109,10 +106,10 @@ public class InputPrimitiveItemProvider
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

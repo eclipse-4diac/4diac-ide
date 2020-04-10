@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
 public class ChangeAlgorithmTypeCommandSimpleFB extends AbstractChangeAlgorithmTypeCommand {
 
-
 	public ChangeAlgorithmTypeCommandSimpleFB(BaseFBType fbType, Algorithm oldAlgorithm, String algorithmType) {
 		super(fbType, oldAlgorithm, algorithmType);
 	}

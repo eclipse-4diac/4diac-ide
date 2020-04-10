@@ -27,13 +27,13 @@ public class ChangeNameCommand extends Command {
 	private String oldName;
 	private FBNetworkElement fbNetworkElement;
 	private AdapterDeclaration adapterDeclaration;
-	
+
 	public ChangeNameCommand(final INamedElement element, final String name) {
 		super();
 		this.element = element;
 		this.name = name;
 	}
-	
+
 	@Override
 	public boolean canExecute() {
 		return NameRepository.isValidName(element, name);
@@ -42,11 +42,11 @@ public class ChangeNameCommand extends Command {
 	@Override
 	public void execute() {
 		oldName = element.getName();
-		if(element instanceof AdapterDeclaration && element.eContainer().eContainer() instanceof CompositeFBType){
-			fbNetworkElement = ((AdapterDeclaration)element).getAdapterFB();
+		if (element instanceof AdapterDeclaration && element.eContainer().eContainer() instanceof CompositeFBType) {
+			fbNetworkElement = ((AdapterDeclaration) element).getAdapterFB();
 		}
-		if(element instanceof AdapterFB) {
-			adapterDeclaration = ((AdapterFB)element).getAdapterDecl();
+		if (element instanceof AdapterFB) {
+			adapterDeclaration = ((AdapterFB) element).getAdapterDecl();
 		}
 		redo();
 	}
@@ -54,10 +54,10 @@ public class ChangeNameCommand extends Command {
 	@Override
 	public void undo() {
 		element.setName(oldName);
-		if(null != fbNetworkElement) {
+		if (null != fbNetworkElement) {
 			fbNetworkElement.setName(oldName);
 		}
-		if(null != adapterDeclaration) {
+		if (null != adapterDeclaration) {
 			adapterDeclaration.setName(oldName);
 		}
 	}
@@ -65,10 +65,10 @@ public class ChangeNameCommand extends Command {
 	@Override
 	public void redo() {
 		element.setName(name);
-		if(null != fbNetworkElement) {
+		if (null != fbNetworkElement) {
 			fbNetworkElement.setName(name);
 		}
-		if(null != adapterDeclaration) {
+		if (null != adapterDeclaration) {
 			adapterDeclaration.setName(name);
 		}
 	}

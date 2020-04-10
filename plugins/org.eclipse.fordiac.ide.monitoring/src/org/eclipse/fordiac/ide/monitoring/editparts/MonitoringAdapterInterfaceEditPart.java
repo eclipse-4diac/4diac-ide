@@ -15,7 +15,7 @@ import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.Request;
 
 public class MonitoringAdapterInterfaceEditPart extends InterfaceEditPartForFBNetwork {
-	
+
 	@Override
 	public DragTracker getDragTracker(Request request) {
 		return new org.eclipse.gef.tools.DragEditPartsTracker(this);

@@ -93,11 +93,10 @@ public abstract class CPPExportFilter implements IExportFilter {
 	protected List<String> forteEmitterInfos = new ArrayList<>();
 
 	protected LibraryElement libraryType;
-	
+
 	public Map<String, VarDefinition> getVars() {
 		return vars;
 	}
-
 
 	/**
 	 * The Class VarDefinition.

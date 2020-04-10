@@ -22,10 +22,10 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.export.compare.messages"; //$NON-NLS-1$
-	
+
 	/** The Default compare editor opener_ newl y_ exported. */
 	public static String DefaultCompareEditorOpener_NEWLY_Exported;
-	
+
 	/** The Default compare editor opener_ origina l_ file. */
 	public static String DefaultCompareEditorOpener_ORIGINAL_FILE;
 	static {

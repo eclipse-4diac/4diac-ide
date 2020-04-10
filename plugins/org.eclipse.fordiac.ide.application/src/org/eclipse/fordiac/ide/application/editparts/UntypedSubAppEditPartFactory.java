@@ -25,7 +25,7 @@ public class UntypedSubAppEditPartFactory extends ElementEditPartFactory {
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		if (modelElement instanceof IInterfaceElement && context instanceof UISubAppNetworkEditPart) {
-			//this is an interface element of the containing subapp
+			// this is an interface element of the containing subapp
 			return new SubAppInternalInterfaceEditPart();
 		}
 		return super.getPartForElement(context, modelElement);

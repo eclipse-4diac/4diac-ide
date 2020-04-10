@@ -19,17 +19,17 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public class CommentTypeField {
-	private final IInterfaceElement referencedElement;	
+	private final IInterfaceElement referencedElement;
 	private final CommentField commentField;
 	private final CommentTypeSeparator separator;
 	private final TypeField typeField;
-	
-	static class CommentTypeSeparator{
-		String getLabel(){
+
+	static class CommentTypeSeparator {
+		String getLabel() {
 			return "    -    "; //$NON-NLS-1$
-		}		
+		}
 	}
-	
+
 	public IInterfaceElement getReferencedElement() {
 		return referencedElement;
 	}
@@ -53,19 +53,18 @@ public class CommentTypeField {
 			return typeField.getArrayLabel() + separator.getLabel() + commentField.getLabel();
 		}
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	public List getChildren() {		
+	public List getChildren() {
 		List<Object> children = new ArrayList<>();
 		if (getReferencedElement().isIsInput()) {
-			children.add(commentField);	
+			children.add(commentField);
 			children.add(separator);
 			children.add(typeField);
-		}
-		else{
+		} else {
 			children.add(typeField);
 			children.add(separator);
-			children.add(commentField);	
+			children.add(commentField);
 		}
 		return children;
 	}

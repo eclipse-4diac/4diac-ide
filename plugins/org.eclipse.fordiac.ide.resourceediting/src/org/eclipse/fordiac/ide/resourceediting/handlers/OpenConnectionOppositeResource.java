@@ -39,9 +39,9 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof IStructuredSelection) {
 			Object first = ((IStructuredSelection) selection).getFirstElement();
-			if(first instanceof VirtualInOutputEditPart) {
-				IInterfaceElement oppositeMappedIE = getOppositeInterfaceelement((VirtualInOutputEditPart)first);
-				if(null != oppositeMappedIE) {
+			if (first instanceof VirtualInOutputEditPart) {
+				IInterfaceElement oppositeMappedIE = getOppositeInterfaceelement((VirtualInOutputEditPart) first);
+				if (null != oppositeMappedIE) {
 					openResource(oppositeMappedIE);
 				}
 			}
@@ -60,40 +60,39 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 				obj = list.get(0);
 			}
 		}
-		if(obj instanceof VirtualInOutputEditPart){
-			setBaseEnabled(null != getOppositeInterfaceelement((VirtualInOutputEditPart)obj));
-		}
-		else{
+		if (obj instanceof VirtualInOutputEditPart) {
+			setBaseEnabled(null != getOppositeInterfaceelement((VirtualInOutputEditPart) obj));
+		} else {
 			setBaseEnabled(false);
 		}
 	}
 
 	private IInterfaceElement getOppositeInterfaceelement(VirtualInOutputEditPart vIOEditPart) {
-		IInterfaceElement ie = vIOEditPart.getModel().getReferencedInterfaceElement();		
+		IInterfaceElement ie = vIOEditPart.getModel().getReferencedInterfaceElement();
 		IInterfaceElement fbOppostiteIE = ie.getFBNetworkElement().getOpposite().getInterfaceElement(ie.getName());
-		if(null != fbOppostiteIE) {
+		if (null != fbOppostiteIE) {
 			IInterfaceElement connectionOpposite = getConnectionOpposite(fbOppostiteIE);
-			if(null != connectionOpposite && connectionOpposite.getFBNetworkElement().isMapped()) {
+			if (null != connectionOpposite && connectionOpposite.getFBNetworkElement().isMapped()) {
 				FBNetworkElement mappedOppositeElement = connectionOpposite.getFBNetworkElement().getOpposite();
 				return mappedOppositeElement.getInterfaceElement(connectionOpposite.getName());
 			}
-			
+
 		}
 		return null;
 	}
 
 	private IInterfaceElement getConnectionOpposite(IInterfaceElement fbOppostiteIE) {
-		EList<Connection> connections = (fbOppostiteIE.isIsInput()) ? 
-				fbOppostiteIE.getInputConnections() : fbOppostiteIE.getOutputConnections();
-        if(connections.size() >= 1) {
-        	return (fbOppostiteIE.isIsInput()) ? connections.get(0).getSource() : connections.get(0).getDestination();
-        }
+		EList<Connection> connections = (fbOppostiteIE.isIsInput()) ? fbOppostiteIE.getInputConnections()
+				: fbOppostiteIE.getOutputConnections();
+		if (connections.size() >= 1) {
+			return (fbOppostiteIE.isIsInput()) ? connections.get(0).getSource() : connections.get(0).getDestination();
+		}
 		return null;
 	}
-	
+
 	private void openResource(IInterfaceElement oppositeMappedIE) {
-		Resource res = oppositeMappedIE.getFBNetworkElement().getResource(); 
-		
+		Resource res = oppositeMappedIE.getFBNetworkElement().getResource();
+
 		if (null != res) {
 			IEditorPart editor = OpenListenerManager.openEditor(res);
 			if (editor instanceof ResourceDiagramEditor) {

@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.swt.widgets.Shell;
 
 public class BootFileDeviceManagementCommunicationHandler extends AbstractFileManagementHandler {
-	
+
 	public static void createBootFile(List<Object> workList, String fileName, Shell shell) {
 		if (null != fileName) {
 			BootFileDeviceManagementCommunicationHandler bootFileHandler = new BootFileDeviceManagementCommunicationHandler();
@@ -29,13 +29,12 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractFileMa
 			bootFileHandler.writeToBootFile(fileName, false, shell);
 		}
 	}
-	
+
 	/*
-	 * only the static function of this class should be able to create an
-	 * instance
+	 * only the static function of this class should be able to create an instance
 	 */
 	private BootFileDeviceManagementCommunicationHandler() {
 		super();
 	}
-	
+
 }

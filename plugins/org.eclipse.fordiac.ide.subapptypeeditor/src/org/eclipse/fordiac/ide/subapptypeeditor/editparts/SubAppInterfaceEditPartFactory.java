@@ -29,12 +29,13 @@ public class SubAppInterfaceEditPartFactory extends FBInterfaceEditPartFactory {
 
 	@Override
 	protected EditPart createInterfaceEditPart() {
-		return new InterfaceEditPart(){
+		return new InterfaceEditPart() {
 			@Override
 			protected void createEditPolicies() {
 				super.createEditPolicies();
-			
-				//supapplications don't have a with construct therefore remove connection handles
+
+				// supapplications don't have a with construct therefore remove connection
+				// handles
 				removeEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE);
 			}
 		};

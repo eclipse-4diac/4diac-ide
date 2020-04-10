@@ -25,8 +25,7 @@ public class DeleteInterfaceEditPolicy extends ComponentEditPolicy {
 	protected Command getDeleteCommand(final GroupRequest request) {
 		if (getHost() instanceof InterfaceEditPart) {
 			InterfaceEditPart iep = (InterfaceEditPart) getHost();
-			DeleteInterfaceCommand c = new DeleteInterfaceCommand(iep
-					.getCastedModel());
+			DeleteInterfaceCommand c = new DeleteInterfaceCommand(iep.getCastedModel());
 			return c;
 		}
 		return super.getDeleteCommand(request);

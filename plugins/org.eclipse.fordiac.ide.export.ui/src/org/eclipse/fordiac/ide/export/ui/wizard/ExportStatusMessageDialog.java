@@ -13,10 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.ui.wizard;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.export.ui.Activator;
+import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
@@ -34,23 +37,26 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 	private final List<String> errors;
 
 	private StyledText text;
-	private String newLine = "";
-		
+	private String newLine = ""; //$NON-NLS-1$
+
 	public ExportStatusMessageDialog(Shell parentShell, final List<String> warnings, final List<String> errors) {
-		super(parentShell, "4diac IDE Type Export Errors", "During Type export the following issues have been identified:", 
-				new Status(IStatus.INFO, "pluginid", errors.size() + " errors and " + warnings.size() + " warnings!"), 
+		super(parentShell, Messages.ExportStatusMessageDialog_4diacIDETypeExportErrors,
+				Messages.ExportStatusMessageDialog_DuringTypeExportTheFollowingIssuesHaveBeenIdentified,
+				new Status(IStatus.INFO, Activator.PLUGIN_ID,
+						MessageFormat.format(Messages.ExportStatusMessageDialog_ExportStatusMessageDialog,
+								errors.size(), warnings.size())),
 				IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR);
-		 
+
 		this.warnings = warnings;
-		this.errors = errors;		
+		this.errors = errors;
 	}
 
 	@Override
 	protected Control createMessageArea(Composite parent) {
 		Control retval = super.createMessageArea(parent);
-		
-		new Label(parent, SWT.NONE);  //simple placeholder label
-		
+
+		new Label(parent, SWT.NONE); // simple placeholder label
+
 		Composite main = new Composite(parent, SWT.NONE);
 		main.setLayout(new GridLayout());
 		GridData fillBoth = new GridData();
@@ -67,12 +73,11 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 		fillText.horizontalAlignment = GridData.FILL;
 		fillText.verticalAlignment = GridData.FILL;
 
-		text = new StyledText(main, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL
-				| SWT.H_SCROLL);
+		text = new StyledText(main, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		text.setLayoutData(fillText);
-		
+
 		printMessages();
-		
+
 		return retval;
 	}
 
@@ -85,22 +90,22 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 		int count = 0;
 		StyleRange style1 = new StyleRange();
 
-		if(!warnings.isEmpty()){
-			String warning = "Warnings \n";
+		if (!warnings.isEmpty()) {
+			String warning = Messages.ExportStatusMessageDialog_WarningsNotEmpty;
 			text.append(warning);
 			style1.start = count;
 			style1.length = warning.length();
 			style1.fontStyle = SWT.BOLD;
 			text.setStyleRange(style1);
-	
+
 			count += warning.length();
 			count += addLines(warnings);
 			text.append(newLine);
 			count += newLine.length();
 		}
-		
-		if(!errors.isEmpty()){
-			String error = "Errors \n";
+
+		if (!errors.isEmpty()) {
+			String error = Messages.ExportStatusMessageDialog_ErrorsNotEmpty;
 			text.append(error);
 			style1 = new StyleRange();
 			style1.start = count;
@@ -113,9 +118,9 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 
 	private int addLines(List<String> messages) {
 		int count = 0;
-		
+
 		for (String string : messages) {
-			if(null != string){
+			if (null != string) {
 				count += string.length();
 				text.append(string);
 				newLine = "\n"; //$NON-NLS-1$

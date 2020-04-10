@@ -313,9 +313,72 @@
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
-            defaultHandler="org.eclipse.fordiac.ide.application.handlers.FlattenSubApplication"
             id="org.eclipse.fordiac.ide.application.commands.flattenSubApp"
             name="Flatten Subapplication">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.SaveAsSubappTypeHandler"
+            id="org.eclipse.fordiac.ide.application.commands.saveAsSubappType"
+            name="Save as Subapplication Type">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.UntypeSubApplicationHandler"
+            id="org.eclipse.fordiac.ide.application.commands.untypeSubApp"
+            name="Detach from Subapplication Type">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.ConnectThroughHandler"
+            description="Take the connection going into this FB and connect them through the target of the output"
+            id="org.eclipse.fordiac.ide.application.commands.connectThrough"
+            name="Bypass FB">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.UpdateFBTypeHandler"
+            description="Update selected function block type to the filesystem state"
+            id="org.eclipse.fordiac.ide.application.commands.updateFBType"
+            name="Update Type">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoParentHandler"
+            id="org.eclipse.fordiac.ide.application.commands.gotoparent"
+            name="Go To Parent">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.FollowConnectionHandler"
+            id="org.eclipse.fordiac.ide.application.commands.followConnection"
+            name="Follow Connection">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.HideDataConnections"
+            id="org.eclipse.fordiac.ide.application.commands.hideDataConnections"
+            name="Hide Data Connections">
+           <state
+                 class="org.eclipse.ui.handlers.RegistryToggleState"
+                 id="org.eclipse.ui.commands.toggleState">
+           </state>
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.HideEventConnections"
+            id="org.eclipse.fordiac.ide.application.commands.hideEventConnections"
+            name="Hide Event Connections">
+           <state
+                 class="org.eclipse.ui.handlers.RegistryToggleState"
+                 id="org.eclipse.ui.commands.toggleState">
+           </state>
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.InsertFB"
+            id="org.eclipse.fordiac.ide.application.commands.insertFB"
+            name="Insert FB">
       </command>
    </extension>
    <extension
@@ -343,11 +406,37 @@
 
       </handler>
       <handler
+            class="org.eclipse.fordiac.ide.application.handlers.UpdateFBTypeHandler"
+            commandId="org.eclipse.fordiac.ide.application.commands.updateFBType">
+            <activeWhen>
+			    <with variable="selection">
+	               <iterate ifEmpty="false">
+	                  <or>
+	                    <instanceof
+	                          value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
+	                    </instanceof>
+	                    <instanceof
+	                          value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+	                    </instanceof>
+	                  </or>
+	               </iterate>
+         		</with>  
+			</activeWhen>
+
+      </handler>      
+      <handler
             class="org.eclipse.fordiac.ide.application.handlers.ClearFocusOn"
             commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn">
 			<activeWhen>
 			    <reference definitionId="org.eclipse.fordiac.ide.application.FocusOnActivation" />
 			</activeWhen>
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.application.handlers.FlattenSubApplication"
+            commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp">
+            <activeWhen>
+                <reference definitionId="org.eclipse.fordiac.ide.application.SubAppSelection" />
+            </activeWhen>
       </handler>
       <handler 
             class="org.eclipse.fordiac.ide.application.handlers.NewSubApplication"
@@ -360,6 +449,19 @@
             </iterate>
          </activeWhen>
       </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.application.handlers.UnmapHandler"
+            commandId="org.eclipse.fordiac.ide.application.unmap">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.application.handlers.UnmapAllHandler"
+            commandId="org.eclipse.fordiac.ide.application.unmapAll">
+         <activeWhen>
+            <reference
+                  definitionId="org.eclipse.fordiac.ide.application.UnmapAllActivation">
+            </reference>
+         </activeWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -368,6 +470,24 @@
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+6">
+      </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+ARROW_UP">
+      </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.followConnection"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+ARROW_RIGHT">
+      </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.connectThrough"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+B">
       </key>
    </extension>
    <extension
@@ -381,9 +501,69 @@
             </command>
       </menuContribution>
       <menuContribution
+            locationURI="menu:navigate?after=goTo">
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
+                  icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png"/>
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.followConnection" />
+      </menuContribution>            
+      <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">
+            <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
+      </menuContribution>            
+      <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup"> 
+            <menu
+                  id="org.eclipse.4diac.ide.mapto.menu"
+                  label="Map To ...">
+               <dynamic
+                     class="org.eclipse.fordiac.ide.application.handlers.MapToContributionItem"
+                     id="org.eclipse.fordiac.ide.application.commands.mapTo">
+               </dynamic>
+               <visibleWhen>
+                    <and>
+                        <with
+                           variable="activeEditorId">
+                        <equals
+                              value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
+                        </equals>
+                     </with>
+                  <reference
+                        definitionId="org.eclipse.fordiac.ide.application.FBNSelection">
+                  </reference>
+                     </and>
+               </visibleWhen>
+            </menu>
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.unmap"
+                  label="Unmap">
+            </command>
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.unmapAll"
+                  label="Unmap All">
+            </command>
+      </menuContribution>
+      <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
                id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar">
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.hideEventConnections"
+                  icon="fordiacimage://ICON_HIDE_EVENT"
+                  id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
+                  tooltip="Hide Event Connections"
+                  style="toggle">
+            </command>
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.hideDataConnections"
+                  icon="fordiacimage://ICON_HIDE_DATA"
+                  id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
+                  tooltip="Hide Data Connections"
+                  style="toggle">
+            </command>
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
                   icon="fordiacimage://ICON_FB"
@@ -393,7 +573,16 @@
          </toolbar>
       </menuContribution>
       <menuContribution
+            locationURI="toolbar:org.eclipse.ui.workbench.navigate">
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
+                  icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png"/>
+      </menuContribution>    
+      <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.insertFB" >
+         </command>
          <command
                commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
                label="New subapplication"
@@ -413,9 +602,7 @@
 		         </with>
             </visibleWhen>
          </command>
-         <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp"
-               label="Flatten subapplication"
-               tooltip="Flatten the subapplication">
+         <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp">
             <visibleWhen
                   checkEnabled="false">
                <reference
@@ -423,15 +610,105 @@
                </reference>
             </visibleWhen>
          </command>
-         <command commandId="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor"> 
-         	<visibleWhen checkEnabled="false">
-	             <reference definitionId="org.eclipse.fordiac.ide.application.FocusOnActivation" />     
-	         </visibleWhen>         
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" >
+            <visibleWhen checkEnabled="true">
+                <with variable="selection">
+                   <count value="2"/>
+                   <iterate>
+                      <or>
+                        <instanceof
+                              value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
+                        </instanceof>
+                        <instanceof
+                              value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart">
+                        </instanceof>
+                      </or>
+                   </iterate>
+                </with>
+            </visibleWhen>
          </command>
-         <command commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn" mnemonic="S">
-	         <visibleWhen checkEnabled="false">
-	             <reference definitionId="org.eclipse.fordiac.ide.application.FocusOnActivation" />     
-	         </visibleWhen>         
+         </menuContribution>
+         <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.rest">
+            <menu
+               id="org.eclipse.4diac.ide.mapto.menu"
+               label="Map To ...">
+            <dynamic
+                  class="org.eclipse.fordiac.ide.application.handlers.MapToContributionItem"
+                  id="org.eclipse.fordiac.ide.application.commands.mapTo">
+               <visibleWhen
+                     checkEnabled="false">
+                     <and>
+                        <with
+                           variable="activeEditorId">
+                        <equals
+                              value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
+                        </equals>
+                     </with>
+                  <reference
+                        definitionId="org.eclipse.fordiac.ide.application.FBNSelection">
+                  </reference>
+                     </and>
+               </visibleWhen>
+            </dynamic>
+         </menu>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.unmap"
+               label="Unmap"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.unmapAll"
+               label="Unmap All"
+               style="push">
+         </command>
+             </menuContribution>
+         <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?endof=org.fordiac.ide.group.navigate">
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
+               icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png">
+            <visibleWhen checkEnabled="true">
+                <with variable="activeEditorId">
+                    <equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
+                </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.followConnection" >
+            <visibleWhen checkEnabled="true">
+                <with variable="selection">
+                   <count value="1"/>
+                   <iterate>
+                      <or>
+                        <instanceof
+                              value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
+                        </instanceof>
+                        <instanceof
+                              value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart">
+                        </instanceof>
+                      </or>
+                   </iterate>
+                </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?endof=group.add">
+               <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType">
+            <visibleWhen checkEnabled="true">
+               <reference
+                     definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp">
+            <visibleWhen checkEnabled="true">
+               <reference
+                     definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
+               </reference>
+            </visibleWhen>
          </command>
       </menuContribution>
    </extension>
@@ -562,9 +839,10 @@
                     <instanceof
                           value="org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart">
                     </instanceof>
+                    <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart" />
                   </or>
                </iterate>
-         </with>  
+            </with>
       </definition>      
 	   <definition
 	         id="org.eclipse.fordiac.ide.application.FocusOnActivation">
@@ -576,5 +854,34 @@
 	        	</or>
 		    </with>
 	   </definition>
+	   <definition
+          id="org.eclipse.fordiac.ide.application.FBNSelection">
+           <with
+                 variable="selection">
+              <iterate>
+                 <or>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+                    </instanceof>
+                    <instanceof
+                          value="org.eclipse.gef.editparts.AbstractConnectionEditPart">
+                    </instanceof></or>
+              </iterate>
+           </with>
+        </definition>
+    <definition
+          id="org.eclipse.fordiac.ide.application.UnmapAllActivation">
+       <with
+             variable="activeEditorId">
+         <or>
+          <equals
+                value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
+          </equals>
+          <equals
+                value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
+          </equals>
+         </or>
+       </with>
+    </definition>
    </extension>   
 </plugin>

@@ -12,6 +12,7 @@
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - cleaned command stack handling for property sections
+ *   Bianca Wiesmayr - create command now has enhanced guess
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
@@ -21,16 +22,18 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceEventSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 
 public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
-		return new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(fillTypeCombo()[0]),
-				getType().getInterfaceList(), isInput, -1);
+	protected CreateInterfaceElementCommand newCreateCommand(IInterfaceElement interfaceElement, boolean isInput) {
+		DataType last = getLastUsedEventType(getType().getInterfaceList(), isInput, interfaceElement);
+		int pos = getInsertingIndex(interfaceElement, isInput);
+		return new CreateInterfaceElementCommand(last, getCreationName(interfaceElement), getType().getInterfaceList(),
+				isInput, pos);
 	}
 
 	@Override

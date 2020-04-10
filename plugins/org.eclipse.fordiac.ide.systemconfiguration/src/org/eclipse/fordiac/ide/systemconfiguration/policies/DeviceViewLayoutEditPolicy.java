@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.systemconfiguration.policies;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
@@ -36,7 +35,6 @@ import org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy;
 import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * The Class DeviceViewLayoutEditPolicy.
@@ -44,14 +42,9 @@ import org.eclipse.jface.preference.IPreferenceStore;
 public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
-		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
-		if (cornerDim > 1) {
-			cornerDim = cornerDim / 2;
-		}
-		return new ModifiedNonResizeableEditPolicy(cornerDim, new Insets(1));
-	}
 
+		return new ModifiedNonResizeableEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1));
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -83,7 +76,7 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		if (childClass instanceof ResourceTypeEntry) {
 			ResourceTypeEntry type = (ResourceTypeEntry) request.getNewObjectType();
 			if (getHost() instanceof DeviceEditPart) {
-				return new ResourceCreateCommand(type, ((DeviceEditPart)getHost()).getModel(), false);
+				return new ResourceCreateCommand(type, ((DeviceEditPart) getHost()).getModel(), false);
 			}
 		}
 		return null;
@@ -101,13 +94,13 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 		return super.getCommand(request);
 	}
-	
+
 	@Override
-	protected Command createAddCommand(ChangeBoundsRequest request,
-			EditPart child, Object constraint){
+	protected Command createAddCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
 		if (child instanceof ResourceEditPart) {
-			Device targetDevice = ((DeviceEditPart)getHost()).getModel();
-			return new ResourceMoveCommand((Resource) child.getModel(), targetDevice, targetDevice.getResource().size());
+			Device targetDevice = ((DeviceEditPart) getHost()).getModel();
+			return new ResourceMoveCommand((Resource) child.getModel(), targetDevice,
+					targetDevice.getResource().size());
 		}
 		return null;
 	}
@@ -115,8 +108,7 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	/**
 	 * Returns the command contribution to an alignment request
 	 * 
-	 * @param request
-	 *            the alignment request
+	 * @param request the alignment request
 	 * @return the contribution to the alignment
 	 */
 	protected Command getAlignCommand(AlignmentRequest request) {

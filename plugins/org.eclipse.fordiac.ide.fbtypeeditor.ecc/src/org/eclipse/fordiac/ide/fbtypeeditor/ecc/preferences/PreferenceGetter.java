@@ -22,7 +22,6 @@ import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 
-
 /**
  * This class implements some static methods for returning different preference
  * settings.
@@ -42,8 +41,7 @@ public final class PreferenceGetter {
 	 * @return the color
 	 */
 	public static Color getColor(final String pref) {
-		RGB rgb = PreferenceConverter.getColor(Activator.getDefault()
-		.getPreferenceStore(), pref);
+		RGB rgb = PreferenceConverter.getColor(Activator.getDefault().getPreferenceStore(), pref);
 
 		if (!usedColors.containsKey(rgb)) {
 			usedColors.put(rgb, new Color(null, rgb));
@@ -51,8 +49,7 @@ public final class PreferenceGetter {
 
 		return usedColors.get(rgb);
 	}
-	
-	
+
 	private PreferenceGetter() {
 		throw new UnsupportedOperationException("PreferenceGetter utility class should not be instantiated!"); //$NON-NLS-1$
 	}

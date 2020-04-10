@@ -19,15 +19,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * The Class ChangeCommentCommand.
  */
 public class ChangeApplicationDomainCommand extends ChangeIdentificationCommand {
-	
+
 	/** The new ApplicationDomain value. */
 	private String newApplicationDomain;
 
 	/** The old ApplicationDomain value. */
 	private String oldApplicationDomain;
 
-	public ChangeApplicationDomainCommand(LibraryElement type,
-			final String newApplicationDomain) {
+	public ChangeApplicationDomainCommand(LibraryElement type, final String newApplicationDomain) {
 		super(type);
 		this.newApplicationDomain = newApplicationDomain;
 	}

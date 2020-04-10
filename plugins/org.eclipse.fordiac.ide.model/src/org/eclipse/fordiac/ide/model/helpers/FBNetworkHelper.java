@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr - added positioning calculations
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
@@ -17,6 +18,8 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
@@ -41,8 +44,20 @@ public final class FBNetworkHelper {
 	public static FBNetwork copyFBNetWork(FBNetwork srcNetwork, InterfaceList destInterface) {
 		FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		dstNetwork.getNetworkElements().addAll(EcoreUtil.copyAll(srcNetwork.getNetworkElements()));
+		checkForAdapterFBs(dstNetwork, destInterface);
 		createConnections(srcNetwork, dstNetwork, destInterface);
 		return dstNetwork;
+	}
+
+	private static void checkForAdapterFBs(FBNetwork dstNetwork, InterfaceList destInterface) {
+		for (FBNetworkElement elem : dstNetwork.getNetworkElements()) {
+			if (elem instanceof AdapterFB) {
+				AdapterDeclaration adapter = destInterface.getAdapter(elem.getName());
+				if (null != adapter) {
+					((AdapterFB) elem).setAdapterDecl(adapter);
+				}
+			}
+		}
 	}
 
 	private static void createConnections(FBNetwork srcNetwork, FBNetwork dstNetwork, InterfaceList destInterface) {
@@ -115,10 +130,11 @@ public final class FBNetworkHelper {
 		}
 	}
 
-	public static void removeXYOffsetForFBNetwork(List<FBNetworkElement> fbNetwork) {
+	public static Point removeXYOffsetForFBNetwork(List<FBNetworkElement> fbNetwork) {
 		Point offset = getTopLeftCornerOfFBNetwork(fbNetwork);
 		moveFBNetworkByOffset(fbNetwork, offset.x - X_OFFSET_FROM_TOP_LEFT_CORNER,
 				offset.y - Y_OFFSET_FROM_TOP_LEFT_CORNER);
+		return offset;
 	}
 
 	public static void moveFBNetworkByOffset(List<FBNetworkElement> fbNetwork, Point offset) {

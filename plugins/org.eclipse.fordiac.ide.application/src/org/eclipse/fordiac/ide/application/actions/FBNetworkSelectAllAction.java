@@ -51,17 +51,19 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 				EditPart childPart = (EditPart) child;
 				if (childPart.isSelectable()) {
 					selectableChildren.add(childPart);
-					//the editparts are in charge of managing the connections if we take all source connections
-					//from one edit part we should get all connections in the end.
+					// the editparts are in charge of managing the connections if we take all source
+					// connections
+					// from one edit part we should get all connections in the end.
 					List elementChildren = childPart.getChildren();
 					for (Object elementChild : elementChildren) {
-						if (elementChild instanceof AbstractGraphicalEditPart) {	
-							selectableChildren.addAll(((AbstractGraphicalEditPart)elementChild).getSourceConnections());							
+						if (elementChild instanceof AbstractGraphicalEditPart) {
+							selectableChildren
+									.addAll(((AbstractGraphicalEditPart) elementChild).getSourceConnections());
 						}
 					}
 				}
 			}
-		}		
+		}
 		return selectableChildren;
 	}
 

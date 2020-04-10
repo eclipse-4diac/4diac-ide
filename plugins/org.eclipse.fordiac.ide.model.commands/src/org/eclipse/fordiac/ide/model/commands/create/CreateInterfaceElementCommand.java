@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
+ *               2019 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  *
  * Contributors:
  *   Monika Wenger - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr - command now contains newly created element
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.commands.create;
@@ -24,9 +26,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
-public class CreateInterfaceElementCommand extends Command {
+public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 	private boolean isInput;
 	private DataType dataType;
 	private IInterfaceElement interfaceElement;
@@ -35,12 +37,23 @@ public class CreateInterfaceElementCommand extends Command {
 	private int index;
 	private InterfaceList interfaceList;
 	private AdapterCreateCommand cmd;
+	private String name;
 
 	public CreateInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput, int index) {
 		this.isInput = isInput;
 		this.dataType = dataType;
 		this.index = index;
 		this.interfaceList = interfaceList;
+		this.name = dataType.getName();
+	}
+
+	public CreateInterfaceElementCommand(DataType dataType, String name, InterfaceList interfaceList, boolean isInput,
+			int index) {
+		this.isInput = isInput;
+		this.dataType = dataType;
+		this.index = index;
+		this.interfaceList = interfaceList;
+		this.name = (null != name) ? name : dataType.getName();
 	}
 
 	protected boolean isInput() {
@@ -112,7 +125,7 @@ public class CreateInterfaceElementCommand extends Command {
 		if (null != cmd) {
 			cmd.execute();
 		}
-		interfaceElement.setName(NameRepository.createUniqueName(interfaceElement, dataType.getName()));
+		interfaceElement.setName(NameRepository.createUniqueName(interfaceElement, name));
 	}
 
 	@Override
@@ -136,6 +149,7 @@ public class CreateInterfaceElementCommand extends Command {
 	private void insertElement() {
 		@SuppressWarnings("unchecked")
 		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
+
 		temp.add(index == -1 ? temp.size() : index, interfaceElement);
 	}
 
@@ -146,5 +160,10 @@ public class CreateInterfaceElementCommand extends Command {
 			cmd = new AdapterCreateCommand(10, 10, (AdapterDeclaration) interfaceElement,
 					(CompositeFBType) interfaceList.eContainer());
 		}
+	}
+
+	@Override
+	public Object getCreatedElement() {
+		return interfaceElement;
 	}
 }

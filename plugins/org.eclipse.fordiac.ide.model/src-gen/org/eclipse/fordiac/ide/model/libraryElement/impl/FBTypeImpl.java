@@ -24,24 +24,25 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>FB Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB
+ * Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl#getInterfaceList <em>Interface List</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl#getService <em>Service</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl#getInterfaceList
+ * <em>Interface List</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl#getService
+ * <em>Service</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 	/**
-	 * The cached value of the '{@link #getInterfaceList() <em>Interface List</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getInterfaceList() <em>Interface List</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getInterfaceList()
 	 * @generated
 	 * @ordered
@@ -49,9 +50,9 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 	protected InterfaceList interfaceList;
 
 	/**
-	 * The cached value of the '{@link #getService() <em>Service</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getService() <em>Service</em>}' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getService()
 	 * @generated
 	 * @ordered
@@ -59,8 +60,8 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 	protected Service service;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected FBTypeImpl() {
@@ -68,8 +69,8 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -78,8 +79,8 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -88,23 +89,27 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetInterfaceList(InterfaceList newInterfaceList, NotificationChain msgs) {
 		InterfaceList oldInterfaceList = interfaceList;
 		interfaceList = newInterfaceList;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_TYPE__INTERFACE_LIST, oldInterfaceList, newInterfaceList);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.FB_TYPE__INTERFACE_LIST, oldInterfaceList, newInterfaceList);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -112,19 +117,22 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 		if (newInterfaceList != interfaceList) {
 			NotificationChain msgs = null;
 			if (interfaceList != null)
-				msgs = ((InternalEObject)interfaceList).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_TYPE__INTERFACE_LIST, null, msgs);
+				msgs = ((InternalEObject) interfaceList).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_TYPE__INTERFACE_LIST, null, msgs);
 			if (newInterfaceList != null)
-				msgs = ((InternalEObject)newInterfaceList).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_TYPE__INTERFACE_LIST, null, msgs);
+				msgs = ((InternalEObject) newInterfaceList).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_TYPE__INTERFACE_LIST, null, msgs);
 			msgs = basicSetInterfaceList(newInterfaceList, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_TYPE__INTERFACE_LIST, newInterfaceList, newInterfaceList));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_TYPE__INTERFACE_LIST,
+					newInterfaceList, newInterfaceList));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -133,23 +141,27 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetService(Service newService, NotificationChain msgs) {
 		Service oldService = service;
 		service = newService;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_TYPE__SERVICE, oldService, newService);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.FB_TYPE__SERVICE, oldService, newService);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -157,98 +169,101 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 		if (newService != service) {
 			NotificationChain msgs = null;
 			if (service != null)
-				msgs = ((InternalEObject)service).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_TYPE__SERVICE, null, msgs);
+				msgs = ((InternalEObject) service).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_TYPE__SERVICE, null, msgs);
 			if (newService != null)
-				msgs = ((InternalEObject)newService).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_TYPE__SERVICE, null, msgs);
+				msgs = ((InternalEObject) newService).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_TYPE__SERVICE, null, msgs);
 			msgs = basicSetService(newService, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_TYPE__SERVICE, newService, newService));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_TYPE__SERVICE, newService,
+					newService));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
-				return basicSetInterfaceList(null, msgs);
-			case LibraryElementPackage.FB_TYPE__SERVICE:
-				return basicSetService(null, msgs);
+		case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
+			return basicSetInterfaceList(null, msgs);
+		case LibraryElementPackage.FB_TYPE__SERVICE:
+			return basicSetService(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
-				return getInterfaceList();
-			case LibraryElementPackage.FB_TYPE__SERVICE:
-				return getService();
+		case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
+			return getInterfaceList();
+		case LibraryElementPackage.FB_TYPE__SERVICE:
+			return getService();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
-				setInterfaceList((InterfaceList)newValue);
-				return;
-			case LibraryElementPackage.FB_TYPE__SERVICE:
-				setService((Service)newValue);
-				return;
+		case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
+			setInterfaceList((InterfaceList) newValue);
+			return;
+		case LibraryElementPackage.FB_TYPE__SERVICE:
+			setService((Service) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
-				setInterfaceList((InterfaceList)null);
-				return;
-			case LibraryElementPackage.FB_TYPE__SERVICE:
-				setService((Service)null);
-				return;
+		case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
+			setInterfaceList((InterfaceList) null);
+			return;
+		case LibraryElementPackage.FB_TYPE__SERVICE:
+			setService((Service) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
-				return interfaceList != null;
-			case LibraryElementPackage.FB_TYPE__SERVICE:
-				return service != null;
+		case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
+			return interfaceList != null;
+		case LibraryElementPackage.FB_TYPE__SERVICE:
+			return service != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //FBTypeImpl
+} // FBTypeImpl

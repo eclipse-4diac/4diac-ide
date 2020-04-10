@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementComma
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.Command;
 
 public class UnmapCommand extends Command {
@@ -28,7 +29,7 @@ public class UnmapCommand extends Command {
 	private DeleteFBNetworkElementCommand deleteMappedFBCmd;
 
 	public UnmapCommand(final FBNetworkElement element) {
-		super("Unmap");
+		super(FordiacMessages.Unmap);
 		mapping = element.getMapping();
 		system = mapping.getAutomationSystem();
 	}

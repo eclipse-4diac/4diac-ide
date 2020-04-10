@@ -26,9 +26,9 @@ import org.eclipse.ui.IWorkbenchPage;
 public class SystemConfigurationEditorLinkHelper extends AbstractEditorLinkHelper {
 
 	@Override
-	public IStructuredSelection findSelection(IEditorInput anInput) {		
-		if(anInput instanceof SystemConfigurationEditorInput){
-			SystemConfigurationEditorInput sysConfInput = (SystemConfigurationEditorInput)anInput;
+	public IStructuredSelection findSelection(IEditorInput anInput) {
+		if (anInput instanceof SystemConfigurationEditorInput) {
+			SystemConfigurationEditorInput sysConfInput = (SystemConfigurationEditorInput) anInput;
 			return new StructuredSelection(sysConfInput.getContent());
 		}
 		return StructuredSelection.EMPTY;
@@ -36,28 +36,28 @@ public class SystemConfigurationEditorLinkHelper extends AbstractEditorLinkHelpe
 
 	@Override
 	public void activateEditor(IWorkbenchPage aPage, IStructuredSelection aSelection) {
-		if (aSelection == null || aSelection.isEmpty()){
+		if (aSelection == null || aSelection.isEmpty()) {
 			return;
 		}
-		
+
 		SystemConfiguration sysConf = null;
 		Object refObject = null;
 		if (aSelection.getFirstElement() instanceof SystemConfiguration) {
-			sysConf = (SystemConfiguration)aSelection.getFirstElement();
-		}else if(aSelection.getFirstElement() instanceof Device){
+			sysConf = (SystemConfiguration) aSelection.getFirstElement();
+		} else if (aSelection.getFirstElement() instanceof Device) {
 			refObject = aSelection.getFirstElement();
-			sysConf = ((Device)refObject).getSystemConfiguration();
-		}else if(aSelection.getFirstElement() instanceof Segment){
+			sysConf = ((Device) refObject).getSystemConfiguration();
+		} else if (aSelection.getFirstElement() instanceof Segment) {
 			refObject = aSelection.getFirstElement();
-			sysConf = (SystemConfiguration)((Segment)refObject).eContainer();
-		}		
-		
+			sysConf = (SystemConfiguration) ((Segment) refObject).eContainer();
+		}
+
 		if (null != sysConf) {
 			IEditorInput sysConfInput = new SystemConfigurationEditorInput(sysConf);
 			IEditorPart editor = activateEditor(aPage, sysConfInput);
 			selectObject(editor, refObject);
 		}
-		
+
 	}
 
 }

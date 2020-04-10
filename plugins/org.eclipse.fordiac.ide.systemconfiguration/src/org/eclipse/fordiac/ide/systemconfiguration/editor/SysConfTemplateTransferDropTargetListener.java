@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2016 Profactor GbmH, fortiss GmbH,  
+ * Copyright (c) 2016 Profactor GbmH, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,7 +9,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl 
+ *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editor;
@@ -27,11 +27,10 @@ import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.swt.dnd.DND;
 
-public class SysConfTemplateTransferDropTargetListener extends
-		TemplateTransferDropTargetListener {
+public class SysConfTemplateTransferDropTargetListener extends TemplateTransferDropTargetListener {
 
 	private AutomationSystem system;
-	
+
 	private static class SysConfTemplateCreationFactory implements CreationFactory {
 
 		/** The type template. */
@@ -53,15 +52,12 @@ public class SysConfTemplateTransferDropTargetListener extends
 
 	}
 
-
 	/**
 	 * Constructs a listener on the specified viewer.
-	 * 
-	 * @param viewer
-	 *            the EditPartViewer
+	 *
+	 * @param viewer the EditPartViewer
 	 */
-	public SysConfTemplateTransferDropTargetListener(
-			final EditPartViewer viewer, AutomationSystem system) {
+	public SysConfTemplateTransferDropTargetListener(final EditPartViewer viewer, AutomationSystem system) {
 		super(viewer);
 		this.system = system;
 	}
@@ -77,10 +73,11 @@ public class SysConfTemplateTransferDropTargetListener extends
 		} else {
 			if (TemplateTransfer.getInstance().getTemplate() instanceof PaletteEntry) {
 				PaletteEntry entry = (PaletteEntry) TemplateTransfer.getInstance().getTemplate();
-				AutomationSystem paletteSystem = entry.getGroup().getPallete().getAutomationSystem();
+				AutomationSystem paletteSystem = entry.getPalette().getAutomationSystem();
 
 				// If project is null it is an entry from the tool palette
-				if (isSysConfEditorType(TemplateTransfer.getInstance().getTemplate()) && (null != paletteSystem) && (paletteSystem.equals(system))) {
+				if (isSysConfEditorType(TemplateTransfer.getInstance().getTemplate()) && (null != paletteSystem)
+						&& (paletteSystem.equals(system))) {
 					getCurrentEvent().detail = DND.DROP_COPY;
 				} else {
 					getCurrentEvent().detail = DND.DROP_NONE;
@@ -90,10 +87,9 @@ public class SysConfTemplateTransferDropTargetListener extends
 		}
 	}
 
-
 	@Override
 	protected void handleDrop() {
-		if (!isSysConfEditorType(getCurrentEvent().data) 
+		if (!isSysConfEditorType(getCurrentEvent().data)
 				&& !(getCurrentEvent().data instanceof TemplateCreationFactory)) {
 			return;
 		}
@@ -101,26 +97,24 @@ public class SysConfTemplateTransferDropTargetListener extends
 		super.handleDrop();
 		TemplateTransfer.getInstance().setTemplate(null);
 	}
-	
+
 	@Override
 	protected CreationFactory getFactory(final Object template) {
 		getCurrentEvent().detail = DND.DROP_COPY;
 
-		if (isSysConfEditorType(template)){
+		if (isSysConfEditorType(template)) {
 			return new SysConfTemplateCreationFactory(template);
-		}else if(template instanceof TemplateCreationFactory){
+		} else if (template instanceof TemplateCreationFactory) {
 			return super.getFactory(template);
-		}else {
+		} else {
 			Activator.getDefault().logError("Type not in list: " + template.getClass().getName()); //$NON-NLS-1$
 		}
 		return null;
 	}
-	
+
 	private static boolean isSysConfEditorType(Object template) {
-		return (template instanceof DeviceTypePaletteEntry) 
-				|| (template instanceof ResourceTypeEntry)
+		return (template instanceof DeviceTypePaletteEntry) || (template instanceof ResourceTypeEntry)
 				|| (template instanceof SegmentTypePaletteEntry);
 	}
-
 
 }

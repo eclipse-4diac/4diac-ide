@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 
 public class CreateSubapplicationTypePaletteEntry implements IPaletteEntryCreator, TypeLibraryTags {
-	
+
 	@Override
 	public boolean canHandle(IFile file) {
 		return (SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));

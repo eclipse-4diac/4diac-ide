@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2013, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,17 +22,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.ElementaryType;
-import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public final class DataTypeLibrary {
 
@@ -52,7 +59,7 @@ public final class DataTypeLibrary {
 
 	/**
 	 * Gets the single instance of DataTypeLibrary.
-	 * 
+	 *
 	 * @return single instance of DataTypeLibrary
 	 */
 	public static DataTypeLibrary getInstance() {
@@ -80,7 +87,7 @@ public final class DataTypeLibrary {
 
 	/**
 	 * Gets the data types.
-	 * 
+	 *
 	 * @return the data types
 	 */
 	public Collection<DataType> getDataTypes() {
@@ -89,7 +96,7 @@ public final class DataTypeLibrary {
 
 	/**
 	 * Gets the data types sorted alphabetically from a to z.
-	 * 
+	 *
 	 * @return the sorted data types list
 	 */
 	public Collection<DataType> getDataTypesSorted() {
@@ -101,9 +108,9 @@ public final class DataTypeLibrary {
 	/**
 	 * FIXME only return type if it really exists! --> after parsing/importing of
 	 * types is implemented --> planned for V0.2
-	 * 
+	 *
 	 * @param name the name
-	 * 
+	 *
 	 * @return the type
 	 */
 	public DataType getType(final String name) {
@@ -121,7 +128,7 @@ public final class DataTypeLibrary {
 	}
 
 	public static void loadReferencedDataTypes(File srcFile, Shell shell) throws TypeImportException {
-		List<String> referencedDataTypes = FBTImporter.getReferencedDataTypes(srcFile);
+		List<String> referencedDataTypes = getReferencedDataTypes(srcFile);
 
 		for (String dataType : referencedDataTypes) {
 			DataType type = DataTypeLibrary.getInstance().getType(dataType);
@@ -142,6 +149,43 @@ public final class DataTypeLibrary {
 
 			}
 		}
+	}
+
+	/**
+	 * This method returns a list with all the data types that are referenced by the
+	 * imported FBTypes.
+	 *
+	 * @param file - the file that is being checked if it has references
+	 *
+	 * @return references - a list containing all the references
+	 */
+	private static List<String> getReferencedDataTypes(final File file) {
+		List<String> references = new ArrayList<>();
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
+
+		dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
+				Boolean.FALSE);
+		try {
+			db = dbf.newDocumentBuilder();
+			Document document = db.parse(file);
+			// parse document for "FBNetwork" tag
+			Node rootNode = document.getDocumentElement();
+			NodeList childNodes = rootNode.getChildNodes();
+			for (int i = 0; i < childNodes.getLength(); i++) {
+				Node n = childNodes.item(i);
+				if (n.getNodeName().equals(LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
+					String dataType = ""; //$NON-NLS-1$
+					dataType = n.getAttributes().getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE).getNodeValue();
+					references.add(dataType);
+				}
+
+			}
+		} catch (Exception e) {
+			Activator.getDefault().logError(e.getMessage(), e);
+		}
+		return references;
+
 	}
 
 }

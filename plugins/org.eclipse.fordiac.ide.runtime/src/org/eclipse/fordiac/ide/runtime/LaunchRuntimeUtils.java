@@ -29,17 +29,12 @@ public final class LaunchRuntimeUtils {
 	/**
 	 * Starts a new launch runtime configuration.
 	 * 
-	 * @param configname
-	 *            the configuration name
-	 * @param runtime
-	 *            the path to the runtime
-	 * @param location
-	 *            the location of the runtime
-	 * @param arguments
-	 *            the runtime arguments
+	 * @param configname the configuration name
+	 * @param runtime    the path to the runtime
+	 * @param location   the location of the runtime
+	 * @param arguments  the runtime arguments
 	 */
-	public static ILaunch startRuntime(String configname, String runtime,
-			String location, String arguments) {
+	public static ILaunch startRuntime(String configname, String runtime, String location, String arguments) {
 		/** Launch configuration. */
 		ILaunchConfiguration config;
 		/** The launch configuration's working copy. */
@@ -55,14 +50,12 @@ public final class LaunchRuntimeUtils {
 		try {
 			wc = configType.newInstance(null, configname);
 			// Set necessary attributes for the launch configuration
-			wc.setAttribute(
-					"org.eclipse.debug.core.appendEnvironmentVariables", true); //$NON-NLS-1$
+			wc.setAttribute("org.eclipse.debug.core.appendEnvironmentVariables", true); //$NON-NLS-1$
 			wc.setAttribute("org.eclipse.ui.externaltools.ATTR_LOCATION", //$NON-NLS-1$
 					runtime);
 			wc.setAttribute("org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS", //$NON-NLS-1$
 					arguments);
-			wc.setAttribute(
-					"org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY", //$NON-NLS-1$
+			wc.setAttribute("org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY", //$NON-NLS-1$
 					location);
 
 			config = wc.doSave();
@@ -78,7 +71,7 @@ public final class LaunchRuntimeUtils {
 		}
 		return launcht;
 	}
-	
+
 	private LaunchRuntimeUtils() {
 		throw new UnsupportedOperationException("LaunchRuntimeUtils utility class should not be instantiated!"); //$NON-NLS-1$
 	}

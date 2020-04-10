@@ -27,24 +27,25 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
+	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
+	 * initializeDefaultPreferences()
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		
-		/*blue*/                                                                                                   
-		PreferenceConverter.setDefault(store,PreferenceConstants.P_ECC_STATE_COLOR,new RGB(207,205,245));          
-		PreferenceConverter.setDefault(store,PreferenceConstants.P_ECC_STATE_BORDER_COLOR,new RGB(78,70,217));     
-		PreferenceConverter.setDefault(store,PreferenceConstants.P_ECC_TRANSITION_COLOR,new RGB(78,70,217));       
-		                                                                                                           
-		/*yellow*/                                                                                                 
-		PreferenceConverter.setDefault(store,PreferenceConstants.P_ECC_ALGORITHM_COLOR,new RGB(254,254,194));      
-		PreferenceConverter.setDefault(store,PreferenceConstants.P_ECC_ALGORITHM_BORDER_COLOR,new RGB(214,145,1)); 
-		                                                                                                           
-		/*green*/                                                                                                  
-		PreferenceConverter.setDefault(store,PreferenceConstants.P_ECC_EVENT_COLOR,new RGB(190,233,197));          
-		PreferenceConverter.setDefault(store,PreferenceConstants.P_ECC_EVENT_BORDER_COLOR,new RGB(57,137,46));
+
+		/* blue */
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_STATE_COLOR, new RGB(207, 205, 245));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_STATE_BORDER_COLOR, new RGB(78, 70, 217));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_TRANSITION_COLOR, new RGB(78, 70, 217));
+
+		/* yellow */
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_ALGORITHM_COLOR, new RGB(254, 254, 194));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_ALGORITHM_BORDER_COLOR, new RGB(214, 145, 1));
+
+		/* green */
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_EVENT_COLOR, new RGB(190, 233, 197));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_EVENT_BORDER_COLOR, new RGB(57, 137, 46));
 	}
 
 }

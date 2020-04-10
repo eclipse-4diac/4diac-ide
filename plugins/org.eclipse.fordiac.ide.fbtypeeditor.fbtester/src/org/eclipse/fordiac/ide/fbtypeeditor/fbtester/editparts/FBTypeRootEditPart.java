@@ -19,9 +19,9 @@ import java.util.List;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ShortestPathConnectionRouter;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
@@ -38,7 +38,7 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.widgets.Display;
 
 public class FBTypeRootEditPart extends AbstractDiagramEditPart {
-	private EContentAdapter adapter;
+	private Adapter adapter;
 
 	@Override
 	protected IFigure createFigure() {
@@ -53,8 +53,7 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			((Notifier) getCastedFBTypeModel()).eAdapters().add(getContentAdapter());
-
+			getCastedFBTypeModel().eAdapters().add(getContentAdapter());
 		}
 	}
 
@@ -62,13 +61,13 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			((Notifier) getCastedFBTypeModel()).eAdapters().remove(getContentAdapter());
+			getCastedFBTypeModel().eAdapters().remove(getContentAdapter());
 		}
 	}
 
-	public EContentAdapter getContentAdapter() {
-		if (adapter == null) {
-			adapter = new EContentAdapter() {
+	public Adapter getContentAdapter() {
+		if (null == adapter) {
+			adapter = new AdapterImpl() {
 				@Override
 				public void notifyChanged(final Notification notification) {
 					int type = notification.getEventType();

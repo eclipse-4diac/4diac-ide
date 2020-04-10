@@ -13,9 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
+import java.text.MessageFormat;
+
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart;
 
@@ -24,24 +27,23 @@ import org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart;
  */
 public class DeleteResourceHandler extends AbstractDeploymentCommand {
 
-
 	private Resource resource;
-	
+
 	@Override
 	protected boolean prepareParametersToExecute(Object element) {
 		setDevice(null);
-		
-		if (element instanceof Resource){
+
+		if (element instanceof Resource) {
 			resource = (Resource) element;
 			setDevice(resource.getDevice());
-			if (null != getDevice() ){
-				return true;	
+			if (null != getDevice()) {
+				return true;
 			}
-		}else if (element instanceof ResourceEditPart){
+		} else if (element instanceof ResourceEditPart) {
 			resource = ((ResourceEditPart) element).getModel();
 			setDevice(resource.getDevice());
-			if (null != getDevice() ){
-				return true;	
+			if (null != getDevice()) {
+				return true;
 			}
 		}
 		return false;
@@ -52,20 +54,19 @@ public class DeleteResourceHandler extends AbstractDeploymentCommand {
 		executor.deleteResource(resource.getName());
 	}
 
-	
 	@Override
 	protected void manageExecutorError() {
-		DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(getDevice(), resource);		
+		DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(getDevice(), resource);
 	}
-	
+
 	@Override
 	protected String getErrorMessageHeader() {
-		return "Delete Resource Error";
+		return Messages.DeleteResourceHandler_DeleteResourceError;
 	}
 
 	@Override
 	protected String getCurrentElementName() {
-		return "Resource: " + resource.getName();
+		return MessageFormat.format(Messages.DeleteResourceHandler_Resource, resource.getName());
 	}
-	
+
 }

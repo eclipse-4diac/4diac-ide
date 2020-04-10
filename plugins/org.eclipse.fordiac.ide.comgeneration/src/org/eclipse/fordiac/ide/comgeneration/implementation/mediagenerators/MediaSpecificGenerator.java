@@ -26,14 +26,14 @@ public interface MediaSpecificGenerator {
 	String getProtocolId();
 
 	FBTypePaletteEntry getPaletteType(ChannelEnd end, int numDataPorts, boolean local);
-	
-	
+
 	void configureFBs(FB sourceFB, FB destinationFB, CommunicationMediaInfo mediaInfo);
 
 	void reset();
 
 	boolean isSeparatedSource();
-	
+
 	VarDeclaration getTargetInputData(int index, FB fb);
+
 	VarDeclaration getTargetOutputData(int index, FB fb);
 }

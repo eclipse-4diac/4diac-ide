@@ -19,7 +19,9 @@ import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 
-/** The edit part for interface elements of FBs and Subapps shown in FBNetwork editors
+/**
+ * The edit part for interface elements of FBs and Subapps shown in FBNetwork
+ * editors
  */
 public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 	@Override
@@ -27,7 +29,7 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 		if (isEvent()) {
 			return new EventNodeEditPolicy();
 		}
-		if(isAdapter()){
+		if (isAdapter()) {
 			return new AdapterNodeEditPolicy();
 		}
 		if (isVariable()) {

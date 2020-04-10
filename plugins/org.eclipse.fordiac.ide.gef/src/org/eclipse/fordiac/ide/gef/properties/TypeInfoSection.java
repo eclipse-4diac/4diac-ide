@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteVersionInfoCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
@@ -100,9 +101,9 @@ public abstract class TypeInfoSection extends AbstractSection {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Type Name:");
+		getWidgetFactory().createCLabel(composite, FordiacMessages.TypeName + ":"); //$NON-NLS-1$
 		fbTypeNameText = createGroupText(composite, false);
-		getWidgetFactory().createCLabel(composite, "Comment:");
+		getWidgetFactory().createCLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(new ModifyListener() {
 			@Override
@@ -113,10 +114,10 @@ public abstract class TypeInfoSection extends AbstractSection {
 	}
 
 	private void createIdentificationGroup(Composite parent) {
-		Group identificationGroup = getWidgetFactory().createGroup(parent, "Identification");
+		Group identificationGroup = getWidgetFactory().createGroup(parent, FordiacMessages.Identification);
 		identificationGroup.setLayout(new GridLayout(2, false));
 		identificationGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		getWidgetFactory().createCLabel(identificationGroup, "Standard:");
+		getWidgetFactory().createCLabel(identificationGroup, FordiacMessages.Standard + ":"); //$NON-NLS-1$
 		standardText = createGroupText(identificationGroup, true);
 		standardText.addModifyListener(new ModifyListener() {
 			@Override
@@ -124,7 +125,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 				executeCommand(new ChangeStandardCommand(getType(), standardText.getText()));
 			}
 		});
-		getWidgetFactory().createCLabel(identificationGroup, "Classification:");
+		getWidgetFactory().createCLabel(identificationGroup, FordiacMessages.Classification + ":"); //$NON-NLS-1$
 		classificationText = createGroupText(identificationGroup, true);
 		classificationText.addModifyListener(new ModifyListener() {
 			@Override
@@ -133,7 +134,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 			}
 
 		});
-		getWidgetFactory().createCLabel(identificationGroup, "Application Domain:");
+		getWidgetFactory().createCLabel(identificationGroup, FordiacMessages.ApplicationDomain + ":"); //$NON-NLS-1$
 		domainText = createGroupText(identificationGroup, true);
 		domainText.addModifyListener(new ModifyListener() {
 			@Override
@@ -141,7 +142,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 				executeCommand(new ChangeApplicationDomainCommand(getType(), domainText.getText()));
 			}
 		});
-		getWidgetFactory().createCLabel(identificationGroup, "Function: ");
+		getWidgetFactory().createCLabel(identificationGroup, FordiacMessages.Function + ":"); //$NON-NLS-1$
 		functionText = createGroupText(identificationGroup, true);
 		functionText.addModifyListener(new ModifyListener() {
 			@Override
@@ -149,7 +150,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 				executeCommand(new ChangeFunctionCommand(getType(), functionText.getText()));
 			}
 		});
-		getWidgetFactory().createCLabel(identificationGroup, "Type: ");
+		getWidgetFactory().createCLabel(identificationGroup, FordiacMessages.Type + ":"); //$NON-NLS-1$
 		typeText = createGroupText(identificationGroup, true);
 		typeText.addModifyListener(new ModifyListener() {
 			@Override
@@ -157,7 +158,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 				executeCommand(new ChangeIdentifcationTypeCommand(getType(), typeText.getText()));
 			}
 		});
-		CLabel label = getWidgetFactory().createCLabel(identificationGroup, "Description: ");
+		CLabel label = getWidgetFactory().createCLabel(identificationGroup, FordiacMessages.Description + ":"); //$NON-NLS-1$
 		label.setLayoutData(new GridData(SWT.NONE, SWT.TOP, false, false));
 		descriptionText = getWidgetFactory().createText(identificationGroup, "", //$NON-NLS-1$
 				SWT.WRAP | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -172,7 +173,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 	}
 
 	private void createVersionInfoGroup(Composite parent) {
-		Group versionInfoGroup = getWidgetFactory().createGroup(parent, "Version Info");
+		Group versionInfoGroup = getWidgetFactory().createGroup(parent, FordiacMessages.VersionInfo);
 		versionInfoGroup.setLayout(new GridLayout(2, false));
 		versionInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
@@ -246,15 +247,15 @@ public abstract class TypeInfoSection extends AbstractSection {
 
 	private static void configureTableLayout(Table table) {
 		TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText("Version");
+		column1.setText(FordiacMessages.Version);
 		TableColumn column2 = new TableColumn(table, SWT.LEFT);
-		column2.setText("Organization");
+		column2.setText(FordiacMessages.Organization);
 		TableColumn column3 = new TableColumn(table, SWT.LEFT);
-		column3.setText("Author");
+		column3.setText(FordiacMessages.Author);
 		TableColumn column4 = new TableColumn(table, SWT.LEFT);
-		column4.setText("Date");
+		column4.setText(FordiacMessages.Date);
 		TableColumn column5 = new TableColumn(table, SWT.LEFT);
-		column5.setText("Remarks");
+		column5.setText(FordiacMessages.Remarks);
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 70));
 		layout.addColumnData(new ColumnWeightData(20, 90));

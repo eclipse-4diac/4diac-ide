@@ -25,14 +25,14 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class ECCSelectAllAction extends SelectAllAction {
-	
+
 	private IWorkbenchPart part;
 
 	public ECCSelectAllAction(IWorkbenchPart part) {
 		super(part);
 		this.part = part;
 	}
-	
+
 	/**
 	 * Selects all ECC State and Transition edit parts in the active workbench part.
 	 */
@@ -40,8 +40,7 @@ public class ECCSelectAllAction extends SelectAllAction {
 	public void run() {
 		GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
-			viewer.setSelection(new StructuredSelection(
-					getSelectableEditParts(viewer)));
+			viewer.setSelection(new StructuredSelection(getSelectableEditParts(viewer)));
 		}
 	}
 
@@ -55,11 +54,11 @@ public class ECCSelectAllAction extends SelectAllAction {
 				EditPart childPart = (EditPart) child;
 				if (childPart.isSelectable() == true) {
 					selectableChildren.add(childPart);
-					selectableChildren.addAll(((ECStateEditPart)childPart).getSourceConnections());
+					selectableChildren.addAll(((ECStateEditPart) childPart).getSourceConnections());
 				}
 			}
 		}
-		
+
 		return selectableChildren;
 	}
 

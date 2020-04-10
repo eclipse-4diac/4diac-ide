@@ -26,7 +26,8 @@ public class ChangePrimitiveInterfaceCommand extends Command {
 	public ChangePrimitiveInterfaceCommand(Service service, Primitive primitive, String interfaceName) {
 		super();
 		this.primitive = primitive;
-		serviceInterface = service.getLeftInterface().getName().equals(interfaceName) ? service.getLeftInterface() : service.getRightInterface();
+		serviceInterface = service.getLeftInterface().getName().equals(interfaceName) ? service.getLeftInterface()
+				: service.getRightInterface();
 	}
 
 	@Override
@@ -39,6 +40,7 @@ public class ChangePrimitiveInterfaceCommand extends Command {
 	public void undo() {
 		primitive.setInterface(oldServiceInterface);
 	}
+
 	@Override
 	public void redo() {
 		primitive.setInterface(serviceInterface);

@@ -39,7 +39,9 @@ public class DefaultCompareEditorOpener implements ICompareEditorOpener {
 		// empty Constructor
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.fodiac.ide.export.util.ICompareEditorOpener#hasDifferences()
 	 */
 	@Override
@@ -58,17 +60,17 @@ public class DefaultCompareEditorOpener implements ICompareEditorOpener {
 	private EditorInput createInput() {
 		CompareConfiguration compareConfig = new CompareConfiguration();
 		compareConfig.setLeftEditable(true);
-		compareConfig
-				.setLeftLabel(Messages.DefaultCompareEditorOpener_NEWLY_Exported + name);
+		compareConfig.setLeftLabel(Messages.DefaultCompareEditorOpener_NEWLY_Exported + name);
 		compareConfig.setRightEditable(false);
-		compareConfig
-				.setRightLabel(Messages.DefaultCompareEditorOpener_ORIGINAL_FILE + name);
+		compareConfig.setRightLabel(Messages.DefaultCompareEditorOpener_ORIGINAL_FILE + name);
 		EditorInput input = new EditorInput(compareConfig, original, newlyGenerated);
 		input.setTitle(title);
 		return input;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.fodiac.ide.export.util.ICompareEditorOpener#openCompareEditor()
 	 */
 	@Override
@@ -79,23 +81,31 @@ public class DefaultCompareEditorOpener implements ICompareEditorOpener {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fodiac.ide.export.util.ICompareEditorOpener#setName(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.fodiac.ide.export.util.ICompareEditorOpener#setName(java.lang.String)
 	 */
 	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fodiac.ide.export.util.ICompareEditorOpener#setTitle(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.fodiac.ide.export.util.ICompareEditorOpener#setTitle(java.lang.String)
 	 */
 	@Override
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.fodiac.ide.export.util.ICompareEditorOpener#setNewFile(java.io.File)
 	 */
 	@Override
@@ -104,8 +114,11 @@ public class DefaultCompareEditorOpener implements ICompareEditorOpener {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fodiac.ide.export.util.ICompareEditorOpener#setOriginalFile(java.io.File)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.fodiac.ide.export.util.ICompareEditorOpener#setOriginalFile(java.io.File)
 	 */
 	@Override
 	public void setOriginalFile(File original) {

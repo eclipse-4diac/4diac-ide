@@ -16,80 +16,70 @@ package org.eclipse.fordiac.ide.model.Palette;
 import org.eclipse.emf.ecore.EFactory;
 
 /**
- * <!-- begin-user-doc -->
- * The <b>Factory</b> for the model.
- * It provides a create method for each non-abstract class of the model.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> The <b>Factory</b> for the model. It provides a
+ * create method for each non-abstract class of the model. <!-- end-user-doc -->
+ * 
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage
  * @generated
  */
 public interface PaletteFactory extends EFactory {
 	/**
-	 * The singleton instance of the factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The singleton instance of the factory. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	PaletteFactory eINSTANCE = org.eclipse.fordiac.ide.model.Palette.impl.PaletteFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Palette</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Palette</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Palette</em>'.
 	 * @generated
 	 */
 	Palette createPalette();
 
 	/**
-	 * Returns a new object of class '<em>Group</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Group</em>'.
-	 * @generated
-	 */
-	PaletteGroup createPaletteGroup();
-
-	/**
-	 * Returns a new object of class '<em>FB Type Palette Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns a new object of class '<em>FB Type Palette Entry</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>FB Type Palette Entry</em>'.
 	 * @generated
 	 */
 	FBTypePaletteEntry createFBTypePaletteEntry();
 
 	/**
-	 * Returns a new object of class '<em>Device Type Palette Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns a new object of class '<em>Device Type Palette Entry</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Device Type Palette Entry</em>'.
 	 * @generated
 	 */
 	DeviceTypePaletteEntry createDeviceTypePaletteEntry();
 
 	/**
-	 * Returns a new object of class '<em>Resource Type Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns a new object of class '<em>Resource Type Entry</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Resource Type Entry</em>'.
 	 * @generated
 	 */
 	ResourceTypeEntry createResourceTypeEntry();
 
 	/**
-	 * Returns a new object of class '<em>Segment Type Palette Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns a new object of class '<em>Segment Type Palette Entry</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Segment Type Palette Entry</em>'.
 	 * @generated
 	 */
 	SegmentTypePaletteEntry createSegmentTypePaletteEntry();
 
 	/**
-	 * Returns a new object of class '<em>Adapter Type Palette Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns a new object of class '<em>Adapter Type Palette Entry</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Adapter Type Palette Entry</em>'.
 	 * @generated
 	 */
@@ -97,20 +87,20 @@ public interface PaletteFactory extends EFactory {
 
 	/**
 	 * Returns a new object of class '<em>Sub Application Type Palette Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Sub Application Type Palette Entry</em>'.
 	 * @generated
 	 */
 	SubApplicationTypePaletteEntry createSubApplicationTypePaletteEntry();
 
 	/**
-	 * Returns the package supported by this factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the package supported by this factory. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @return the package supported by this factory.
 	 * @generated
 	 */
 	PalettePackage getPalettePackage();
 
-} //PaletteFactory
+} // PaletteFactory

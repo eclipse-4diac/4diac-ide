@@ -47,8 +47,8 @@ import org.eclipse.ui.PlatformUI;
 
 public enum DeploymentCoordinator {
 	INSTANCE;
-	
-	private static final String OUTPUT_VIEW_ID = "org.eclipse.fordiac.ide.deployment.ui.views.Output";
+
+	private static final String OUTPUT_VIEW_ID = "org.eclipse.fordiac.ide.deployment.ui.views.Output"; //$NON-NLS-1$
 
 	private final Map<Device, List<VarDeclaration>> deployedDeviceProperties = new HashMap<>();
 
@@ -80,12 +80,12 @@ public enum DeploymentCoordinator {
 
 	public List<VarDeclaration> getSelectedDeviceProperties(Device dev) {
 		List<VarDeclaration> retVal = deployedDeviceProperties.get(dev);
-		if(null == retVal) {
+		if (null == retVal) {
 			retVal = Collections.emptyList();
 		}
 		return retVal;
 	}
-	
+
 	public static void printUnsupportedDeviceProfileMessageBox(final Device device, final Resource res) {
 		Display.getDefault().asyncExec(() -> {
 			MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
@@ -103,7 +103,6 @@ public enum DeploymentCoordinator {
 			messageBox.open();
 		});
 	}
-
 
 	/**
 	 * Count work creating f bs.
@@ -139,7 +138,6 @@ public enum DeploymentCoordinator {
 		return work;
 	}
 
-
 	/**
 	 * Perform deployment.
 	 * 
@@ -148,14 +146,17 @@ public enum DeploymentCoordinator {
 	 *                                  communication should be used instead the one
 	 *                                  derived from the device profile.
 	 */
-	public void performDeployment(final Object[] selection, IDeviceManagementCommunicationHandler overrideDevMgmCommHandler, String profile) {
-		IDeploymentListener outputView = (IDeploymentListener)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(OUTPUT_VIEW_ID);
-		DownloadRunnable download = new DownloadRunnable(createDeploymentdata(selection), overrideDevMgmCommHandler, outputView, profile);
+	public void performDeployment(final Object[] selection,
+			IDeviceManagementCommunicationHandler overrideDevMgmCommHandler, String profile) {
+		IDeploymentListener outputView = (IDeploymentListener) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getActivePage().findView(OUTPUT_VIEW_ID);
+		DownloadRunnable download = new DownloadRunnable(createDeploymentdata(selection), overrideDevMgmCommHandler,
+				outputView, profile);
 		Shell shell = Display.getDefault().getActiveShell();
 		try {
 			new ProgressMonitorDialog(shell).run(true, true, download);
 		} catch (InvocationTargetException ex) {
-			MessageDialog.openError(shell, "Error", ex.getMessage());
+			MessageDialog.openError(shell, Messages.DeploymentCoordinator_DepoymentError, ex.getMessage());
 		} catch (InterruptedException ex) {
 			MessageDialog.openInformation(shell, Messages.DeploymentCoordinator_LABEL_DownloadAborted, ex.getMessage());
 		}
@@ -164,20 +165,19 @@ public enum DeploymentCoordinator {
 	public void performDeployment(final Object[] selection) {
 		performDeployment(selection, null, null);
 	}
-	
+
 	/**
-	* Enable output.
-	* 
-	* @param executor
-	*            the executor
-	*/
+	 * Enable output.
+	 * 
+	 * @param executor the executor
+	 */
 	public void enableOutput(IDeviceManagementInteractor interactor) {
 		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(OUTPUT_VIEW_ID);
-		if(null != view) {
-			interactor.addDeploymentListener((IDeploymentListener)view);
+		if (null != view) {
+			interactor.addDeploymentListener((IDeploymentListener) view);
 		}
 	}
-	
+
 	/**
 	 * Disable output.
 	 * 
@@ -185,8 +185,8 @@ public enum DeploymentCoordinator {
 	 */
 	public void disableOutput(IDeviceManagementInteractor interactor) {
 		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(OUTPUT_VIEW_ID);
-		if(null != view) {
-			interactor.removeDeploymentListener((IDeploymentListener)view);
+		if (null != view) {
+			interactor.removeDeploymentListener((IDeploymentListener) view);
 		}
 	}
 
@@ -194,7 +194,7 @@ public enum DeploymentCoordinator {
 		List<DeviceDeploymentData> data = new ArrayList<>();
 		for (Object object : selection) {
 			if (object instanceof Resource) {
-				Resource res = (Resource)object;
+				Resource res = (Resource) object;
 				DeviceDeploymentData devData = getDevData(data, res.getDevice());
 				devData.addResourceData(new ResourceDeploymentData(res));
 			} else if (object instanceof Device) {
@@ -202,19 +202,19 @@ public enum DeploymentCoordinator {
 				DeviceDeploymentData devData = getDevData(data, dev);
 				devData.setSeltectedDevParams(getSelectedDeviceProperties((Device) object));
 			}
-		}		
+		}
 		return data;
 	}
 
 	private static DeviceDeploymentData getDevData(List<DeviceDeploymentData> data, final Device device) {
 		DeviceDeploymentData retVal = null;
-		for(DeviceDeploymentData devData : data) {
-			if(device == devData.getDevice()) {
+		for (DeviceDeploymentData devData : data) {
+			if (device == devData.getDevice()) {
 				retVal = devData;
 				break;
 			}
 		}
-		if(null == retVal) {
+		if (null == retVal) {
 			retVal = new DeviceDeploymentData(device);
 			data.add(retVal);
 		}

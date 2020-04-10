@@ -22,21 +22,20 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.systemconfiguration.messages"; //$NON-NLS-1$
-	
+
 	/** The Device create command_ labe l_ create device. */
 	public static String DeviceCreateCommand_LABEL_CreateDevice;
-		
+
 	/** The Device edit part_ labe l_ not defined. */
 	public static String DeviceEditPart_LABEL_NotDefined;
 
 	public static String OpenSystemConfEditorAction_Name;
-	
+
 	public static String SystemConfigurationEditorInput_SysConfTitleName;
 
 	/** The System conf palette factory_ labe l_ tools. */
 	public static String SystemConfPaletteFactory_LABEL_Tools;
-	
-	
+
 	public static String virtualDNSConfigurationTitle;
 	public static String virtualDNSNewConfiguration;
 	public static String virtualDNSDeleteConfiguration;

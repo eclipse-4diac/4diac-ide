@@ -22,12 +22,12 @@ public class ChangeSubAppIENameCommand extends AbstractChangeElementNameWithOppo
 	public ChangeSubAppIENameCommand(IInterfaceElement element, String name) {
 		super(element, name);
 	}
-	
+
 	@Override
 	protected INamedElement getOppositeElement(INamedElement element) {
-		if((null != ((IInterfaceElement)element).getFBNetworkElement()) && 
-				((IInterfaceElement)element).getFBNetworkElement().isMapped()) {
-			FBNetworkElement oppositeElement = ((IInterfaceElement)element).getFBNetworkElement().getOpposite();
+		if ((null != ((IInterfaceElement) element).getFBNetworkElement())
+				&& ((IInterfaceElement) element).getFBNetworkElement().isMapped()) {
+			FBNetworkElement oppositeElement = ((IInterfaceElement) element).getFBNetworkElement().getOpposite();
 			return oppositeElement.getInterfaceElement(element.getName());
 		}
 		return null;

@@ -25,67 +25,67 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.deployment.Activator;
+import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 
 public abstract class AbstractMonitoringManager {
-	
+
 	private static AbstractMonitoringManager monitoringManager = null;
-	
+
 	private static final AbstractMonitoringManager dummyMonitoringManager = new AbstractMonitoringManager() {
-		
+
 		@Override
 		public void enableSystem(AutomationSystem system) {
-			//in the dummy manager we don't do anything here
+			// in the dummy manager we don't do anything here
 		}
-		
+
 		@Override
 		public void enableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
-			//in the dummy manager we don't do anything here			
+			// in the dummy manager we don't do anything here
 		}
-		
+
 		@Override
 		public void disableSystem(AutomationSystem system) {
-			//in the dummy manager we don't do anything here			
+			// in the dummy manager we don't do anything here
 		}
-		
+
 		@Override
 		public void disableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
-			//in the dummy manager we don't do anything here			
+			// in the dummy manager we don't do anything here
 		}
-		
+
 		@Override
 		public boolean isSystemMonitored(AutomationSystem system) {
 			return false;
 		}
 	};
-	
+
 	public static AbstractMonitoringManager getMonitoringManager() {
-		if(null == monitoringManager) {
+		if (null == monitoringManager) {
 			monitoringManager = createMonitoringManager();
 		}
 		return monitoringManager;
 	}
-	
+
 	private static AbstractMonitoringManager createMonitoringManager() {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				Activator.PLUGIN_ID, "monitoringmanager"); //$NON-NLS-1$
+		IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID, "monitoringmanager"); //$NON-NLS-1$
 		for (IConfigurationElement element : elems) {
 			try {
 				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof AbstractMonitoringManager) {
-					return (AbstractMonitoringManager)object;
+					return (AbstractMonitoringManager) object;
 				}
 			} catch (CoreException corex) {
-				Activator.getDefault().logError("error in creating monitoring manager", corex);
+				Activator.getDefault().logError(Messages.AbstractMonitoringManager_ErrorInCreatingMonitoringManager,
+						corex);
 			}
 		}
-		Activator.getDefault().logError("No monitoring manager provided");
+		Activator.getDefault().logError(Messages.AbstractMonitoringManager_NoMonitoringManagerProvided);
 		return dummyMonitoringManager;
 	}
-	
 
 	/** The monitoring listeners. */
 	private final List<IMonitoringListener> monitoringListeners = new ArrayList<>();
@@ -93,8 +93,7 @@ public abstract class AbstractMonitoringManager {
 	/**
 	 * Register IMonitoringListener.
 	 * 
-	 * @param listener
-	 *            the listener
+	 * @param listener the listener
 	 */
 	public void registerMonitoringListener(IMonitoringListener listener) {
 		if (!monitoringListeners.contains(listener)) {
@@ -102,12 +101,10 @@ public abstract class AbstractMonitoringManager {
 		}
 	}
 
-
 	/**
 	 * Notify add port.
 	 * 
-	 * @param port
-	 *            the port
+	 * @param port the port
 	 */
 	public void notifyAddPort(PortElement port) {
 		for (IMonitoringListener monitoringListener : monitoringListeners) {
@@ -118,8 +115,7 @@ public abstract class AbstractMonitoringManager {
 	/**
 	 * Notify remove port.
 	 * 
-	 * @param port
-	 *            the port
+	 * @param port the port
 	 */
 	public void notifyRemovePort(PortElement port) {
 		for (IMonitoringListener monitoringListener : monitoringListeners) {
@@ -130,18 +126,16 @@ public abstract class AbstractMonitoringManager {
 	/**
 	 * Notify trigger event.
 	 * 
-	 * @param port
-	 *            the port
+	 * @param port the port
 	 */
 	public void notifyTriggerEvent(PortElement port) {
 		for (IMonitoringListener monitoringListener : monitoringListeners) {
 			monitoringListener.notifyTriggerEvent(port);
 		}
 	}
-	
 
 	private List<IMonitoringListener> watchesAdapter = new ArrayList<>();
-	
+
 	public void addWatchesAdapter(IMonitoringListener adapter) {
 		if (!watchesAdapter.contains(adapter)) {
 			watchesAdapter.add(adapter);
@@ -151,26 +145,28 @@ public abstract class AbstractMonitoringManager {
 	public void removeWatchesAdapter(IMonitoringListener adapter) {
 		watchesAdapter.remove(adapter);
 	}
-	
+
 	public void notifyWatchesAdapterPortAdded(PortElement port) {
 		for (IMonitoringListener adapter : watchesAdapter) {
 			adapter.notifyAddPort(port);
 		}
 	}
-	
+
 	public void notifyWatchesAdapterPortRemoved(PortElement port) {
 		for (IMonitoringListener adapter : watchesAdapter) {
 			adapter.notifyRemovePort(port);
 		}
 	}
-	
+
 	public abstract void disableSystem(AutomationSystem system);
-	
-	public abstract void disableSystemSynch(AutomationSystem system, IProgressMonitor monitor) throws InvocationTargetException, InterruptedException;
-	
+
+	public abstract void disableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
+			throws InvocationTargetException, InterruptedException;
+
 	public abstract void enableSystem(AutomationSystem system);
-	
-	public abstract void enableSystemSynch(AutomationSystem system, IProgressMonitor monitor) throws InvocationTargetException, InterruptedException;
-	
+
+	public abstract void enableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
+			throws InvocationTargetException, InterruptedException;
+
 	public abstract boolean isSystemMonitored(AutomationSystem system);
 }

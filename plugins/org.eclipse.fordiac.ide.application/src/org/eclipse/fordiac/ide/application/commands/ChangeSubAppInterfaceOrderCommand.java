@@ -19,20 +19,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 public class ChangeSubAppInterfaceOrderCommand extends ChangeInterfaceOrderCommand {
 
 	private ChangeInterfaceOrderCommand mirroredElement = null;
-	
+
 	public ChangeSubAppInterfaceOrderCommand(IInterfaceElement selection, boolean isInput, boolean moveUp) {
 		super(selection, isInput, moveUp);
-		
-		if(selection.getFBNetworkElement().isMapped()) {
-			mirroredElement = new ChangeInterfaceOrderCommand(selection.getFBNetworkElement().getOpposite().getInterfaceElement(selection.getName()),
-					isInput, moveUp);
+
+		if (selection.getFBNetworkElement().isMapped()) {
+			mirroredElement = new ChangeInterfaceOrderCommand(
+					selection.getFBNetworkElement().getOpposite().getInterfaceElement(selection.getName()), isInput,
+					moveUp);
 		}
 	}
-	
+
 	@Override
 	public void execute() {
 		super.execute();
-		if(null != mirroredElement) {
+		if (null != mirroredElement) {
 			mirroredElement.execute();
 		}
 	}
@@ -40,7 +41,7 @@ public class ChangeSubAppInterfaceOrderCommand extends ChangeInterfaceOrderComma
 	@Override
 	public void redo() {
 		super.redo();
-		if(null != mirroredElement) {
+		if (null != mirroredElement) {
 			mirroredElement.redo();
 		}
 	}
@@ -48,7 +49,7 @@ public class ChangeSubAppInterfaceOrderCommand extends ChangeInterfaceOrderComma
 	@Override
 	public void undo() {
 		super.undo();
-		if(null != mirroredElement) {
+		if (null != mirroredElement) {
 			mirroredElement.undo();
 		}
 	}

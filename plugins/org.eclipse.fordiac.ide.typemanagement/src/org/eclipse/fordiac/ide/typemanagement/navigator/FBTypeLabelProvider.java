@@ -1,10 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH
-<<<<<<< HEAD
  * 				 2019 Johannes Kepler University Linz
-=======
- * 				 2019 Johannes Kepler University
->>>>>>> 1.11.x
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,12 +10,9 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
-<<<<<<< HEAD
  *   			 - cleaned up issues reported by sonarlint
-=======
  *   			 - made the getImageForFile public so it can be used by the
  *                 palette, some code cleanup
->>>>>>> 1.11.x
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
@@ -32,7 +25,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -173,7 +165,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static FBType getAdapterTypeForFile(IFile file) {
-		PaletteEntry entry = getPalletEntryForFile(file);
+		PaletteEntry entry = FBTypeUtils.getPaletteEntryForFile(file);
 		if (entry instanceof AdapterTypePaletteEntry) {
 			return ((AdapterTypePaletteEntry) entry).getType().getAdapterFBType();
 		}
@@ -181,17 +173,9 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static FBType getFBTypeFromFile(IFile file) {
-		PaletteEntry entry = getPalletEntryForFile(file);
+		PaletteEntry entry = FBTypeUtils.getPaletteEntryForFile(file);
 		if (entry instanceof FBTypePaletteEntry) {
 			return ((FBTypePaletteEntry) entry).getFBType();
-		}
-		return null;
-	}
-
-	private static PaletteEntry getPalletEntryForFile(IFile file) {
-		Palette palette = FBTypeUtils.getPalletteForFBTypeFile(file);
-		if (palette != null) {
-			return TypeLibrary.getPaletteEntry(palette, file);
 		}
 		return null;
 	}

@@ -13,8 +13,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceDelta;
@@ -24,10 +27,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -40,8 +43,6 @@ import org.eclipse.ltk.core.refactoring.participants.ResourceChangeChecker;
 
 public class DeleteFBTypeParticipant extends DeleteParticipant {
 
-	private List<String> typeNames = new ArrayList<>();
-
 	@Override
 	protected boolean initialize(Object element) {
 		return (element instanceof IFile);
@@ -49,7 +50,7 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 
 	@Override
 	public String getName() {
-		return "Delete IEC 61499 Type";
+		return Messages.DeleteFBTypeParticipant_Name;
 	}
 
 	@Override
@@ -62,19 +63,17 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 		return verifyAffectedChildren(affectedChildren);
 	}
 
-	private RefactoringStatus verifyAffectedChildren(IResourceDelta[] affectedChildren) {
+	private static RefactoringStatus verifyAffectedChildren(IResourceDelta[] affectedChildren) {
 		for (IResourceDelta resourceDelta : affectedChildren) {
 			if (resourceDelta.getResource() instanceof IFile) {
 				Palette palette = SystemManager.INSTANCE.getPalette(resourceDelta.getResource().getProject());
 
-				typeNames.clear();
-
 				String typeNameToDelete = TypeLibrary.getTypeNameFromFile((IFile) resourceDelta.getResource());
-				checkTypeContainment(palette.getRootGroup(), typeNameToDelete);
+				List<String> typeNames = checkTypeContainment(palette, typeNameToDelete);
 
 				if (!typeNames.isEmpty()) {
-					return RefactoringStatus.createWarningStatus(
-							"FB type " + typeNameToDelete + " is used in the following types: " + typeNames.toString());
+					return RefactoringStatus.createWarningStatus(MessageFormat.format(
+							Messages.DeleteFBTypeParticipant_TypeInUseWarning, typeNameToDelete, typeNames.toString()));
 				}
 			} else {
 				return verifyAffectedChildren(resourceDelta.getAffectedChildren());
@@ -83,27 +82,34 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 		return new RefactoringStatus();
 	}
 
-	private void checkTypeContainment(PaletteGroup rootGroup, String searchTypeName) {
+	private static List<String> checkTypeContainment(Palette palette, String searchTypeName) {
+		List<String> retVal = new ArrayList<>();
+		Stream<Entry<String, ? extends PaletteEntry>> stream = Stream.concat(
+				Stream.concat(palette.getFbTypes().entrySet().stream(), palette.getSubAppTypes().entrySet().stream()),
+				palette.getResourceTypes().entrySet().stream());
 
-		for (PaletteEntry entry : rootGroup.getEntries()) {
-			FBNetwork network = null;
-			if (entry.getType() instanceof CompositeFBType) {
-				network = ((CompositeFBType) entry.getType()).getFBNetwork();
-			} else if (entry.getType() instanceof ResourceType) {
-				network = ((ResourceType) entry.getType()).getFBNetwork();
-			} else if (entry.getType() instanceof SubAppType) {
-				network = ((SubAppType) entry.getType()).getFBNetwork();
+		stream.forEach(entry -> {
+			FBNetwork network = getNetwork(entry);
+			if ((null != network) && (containsElementWithType(searchTypeName, network))) {
+				retVal.add(entry.getValue().getLabel());
 			}
+		});
 
-			if (null != network && containsElementWithType(searchTypeName, network)) {
-				typeNames.add(entry.getLabel());
-			}
+		return retVal;
+	}
+
+	private static FBNetwork getNetwork(Entry<String, ? extends PaletteEntry> entry) {
+		FBNetwork network = null;
+		LibraryElement type = entry.getValue().getType();
+
+		if (type instanceof CompositeFBType) {
+			network = ((CompositeFBType) type).getFBNetwork();
+		} else if (type instanceof ResourceType) {
+			network = ((ResourceType) type).getFBNetwork();
+		} else if (type instanceof SubAppType) {
+			network = ((SubAppType) type).getFBNetwork();
 		}
-
-		for (PaletteGroup group : rootGroup.getSubGroups()) {
-			checkTypeContainment(group, searchTypeName);
-		}
-
+		return network;
 	}
 
 	private static boolean containsElementWithType(String searchTypeName, FBNetwork network) {

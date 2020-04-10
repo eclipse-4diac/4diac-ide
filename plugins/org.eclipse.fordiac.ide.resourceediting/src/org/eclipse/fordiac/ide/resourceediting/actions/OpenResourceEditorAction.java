@@ -27,7 +27,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
  * The Class OpenResourceEditorAction.
  */
 public class OpenResourceEditorAction extends OpenListener {
-	
+
 	private static final String OPEN_RES_EDITOR_LISTENER_ID = "org.eclipse.fordiac.ide.resourceediting.actions.OpenResourceEditorAction"; //$NON-NLS-1$
 
 	/** The res. */
@@ -35,15 +35,14 @@ public class OpenResourceEditorAction extends OpenListener {
 
 	@Override
 	public void run(final IAction action) {
-		if(null != res){
-			ResourceEditorInput input = new ResourceEditorInput(res);			
-			openEditor(input, ResourceDiagramEditor.class.getName());	
+		if (null != res) {
+			ResourceEditorInput input = new ResourceEditorInput(res);
+			openEditor(input, ResourceDiagramEditor.class.getName());
 		}
 	}
 
 	@Override
-	public void selectionChanged(final IAction action,
-			final ISelection selection) {
+	public void selectionChanged(final IAction action, final ISelection selection) {
 		res = null;
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSel = (IStructuredSelection) selection;

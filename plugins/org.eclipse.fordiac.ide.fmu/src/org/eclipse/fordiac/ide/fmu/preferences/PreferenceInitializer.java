@@ -30,7 +30,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_PATH,""); //$NON-NLS-1$
+		store.setDefault(PreferenceConstants.P_PATH, ""); //$NON-NLS-1$
 		store.setDefault(PreferenceConstants.P_FMU_WIN32, false);
 		store.setDefault(PreferenceConstants.P_FMU_WIN64, false);
 		store.setDefault(PreferenceConstants.P_FMU_LIN32, false);

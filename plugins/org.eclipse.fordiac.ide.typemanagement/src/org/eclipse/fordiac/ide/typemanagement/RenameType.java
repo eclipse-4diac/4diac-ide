@@ -28,7 +28,7 @@ import org.eclipse.ltk.core.refactoring.participants.RenameParticipant;
 import org.eclipse.ltk.core.refactoring.participants.ResourceChangeChecker;
 
 public class RenameType extends RenameParticipant {
-	
+
 	@Override
 	protected boolean initialize(Object element) {
 		return (element instanceof IFile);
@@ -40,37 +40,36 @@ public class RenameType extends RenameParticipant {
 	}
 
 	@Override
-	public RefactoringStatus checkConditions(IProgressMonitor pm,
-			CheckConditionsContext context) throws OperationCanceledException {
-		
+	public RefactoringStatus checkConditions(IProgressMonitor pm, CheckConditionsContext context)
+			throws OperationCanceledException {
+
 		ResourceChangeChecker resChecker = context.getChecker(ResourceChangeChecker.class);
 		IResourceChangeDescriptionFactory deltaFactory = resChecker.getDeltaFactory();
 		IResourceDelta[] affectedChildren = deltaFactory.getDelta().getAffectedChildren();
 
 		return verifyAffectedChildren(affectedChildren);
 	}
-	
+
 	private RefactoringStatus verifyAffectedChildren(IResourceDelta[] affectedChildren) {
 		for (IResourceDelta resourceDelta : affectedChildren) {
 			if (resourceDelta.getMovedFromPath() != null) {
 				String name = getTypeName(resourceDelta);
-				if(null != name){					
+				if (null != name) {
 					if (!IdentifierVerifyer.isValidIdentifier(name)) {
 						return getWrongIdentifierErrorStatus();
 					}
 				}
-			}
-			else if (resourceDelta.getMovedToPath() == null){
+			} else if (resourceDelta.getMovedToPath() == null) {
 				return verifyAffectedChildren(resourceDelta.getAffectedChildren());
 			}
 		}
-		
+
 		return new RefactoringStatus();
 	}
 
 	protected String getTypeName(IResourceDelta resourceDelta) {
-		if(resourceDelta.getResource() instanceof IFile){
-			return TypeLibrary.getTypeNameFromFile((IFile)resourceDelta.getResource());
+		if (resourceDelta.getResource() instanceof IFile) {
+			return TypeLibrary.getTypeNameFromFile((IFile) resourceDelta.getResource());
 		}
 		return null;
 	}
@@ -79,10 +78,8 @@ public class RenameType extends RenameParticipant {
 		return RefactoringStatus.createFatalErrorStatus(Messages.RenameType_InvalidIdentifierErrorMessage);
 	}
 
-
 	@Override
-	public Change createChange(IProgressMonitor pm) throws CoreException,
-			OperationCanceledException {
+	public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		return null;
 	}
 

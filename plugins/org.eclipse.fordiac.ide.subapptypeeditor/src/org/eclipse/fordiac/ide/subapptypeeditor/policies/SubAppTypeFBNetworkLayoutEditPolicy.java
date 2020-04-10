@@ -35,8 +35,8 @@ public class SubAppTypeFBNetworkLayoutEditPolicy extends CompositeFBNetworkLayou
 
 			if (getHost().getModel() instanceof FBNetwork) {
 				FBNetwork fbNetwork = (FBNetwork) getHost().getModel();
-				CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(type, fbNetwork, constraint.getLocation().x,
-						constraint.getLocation().y);
+				CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(type, fbNetwork,
+						constraint.getLocation().x, constraint.getLocation().y);
 				return cmd;
 			}
 		}

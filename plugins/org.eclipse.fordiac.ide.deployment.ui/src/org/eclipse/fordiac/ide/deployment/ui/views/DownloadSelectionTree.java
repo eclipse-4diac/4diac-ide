@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GbmH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -17,9 +17,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
+import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -55,12 +57,11 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 
 public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
-	
+
 	private static final String DOWNLOAD_DEV_SELECTION = "DOWNLOAD_DEV_SELECTION"; //$NON-NLS-1$
 	private static final String DOWNLOAD_DEV_MGRID = "DOWNLOAD_DEV_MGRID"; //$NON-NLS-1$
 	private static final String DOWNLOAD_DEV_PROPERTIES = "DOWNLOAD_DEV_PROPERTIES"; //$NON-NLS-1$
 
-	
 	static void initSelectedProperties(Device device) {
 		List<VarDeclaration> selectedProperties = new ArrayList<>();
 		for (VarDeclaration varDecl : device.getVarDeclarations()) {
@@ -70,16 +71,14 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 		}
 		DeploymentCoordinator.INSTANCE.setDeviceProperties(device, selectedProperties);
 	}
-	
-		
+
 	/**
 	 * The Class ViewContentProvider.
 	 */
-	class ViewContentProvider implements IStructuredContentProvider,
-			ITreeContentProvider {
-		
+	class ViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
+
 		/** The adapter. */
-		private final EContentAdapter adapter = new EContentAdapter() {
+		private final Adapter adapter = new AdapterImpl() {
 
 			@Override
 			public void notifyChanged(Notification notification) {
@@ -99,20 +98,19 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see
 		 * org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface
 		 * .viewers.Viewer, java.lang.Object, java.lang.Object)
 		 */
 		@Override
-		public void inputChanged(final Viewer v, final Object oldInput,
-				final Object newInput) {
+		public void inputChanged(final Viewer v, final Object oldInput, final Object newInput) {
 			// not used
 		}
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
 		 */
 		@Override
@@ -123,16 +121,15 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java
+		 *
+		 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java
 		 * .lang.Object)
 		 */
 		@Override
 		public Object[] getElements(final Object parent) {
 			if (parent.equals(getInput())) {
 				List<AutomationSystem> systems = SystemManager.INSTANCE.getSystems();
-				
+
 				for (AutomationSystem sys : systems) {
 					if (!sys.eAdapters().contains(adapter)) {
 						sys.eAdapters().add(adapter);
@@ -146,10 +143,9 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see
-		 * org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object
-		 * )
+		 * org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object )
 		 */
 		@Override
 		public Object getParent(final Object child) {
@@ -164,34 +160,34 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.
+		 *
+		 * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.
 		 * Object)
 		 */
 		@Override
 		public Object[] getChildren(final Object parent) {
 			if (parent instanceof AutomationSystem) {
 				SystemConfiguration sysConf = ((AutomationSystem) parent).getSystemConfiguration();
-				
+
 				if (sysConf == null) {
 					return new Object[] {};
 				}
 				if (!sysConf.eAdapters().contains(adapter)) {
 					sysConf.eAdapters().add(adapter);
 				}
-				List <Device> devList = new ArrayList<>(sysConf.getDevices()); 
+				List<Device> devList = new ArrayList<>(sysConf.getDevices());
 				Collections.sort(devList, NamedElementComparator.INSTANCE);
 				return devList.toArray();
 			}
 			if (parent instanceof Device) {
 				Device device = (Device) parent;
 				if (!device.eAdapters().contains(adapter)) {
-					//this device is new in the list of devices we need to correctly set up its properties
+					// this device is new in the list of devices we need to correctly set up its
+					// properties
 					initSelectedProperties(device);
 					device.eAdapters().add(adapter);
 				}
-				
+
 				List<Resource> resource = new ArrayList<>();
 				for (Resource res : ((Device) parent).getResource()) {
 					if (!res.isDeviceTypeResource()) {
@@ -205,9 +201,8 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.
+		 *
+		 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.
 		 * Object)
 		 */
 		@Override
@@ -224,16 +219,15 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 			return false;
 		}
 	}
-	
-	
+
 	/**
 	 * The Class ViewLabelProvider.
 	 */
-	static class ViewLabelProvider extends LabelProvider{
+	static class ViewLabelProvider extends LabelProvider {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
 		 */
 		@Override
@@ -249,7 +243,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
 		 */
 		@Override
@@ -272,11 +266,10 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 		}
 
 	}
-	
+
 	static class DownloadDecoratingLabelProvider extends DecoratingLabelProvider implements ITableLabelProvider {
 
-		public DownloadDecoratingLabelProvider(ILabelProvider provider,
-				ILabelDecorator decorator) {
+		public DownloadDecoratingLabelProvider(ILabelProvider provider, ILabelDecorator decorator) {
 			super(provider, decorator);
 		}
 
@@ -295,7 +288,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 				return getText(element);
 			case 1:
 				if (element instanceof Device) {
-					return DeploymentHelper.getMgrID((Device)element);
+					return DeploymentHelper.getMgrID((Device) element);
 				}
 				break;
 			case 2:
@@ -308,32 +301,30 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 			}
 			return ""; //$NON-NLS-1$
 		}
-		
+
 	}
-	
-	
 
 	public DownloadSelectionTree(Composite parent, int style) {
 		super(parent, style);
-		
+
 		getTree().setHeaderVisible(true);
 		TreeColumn column1 = new TreeColumn(getTree(), SWT.LEFT);
-		column1.setText("Selection");
+		column1.setText(Messages.DownloadSelectionTree_Selection);
 		column1.setWidth(200);
-		
+
 		TreeColumn mgrIDColumn = new TreeColumn(getTree(), SWT.LEFT);
-		mgrIDColumn.setText("MGR ID");
+		mgrIDColumn.setText(Messages.DownloadSelectionTree_MgrId);
 		mgrIDColumn.setWidth(150);
-		
+
 		TreeColumn propertiesColumn = new TreeColumn(getTree(), SWT.LEFT);
-		propertiesColumn.setText("Properties");
+		propertiesColumn.setText(Messages.DownloadSelectionTree_Properties);
 		propertiesColumn.setWidth(200);
-		
+
 		setContentProvider(new ViewContentProvider());
-		ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();  		
-		LabelProvider lp = new ViewLabelProvider();		
-		setLabelProvider(new DownloadDecoratingLabelProvider(lp ,decorator));
-		
+		ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
+		LabelProvider lp = new ViewLabelProvider();
+		setLabelProvider(new DownloadDecoratingLabelProvider(lp, decorator));
+
 		setCellModifier(new ICellModifier() {
 			@Override
 			public boolean canModify(final Object element, final String property) {
@@ -353,27 +344,27 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 				// nothing to do
 			}
 		});
-		
+
 		setCellEditors(new CellEditor[] { new TextCellEditor(), new TextCellEditor(), new DialogCellEditor(getTree()) {
-					@Override
-					protected Object openDialogBox(Control cellEditorWindow) {
-						DeviceParametersDialog dialog = new DeviceParametersDialog(cellEditorWindow.getShell());
-						if (((TreeSelection) getSelection()).getFirstElement() instanceof Device) {
-							dialog.setDevice((Device) ((TreeSelection) getSelection()).getFirstElement());
-							if (Window.OK == dialog.open() ) {
-								DeploymentCoordinator.INSTANCE.setDeviceProperties(dialog.getDevice(), dialog.getSelectedProperties());
-								refresh(dialog.getDevice(), true);
-							} 
-						}
-						return null;
+			@Override
+			protected Object openDialogBox(Control cellEditorWindow) {
+				DeviceParametersDialog dialog = new DeviceParametersDialog(cellEditorWindow.getShell());
+				if (((TreeSelection) getSelection()).getFirstElement() instanceof Device) {
+					dialog.setDevice((Device) ((TreeSelection) getSelection()).getFirstElement());
+					if (Window.OK == dialog.open()) {
+						DeploymentCoordinator.INSTANCE.setDeviceProperties(dialog.getDevice(),
+								dialog.getSelectedProperties());
+						refresh(dialog.getDevice(), true);
 					}
+				}
+				return null;
+			}
 
-				} });
+		} });
 
-		setColumnProperties(new String[] { DOWNLOAD_DEV_SELECTION, DOWNLOAD_DEV_MGRID,
-				DOWNLOAD_DEV_PROPERTIES });
+		setColumnProperties(new String[] { DOWNLOAD_DEV_SELECTION, DOWNLOAD_DEV_MGRID, DOWNLOAD_DEV_PROPERTIES });
 	}
-	
+
 	private static String getSelectedString(Object element) {
 		List<VarDeclaration> temp = DeploymentCoordinator.INSTANCE.getSelectedDeviceProperties((Device) element);
 		if (temp != null) {
@@ -388,14 +379,12 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 				}
 				buffer.append(varDeclaration.getName());
 				buffer.append("="); //$NON-NLS-1$
-				buffer.append(varDeclaration.getValue() != null ? varDeclaration
-						.getValue().getValue() : ""); //$NON-NLS-1$
+				buffer.append(varDeclaration.getValue() != null ? varDeclaration.getValue().getValue() : ""); //$NON-NLS-1$
 			}
 			buffer.append("]"); //$NON-NLS-1$
 			return buffer.toString();
 		}
 		return "[]"; //$NON-NLS-1$
 	}
-
 
 }

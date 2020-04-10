@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -17,23 +17,23 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
+import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Segment Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Segment
+ * Type Palette Entry</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements SegmentTypePaletteEntry {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SegmentTypePaletteEntryImpl() {
@@ -41,8 +41,8 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -50,41 +50,47 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 		return PalettePackage.Literals.SEGMENT_TYPE_PALETTE_ENTRY;
 	}
 
-	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public SegmentType getSegmentType() {
 		LibraryElement type = getType();
-		if((null !=type) && (type instanceof SegmentType)){
-		   return (SegmentType) type;
+		if (type instanceof SegmentType) {
+			return (SegmentType) type;
 		}
 		return null;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if((null != type) && (type instanceof SegmentType)){
+		if (type instanceof SegmentType) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
-				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no SegmentType as type entry for SegmentTypePaletteEntry");
+			if (null != type) {
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+						"tried to set no SegmentType as type entry for SegmentTypePaletteEntry"); //$NON-NLS-1$
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
 	}
 
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	protected LibraryElement loadType(){
-		return SEGImporter.importSEGType(getFile());
+	public TypeImporter getTypeImporter(final Palette palette) {
+		return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter();
 	}
-} //SegmentTypePaletteEntryImpl
+
+} // SegmentTypePaletteEntryImpl

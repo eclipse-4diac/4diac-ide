@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -41,7 +42,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
  */
 public final class ECCContentAndLabelProvider {
 
-	public static final String EMPTY_FIELD = "[none]"; // drop-down menu entry for selecting nothing
+	public static final String EMPTY_FIELD = Messages.ECCContentAndLabelProvider_EmptyField; // drop-down menu entry for
+																								// selecting nothing
 	public static final String ONE_CONDITION = "1"; //$NON-NLS-1$
 
 	public static List<Event> getOutputEvents(BasicFBType type) {
@@ -136,6 +138,6 @@ public final class ECCContentAndLabelProvider {
 	}
 
 	private ECCContentAndLabelProvider() {
-		throw new UnsupportedOperationException("ECActionHelpers should not be instantiated!");
+		throw new UnsupportedOperationException("ECActionHelpers should not be instantiated!"); //$NON-NLS-1$
 	}
 }

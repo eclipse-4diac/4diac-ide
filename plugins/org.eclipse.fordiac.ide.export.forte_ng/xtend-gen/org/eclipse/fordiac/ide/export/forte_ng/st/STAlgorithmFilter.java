@@ -1,6 +1,19 @@
+/**
+ * Copyright (c) 2019 fortiss GmbH
+ *               2020 Johannes Kepler University Linz
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Ernst Blecha - add multibit partial access
+ */
 package org.eclipse.fordiac.ide.export.forte_ng.st;
 
-import com.google.common.collect.Iterables;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +48,8 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IntLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocatedVariable;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RealLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RepeatStatement;
@@ -45,20 +60,24 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StringLiteral
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.ParserRule;
-import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.util.LazyStringInputStream;
 import org.eclipse.xtext.util.Strings;
+import org.eclipse.xtext.validation.CheckMode;
+import org.eclipse.xtext.validation.IResourceValidator;
+import org.eclipse.xtext.validation.Issue;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 @SuppressWarnings("all")
@@ -82,12 +101,21 @@ public class STAlgorithmFilter {
       Pair<String, Boolean> _mappedTo = Pair.<String, Boolean>of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
       resource.load(_lazyStringInputStream, Collections.<String, Boolean>unmodifiableMap(CollectionLiterals.<String, Boolean>newHashMap(_mappedTo)));
       final IParseResult parseResult = resource.getParseResult();
-      boolean _hasSyntaxErrors = parseResult.hasSyntaxErrors();
-      if (_hasSyntaxErrors) {
-        final Function1<INode, String> _function = (INode it) -> {
-          return it.getSyntaxErrorMessage().getMessage();
+      final IResourceValidator validator = resource.getResourceServiceProvider().getResourceValidator();
+      final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
+      boolean _isEmpty = issues.isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        final Function1<Issue, String> _function = (Issue it) -> {
+          String _name = alg.getName();
+          String _plus = (_name + ", Line ");
+          String _string = Long.toString((it.getLineNumber()).intValue());
+          String _plus_1 = (_plus + _string);
+          String _plus_2 = (_plus_1 + ": ");
+          String _message = it.getMessage();
+          return (_plus_2 + _message);
         };
-        Iterables.<String>addAll(errors, IterableExtensions.<INode, String>map(parseResult.getSyntaxErrors(), _function));
+        errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
         return null;
       }
       EObject _rootASTElement = parseResult.getRootASTElement();
@@ -113,12 +141,19 @@ public class STAlgorithmFilter {
       Pair<String, ParserRule> _mappedTo = Pair.<String, ParserRule>of(StructuredTextResource.OPTION_PARSER_RULE, _expressionRule);
       resource.load(_lazyStringInputStream, Collections.<String, ParserRule>unmodifiableMap(CollectionLiterals.<String, ParserRule>newHashMap(_mappedTo)));
       final IParseResult parseResult = resource.getParseResult();
-      boolean _hasSyntaxErrors = parseResult.hasSyntaxErrors();
-      if (_hasSyntaxErrors) {
-        final Function1<INode, String> _function = (INode it) -> {
-          return it.getSyntaxErrorMessage().getMessage();
+      final IResourceValidator validator = resource.getResourceServiceProvider().getResourceValidator();
+      final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
+      boolean _isEmpty = issues.isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        final Function1<Issue, String> _function = (Issue it) -> {
+          String _string = Long.toString((it.getLineNumber()).intValue());
+          String _plus = ("Line " + _string);
+          String _plus_1 = (_plus + ": ");
+          String _message = it.getMessage();
+          return (_plus_1 + _message);
         };
-        Iterables.<String>addAll(errors, IterableExtensions.<INode, String>map(parseResult.getSyntaxErrors(), _function));
+        errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
         return null;
       }
       EObject _rootASTElement = parseResult.getRootASTElement();
@@ -140,19 +175,220 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
+  private int BitSize(final String str) {
+    int _switchResult = (int) 0;
+    boolean _matched = false;
+    boolean _equals = str.equals("LWORD");
+    if (_equals) {
+      _matched=true;
+      _switchResult = 64;
+    }
+    if (!_matched) {
+      boolean _equals_1 = str.equals("DWORD");
+      if (_equals_1) {
+        _matched=true;
+        _switchResult = 32;
+      }
+    }
+    if (!_matched) {
+      boolean _equals_2 = str.equals("WORD");
+      if (_equals_2) {
+        _matched=true;
+        _switchResult = 16;
+      }
+    }
+    if (!_matched) {
+      boolean _equals_3 = str.equals("BYTE");
+      if (_equals_3) {
+        _matched=true;
+        _switchResult = 8;
+      }
+    }
+    if (!_matched) {
+      boolean _equals_4 = str.equals("BOOL");
+      if (_equals_4) {
+        _matched=true;
+        _switchResult = 1;
+      }
+    }
+    if (!_matched) {
+      _switchResult = 0;
+    }
+    return _switchResult;
+  }
+  
+  protected CharSequence generateArrayDecl(final LocatedVariable variable) {
+    CharSequence _xblockexpression = null;
+    {
+      final Variable l = variable.getLocation();
+      CharSequence _switchResult = null;
+      boolean _matched = false;
+      if (l instanceof PrimaryVariable) {
+        _matched=true;
+        StringConcatenation _builder = new StringConcatenation();
+        {
+          if (((this.BitSize(variable.getType().getName()) > 0) && (this.BitSize(((PrimaryVariable)l).getVar().getType().getName()) > 0))) {
+            {
+              int _BitSize = this.BitSize(((PrimaryVariable)l).getVar().getType().getName());
+              int _BitSize_1 = this.BitSize(variable.getType().getName());
+              boolean _greaterThan = (_BitSize > _BitSize_1);
+              if (_greaterThan) {
+                _builder.append("ARRAY_AT<CIEC_");
+                String _name = variable.getType().getName();
+                _builder.append(_name);
+                _builder.append(", CIEC_");
+                String _name_1 = ((PrimaryVariable)l).getVar().getType().getName();
+                _builder.append(_name_1);
+                _builder.append(", 0, ");
+                int _arraySize = variable.getArraySize();
+                int _minus = (_arraySize - 1);
+                _builder.append(_minus);
+                _builder.append("> ");
+                String _name_2 = variable.getName();
+                _builder.append(_name_2);
+                _builder.append("(");
+                String _name_3 = ((PrimaryVariable)l).getVar().getName();
+                _builder.append(_name_3);
+                _builder.append(");");
+                _builder.newLineIfNotEmpty();
+              } else {
+                _builder.append("#error Accessing CIEC_");
+                String _name_4 = ((PrimaryVariable)l).getVar().getType().getName();
+                _builder.append(_name_4);
+                _builder.append(" via CIEC_");
+                String _name_5 = variable.getType().getName();
+                _builder.append(_name_5);
+                _builder.append(" would result in undefined behaviour");
+                _builder.newLineIfNotEmpty();
+              }
+            }
+          } else {
+            _builder.append("#error Piecewise access is supported only for types with defined bit-representation (e.g. not CIEC_");
+            String _name_6 = ((PrimaryVariable)l).getVar().getType().getName();
+            _builder.append(_name_6);
+            _builder.append(" via CIEC_");
+            String _name_7 = variable.getType().getName();
+            _builder.append(_name_7);
+            _builder.append(") ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+        _switchResult = _builder;
+      }
+      if (!_matched) {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("#error unhandled located array");
+        _switchResult = _builder;
+      }
+      _xblockexpression = _switchResult;
+    }
+    return _xblockexpression;
+  }
+  
+  protected CharSequence generateArrayDecl(final LocalVariable variable) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("CIEC_");
+    String _name = variable.getType().getName();
+    _builder.append(_name);
+    _builder.append(" ");
+    String _name_1 = variable.getName();
+    _builder.append(_name_1);
+    _builder.append("[");
+    int _arraySize = variable.getArraySize();
+    _builder.append(_arraySize);
+    _builder.append("]");
+    CharSequence _generateLocalVariableInitializer = this.generateLocalVariableInitializer(variable);
+    _builder.append(_generateLocalVariableInitializer);
+    _builder.append(";");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  protected CharSequence generateVariableDecl(final LocatedVariable variable) {
+    CharSequence _xblockexpression = null;
+    {
+      final Variable l = variable.getLocation();
+      CharSequence _switchResult = null;
+      boolean _matched = false;
+      if (l instanceof PrimaryVariable) {
+        _matched=true;
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("// replacing all instances of ");
+        String _extractTypeInformation = this.extractTypeInformation(variable);
+        _builder.append(_extractTypeInformation);
+        _builder.append(":");
+        String _name = variable.getName();
+        _builder.append(_name);
+        _builder.append(" with ");
+        CharSequence _generateVarAccess = this.generateVarAccess(variable);
+        _builder.append(_generateVarAccess);
+        _switchResult = _builder;
+      }
+      if (!_matched) {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("#error located variable of unhandled type");
+        _switchResult = _builder;
+      }
+      _xblockexpression = _switchResult;
+    }
+    return _xblockexpression;
+  }
+  
+  protected CharSequence generateVariableDecl(final LocalVariable variable) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("CIEC_");
+    String _name = variable.getType().getName();
+    _builder.append(_name);
+    _builder.append(" ");
+    String _name_1 = variable.getName();
+    _builder.append(_name_1);
+    CharSequence _generateLocalVariableInitializer = this.generateLocalVariableInitializer(variable);
+    _builder.append(_generateLocalVariableInitializer);
+    _builder.append(";");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
   protected CharSequence generateLocalVariables(final List<VarDeclaration> variables) {
     StringConcatenation _builder = new StringConcatenation();
     {
       for(final VarDeclaration variable : variables) {
-        _builder.append("CIEC_");
-        String _name = variable.getType().getName();
-        _builder.append(_name);
-        _builder.append(" ");
-        String _name_1 = variable.getName();
-        _builder.append(_name_1);
-        CharSequence _generateLocalVariableInitializer = this.generateLocalVariableInitializer(variable);
-        _builder.append(_generateLocalVariableInitializer);
-        _builder.append(";");
+        CharSequence _switchResult = null;
+        boolean _matched = false;
+        if (variable instanceof LocalVariable) {
+          boolean _isArray = ((LocalVariable)variable).isArray();
+          boolean _not = (!_isArray);
+          if (_not) {
+            _matched=true;
+            _switchResult = this.generateVariableDecl(((LocalVariable)variable));
+          }
+        }
+        if (!_matched) {
+          if (variable instanceof LocalVariable) {
+            boolean _isArray = ((LocalVariable)variable).isArray();
+            if (_isArray) {
+              _matched=true;
+              _switchResult = this.generateArrayDecl(((LocalVariable)variable));
+            }
+          }
+        }
+        if (!_matched) {
+          if (variable instanceof LocatedVariable) {
+            if (((null != ((LocatedVariable)variable).getLocation()) && (!((LocatedVariable)variable).isArray()))) {
+              _matched=true;
+              _switchResult = this.generateVariableDecl(((LocatedVariable)variable));
+            }
+          }
+        }
+        if (!_matched) {
+          if (variable instanceof LocatedVariable) {
+            if (((null != ((LocatedVariable)variable).getLocation()) && ((LocatedVariable)variable).isArray())) {
+              _matched=true;
+              _switchResult = this.generateArrayDecl(((LocatedVariable)variable));
+            }
+          }
+        }
+        _builder.append(_switchResult);
         _builder.newLineIfNotEmpty();
       }
     }
@@ -565,10 +801,8 @@ public class STAlgorithmFilter {
         } else {
           _builder.appendImmediate("][", "");
         }
-        _builder.append("(");
         CharSequence _generateExpression_1 = this.generateExpression(index);
         _builder.append(_generateExpression_1);
-        _builder.append(") + 1");
       }
       if (_hasElements) {
         _builder.append("]");
@@ -585,15 +819,160 @@ public class STAlgorithmFilter {
     String _name_1 = expr.getVar().getName();
     _builder.append(_name_1);
     _builder.append("()");
+    CharSequence _generateBitaccess = this.generateBitaccess(expr);
+    _builder.append(_generateBitaccess);
     return _builder;
   }
   
   protected CharSequence _generateExpression(final PrimaryVariable expr) {
     StringConcatenation _builder = new StringConcatenation();
-    String _name = expr.getVar().getName();
+    CharSequence _generateVarAccess = this.generateVarAccess(expr.getVar());
+    _builder.append(_generateVarAccess);
+    CharSequence _generateBitaccess = this.generateBitaccess(expr);
+    _builder.append(_generateBitaccess);
+    return _builder;
+  }
+  
+  protected CharSequence _generateVarAccess(final LocalVariable variable) {
+    StringConcatenation _builder = new StringConcatenation();
+    String _name = variable.getName();
+    _builder.append(_name);
+    return _builder;
+  }
+  
+  protected CharSequence _generateVarAccess(final VarDeclaration variable) {
+    StringConcatenation _builder = new StringConcatenation();
+    String _name = variable.getName();
     _builder.append(_name);
     _builder.append("()");
     return _builder;
+  }
+  
+  protected CharSequence _generateVarAccess(final LocatedVariable variable) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      boolean _isArray = variable.isArray();
+      if (_isArray) {
+        String _name = variable.getName();
+        _builder.append(_name);
+      } else {
+        CharSequence _generateExpression = this.generateExpression(variable.getLocation());
+        _builder.append(_generateExpression);
+        CharSequence _generateBitaccess = this.generateBitaccess(this.extractTypeInformation(variable.getLocation()), this.extractTypeInformation(variable), 0);
+        _builder.append(_generateBitaccess);
+      }
+    }
+    return _builder;
+  }
+  
+  protected CharSequence generateBitaccess(final AdapterVariable variable) {
+    CharSequence _xifexpression = null;
+    PartialAccess _part = variable.getPart();
+    boolean _tripleNotEquals = (null != _part);
+    if (_tripleNotEquals) {
+      _xifexpression = this.generateBitaccess(variable.getVar().getType().getName(), this.extractTypeInformation(variable), variable.getPart().getIndex());
+    }
+    return _xifexpression;
+  }
+  
+  protected CharSequence generateBitaccess(final PrimaryVariable variable) {
+    CharSequence _xifexpression = null;
+    PartialAccess _part = variable.getPart();
+    boolean _tripleNotEquals = (null != _part);
+    if (_tripleNotEquals) {
+      _xifexpression = this.generateBitaccess(variable.getVar().getType().getName(), this.extractTypeInformation(variable), variable.getPart().getIndex());
+    }
+    return _xifexpression;
+  }
+  
+  protected CharSequence generateBitaccess(final String DataType, final String AccessorType, final int Index) {
+    CharSequence _xifexpression = null;
+    if (((this.BitSize(AccessorType) > 0) && (this.BitSize(DataType) > this.BitSize(AccessorType)))) {
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append(".partial<CIEC_");
+      _builder.append(AccessorType);
+      _builder.append(",");
+      String _string = Long.toString(Index);
+      _builder.append(_string);
+      _builder.append(">()");
+      _xifexpression = _builder;
+    } else {
+      CharSequence _xifexpression_1 = null;
+      int _BitSize = this.BitSize(DataType);
+      int _BitSize_1 = this.BitSize(AccessorType);
+      boolean _equals = (_BitSize == _BitSize_1);
+      if (_equals) {
+        StringConcatenation _builder_1 = new StringConcatenation();
+        _xifexpression_1 = _builder_1;
+      } else {
+        StringConcatenation _builder_2 = new StringConcatenation();
+        _xifexpression_1 = _builder_2;
+      }
+      _xifexpression = _xifexpression_1;
+    }
+    return _xifexpression;
+  }
+  
+  private String _extractTypeInformation(final PartialAccess part, final String DataType) {
+    String _xifexpression = null;
+    if ((null != part)) {
+      String _xifexpression_1 = null;
+      boolean _isBitaccess = part.isBitaccess();
+      if (_isBitaccess) {
+        _xifexpression_1 = "BOOL";
+      } else {
+        String _xifexpression_2 = null;
+        boolean _isByteaccess = part.isByteaccess();
+        if (_isByteaccess) {
+          _xifexpression_2 = "BYTE";
+        } else {
+          String _xifexpression_3 = null;
+          boolean _isWordaccess = part.isWordaccess();
+          if (_isWordaccess) {
+            _xifexpression_3 = "WORD";
+          } else {
+            String _xifexpression_4 = null;
+            boolean _isDwordaccess = part.isDwordaccess();
+            if (_isDwordaccess) {
+              _xifexpression_4 = "DWORD";
+            } else {
+              _xifexpression_4 = "";
+            }
+            _xifexpression_3 = _xifexpression_4;
+          }
+          _xifexpression_2 = _xifexpression_3;
+        }
+        _xifexpression_1 = _xifexpression_2;
+      }
+      _xifexpression = _xifexpression_1;
+    } else {
+      _xifexpression = DataType;
+    }
+    return _xifexpression;
+  }
+  
+  private String _extractTypeInformation(final PrimaryVariable variable, final String DataType) {
+    String _xifexpression = null;
+    PartialAccess _part = variable.getPart();
+    boolean _tripleNotEquals = (null != _part);
+    if (_tripleNotEquals) {
+      _xifexpression = this.extractTypeInformation(variable.getPart(), DataType);
+    } else {
+      _xifexpression = DataType;
+    }
+    return _xifexpression;
+  }
+  
+  protected String _extractTypeInformation(final PrimaryVariable variable) {
+    return this.extractTypeInformation(variable, this.extractTypeInformation(variable.getVar()));
+  }
+  
+  protected String _extractTypeInformation(final LocalVariable variable) {
+    return variable.getType().getName();
+  }
+  
+  protected String _extractTypeInformation(final VarDeclaration variable) {
+    return variable.getType().getName();
   }
   
   protected CharSequence generateStatement(final Statement stmt) {
@@ -649,6 +1028,43 @@ public class STAlgorithmFilter {
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
         Arrays.<Object>asList(expr).toString());
+    }
+  }
+  
+  protected CharSequence generateVarAccess(final VarDeclaration variable) {
+    if (variable instanceof LocalVariable) {
+      return _generateVarAccess((LocalVariable)variable);
+    } else if (variable instanceof LocatedVariable) {
+      return _generateVarAccess((LocatedVariable)variable);
+    } else if (variable != null) {
+      return _generateVarAccess(variable);
+    } else {
+      throw new IllegalArgumentException("Unhandled parameter types: " +
+        Arrays.<Object>asList(variable).toString());
+    }
+  }
+  
+  private String extractTypeInformation(final EObject variable, final String DataType) {
+    if (variable instanceof PrimaryVariable) {
+      return _extractTypeInformation((PrimaryVariable)variable, DataType);
+    } else if (variable instanceof PartialAccess) {
+      return _extractTypeInformation((PartialAccess)variable, DataType);
+    } else {
+      throw new IllegalArgumentException("Unhandled parameter types: " +
+        Arrays.<Object>asList(variable, DataType).toString());
+    }
+  }
+  
+  protected String extractTypeInformation(final EObject variable) {
+    if (variable instanceof LocalVariable) {
+      return _extractTypeInformation((LocalVariable)variable);
+    } else if (variable instanceof VarDeclaration) {
+      return _extractTypeInformation((VarDeclaration)variable);
+    } else if (variable instanceof PrimaryVariable) {
+      return _extractTypeInformation((PrimaryVariable)variable);
+    } else {
+      throw new IllegalArgumentException("Unhandled parameter types: " +
+        Arrays.<Object>asList(variable).toString());
     }
   }
 }

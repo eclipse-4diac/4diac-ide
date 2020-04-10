@@ -61,8 +61,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public void addPages() {
-		page = new NewSystemPage(
-				Messages.NewSystemWizard_WizardName);
+		page = new NewSystemPage(Messages.NewSystemWizard_WizardName);
 		page.setTitle(Messages.NewSystemWizard_WizardName);
 		page.setDescription(Messages.NewSystemWizard_WizardDesc);
 
@@ -80,27 +79,25 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 			WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 				@Override
 				protected void execute(IProgressMonitor monitor) {
-					createProject(monitor != null ? monitor
-							: new NullProgressMonitor());
+					createProject(monitor != null ? monitor : new NullProgressMonitor());
 				}
 			};
 			getContainer().run(false, true, op);
 		} catch (InvocationTargetException | InterruptedException x) {
 			return false;
-		} 
+		}
 		// everything worked fine
 		return true;
 	}
 
 	private static String[] getNatureIDs() {
-		return new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID};
+		return new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID };
 	}
-	
+
 	/**
 	 * Creates a new project in the workspace.
 	 * 
-	 * @param monitor
-	 *            the monitor
+	 * @param monitor the monitor
 	 */
 	private void createProject(final IProgressMonitor monitor) {
 		try {
@@ -114,7 +111,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 				description.setLocation(location);
 			}
 
-			description.setNatureIds(getNatureIDs()); 
+			description.setNatureIds(getNatureIDs());
 
 			project.create(description, monitor);
 			project.open(monitor);
@@ -130,9 +127,9 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 
 			TypeManagementPreferencesHelper.setupVersionInfo(system);
 			SystemManager.INSTANCE.addSystem(system);
-			
+
 			createInitialApplication(monitor, system);
-			
+
 			SystemManager.INSTANCE.saveSystem(system);
 		} catch (CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
@@ -142,11 +139,12 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 	}
 
 	private void createInitialApplication(final IProgressMonitor monitor, AutomationSystem system) {
-		NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(), Messages.NewApplicationWizard_Comment);
+		NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(),
+				Messages.NewApplicationWizard_Comment);
 		cmd.execute(monitor, null);
-		
+
 		Application app = cmd.getApplication();
-		if(page.getOpenApplication() && null != app){
+		if (page.getOpenApplication() && null != app) {
 			OpenListenerManager.openEditor(app);
 		}
 	}
@@ -158,9 +156,8 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 	 * org.eclipse.jface.viewers.IStructuredSelection)
 	 */
 	@Override
-	public void init(final IWorkbench workbench,
-			final IStructuredSelection selection) {
-		//currently nothing to do here
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
+		// currently nothing to do here
 	}
 
 }

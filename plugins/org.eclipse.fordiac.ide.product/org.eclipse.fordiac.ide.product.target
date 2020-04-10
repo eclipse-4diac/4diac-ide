@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="4diac-ide Target" sequenceNumber="20">
+<target name="4diac-ide Target" sequenceNumber="21">
 	<locations>
     	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-        	<repository location="http://download.eclipse.org/releases/2019-09"/>
-        	<unit id="org.eclipse.emf.sdk.feature.group" version="2.19.0.v20190824-1315"/>
+        	<repository location="http://download.eclipse.org/releases/2020-03"/>
+        	<unit id="org.eclipse.egit.feature.group" version="5.7.0.202003110725-r"/>
+        	<unit id="org.eclipse.emf.sdk.feature.group" version="2.21.0.v20200205-0529"/>
+        	<unit id="org.eclipse.equinox.executable.feature.group" version="3.8.700.v20200207-2156"/>
         	<unit id="org.eclipse.gef.sdk.feature.group" version="3.11.0.201606061308"/>
-        	<unit id="org.eclipse.xtext.sdk.feature.group" version="2.19.0.v20190902-1322"/>
-        	<unit id="org.eclipse.equinox.executable.feature.group" version="3.8.500.v20190907-0428"/>
+        	<unit id="org.eclipse.xtext.sdk.feature.group" version="2.21.0.v20200302-1509"/>
     	</location>
     	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-        	<repository location="http://download.eclipse.org/eclipse/updates/4.13"/>
-        	<unit id="org.eclipse.jdt.feature.group" version="3.18.100.v20190916-1045"/>
-        	<unit id="org.eclipse.pde.feature.group" version="3.14.100.v20190916-1045"/>
-        	<unit id="org.eclipse.platform.sdk" version="4.13.0.I20190916-1045"/>
+        	<repository location="http://download.eclipse.org/eclipse/updates/4.15"/>
+        	<unit id="org.eclipse.jdt.feature.group" version="3.18.300.v20200305-0155"/>
+        	<unit id="org.eclipse.pde.feature.group" version="3.14.300.v20200305-0155"/>
+        	<unit id="org.eclipse.platform.sdk" version="4.15.0.I20200305-0155"/>
     	</location>
 	</locations>
 </target>

@@ -46,32 +46,33 @@ public class FocusOnPredecessor extends AbstractHandler {
 		Set<ConfigurableObject> elementToHighlight = new HashSet<>();
 		getPredecessorFBNetworkElements(getSelectedFBElement(event), elementToHighlight);
 
-		FBNetworkEditor editor = (FBNetworkEditor)HandlerUtil.getActiveEditor(event);
+		FBNetworkEditor editor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
 		GraphicalViewer viewer = editor.getViewer();
-		
+
 		Map<?, ?> map = viewer.getEditPartRegistry();
 		for (Entry<?, ?> entry : map.entrySet()) {
 			Object obj = entry.getKey();
 			Object editPartAsObject = entry.getValue();
-			int transparency = (elementToHighlight.contains(obj)) ? NON_TRANSPARENT : HALF_TRANSPERENT;					
+			int transparency = (elementToHighlight.contains(obj)) ? NON_TRANSPARENT : HALF_TRANSPERENT;
 			if (editPartAsObject instanceof AbstractViewEditPart) {
 				((AbstractViewEditPart) editPartAsObject).setTransparency(transparency);
-			} else if (editPartAsObject instanceof ConnectionEditPart){
+			} else if (editPartAsObject instanceof ConnectionEditPart) {
 				((ConnectionEditPart) editPartAsObject).setTransparency(transparency);
-			}					
-		}		
+			}
+		}
 		return null;
 	}
 
-	private static void getPredecessorFBNetworkElements(FBNetworkElement element,  Set<ConfigurableObject> elementToHighlight) {
-		if(null != element) {
-			elementToHighlight.add(element);			
+	private static void getPredecessorFBNetworkElements(FBNetworkElement element,
+			Set<ConfigurableObject> elementToHighlight) {
+		if (null != element) {
+			elementToHighlight.add(element);
 			for (VarDeclaration inVar : element.getInterface().getInputVars()) {
 				for (Connection con : inVar.getInputConnections()) {
 					IInterfaceElement source = con.getSource();
 					if (source != null) {
-						FBNetworkElement sourceElement = source.getFBNetworkElement();						
-						if (null != sourceElement ) {
+						FBNetworkElement sourceElement = source.getFBNetworkElement();
+						if (null != sourceElement) {
 							elementToHighlight.add(con);
 							if (!elementToHighlight.contains(sourceElement)) {
 								getPredecessorFBNetworkElements(sourceElement, elementToHighlight);
@@ -82,15 +83,15 @@ public class FocusOnPredecessor extends AbstractHandler {
 			}
 		}
 	}
-		
+
 	private static FBNetworkElement getSelectedFBElement(ExecutionEvent event) {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if(selection instanceof StructuredSelection) {
-			if(((StructuredSelection) selection).getFirstElement() instanceof FBNetworkElement)  {
-				return (FBNetworkElement)((StructuredSelection) selection).getFirstElement();
-			}else if(((StructuredSelection) selection).getFirstElement() instanceof AbstractFBNElementEditPart)  {
-				return ((AbstractFBNElementEditPart)((StructuredSelection) selection).getFirstElement()).getModel();
-			}				
+		if (selection instanceof StructuredSelection) {
+			if (((StructuredSelection) selection).getFirstElement() instanceof FBNetworkElement) {
+				return (FBNetworkElement) ((StructuredSelection) selection).getFirstElement();
+			} else if (((StructuredSelection) selection).getFirstElement() instanceof AbstractFBNElementEditPart) {
+				return ((AbstractFBNElementEditPart) ((StructuredSelection) selection).getFirstElement()).getModel();
+			}
 		}
 		return null;
 	}

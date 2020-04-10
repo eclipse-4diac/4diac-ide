@@ -19,16 +19,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Event Connection</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Event
+ * Connection</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class EventConnectionImpl extends ConnectionImpl implements EventConnection {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected EventConnectionImpl() {
@@ -36,8 +35,8 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -46,8 +45,8 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -56,8 +55,8 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -65,4 +64,4 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 		return org.eclipse.fordiac.ide.model.Annotations.getEventDestination(this);
 	}
 
-} //EventConnectionImpl
+} // EventConnectionImpl

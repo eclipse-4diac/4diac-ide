@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
+import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.fordiac.ide.export.utils.CompareEditorOpenerUtil;
 import org.eclipse.fordiac.ide.export.utils.PreferenceConstants;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -31,16 +32,14 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 /**
  * The Class FORTEExportPreferences.
  */
-public class FORTEExportPreferences extends FieldEditorPreferencePage implements
-		IWorkbenchPreferencePage {
+public class FORTEExportPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	/**
 	 * Instantiates a new fORTE export preferences.
 	 */
 	public FORTEExportPreferences() {
 		super(GRID);
-		setPreferenceStore(org.eclipse.fordiac.ide.export.Activator.getDefault()
-				.getPreferenceStore());
+		setPreferenceStore(org.eclipse.fordiac.ide.export.Activator.getDefault().getPreferenceStore());
 	}
 
 	/**
@@ -53,12 +52,11 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 
 		// Create a Group to hold the compare editor fields
 		Group compare = new Group(getFieldEditorParent(), SWT.NONE);
-		compare.setText("Compare Editor for Merging");
+		compare.setText(Messages.FORTEExportPreferences_CompareEditorForMerging);
 		GridLayout routerLayout = new GridLayout(2, false);
 
 		Map<String, ICompareEditorOpener> compareEditorOpeners = CompareEditorOpenerUtil.getCompareEditorOpeners();
 
-		
 		Set<String> keySet = compareEditorOpeners.keySet();
 		String nameArray[][] = new String[keySet.size()][2];
 		int i = 0;
@@ -68,10 +66,8 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 			i++;
 		}
 
-		ComboFieldEditor compareEditor = new ComboFieldEditor(
-				PreferenceConstants.P_COMPARE_EDITOR, "Default CompareEditor Opener",
-				nameArray,
-				compare);
+		ComboFieldEditor compareEditor = new ComboFieldEditor(PreferenceConstants.P_COMPARE_EDITOR,
+				Messages.FORTEExportPreferences_DefaultCompareEditorOpener, nameArray, compare);
 		addField(compareEditor);
 
 		GridData comparedata = new GridData(GridData.FILL_HORIZONTAL);
@@ -86,12 +82,11 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	@Override
 	public void init(IWorkbench workbench) {
-		//Currently nothing to do here
+		// Currently nothing to do here
 	}
 
 }

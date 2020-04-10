@@ -31,11 +31,12 @@ public class MonitorSystemHandler extends AbstractHandler {
 		Command command = event.getCommand();
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 
-		if ((selection instanceof TreeSelection) && (((TreeSelection) selection).getFirstElement() instanceof AutomationSystem)) {
+		if ((selection instanceof TreeSelection)
+				&& (((TreeSelection) selection).getFirstElement() instanceof AutomationSystem)) {
 			AutomationSystem system = (AutomationSystem) ((TreeSelection) selection).getFirstElement();
 			if (HandlerUtil.toggleCommandState(command)) {
 				// we are monitoring disable it now
-				MonitoringManager.getInstance().disableSystem(system);					
+				MonitoringManager.getInstance().disableSystem(system);
 			} else {
 				MonitoringManager.getInstance().enableSystem(system);
 			}

@@ -24,19 +24,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.gef.ConnectionEditPart;
 
-public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand{
+public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand {
 
 	private Connection conn = null;
 	private Resource res = null;
-	
+
 	@Override
 	protected boolean prepareParametersToExecute(Object element) {
-		if (element instanceof ConnectionEditPart){
-			conn = (Connection)((ConnectionEditPart) element).getModel();
+		if (element instanceof ConnectionEditPart) {
+			conn = (Connection) ((ConnectionEditPart) element).getModel();
 			Connection resCon = getResourceConnection(conn);
-			if (null != resCon){
+			if (null != resCon) {
 				res = (Resource) resCon.getFBNetwork().eContainer();
-				if (null != res){
+				if (null != res) {
 					setDevice(res.getDevice());
 					return (null != getDevice());
 				}
@@ -49,24 +49,25 @@ public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand{
 	protected void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
 		executor.createConnection(res, new ConnectionDeploymentData("", conn.getSource(), "", conn.getDestination())); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
+
 	private static Connection getResourceConnection(Connection conn) {
-		if(conn.getFBNetwork().eContainer() instanceof Resource){
+		if (conn.getFBNetwork().eContainer() instanceof Resource) {
 			return conn;
-		}		
+		}
 		FBNetworkElement oppositeSource = conn.getSourceElement().getOpposite();
-		if(null != oppositeSource){
-			List<Connection> conns = oppositeSource.getInterfaceElement(conn.getSource().getName()).getOutputConnections();
+		if (null != oppositeSource) {
+			List<Connection> conns = oppositeSource.getInterfaceElement(conn.getSource().getName())
+					.getOutputConnections();
 			for (Connection connection : conns) {
-				if(connection.getDestination().getName().equals(conn.getDestination().getName())){
+				if (connection.getDestination().getName().equals(conn.getDestination().getName())) {
 					return connection;
 				}
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	@Override
 	protected String getErrorMessageHeader() {
 		return "Create Connection Error";

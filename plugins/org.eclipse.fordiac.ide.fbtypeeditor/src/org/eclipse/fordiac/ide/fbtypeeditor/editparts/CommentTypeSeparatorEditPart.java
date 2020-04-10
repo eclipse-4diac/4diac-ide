@@ -18,14 +18,13 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
-class CommentTypeSeparatorEditPart extends AbstractGraphicalEditPart implements
-EditPart{
-	
+class CommentTypeSeparatorEditPart extends AbstractGraphicalEditPart implements EditPart {
+
 	@Override
 	public CommentTypeField.CommentTypeSeparator getModel() {
 		return (CommentTypeField.CommentTypeSeparator) super.getModel();
 	}
-	
+
 	@Override
 	protected IFigure createFigure() {
 		return new Label(getModel().getLabel());
@@ -33,7 +32,7 @@ EditPart{
 
 	@Override
 	protected void createEditPolicies() {
-			// no editpart necessary
+		// no editpart necessary
 	}
-	
+
 }

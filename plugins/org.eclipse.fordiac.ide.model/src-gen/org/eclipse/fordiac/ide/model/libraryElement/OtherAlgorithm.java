@@ -13,17 +13,16 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Other Algorithm</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Other
+ * Algorithm</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage <em>Language</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage
+ * <em>Language</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getOtherAlgorithm()
@@ -32,13 +31,14 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  */
 public interface OtherAlgorithm extends TextAlgorithm {
 	/**
-	 * Returns the value of the '<em><b>Language</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Language</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Language</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Language</em>' attribute isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Language</em>' attribute.
 	 * @see #setLanguage(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getOtherAlgorithm_Language()
@@ -49,9 +49,10 @@ public interface OtherAlgorithm extends TextAlgorithm {
 	String getLanguage();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage <em>Language</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage
+	 * <em>Language</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Language</em>' attribute.
 	 * @see #getLanguage()
 	 * @generated

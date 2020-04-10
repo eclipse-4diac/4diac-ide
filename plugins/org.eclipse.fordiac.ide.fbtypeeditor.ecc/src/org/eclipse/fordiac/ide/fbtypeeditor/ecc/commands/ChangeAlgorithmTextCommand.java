@@ -19,22 +19,22 @@ import org.eclipse.gef.commands.Command;
 public class ChangeAlgorithmTextCommand extends Command {
 
 	private TextAlgorithm algorithm;
-	
+
 	private String newAlgorithmText;
-	
+
 	private String oldAlgorithmText;
-	
+
 	public ChangeAlgorithmTextCommand(TextAlgorithm algorithm, String algorithmText) {
 		this.algorithm = algorithm;
 		this.newAlgorithmText = algorithmText;
 	}
-	
+
 	@Override
-	public void execute() {		
-		oldAlgorithmText = algorithm.getText();		
+	public void execute() {
+		oldAlgorithmText = algorithm.getText();
 		redo();
 	}
-	
+
 	@Override
 	public void undo() {
 		algorithm.setText(oldAlgorithmText);

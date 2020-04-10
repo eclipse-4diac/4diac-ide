@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2019 Johannes Kepler University Linz
- * 	
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,11 +8,15 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Alois Zoitl - initial implementation
+ * Bianca Wiesmayr - enhanced add functionality
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
+import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -80,13 +84,10 @@ public class AddDeleteWidget {
 		deleteButton.addListener(SWT.Selection, deleteListener);
 	}
 
-	public void bindToTableViewer(TableViewer viewer, CommandExecutor executor, CommandProvider addCommand,
+	public void bindToTableViewer(TableViewer viewer, CommandExecutor executor, CreationCommandProvider addCommand,
 			CommandProvider deleteCommand) {
 
-		Listener createListener = e -> {
-			executor.executeCommand(addCommand.getCommand(null));
-			viewer.refresh();
-		};
+		Listener createListener = getAddListener(viewer, executor, addCommand);
 
 		Listener deleteListener = getSelectionListener(viewer, executor, deleteCommand);
 
@@ -109,9 +110,9 @@ public class AddDeleteWidget {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.keyCode == SWT.INSERT && e.stateMask == 0) {
+				if ((e.keyCode == SWT.INSERT) && (e.stateMask == 0)) {
 					createListener.handleEvent(null);
-				} else if (e.character == SWT.DEL && e.stateMask == 0) {
+				} else if ((e.character == SWT.DEL) && (e.stateMask == 0)) {
 					deleteListener.handleEvent(null);
 				}
 			}
@@ -119,14 +120,33 @@ public class AddDeleteWidget {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Listener getSelectionListener(TableViewer viewer, CommandExecutor executor, CommandProvider command) {
+	public static Listener getSelectionListener(TableViewer viewer, CommandExecutor executor,
+			CommandProvider commandProvider) {
 		return ev -> {
 			if (!viewer.getStructuredSelection().isEmpty()) {
 				CompoundCommand cmd = new CompoundCommand();
-				viewer.getStructuredSelection().toList().stream().forEach(elem -> cmd.add(command.getCommand(elem)));
+				viewer.getStructuredSelection().toList().stream()
+						.forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
 				executor.executeCommand(cmd);
 				viewer.refresh();
 			}
 		};
+	}
+
+	private static Listener getAddListener(TableViewer viewer, CommandExecutor executor,
+			CreationCommandProvider commandProvider) {
+		return ev -> {
+			AbstractCreationCommand cmd = commandProvider.getCommand(getReferencedElement(viewer));
+			executor.executeCommand(cmd);
+			viewer.refresh();
+			viewer.setSelection(new StructuredSelection(cmd.getCreatedElement()));
+		};
+	}
+
+	private static Object getReferencedElement(TableViewer viewer) {
+		if (!viewer.getStructuredSelection().isEmpty()) {
+			return viewer.getStructuredSelection().toList().get(viewer.getStructuredSelection().size() - 1);
+		}
+		return null;
 	}
 }

@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH, 
  * 							 Johannes Kepler University
+ * 				 2019        Andrea Zoitl
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  *  Alois Zoitl, Florian Noack, Gerhard Ebenhofer, Monika Wenger 
  *  		- initial API and implementation and/or initial documentation
  *  Alois Zoitl - Harmonized deployment and monitoring communication
+ *  Andrea Zoitl - externalized all remaining strings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499;
 
@@ -35,9 +37,9 @@ public class Messages extends NLS {
 	public static String DeploymentExecutor_KillFBFailed;
 	public static String DeploymentExecutor_KillDeviceFailed;
 	public static String DeploymentExecutor_DeleteFBFailed;
-	
+
 	public static String DeploymentExecutor_QueryResourcesFailed;
-	
+
 	public static String DeploymentExecutor_ReadWatchesFailed;
 	public static String DeploymentExecutor_AddWatchesFailed;
 	public static String DeploymentExecutor_DeleteWatchesFailed;
@@ -45,12 +47,18 @@ public class Messages extends NLS {
 	public static String DeploymentExecutor_ClearForceFailed;
 	public static String DeploymentExecutor_TriggerEventFailed;
 
-	
-	public static String DTL_QueryFailed;
-	public static String DTL_CreateTypeFailed;
-	
+	public static String DynamicTypeLoadDeploymentExecutor_QueryFailed;
+	public static String DynamicTypeLoadDeploymentExecutor_CreateTypeFailed;
+	public static String DynamicTypeLoadDeploymentExecutor_LUAScriptForFBTypeNotExecuted;
+	public static String DynamicTypeLoadDeploymentExecutor_LUAScriptForAdapterTypeNotExecuted;
+
+	public static String EthernetDeviceManagementCommunicationHandler_CouldNotConnectToDevice;
+
 	public static String EthernetComHandler_InvalidMgmtID;
-	
+
+	public static String HoloblocDeploymentPreferences_PreferencePageDescription;
+	public static String HoloblocDeploymentPreferences_ConnectionTimout;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.ui.widget;
 import org.eclipse.gef.commands.Command;
 
 public interface CommandExecutor {
-	
+
 	void executeCommand(Command cmd);
 
 }

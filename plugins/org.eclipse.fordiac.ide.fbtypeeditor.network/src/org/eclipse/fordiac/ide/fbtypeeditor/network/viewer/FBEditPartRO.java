@@ -19,7 +19,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.ZoomManager;
 
 public class FBEditPartRO extends FBEditPart {
-	
+
 	FBEditPartRO(ZoomManager zoomManager) {
 		super(zoomManager);
 	}
@@ -28,14 +28,14 @@ public class FBEditPartRO extends FBEditPart {
 	protected void createEditPolicies() {
 		// Highlight In and Outconnections of the selected fb, allow alignment of FBs
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FBNElementSelectionPolicy());
-		//correctly layout the internals
+		// correctly layout the internals
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());
-		//do not allow any further editing of the RO FB
+		// do not allow any further editing of the RO FB
 	}
-	
+
 	@Override
 	public void performDirectEdit() {
-		//don't do anything here to avoid direct edit
+		// don't do anything here to avoid direct edit
 	}
 
 }

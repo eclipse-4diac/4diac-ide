@@ -23,24 +23,24 @@ public class ApplicationEditorInput extends PersistableUntypedEditorInput {
 	public ApplicationEditorInput(Application app) {
 		super(app, app.getName());
 	}
-	
+
 	@Override
 	public void saveState(IMemento memento) {
 		ApplicationEditorInputFactory.saveState(memento, this);
-		
+
 	}
 
 	@Override
 	public String getFactoryId() {
 		return ApplicationEditorInputFactory.getFactoryId();
 	}
-	
-	public AutomationSystem getAutomationSystem(){
+
+	public AutomationSystem getAutomationSystem() {
 		return getContent().getAutomationSystem();
 	}
 
 	@Override
 	public Application getContent() {
-		return (Application)super.getContent();
+		return (Application) super.getContent();
 	}
 }

@@ -29,27 +29,27 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public abstract class AbstractMonitoringHandler extends AbstractHandler {
 
 	private RootEditPart rootEditPart = null;
-	
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		setEditor(HandlerUtil.getActiveEditor(event));
 		return null;
 	}
-	
+
 	protected void setEditor(IEditorPart activeEditor) {
-		if (activeEditor instanceof DiagramEditorWithFlyoutPalette){
-			DiagramEditorWithFlyoutPalette editorW = (DiagramEditorWithFlyoutPalette)activeEditor;
+		if (activeEditor instanceof DiagramEditorWithFlyoutPalette) {
+			DiagramEditorWithFlyoutPalette editorW = (DiagramEditorWithFlyoutPalette) activeEditor;
 			rootEditPart = editorW.getViewer().getRootEditPart();
-		}else if(activeEditor instanceof CompositeInstanceViewer) {
+		} else if (activeEditor instanceof CompositeInstanceViewer) {
 			DiagramEditor editor = (DiagramEditor) activeEditor;
-			rootEditPart = editor.getViewer().getRootEditPart(); 			
-		}else{
+			rootEditPart = editor.getViewer().getRootEditPart();
+		} else {
 			rootEditPart = null;
-		}		
+		}
 	}
 
 	protected void refreshEditor() {
-		if(null != rootEditPart){ 
+		if (null != rootEditPart) {
 			refresh(rootEditPart);
 		}
 	}

@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.actions;
 import java.io.File;
 import java.io.FileFilter;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -39,7 +40,7 @@ public abstract class CreateFromNewAdapterAction extends WorkbenchPartAction {
 
 	CreateFromNewAdapterAction(IWorkbenchPart part, FBType fbType) {
 		super(part);
-		setText("New Adapter ...");
+		setText(Messages.CreateFromNewAdapterAction_NewAdapter);
 		this.fbType = fbType;
 	}
 
@@ -50,16 +51,16 @@ public abstract class CreateFromNewAdapterAction extends WorkbenchPartAction {
 
 	@Override
 	public void run() {
-		NewFBTypeWizard wizard = new NewFBTypeWizard(){
+		NewFBTypeWizard wizard = new NewFBTypeWizard() {
 			@Override
 			protected NewFBTypeWizardPage createNewFBTypeWizardPage() {
-				return new NewFBTypeWizardPage(getSelection()){
+				return new NewFBTypeWizardPage(getSelection()) {
 					@Override
 					protected FileFilter createTemplatesFileFilter() {
 						return new FileFilter() {
 							@Override
 							public boolean accept(File pathname) {
-								//only show adapter templates in template selection box 
+								// only show adapter templates in template selection box
 								return pathname.getName().toUpperCase().endsWith(".ADP"); //$NON-NLS-1$
 							}
 						};
@@ -67,24 +68,24 @@ public abstract class CreateFromNewAdapterAction extends WorkbenchPartAction {
 				};
 			}
 		};
-		
-		
+
 		WizardDialog dialog = new WizardDialog(getWorkbenchPart().getSite().getShell(), wizard);
 		dialog.create();
-		
-		if(Window.OK == dialog.open()){
-			//the type could be created new execute the command
+
+		if (Window.OK == dialog.open()) {
+			// the type could be created new execute the command
 			PaletteEntry entry = wizard.getPaletteEntry();
-			if(entry instanceof AdapterTypePaletteEntry){
-				execute(getCreationCommand((AdapterTypePaletteEntry)entry));
+			if (entry instanceof AdapterTypePaletteEntry) {
+				execute(getCreationCommand((AdapterTypePaletteEntry) entry));
 			}
 		}
 	}
 
 	private IStructuredSelection getSelection() {
-		if(null != paletteEntry){
-			//if we have a paletteEntry we will use this to mark the place in the typelibrary 
-			//to indicate the user where he might add the adapter
+		if (null != paletteEntry) {
+			// if we have a paletteEntry we will use this to mark the place in the
+			// typelibrary
+			// to indicate the user where he might add the adapter
 			return new StructuredSelection(paletteEntry.getFile().getParent());
 		}
 		return new StructuredSelection();

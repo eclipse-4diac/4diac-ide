@@ -43,24 +43,23 @@ public class LineSegmentHandle extends BendpointCreationHandle {
 		} else {
 			setCursor(Cursors.SIZENS);
 			setPreferredSize(getHandleLenght(Math.abs(pt1.x - pt2.x)), DEFAULT_HANDLE_SIZE - 2);
-		}		
+		}
 	}
-	
 
 	@Override
 	protected Color getFillColor() {
-		if(getOwner() != null && getOwner().getFigure() != null) {
+		if (getOwner() != null && getOwner().getFigure() != null) {
 			return getOwner().getFigure().getForegroundColor();
 		}
 		return super.getFillColor();
 	}
-	
+
 	private int getHandleLenght(int len) {
 		double zoom = 1.0;
-		if(getOwner().getRoot() instanceof ScalableFreeformRootEditPart) {
-			zoom = ((ScalableFreeformRootEditPart)(getOwner().getRoot())).getZoomManager().getZoom(); 
-		}		
-		return (int) Math.floor( (len- 2 * HideableConnection.BEND_POINT_BEVEL_SIZE) * zoom );
+		if (getOwner().getRoot() instanceof ScalableFreeformRootEditPart) {
+			zoom = ((ScalableFreeformRootEditPart) (getOwner().getRoot())).getZoomManager().getZoom();
+		}
+		return (int) Math.floor((len - 2 * HideableConnection.BEND_POINT_BEVEL_SIZE) * zoom);
 	}
 
 }

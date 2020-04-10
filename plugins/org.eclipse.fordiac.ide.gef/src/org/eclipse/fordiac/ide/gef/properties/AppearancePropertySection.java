@@ -67,10 +67,11 @@ public class AppearancePropertySection extends AbstractPropertySection {
 		super.setInput(part, selection);
 		Assert.isTrue(selection instanceof IStructuredSelection);
 		Object input = ((IStructuredSelection) selection).getFirstElement();
-		if(input instanceof AbstractViewEditPart && ((AbstractViewEditPart)input).getModel() instanceof ColorizableElement) {
-			colorizableElement = (ColorizableElement) ((AbstractViewEditPart)input).getModel();
-		}else {
-			if(input instanceof ColorizableElement) {
+		if (input instanceof AbstractViewEditPart
+				&& ((AbstractViewEditPart) input).getModel() instanceof ColorizableElement) {
+			colorizableElement = (ColorizableElement) ((AbstractViewEditPart) input).getModel();
+		} else {
+			if (input instanceof ColorizableElement) {
 				colorizableElement = (ColorizableElement) input;
 			}
 		}
@@ -139,7 +140,7 @@ public class AppearancePropertySection extends AbstractPropertySection {
 					// new one, and set into the label
 					Command cmd;
 					if (selectedViews.size() > 0) {
-						cmd = new CompoundCommand("Change Background Color");
+						cmd = new CompoundCommand(Messages.AppearancePropertySection_ChangeBackgroundColor);
 						for (ColorizableElement colorizableElement : selectedViews) {
 							ChangeBackgroundcolorCommand tmp = new ChangeBackgroundcolorCommand(colorizableElement,
 									rgb);
@@ -149,7 +150,10 @@ public class AppearancePropertySection extends AbstractPropertySection {
 						cmd = new ChangeBackgroundcolorCommand(colorizableElement, rgb);
 					}
 					if (cmd.canExecute()) {
-						SystemManager.INSTANCE.getCommandStack( ((SystemConfiguration) colorizableElement.eContainer()).getAutomationSystem() ).execute(cmd);
+						SystemManager.INSTANCE
+								.getCommandStack(
+										((SystemConfiguration) colorizableElement.eContainer()).getAutomationSystem())
+								.execute(cmd);
 						color.dispose();
 						color = new Color(null, rgb);
 						colorLabel.setBackground(color);

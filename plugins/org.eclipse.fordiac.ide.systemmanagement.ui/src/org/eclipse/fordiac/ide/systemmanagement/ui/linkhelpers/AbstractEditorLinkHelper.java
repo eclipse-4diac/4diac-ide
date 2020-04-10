@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015, 2018 fortiss GmbH, Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -36,17 +36,17 @@ public abstract class AbstractEditorLinkHelper implements ILinkHelper {
 
 	/**
 	 * helper method for selecting objects inside the main editors
-	 * 
+	 *
 	 * This can be when they are single clicked in the system explorer and link with
 	 * editor is activated, or double clicked when opening an elemetns base editor.
 	 *
-	 * 
+	 *
 	 * @param editor    the editor that was chosen for the element, may be null
 	 * @param selObject the object to be selected, may be null
 	 */
 	public static void selectObject(IEditorPart editor, Object selObject) {
 		if ((editor instanceof FBNetworkEditor) && (selObject instanceof FBNetworkElement)) {
-			((FBNetworkEditor) editor).selectFBNetworkElement((FBNetworkElement) selObject);
+			((FBNetworkEditor) editor).selectElement(selObject);
 			return;
 		}
 		if ((editor instanceof SystemConfigurationEditor)

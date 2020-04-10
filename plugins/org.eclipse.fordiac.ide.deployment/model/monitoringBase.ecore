@@ -6,7 +6,7 @@
       eSuperTypes="#//IEditPartCreator">
     <eOperations name="getPortString" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="String hierarchy = &quot;&quot;; &#xA;&#x9;&#x9;for (String element : getPort().getHierarchy()) {&#xA;&#x9;&#x9;&#x9;hierarchy += element; &#xA;&#x9;&#x9;&#x9;hierarchy += &quot;.&quot;; &#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;String adapter = &quot;&quot;;&#xA;&#x9;&#x9;if (getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {&#xA;&#x9;&#x9;&#x9;adapter += ((PortElementImpl)getPort().eContainer()).getInterfaceElement().getName();&#xA;&#x9;&#x9;&#x9;adapter += &quot;.&quot;;&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;return hierarchy +  getPort().getFb().getName() + &quot;.&quot; +&#xA;&#x9;&#x9;&#x9;&#x9;adapter + getPort().getInterfaceElement().getName();"/>
+        <details key="body" value="&#x9;&#x9;StringBuilder portString = new StringBuilder();&#xA;&#xA;&#x9;&#x9;for (String element : getPort().getHierarchy()) {&#xA;&#x9;&#x9;&#x9;portString.append(element);&#xA;&#x9;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;}&#xA;&#xA;&#x9;&#x9;portString.append(getPort().getFb().getName());&#xA;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#xA;&#x9;&#x9;if (getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {&#xA;&#x9;&#x9;&#x9;portString.append(((PortElementImpl) getPort().eContainer()).getInterfaceElement().getName());&#xA;&#x9;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;portString.append(getPort().getInterfaceElement().getName());&#xA;&#xA;&#x9;&#x9;return portString.toString();&#xA;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getResourceString" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
@@ -21,7 +21,7 @@
     </eOperations>
     <eOperations name="getQualifiedString" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="String hierarchy = &quot;&quot;; &#xA;for (String element : getPort().getHierarchy()) {&#xA;&#x9;hierarchy += element; &#xA;&#x9;hierarchy += &quot;.&quot;; &#xA;}&#xA;&#xA;String adapter = &quot;&quot;;&#xA;if (getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {&#xA;&#x9;adapter += ((PortElementImpl)getPort().eContainer()).getInterfaceElement().getName();&#xA;&#x9;adapter += &quot;.&quot;;&#xA;}&#xA;&#xA;return hierarchy +  getPort().getFb().getName() + &quot;.&quot; +&#xA;&#x9;&#x9;adapter + getPort().getInterfaceElement().getName();"/>
+        <details key="body" value="&#x9;&#x9;return getPortString();"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//PortElement"/>
@@ -31,7 +31,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="PortElement">
     <eOperations name="getPortString" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="&#x9;&#x9;String hierarchy = &quot;&quot;; &#xD;&#xA;&#x9;&#x9;for (String element : getHierarchy()) {&#xD;&#xA;&#x9;&#x9;&#x9;hierarchy += element; &#xD;&#xA;&#x9;&#x9;&#x9;hierarchy += &quot;.&quot;; &#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;String adapter = &quot;&quot;;&#xD;&#xA;&#x9;&#x9;if (interfaceElement.eContainer().eContainer() instanceof AdapterFB) {&#xD;&#xA;&#x9;&#x9;&#x9;adapter += ((PortElementImpl)eContainer()).interfaceElement.getName();&#xD;&#xA;&#x9;&#x9;&#x9;adapter += &quot;.&quot;;&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;return getResource().getDevice().getName() + &quot;.&quot;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;+ resource.getName() + &quot;.&quot; + hierarchy +  fb.getName() + &quot;.&quot;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;+ adapter + interfaceElement.getName();"/>
+        <details key="body" value="&#x9;&#x9;StringBuilder portString = new StringBuilder(getResource().getDevice().getName());&#xA;&#xA;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;portString.append(resource.getName());&#xA;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#xA;&#x9;&#x9;for (String element : getHierarchy()) {&#xA;&#x9;&#x9;&#x9;portString.append(element);&#xA;&#x9;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;}&#xA;&#xA;&#x9;&#x9;portString.append(fb.getName());&#xA;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#xA;&#x9;&#x9;if (interfaceElement.eContainer().eContainer() instanceof AdapterFB) {&#xA;&#x9;&#x9;&#x9;portString.append(((PortElementImpl) eContainer()).interfaceElement.getName());&#xA;&#x9;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;portString.append(interfaceElement.getName());&#xA;&#xA;&#x9;&#x9;return portString.toString();&#xA;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getDevice" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Device">

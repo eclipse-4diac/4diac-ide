@@ -21,13 +21,13 @@ import org.eclipse.gef.commands.Command;
  * The Class AddNewVersionInfoCommand.
  */
 public class DeleteVersionInfoCommand extends Command {
-	
+
 	/** The type. */
 	private LibraryElement type;
 
 	/** The new version info. */
 	private VersionInfo info;
-	
+
 	/** The old index. */
 	private int oldIndex;
 
@@ -35,7 +35,7 @@ public class DeleteVersionInfoCommand extends Command {
 	 * Instantiates a new change comment command.
 	 * 
 	 * @param interfaceElement the interface element
-	 * @param comment the comment
+	 * @param comment          the comment
 	 */
 	public DeleteVersionInfoCommand(final LibraryElement type, final VersionInfo info) {
 		super();
@@ -50,7 +50,7 @@ public class DeleteVersionInfoCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		oldIndex = type.getVersionInfo().indexOf(info);		
+		oldIndex = type.getVersionInfo().indexOf(info);
 		redo();
 	}
 

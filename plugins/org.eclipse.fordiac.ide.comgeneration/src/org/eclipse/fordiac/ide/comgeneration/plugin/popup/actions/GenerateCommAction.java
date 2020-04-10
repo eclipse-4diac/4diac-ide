@@ -38,7 +38,7 @@ public class GenerateCommAction implements IObjectActionDelegate {
 
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		//currently nothing todo here
+		// currently nothing todo here
 	}
 
 	@Override
@@ -49,17 +49,15 @@ public class GenerateCommAction implements IObjectActionDelegate {
 			EthernetPubSubGenerator ethernetPubSubGenerator = new EthernetPubSubGenerator(palette);
 			ethernetPubSubGenerator.reset(61550);
 			specificGeneratorFactory.addGenerator(ethernetPubSubGenerator);
-			specificGeneratorFactory.addGenerator(new CanPubSubGenerator(
-					palette));
+			specificGeneratorFactory.addGenerator(new CanPubSubGenerator(palette));
 			Analyzer analyzer = new Analyzer();
 			CommunicationModel model = analyzer.analyze(selectedApplication);
 			ProtocolSelector.doAutomatedProtocolSelection(model);
-			CommFBGenerator generator = new CommFBGenerator(
-					specificGeneratorFactory);
+			CommFBGenerator generator = new CommFBGenerator(specificGeneratorFactory);
 			generator.removeGeneratedElements(selectedApplication);
 			generator.setTransferedData(TransferedData.EXACT);
 			generator.generate(model);
-		} 
+		}
 	}
 
 	@Override

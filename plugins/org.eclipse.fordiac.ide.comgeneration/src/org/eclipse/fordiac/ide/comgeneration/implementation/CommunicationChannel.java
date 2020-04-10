@@ -20,19 +20,16 @@ import java.util.Map;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
-
 class CommunicationChannel {
-	
-	private Event sourceEvent;	
-	private final Map<Resource, CommunicationChannelDestination> destinations = new HashMap<>();	
+
+	private Event sourceEvent;
+	private final Map<Resource, CommunicationChannelDestination> destinations = new HashMap<>();
 	private boolean local;
-		
 
 	public CommunicationChannel() {
 		local = true;
 	}
-	
-	
+
 	public CommunicationChannelDestination getDestination(Resource resource) {
 		if (destinations.containsKey(resource)) {
 			return destinations.get(resource);
@@ -42,7 +39,7 @@ class CommunicationChannel {
 		destinations.put(resource, newDestination);
 		return newDestination;
 	}
-	
+
 	public Collection<CommunicationChannelDestination> getDestinations() {
 		return destinations.values();
 	}
@@ -55,25 +52,20 @@ class CommunicationChannel {
 		return sourceEvent;
 	}
 
-
 	public void setSourceEvent(Event sourceEvent) {
 		this.sourceEvent = sourceEvent;
 	}
-
 
 	public boolean isLocal() {
 		return local;
 	}
 
-
 	public void setLocal(boolean local) {
 		this.local = local;
 	}
-
 
 	public int getNumberOfDataPorts() {
 		return sourceEvent.getWith().size();
 	}
 
-	
 }

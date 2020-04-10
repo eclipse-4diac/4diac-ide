@@ -41,7 +41,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
  * @see org.eclipse.core.commands.AbstractHandler
  */
 public class ShowFBInApp extends AbstractHandler {
-	
+
 	/**
 	 * The constructor.
 	 */
@@ -49,8 +49,8 @@ public class ShowFBInApp extends AbstractHandler {
 	}
 
 	/**
-	 * the command has been executed, so extract extract the needed information
-	 * from the application context.
+	 * the command has been executed, so extract extract the needed information from
+	 * the application context.
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -59,7 +59,7 @@ public class ShowFBInApp extends AbstractHandler {
 			Object first = ((IStructuredSelection) selection).getFirstElement();
 			if (first instanceof ResFBEditPart) {
 				FB fb = ((ResFBEditPart) first).getModel();
-				FB appFB = (FB)fb.getOpposite();
+				FB appFB = (FB) fb.getOpposite();
 				Application app = getApplication(appFB);
 				if (app != null && appFB != null) {
 					IEditorPart editor = OpenListenerManager.openEditor(app);
@@ -81,7 +81,8 @@ public class ShowFBInApp extends AbstractHandler {
 	}
 
 	/**
-	 * Finds the corresponding application of a <em>mapped</em> FB. 
+	 * Finds the corresponding application of a <em>mapped</em> FB.
+	 * 
 	 * @param fbView
 	 * @return the application of the fbView if available
 	 */
@@ -103,13 +104,12 @@ public class ShowFBInApp extends AbstractHandler {
 				obj = list.get(0);
 			}
 		}
-		if(obj instanceof ResFBEditPart){
+		if (obj instanceof ResFBEditPart) {
 			FB fb = ((ResFBEditPart) obj).getModel();
-			FB appFB = (FB)fb.getOpposite();
+			FB appFB = (FB) fb.getOpposite();
 			Application app = getApplication(appFB);
 			setBaseEnabled((app != null && appFB != null));
-		}
-		else{
+		} else {
 			setBaseEnabled(false);
 		}
 	}

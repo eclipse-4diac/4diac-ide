@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
-import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -22,11 +22,10 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.actions.ActionFactory;
 
-public class SystemConfigurationContextMenueProvider extends
-		ZoomUndoRedoContextMenuProvider {
+public class SystemConfigurationContextMenueProvider extends FordiacContextMenuProvider {
 
-	public SystemConfigurationContextMenueProvider(EditPartViewer viewer,
-			ZoomManager zoomManager, ActionRegistry registry) {
+	public SystemConfigurationContextMenueProvider(EditPartViewer viewer, ZoomManager zoomManager,
+			ActionRegistry registry) {
 		super(viewer, zoomManager, registry);
 	}
 
@@ -37,7 +36,7 @@ public class SystemConfigurationContextMenueProvider extends
 
 		action = getRegistry().getAction(ActionFactory.DELETE.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
-		
+
 		action = getRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
 		if (action != null && action.isEnabled()) {
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);

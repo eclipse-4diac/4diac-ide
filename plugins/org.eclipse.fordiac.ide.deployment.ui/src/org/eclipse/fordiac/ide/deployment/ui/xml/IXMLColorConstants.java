@@ -19,19 +19,19 @@ import org.eclipse.swt.graphics.RGB;
  * The Interface IXMLColorConstants.
  */
 public interface IXMLColorConstants {
-	
+
 	/** The XM l_ comment. */
 	RGB XML_COMMENT = new RGB(128, 0, 0);
-	
+
 	/** The PRO c_ instr. */
 	RGB PROC_INSTR = new RGB(128, 128, 128);
-	
+
 	/** The STRING. */
 	RGB STRING = new RGB(0, 128, 0);
-	
+
 	/** The DEFAULT. */
 	RGB DEFAULT = new RGB(0, 0, 0);
-	
+
 	/** The TAG. */
 	RGB TAG = new RGB(0, 0, 128);
 }

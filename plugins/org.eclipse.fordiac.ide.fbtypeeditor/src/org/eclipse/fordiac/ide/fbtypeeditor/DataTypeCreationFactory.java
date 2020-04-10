@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.gef.utilities.TemplateCreationFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 
 public class DataTypeCreationFactory extends TemplateCreationFactory {
-	public DataTypeCreationFactory(DataType typeTemplate) {		
+	public DataTypeCreationFactory(DataType typeTemplate) {
 		super(typeTemplate);
 	}
 }

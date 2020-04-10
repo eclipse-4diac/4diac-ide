@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="1.11.3.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="1.12.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.eclipse.fordiac.ide.images/images/dialog.png"/>
@@ -21,8 +21,6 @@
 -Dosgi.instance.area.default=@user.home/4diacIDE-workspace
 -XX:+UseG1GC
 -XX:+UseStringDeduplication
--XX:+AggressiveOpts
--Dosgi.requiredJavaVersion=1.8
 -Dosgi.dataAreaRequiresExplicitInit=true
 -Xmn512m
 -Xms1024m
@@ -35,7 +33,8 @@
    <windowImages i16="/org.eclipse.fordiac.ide/icons/fordiac16.png" i32="/org.eclipse.fordiac.ide/icons/fordiac32.png" i48="/org.eclipse.fordiac.ide/icons/fordiac48.png" i256="/org.eclipse.fordiac.ide/icons/fordiac256.png"/>
 
    <splash
-      location="org.eclipse.fordiac.ide" />
+      location="org.eclipse.fordiac.ide"
+      startupProgressRect="375,375,172,4" />
    <launcher name="4diac-ide">
       <linux icon="/icons/fordiac.xpm"/>
       <macosx icon="/icons/fordiac.icns"/>
@@ -279,6 +278,10 @@
       <feature id="org.eclipse.xtext.runtime"/>
       <feature id="org.eclipse.xtext.xbase"/>
       <feature id="org.eclipse.jdt"/>
+      <feature id="org.eclipse.egit" installMode="root"/>
+      <feature id="org.eclipse.jgit" installMode="root"/>
+      <feature id="org.eclipse.jgit.http.apache" installMode="root"/>
+      <feature id="org.eclipse.jgit.ssh.apache" installMode="root"/>
    </features>
 
    <configurations>

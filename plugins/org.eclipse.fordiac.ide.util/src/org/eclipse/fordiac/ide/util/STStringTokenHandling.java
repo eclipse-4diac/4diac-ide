@@ -18,20 +18,20 @@ import java.util.StringTokenizer;
 public class STStringTokenHandling {
 
 	public static final String stTokenDelimiters = " &():.=[]+-*/><;\n\r\t\"\'!,"; //$NON-NLS-1$
-	
+
 	private STStringTokenHandling() {
-		//we dont want this class to be instantiable
+		// we dont want this class to be instantiable
 	}
-	
-	public static String replaceSTToken(String stString, final String oldToken, final String newToken){
+
+	public static String replaceSTToken(String stString, final String oldToken, final String newToken) {
 		StringBuilder retVal = new StringBuilder();
-		 
+
 		StringTokenizer t = new StringTokenizer(stString, STStringTokenHandling.stTokenDelimiters, true);
 		while (t.hasMoreElements()) {
 			String s = t.nextToken();
-			if(s.equals(oldToken)){
+			if (s.equals(oldToken)) {
 				retVal.append(newToken);
-			}else{
+			} else {
 				retVal.append(s);
 			}
 		}

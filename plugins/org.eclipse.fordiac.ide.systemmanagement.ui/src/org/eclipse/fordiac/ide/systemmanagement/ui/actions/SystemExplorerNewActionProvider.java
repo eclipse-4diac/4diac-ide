@@ -26,12 +26,12 @@ import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 import org.eclipse.ui.navigator.WizardActionGroup;
 
 public class SystemExplorerNewActionProvider extends CommonActionProvider {
-	
+
 	private static final String NEW_MENU_NAME = "common.new.menu";//$NON-NLS-1$
 
 	private ActionFactory.IWorkbenchAction showDlgAction;
 	private WizardActionGroup newWizardActionGroup;
-	
+
 	@Override
 	public void init(ICommonActionExtensionSite anExtensionSite) {
 
@@ -39,14 +39,15 @@ public class SystemExplorerNewActionProvider extends CommonActionProvider {
 			IWorkbenchWindow window = ((ICommonViewerWorkbenchSite) anExtensionSite.getViewSite()).getWorkbenchWindow();
 			showDlgAction = ActionFactory.NEW.create(window);
 
-			newWizardActionGroup = new WizardActionGroup(window, PlatformUI.getWorkbench().getNewWizardRegistry(), WizardActionGroup.TYPE_NEW, anExtensionSite.getContentService());
+			newWizardActionGroup = new WizardActionGroup(window, PlatformUI.getWorkbench().getNewWizardRegistry(),
+					WizardActionGroup.TYPE_NEW, anExtensionSite.getContentService());
 		}
 	}
-	
+
 	@Override
 	public void fillContextMenu(IMenuManager menu) {
 		IMenuManager submenu = new MenuManager("&New", NEW_MENU_NAME);
-		
+
 		// fill the menu from the commonWizard contributions
 		newWizardActionGroup.setContext(getContext());
 		newWizardActionGroup.fillContextMenu(submenu);
@@ -60,7 +61,7 @@ public class SystemExplorerNewActionProvider extends CommonActionProvider {
 		// append the submenu after the GROUP_NEW group.
 		menu.insertAfter(ICommonMenuConstants.GROUP_NEW, submenu);
 	}
-	
+
 	@Override
 	public void dispose() {
 		if (null != showDlgAction) {

@@ -29,7 +29,7 @@ public class AdvancedLineBorder extends LineBorder {
 
 	private int side = PositionConstants.NONE;
 	private int style = SWT.LINE_SOLID;
-	
+
 	private int alpha = 255;
 
 	/**
@@ -40,7 +40,8 @@ public class AdvancedLineBorder extends LineBorder {
 	 * <LI>{@link PositionConstants#SOUTH}
 	 * <LI>{@link PositionConstants#WEST}
 	 * <LI><EM>{@link PositionConstants#NONE}</EM>
-	 * </UL>.
+	 * </UL>
+	 * .
 	 * 
 	 * @param side the side
 	 */
@@ -48,7 +49,7 @@ public class AdvancedLineBorder extends LineBorder {
 		super();
 		this.side = side;
 	}
-	
+
 	/**
 	 * Sets the placement of line Valid values are (or any combinations)
 	 * <UL>
@@ -66,9 +67,10 @@ public class AdvancedLineBorder extends LineBorder {
 	 * <LI>{@link SWT#LINE_DOT}
 	 * <LI>{@link SWT#LINE_SOLID}
 	 * <LI><EM>{@link SWT#LINE_SOLID}</EM>
-	 * </UL>.
+	 * </UL>
+	 * .
 	 * 
-	 * @param side the side
+	 * @param side  the side
 	 * @param style the style
 	 */
 	public AdvancedLineBorder(int side, int style) {
@@ -84,7 +86,9 @@ public class AdvancedLineBorder extends LineBorder {
 		super();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.draw2d.LineBorder#getInsets(org.eclipse.draw2d.IFigure)
 	 */
 	@Override
@@ -109,8 +113,11 @@ public class AdvancedLineBorder extends LineBorder {
 		return new Insets(north, west, south, east);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.draw2d.LineBorder#paint(org.eclipse.draw2d.IFigure, org.eclipse.draw2d.Graphics, org.eclipse.draw2d.geometry.Insets)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.draw2d.LineBorder#paint(org.eclipse.draw2d.IFigure,
+	 * org.eclipse.draw2d.Graphics, org.eclipse.draw2d.geometry.Insets)
 	 */
 	@Override
 	public void paint(IFigure figure, Graphics graphics, Insets insets) {
@@ -123,45 +130,43 @@ public class AdvancedLineBorder extends LineBorder {
 		}
 
 		graphics.setLineStyle(style);
-		
+
 		if ((side & PositionConstants.NORTH) != 0) {
-			graphics.drawLine(tempRect.x, tempRect.y, tempRect.x
-					+ tempRect.width - getWidth(), tempRect.y);
+			graphics.drawLine(tempRect.x, tempRect.y, tempRect.x + tempRect.width - getWidth(), tempRect.y);
 		}
 		if ((side & PositionConstants.EAST) != 0) {
-			graphics.drawLine(tempRect.x + tempRect.width - getWidth(),
-					tempRect.y, tempRect.x + tempRect.width - getWidth(),
-					tempRect.y + tempRect.height - getWidth());
+			graphics.drawLine(tempRect.x + tempRect.width - getWidth(), tempRect.y,
+					tempRect.x + tempRect.width - getWidth(), tempRect.y + tempRect.height - getWidth());
 		}
 		if ((side & PositionConstants.SOUTH) != 0) {
-			graphics.drawLine(tempRect.x, tempRect.y + tempRect.height
-					- getWidth(), tempRect.x + tempRect.width, tempRect.y
-					+ tempRect.height - getWidth());
+			graphics.drawLine(tempRect.x, tempRect.y + tempRect.height - getWidth(), tempRect.x + tempRect.width,
+					tempRect.y + tempRect.height - getWidth());
 		}
 		if ((side & PositionConstants.WEST) != 0) {
-			graphics.drawLine(tempRect.x, tempRect.y, tempRect.x, tempRect.y
-					+ tempRect.height - getWidth());
+			graphics.drawLine(tempRect.x, tempRect.y, tempRect.x, tempRect.y + tempRect.height - getWidth());
 		}
 		if ((side & PositionConstants.NONE) != 0) {
 			// nothing to do!
 		}
 
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.draw2d.LineBorder#setStyle(int)
 	 */
 	@Override
 	public void setStyle(int style) {
 		this.style = style;
 	}
-	
+
 	public void setAlpha(int alpha) {
 		if (this.alpha != alpha) {
 			this.alpha = alpha;
 		}
 	}
-	
+
 	public int getAlpha() {
 		return alpha;
 	}
@@ -170,6 +175,5 @@ public class AdvancedLineBorder extends LineBorder {
 	public boolean isOpaque() {
 		return alpha > 254;
 	}
-	
 
 }

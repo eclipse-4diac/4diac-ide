@@ -25,15 +25,15 @@ public interface IConnectionRouterFactory {
 	/**
 	 * Gets the connection router.
 	 * 
-	 * @param container
-	 *          the container
+	 * @param container the container
 	 * 
 	 * @return the connection router
 	 */
 	ConnectionRouter getConnectionRouter(IFigure container);
-	
+
 	/**
-	 * Creates the Connectionfigure for this router which needs to be a PolylineConnection.
+	 * Creates the Connectionfigure for this router which needs to be a
+	 * PolylineConnection.
 	 */
 	PolylineConnection createConnectionFigure();
 

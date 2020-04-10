@@ -23,22 +23,23 @@ import org.eclipse.gef.handles.SquareHandle;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 
-
-/** A selection handle that can be utilized to draw a square with a plus on the 
+/**
+ * A selection handle that can be utilized to draw a square with a plus on the
  * selection border to indicate creation options.
  * 
  */
 public class PlusHandle extends SquareHandle {
-	
+
 	private static final int DEFAULT_PLUS_HANDLE_SIZE = 8;
-	
-	private Color handleColor = ColorManager.getColor(new RGB(114, 175, 73));   //use green as handle color to give more contrast to diagrams 
-	
+
+	private Color handleColor = ColorManager.getColor(new RGB(114, 175, 73)); // use green as handle color to give more
+																				// contrast to diagrams
+
 	public PlusHandle(GraphicalEditPart owner, Locator loc) {
 		super(owner, loc);
 	}
 
-	void setHandleColor(Color col){
+	void setHandleColor(Color col) {
 		handleColor = col;
 	}
 
@@ -47,13 +48,12 @@ public class PlusHandle extends SquareHandle {
 		setPreferredSize(new Dimension(DEFAULT_PLUS_HANDLE_SIZE, DEFAULT_PLUS_HANDLE_SIZE));
 	}
 
-	
 	@Override
 	protected DragTracker createDragTracker() {
-		//We don't want to be draged arround
+		// We don't want to be draged arround
 		return null;
 	}
-	
+
 	@Override
 	protected Color getBorderColor() {
 		return getFillColor();
@@ -63,19 +63,18 @@ public class PlusHandle extends SquareHandle {
 	protected Color getFillColor() {
 		return handleColor;
 	}
-	
+
 	@Override
 	public void paintFigure(Graphics g) {
 		super.paintFigure(g);
 		Rectangle r = getBounds();
-		
+
 		g.setBackgroundColor(getFillColor());
 		g.fillRectangle(r.x, r.y, r.width, r.height);
-		
-			
-		int yMiddle = r.y + r.height/2;
-		int xMiddle = r.x + r.width/2;
-		
+
+		int yMiddle = r.y + r.height / 2;
+		int xMiddle = r.x + r.width / 2;
+
 		g.setBackgroundColor(ColorConstants.white);
 		g.fillRectangle(r.x + 1, yMiddle - 1, 6, 2);
 		g.fillRectangle(xMiddle - 1, r.y + 1, 2, 6);

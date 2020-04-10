@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2015 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,8 +23,9 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteServiceSequenceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.SequenceLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
@@ -39,13 +40,13 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
 
-public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*ResizableCompartmentEditPart*/ {
+public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* ResizableCompartmentEditPart */ {
 
-	private EContentAdapter adapter = new EContentAdapter() {
+	private Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if(getCastedModel().eAdapters().contains(adapter)){
+			if (getCastedModel().eAdapters().contains(adapter)) {
 				refresh();
 			}
 		}
@@ -58,7 +59,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 		}
 		super.activate();
 	}
-	
+
 	@Override
 	public void deactivate() {
 		if (isActive()) {
@@ -66,7 +67,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 		}
 		super.deactivate();
 	}
-		
+
 	public class ServiceSequenceFigure extends Layer {
 		private Label nameLabel;
 		private final Layer transactionContainer;
@@ -84,7 +85,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 			nameLayoutData.horizontalAlignment = GridData.FILL;
 			getLayoutManager().setConstraint(nameLabel, nameLayoutData);
 			add(nameLabel);
-			
+
 			transactionContainer = new Layer();
 			GridLayout containerLayout;
 			transactionContainer.setLayoutManager(containerLayout = new GridLayout());
@@ -92,18 +93,18 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 			GridData containerData = new GridData();
 			containerData.grabExcessHorizontalSpace = true;
 			containerData.horizontalAlignment = GridData.FILL;
-			getLayoutManager().setConstraint(transactionContainer, containerData);		
+			getLayoutManager().setConstraint(transactionContainer, containerData);
 			add(transactionContainer);
 		}
 
 		public Label getLabel() {
 			return nameLabel;
 		}
-		
-		public void setLabelText(String name){
+
+		public void setLabelText(String name) {
 			this.nameLabel.setText(null != name ? name : ""); //$NON-NLS-1$
-		}		
-		
+		}
+
 		public Layer getTransactionContainer() {
 			return transactionContainer;
 		}
@@ -116,7 +117,8 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
 			@Override
 			protected Command getDeleteCommand(final GroupRequest request) {
-				return new DeleteServiceSequenceCommand((FBType) getCastedModel().eContainer().eContainer(), getCastedModel());
+				return new DeleteServiceSequenceCommand((FBType) getCastedModel().eContainer().eContainer(),
+						getCastedModel());
 			}
 		});
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new HighlightEditPolicy());
@@ -134,7 +136,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 		layoutData.grabExcessHorizontalSpace = true;
 		layoutData.horizontalAlignment = GridData.FILL;
 		figure.getLayoutManager().setConstraint(figure, layoutData);
-		
+
 		return figure;
 	}
 
@@ -171,7 +173,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		ServiceSequenceFigure figure = (ServiceSequenceFigure) getFigure();
-		if(null != getCastedModel()){
+		if (null != getCastedModel()) {
 			figure.setLabelText(getCastedModel().getName());
 		}
 	}
@@ -183,6 +185,6 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 
 	@Override
 	public Label getNameLabel() {
-		return ((ServiceSequenceFigure)getFigure()).getLabel();
+		return ((ServiceSequenceFigure) getFigure()).getLabel();
 	}
 }

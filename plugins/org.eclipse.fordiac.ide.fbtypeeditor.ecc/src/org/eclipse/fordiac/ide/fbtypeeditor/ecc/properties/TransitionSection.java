@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeECTransitionCommentCommand;
@@ -124,11 +125,11 @@ public class TransitionSection extends AbstractECSection {
 		composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Condition:");
+		getWidgetFactory().createCLabel(composite, Messages.TransitionSection_Condition);
 
 		createConditionEditingPlaceHolder(composite);
 
-		getWidgetFactory().createCLabel(composite, "Comment:");
+		getWidgetFactory().createCLabel(composite, Messages.TransitionSection_Comment);
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(event -> {
 			removeContentAdapter();

@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 /**
@@ -35,7 +36,7 @@ public class CleanDeviceHandler extends AbstractDeviceDeploymentCommand {
 
 	@Override
 	protected String getErrorMessageHeader() {
-		return "Clean Device Error";
+		return Messages.CleanDeviceHandler_CleanDeviceError;
 	}
 
 }

@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
@@ -64,7 +65,7 @@ public class InterfaceElementSection extends AbstractSection {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Name:");
+		getWidgetFactory().createCLabel(composite, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupText(composite, true);
 		nameText.addVerifyListener(new IdentifierVerifyListener());
 		nameText.addModifyListener(e -> {
@@ -73,14 +74,14 @@ public class InterfaceElementSection extends AbstractSection {
 			addContentAdapter();
 		});
 
-		getWidgetFactory().createCLabel(composite, "Comment:");
+		getWidgetFactory().createCLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(e -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();
 		});
-		getWidgetFactory().createCLabel(composite, "Type: ");
+		getWidgetFactory().createCLabel(composite, FordiacMessages.Type + ":"); //$NON-NLS-1$
 		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
 		typeCombo.addListener(SWT.Selection, event -> {
 			Command cmd = null;
@@ -95,7 +96,7 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 			executeCommand(cmd);
 		});
-		valueCLabel = getWidgetFactory().createCLabel(composite, "Value:");
+		valueCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.Value + ":"); //$NON-NLS-1$
 		parameterText = createGroupText(composite, true);
 		parameterText.addModifyListener(e -> {
 			removeContentAdapter();
@@ -110,7 +111,7 @@ public class InterfaceElementSection extends AbstractSection {
 			EventTypeLibrary.getInstance().getEventTypes().forEach(eType -> typeCombo.add(eType.getName()));
 		} else if (getType() instanceof AdapterDeclaration) {
 			if (null != getType().getFBNetworkElement().getFbNetwork().getApplication()) {
-				getPalette().getAdapterTypes().forEach(adp -> typeCombo.add(adp.getType().getName()));
+				getPalette().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getType().getName()));
 			}
 		} else if (getType() instanceof VarDeclaration) {
 			DataTypeLibrary.getInstance().getDataTypesSorted().forEach(dataType -> typeCombo.add(dataType.getName()));
@@ -152,7 +153,7 @@ public class InterfaceElementSection extends AbstractSection {
 					parameterText.setVisible(false);
 				}
 			} else {
-				itype = "Event";
+				itype = FordiacMessages.Event;
 				valueCLabel.setVisible(false);
 				parameterText.setVisible(false);
 			}

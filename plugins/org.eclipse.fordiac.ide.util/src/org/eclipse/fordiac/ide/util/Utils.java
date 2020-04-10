@@ -28,13 +28,11 @@ public final class Utils {
 	/**
 	 * Creats a backup file of the specified file.
 	 * 
-	 * @param in
-	 *            the file that should be backuped
+	 * @param in the file that should be backuped
 	 * 
 	 * @return the backup file
 	 * 
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public static File createBakFile(final File in) throws IOException {
 		String path = in.getAbsolutePath() + ".bak"; //$NON-NLS-1$

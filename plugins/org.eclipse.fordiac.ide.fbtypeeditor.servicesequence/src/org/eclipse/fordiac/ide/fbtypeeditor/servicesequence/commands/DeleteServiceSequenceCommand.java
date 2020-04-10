@@ -24,43 +24,51 @@ public class DeleteServiceSequenceCommand extends Command {
 
 	private FBType fbType;
 	private ServiceSequence sequence;
-	
+
 	/**
 	 * Instantiates a new delete service squence command.
 	 * 
-	 * @param fbType the fb type
+	 * @param fbType   the fb type
 	 * @param sequence the sequence
 	 */
 	public DeleteServiceSequenceCommand(FBType fbType, ServiceSequence sequence) {
 		this.fbType = fbType;
 		this.sequence = sequence;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#canExecute()
 	 */
 	@Override
 	public boolean canExecute() {
 		return fbType != null && sequence != null;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
 	public void execute() {
 		fbType.getService().getServiceSequence().remove(sequence);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
 	public void undo() {
 		fbType.getService().getServiceSequence().add(sequence);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override

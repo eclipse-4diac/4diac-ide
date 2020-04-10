@@ -25,22 +25,22 @@ public class FordiacImageURLConnection extends URLConnection {
 	protected FordiacImageURLConnection(URL url) {
 		super(url);
 		imageName = url.getAuthority();
-		if(null == imageName){
+		if (null == imageName) {
 			imageName = url.getFile();
-			if((null != imageName) && (imageName.startsWith("/"))){ //$NON-NLS-1$
+			if ((null != imageName) && (imageName.startsWith("/"))) { //$NON-NLS-1$
 				imageName = imageName.substring(1);
 			}
 		}
 	}
-	
+
 	@Override
 	public InputStream getInputStream() throws IOException {
 		InputStream is = null;
-		try{
+		try {
 			FordiacImage selectedIcon = FordiacImage.valueOf(imageName);
 			is = selectedIcon.getImageAsInputStream();
 		} catch (Exception e) {
-			is = FordiacImage.MISSING.getImageAsInputStream();			
+			is = FordiacImage.MISSING.getImageAsInputStream();
 		}
 		return is;
 	}

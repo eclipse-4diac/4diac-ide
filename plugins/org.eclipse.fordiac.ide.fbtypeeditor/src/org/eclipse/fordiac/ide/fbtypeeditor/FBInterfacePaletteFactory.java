@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,14 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
@@ -28,7 +23,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
-import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.jface.resource.ImageDescriptor;
 
@@ -45,92 +39,53 @@ public final class FBInterfacePaletteFactory {
 	}
 
 	private static void fillPalette(Palette systemPalette, final PaletteRoot palette) {
-		PaletteDrawer drawer = new PaletteDrawer("EventTypes");
+		PaletteDrawer drawer = new PaletteDrawer(Messages.FBInterfacePaletteFactory_EventTypes);
 
-		for (DataType type : EventTypeLibrary.getInstance().getEventTypes()){
+		for (DataType type : EventTypeLibrary.getInstance().getEventTypes()) {
 			ImageDescriptor desc = FordiacImage.ICON_DATA_TYPE.getImageDescriptor();
-			CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(
-					type.getName(), type.getComment(), new DataTypeCreationFactory(type), desc, desc);
+			CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(type.getName(),
+					type.getComment(), new DataTypeCreationFactory(type), desc, desc);
 			drawer.add(combined);
 		}
 		palette.add(drawer);
-		
-		drawer = new PaletteDrawer("DataTypes");
+
+		drawer = new PaletteDrawer(Messages.FBInterfacePaletteFactory_DataTypes);
 
 		for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
 			ImageDescriptor desc = FordiacImage.ICON_DATA_TYPE.getImageDescriptor();
-			CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(
-					dataType.getName(), dataType.getComment(), new DataTypeCreationFactory(dataType), desc, desc);
+			CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(dataType.getName(),
+					dataType.getComment(), new DataTypeCreationFactory(dataType), desc, desc);
 			drawer.add(combined);
-		}		
+		}
 		palette.add(drawer);
-				
-		fillPalette(palette, systemPalette);
-		
-		
+
+		createAdapterEntry(palette, systemPalette);
+
 	}
-	
-	private static void fillPalette(final PaletteRoot palette,
-			final Palette systemPalette) {
+
+	private static void createAdapterEntry(final PaletteRoot palette, final Palette systemPalette) {
 		Palette pal = null;
 		if (systemPalette == null) {
 			pal = TypeLibrary.getInstance().getPalette();
 		} else {
 			pal = systemPalette;
-		}	
-		
-		PaletteDrawer drawer = createGroup(pal.getRootGroup(), "", palette); //$NON-NLS-1$
+		}
+
+		PaletteDrawer drawer = new PaletteDrawer("Adapters");
+
+		for (AdapterTypePaletteEntry entry : pal.getAdapterTypesSorted()) {
+			ImageDescriptor desc = FordiacImage.ICON_DATA_TYPE.getImageDescriptor();
+			drawer.add(new CombinedTemplateCreationEntry(entry.getLabel(), entry.getType().getComment(),
+					new DataTypeCreationFactory(entry.getType()), desc, desc));
+		}
+
 		if (!drawer.getChildren().isEmpty()) {
 			palette.add(drawer);
 		}
 	}
 
-	private static PaletteDrawer createGroup(
-			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group,
-			final String parentGroup, final PaletteRoot palette) {
-		
-		String newParent = ""; //$NON-NLS-1$
-		if(!group.getLabel().equals("Root Group")){
-			newParent += parentGroup.equals("") ? parentGroup + "." + group.getLabel() //$NON-NLS-1$ //$NON-NLS-2$
-					: group.getLabel();
-		}
-		
-		
-		for (Iterator<PaletteGroup> iterator = group.getSubGroups().iterator(); iterator
-				.hasNext();) {
-			PaletteGroup paletteGroup = iterator.next();
-			PaletteDrawer drawer = createGroup(paletteGroup, newParent, palette);
-			if (!drawer.getChildren().isEmpty()) {
-				palette.add(drawer);
-			}
-
-		}
-		PaletteDrawer paletteContainer = new PaletteDrawer(
-				!parentGroup.equals("") ? parentGroup + "." + group.getLabel() //$NON-NLS-1$ //$NON-NLS-2$
-				: group.getLabel());
-		paletteContainer.addAll(createAdapterEntries(group));
-		return paletteContainer;
-	}
-
-	private static List<PaletteEntry> createAdapterEntries(
-			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<PaletteEntry> entries = new ArrayList<>();
-		
-		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry paletteEntry : group.getEntries()) {
-			if(paletteEntry instanceof AdapterTypePaletteEntry){
-				AdapterTypePaletteEntry entry = (AdapterTypePaletteEntry) paletteEntry;
-				ImageDescriptor desc = FordiacImage.ICON_DATA_TYPE.getImageDescriptor();
-				entries.add(new CombinedTemplateCreationEntry(
-						entry.getLabel(), entry.getType().getComment(), 
-						new DataTypeCreationFactory(entry.getType()), desc, desc));
-			}
-		}
-		return entries;
-	}
-	
-	private FBInterfacePaletteFactory(){
+	private FBInterfacePaletteFactory() {
 		throw new UnsupportedOperationException("Class FBInterfacePaletteFactory should not be created!\n"); //$NON-NLS-1$
 	}
-
 
 }

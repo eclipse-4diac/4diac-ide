@@ -55,7 +55,7 @@ public class MonitoredSystems extends CompoundContributionItem {
 		}
 	}
 
-	private static class MonitorSystemContribution extends ContributionItem {		
+	private static class MonitorSystemContribution extends ContributionItem {
 		private final AutomationSystem system;
 
 		MonitorSystemContribution(AutomationSystem system) {
@@ -63,7 +63,6 @@ public class MonitoredSystems extends CompoundContributionItem {
 			this.system = system;
 		}
 
-		
 		@Override
 		public void fill(Menu menu, int index) {
 			createSystemMonitoringMenuEntry(system, menu, index);
@@ -78,9 +77,9 @@ public class MonitoredSystems extends CompoundContributionItem {
 		}
 		return menuList.toArray(new IContributionItem[menuList.size()]);
 	}
-	
-	private static void createSystemMonitoringMenuEntry(AutomationSystem system, Menu menu, int index){
-		MenuItem item = (index == -1 ) ? new MenuItem(menu, SWT.CHECK) : new MenuItem(menu, SWT.CHECK, index);
+
+	private static void createSystemMonitoringMenuEntry(AutomationSystem system, Menu menu, int index) {
+		MenuItem item = (index == -1) ? new MenuItem(menu, SWT.CHECK) : new MenuItem(menu, SWT.CHECK, index);
 		item.setText(system.getName());
 		MonitoringManager manager = MonitoringManager.getInstance();
 		item.setSelection(manager.monitoringForSystemEnabled(system));
@@ -88,24 +87,24 @@ public class MonitoredSystems extends CompoundContributionItem {
 	}
 
 	public static void createMenuEntriesForSystems(Menu menu) {
-		for (AutomationSystem system : SystemManager.INSTANCE.getSystems()) {	
+		for (AutomationSystem system : SystemManager.INSTANCE.getSystems()) {
 			createSystemMonitoringMenuEntry(system, menu, -1);
-		}		
+		}
 	}
 
 	public static void refreshSystemTree() {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IViewPart view = page.findView("org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"); //$NON-NLS-1$
-		
-		if ((null != view) && (view instanceof CommonNavigator)){
-			CommonNavigator treeView = (CommonNavigator)view;
+
+		if ((null != view) && (view instanceof CommonNavigator)) {
+			CommonNavigator treeView = (CommonNavigator) view;
 			treeView.getCommonViewer().refresh();
 		}
-		
+
 		view = page.findView("org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView"); //$NON-NLS-1$
-		
-		if ((null != view) && (view instanceof DownloadSelectionTreeView)){
-			DownloadSelectionTreeView treeView = (DownloadSelectionTreeView)view;
+
+		if ((null != view) && (view instanceof DownloadSelectionTreeView)) {
+			DownloadSelectionTreeView treeView = (DownloadSelectionTreeView) view;
 			treeView.getViewer().refresh();
 		}
 	}

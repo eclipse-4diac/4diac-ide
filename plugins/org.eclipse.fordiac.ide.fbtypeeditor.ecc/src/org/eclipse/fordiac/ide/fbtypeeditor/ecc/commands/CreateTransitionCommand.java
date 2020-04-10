@@ -12,6 +12,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Martin Melik-Merkumians
  *     - adds constructor and convenience constructor for code generation purposes
+ *   Bianca Wiesmayr
+ *     - command now returns newly created element
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
@@ -21,14 +23,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.commands.Command;
 
 /**
  * The Class CreateTransitionCommand.
  */
-public class CreateTransitionCommand extends Command {
+public class CreateTransitionCommand extends AbstractCreationCommand {
 	static final Point SELF_TRANS_OFFSET = new Point(10, 50);
 
 	/** The source. */
@@ -135,7 +137,7 @@ public class CreateTransitionCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return (null != source && null != destination && null != source.getECC());
+		return ((null != source) && (null != destination) && (null != source.getECC()));
 	}
 
 	/*
@@ -229,5 +231,10 @@ public class CreateTransitionCommand extends Command {
 
 	public void setViewer(EditPartViewer viewer) {
 		this.viewer = viewer;
+	}
+
+	@Override
+	public Object getCreatedElement() {
+		return transition;
 	}
 }

@@ -39,16 +39,16 @@ public final class SystemPaletteManagement {
 	 * 
 	 * @param project the project
 	 */
-	public static void copyToolTypeLibToProject(final IProject project) {		
+	public static void copyToolTypeLibToProject(final IProject project) {
 		try {
 			copyDirectory(TypeLibrary.getToolLibFolder(), project);
 		} catch (Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}
-	
-	private static void copyDirectory(final IContainer sourceLocation,
-			final IContainer targetLocation) throws IOException, CoreException {
+
+	private static void copyDirectory(final IContainer sourceLocation, final IContainer targetLocation)
+			throws IOException, CoreException {
 
 		IProgressMonitor monitor = new NullProgressMonitor();
 
@@ -60,12 +60,10 @@ public final class SystemPaletteManagement {
 		for (IResource resource : sourceLocation.members()) {
 			if (!resource.getName().startsWith(".")) { //$NON-NLS-1$
 				if (resource instanceof IFolder) {
-					IFolder target = targetLocation.getFolder(new Path(resource
-							.getName()));
+					IFolder target = targetLocation.getFolder(new Path(resource.getName()));
 					copyDirectory((IFolder) resource, target);
 				} else if (resource instanceof IFile) {
-					IFile file = targetLocation.getFile(new Path(resource
-							.getName()));
+					IFile file = targetLocation.getFile(new Path(resource.getName()));
 					File in = ((IFile) resource).getLocation().toFile();
 					File out = file.getLocation().toFile();
 					ImportUtils.copyFile(in, out);
@@ -74,7 +72,7 @@ public final class SystemPaletteManagement {
 		}
 		targetLocation.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 	}
-	
+
 	private SystemPaletteManagement() {
 		throw new UnsupportedOperationException("SystemPaletteManagement utility class should not be instantiated!"); //$NON-NLS-1$
 	}

@@ -27,15 +27,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.Request;
 
-public class InputPrimitiveEditPart extends PrimitiveEditPart{
+public class InputPrimitiveEditPart extends PrimitiveEditPart {
 
 	private ConnectingConnection connectingConnection;
-	
-	InputPrimitiveEditPart(){
-		super(new PrimitiveConnection(true));	
+
+	InputPrimitiveEditPart() {
+		super(new PrimitiveConnection(true));
 		connectingConnection = new ConnectingConnection();
 	}
-	
+
 	@Override
 	public InputPrimitive getCastedModel() {
 		return (InputPrimitive) getModel();
@@ -44,7 +44,7 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart{
 	public ConnectingConnection getConnectingConnection() {
 		return connectingConnection;
 	}
-	
+
 	@Override
 	public List<Object> getModelSourceConnections() {
 		ArrayList<Object> temp = new ArrayList<>();
@@ -67,11 +67,11 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart{
 	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
 		return null;
 	}
-	
+
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		if (connection instanceof PrimitiveConnectionEditPart) {
-			return new FixedAnchor(getNameLabel(), ! isLeftInterface());
+			return new FixedAnchor(getNameLabel(), !isLeftInterface());
 		} else if (connection instanceof ConnectingConnectionEditPart) {
 			return new AdvancedFixedAnchor(getCenterFigure(), isLeftInterface(), isLeftInterface() ? 3 : -4, 0);
 		}
@@ -87,7 +87,7 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart{
 		}
 		return null;
 	}
-	
+
 	@Override
 	public int getFeatureID() {
 		return 0;

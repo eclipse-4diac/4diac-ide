@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
-	private FBTypePaletteEntry paletteEntry;	
+	private FBTypePaletteEntry paletteEntry;
 
 	public FBCreateCommand(final FBTypePaletteEntry paletteEntry, final FBNetwork fbNetwork, int x, int y) {
 		super(fbNetwork, LibraryElementFactory.eINSTANCE.createFB(), x, y);
@@ -30,8 +30,8 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 		setLabel(Messages.FBCreateCommand_LABLE_CreateFunctionBlock);
 		getFB().setPaletteEntry(paletteEntry);
 	}
-	
-	//constructor to reuse this command for adapter creation
+
+	// constructor to reuse this command for adapter creation
 	protected FBCreateCommand(final FBNetwork fbNetwork, FBNetworkElement adapter, int x, int y) {
 		super(fbNetwork, adapter, x, y);
 		this.paletteEntry = null;
@@ -40,25 +40,25 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	public FB getFB() {
-		return (FB)getElement();
+		return (FB) getElement();
 	}
 
 	public FBTypePaletteEntry getPaletteEntry() {
 		return paletteEntry;
 	}
-	
+
 	public void setPaletteEntry(FBTypePaletteEntry paletteEntry) {
 		this.paletteEntry = paletteEntry;
 	}
-	
+
 	@Override
 	public boolean canExecute() {
 		return paletteEntry != null && super.canExecute();
 	}
-	
+
 	@Override
 	protected InterfaceList getTypeInterfaceList() {
 		return paletteEntry.getFBType().getInterfaceList();
 	}
-	
+
 }

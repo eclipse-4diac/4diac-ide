@@ -20,6 +20,7 @@ import java.text.MessageFormat;
 import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.Activator;
+import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.gef.commands.Command;
 
@@ -45,38 +46,41 @@ public class AdjustConnectionCommand extends Command {
 	public void execute() {
 		Point sourceP = getSourcePoint();
 		Point destP = getDestinationPoint();
-		int scaledMinDistance = (int)Math.floor(MoveableRouter.MIN_CONNECTION_FB_DISTANCE * zoom);
-		
+		int scaledMinDistance = (int) Math.floor(MoveableRouter.MIN_CONNECTION_FB_DISTANCE * zoom);
+
 		switch (index) {
 		case 1:
 			int newDx1 = Math.max(point.x - sourceP.x, scaledMinDistance);
-			if(0 == modelConnection.getDx2()) {	  
-				//we have three segment connection check that we are not beyond the input
+			if (0 == modelConnection.getDx2()) {
+				// we have three segment connection check that we are not beyond the input
 				newDx1 = Math.min(newDx1, destP.x - sourceP.x - scaledMinDistance);
 			}
-			modelConnection.setDx1((int)Math.floor(newDx1 / zoom));
+			modelConnection.setDx1((int) Math.floor(newDx1 / zoom));
 			break;
 		case 2:
-			modelConnection.setDy((int)Math.floor((point.y - sourceP.y) / zoom));
+			modelConnection.setDy((int) Math.floor((point.y - sourceP.y) / zoom));
 			break;
-		case 3:		
+		case 3:
 			int newDx2 = Math.max(destP.x - point.x, scaledMinDistance);
-			modelConnection.setDx2((int)Math.floor(newDx2 / zoom));
+			modelConnection.setDx2((int) Math.floor(newDx2 / zoom));
 			break;
 		default:
-			Activator.getDefault().logError(MessageFormat.format("Wrong connection segment index ({0}) provided to AdjustConnectionCommand!", index));
+			Activator.getDefault().logError(
+					MessageFormat.format(Messages.AdjustConnectionCommand_WrongConnectionSegmentIndex, index));
 			break;
 		}
 		connection.revalidate();
 	}
 
 	private Point getDestinationPoint() {
-		Point destP = connection.getTargetAnchor().getLocation(connection.getTargetAnchor().getReferencePoint()).getCopy();
+		Point destP = connection.getTargetAnchor().getLocation(connection.getTargetAnchor().getReferencePoint())
+				.getCopy();
 		return destP;
 	}
 
 	private Point getSourcePoint() {
-		Point sourceP = connection.getSourceAnchor().getLocation(connection.getSourceAnchor().getReferencePoint()).getCopy();
+		Point sourceP = connection.getSourceAnchor().getLocation(connection.getSourceAnchor().getReferencePoint())
+				.getCopy();
 		return sourceP;
 	}
 

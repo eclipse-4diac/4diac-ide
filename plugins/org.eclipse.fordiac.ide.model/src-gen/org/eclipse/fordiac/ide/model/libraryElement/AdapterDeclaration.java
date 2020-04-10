@@ -15,19 +15,18 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 
-
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Adapter Declaration</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Adapter
+ * Declaration</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getPaletteEntry <em>Palette Entry</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB
+ * <em>Adapter FB</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getPaletteEntry
+ * <em>Palette Entry</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration()
@@ -37,14 +36,16 @@ import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 public interface AdapterDeclaration extends VarDeclaration {
 
 	/**
-	 * Returns the value of the '<em><b>Adapter FB</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl <em>Adapter Decl</em>}'.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Adapter FB</b></em>' reference. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl
+	 * <em>Adapter Decl</em>}'. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Adapter FB</em>' reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Adapter FB</em>' reference isn't clear, there
+	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Adapter FB</em>' reference.
 	 * @see #setAdapterFB(AdapterFB)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration_AdapterFB()
@@ -55,9 +56,11 @@ public interface AdapterDeclaration extends VarDeclaration {
 	AdapterFB getAdapterFB();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB
+	 * <em>Adapter FB</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @param value the new value of the '<em>Adapter FB</em>' reference.
 	 * @see #getAdapterFB()
 	 * @generated
@@ -65,13 +68,14 @@ public interface AdapterDeclaration extends VarDeclaration {
 	void setAdapterFB(AdapterFB value);
 
 	/**
-	 * Returns the value of the '<em><b>Palette Entry</b></em>' reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Palette Entry</b></em>' reference. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Palette Entry</em>' reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Palette Entry</em>' reference isn't clear, there
+	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Palette Entry</em>' reference.
 	 * @see #setPaletteEntry(AdapterTypePaletteEntry)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration_PaletteEntry()
@@ -81,9 +85,11 @@ public interface AdapterDeclaration extends VarDeclaration {
 	AdapterTypePaletteEntry getPaletteEntry();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getPaletteEntry <em>Palette Entry</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getPaletteEntry
+	 * <em>Palette Entry</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @param value the new value of the '<em>Palette Entry</em>' reference.
 	 * @see #getPaletteEntry()
 	 * @generated
@@ -91,8 +97,8 @@ public interface AdapterDeclaration extends VarDeclaration {
 	void setPaletteEntry(AdapterTypePaletteEntry value);
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation"
 	 * @generated
 	 */

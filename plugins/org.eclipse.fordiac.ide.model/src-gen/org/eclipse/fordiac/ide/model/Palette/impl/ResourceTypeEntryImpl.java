@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,21 +20,20 @@ import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
+import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Resource Type Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Resource Type Entry</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceTypeEntry {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ResourceTypeEntryImpl() {
@@ -42,51 +41,56 @@ public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceT
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected EClass eStaticClass() {
 		return PalettePackage.Literals.RESOURCE_TYPE_ENTRY;
 	}
-	
+
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public ResourceType getResourceType() {
 		LibraryElement type = getType();
-		if((null !=type) && (type instanceof ResourceType)){
-		   return (ResourceType) type;
+		if (type instanceof ResourceType) {
+			return (ResourceType) type;
 		}
 		return null;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if((null != type) && (type instanceof ResourceType)){
+		if (type instanceof ResourceType) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
-				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no ResourceType as type entry for ResourceTypeEntry");
+			if (null != type) {
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+						"tried to set no ResourceType as type entry for ResourceTypeEntry"); //$NON-NLS-1$
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
 	}
 
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	protected LibraryElement loadType() {
-		Palette palette = getGroup().getPallete();
-		return RESImporter.importResType(getFile(), palette);
+	public TypeImporter getTypeImporter(final Palette palette) {
+		return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(palette);
 	}
 
-} //ResourceTypeEntryImpl
+} // ResourceTypeEntryImpl

@@ -17,11 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
-import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * NonResizeableEditPolicy with a rounded EtchedBorder and moveHandles (move
@@ -29,14 +27,14 @@ import org.eclipse.jface.preference.IPreferenceStore;
  */
 public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 
-	private int arc = 14;
+	private int arc = DiagramPreferences.CORNER_DIM;
 
 	private Insets insets = new Insets(2);
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param arc the arc
+	 * @param arc    the arc
 	 * @param insets the insets
 	 */
 	public ModifiedNonResizeableEditPolicy(int arc, Insets insets) {
@@ -50,9 +48,6 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	 */
 	public ModifiedNonResizeableEditPolicy() {
 		super();
-		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
-		this.arc = cornerDim;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

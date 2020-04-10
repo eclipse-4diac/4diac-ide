@@ -38,7 +38,8 @@ public class Activator extends Abstract4DIACUIPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
+	 * BundleContext)
 	 */
 	@Override
 	public void start(final BundleContext context) throws Exception {
@@ -49,7 +50,8 @@ public class Activator extends Abstract4DIACUIPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {

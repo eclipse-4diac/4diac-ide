@@ -24,8 +24,7 @@ public class CreatePlugAction extends WorkbenchPartAction {
 	private FBType fbType;
 	private AdapterTypePaletteEntry entry;
 
-	public CreatePlugAction(IWorkbenchPart part, FBType fbType,
-			AdapterTypePaletteEntry entry) {
+	public CreatePlugAction(IWorkbenchPart part, FBType fbType, AdapterTypePaletteEntry entry) {
 		super(part);
 		setId(getID(entry));
 		setText(entry.getLabel());
@@ -40,11 +39,12 @@ public class CreatePlugAction extends WorkbenchPartAction {
 
 	@Override
 	public void run() {
-		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(entry.getType(), fbType.getInterfaceList(), false, -1);
+		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(entry.getType(),
+				fbType.getInterfaceList(), false, -1);
 		execute(cmd);
 	}
 
-	public static String getID(AdapterTypePaletteEntry entry ) {
+	public static String getID(AdapterTypePaletteEntry entry) {
 		return ID_PREFIX + entry.getFile().getFullPath().toString();
 	}
 

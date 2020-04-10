@@ -16,17 +16,19 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 import org.eclipse.emf.common.util.EList;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>System Configuration</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>System
+ * Configuration</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getDevices <em>Devices</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getSegments <em>Segments</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getLinks <em>Links</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getDevices
+ * <em>Devices</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getSegments
+ * <em>Segments</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getLinks
+ * <em>Links</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSystemConfiguration()
@@ -35,52 +37,58 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface SystemConfiguration extends I4DIACElement {
 	/**
-	 * Returns the value of the '<em><b>Devices</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.Device}.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Devices</b></em>' containment reference
+	 * list. The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.Device}. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Devices</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Devices</em>' containment reference list isn't
+	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Devices</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSystemConfiguration_Devices()
-	 * @model containment="true" required="true"
-	 *        extendedMetaData="kind='element' name='Device' namespace='##targetNamespace'"
+	 * @model containment="true" required="true" extendedMetaData="kind='element'
+	 *        name='Device' namespace='##targetNamespace'"
 	 * @generated
 	 */
 	EList<Device> getDevices();
 
 	/**
-	 * Returns the value of the '<em><b>Segments</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.Segment}.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Segments</b></em>' containment reference
+	 * list. The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.Segment}. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Segments</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Segments</em>' containment reference list isn't
+	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Segments</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSystemConfiguration_Segments()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='Segment' namespace='##targetNamespace'"
+	 * @model containment="true" extendedMetaData="kind='element' name='Segment'
+	 *        namespace='##targetNamespace'"
 	 * @generated
 	 */
 	EList<Segment> getSegments();
 
 	/**
 	 * Returns the value of the '<em><b>Links</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.Link}.
-	 * <!-- begin-user-doc -->
+	 * The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.Link}. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Links</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Links</em>' containment reference list isn't
+	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Links</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSystemConfiguration_Links()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='Link' namespace='##targetNamespace'"
+	 * @model containment="true" extendedMetaData="kind='element' name='Link'
+	 *        namespace='##targetNamespace'"
 	 * @generated
 	 */
 	EList<Link> getLinks();
@@ -88,26 +96,27 @@ public interface SystemConfiguration extends I4DIACElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Automation System</em>' container reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Automation System</em>' container reference isn't
+	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
 	AutomationSystem getAutomationSystem();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true" nameRequired="true"
 	 * @generated
 	 */
 	Segment getSegmentNamed(String name);
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true" nameRequired="true"
 	 * @generated
 	 */

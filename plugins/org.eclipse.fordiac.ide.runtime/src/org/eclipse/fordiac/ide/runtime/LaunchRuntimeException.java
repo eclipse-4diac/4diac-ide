@@ -17,7 +17,7 @@ package org.eclipse.fordiac.ide.runtime;
  * The Class LaunchRuntimeException.
  */
 public class LaunchRuntimeException extends Exception {
-	
+
 	/**
 	 * 
 	 */

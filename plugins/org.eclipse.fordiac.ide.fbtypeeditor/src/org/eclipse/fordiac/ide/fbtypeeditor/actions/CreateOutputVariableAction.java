@@ -24,8 +24,7 @@ public class CreateOutputVariableAction extends WorkbenchPartAction {
 	private FBType fbType;
 	private DataType dataType;
 
-	public CreateOutputVariableAction(IWorkbenchPart part, FBType fbType,
-			DataType dataType) {
+	public CreateOutputVariableAction(IWorkbenchPart part, FBType fbType, DataType dataType) {
 		super(part);
 		setId(getID(dataType.getName()));
 		setText(dataType.getName());
@@ -40,7 +39,8 @@ public class CreateOutputVariableAction extends WorkbenchPartAction {
 
 	@Override
 	public void run() {
-		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(dataType, fbType.getInterfaceList(), false, -1);
+		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(dataType, fbType.getInterfaceList(),
+				false, -1);
 		execute(cmd);
 	}
 

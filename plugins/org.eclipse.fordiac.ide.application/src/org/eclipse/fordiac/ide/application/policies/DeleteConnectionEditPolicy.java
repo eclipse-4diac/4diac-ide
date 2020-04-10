@@ -21,13 +21,13 @@ import org.eclipse.gef.requests.GroupRequest;
 /**
  * This EditPolicy returns a command for deleting a Connection.
  */
-public class DeleteConnectionEditPolicy extends
-		org.eclipse.gef.editpolicies.ConnectionEditPolicy {
+public class DeleteConnectionEditPolicy extends org.eclipse.gef.editpolicies.ConnectionEditPolicy {
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.editpolicies.ConnectionEditPolicy#getDeleteCommand(org.eclipse.gef.requests.GroupRequest)
+	 * @see org.eclipse.gef.editpolicies.ConnectionEditPolicy#getDeleteCommand(org.
+	 * eclipse.gef.requests.GroupRequest)
 	 */
 	@Override
 	protected Command getDeleteCommand(final GroupRequest request) {

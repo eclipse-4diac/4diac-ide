@@ -24,8 +24,12 @@ import org.eclipse.jface.text.ITextViewer;
 public class XMLDoubleClickStrategy implements ITextDoubleClickStrategy {
 	private ITextViewer fText;
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.text.ITextDoubleClickStrategy#doubleClicked(org.eclipse.jface.text.ITextViewer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.text.ITextDoubleClickStrategy#doubleClicked(org.eclipse.
+	 * jface.text.ITextViewer)
 	 */
 	@Override
 	public void doubleClicked(final ITextViewer part) {

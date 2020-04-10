@@ -24,8 +24,10 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getAvailableDNSCollections <em>Available DNS Collections</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getActiveVirtualDNS <em>Active Virtual DNS</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getAvailableDNSCollections
+ * <em>Available DNS Collections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getActiveVirtualDNS
+ * <em>Active Virtual DNS</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage#getVirtualDNSManagement()
@@ -54,13 +56,14 @@ public interface VirtualDNSManagement extends EObject {
 	EList<VirtualDNSCollection> getAvailableDNSCollections();
 
 	/**
-	 * Returns the value of the '<em><b>Active Virtual DNS</b></em>' reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Active Virtual DNS</b></em>' reference. <!--
+	 * begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Active Virtual DNS</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Active Virtual DNS</em>' reference.
 	 * @see #setActiveVirtualDNS(VirtualDNSCollection)
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage#getVirtualDNSManagement_ActiveVirtualDNS()
@@ -70,9 +73,11 @@ public interface VirtualDNSManagement extends EObject {
 	VirtualDNSCollection getActiveVirtualDNS();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getActiveVirtualDNS <em>Active Virtual DNS</em>}' reference.
-	 * <!-- begin-user-doc --> <!--
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getActiveVirtualDNS
+	 * <em>Active Virtual DNS</em>}' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Active Virtual DNS</em>' reference.
 	 * @see #getActiveVirtualDNS()
 	 * @generated

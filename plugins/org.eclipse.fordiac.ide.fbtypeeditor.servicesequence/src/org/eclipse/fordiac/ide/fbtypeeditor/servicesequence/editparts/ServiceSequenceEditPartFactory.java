@@ -27,8 +27,6 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
  */
 public class ServiceSequenceEditPartFactory extends Abstract4diacEditPartFactory {
 
-	
-
 	public ServiceSequenceEditPartFactory(GraphicalEditor editor) {
 		super(editor);
 	}

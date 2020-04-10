@@ -13,17 +13,16 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Compilable Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Compilable Type</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType#getCompilerInfo <em>Compiler Info</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType#getCompilerInfo
+ * <em>Compiler Info</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCompilableType()
@@ -32,13 +31,14 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  */
 public interface CompilableType extends LibraryElement {
 	/**
-	 * Returns the value of the '<em><b>Compiler Info</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Compiler Info</b></em>' containment
+	 * reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Compiler Info</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Compiler Info</em>' containment reference isn't
+	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Compiler Info</em>' containment reference.
 	 * @see #setCompilerInfo(CompilerInfo)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCompilableType_CompilerInfo()
@@ -48,10 +48,13 @@ public interface CompilableType extends LibraryElement {
 	CompilerInfo getCompilerInfo();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType#getCompilerInfo <em>Compiler Info</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Compiler Info</em>' containment reference.
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType#getCompilerInfo
+	 * <em>Compiler Info</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @param value the new value of the '<em>Compiler Info</em>' containment
+	 *              reference.
 	 * @see #getCompilerInfo()
 	 * @generated
 	 */

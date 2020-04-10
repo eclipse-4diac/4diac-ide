@@ -27,38 +27,38 @@ public class ClearForceHandler extends AbstractMonitoringHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		super.execute(event);
-		StructuredSelection selection = (StructuredSelection)HandlerUtil.getCurrentSelection(event);
-		VarDeclaration var = ForceHandler.getVariable(selection.getFirstElement());				
-		if(null != var){		
+		StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
+		VarDeclaration var = ForceHandler.getVariable(selection.getFirstElement());
+		if (null != var) {
 			MonitoringManager manager = MonitoringManager.getInstance();
 			MonitoringBaseElement element = manager.getMonitoringElement(var);
 			if (element instanceof MonitoringElement) {
-				manager.forceValue((MonitoringElement)element, ""); //$NON-NLS-1$
+				manager.forceValue((MonitoringElement) element, ""); //$NON-NLS-1$
 			}
 		}
-		
+
 		return null;
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext){
+	public void setEnabled(Object evaluationContext) {
 		boolean needToAdd = false;
 		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		
+
 		if (selection instanceof StructuredSelection) {
 			StructuredSelection sel = (StructuredSelection) selection;
 			MonitoringManager manager = MonitoringManager.getInstance();
-			
-			if(1 == sel.size()){
-				//only allow to force a value if only one element is selected
-				VarDeclaration var = ForceHandler.getVariable(sel.getFirstElement());				
-				if(null != var){
+
+			if (1 == sel.size()) {
+				// only allow to force a value if only one element is selected
+				VarDeclaration var = ForceHandler.getVariable(sel.getFirstElement());
+				if (null != var) {
 					MonitoringBaseElement element = manager.getMonitoringElement(var);
-					needToAdd = (element instanceof MonitoringElement &&  ((MonitoringElement)element).isForce());
+					needToAdd = (element instanceof MonitoringElement && ((MonitoringElement) element).isForce());
 				}
 			}
 		}
 		setBaseEnabled(needToAdd);
 	}
-	
+
 }

@@ -19,11 +19,12 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class VariableInputContainer extends AbstractContainerElement{
+public class VariableInputContainer extends AbstractContainerElement {
 
 	public VariableInputContainer(final FBType fbtype) {
 		super(fbtype);
 	}
+
 	@Override
 	public List<IInterfaceElement> getChildren() {
 		return new ArrayList<>(getFbType().getInterfaceList().getInputVars());

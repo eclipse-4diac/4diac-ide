@@ -27,28 +27,28 @@ public class TriggerEventHandler extends AbstractMonitoringHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		super.execute(event);
-		StructuredSelection selection = (StructuredSelection)HandlerUtil.getCurrentSelection(event);
-		
+		StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
+
 		Event ev = getEvent(selection.getFirstElement());
-		if(null != ev){
+		if (null != ev) {
 			MonitoringManager.getInstance().triggerEvent(ev);
 		}
 		return null;
 	}
-	
+
 	@Override
-	public void setEnabled(Object evaluationContext){
+	public void setEnabled(Object evaluationContext) {
 		boolean needToAdd = false;
 		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		
+
 		if (selection instanceof StructuredSelection) {
 			StructuredSelection sel = (StructuredSelection) selection;
 			MonitoringManager manager = MonitoringManager.getInstance();
-			
-			if(1 == sel.size()){
-				//only allow trigger event if only one element is selected
+
+			if (1 == sel.size()) {
+				// only allow trigger event if only one element is selected
 				Event ev = getEvent(sel.getFirstElement());
-				if((null != ev) && manager.containsPort(ev)) {
+				if ((null != ev) && manager.containsPort(ev)) {
 					needToAdd = true;
 				}
 			}
@@ -58,13 +58,13 @@ public class TriggerEventHandler extends AbstractMonitoringHandler {
 
 	private static Event getEvent(Object object) {
 		IInterfaceElement ie = null;
-		if(object instanceof InterfaceEditPart) {
+		if (object instanceof InterfaceEditPart) {
 			ie = ((InterfaceEditPart) object).getModel();
-		} else if (object instanceof MonitoringEditPart){
-			ie = ((MonitoringEditPart)object).getModel().getPort().getInterfaceElement();
+		} else if (object instanceof MonitoringEditPart) {
+			ie = ((MonitoringEditPart) object).getModel().getPort().getInterfaceElement();
 		}
-		if(ie instanceof Event) {
-			return (Event)ie;
+		if (ie instanceof Event) {
+			return (Event) ie;
 		}
 		return null;
 	}

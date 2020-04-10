@@ -30,17 +30,16 @@ import org.eclipse.fordiac.ide.systemmanagement.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 
-public class SystemContentProvider extends AdapterFactoryContentProvider implements DistributedSystemListener  {
+public class SystemContentProvider extends AdapterFactoryContentProvider implements DistributedSystemListener {
 
 	private static ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
-	
+
 	private BaseWorkbenchContentProvider workbenchContentProvider = new BaseWorkbenchContentProvider();
-	
+
 	public SystemContentProvider() {
 		super(systemAdapterFactory);
 		SystemManager.INSTANCE.addWorkspaceListener(this);
 	}
-
 
 	@Override
 	public Object[] getElements(Object inputElement) {
@@ -50,62 +49,59 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		// this content provider is only requried on the lowest level of the tree
-		if((null == parentElement) || (parentElement instanceof IWorkspaceRoot)){
+		if ((null == parentElement) || (parentElement instanceof IWorkspaceRoot)) {
 			return getProjects();
 		}
-		if(parentElement instanceof IResource){
+		if (parentElement instanceof IResource) {
 			return workbenchContentProvider.getChildren(parentElement);
-		}		
+		}
 		return super.getChildren(parentElement);
 	}
 
-
 	@Override
 	public boolean hasChildren(Object element) {
-		if (element instanceof IProject){
-			return (null != SystemManager.INSTANCE.getSystemForName(((IProject)element).getName()));
+		if (element instanceof IProject) {
+			return (null != SystemManager.INSTANCE.getSystemForName(((IProject) element).getName()));
 		}
 		return super.hasChildren(element);
 	}
-	
-		
-	private static List<AdapterFactory> createFactoryList(){
+
+	private static List<AdapterFactory> createFactoryList() {
 		ArrayList<AdapterFactory> factories = new ArrayList<AdapterFactory>();
 		factories.add(new SystemElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());
 		return factories;
 	}
-	
+
 	private static Object[] getProjects() {
 		IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		
+
 		IProject[] projects = myWorkspaceRoot.getProjects();
-		
+
 		ArrayList<Object> list = new ArrayList<>();
-		
+
 		for (IProject project : projects) {
-			if(!project.getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)){
+			if (!project.getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)) {
 				AutomationSystem system = SystemManager.INSTANCE.getSystemForName(project.getName());
-				if(null != system){
+				if (null != system) {
 					list.add(system);
-				}else{
+				} else {
 					list.add(project);
 				}
-			}					
-		}			
+			}
+		}
 		return (list.isEmpty()) ? null : list.toArray();
 	}
 
-
 	@Override
-	public void distributedSystemWorkspaceChanged() {		
-		if(null != viewer && null != viewer.getControl() && null != viewer.getControl().getDisplay()){
+	public void distributedSystemWorkspaceChanged() {
+		if (null != viewer && null != viewer.getControl() && null != viewer.getControl().getDisplay()) {
 			viewer.getControl().getDisplay().asyncExec(new Runnable() {
 				@Override
 				public void run() {
-					viewer.refresh();		
+					viewer.refresh();
 				}
-			});		
+			});
 		}
 	}
 

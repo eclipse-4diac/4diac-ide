@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.actions;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
@@ -26,7 +27,7 @@ public class CreateInputEventAction extends WorkbenchPartAction {
 	public CreateInputEventAction(IWorkbenchPart part, FBType fbType) {
 		super(part);
 		setId(ID);
-		setText("Create Input Event");
+		setText(Messages.CreateInputEventAction_CreateInputEvent);
 		this.fbType = fbType;
 	}
 
@@ -46,7 +47,8 @@ public class CreateInputEventAction extends WorkbenchPartAction {
 
 	@Override
 	public void run() {
-		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), fbType.getInterfaceList(), true, -1);
+		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(
+				EventTypeLibrary.getInstance().getType(null), fbType.getInterfaceList(), true, -1);
 		execute(cmd);
 	}
 }

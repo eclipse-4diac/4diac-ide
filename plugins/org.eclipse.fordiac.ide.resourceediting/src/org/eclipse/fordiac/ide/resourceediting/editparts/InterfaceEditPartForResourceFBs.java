@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwo
 import org.eclipse.gef.EditPart;
 
 public class InterfaceEditPartForResourceFBs extends InterfaceEditPartForFBNetwork {
-	
+
 	@Override
 	protected IFigure createFigure() {
 		IFigure fig = super.createFigure();

@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.ui.ExtendedStructuredTextAct
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
-	
+
 	public static final String AUTO_INSERT = "enableAutoInsert"; //$NON-NLS-1$
 
 	@Override

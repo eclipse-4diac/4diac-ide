@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2014, 2015 Profactor GbmH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,7 +16,8 @@ package org.eclipse.fordiac.ide.monitoring.provider;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
@@ -26,29 +27,26 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
-
 public class WatchesContentProvider implements ITreeContentProvider {
 
 	private Viewer viewer;
 
-	private EContentAdapter adapter = new EContentAdapter() {
+	private Adapter adapter = new AdapterImpl() {
 		@Override
-		public void notifyChanged(
-				final org.eclipse.emf.common.notify.Notification notification) {
+		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 			int featureID = notification.getFeatureID(MonitoringElement.class);
 			if (featureID == MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE
 					&& notification.getNotifier() instanceof MonitoringElement) {
 				Display.getDefault().asyncExec(() -> {
-						if(!viewer.getControl().isDisposed()){
-							((TreeViewer) viewer).refresh(notification.getNotifier());
-						}
+					if (!viewer.getControl().isDisposed()) {
+						((TreeViewer) viewer).refresh(notification.getNotifier());
 					}
-				);
+				});
 
 			}
 		}
 	};
-	
+
 	private List<MonitoringBaseElement> watchedElements = new ArrayList<>();
 
 	@Override
@@ -61,13 +59,13 @@ public class WatchesContentProvider implements ITreeContentProvider {
 
 		watchedElements.clear();
 
-		for (MonitoringBaseElement element  : MonitoringManager.getInstance().getElementsToMonitor()) {
+		for (MonitoringBaseElement element : MonitoringManager.getInstance().getElementsToMonitor()) {
 			if (element != null && !watchedElements.contains(element)) {
 				element.eAdapters().add(adapter);
 				watchedElements.add(element);
 			}
 		}
-		
+
 		return watchedElements.toArray();
 	}
 
@@ -103,5 +101,5 @@ public class WatchesContentProvider implements ITreeContentProvider {
 			}
 		}
 	}
-	
+
 }

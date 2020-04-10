@@ -14,36 +14,38 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementCommand {
-	
+
 	private SubApplicationTypePaletteEntry paletteEntry;
-	
-	public CreateSubAppInstanceCommand(final SubApplicationTypePaletteEntry paletteEntry, final FBNetwork fbNetwork, int x, int y) {
+
+	public CreateSubAppInstanceCommand(final SubApplicationTypePaletteEntry paletteEntry, final FBNetwork fbNetwork,
+			int x, int y) {
 		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
 		this.paletteEntry = paletteEntry;
-		setLabel("Create Subapplication Instance");
+		setLabel(Messages.CreateSubAppInstanceCommand_CreateSubapplicationInstance);
 		getSubApp().setPaletteEntry(paletteEntry);
 	}
-	
+
 	@Override
 	public boolean canExecute() {
 		return paletteEntry != null && super.canExecute();
 	}
-			
+
 	@Override
 	protected InterfaceList getTypeInterfaceList() {
 		return paletteEntry.getSubApplicationType().getInterfaceList();
 	}
-	
+
 	public SubApp getSubApp() {
-		return (SubApp)getElement();
+		return (SubApp) getElement();
 	}
-	
+
 	public SubApplicationTypePaletteEntry getPaletteEntry() {
 		return paletteEntry;
 	}

@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceInterfacePaletteFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateInputPrimitiveCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateOutputPrimitiveCommand;
@@ -76,7 +77,7 @@ public class TransactionSection extends AbstractServiceSection {
 	}
 
 	private void createInputPrimitiveSection(Composite parent) {
-		Group transactionGroup = getWidgetFactory().createGroup(parent, "Input Primitive");
+		Group transactionGroup = getWidgetFactory().createGroup(parent, Messages.TransactionSection_InputPrimitive);
 		transactionGroup.setLayout(new GridLayout(1, false));
 		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.UP, true, false));
 
@@ -91,7 +92,8 @@ public class TransactionSection extends AbstractServiceSection {
 		Composite buttonComp = getWidgetFactory().createComposite(transactionGroup);
 		buttonComp.setLayout(new GridLayout(3, false));
 		buttonComp.setLayoutData(new GridData(SWT.CENTER, SWT.UP, true, false));
-		leftInputPrimitiveNew = getWidgetFactory().createButton(buttonComp, "Create Left Primitive", SWT.PUSH);
+		leftInputPrimitiveNew = getWidgetFactory().createButton(buttonComp,
+				Messages.TransactionSection_CreateLeftPrimitive, SWT.PUSH);
 		leftInputPrimitiveNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		leftInputPrimitiveNew.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -101,7 +103,8 @@ public class TransactionSection extends AbstractServiceSection {
 				refreshInputPrimitive();
 			}
 		});
-		inputPrimitiveDelete = getWidgetFactory().createButton(buttonComp, "Delete", SWT.PUSH);
+		inputPrimitiveDelete = getWidgetFactory().createButton(buttonComp, Messages.TransactionSection_Delete,
+				SWT.PUSH);
 		inputPrimitiveDelete
 				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		inputPrimitiveDelete.addSelectionListener(new SelectionAdapter() {
@@ -111,7 +114,8 @@ public class TransactionSection extends AbstractServiceSection {
 				refreshInputPrimitive();
 			}
 		});
-		rightInputPrimitiveNew = getWidgetFactory().createButton(buttonComp, "Create Right Primitive", SWT.PUSH);
+		rightInputPrimitiveNew = getWidgetFactory().createButton(buttonComp,
+				Messages.TransactionSection_CreateRightPrimitive, SWT.PUSH);
 		rightInputPrimitiveNew
 				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		rightInputPrimitiveNew.addSelectionListener(new SelectionAdapter() {
@@ -125,7 +129,8 @@ public class TransactionSection extends AbstractServiceSection {
 	}
 
 	private void createLeftOutputPrimitiveSection(Composite parent) {
-		Group transactionGroup = getWidgetFactory().createGroup(parent, "Left Output Primitives");
+		Group transactionGroup = getWidgetFactory().createGroup(parent,
+				Messages.TransactionSection_LeftOutputPrimitives);
 		transactionGroup.setLayout(new GridLayout(2, false));
 		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -151,7 +156,8 @@ public class TransactionSection extends AbstractServiceSection {
 
 		Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		leftOutputPrimitivesNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
+		leftOutputPrimitivesNew = getWidgetFactory().createButton(buttonComp, Messages.TransactionSection_New,
+				SWT.PUSH);
 		leftOutputPrimitivesNew
 				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		leftOutputPrimitivesNew.addSelectionListener(new SelectionAdapter() {
@@ -162,7 +168,8 @@ public class TransactionSection extends AbstractServiceSection {
 				leftOutputPrimitivesViewer.refresh();
 			}
 		});
-		leftOutputPrimitivesDelete = getWidgetFactory().createButton(buttonComp, "Delete", SWT.PUSH);
+		leftOutputPrimitivesDelete = getWidgetFactory().createButton(buttonComp, Messages.TransactionSection_Delete,
+				SWT.PUSH);
 		leftOutputPrimitivesDelete
 				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		leftOutputPrimitivesDelete.addSelectionListener(new SelectionAdapter() {
@@ -182,7 +189,8 @@ public class TransactionSection extends AbstractServiceSection {
 	}
 
 	private void createRightOutputPrimitiveSection(Composite parent) {
-		Group transactionGroup = getWidgetFactory().createGroup(parent, "Right Output Primitives");
+		Group transactionGroup = getWidgetFactory().createGroup(parent,
+				Messages.TransactionSection_RightOutputPrimitives);
 		transactionGroup.setLayout(new GridLayout(2, false));
 		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -209,7 +217,8 @@ public class TransactionSection extends AbstractServiceSection {
 
 		Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		rightOutputPrimitivesNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
+		rightOutputPrimitivesNew = getWidgetFactory().createButton(buttonComp, Messages.TransactionSection_New,
+				SWT.PUSH);
 		rightOutputPrimitivesNew
 				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		rightOutputPrimitivesNew.addSelectionListener(new SelectionAdapter() {
@@ -220,7 +229,8 @@ public class TransactionSection extends AbstractServiceSection {
 				rightOutputPrimitivesViewer.refresh();
 			}
 		});
-		rightOutputPrimitivesDelete = getWidgetFactory().createButton(buttonComp, "Delete", SWT.PUSH);
+		rightOutputPrimitivesDelete = getWidgetFactory().createButton(buttonComp, Messages.TransactionSection_Delete,
+				SWT.PUSH);
 		rightOutputPrimitivesDelete
 				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		rightOutputPrimitivesDelete.addListener(SWT.Selection, event -> {

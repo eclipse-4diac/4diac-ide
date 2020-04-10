@@ -29,34 +29,35 @@ import org.eclipse.gef.requests.DropRequest;
 public class SequenceLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 
 	@Override
-	protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint){
+	protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
 		EditPart after;
-		if(child instanceof TransactionEditPart){
+		if (child instanceof TransactionEditPart) {
 			ServiceSequence target = (ServiceSequence) getHost().getModel();
 			after = getInsertionReference(((DropRequest) request).getLocation());
 			int newindex = -1;
-			if(after != null){		
-				if(after.getModel() instanceof ServiceTransaction){
-					ServiceTransaction refElement = ((TransactionEditPart)after).getCastedModel();
+			if (after != null) {
+				if (after.getModel() instanceof ServiceTransaction) {
+					ServiceTransaction refElement = ((TransactionEditPart) after).getCastedModel();
 					newindex = target.getServiceTransaction().indexOf(refElement);
-				}else{
-					if(after.getModel() instanceof Primitive){
-						ServiceTransaction refElement = ((TransactionEditPart)after.getParent()).getCastedModel();
+				} else {
+					if (after.getModel() instanceof Primitive) {
+						ServiceTransaction refElement = ((TransactionEditPart) after.getParent()).getCastedModel();
 						newindex = target.getServiceTransaction().indexOf(refElement);
-					}					
+					}
 				}
-				if(newindex > -1){
-					return new MoveTransactionCommand((ServiceTransaction) child.getModel(), target.getServiceTransaction().indexOf(child.getModel()), newindex);					
+				if (newindex > -1) {
+					return new MoveTransactionCommand((ServiceTransaction) child.getModel(),
+							target.getServiceTransaction().indexOf(child.getModel()), newindex);
 				}
-			}		
+			}
 		}
 		return null;
 	}
-	
+
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
 		Object model = getHost().getModel();
-		if(model instanceof ServiceSequence){
+		if (model instanceof ServiceSequence) {
 			return new CreateTransactionCommand((ServiceSequence) model);
 		}
 		return null;

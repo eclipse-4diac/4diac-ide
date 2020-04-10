@@ -24,14 +24,13 @@ import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.requests.ReconnectRequest;
 
 public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy {
-		
+
 	@Override
 	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
 		AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
 		command.setDestination(((InterfaceEditPart) getHost()).getModel());
 		return command;
 	}
-
 
 	@Override
 	protected Command getReconnectTargetCommand(final ReconnectRequest request) {
@@ -53,7 +52,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		}
 		return null;
 	}
-	
+
 	protected abstract Command createReconnectCommand(ReconnectRequest request);
 
 }

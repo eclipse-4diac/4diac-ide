@@ -17,9 +17,9 @@ import org.eclipse.draw2d.geometry.Point;
 
 public interface InteractionStyleFigure {
 
-	int REGION_CONNECTION = 0; 
-	int REGION_DRAG = 1; 
-	
+	int REGION_CONNECTION = 0;
+	int REGION_DRAG = 1;
+
 	int getIntersectionStyle(Point location);
-	
+
 }

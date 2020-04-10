@@ -23,37 +23,36 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.commands.Command;
 
 public class DeleteAlgorithmCommand extends Command {
-	
+
 	private final BasicFBType fbType;
 
 	private Algorithm algorithm;
-	
+
 	private List<ECAction> actions = new ArrayList<>();
-	
-	public DeleteAlgorithmCommand(final BasicFBType fbType, Algorithm algorithm){
+
+	public DeleteAlgorithmCommand(final BasicFBType fbType, Algorithm algorithm) {
 		this.fbType = fbType;
 		this.algorithm = algorithm;
 	}
 
 	@Override
-	public void execute() {				
+	public void execute() {
 		for (ECState state : fbType.getECC().getECState()) {
 			for (ECAction ecAction : state.getECAction()) {
-				if (ecAction.getAlgorithm() != null
-						&& ecAction.getAlgorithm().equals(algorithm)) {
+				if (ecAction.getAlgorithm() != null && ecAction.getAlgorithm().equals(algorithm)) {
 					actions.add(ecAction);
 				}
 			}
 		}
-		
+
 		redo();
 	}
 
 	@Override
-	public void undo() {		
+	public void undo() {
 		for (ECAction action : actions) {
 			action.setAlgorithm(algorithm);
-		}		
+		}
 		fbType.getAlgorithm().add(algorithm);
 	}
 

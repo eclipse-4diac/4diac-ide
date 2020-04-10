@@ -27,9 +27,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowPulldownDelegate2;
 
-
-public class SwitchMonitoringModeAction implements
-		IWorkbenchWindowPulldownDelegate2 {
+public class SwitchMonitoringModeAction implements IWorkbenchWindowPulldownDelegate2 {
 
 	private boolean selectAll = true;
 
@@ -43,30 +41,30 @@ public class SwitchMonitoringModeAction implements
 		Menu menu = new Menu(parent);
 		MonitoredSystems.createMenuEntriesForSystems(menu);
 		return menu;
-	}	
-	
+	}
+
 	@Override
 	public void dispose() {
-		//currently nothing to do here
+		// currently nothing to do here
 	}
 
 	@Override
 	public void init(IWorkbenchWindow window) {
-		//currently nothing to do here
+		// currently nothing to do here
 	}
 
 	@Override
 	public void run(IAction action) {
 		if (selectAll) {
-			for (Iterator<AutomationSystem> iterator = SystemManager.INSTANCE.getSystems()
-					.iterator(); iterator.hasNext();) {
+			for (Iterator<AutomationSystem> iterator = SystemManager.INSTANCE.getSystems().iterator(); iterator
+					.hasNext();) {
 				AutomationSystem system = iterator.next();
 				MonitoringManager.getInstance().enableSystem(system);
 			}
 			selectAll = false;
 		} else {
-			for (Iterator<AutomationSystem> iterator = SystemManager.INSTANCE.getSystems()
-					.iterator(); iterator.hasNext();) {
+			for (Iterator<AutomationSystem> iterator = SystemManager.INSTANCE.getSystems().iterator(); iterator
+					.hasNext();) {
 				AutomationSystem system = iterator.next();
 				MonitoringManager.getInstance().disableSystem(system);
 			}
@@ -77,7 +75,7 @@ public class SwitchMonitoringModeAction implements
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		//currently nothing to do here
+		// currently nothing to do here
 	}
-	
+
 }

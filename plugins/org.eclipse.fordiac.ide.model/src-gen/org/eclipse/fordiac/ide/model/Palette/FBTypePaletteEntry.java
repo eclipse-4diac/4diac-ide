@@ -13,13 +13,15 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette;
 
+import javax.xml.stream.XMLStreamException;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>FB Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>FB Type
+ * Palette Entry</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getFBTypePaletteEntry()
@@ -29,20 +31,29 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 public interface FBTypePaletteEntry extends PaletteEntry {
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
 	FBType getFBType();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model
 	 * @generated
 	 */
 	@Override
 	void setType(LibraryElement type);
-	
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
+	 * @generated
+	 */
+	@Override
+	TypeImporter getTypeImporter(Palette palette) throws CoreException, XMLStreamException;
+
 } // FBTypePaletteEntry

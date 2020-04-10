@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,27 +13,36 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette;
 
-import java.util.List;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Palette</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Palette</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getRootGroup <em>Root Group</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject <em>Project</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem <em>Automation System</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject
+ * <em>Project</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem
+ * <em>Automation System</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAdapterTypes
+ * <em>Adapter Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getDeviceTypes
+ * <em>Device Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getFbTypes <em>Fb
+ * Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getResourceTypes
+ * <em>Resource Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getSegmentTypes
+ * <em>Segment Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getSubAppTypes
+ * <em>Sub App Types</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette()
@@ -42,39 +51,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
  */
 public interface Palette extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Root Group</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Project</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Root Group</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Project</em>' attribute isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Root Group</em>' containment reference.
-	 * @see #setRootGroup(PaletteGroup)
-	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_RootGroup()
-	 * @model containment="true" resolveProxies="true" required="true"
-	 * @generated
-	 */
-	PaletteGroup getRootGroup();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getRootGroup <em>Root Group</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Root Group</em>' containment reference.
-	 * @see #getRootGroup()
-	 * @generated
-	 */
-	void setRootGroup(PaletteGroup value);
-
-	/**
-	 * Returns the value of the '<em><b>Project</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Project</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Project</em>' attribute.
 	 * @see #setProject(IProject)
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_Project()
@@ -84,9 +68,10 @@ public interface Palette extends EObject {
 	IProject getProject();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject <em>Project</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject
+	 * <em>Project</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Project</em>' attribute.
 	 * @see #getProject()
 	 * @generated
@@ -94,14 +79,16 @@ public interface Palette extends EObject {
 	void setProject(IProject value);
 
 	/**
-	 * Returns the value of the '<em><b>Automation System</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette <em>Palette</em>}'.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Automation System</b></em>' reference. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette
+	 * <em>Palette</em>}'. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Automation System</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Automation System</em>' reference.
 	 * @see #setAutomationSystem(AutomationSystem)
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_AutomationSystem()
@@ -112,9 +99,11 @@ public interface Palette extends EObject {
 	AutomationSystem getAutomationSystem();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem <em>Automation System</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem
+	 * <em>Automation System</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Automation System</em>' reference.
 	 * @see #getAutomationSystem()
 	 * @generated
@@ -122,76 +111,159 @@ public interface Palette extends EObject {
 	void setAutomationSystem(AutomationSystem value);
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model required="true" typeNameRequired="true"
+	 * Returns the value of the '<em><b>Fb Types</b></em>' map. The key is of type
+	 * {@link java.lang.String}, and the value is of type
+	 * {@link org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry}, <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the value of the '<em>Fb Types</em>' map.
+	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_FbTypes()
+	 * @model mapType="org.eclipse.fordiac.ide.model.Palette.StringToFBTypePaletteEntryMap&lt;org.eclipse.emf.ecore.EString,
+	 *        org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry&gt;"
 	 * @generated
 	 */
-	PaletteEntry getTypeEntry(String typeName);
+	EMap<String, FBTypePaletteEntry> getFbTypes();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model required="true" adapterTypeNameRequired="true"
+	 * Returns the value of the '<em><b>Resource Types</b></em>' map. The key is of
+	 * type {@link java.lang.String}, and the value is of type
+	 * {@link org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry}, <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the value of the '<em>Resource Types</em>' map.
+	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_ResourceTypes()
+	 * @model mapType="org.eclipse.fordiac.ide.model.Palette.StringToResourceTypeEntryMap&lt;org.eclipse.emf.ecore.EString,
+	 *        org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry&gt;"
 	 * @generated
 	 */
-	AdapterTypePaletteEntry getAdapterTypeEntry(String adapterTypeName);
+	EMap<String, ResourceTypeEntry> getResourceTypes();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * Returns the value of the '<em><b>Device Types</b></em>' map. The key is of
+	 * type {@link java.lang.String}, and the value is of type
+	 * {@link org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry}, <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the value of the '<em>Device Types</em>' map.
+	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_DeviceTypes()
+	 * @model mapType="org.eclipse.fordiac.ide.model.Palette.StringToFDeviceTypePaletteEntryMap&lt;org.eclipse.emf.ecore.EString,
+	 *        org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry&gt;"
 	 * @generated
 	 */
-	EList<AdapterTypePaletteEntry> getAdapterTypes();
+	EMap<String, DeviceTypePaletteEntry> getDeviceTypes();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the value of the '<em><b>Segment Types</b></em>' map. The key is of
+	 * type {@link java.lang.String}, and the value is of type
+	 * {@link org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry}, <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the value of the '<em>Segment Types</em>' map.
+	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_SegmentTypes()
+	 * @model mapType="org.eclipse.fordiac.ide.model.Palette.StringToSegmentTypePaletteEntryMap&lt;org.eclipse.emf.ecore.EString,
+	 *        org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry&gt;"
+	 * @generated
+	 */
+	EMap<String, SegmentTypePaletteEntry> getSegmentTypes();
+
+	/**
+	 * Returns the value of the '<em><b>Sub App Types</b></em>' map. The key is of
+	 * type {@link java.lang.String}, and the value is of type
+	 * {@link org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry},
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the value of the '<em>Sub App Types</em>' map.
+	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_SubAppTypes()
+	 * @model mapType="org.eclipse.fordiac.ide.model.Palette.StringToSubApplicationTypePaletteEntryMap&lt;org.eclipse.emf.ecore.EString,
+	 *        org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry&gt;"
+	 * @generated
+	 */
+	EMap<String, SubApplicationTypePaletteEntry> getSubAppTypes();
+
+	/**
+	 * Returns the value of the '<em><b>Adapter Types</b></em>' map. The key is of
+	 * type {@link java.lang.String}, and the value is of type
+	 * {@link org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry}, <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the value of the '<em>Adapter Types</em>' map.
+	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_AdapterTypes()
+	 * @model mapType="org.eclipse.fordiac.ide.model.Palette.StringToAdapterTypePaletteEntryMap&lt;org.eclipse.emf.ecore.EString,
+	 *        org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry&gt;"
+	 * @generated
+	 */
+	EMap<String, AdapterTypePaletteEntry> getAdapterTypes();
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation"
 	 * @generated
 	 */
 	EList<AdapterTypePaletteEntry> getAdapterTypesSorted();
 
-	public PaletteEntry createFBTypeEntry(IFile file, PaletteGroup parent);
-	public PaletteEntry createDeviceEntry(IFile file, PaletteGroup parent);
-	public PaletteEntry createResourceTypeEntry(IFile file, PaletteGroup parent);
-	public PaletteEntry createSegmentTypeEntry(IFile file, PaletteGroup parent);
-	public PaletteEntry createAdapterEntry(IFile file, PaletteGroup parent);
-	public PaletteEntry createSubApplicationEntry(IFile file, PaletteGroup parent);
-		
-	public List<FBType> getFBTypes(String typeName);
-	public List<PaletteEntry> getTypeEntries(String typeName);
-	public PaletteEntry getTypeEntryForPath(String typePath, String typeEnding);
-	public PaletteGroup getGroup(List<String> path, boolean createDir);
-	
-	public PaletteGroup findGroup(final List<String> path);
-	
 	/**
-	 * returns a list with all containing subgroups starting at pGroup
-	 * @param the starting group 
-	 * @return all subgroups of pGroup (pGroup is not in the list!)
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model required="true" typeNameRequired="true"
+	 * @generated
 	 */
-	public List<PaletteGroup> getAllGroups(PaletteGroup pGroup);
-	
+	AdapterTypePaletteEntry getAdapterTypeEntry(String typeName);
 
 	/**
-	 * returns a list with all parents
-	 * @param pGroup the group where to start
-	 * @return all direct and indirect parents
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model required="true" typeNameRequired="true"
+	 * @generated
 	 */
-	public List<PaletteGroup> getAllParentGroups(PaletteGroup pGroup);
-	
+	DeviceTypePaletteEntry getDeviceTypeEntry(String typeName);
+
 	/**
-	 * Removes all the groups (including all subgroups) specified in pGroups
-	 * @param pGroups the groups to be removed
-	 * @return true if the groups were removed
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model required="true" typeNameRequired="true"
+	 * @generated
 	 */
-	public boolean removeGroups(List<PaletteGroup>pGroups);
-	
-	public PaletteGroup createGroup(PaletteGroup parent, String groupName);
+	FBTypePaletteEntry getFBTypeEntry(String typeName);
 
-	public PaletteGroup createGroupWithFolder(PaletteGroup parent, String groupName);
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model required="true" typeNameRequired="true"
+	 * @generated
+	 */
+	ResourceTypeEntry getResourceTypeEntry(String typeName);
 
-	
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model required="true" typeNameRequired="true"
+	 * @generated
+	 */
+	SegmentTypePaletteEntry getSegmentTypeEntry(String typeName);
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model required="true" typeNameRequired="true"
+	 * @generated
+	 */
+	SubApplicationTypePaletteEntry getSubAppTypeEntry(String typeName);
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model entryRequired="true"
+	 * @generated
+	 */
+	void addPaletteEntry(PaletteEntry entry);
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model entryRequired="true"
+	 * @generated
+	 */
+	void removePaletteEntry(PaletteEntry entry);
+
 } // Palette

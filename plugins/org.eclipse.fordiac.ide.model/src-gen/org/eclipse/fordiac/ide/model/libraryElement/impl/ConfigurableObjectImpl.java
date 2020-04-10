@@ -28,34 +28,36 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Configurable Object</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Configurable Object</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl#getComment <em>Comment</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl#getAttributes <em>Attributes</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl#getName
+ * <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl#getComment
+ * <em>Comment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl#getAttributes
+ * <em>Attributes</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ConfigurableObjectImpl extends I4DIACElementImpl implements ConfigurableObject {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
 	protected static final String NAME_EDEFAULT = "";
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -63,8 +65,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	protected String name = NAME_EDEFAULT;
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -72,25 +74,26 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	protected static final String COMMENT_EDEFAULT = "";
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
 	 */
 	protected String comment = COMMENT_EDEFAULT;
 	/**
-	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getAttributes()
 	 * @generated
 	 * @ordered
 	 */
 	protected EList<Attribute> attributes;
+
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ConfigurableObjectImpl() {
@@ -98,8 +101,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -108,8 +111,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -118,8 +121,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -127,12 +130,13 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONFIGURABLE_OBJECT__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONFIGURABLE_OBJECT__NAME,
+					oldName, name));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -141,8 +145,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -150,25 +154,27 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 		String oldComment = comment;
 		comment = newComment;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT, oldComment, comment));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT,
+					oldComment, comment));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES);
+			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this,
+					LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES);
 		}
 		return attributes;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -177,8 +183,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -187,8 +193,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -197,107 +203,108 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
-				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
+			return ((InternalEList<?>) getAttributes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__NAME:
-				return getName();
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
-				return getComment();
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
-				return getAttributes();
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__NAME:
+			return getName();
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
+			return getComment();
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
+			return getAttributes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__NAME:
-				setName((String)newValue);
-				return;
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
-				setComment((String)newValue);
-				return;
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
-				getAttributes().clear();
-				getAttributes().addAll((Collection<? extends Attribute>)newValue);
-				return;
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__NAME:
+			setName((String) newValue);
+			return;
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
+			setComment((String) newValue);
+			return;
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
+			getAttributes().clear();
+			getAttributes().addAll((Collection<? extends Attribute>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
-				setComment(COMMENT_EDEFAULT);
-				return;
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
-				getAttributes().clear();
-				return;
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
+			setComment(COMMENT_EDEFAULT);
+			return;
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
+			getAttributes().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
-				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
-				return attributes != null && !attributes.isEmpty();
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
+			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+		case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
+			return attributes != null && !attributes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
@@ -308,4 +315,4 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 		return result.toString();
 	}
 
-} //ConfigurableObjectImpl
+} // ConfigurableObjectImpl

@@ -21,28 +21,30 @@ import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.widgets.Text;
 
 /**
- * The listener interface for receiving identifierVerify events.
- * The class that is interested in processing a identifierVerify
- * event implements this interface, and the object created
- * with that class is registered with a component using the
- * component's <code>addIdentifierVerifyListener<code> method. When
- * the identifierVerify event occurs, that object's appropriate
+ * The listener interface for receiving identifierVerify events. The class that
+ * is interested in processing a identifierVerify event implements this
+ * interface, and the object created with that class is registered with a
+ * component using the component's <code>addIdentifierVerifyListener<code>
+ * method. When the identifierVerify event occurs, that object's appropriate
  * method is invoked.
  * 
  * @see IdentifierVerifyEvent
  */
 public class IdentifierVerifyListener implements VerifyListener {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.swt.events.VerifyListener#verifyText(org.eclipse.swt.events.VerifyEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.swt.events.VerifyListener#verifyText(org.eclipse.swt.events.
+	 * VerifyEvent)
 	 */
 	@Override
 	public void verifyText(VerifyEvent event) {
-		if (!event.doit) { 
+		if (!event.doit) {
 			// other verifylisteners which are first can already set it
 			return;
 		}
-		
+
 		if (event.keyCode == SWT.DEL || event.keyCode == SWT.BS) {
 			return;
 		}
@@ -51,12 +53,13 @@ public class IdentifierVerifyListener implements VerifyListener {
 			event.doit = true;
 		} else {
 			String currentValue = ((Text) event.widget).getText();
-			String resultingValue = currentValue.substring(0, event.start) + event.text + currentValue.substring(event.end);
-			if(resultingValue.isEmpty()) {
+			String resultingValue = currentValue.substring(0, event.start) + event.text
+					+ currentValue.substring(event.end);
+			if (resultingValue.isEmpty()) {
 				resultingValue = String.valueOf(event.character);
 			}
-			event.doit = IdentifierVerifyer.isValidIdentifier(resultingValue);			
+			event.doit = IdentifierVerifyer.isValidIdentifier(resultingValue);
 		}
 	}
-	
+
 }

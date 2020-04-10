@@ -58,8 +58,8 @@ public class DeleteHandler extends AbstractHandler {
 	private void executeDeleteCommands() {
 		commandMap.entrySet()
 				.forEach(entry -> SystemManager.INSTANCE.getCommandStack(entry.getKey()).execute(entry.getValue()));
-		
-		//we have executed all commands, clear the map
+
+		// we have executed all commands, clear the map
 		commandMap.clear();
 	}
 

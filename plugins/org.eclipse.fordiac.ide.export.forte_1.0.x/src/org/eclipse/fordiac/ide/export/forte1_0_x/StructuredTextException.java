@@ -24,5 +24,4 @@ public class StructuredTextException extends Exception {
 	 */
 	private static final long serialVersionUID = -5310757976250294807L;
 
-
 }

@@ -20,18 +20,18 @@ import org.eclipse.fordiac.ide.typemanagement.RenameType;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class RenameSystemParticipant extends RenameType {
-	
+
 	@Override
 	protected boolean initialize(Object element) {
-		//TODO check if 4DIAC nature
+		// TODO check if 4DIAC nature
 		return (element instanceof IProject);
 	}
-	
+
 	@Override
 	protected String getTypeName(IResourceDelta resourceDelta) {
 		return resourceDelta.getResource().getName();
 	}
-	
+
 	@Override
 	protected RefactoringStatus getWrongIdentifierErrorStatus() {
 		return RefactoringStatus.createFatalErrorStatus(Messages.SystemNameNotValid);

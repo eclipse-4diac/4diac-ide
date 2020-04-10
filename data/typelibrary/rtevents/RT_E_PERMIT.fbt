@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
 <FBType Name="RT_E_PERMIT" Comment="Permissive propagation of an event" >
-  <Identificatiovn Description="Copyright (c) 2008 ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
+  <Identification Description="Copyright (c) 2008 ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
   <VersionInfo Author="Alois Zoitl" Date="2008-07-10" Organization="ACIN" Version="1.0"/>
   <InterfaceList>
     <EventInputs>

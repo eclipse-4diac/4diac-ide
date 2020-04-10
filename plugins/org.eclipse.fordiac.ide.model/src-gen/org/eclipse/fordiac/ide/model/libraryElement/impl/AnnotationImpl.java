@@ -21,24 +21,25 @@ import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Annotation</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Annotation</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AnnotationImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AnnotationImpl#getServity <em>Servity</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AnnotationImpl#getName
+ * <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AnnotationImpl#getServity
+ * <em>Servity</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class AnnotationImpl extends EObjectImpl implements Annotation {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -46,9 +47,9 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 	protected static final String NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -57,8 +58,8 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 
 	/**
 	 * The default value of the '{@link #getServity() <em>Servity</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getServity()
 	 * @generated
 	 * @ordered
@@ -67,8 +68,8 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 
 	/**
 	 * The cached value of the '{@link #getServity() <em>Servity</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getServity()
 	 * @generated
 	 * @ordered
@@ -76,8 +77,8 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 	protected int servity = SERVITY_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected AnnotationImpl() {
@@ -85,8 +86,8 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -95,8 +96,8 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -105,8 +106,8 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -114,12 +115,13 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ANNOTATION__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ANNOTATION__NAME, oldName,
+					name));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -128,8 +130,8 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -137,85 +139,87 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 		int oldServity = servity;
 		servity = newServity;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ANNOTATION__SERVITY, oldServity, servity));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ANNOTATION__SERVITY, oldServity,
+					servity));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.ANNOTATION__NAME:
-				return getName();
-			case LibraryElementPackage.ANNOTATION__SERVITY:
-				return getServity();
+		case LibraryElementPackage.ANNOTATION__NAME:
+			return getName();
+		case LibraryElementPackage.ANNOTATION__SERVITY:
+			return getServity();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.ANNOTATION__NAME:
-				setName((String)newValue);
-				return;
-			case LibraryElementPackage.ANNOTATION__SERVITY:
-				setServity((Integer)newValue);
-				return;
+		case LibraryElementPackage.ANNOTATION__NAME:
+			setName((String) newValue);
+			return;
+		case LibraryElementPackage.ANNOTATION__SERVITY:
+			setServity((Integer) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.ANNOTATION__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case LibraryElementPackage.ANNOTATION__SERVITY:
-				setServity(SERVITY_EDEFAULT);
-				return;
+		case LibraryElementPackage.ANNOTATION__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case LibraryElementPackage.ANNOTATION__SERVITY:
+			setServity(SERVITY_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.ANNOTATION__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case LibraryElementPackage.ANNOTATION__SERVITY:
-				return servity != SERVITY_EDEFAULT;
+		case LibraryElementPackage.ANNOTATION__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case LibraryElementPackage.ANNOTATION__SERVITY:
+			return servity != SERVITY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
@@ -226,4 +230,4 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 		return result.toString();
 	}
 
-} //AnnotationImpl
+} // AnnotationImpl

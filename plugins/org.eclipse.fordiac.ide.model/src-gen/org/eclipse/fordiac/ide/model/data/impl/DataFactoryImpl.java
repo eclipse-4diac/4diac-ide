@@ -35,35 +35,34 @@ import org.eclipse.fordiac.ide.model.data.SubrangeType;
 import org.eclipse.fordiac.ide.model.data.ValueType;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>Factory</b>.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
+ * end-user-doc -->
+ * 
  * @generated
  */
 public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static DataFactory init() {
 		try {
-			DataFactory theDataFactory = (DataFactory)EPackage.Registry.INSTANCE.getEFactory(DataPackage.eNS_URI);
+			DataFactory theDataFactory = (DataFactory) EPackage.Registry.INSTANCE.getEFactory(DataPackage.eNS_URI);
 			if (theDataFactory != null) {
 				return theDataFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new DataFactoryImpl();
 	}
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	public DataFactoryImpl() {
@@ -71,62 +70,73 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case DataPackage.ARRAY_TYPE: return createArrayType();
-			case DataPackage.DIRECTLY_DERIVED_TYPE: return createDirectlyDerivedType();
-			case DataPackage.ENUMERATED_TYPE: return createEnumeratedType();
-			case DataPackage.ENUMERATED_VALUE: return createEnumeratedValue();
-			case DataPackage.STRUCTURED_TYPE: return createStructuredType();
-			case DataPackage.SUBRANGE: return createSubrange();
-			case DataPackage.SUBRANGE_TYPE: return createSubrangeType();
-			case DataPackage.VALUE_TYPE: return createValueType();
-			case DataPackage.ELEMENTARY_TYPE: return createElementaryType();
-			case DataPackage.DERIVED_TYPE: return createDerivedType();
-			case DataPackage.EVENT_TYPE: return createEventType();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		case DataPackage.ARRAY_TYPE:
+			return createArrayType();
+		case DataPackage.DIRECTLY_DERIVED_TYPE:
+			return createDirectlyDerivedType();
+		case DataPackage.ENUMERATED_TYPE:
+			return createEnumeratedType();
+		case DataPackage.ENUMERATED_VALUE:
+			return createEnumeratedValue();
+		case DataPackage.STRUCTURED_TYPE:
+			return createStructuredType();
+		case DataPackage.SUBRANGE:
+			return createSubrange();
+		case DataPackage.SUBRANGE_TYPE:
+			return createSubrangeType();
+		case DataPackage.VALUE_TYPE:
+			return createValueType();
+		case DataPackage.ELEMENTARY_TYPE:
+			return createElementaryType();
+		case DataPackage.DERIVED_TYPE:
+			return createDerivedType();
+		case DataPackage.EVENT_TYPE:
+			return createEventType();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-			case DataPackage.BASE_TYPE1:
-				return createBaseType1FromString(eDataType, initialValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		case DataPackage.BASE_TYPE1:
+			return createBaseType1FromString(eDataType, initialValue);
+		default:
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-			case DataPackage.BASE_TYPE1:
-				return convertBaseType1ToString(eDataType, instanceValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		case DataPackage.BASE_TYPE1:
+			return convertBaseType1ToString(eDataType, instanceValue);
+		default:
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -136,8 +146,8 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -147,8 +157,8 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -158,8 +168,8 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -169,8 +179,8 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -180,8 +190,8 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -191,8 +201,8 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -202,8 +212,8 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -213,8 +223,8 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -224,8 +234,8 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -235,8 +245,8 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -246,19 +256,21 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public BaseType1 createBaseType1FromString(EDataType eDataType, String initialValue) {
 		BaseType1 result = BaseType1.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		if (result == null)
+			throw new IllegalArgumentException(
+					"The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String convertBaseType1ToString(EDataType eDataType, Object instanceValue) {
@@ -266,18 +278,18 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public DataPackage getDataPackage() {
-		return (DataPackage)getEPackage();
+		return (DataPackage) getEPackage();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @deprecated
 	 * @generated
 	 */
@@ -286,4 +298,4 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 		return DataPackage.eINSTANCE;
 	}
 
-} //DataFactoryImpl
+} // DataFactoryImpl

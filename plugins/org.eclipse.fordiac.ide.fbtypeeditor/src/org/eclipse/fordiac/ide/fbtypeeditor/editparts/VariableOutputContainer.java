@@ -19,7 +19,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class VariableOutputContainer extends AbstractContainerElement{
+public class VariableOutputContainer extends AbstractContainerElement {
 
 	public VariableOutputContainer(final FBType fbtype) {
 		super(fbtype);

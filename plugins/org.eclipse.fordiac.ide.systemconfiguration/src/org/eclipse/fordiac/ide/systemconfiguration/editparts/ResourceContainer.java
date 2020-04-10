@@ -22,9 +22,9 @@ public class ResourceContainer {
 	public ResourceContainer(Device dev) {
 		this.dev = dev;
 	}
-	
+
 	public Device getDevice() {
 		return dev;
 	}
-		
+
 }

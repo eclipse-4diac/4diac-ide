@@ -29,54 +29,50 @@ public class ToolLibraryContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
-		//currently nothing todo here
+		// currently nothing todo here
 	}
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		//currently nothing todo here
+		// currently nothing todo here
 	}
 
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if((null == inputElement) || (inputElement instanceof IWorkspaceRoot)){
+		if ((null == inputElement) || (inputElement instanceof IWorkspaceRoot)) {
 			// this content provider is only requried on the lowest level of the tree
-			IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace()
-					.getRoot();
-	
+			IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+
 			IFolder toolLibFolder = TypeLibrary.getToolLibFolder();
-			
+
 			IProject[] projects = myWorkspaceRoot.getProjects();
-	
+
 			Object[] retval = new Object[projects.length];
-			
-			//tool library should be first
+
+			// tool library should be first
 			retval[0] = toolLibFolder;
-			
-			for(int i = 0, outputRunner = 1; i < projects.length; i++){
-				if(!projects[i].getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)){
+
+			for (int i = 0, outputRunner = 1; i < projects.length; i++) {
+				if (!projects[i].getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)) {
 					retval[outputRunner] = projects[i];
 					outputRunner++;
 				}
 			}
-			
+
 			return retval;
-		}
-		else{
-			if(inputElement instanceof IContainer){
+		} else {
+			if (inputElement instanceof IContainer) {
 				try {
-					return ((IContainer)inputElement).members();
+					return ((IContainer) inputElement).members();
 				} catch (CoreException e) {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}
-			}			
+			}
 		}
-		
+
 		return null;
 	}
-
-	
 
 	@Override
 	public Object[] getChildren(Object parentElement) {

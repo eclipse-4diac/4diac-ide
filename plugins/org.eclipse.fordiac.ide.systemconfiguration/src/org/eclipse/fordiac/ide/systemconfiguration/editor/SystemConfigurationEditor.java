@@ -36,7 +36,6 @@ import org.eclipse.ui.IEditorPart;
 public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette implements ISystemEditor {
 	private SystemConfiguration sysConf;
 
-
 	@Override
 	protected EditPartFactory getEditPartFactory() {
 		return new SystemConfEditPartFactory(this, getZoomManger());
@@ -96,12 +95,11 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 
 	public void selectElement(TypedConfigureableObject refElement) {
 		Object obj = getViewer().getEditPartRegistry().get(refElement);
-		if(obj instanceof EditPart) {
-			getViewer().select((EditPart)obj);
-			getViewer().reveal((EditPart)obj);
+		if (obj instanceof EditPart) {
+			getViewer().select((EditPart) obj);
+			getViewer().reveal((EditPart) obj);
 		}
 	}
-
 
 	@Override
 	public void doSaveAs() {

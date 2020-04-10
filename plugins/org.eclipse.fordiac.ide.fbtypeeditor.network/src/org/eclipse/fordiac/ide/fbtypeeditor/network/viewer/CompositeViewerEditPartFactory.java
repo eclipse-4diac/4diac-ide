@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -36,26 +36,23 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 
 	private FB fbInstance;
 	private FBEditPart fbEditPart;
-	
 
-	public CompositeViewerEditPartFactory(GraphicalEditor editor, FB fbInstance, FBEditPart fbEditPart, ZoomManager zoomManager) {
+	public CompositeViewerEditPartFactory(GraphicalEditor editor, FB fbInstance, FBEditPart fbEditPart,
+			ZoomManager zoomManager) {
 		super(editor, zoomManager);
 		this.fbInstance = fbInstance;
 		this.fbEditPart = fbEditPart;
 	}
-	
+
 	/**
 	 * Maps an object to an EditPart.
-	 * 
-	 * @param context
-	 *          the context
-	 * @param modelElement
-	 *          the model element
-	 * 
+	 *
+	 * @param context      the context
+	 * @param modelElement the model element
+	 *
 	 * @return the part for element
-	 * 
-	 * @throws RuntimeException
-	 *           if no match was found (programming error)
+	 *
+	 * @throws RuntimeException if no match was found (programming error)
 	 */
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
@@ -64,21 +61,18 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 			CompositeNetworkViewerEditPart compositeNetEP = new CompositeNetworkViewerEditPart();
 			compositeNetEP.setFbInstance(fbInstance);
 			if (fbEditPart.getParent() instanceof CompositeNetworkViewerEditPart) {
-				compositeNetEP.setparentInstanceViewerEditPart((CompositeNetworkViewerEditPart)fbEditPart.getParent());	
+				compositeNetEP.setparentInstanceViewerEditPart((CompositeNetworkViewerEditPart) fbEditPart.getParent());
 			}
 			return compositeNetEP;
 
-		} 
+		}
 		if (modelElement instanceof IInterfaceElement) {
-			IInterfaceElement iElement = (IInterfaceElement)modelElement;
-			if(iElement.eContainer().eContainer() instanceof CompositeFBType){
+			IInterfaceElement iElement = (IInterfaceElement) modelElement;
+			if (iElement.eContainer().eContainer() instanceof CompositeFBType) {
 				return new CompositeInternalInterfaceEditPartRO();
-			}else {
+			} else {
 				return new InterfaceEditPartForFBNetworkRO();
 			}
-		}
-		if (modelElement instanceof FB) {
-			return new FBEditPartRO(getZoomManager());
 		}
 		if (modelElement instanceof AdapterFB) {
 			return new AdapterFBEditPart(getZoomManager()) {
@@ -86,14 +80,17 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 				protected void createEditPolicies() {
 					// Highlight In and Outconnections of the selected fb, allow alignment of FBs
 					installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FBNElementSelectionPolicy());
-					installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());					
+					installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());
 				}
-				
+
 				@Override
 				public void performDirectEdit() {
-					//don't do anything here to avoid direct edit
+					// don't do anything here to avoid direct edit
 				}
 			};
+		}
+		if (modelElement instanceof FB) {
+			return new FBEditPartRO(getZoomManager());
 		}
 		if (modelElement instanceof Connection) {
 			return new ConnectionEditPartRO();

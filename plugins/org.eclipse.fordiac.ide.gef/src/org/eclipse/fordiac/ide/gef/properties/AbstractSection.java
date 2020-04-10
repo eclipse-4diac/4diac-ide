@@ -16,14 +16,14 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.model.Palette.provider.PaletteItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -82,7 +82,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		setInputInit();
 	}
 
-	private final EContentAdapter contentAdapter = new EContentAdapter() {
+	private final Adapter contentAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			if (null != getType() && getType().eAdapters().contains(contentAdapter) && !blockRefresh) {
@@ -153,7 +153,6 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		if (null == adapterFactory) {
 			adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 			adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-			adapterFactory.addAdapterFactory(new PaletteItemProviderAdapterFactory());
 			adapterFactory.addAdapterFactory(new LibraryElementItemProviderAdapterFactory());
 			adapterFactory.addAdapterFactory(new DataItemProviderAdapterFactory());
 			adapterFactory.addAdapterFactory(new EcoreItemProviderAdapterFactory());

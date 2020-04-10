@@ -25,16 +25,14 @@ import org.eclipse.swt.widgets.Display;
 /**
  * The Class ConnectionMovementHighlightEditPolicy.
  */
-public class ConnectionMovementHighlightEditPolicy extends
-		org.eclipse.gef.editpolicies.GraphicalEditPolicy {
+public class ConnectionMovementHighlightEditPolicy extends org.eclipse.gef.editpolicies.GraphicalEditPolicy {
 
 	private int style;
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.AbstractEditPolicy#eraseTargetFeedback(org
+	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#eraseTargetFeedback(org
 	 * .eclipse.gef.Request)
 	 */
 	@Override
@@ -45,25 +43,22 @@ public class ConnectionMovementHighlightEditPolicy extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.AbstractEditPolicy#getTargetEditPart(org
+	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#getTargetEditPart(org
 	 * .eclipse.gef.Request)
 	 */
 	@Override
 	public EditPart getTargetEditPart(Request request) {
-		return request.getType().equals(RequestConstants.REQ_SELECTION_HOVER) ? getHost()
-				: null;
+		return request.getType().equals(RequestConstants.REQ_SELECTION_HOVER) ? getHost() : null;
 	}
 
 	public int getCurrentInteractionStyle() {
 		return style;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.AbstractEditPolicy#showTargetFeedback(org
+	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#showTargetFeedback(org
 	 * .eclipse.gef.Request)
 	 */
 	@Override
@@ -72,7 +67,7 @@ public class ConnectionMovementHighlightEditPolicy extends
 			Point pos = ((SelectionRequest) request).getLocation();
 			getHostFigure().translateToRelative(pos);
 			if (getHostFigure() instanceof InteractionStyleFigure) {
-				style = ((InteractionStyleFigure)getHostFigure()).getIntersectionStyle(pos);
+				style = ((InteractionStyleFigure) getHostFigure()).getIntersectionStyle(pos);
 				if (style == InteractionStyleFigure.REGION_CONNECTION) {
 					getHostFigure().setCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
 				} else if (style == InteractionStyleFigure.REGION_DRAG) {

@@ -30,8 +30,7 @@ public class ECCEditPartFactory extends Abstract4diacEditPartFactory {
 	}
 
 	@Override
-	protected EditPart getPartForElement(final EditPart context,
-			final Object modelElement) {
+	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		if (modelElement instanceof ECC) {
 			return new ECCRootEditPart();
 		}
@@ -41,16 +40,16 @@ public class ECCEditPartFactory extends Abstract4diacEditPartFactory {
 		if (modelElement instanceof ECTransition) {
 			return new ECTransitionEditPart();
 		}
-				
-		if (modelElement instanceof ECActionAlgorithm){
+
+		if (modelElement instanceof ECActionAlgorithm) {
 			return new ECActionAlgorithmEditPart();
 		}
-		
-		if (modelElement instanceof ECActionOutputEvent){
+
+		if (modelElement instanceof ECActionOutputEvent) {
 			return new ECActionOutputEventEditPart();
 		}
 
-		throw createEditpartCreationException(modelElement); 
+		throw createEditpartCreationException(modelElement);
 	}
 
 }

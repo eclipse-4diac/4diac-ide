@@ -13,14 +13,15 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette;
 
+import javax.xml.stream.XMLStreamException;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Sub Application Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Sub
+ * Application Type Palette Entry</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getSubApplicationTypePaletteEntry()
@@ -30,19 +31,28 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 public interface SubApplicationTypePaletteEntry extends PaletteEntry {
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
 	SubAppType getSubApplicationType();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model
 	 * @generated
 	 */
 	@Override
 	void setType(LibraryElement type);
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
+	 * @generated
+	 */
+	@Override
+	TypeImporter getTypeImporter(Palette palette) throws CoreException, XMLStreamException;
 } // SubApplicationTypePaletteEntry

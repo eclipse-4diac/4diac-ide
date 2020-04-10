@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 - 2018 fortiss GmbH, Johannes Kepler University
  * 				 2019		Jan Holzweber
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,8 +11,9 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - reworked this class for the new device managment interaction 
- *                 interface  
+ *     - fixed E_RESTART
+ *   Alois Zoitl - reworked this class for the new device managment interaction
+ *                 interface
  *   Jan Holzweber - reworked deploying mechanism
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499;
@@ -26,7 +27,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,7 +47,6 @@ import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
 import org.eclipse.fordiac.ide.model.Annotations;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -72,6 +71,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
 import org.eclipse.swt.widgets.Display;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -134,7 +134,8 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			try {
 				createFBType(fbType);
 			} catch (DeploymentException ce) {
-				logger.error(MessageFormat.format(Messages.DTL_CreateTypeFailed, fbType.getName()));
+				logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed,
+						fbType.getName()));
 			}
 		}
 
@@ -143,7 +144,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	public void createFBType(final FBType fbType) throws DeploymentException {
 		setAttribute(getDevice(), "FBType", getTypes()); //$NON-NLS-1$
 
-		if (fbType instanceof BasicFBType || fbType instanceof CompositeFBType) {
+		if ((fbType instanceof BasicFBType) || (fbType instanceof CompositeFBType)) {
 			if (fbType instanceof CompositeFBType) {
 				createFBTypesOfCFB(fbType);
 			}
@@ -156,12 +157,14 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		try {
 			String result = sendREQ("", request); //$NON-NLS-1$
 			if (result.contains("Reason")) { //$NON-NLS-1$
-				throw new DeploymentException("LUA skript for " + fbType.getName() + " FBType not executed");
+				throw new DeploymentException(MessageFormat.format(
+						Messages.DynamicTypeLoadDeploymentExecutor_LUAScriptForFBTypeNotExecuted, fbType.getName()));
 			} else {
 				getTypes().add(fbType.getName());
 			}
 		} catch (IOException e) {
-			logger.error(MessageFormat.format(Messages.DTL_CreateTypeFailed, "LUA script")); //$NON-NLS-1$
+			logger.error(
+					MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed, "LUA script")); //$NON-NLS-1$
 		}
 	}
 
@@ -172,25 +175,25 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				if (!adapters.isEmpty()) {
 					createAdapterTypes(adapters);
 				}
-				createFBType((FBType) netelem.getType());
+				createFBType(netelem.getType());
 			}
 		}
 	}
 
 	private String createLuaXmlRequestMessage(final FBType fbType) {
-		ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();		
+		ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 
 		String escapedLuaScript = escapeXmlCharacters(luaFilter.createLUA(fbType));
-		
+
 		return MessageFormat.format(CREATE_FB_TYPE, getNextId(), fbType.getName(), escapedLuaScript);
 	}
 
-	private String escapeXmlCharacters(String luaScript) {
-		luaScript = luaScript.replace("&", "&amp;");
-		luaScript = luaScript.replace("<", "&lt;");
-		luaScript = luaScript.replace(">", "&gt;");
-		luaScript = luaScript.replace("\"", "&quot;");
-		return luaScript.replace("\'", "&apos;");
+	private static String escapeXmlCharacters(String luaScript) {
+		luaScript = luaScript.replace("&", "&amp;"); //$NON-NLS-1$//$NON-NLS-2$
+		luaScript = luaScript.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
+		luaScript = luaScript.replace(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
+		luaScript = luaScript.replace("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
+		return luaScript.replace("\'", "&apos;"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static boolean isAttribute(Device device, String fbTypeName, String attributeType) {
@@ -227,28 +230,29 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		try {
 			String result = sendREQ("", request); //$NON-NLS-1$
 			if (result.contains("Reason")) { //$NON-NLS-1$
-				throw new DeploymentException("LUA skript for " + adapterKey + " AdapterType not executed");
+				throw new DeploymentException(MessageFormat.format(
+						Messages.DynamicTypeLoadDeploymentExecutor_LUAScriptForAdapterTypeNotExecuted, adapterKey));
 			}
 			getAdapterTypes().add(adapterKey);
 		} catch (IOException e) {
-			logger.error(MessageFormat.format(Messages.DTL_CreateTypeFailed, "Adapter")); //$NON-NLS-1$
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed, "Adapter")); //$NON-NLS-1$
 		}
 	}
 
 	public void queryResourcesWithNetwork(Device dev) {
 		try {
 			for (org.eclipse.fordiac.ide.deployment.devResponse.Resource resource : queryResources()) {
-				Resource res = LibraryElementFactory.eINSTANCE.createResource();
-				res.setName(resource.getName());
-				res.setPaletteEntry(getResourceType(dev, resource.getType()));
-				res.setFBNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
-				dev.getResource().add(res);
-				queryFBNetwork(res);
-				queryConnections(res);
-				queryParameters(res);
+				ResourceCreateCommand cmd = new ResourceCreateCommand(getResourceType(dev, resource.getType()), dev,
+						false);
+				cmd.execute();
+				cmd.getResource().setName(resource.getName());
+				dev.getResource().add(cmd.getResource());
+				queryFBNetwork(cmd.getResource());
+				queryConnections(cmd.getResource());
+				queryParameters(cmd.getResource());
 			}
 		} catch (Exception e) {
-			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Resources")); //$NON-NLS-1$
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Resources")); //$NON-NLS-1$
 		}
 	}
 
@@ -271,7 +275,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				createParameter(res, inVar, parseResponse(result));
 			}
 		} catch (Exception e) {
-			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Parameter")); //$NON-NLS-1$
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Parameter")); //$NON-NLS-1$
 		}
 	}
 
@@ -291,7 +295,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				createConnections(res, parseResponse(result));
 			}
 		} catch (Exception e) {
-			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Connections")); //$NON-NLS-1$
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Connections")); //$NON-NLS-1$
 		}
 	}
 
@@ -340,57 +344,58 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				createFBNetwork(res, xmlResource);
 			}
 		} catch (Exception e) {
-			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Networks")); //$NON-NLS-1$
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Networks")); //$NON-NLS-1$
 		}
 	}
 
 	private void createFBNetwork(Resource res, XMLResource xmlResource) {
 		for (EObject object : xmlResource.getContents()) {
 			if (object instanceof Response) {
-				int i = 0;
-				if (getAdapterTypes().isEmpty()) {
-					createNotExistingAdapterTypes(res);
-				}
-				for (org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : ((Response) object).getFblist()
-						.getFbs()) {
-					FBTypePaletteEntry entry = (FBTypePaletteEntry) res.getDevice().getAutomationSystem().getPalette()
-							.getTypeEntry(fbresult.getType());
-					if (null == entry) {
-						addTypeToTypelib(res, fbresult.getType(), "fbt", QUERY_FB_TYPE); //$NON-NLS-1$
-						entry = (FBTypePaletteEntry) res.getDevice().getAutomationSystem().getPalette()
-								.getTypeEntry(fbresult.getType());
-					}
-					FBCreateCommand fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
-					if (fbcmd.canExecute()) {
-						fbcmd.execute();
-						fbcmd.getFB().setName(fbresult.getName());
-					}
-					i++;
-				}
+				createNotExistingAdapterTypes(res);
+				addFBNetworkElements(res, (Response) object);
 			}
 		}
 	}
 
 	private void createNotExistingAdapterTypes(Resource res) {
 		for (String entryName : getAdapterTypes()) {
-			if (null == res.getDevice().getAutomationSystem().getPalette().getTypeEntry(entryName)) {
-				addTypeToTypelib(res, entryName, "adp", QUERY_ADAPTER_TYPE);
+			if (null == res.getDevice().getAutomationSystem().getPalette().getAdapterTypeEntry(entryName)) {
+				addTypeToTypelib(res, entryName, "adp", QUERY_ADAPTER_TYPE); //$NON-NLS-1$
 			}
 		}
 	}
 
-	@SuppressWarnings("nls")
+	private void addFBNetworkElements(Resource res, Response object) {
+		int i = 0;
+		for (org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : (object).getFblist().getFbs()) {
+			if (!"E_RESTART".equals(fbresult.getType())) { //$NON-NLS-1$
+				FBTypePaletteEntry entry = res.getDevice().getAutomationSystem().getPalette()
+						.getFBTypeEntry(fbresult.getType());
+				if (null == entry) {
+					addTypeToTypelib(res, fbresult.getType(), "fbt", QUERY_FB_TYPE); //$NON-NLS-1$
+					entry = res.getDevice().getAutomationSystem().getPalette().getFBTypeEntry(fbresult.getType());
+				}
+				FBCreateCommand fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
+				if (fbcmd.canExecute()) {
+					fbcmd.execute();
+					fbcmd.getFB().setName(fbresult.getName());
+				}
+				i++;
+			}
+		}
+	}
+
 	private void addTypeToTypelib(Resource res, String typeName, String extension, String messageType) {
 		String request = MessageFormat.format(messageType, getNextId(), typeName);
 		try {
 			String result = sendREQ(res.getName(), request);
 			if (result != null) {
-				result = result.replaceFirst("<Response ID=\"[0-9]+\">\n", "");
-				result = result.replaceFirst("</Response>", "");
-				if (!result.contains("Reason=\"UNSUPPORTED_TYPE\"") && !result.contains("Reason=\"UNSUPPORTED_CMD\"")) {
+				result = result.replaceFirst("<Response ID=\"[0-9]+\">\n", ""); //$NON-NLS-1$ //$NON-NLS-2$
+				result = result.replaceFirst("</Response>", ""); //$NON-NLS-1$ //$NON-NLS-2$
+				if (!result.contains("Reason=\"UNSUPPORTED_TYPE\"") && !result.contains("Reason=\"UNSUPPORTED_CMD\"")) { //$NON-NLS-1$ //$NON-NLS-2$
 					AutomationSystem system = res.getDevice().getAutomationSystem();
-					Path path = Paths.get(system.getProject().getLocation() + File.separator + "generated"
-							+ File.separator + typeName + "." + extension);
+					Path path = Paths.get(system.getProject().getLocation() + File.separator + "generated" //$NON-NLS-1$
+							+ File.separator + typeName + "." + extension); //$NON-NLS-1$
 					File file = new File(path.toString());
 					file.getParentFile().mkdirs();
 					Files.write(path, result.getBytes(), StandardOpenOption.CREATE);
@@ -400,28 +405,25 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			}
 		} catch (Exception e) {
 			if (messageType.equals(QUERY_ADAPTER_TYPE)) {
-				logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Adapter Type")); //$NON-NLS-1$
+				logger.error(
+						MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Adapter Type")); //$NON-NLS-1$
 			} else {
-				logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "FB Type")); //$NON-NLS-1$
+				logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "FB Type")); //$NON-NLS-1$
 			}
 		}
 	}
 
 	private static ResourceTypeEntry getResourceType(Device device, String resTypeName) {
-		List<PaletteEntry> typeEntries = device.getPaletteEntry().getGroup().getPallete().getTypeEntries(resTypeName);
-		if (!typeEntries.isEmpty() && typeEntries.get(0) instanceof ResourceTypeEntry) {
-			return (ResourceTypeEntry) typeEntries.get(0);
-		}
-		return null;
+		return device.getPaletteEntry().getPalette().getResourceTypeEntry(resTypeName);
 	}
 
 	private void queryFBTypes() {
 		String request = MessageFormat.format(QUERY_FB_TYPES, getNextId());
 		try {
-			QueryResponseHandler queryResp = sendQUERY("", request);
+			QueryResponseHandler queryResp = sendQUERY("", request); //$NON-NLS-1$
 			setTypes(queryResp.getQueryResult());
 		} catch (Exception e) {
-			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "FB Types")); //$NON-NLS-1$
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "FB Types")); //$NON-NLS-1$
 		}
 
 	}
@@ -429,10 +431,10 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private void queryAdapterTypes() {
 		String request = MessageFormat.format(QUERY_ADAPTER_TYPES, getNextId());
 		try {
-			QueryResponseHandler queryResp = sendQUERY("", request);
+			QueryResponseHandler queryResp = sendQUERY("", request); //$NON-NLS-1$
 			setAdapterTypes(queryResp.getQueryResult());
 		} catch (Exception e1) {
-			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Adapter Types")); //$NON-NLS-1$
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Adapter Types")); //$NON-NLS-1$
 		}
 
 	}
@@ -442,7 +444,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			try {
 				createAdapterType(e, adapters);
 			} catch (DeploymentException ce) {
-				logger.error(MessageFormat.format(Messages.DTL_CreateTypeFailed, e));
+				logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed, e));
 			}
 		});
 	}

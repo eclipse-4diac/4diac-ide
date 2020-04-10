@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.gef.RequestConstants;
@@ -45,7 +46,7 @@ public class ReconnectTransitionCommand extends Command {
 	 * @param request the request
 	 */
 	public ReconnectTransitionCommand(final ReconnectRequest request) {
-		super("Reconnect Transition");
+		super(Messages.ReconnectTransitionCommand_ReconnectTransition);
 		this.request = request;
 	}
 

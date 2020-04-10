@@ -20,14 +20,14 @@ import org.eclipse.gef.editpolicies.FlowLayoutEditPolicy;
 
 public abstract class AbstractInterfaceContainerLayoutEditPolicy extends FlowLayoutEditPolicy {
 
-	protected AbstractContainerElement getModel(){
-		return ((InterfaceContainerEditPart)getHost()).getModel();
+	protected AbstractContainerElement getModel() {
+		return ((InterfaceContainerEditPart) getHost()).getModel();
 	}
-	
-	protected FBType getFBType(){
+
+	protected FBType getFBType() {
 		return getModel().getFbType();
 	}
-	
+
 	@Override
 	protected Command createAddCommand(final EditPart child, final EditPart after) {
 		return null;

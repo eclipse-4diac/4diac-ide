@@ -16,29 +16,28 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
-public class ChangeArraySizeCommand extends Command {	
+public class ChangeArraySizeCommand extends Command {
 	private VarDeclaration variable;
 	private int oldArraySize;
 	private int newArraySize;
-	private String newArraySizeString;	
-	
-	public ChangeArraySizeCommand(final VarDeclaration variable, final String newArraySizeString){
+	private String newArraySizeString;
+
+	public ChangeArraySizeCommand(final VarDeclaration variable, final String newArraySizeString) {
 		super();
 		this.variable = variable;
 		this.newArraySizeString = newArraySizeString;
 	}
-	
+
 	@Override
 	public boolean canExecute() {
-		return (null != variable)&&(null != newArraySizeString);
+		return (null != variable) && (null != newArraySizeString);
 	}
-	
+
 	@Override
-	public void execute() {	
-		if(variable.isArray()){
+	public void execute() {
+		if (variable.isArray()) {
 			oldArraySize = variable.getArraySize();
-		}
-		else{
+		} else {
 			oldArraySize = 0;
 		}
 		if (newArraySizeString.length() == 0) {
@@ -48,15 +47,15 @@ public class ChangeArraySizeCommand extends Command {
 				newArraySize = Integer.parseInt(newArraySizeString);
 			} catch (NumberFormatException nfe) {
 				newArraySize = 0;
-			} 
-		}		
+			}
+		}
 		setArraySize(newArraySize);
 	}
 
 	private void setArraySize(int arraySize) {
-		variable.setArraySize(arraySize);		
+		variable.setArraySize(arraySize);
 	}
-	
+
 	@Override
 	public void undo() {
 		setArraySize(oldArraySize);

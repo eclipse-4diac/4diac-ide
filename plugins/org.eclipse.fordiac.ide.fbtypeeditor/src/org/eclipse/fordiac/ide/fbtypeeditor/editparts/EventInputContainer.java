@@ -19,7 +19,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class EventInputContainer extends AbstractContainerElement{
+public class EventInputContainer extends AbstractContainerElement {
 
 	public EventInputContainer(final FBType fbtype) {
 		super(fbtype);

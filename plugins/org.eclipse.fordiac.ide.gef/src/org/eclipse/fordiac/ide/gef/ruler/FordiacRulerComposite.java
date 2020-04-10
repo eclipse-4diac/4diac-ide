@@ -28,10 +28,10 @@ public class FordiacRulerComposite extends RulerComposite {
 	public void setGraphicalViewer(ScrollingGraphicalViewer primaryViewer) {
 		RulerProvider rpV = new FordiacRulerProvider();
 		RulerProvider rpH = new FordiacRulerProvider();
-		
-		primaryViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER,rpV);
+
+		primaryViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, rpV);
 		primaryViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER, rpH);
 
-		super.setGraphicalViewer(primaryViewer);		
+		super.setGraphicalViewer(primaryViewer);
 	}
 }

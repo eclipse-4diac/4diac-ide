@@ -32,110 +32,102 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 public class SystemMonitoringData {
-	
+
 	private final AutomationSystem system;
-	
+
 	private final Map<IInterfaceElement, MonitoringBaseElement> monitoredElements = new HashMap<>();
 	private final Map<String, MonitoringBaseElement> monitoredElementsPerPortStrings = new HashMap<>();
 
 	private final Map<Device, DeviceMonitoringHandler> deviceHandlers = new HashMap<>();
-	
+
 	private boolean monitoringEnabled = false;
-	
+
 	public SystemMonitoringData(AutomationSystem system) {
 		this.system = system;
 	}
 
-	
-	AutomationSystem getSystem(){
+	AutomationSystem getSystem() {
 		return system;
 	}
-	
-	Collection<MonitoringBaseElement> getMonitoredElements(){ 
+
+	Collection<MonitoringBaseElement> getMonitoredElements() {
 		return monitoredElements.values();
 	}
-	
-	DeviceMonitoringHandler getDevMonitoringHandler(Device dev){
+
+	DeviceMonitoringHandler getDevMonitoringHandler(Device dev) {
 		return deviceHandlers.get(dev);
 	}
-	
-	void addDevMonitoringHandler(Device dev, DeviceMonitoringHandler handler){
+
+	void addDevMonitoringHandler(Device dev, DeviceMonitoringHandler handler) {
 		deviceHandlers.put(dev, handler);
 	}
-	
-	Map<Device, DeviceMonitoringHandler>getDevMonitoringHandlers(){
+
+	Map<Device, DeviceMonitoringHandler> getDevMonitoringHandlers() {
 		return deviceHandlers;
 	}
-	
-	void removeDeviceMonitoringHandler(Device dev){
+
+	void removeDeviceMonitoringHandler(Device dev) {
 		deviceHandlers.remove(dev);
 	}
-	
+
 	public void enableSystem() {
 		EnableSystemMonitoringRunnable enable = new EnableSystemMonitoringRunnable(this);
 		Shell shell = Display.getDefault().getActiveShell();
 		try {
-			new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(
-					true, true, enable);
+			new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(true, true, enable);
 			monitoringEnabled = true;
 		} catch (InvocationTargetException ex) {
 			MessageDialog.openError(shell, "Error", ex.getMessage());
 		} catch (InterruptedException ex) {
-			MessageDialog.openInformation(shell, "Enable Monitoring Aborted",
-					"Enable Monitoring Aborted");
+			MessageDialog.openInformation(shell, "Enable Monitoring Aborted", "Enable Monitoring Aborted");
 		}
 	}
-	
+
 	public void enableSystemSynch(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		EnableSystemMonitoringRunnable enable = new EnableSystemMonitoringRunnable(this);
 		enable.run(monitor);
 		monitoringEnabled = true;
 	}
 
-
 	public void disableSystem() {
 		DisableSystemMonitoringRunnable disable = new DisableSystemMonitoringRunnable(this);
 		Shell shell = Display.getDefault().getActiveShell();
 		try {
-			new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(
-					true, true, disable);
+			new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(true, true, disable);
 			monitoringEnabled = false;
 		} catch (InvocationTargetException ex) {
 			MessageDialog.openError(shell, "Error", ex.getMessage());
 		} catch (InterruptedException ex) {
-			MessageDialog.openInformation(shell, "Disable Monitoring Aborted",
-					"Disable Monitoring Aborted");
+			MessageDialog.openInformation(shell, "Disable Monitoring Aborted", "Disable Monitoring Aborted");
 		}
-		
+
 	}
-	
+
 	public void disableSystemSynch(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		DisableSystemMonitoringRunnable disable = new DisableSystemMonitoringRunnable(this);
 		monitoringEnabled = false;
 		disable.run(monitor);
 	}
 
-
 	public MonitoringBaseElement getMonitoringElementByPortString(String portString) {
 		return monitoredElementsPerPortStrings.get(portString);
 	}
 
-
 	public void sendRemoveWatch(MonitoringBaseElement element) {
 		IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(element.getPort().getDevice());
-		if(null != devMgmInteractor && devMgmInteractor.isConnected()){
+		if (null != devMgmInteractor && devMgmInteractor.isConnected()) {
 			try {
 				devMgmInteractor.removeWatch(element);
 			} catch (DeploymentException e) {
 				// TODO think if error should be shown to the user
 				Activator.getDefault().logError("Could not remove watch for " + element.getQualifiedString(), e);
 			}
-		}		
+		}
 	}
 
 	public void sendAddWatch(MonitoringBaseElement element) {
 		IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(element.getPort().getDevice());
-		if(null != devMgmInteractor && devMgmInteractor.isConnected()){
+		if (null != devMgmInteractor && devMgmInteractor.isConnected()) {
 			try {
 				devMgmInteractor.addWatch(element);
 			} catch (DeploymentException e) {
@@ -145,45 +137,38 @@ public class SystemMonitoringData {
 		}
 	}
 
-
 	public IDeviceManagementInteractor getDevMgmInteractor(Device device) {
 		DeviceMonitoringHandler handler = getDevMonitoringHandler(device);
 		return (null != handler) ? handler.getDevMgmInteractor() : null;
 	}
 
-
 	public boolean isMonitoringForSystemEnabled() {
 		return monitoringEnabled;
 	}
 
-
 	public void removeMonitoringElement(MonitoringBaseElement element) {
 		PortElement port = element.getPort();
-		
+
 		if (element instanceof MonitoringElement) {
 			sendRemoveWatch(element);
 		}
 		monitoredElements.remove(port.getInterfaceElement());
-		monitoredElementsPerPortStrings.remove(port.getPortString());		
+		monitoredElementsPerPortStrings.remove(port.getPortString());
 	}
-
 
 	public void addMonitoringElement(MonitoringBaseElement element) {
 		PortElement port = element.getPort();
 
 		monitoredElements.put(port.getInterfaceElement(), element);
 		monitoredElementsPerPortStrings.put(port.getPortString(), element);
-        
+
 		if (element instanceof MonitoringElement) {
 			sendAddWatch(element);
-		}		
+		}
 	}
-
 
 	public MonitoringBaseElement getMonitoredElement(IInterfaceElement port) {
 		return monitoredElements.get(port);
 	}
 
-	
-	
 }

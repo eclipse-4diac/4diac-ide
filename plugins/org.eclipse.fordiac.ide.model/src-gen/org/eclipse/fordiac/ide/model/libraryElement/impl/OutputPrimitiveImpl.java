@@ -20,23 +20,23 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Output Primitive</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Output
+ * Primitive</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl#getTestResult <em>Test Result</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl#getTestResult
+ * <em>Test Result</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitive {
 	/**
-	 * The default value of the '{@link #getTestResult() <em>Test Result</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getTestResult() <em>Test Result</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getTestResult()
 	 * @generated
 	 * @ordered
@@ -46,14 +46,12 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 	public static final int NOT_TESTED = 0;
 	public static final int TEST_OK = 1;
 	public static final int TEST_FAIL = -1;
-	
 
 	private int testResult = TEST_RESULT_EDEFAULT;
-	
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected OutputPrimitiveImpl() {
@@ -61,8 +59,8 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -71,8 +69,8 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated NOT
 	 */
 	@Override
@@ -81,35 +79,37 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated NOT
 	 */
 	@Override
 	public void setTestResult(int newTestResult) {
 		int oldTestResult = testResult;
-		testResult=newTestResult;
+		testResult = newTestResult;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT, oldTestResult, testResult));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT,
+					oldTestResult, testResult));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated not
 	 */
 	@Override
 	public void unsetTestResult() {
 		int oldTestResult = testResult;
-		testResult=TEST_RESULT_EDEFAULT;
+		testResult = TEST_RESULT_EDEFAULT;
 		if (eNotificationRequired())
-		  eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT, oldTestResult, testResult));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT,
+					oldTestResult, testResult));
 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated not
 	 */
 	@Override
@@ -118,61 +118,61 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
-				return getTestResult();
+		case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
+			return getTestResult();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
-				setTestResult((Integer)newValue);
-				return;
+		case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
+			setTestResult((Integer) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
-				unsetTestResult();
-				return;
+		case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
+			unsetTestResult();
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
-				return isSetTestResult();
+		case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
+			return isSetTestResult();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //OutputPrimitiveImpl
+} // OutputPrimitiveImpl

@@ -37,6 +37,7 @@ public class ChangePrimitiveParameterCommand extends Command {
 	public void undo() {
 		primitive.setParameters(oldParameters);
 	}
+
 	@Override
 	public void redo() {
 		primitive.setParameters(parameters);

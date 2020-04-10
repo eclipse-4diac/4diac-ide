@@ -17,15 +17,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public abstract class AbstractChangeElementNameWithOppositeCommand extends ChangeNameCommand {
 
-	/* the command for updating the name of the opposite element when necessary
+	/*
+	 * the command for updating the name of the opposite element when necessary
 	 */
 	private ChangeNameCommand oppositeChange = null;
 
 	public AbstractChangeElementNameWithOppositeCommand(final INamedElement element, String name) {
 		super(element, name);
-		
+
 		INamedElement oppositeElement = getOppositeElement(element);
-		if(null != oppositeElement) {
+		if (null != oppositeElement) {
 			oppositeChange = new ChangeNameCommand(oppositeElement, name);
 		}
 	}
@@ -33,7 +34,7 @@ public abstract class AbstractChangeElementNameWithOppositeCommand extends Chang
 	@Override
 	public void execute() {
 		super.execute();
-		if(null != oppositeChange) {
+		if (null != oppositeChange) {
 			oppositeChange.execute();
 		}
 	}
@@ -41,7 +42,7 @@ public abstract class AbstractChangeElementNameWithOppositeCommand extends Chang
 	@Override
 	public void redo() {
 		super.redo();
-		if(null != oppositeChange) {
+		if (null != oppositeChange) {
 			oppositeChange.redo();
 		}
 	}
@@ -49,7 +50,7 @@ public abstract class AbstractChangeElementNameWithOppositeCommand extends Chang
 	@Override
 	public void undo() {
 		super.undo();
-		if(null != oppositeChange) {
+		if (null != oppositeChange) {
 			oppositeChange.undo();
 		}
 	}

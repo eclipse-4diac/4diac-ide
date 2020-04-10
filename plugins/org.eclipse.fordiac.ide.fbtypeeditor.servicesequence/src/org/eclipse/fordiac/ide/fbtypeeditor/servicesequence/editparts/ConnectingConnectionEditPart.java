@@ -38,7 +38,7 @@ public class ConnectingConnectionEditPart extends AbstractConnectionEditPart {
 	 */
 	@Override
 	protected void createEditPolicies() {
-		//currently no policies for this edit part
+		// currently no policies for this edit part
 	}
 
 }

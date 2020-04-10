@@ -27,7 +27,7 @@ public class AttributeChangeCommand extends Command {
 	private String commentOld;
 	private BaseType1 type;
 	private BaseType1 typeOld;
-	
+
 	public AttributeChangeCommand(Attribute attribute, String name, String value, BaseType1 type, String comment) {
 		this.attribute = attribute;
 		this.comment = comment;
@@ -35,10 +35,11 @@ public class AttributeChangeCommand extends Command {
 		this.name = name;
 		this.type = type;
 	}
-	
+
 	@Override
 	public boolean canExecute() {
-		return null != attribute && (null != name || null != value || null != comment || (null == attribute.getAttributeDeclaration() && null != type));
+		return null != attribute && (null != name || null != value || null != comment
+				|| (null == attribute.getAttributeDeclaration() && null != type));
 	}
 
 	@Override
@@ -52,32 +53,32 @@ public class AttributeChangeCommand extends Command {
 
 	@Override
 	public void undo() {
-		if(null != name) {			
+		if (null != name) {
 			attribute.setName(nameOld);
 		}
-		if(null != comment) {			
+		if (null != comment) {
 			attribute.setComment(commentOld);
 		}
-		if(null != value) {			
+		if (null != value) {
 			attribute.setValue(valueOld);
 		}
-		if(null != type) {			
+		if (null != type) {
 			attribute.setType(typeOld);
 		}
 	}
 
 	@Override
 	public void redo() {
-		if(null != name) {			
+		if (null != name) {
 			attribute.setName(name);
 		}
-		if(null != comment) {			
+		if (null != comment) {
 			attribute.setComment(comment);
 		}
-		if(null != value) {			
+		if (null != value) {
 			attribute.setValue(value);
 		}
-		if(null != type) {			
+		if (null != type) {
 			attribute.setType(type);
 		}
 	}

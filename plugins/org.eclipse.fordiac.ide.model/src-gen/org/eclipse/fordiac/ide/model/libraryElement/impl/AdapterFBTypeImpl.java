@@ -22,23 +22,23 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Adapter FB Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Adapter
+ * FB Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBTypeImpl#getAdapterType <em>Adapter Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBTypeImpl#getAdapterType
+ * <em>Adapter Type</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
 	/**
-	 * The cached value of the '{@link #getAdapterType() <em>Adapter Type</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getAdapterType() <em>Adapter Type</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getAdapterType()
 	 * @generated
 	 * @ordered
@@ -46,8 +46,8 @@ public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
 	protected AdapterType adapterType;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected AdapterFBTypeImpl() {
@@ -55,8 +55,8 @@ public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -65,26 +65,27 @@ public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public AdapterType getAdapterType() {
 		if (adapterType != null && adapterType.eIsProxy()) {
-			InternalEObject oldAdapterType = (InternalEObject)adapterType;
-			adapterType = (AdapterType)eResolveProxy(oldAdapterType);
+			InternalEObject oldAdapterType = (InternalEObject) adapterType;
+			adapterType = (AdapterType) eResolveProxy(oldAdapterType);
 			if (adapterType != oldAdapterType) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE, oldAdapterType, adapterType));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE, oldAdapterType, adapterType));
 			}
 		}
 		return adapterType;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public AdapterType basicGetAdapterType() {
@@ -92,8 +93,8 @@ public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -101,66 +102,68 @@ public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
 		AdapterType oldAdapterType = adapterType;
 		adapterType = newAdapterType;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE, oldAdapterType, adapterType));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE,
+					oldAdapterType, adapterType));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE:
-				if (resolve) return getAdapterType();
-				return basicGetAdapterType();
+		case LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE:
+			if (resolve)
+				return getAdapterType();
+			return basicGetAdapterType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE:
-				setAdapterType((AdapterType)newValue);
-				return;
+		case LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE:
+			setAdapterType((AdapterType) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE:
-				setAdapterType((AdapterType)null);
-				return;
+		case LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE:
+			setAdapterType((AdapterType) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE:
-				return adapterType != null;
+		case LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE:
+			return adapterType != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //AdapterFBTypeImpl
+} // AdapterFBTypeImpl

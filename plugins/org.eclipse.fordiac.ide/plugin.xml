@@ -34,10 +34,6 @@
                value="icons/fordiac16.png,icons/fordiac32.png,icons/fordiac48.png,icons/fordiac256.png">
          </property>
          <property
-               name="startupProgressRect"
-               value="375,375,172,4">
-         </property>
-         <property
                name="introTitle"
                value="Welcome to 4diac IDE">
          </property>
@@ -56,6 +52,10 @@
 <property
     name="applicationCSSResources"
     value="platform:/plugin/org.eclipse.platform/images/">
+</property>
+<property
+      name="startupProgressRect"
+      value="375,375,172,4">
 </property>
 <property
       name="preferenceCustomization"
@@ -130,7 +130,14 @@
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/import-existing-project.png"
             label="Import Existing Projects"
             resolution="launchbar">
-      </command>   
+      </command> 
+      <command
+            id="org.eclipse.ui.file.import(importWizardId=org.eclipse.egit.ui.internal.clone.GitCloneWizard)"
+            label="Clone Project from GIT Repository"
+            description="Clone existing 4diac IDE projects from a GIT repository"
+            icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/egit-checkout.png"
+            resolution="launchbar">
+      </command>  
       <override
             command="org.eclipse.ui.newWizard*"
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/new-project.png"

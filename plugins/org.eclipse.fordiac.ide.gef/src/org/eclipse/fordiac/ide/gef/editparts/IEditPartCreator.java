@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.gef.EditPart;
 
-
 /**
  * Objects implementing this element can create an EditPart (for graphical
  * visualisation in GEF editors).
@@ -28,5 +27,5 @@ public interface IEditPartCreator {
 	 * @return the created EditPart
 	 */
 	EditPart createEditPart();
-	
+
 }

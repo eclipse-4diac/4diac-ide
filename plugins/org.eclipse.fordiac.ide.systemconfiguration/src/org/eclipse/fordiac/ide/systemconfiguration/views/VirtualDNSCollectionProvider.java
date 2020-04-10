@@ -22,8 +22,7 @@ public class VirtualDNSCollectionProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof VirtualDNSCollection) {
-			return ((VirtualDNSCollection) parentElement).getVirtualDNSEntries()
-					.toArray();
+			return ((VirtualDNSCollection) parentElement).getVirtualDNSEntries().toArray();
 		}
 		return new Object[0];
 	}

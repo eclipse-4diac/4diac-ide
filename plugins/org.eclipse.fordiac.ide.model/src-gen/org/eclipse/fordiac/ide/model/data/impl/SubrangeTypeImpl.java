@@ -23,23 +23,23 @@ import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.data.SubrangeType;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Subrange Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Subrange Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeTypeImpl#getSubrange <em>Subrange</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeTypeImpl#getSubrange
+ * <em>Subrange</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 	/**
-	 * The cached value of the '{@link #getSubrange() <em>Subrange</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getSubrange() <em>Subrange</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getSubrange()
 	 * @generated
 	 * @ordered
@@ -47,8 +47,8 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 	protected Subrange subrange;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SubrangeTypeImpl() {
@@ -56,8 +56,8 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -66,8 +66,8 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -76,23 +76,27 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetSubrange(Subrange newSubrange, NotificationChain msgs) {
 		Subrange oldSubrange = subrange;
 		subrange = newSubrange;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DataPackage.SUBRANGE_TYPE__SUBRANGE, oldSubrange, newSubrange);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					DataPackage.SUBRANGE_TYPE__SUBRANGE, oldSubrange, newSubrange);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -100,86 +104,89 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 		if (newSubrange != subrange) {
 			NotificationChain msgs = null;
 			if (subrange != null)
-				msgs = ((InternalEObject)subrange).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DataPackage.SUBRANGE_TYPE__SUBRANGE, null, msgs);
+				msgs = ((InternalEObject) subrange).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - DataPackage.SUBRANGE_TYPE__SUBRANGE, null, msgs);
 			if (newSubrange != null)
-				msgs = ((InternalEObject)newSubrange).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DataPackage.SUBRANGE_TYPE__SUBRANGE, null, msgs);
+				msgs = ((InternalEObject) newSubrange).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - DataPackage.SUBRANGE_TYPE__SUBRANGE, null, msgs);
 			msgs = basicSetSubrange(newSubrange, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.SUBRANGE_TYPE__SUBRANGE, newSubrange, newSubrange));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.SUBRANGE_TYPE__SUBRANGE, newSubrange,
+					newSubrange));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case DataPackage.SUBRANGE_TYPE__SUBRANGE:
-				return basicSetSubrange(null, msgs);
+		case DataPackage.SUBRANGE_TYPE__SUBRANGE:
+			return basicSetSubrange(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DataPackage.SUBRANGE_TYPE__SUBRANGE:
-				return getSubrange();
+		case DataPackage.SUBRANGE_TYPE__SUBRANGE:
+			return getSubrange();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DataPackage.SUBRANGE_TYPE__SUBRANGE:
-				setSubrange((Subrange)newValue);
-				return;
+		case DataPackage.SUBRANGE_TYPE__SUBRANGE:
+			setSubrange((Subrange) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DataPackage.SUBRANGE_TYPE__SUBRANGE:
-				setSubrange((Subrange)null);
-				return;
+		case DataPackage.SUBRANGE_TYPE__SUBRANGE:
+			setSubrange((Subrange) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DataPackage.SUBRANGE_TYPE__SUBRANGE:
-				return subrange != null;
+		case DataPackage.SUBRANGE_TYPE__SUBRANGE:
+			return subrange != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //SubrangeTypeImpl
+} // SubrangeTypeImpl

@@ -21,7 +21,7 @@ public class InterfaceEditPartForFBNetworkRO extends InterfaceEditPartForFBNetwo
 		super();
 		setConnectable(false);
 	}
-	
+
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
 		return null;

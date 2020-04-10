@@ -29,13 +29,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.navigator.IDescriptionProvider;
 
-public class SystemLabelProvider extends AdapterFactoryLabelProvider implements IDescriptionProvider{
+public class SystemLabelProvider extends AdapterFactoryLabelProvider implements IDescriptionProvider {
 
 	private static ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
-	
+
 	private ILabelProvider workbenchLabelProvider = WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider();
-	
-	
+
 	public SystemLabelProvider() {
 		super(systemAdapterFactory);
 	}
@@ -48,7 +47,7 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	@Override
 	public String getText(Object object) {
-		if(object instanceof IResource){
+		if (object instanceof IResource) {
 			return null;
 		}
 		return super.getText(object);
@@ -56,15 +55,14 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	@Override
 	public Image getImage(Object object) {
-		if(object instanceof AutomationSystem){
+		if (object instanceof AutomationSystem) {
 			return FordiacImage.ICON_SYSTEM_PERSPECTIVE.getImage();
 		}
-		if(object instanceof IResource){
+		if (object instanceof IResource) {
 			return null;
 		}
 		return super.getImage(object);
 	}
-
 
 	@Override
 	public String getDescription(Object anElement) {
@@ -72,7 +70,7 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 		return super.getText(anElement);
 	}
 
-	private static List<AdapterFactory> createFactoryList(){
+	private static List<AdapterFactory> createFactoryList() {
 		ArrayList<AdapterFactory> factories = new ArrayList<AdapterFactory>();
 		factories.add(new LibraryElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());

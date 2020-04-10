@@ -1,7 +1,8 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2018 TU Wien/ACIN
- * 
+ * 				 2020 Johannes Kepler University, Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,35 +12,28 @@
  * Contributors:
  *  Gerhard Ebenhofer, Ingo Hegny, Alois Zoitl, Martin Jobst
  *    - initial API and implementation and/or initial documentation
- *    
- *  Peter Gsellmann
- *    - incorporating simple fb
+ *  Peter Gsellmann - incorporating simple fb
+ *  Alois Zoitl - Changed XML parsing to Staxx cursor interface for improved
+ *  			  parsing performance
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.dataimport.exceptions.ReferencedTypeNotFoundException;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -58,40 +52,33 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 
 /**
  * Managing class for importing *.fbt files
- * 
- * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
- * @author Martijn Rooker (martijn.rooker@profactor.at)
+ *
  */
 
-public class FBTImporter implements LibraryElementTags {
+public class FBTImporter extends TypeImporter {
 
 	/** The variables. */
 	private Map<String, VarDeclaration> variables = new HashMap<>();
-
-	/** The internal variables. */
-	private Map<String, VarDeclaration> internalVariables = new HashMap<>();
 
 	/** The input events. */
 	private Map<String, Event> inputEvents = new HashMap<>();
@@ -109,14 +96,13 @@ public class FBTImporter implements LibraryElementTags {
 	/** The ec states. */
 	private Map<String, ECState> ecStates = new HashMap<>();
 
-	private FBType type;
-
-	private IFile file;
+	private Map<Event, List<String>> withList = new HashMap<>();
 
 	private Palette palette;
 
+	@Override
 	protected FBType getType() {
-		return type;
+		return (FBType) super.getType();
 	}
 
 	protected Palette getPalette() {
@@ -127,320 +113,241 @@ public class FBTImporter implements LibraryElementTags {
 		this.palette = palette;
 	}
 
-	/**
-	 * Import fb type.
-	 * 
-	 * @param fbtFile      the fbt file
-	 * @param parseNetwork the parse network
-	 * @param palette      the palette
-	 * 
-	 * @return the fB type
-	 * 
-	 * @throws ReferencedTypeNotFoundException the referenced type not found
-	 *                                         exception
-	 */
-	public FBType importType(final IFile fbtFile, final Palette palette) {
-
+	public FBTImporter(final Palette palette) {
 		this.palette = palette;
-		file = fbtFile;
-		prepareParseDataBuffers();
+	}
 
-		try {
-			Document document = createDocument();
-			if (null != document) {
-				Element rootNode = document.getDocumentElement();
-				type = createType();
+	protected FBTImporter(final XMLStreamReader reader, final Palette palette) {
+		super(reader);
+		this.palette = palette;
+	}
 
-				configureType();
+	@Override
+	protected LibraryElement createType() {
+		FBType newType = LibraryElementFactory.eINSTANCE.createFBType();
+		newType.setService(LibraryElementFactory.eINSTANCE.createService());
+		return newType;
+	}
 
-				// parse document and fill type
-				return parseType(rootNode);
+	@Override
+	protected String getStartElementName() {
+		return LibraryElementTags.FBTYPE_ELEMENT;
+	}
+
+	@Override
+	protected IChildHandler getTypeChildrenHandler() {
+		return name -> {
+			switch (name) {
+			case LibraryElementTags.IDENTIFICATION_ELEMENT:
+				parseIdentification(getType());
+				break;
+			case LibraryElementTags.VERSION_INFO_ELEMENT:
+				parseVersionInfo(getType());
+				break;
+			case LibraryElementTags.COMPILER_INFO_ELEMENT:
+				parseCompilerInfo(getType());
+				break;
+			case LibraryElementTags.INTERFACE_LIST_ELEMENT:
+				getType().setInterfaceList(parseInterfaceList(LibraryElementTags.INTERFACE_LIST_ELEMENT));
+				break;
+			case LibraryElementTags.BASIC_F_B_ELEMENT:
+				setType(convertToBasicType(getType()));
+				parseBasicFB((BasicFBType) getType());
+				break;
+			case LibraryElementTags.SIMPLE_F_B_ELEMENT:
+				setType(convertToSimpleType(getType()));
+				parseSimpleFB((SimpleFBType) getType());
+				break;
+			case LibraryElementTags.FBNETWORK_ELEMENT:
+				// parse the composite FBs as last
+				setType(convertToCompositeType(getType()));
+				parseFBNetwork((CompositeFBType) getType());
+				break;
+			case LibraryElementTags.SERVICE_ELEMENT:
+				parseService(getType());
+				break;
+			default:
+				return false;
 			}
+			return true;
+		};
+	}
 
-		} catch (Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+	@Override
+	public LibraryElement importType(IFile typeFile) throws TypeImportException {
+		LibraryElement newType = super.importType(typeFile);
+
+		if ((newType instanceof BasicFBType) || (newType instanceof CompositeFBType)
+				|| (newType instanceof ServiceInterfaceFBType) || (newType instanceof SimpleFBType)
+				|| (newType instanceof SubAppType)) {
+			return newType;
 		}
-
-		return null;
-
-	}
-
-	/*
-	 * Perform basic setup of the type's data structures
-	 */
-	protected void configureType() {
-		Service service = LibraryElementFactory.eINSTANCE.createService();
-		type.setService(service);
-	}
-
-	protected FBType createType() {
-		return LibraryElementFactory.eINSTANCE.createFBType();
-	}
-
-	protected void prepareParseDataBuffers() {
-		algorithmNameECActionMapping.clear();
-		inputEvents.clear();
-		outputEvents.clear();
-		variables.clear();
-		ecStates.clear();
-		adapters.clear();
-		adapterPositions.clear();
-	}
-
-	protected Document createDocument() throws ParserConfigurationException, SAXException, IOException, CoreException {
-		if (file.exists()) {
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			dbf.setNamespaceAware(false);
-			DocumentBuilder db;
-			// TODO: set local dtd for validating!
-			dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
-					Boolean.FALSE);
-			db = dbf.newDocumentBuilder();
-			return db.parse(file.getContents());
-		}
-		return null;
-	}
-
-	/**
-	 * This method parses the DTD of the imported FBType.
-	 * 
-	 * @param rootNode - The root node in the DTD
-	 * @return the FBType that is parsed
-	 * 
-	 * @throws TypeImportException             the FBT import exception
-	 * @throws ReferencedTypeNotFoundException the referenced type not found
-	 *                                         exception
-	 * @throws ParseException
-	 */
-	protected FBType parseType(final Node rootNode)
-			throws TypeImportException, ReferencedTypeNotFoundException, ParseException {
-		if (rootNode.getNodeName().equals(FBTYPE_ELEMENT)) {
-			CommonElementImporter.readNameCommentAttributes(type, rootNode.getAttributes());
-
-			NodeList childNodes = rootNode.getChildNodes();
-			for (int i = 0; i < childNodes.getLength(); i++) {
-				Node n = childNodes.item(i);
-				if (n.getNodeName().equals(IDENTIFICATION_ELEMENT)) {
-					type.setIdentification(CommonElementImporter.parseIdentification(type, n));
-				}
-				if (n.getNodeName().equals(VERSION_INFO_ELEMENT)) {
-					type.getVersionInfo().add(CommonElementImporter.parseVersionInfo(type, n));
-				}
-				if (n.getNodeName().equals(COMPILER_INFO_ELEMENT)) {
-					type.setCompilerInfo(CompilableElementImporter.parseCompilerInfo(type, n));
-				}
-				if (n.getNodeName().equals(INTERFACE_LIST_ELEMENT)) {
-					type.setInterfaceList(parseInterfaceList(n));
-				}
-				if (n.getNodeName().equals(BASIC_F_B_ELEMENT)) {
-					type = convertToBasicType(type);
-					parseBasicFB((BasicFBType) type, n);
-				}
-				if (n.getNodeName().equals(SIMPLE_F_B_ELEMENT)) {
-					type = convertToSimpleType(type);
-					parseSimpleFB((SimpleFBType) type, n);
-				}
-				if (n.getNodeName().equals(FBNETWORK_ELEMENT)) {
-					// parse the composite FBs as last
-					type = convertToCompositeType(type);
-					parseFBNetwork((CompositeFBType) type, n);
-				}
-
-				if (n.getNodeName().equals(SERVICE_ELEMENT)) {
-					// type = convertToServiceInterfaceType(type); // FIX:
-					// gebenh: every
-					// fbtype can have a service
-					parseService(type, n);
-				}
-			}
-			if ((type instanceof BasicFBType) || (type instanceof CompositeFBType)
-					|| (type instanceof ServiceInterfaceFBType) || (type instanceof SimpleFBType)) {
-				return type;
-			}
-			type = convertToServiceInterfaceType(type);
-			return type;
-		}
-		throw new ParseException(Messages.FBTImporter_PARSE_FBTYPE_PARSEEXCEPTION, 0);
+		return convertToServiceInterfaceType((FBType) newType);
 	}
 
 	/**
 	 * This method parses the DTD of a ServiceInterfaceFBType.
-	 * 
+	 *
 	 * @param type - The ServiceInterfaceFBType that is being parsed
-	 * @param n    - the node of the ServiceInterfaceFBType in the DTD
-	 * 
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	public void parseService(final FBType type, final Node n) throws TypeImportException {
-		NodeList childNodes = n.getChildNodes();
-		NamedNodeMap map = n.getAttributes();
+	protected void parseService(FBType type) throws TypeImportException, XMLStreamException {
 
-		Node rightInterface = map.getNamedItem(RIGHT_INTERFACE_ATTRIBUTE);
-		if (rightInterface != null) {
+		String rightInterface = getAttributeValue(LibraryElementTags.RIGHT_INTERFACE_ATTRIBUTE);
+		if (null != rightInterface) {
 			ServiceInterface rightInter = LibraryElementFactory.eINSTANCE.createServiceInterface();
-			rightInter.setName(rightInterface.getNodeValue());
+			rightInter.setName(rightInterface);
 			type.getService().setRightInterface(rightInter);
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_SERVICE_INTERFACE_RIGHTINTERFACE_EXCEPTION);
 		}
-		Node leftInterface = map.getNamedItem(LEFT_INTERFACE_ATTRIBUTE);
-		if (leftInterface != null) {
+		String leftInterface = getAttributeValue(LibraryElementTags.LEFT_INTERFACE_ATTRIBUTE);
+		if (null != leftInterface) {
 			ServiceInterface leftInter = LibraryElementFactory.eINSTANCE.createServiceInterface();
-			leftInter.setName(leftInterface.getNodeValue());
+			leftInter.setName(leftInterface);
 			type.getService().setLeftInterface(leftInter);
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_SERVICE_INTERFACE_LEFTINTERFACE_EXCEPTION);
 		}
-		Node comment = map.getNamedItem(COMMENT_ATTRIBUTE);
-		if (comment != null) {
-			type.setComment(comment.getNodeValue());
+		String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+		if (null != comment) {
+			type.setComment(comment);
 		}
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node node = childNodes.item(i);
-			if (node.getNodeName().equals(SERVICE_SEQUENCE_ELEMENT)) {
-				parseServiceSequence(type, node);
+
+		processChildren(LibraryElementTags.SERVICE_ELEMENT, name -> {
+			if (LibraryElementTags.SERVICE_SEQUENCE_ELEMENT.equals(name)) {
+				parseServiceSequence(type);
+				return true;
 			}
-		}
+			return false;
+		});
 	}
 
 	/**
 	 * This method parses the ServiceSequence of a ServiceInterfaceFBType.
-	 * 
+	 *
 	 * @param type - The ServiceInterfaceFBType from which the ServiceSequence will
 	 *             be parsed
-	 * @param node - The node in the DTD of the ServiceSequence of the
-	 *             ServiceInterfaceFBType that is being parsed
-	 * 
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parseServiceSequence(final FBType type, final Node node) throws TypeImportException {
+	private void parseServiceSequence(final FBType type) throws TypeImportException, XMLStreamException {
 		ServiceSequence serviceSequence = LibraryElementFactory.eINSTANCE.createServiceSequence();
-		NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(SERVICE_TRANSACTION_ELEMENT)) {
-				parseServiceTransaction(serviceSequence, n, type);
+		readNameCommentAttributes(serviceSequence);
+
+		processChildren(LibraryElementTags.SERVICE_SEQUENCE_ELEMENT, name -> {
+			if (LibraryElementTags.SERVICE_TRANSACTION_ELEMENT.equals(name)) {
+				parseServiceTransaction(serviceSequence, type);
+				return true;
 			}
-		}
-		NamedNodeMap map = node.getAttributes();
-		CommonElementImporter.readNameCommentAttributes(serviceSequence, map);
+			return false;
+		});
 		type.getService().getServiceSequence().add(serviceSequence);
 	}
 
 	/**
 	 * This method parses the ServiceTransaction of a ServiceSequence.
-	 * 
+	 *
 	 * @param serviceSequence - The serviceSequence containing the
 	 *                        serviceTransaction that is being parsed
-	 * @param node            - The node in the DTD of the serviceTransaction of the
-	 *                        serviceSequence that is being parsed
 	 * @param type            - The serviceInterfaceFBType containing the
 	 *                        serviceTransaction
-	 * 
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parseServiceTransaction(final ServiceSequence serviceSequence, final Node node, final FBType type)
-			throws TypeImportException {
+	private void parseServiceTransaction(final ServiceSequence serviceSequence, final FBType type)
+			throws TypeImportException, XMLStreamException {
 		ServiceTransaction serviceTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
-		NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(INPUT_PRIMITIVE_ELEMENT)) {
-				parseInputPrimitive(serviceTransaction, n, type);
-			}
-			if (n.getNodeName().equals(OUTPUT_PRIMITIVE_ELEMENT)) {
-				parseOutputPrimitive(serviceTransaction, n, type);
-			}
-			serviceSequence.getServiceTransaction().add(serviceTransaction);
-		}
 
+		processChildren(LibraryElementTags.SERVICE_TRANSACTION_ELEMENT, name -> {
+			switch (name) {
+			case LibraryElementTags.INPUT_PRIMITIVE_ELEMENT:
+				parseInputPrimitive(serviceTransaction, type);
+				break;
+			case LibraryElementTags.OUTPUT_PRIMITIVE_ELEMENT:
+				parseOutputPrimitive(serviceTransaction, type);
+				break;
+			default:
+				return false;
+			}
+			return true;
+		});
+
+		serviceSequence.getServiceTransaction().add(serviceTransaction);
 	}
 
 	/**
 	 * This method parses the OutputPrimitive of a ServiceTransaction.
-	 * 
+	 *
 	 * @param serviceTransaction - The serviceTransaction containing the
 	 *                           OutputPrimitive that is being parsed
-	 * @param n                  - the node in the DTD of the OutputPrimitive of the
-	 *                           serviceTransaction that is being parsed
 	 * @param type               - the serviceInterfaceFBType containing the
 	 *                           OutputPrimitive
-	 * 
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parseOutputPrimitive(final ServiceTransaction serviceTransaction, final Node n, final FBType type)
-			throws TypeImportException {
+	private void parseOutputPrimitive(final ServiceTransaction serviceTransaction, final FBType type)
+			throws TypeImportException, XMLStreamException {
 		OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
-		NamedNodeMap map = n.getAttributes();
-		Node interFace = map.getNamedItem(INTERFACE_ATTRIBUTE);
-		if (interFace != null) {
-			if (interFace.getNodeValue().equals(type.getService().getLeftInterface().getName())) {
+
+		parsePrimitive(type, outputPrimitive);
+		proceedToEndElementNamed(LibraryElementTags.OUTPUT_PRIMITIVE_ELEMENT);
+		serviceTransaction.getOutputPrimitive().add(outputPrimitive);
+	}
+
+	private void parsePrimitive(final FBType type, Primitive outputPrimitive) throws TypeImportException {
+		String interFace = getAttributeValue(LibraryElementTags.INTERFACE_ATTRIBUTE);
+		if (null != interFace) {
+			if (interFace.equals(type.getService().getLeftInterface().getName())) {
 				outputPrimitive.setInterface(type.getService().getLeftInterface());
-			} else if (interFace.getNodeValue().equals(type.getService().getRightInterface().getName())) {
+			} else if (interFace.equals(type.getService().getRightInterface().getName())) {
 				outputPrimitive.setInterface(type.getService().getRightInterface());
 			}
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_OUTPUT_PRIMITIVE_EXCEPTION);
 		}
-		Node event = map.getNamedItem(getEventElement());
-		if (event != null) {
-			outputPrimitive.setEvent(event.getNodeValue());
+		String event = getAttributeValue(getEventElement());
+		if (null != event) {
+			outputPrimitive.setEvent(event);
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_OUTPUT_PRIMITIVE_EVENT_EXCEPTION);
 		}
-		Node parameters = map.getNamedItem(PARAMETERS_ATTRIBUTE);
-		if (parameters != null) {
-			outputPrimitive.setParameters(parameters.getNodeValue());
+		String parameters = getAttributeValue(LibraryElementTags.PARAMETERS_ATTRIBUTE);
+		if (null != parameters) {
+			outputPrimitive.setParameters(parameters);
 		}
-
-		serviceTransaction.getOutputPrimitive().add(outputPrimitive);
 	}
 
 	/**
 	 * This method parses the InputPrimitive of a ServiceTransaction.
-	 * 
+	 *
 	 * @param serviceTransaction - The serviceTransaction containing the
 	 *                           InputPrimitive that is being parsed
-	 * @param n                  - the node in the DTD of the InputPrimitive of the
-	 *                           serviceTransaction that is being parsed
 	 * @param type               - the serviceInterfaceFBType containing the
 	 *                           InputPrimitive
-	 * 
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parseInputPrimitive(final ServiceTransaction serviceTransaction, final Node n, final FBType type)
-			throws TypeImportException {
+	private void parseInputPrimitive(final ServiceTransaction serviceTransaction, final FBType type)
+			throws TypeImportException, XMLStreamException {
 		InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
-		NamedNodeMap map = n.getAttributes();
-		Node interFace = map.getNamedItem(INTERFACE_ATTRIBUTE);
-		if (interFace != null) {
-			if (interFace.getNodeValue().equals(type.getService().getLeftInterface().getName())) {
-				inputPrimitive.setInterface(type.getService().getLeftInterface());
-			} else if (interFace.getNodeValue().equals(type.getService().getRightInterface().getName())) {
-				inputPrimitive.setInterface(type.getService().getRightInterface());
-			}
-		} else {
-			throw new TypeImportException(Messages.FBTImporter_INPUT_PRIMITIVE_EXCEPTION);
-		}
-		Node event = map.getNamedItem(getEventElement());
-		if (event != null) {
-			inputPrimitive.setEvent(event.getNodeValue());
-		} else {
-			throw new TypeImportException(Messages.FBTImporter_INPUT_PRIMITIVE_EVENT_EXCEPTION);
-		}
-		Node parameters = map.getNamedItem(PARAMETERS_ATTRIBUTE);
-		if (parameters != null) {
-			inputPrimitive.setParameters(parameters.getNodeValue());
-		}
 
+		parsePrimitive(type, inputPrimitive);
+		proceedToEndElementNamed(LibraryElementTags.INPUT_PRIMITIVE_ELEMENT);
 		serviceTransaction.setInputPrimitive(inputPrimitive);
 	}
 
 	/**
 	 * This method converts a FBType to a ServiceInterfaceFBType.
-	 * 
+	 *
 	 * @param type - The FBType that is being converted to ServiceInterfaceFBType
-	 * 
+	 *
 	 * @return - A FBType that is converted
 	 */
 	private static FBType convertToServiceInterfaceType(final FBType type) {
@@ -461,27 +368,23 @@ public class FBTImporter implements LibraryElementTags {
 
 	/**
 	 * This method parses a compositeFBType.
-	 * 
-	 * @param type    - the CompositeFBType that is being parsed
-	 * @param node    - the node in the DTD of the CompositeFBType that is being
-	 *                parsed
-	 * @param palette the palette
-	 * 
-	 * @throws TypeImportException             the FBT import exception
-	 * @throws ReferencedTypeNotFoundException the referenced type not found
-	 *                                         exception
+	 *
+	 * @param type - the CompositeFBType that is being parsed
+	 *
+	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parseFBNetwork(final CompositeFBType type, final Node node)
-			throws TypeImportException, ReferencedTypeNotFoundException {
+	private void parseFBNetwork(final CompositeFBType type) throws TypeImportException, XMLStreamException {
 		FBNetwork fbNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		adapters.values().forEach(adapter -> addAdapterFB(fbNetwork, adapter, palette));
-		FBNetworkImporter fbnInmporter = new FBNetworkImporter(palette, fbNetwork, type.getInterfaceList());
-		type.setFBNetwork(fbnInmporter.parseFBNetwork(node));
+		FBNetworkImporter fbnInmporter = new FBNetworkImporter(palette, fbNetwork, type.getInterfaceList(),
+				getReader());
+		type.setFBNetwork(fbnInmporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
 	}
 
 	private void addAdapterFB(final FBNetwork fbNetwork, AdapterDeclaration adapter, Palette palette) {
 		AdapterFB aFB = LibraryElementFactory.eINSTANCE.createAdapterFB();
-		aFB.setPaletteEntry(getAdapterPaletEntry(adapter.getTypeName(), palette));
+		aFB.setPaletteEntry(palette.getAdapterTypeEntry(adapter.getTypeName()));
 		aFB.setAdapterDecl(adapter);
 
 		aFB.setName(adapter.getName());
@@ -496,22 +399,18 @@ public class FBTImporter implements LibraryElementTags {
 		if (null != aFB.getType() && null != aFB.getType().getInterfaceList()) {
 			aFB.setInterface(EcoreUtil.copy(aFB.getType().getInterfaceList()));
 		} else {
-			//if we don't have a type or interface list set an empty interface list to adapter
+			// if we don't have a type or interface list set an empty interface list to
+			// adapter
 			aFB.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		}
 		fbNetwork.getNetworkElements().add(aFB);
 	}
 
-	private static AdapterTypePaletteEntry getAdapterPaletEntry(String name, Palette palette) {
-		PaletteEntry entry = palette.getTypeEntry(name);
-		return (entry instanceof AdapterTypePaletteEntry) ? (AdapterTypePaletteEntry) entry : null;
-	}
-
 	/**
 	 * This method converts a FBType to a CompositeFBType.
-	 * 
+	 *
 	 * @param type - The FBType that is being converted to CompositeFBType
-	 * 
+	 *
 	 * @return - A FBType that is converted
 	 */
 	private static FBType convertToCompositeType(final FBType type) {
@@ -522,105 +421,107 @@ public class FBTImporter implements LibraryElementTags {
 
 	/**
 	 * This method parses a BasicFBType.
-	 * 
-	 * @param type    - the basicFBType that is being parsed
-	 * @param node    - the node in the DTD of the BasicFBType that is being parsed
-	 * @param palette the palette
-	 * 
-	 * @throws TypeImportException             the FBT import exception
-	 * @throws ReferencedTypeNotFoundException the referenced type not found
-	 *                                         exception
+	 *
+	 * @param type - the basicFBType that is being parsed
+	 *
+	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parseBasicFB(final BasicFBType type, final Node node) throws TypeImportException {
-		NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(INTERNAL_VARS_ELEMENT)) {
-				parseInternalVars(type, n);
-			}
-			if (n.getNodeName().equals(ECC_ELEMENT)) {
-				parseECC(type, n);
-			}
-			if (n.getNodeName().equals(ALGORITHM_ELEMENT)) {
-				Algorithm alg = parseAlgorithm(n);
+	private void parseBasicFB(final BasicFBType type) throws TypeImportException, XMLStreamException {
+		processChildren(LibraryElementTags.BASIC_F_B_ELEMENT, name -> {
+			switch (name) {
+			case LibraryElementTags.INTERNAL_VARS_ELEMENT:
+				parseInternalVars(type);
+				break;
+			case LibraryElementTags.ECC_ELEMENT:
+				parseECC(type);
+				break;
+			case LibraryElementTags.ALGORITHM_ELEMENT:
+				Algorithm alg = parseAlgorithm();
 				if (null != alg) {
 					type.getAlgorithm().add(alg);
 					List<ECAction> list = algorithmNameECActionMapping.get(alg.getName());
-					if (list != null) {
+					if (null != list) {
 						for (ECAction action : list) {
 							action.setAlgorithm(alg);
 						}
 					}
 				}
+				break;
+			default:
+				return false;
 			}
-		}
+			return true;
+		});
+
 	}
 
 	/**
 	 * This method parses a SimpleFBType.
-	 * 
-	 * @param type    - the simpleFBType that is being parsed
-	 * @param node    - the node in the DTD of the SimpleFBType that is being parsed
-	 * @param palette the palette
-	 * 
-	 * @throws TypeImportException             the FBT import exception
-	 * @throws ReferencedTypeNotFoundException the referenced type not found
-	 *                                         exception
+	 *
+	 * @param type - the simpleFBType that is being parsed
+	 *
+	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parseSimpleFB(final SimpleFBType type, final Node node) throws TypeImportException {
-		NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(INTERNAL_VARS_ELEMENT)) {
-				parseInternalVars(type, n);
+	private void parseSimpleFB(final SimpleFBType type) throws TypeImportException, XMLStreamException {
+		processChildren(LibraryElementTags.SIMPLE_F_B_ELEMENT, name -> {
+			switch (name) {
+			case LibraryElementTags.INTERNAL_VARS_ELEMENT:
+				parseInternalVars(type);
+				break;
+			case LibraryElementTags.ALGORITHM_ELEMENT:
+				type.setAlgorithm(parseAlgorithm());
+				break;
+			default:
+				return false;
 			}
-			if (n.getNodeName().equals(ALGORITHM_ELEMENT)) {
-				type.setAlgorithm(parseAlgorithm(n));
-			}
-		}
+			return true;
+		});
 	}
 
 	/**
 	 * This method parses an Algorithm.
-	 * 
-	 * @param type    - the BasicFBType containing the Algorithm
-	 * @param n       - the node in the DTD of the algorithm that is being parsed
-	 * @param palette the palette
-	 * 
-	 * @throws TypeImportException             the FBT import exception
-	 * @throws ReferencedTypeNotFoundException the referenced type not found
-	 *                                         exception
+	 *
+	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private static Algorithm parseAlgorithm(final Node n) throws TypeImportException {
-		NamedNodeMap map = n.getAttributes();
-		Node nameNode = map.getNamedItem(NAME_ATTRIBUTE);
-		Node commentNode = map.getNamedItem(COMMENT_ATTRIBUTE);
-		String name = null;
-		String comment = null;
-		if (nameNode != null) {
-			name = nameNode.getNodeValue();
-		}
-		if (commentNode != null) {
-			comment = commentNode.getNodeValue();
-		}
+	private Algorithm parseAlgorithm() throws TypeImportException, XMLStreamException {
+		String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 
 		Algorithm retVal = null;
-		NodeList childNodes = n.getChildNodes(); // should have only one child node
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node node = childNodes.item(i);
-			String nodeName = node.getNodeName();
-			if (nodeName.equals(FBD_ELEMENT)) {
-				throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!");
-			} else if (nodeName.equals(ST_ELEMENT)) {
-				retVal = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-				parseST((STAlgorithm) retVal, node);
-			} else if (nodeName.equals(LD_ELEMENT)) {
-				throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!");
-			} else if (nodeName.equals(OTHER_ELEMENT)) {
-				retVal = LibraryElementFactory.eINSTANCE.createOtherAlgorithm();
-				parseOtherAlg((OtherAlgorithm) retVal, node);
+		while (getReader().hasNext()) {
+			int event = getReader().next();
+			if (XMLStreamConstants.START_ELEMENT == event) {
+
+				switch (getReader().getLocalName()) {
+				case LibraryElementTags.FBD_ELEMENT:
+					throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!");
+				case LibraryElementTags.ST_ELEMENT:
+					retVal = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
+					parseST((STAlgorithm) retVal);
+					break;
+				case LibraryElementTags.LD_ELEMENT:
+					throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!");
+				case LibraryElementTags.OTHER_ELEMENT:
+					retVal = LibraryElementFactory.eINSTANCE.createOtherAlgorithm();
+					parseOtherAlg((OtherAlgorithm) retVal);
+					break;
+				default:
+					throw new XMLStreamException("Unexpected xml child (" + getReader().getLocalName() + ") found!"); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+
+			} else if (XMLStreamConstants.END_ELEMENT == event) {
+				if (!getReader().getLocalName().equals(LibraryElementTags.ALGORITHM_ELEMENT)) {
+					throw new XMLStreamException("Unexpected xml end tag found in " //$NON-NLS-1$
+							+ LibraryElementTags.ALGORITHM_ELEMENT + ": " + getReader().getLocalName()); //$NON-NLS-1$
+				}
+				// we came to the end
+				break;
 			}
 		}
+
 		if (null != retVal) {
 			retVal.setName(name);
 			retVal.setComment(comment);
@@ -630,117 +531,120 @@ public class FBTImporter implements LibraryElementTags {
 
 	/**
 	 * Parses the other alg.
-	 * 
-	 * @param other the other
-	 * @param node  the node
-	 * 
+	 *
+	 * @param alg the other
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private static void parseOtherAlg(final OtherAlgorithm other, final Node node) throws TypeImportException {
-		NamedNodeMap map = node.getAttributes();
-		Node language = map.getNamedItem(LANGUAGE_ATTRIBUTE);
-		if (language != null) {
-			other.setLanguage(language.getNodeValue());
+	private void parseOtherAlg(final OtherAlgorithm alg) throws TypeImportException, XMLStreamException {
+		String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
+		if (null != language) {
+			alg.setLanguage(language);
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_OTHER_ALG_MISSING_LANG_EXCEPTION);
 		}
 
-		Node text = map.getNamedItem(TEXT_ATTRIBUTE);
-		if (text != null) {
-			other.setText(text.getNodeValue());
-		} else {
-			throw new TypeImportException(Messages.FBTImporter_OTHER_ALG_MISSING_TEXT_EXCEPTION);
-		}
+		parseAlgorithmText(alg);
+		proceedToEndElementNamed(LibraryElementTags.OTHER_ELEMENT);
 	}
 
 	/**
 	 * This method parses a STAlgorithm.
-	 * 
-	 * @param st   - the STAlgorithm being parsed
-	 * @param node - the node in the DTD of the STAlgorithm that is being parsed
-	 * 
+	 *
+	 * @param st - the STAlgorithm being parsed
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private static void parseST(final STAlgorithm st, final Node node) throws TypeImportException {
-		NamedNodeMap map = node.getAttributes();
-		Node text = map.getNamedItem(TEXT_ATTRIBUTE);
-		if (text != null) {
-			st.setText(text.getNodeValue());
-		} else {
-			throw new TypeImportException(Messages.FBTImporter_ST_TEXTNOTSET_EXCEPTION);
-		}
+	private void parseST(final STAlgorithm st) throws TypeImportException, XMLStreamException {
+		parseAlgorithmText(st);
+		proceedToEndElementNamed(LibraryElementTags.ST_ELEMENT);
+	}
 
+	private void parseAlgorithmText(final TextAlgorithm alg) throws TypeImportException, XMLStreamException {
+		String text = getAttributeValue(LibraryElementTags.TEXT_ATTRIBUTE);
+		if (null != text) {
+			alg.setText(text);
+		} else {
+			StringBuilder algText = new StringBuilder();
+			// the parser my split the content of several parts therefore this while loop
+			while ((getReader().hasNext()) && (XMLStreamConstants.CHARACTERS == getReader().next())) {
+				algText.append(getReader().getText());
+			}
+			alg.setText(algText.toString());
+		}
 	}
 
 	/**
 	 * This method parses an ECC.
-	 * 
+	 *
 	 * @param type - the BasicFBType containing the ECC being parsed
-	 * @param n    - the node in the DTD of the ECC being parsed
-	 * 
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parseECC(final BasicFBType type, final Node n) throws TypeImportException {
-		NodeList childNodes = n.getChildNodes();
+	private void parseECC(final BasicFBType type) throws TypeImportException, XMLStreamException {
 		ECC ecc = LibraryElementFactory.eINSTANCE.createECC();
-		boolean first = true;
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node node = childNodes.item(i);
-			if (node.getNodeName().equals(ECSTATE_ELEMENT)) {
-				parseECState(ecc, node, first); // IEC 61499 ->
-				// "START" state is the
-				// first in the list
-				first = false;
+
+		processChildren(LibraryElementTags.ECC_ELEMENT, name -> {
+			switch (name) {
+			case LibraryElementTags.ECSTATE_ELEMENT:
+				parseECState(ecc); // IEC 61499 ->
+				// "START" state is the first in the list
+				break;
+			case LibraryElementTags.ECTRANSITION_ELEMENT:
+				parseECTransition(ecc);
+				break;
+			default:
+				return false;
 			}
-			if (node.getNodeName().equals(ECTRANSITION_ELEMENT)) {
-				parseECTransition(ecc, node);
-			}
-		}
+			return true;
+		});
 		type.setECC(ecc);
 	}
 
 	/**
 	 * This method parses an ECTransition.
-	 * 
-	 * @param ecc  - the ECC containing the ECTransition being parsed
-	 * @param node - the node in the DTD of the ECTransition being parsed
-	 * 
+	 *
+	 * @param ecc - the ECC containing the ECTransition being parsed
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parseECTransition(final ECC ecc, final Node node) throws TypeImportException {
-		NamedNodeMap map = node.getAttributes();
+	private void parseECTransition(final ECC ecc) throws TypeImportException, XMLStreamException {
 		ECTransition ecTransition = LibraryElementFactory.eINSTANCE.createECTransition();
-		ecc.getECTransition().add(ecTransition);
-		Node source = map.getNamedItem(SOURCE_ATTRIBUTE);
-		if (source != null) {
-			ECState state = ecStates.get(source.getNodeValue());
+		String source = getAttributeValue(LibraryElementTags.SOURCE_ATTRIBUTE);
+		if (null != source) {
+			ECState state = ecStates.get(source);
 			if (state != null) {
 				ecTransition.setSource(state);
 			}
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANSITION_SOURCE_EXCEPTION);
 		}
-		Node destination = map.getNamedItem(DESTINATION_ATTRIBUTE);
-		if (destination != null) {
-			ECState state = ecStates.get(destination.getNodeValue());
+		String destination = getAttributeValue(LibraryElementTags.DESTINATION_ATTRIBUTE);
+		if (null != destination) {
+			ECState state = ecStates.get(destination);
 			if (state != null) {
 				ecTransition.setDestination(state);
 			}
-
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANSITION_DEST_EXCEPTION);
 		}
-		Node condition = map.getNamedItem(CONDITION_ATTRIBUTE);
-		if (condition != null) {
-			validateTransitionCondition(ecTransition, condition.getNodeValue());
+		String condition = getAttributeValue(LibraryElementTags.CONDITION_ATTRIBUTE);
+		if (null != condition) {
+			validateTransitionCondition(ecTransition, condition);
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANASITION_CONDITION_EXCEPTION);
 		}
-		Node comment = map.getNamedItem(COMMENT_ATTRIBUTE);
-		if (comment != null) {
-			ecTransition.setComment(comment.getNodeValue());
+		String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+		if (null != comment) {
+			ecTransition.setComment(comment);
 		}
-		CommonElementImporter.getXandY(map, ecTransition);
+		getXandY(ecTransition);
+		proceedToEndElementNamed(LibraryElementTags.ECTRANSITION_ELEMENT);
+		ecc.getECTransition().add(ecTransition);
 	}
 
 	private void validateTransitionCondition(ECTransition ecTransition, String condition) {
@@ -775,90 +679,85 @@ public class FBTImporter implements LibraryElementTags {
 
 	/**
 	 * This method parses an ECState.
-	 * 
-	 * @param ecc          - the ECC containing the ECState being parsed
-	 * @param node         - the node in the DTD of the ECState being parsed
-	 * @param initialState the initial state
-	 * 
+	 *
+	 * @param ecc - the ECC containing the ECState being parsed
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parseECState(final ECC ecc, final Node node, final boolean initialState) throws TypeImportException {
-		NodeList childNodes = node.getChildNodes();
+	private void parseECState(final ECC ecc) throws TypeImportException, XMLStreamException {
 		ECState state = LibraryElementFactory.eINSTANCE.createECState();
-		ecc.getECState().add(state);
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(ECACTION_ELEMENT)) {
-				parseECAction(state, n);
+		readNameCommentAttributes(state);
+		getXandY(state);
+
+		processChildren(LibraryElementTags.ECSTATE_ELEMENT, name -> {
+			if (LibraryElementTags.ECACTION_ELEMENT.equals(name)) {
+				parseECAction(state);
+				return true;
 			}
-		}
-		NamedNodeMap map = node.getAttributes();
-		CommonElementImporter.readNameCommentAttributes(state, map);
-		CommonElementImporter.getXandY(map, state);
-		ecStates.put(state.getName(), state);
-		if (initialState) {
-			// have to be "START"
+			return false;
+		});
+
+		if (ecc.getECState().isEmpty()) {
 			ecc.setStart(state);
 		}
+		ecc.getECState().add(state);
+		ecStates.put(state.getName(), state);
 	}
 
 	/**
 	 * This method parses an ECAction.
-	 * 
+	 *
 	 * @param type - the ECState belonging to the ECAction being parsed
-	 * @param n    - the node in the DTD of the ECAction being parsed
-	 * 
-	 * @throws TypeImportException
+	 * @throws XMLStreamException
 	 */
-	private void parseECAction(final ECState type, final Node n) {
-		NamedNodeMap map = n.getAttributes();
+	private void parseECAction(final ECState type) throws XMLStreamException {
 		ECAction ecAction = LibraryElementFactory.eINSTANCE.createECAction();
-		type.getECAction().add(ecAction);
-		Node algorithm = map.getNamedItem(ALGORITHM_ELEMENT);
-		if (algorithm != null) {
-			if (algorithmNameECActionMapping.containsKey(algorithm.getNodeValue())) {
-				algorithmNameECActionMapping.get(algorithm.getNodeValue()).add(ecAction);
+		String algorithm = getAttributeValue(LibraryElementTags.ALGORITHM_ELEMENT);
+		if (null != algorithm) {
+			if (algorithmNameECActionMapping.containsKey(algorithm)) {
+				algorithmNameECActionMapping.get(algorithm).add(ecAction);
 			} else {
 				List<ECAction> temp = new ArrayList<>();
 				temp.add(ecAction);
-				algorithmNameECActionMapping.put(algorithm.getNodeValue(), temp);
+				algorithmNameECActionMapping.put(algorithm, temp);
 			}
 		}
-		Node output = map.getNamedItem(OUTPUT_ATTRIBUTE);
-		if (output != null) {
-			Event outp = outputEvents.get(output.getNodeValue());
-			if (outp != null) {
+		String output = getAttributeValue(LibraryElementTags.OUTPUT_ATTRIBUTE);
+		if (null != output) {
+			Event outp = outputEvents.get(output);
+			if (null != outp) {
 				ecAction.setOutput(outp);
 			}
 		}
-
+		proceedToEndElementNamed(LibraryElementTags.ECACTION_ELEMENT);
+		type.getECAction().add(ecAction);
 	}
 
 	/**
 	 * This method parses Internal Variables of a BaseFBType.
-	 * 
+	 *
 	 * @param type - the BaseFBType of which the Internal Variables will be parsed
-	 * @param n    - the node in the DTD of the Internal Variable being parsed
-	 * 
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parseInternalVars(final BaseFBType type, final Node n) throws TypeImportException {
-		NodeList childNodes = n.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node node = childNodes.item(i);
-			if (node.getNodeName().equals(VAR_DECLARATION_ELEMENT)) {
-				VarDeclaration v = ImportUtils.parseVarDeclaration(node);
+	private void parseInternalVars(final BaseFBType type) throws TypeImportException, XMLStreamException {
+		processChildren(LibraryElementTags.INTERNAL_VARS_ELEMENT, name -> {
+			if (LibraryElementTags.VAR_DECLARATION_ELEMENT.equals(name)) {
+				VarDeclaration v = parseVarDeclaration();
 				type.getInternalVars().add(v);
-				internalVariables.put(v.getName(), v);
+				return true;
 			}
-		}
+			return false;
+		});
 	}
 
 	/**
 	 * This method parses a FBType to a BasicFBType.
-	 * 
+	 *
 	 * @param type - the FBType being parsed to BasicFBType
-	 * 
+	 *
 	 * @return the basicFBType
 	 */
 	private static FBType convertToBasicType(final FBType type) {
@@ -869,9 +768,9 @@ public class FBTImporter implements LibraryElementTags {
 
 	/**
 	 * This method parses a FBType to a SimpleFBType.
-	 * 
+	 *
 	 * @param type - the FBType being parsed to SimpleFBType
-	 * 
+	 *
 	 * @return the simpleFBType
 	 */
 	private static FBType convertToSimpleType(final FBType type) {
@@ -882,78 +781,104 @@ public class FBTImporter implements LibraryElementTags {
 
 	/**
 	 * This method parses the InterfaceList of a FBType.
-	 * 
-	 * @param type - the FBType containing the InterfaceList being parsed
-	 * @param node - the node in the DTD of the interfaceList being parsed
-	 * 
+	 *
+	 * @param interfaceListName
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	protected InterfaceList parseInterfaceList(final Node node) throws TypeImportException {
+	protected InterfaceList parseInterfaceList(String interfaceListName)
+			throws TypeImportException, XMLStreamException {
 		InterfaceList interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
-		NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(getEventInputElement())) {
-				parseEventInputs(interfaceList, n);
+		final String inputEventListName = getEventInputElement();
+		final String outputEventListName = getEventOutputElement();
+
+		processChildren(interfaceListName, name -> {
+			if (inputEventListName.equals(name)) {
+				parseEventList(interfaceList.getEventInputs(), inputEventListName, true);
+			} else if (outputEventListName.equals(name)) {
+				parseEventList(interfaceList.getEventOutputs(), outputEventListName, false);
+			} else {
+				switch (name) {
+				case LibraryElementTags.INPUT_VARS_ELEMENT:
+					parseVariableList(LibraryElementTags.INPUT_VARS_ELEMENT, interfaceList.getInputVars());
+					interfaceList.getInputVars().forEach(v -> {
+						variables.put(v.getName(), v);
+						v.setIsInput(true);
+					});
+					break;
+				case LibraryElementTags.OUTPUT_VARS_ELEMENT:
+					parseVariableList(LibraryElementTags.OUTPUT_VARS_ELEMENT, interfaceList.getOutputVars());
+					interfaceList.getOutputVars().forEach(v -> variables.put(v.getName(), v));
+					break;
+				case LibraryElementTags.SOCKETS_ELEMENT:
+					parseAdapterList(interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT, true);
+					break;
+				case LibraryElementTags.PLUGS_ELEMENT:
+					parseAdapterList(interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT, false);
+					break;
+				default:
+					return false;
+				}
 			}
-			if (n.getNodeName().equals(getEventOutputElement())) {
-				parseEventOutputs(interfaceList, n);
-			}
-			if (n.getNodeName().equals(INPUT_VARS_ELEMENT)) {
-				List<VarDeclaration> vars = ImportUtils.parseInputVariables(n);
-				vars.forEach(v -> variables.put(v.getName(), v));
-				interfaceList.getInputVars().addAll(vars);
-			}
-			if (n.getNodeName().equals(OUTPUT_VARS_ELEMENT)) {
-				List<VarDeclaration> vars = ImportUtils.parseOutputVariables(n);
-				vars.forEach(v -> variables.put(v.getName(), v));
-				interfaceList.getOutputVars().addAll(vars);
-			}
-			if (n.getNodeName().equals(SOCKETS_ELEMENT)) {
-				parseSockets(interfaceList, n, palette);
-			}
-			if (n.getNodeName().equals(PLUGS_ELEMENT)) {
-				parsePlugs(interfaceList, n, palette);
-			}
-		}
-		parseWithConstructs(childNodes);
+			return true;
+		});
+
+		processWiths();
 		return interfaceList;
 	}
 
 	@SuppressWarnings("static-method")
 	protected String getEventOutputElement() {
-		return EVENT_OUTPUTS;
+		return LibraryElementTags.EVENT_OUTPUTS;
 	}
 
 	@SuppressWarnings("static-method")
 	protected String getEventInputElement() {
-		return EVENT_INPUTS_ELEMENT;
+		return LibraryElementTags.EVENT_INPUTS_ELEMENT;
+	}
+
+	private void parseVariableList(final String nodeName, final EList<VarDeclaration> varList)
+			throws TypeImportException, XMLStreamException {
+		processChildren(nodeName, name -> {
+			if (name.equals(LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
+				varList.add(parseVarDeclaration());
+				return true;
+			}
+			return false;
+		});
 	}
 
 	/**
 	 * This method parses Plugs of a FBType.
-	 * 
-	 * @param type - the FBType containing the Plugs
-	 * @param node - the node in the DTD of the Plug being parsed
-	 * 
+	 *
+	 * @param adpaterListName
+	 * @param isInput
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parsePlugs(final InterfaceList interfaceList, final Node node, Palette palette)
-			throws TypeImportException {
-		NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(ADAPTER_DECLARATION_ELEMENT)) {
-				AdapterDeclaration a = parseAdapterDeclaration(n, palette);
-				a.setIsInput(false);
+	private void parseAdapterList(final EList<AdapterDeclaration> adpaterList, String adpaterListName, boolean isInput)
+			throws TypeImportException, XMLStreamException {
+		processChildren(adpaterListName, name -> {
+			if (LibraryElementTags.ADAPTER_DECLARATION_ELEMENT.equals(name)) {
+				AdapterDeclaration a = parseAdapterDeclaration();
+				a.setIsInput(isInput);
 				adapters.put(a.getName(), a);
-				interfaceList.getPlugs().add(a);
-				if (null != a.getType() && null != a.getType().getInterfaceList()) {
-					addAdapterEventInputs(a.getType().getInterfaceList().getEventInputs(), a);
-					addAdapterEventOutputs(a.getType().getInterfaceList().getEventOutputs(), a);
+				adpaterList.add(a);
+				if ((null != a.getType()) && (null != a.getType().getInterfaceList())) {
+					if (isInput) {
+						addAdapterEventInputs(a.getType().getInterfaceList().getEventOutputs(), a);
+						addAdapterEventOutputs(a.getType().getInterfaceList().getEventInputs(), a);
+					} else {
+						addAdapterEventInputs(a.getType().getInterfaceList().getEventInputs(), a);
+						addAdapterEventOutputs(a.getType().getInterfaceList().getEventOutputs(), a);
+					}
 				}
+				return true;
 			}
-		}
+			return false;
+		});
 	}
 
 	private void addAdapterEventOutputs(EList<Event> eventOutputs, AdapterDeclaration a) {
@@ -972,66 +897,28 @@ public class FBTImporter implements LibraryElementTags {
 	}
 
 	/**
-	 * This method parses Sockets of a FBType.
-	 * 
-	 * @param type - the FBType containing the Sockets
-	 * @param node - the node in the DTD of the Socket being parsed
-	 * 
-	 * @throws TypeImportException the FBT import exception
-	 */
-	private void parseSockets(final InterfaceList interfaceList, final Node node, Palette palette)
-			throws TypeImportException {
-		NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(ADAPTER_DECLARATION_ELEMENT)) {
-				AdapterDeclaration a = parseAdapterDeclaration(n, palette);
-				// TODO handle if type was not found!
-				a.setIsInput(true);
-				adapters.put(a.getName(), a);
-				interfaceList.getSockets().add(a);
-				if (null != a.getType() && null != a.getType().getInterfaceList()) {
-					addAdapterEventInputs(a.getType().getInterfaceList().getEventOutputs(), a);
-					addAdapterEventOutputs(a.getType().getInterfaceList().getEventInputs(), a);
-				}
-
-			}
-		}
-
-	}
-
-	/**
 	 * This method parses AdapterDeclaration.
-	 * 
+	 *
 	 * @param node - the node in the DTD of the AdapterDeclaration being parsed
-	 * 
+	 *
 	 * @return a - the AdapterDeclaration
-	 * 
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private AdapterDeclaration parseAdapterDeclaration(final Node node, Palette palette) throws TypeImportException {
+	private AdapterDeclaration parseAdapterDeclaration() throws TypeImportException, XMLStreamException {
 		AdapterDeclaration a = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
-		NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(PARAMETER_ELEMENT)) {
-				// TODO !! import parameter of adapterDeclaration
-				// Parameter p = ImportUtils.parseParameter(node);
-				// a.getParameter().add(p);
-			}
-		}
-		NamedNodeMap map = node.getAttributes();
-		CommonElementImporter.readNameCommentAttributes(a, map);
-		Node typeName = map.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (typeName != null) {
-			AdapterTypePaletteEntry entry = getAdapterPaletEntry(typeName.getNodeValue(), palette);
+		readNameCommentAttributes(a);
+		String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		if (null != typeName) {
+			AdapterTypePaletteEntry entry = palette.getAdapterTypeEntry(typeName);
 			a.setPaletteEntry(entry);
 			AdapterType dataType = null;
-			if (entry != null) {
+			if (null != entry) {
 				dataType = entry.getType();
 			}
-			a.setTypeName(typeName.getNodeValue());
-			if (dataType != null) {
+			a.setTypeName(typeName);
+			if (null != dataType) {
 				a.setType(dataType);
 			}
 		} else {
@@ -1039,176 +926,82 @@ public class FBTImporter implements LibraryElementTags {
 		}
 
 		PositionableElement pos = LibraryElementFactory.eINSTANCE.createPositionableElement();
-		CommonElementImporter.getXandY(map, pos);
+		getXandY(pos);
 		adapterPositions.put(a.getName(), pos);
+		proceedToEndElementNamed(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
 		return a;
 	}
 
-	/**
-	 * This method parses WithConstructs.
-	 * 
-	 * @param childNodes - the childNodes in the DTD containing the WithConstructs
-	 *                   being parsed
-	 */
-	private void parseWithConstructs(final NodeList childNodes) {
-		parseWithConstructs(childNodes, inputEvents, outputEvents, variables);
-	}
-
-	public void parseWithConstructs(final NodeList childNodes, Map<String, Event> eventInputs,
-			Map<String, Event> eventOutputs, Map<String, VarDeclaration> variables) {
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			Map<String, Event> eventMap = (n.getNodeName().equals(getEventInputElement())) ? eventInputs : eventOutputs;
-			NodeList eventNodes = n.getChildNodes();
-			for (int j = 0; j < eventNodes.getLength(); j++) {
-				Node eventNode = eventNodes.item(j);
-				if (eventNode.getNodeName().equals(getEventElement())) {
-					NamedNodeMap map = eventNode.getAttributes();
-					Node name = map.getNamedItem(NAME_ATTRIBUTE);
-					Event e = eventMap.get(name.getNodeValue());
-					NodeList withs = eventNode.getChildNodes();
-					for (int k = 0; k < withs.getLength(); k++) {
-						Node with = withs.item(k);
-						if (with.getNodeName().equals(WITH_ELEMENT)) {
-							NamedNodeMap withAttributes = with.getAttributes();
-							Node var = withAttributes.getNamedItem(VAR_ATTRIBUTE);
-							if (var != null) {
-								With withConstruct = LibraryElementFactory.eINSTANCE.createWith();
-								e.getWith().add(withConstruct);
-								VarDeclaration v = variables.get(var.getNodeValue());
-								withConstruct.setVariables(v);
-							}
-						}
-					}
+	protected void processWiths() {
+		withList.entrySet().forEach(entry -> {
+			Event e = entry.getKey();
+			entry.getValue().forEach(varName -> {
+				VarDeclaration v = variables.get(varName);
+				if (null != v) {
+					With withConstruct = LibraryElementFactory.eINSTANCE.createWith();
+					withConstruct.setVariables(v);
+					e.getWith().add(withConstruct);
 				}
-			}
-		}
+			});
+		});
 	}
 
 	/**
 	 * This method parses EventInputs of FBTypes.
-	 * 
-	 * @param fBtype - the FBType containing the EventInputs being parsed
-	 * @param node   - the node in the DTD of the EventInputs being parsed
-	 * 
+	 *
+	 * @param isInput
+	 *
 	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
 	 */
-	private void parseEventInputs(final InterfaceList interfaceList, final Node node) throws TypeImportException {
-		NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(getEventElement())) {
-				Event e = ImportUtils.parseEvent(n);
-				e.setIsInput(true);
-				inputEvents.put(e.getName(), e);
-				interfaceList.getEventInputs().add(e);
+	private void parseEventList(final EList<Event> eventList, final String eventListName, boolean isInput)
+			throws TypeImportException, XMLStreamException {
+		final String eventName = getEventElement();
+
+		processChildren(eventListName, name -> {
+			if (eventName.equals(name)) {
+				Event e = parseEvent(eventName);
+				e.setIsInput(isInput);
+				if (isInput) {
+					inputEvents.put(e.getName(), e);
+				} else {
+					outputEvents.put(e.getName(), e);
+				}
+				eventList.add(e);
+				return true;
 			}
-		}
+			return false;
+		});
 	}
 
 	@SuppressWarnings("static-method")
 	protected String getEventElement() {
-		return EVENT_ELEMENT;
+		return LibraryElementTags.EVENT_ELEMENT;
 	}
 
-	/**
-	 * This method parses EventOutputs of FBTypes.
-	 * 
-	 * @param interfacelist
-	 * @param node          - the node in the DTD of the EventOutputs being parsed
-	 * 
-	 * @throws TypeImportException the FBT import exception
-	 */
-	private void parseEventOutputs(final InterfaceList interfaceList, final Node node) throws TypeImportException {
-		NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(getEventElement())) {
-				Event e = ImportUtils.parseEvent(n);
-				outputEvents.put(e.getName(), e);
-				e.setIsInput(false);
-				interfaceList.getEventOutputs().add(e);
-			}
-		}
-	}
+	private Event parseEvent(String eventName) throws TypeImportException, XMLStreamException {
+		Event e = LibraryElementFactory.eINSTANCE.createEvent();
+		e.setType(EventTypeLibrary.getInstance().getType(null));
 
-	/**
-	 * This method returns a list with all the data types that are referenced by the
-	 * imported FBTypes.
-	 * 
-	 * @param file - the file that is being checked if it has references
-	 * 
-	 * @return references - a list containing all the references
-	 */
-	public static List<String> getReferencedDataTypes(final File file) {
-		List<String> references = new ArrayList<>();
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db;
+		readNameCommentAttributes(e);
+		List<String> withVars = new ArrayList<>();
 
-		dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
-				Boolean.FALSE);
-		try {
-			db = dbf.newDocumentBuilder();
-			Document document = db.parse(file);
-			// parse document for "FBNetwork" tag
-			Node rootNode = document.getDocumentElement();
-			NodeList childNodes = rootNode.getChildNodes();
-			for (int i = 0; i < childNodes.getLength(); i++) {
-				Node n = childNodes.item(i);
-				if (n.getNodeName().equals(VAR_DECLARATION_ELEMENT)) {
-					String dataType = ""; //$NON-NLS-1$
-					dataType = n.getAttributes().getNamedItem(TYPE_ATTRIBUTE).getNodeValue();
-					references.add(dataType);
+		processChildren(eventName, name -> {
+			if (LibraryElementTags.WITH_ELEMENT.equals(name)) {
+				String val = getAttributeValue(LibraryElementTags.VAR_ATTRIBUTE);
+				if (null != val) {
+					withVars.add(val);
 				}
-
+				proceedToEndElementNamed(LibraryElementTags.WITH_ELEMENT);
+				return true;
 			}
-		} catch (Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			return false;
+		});
+
+		if (!withVars.isEmpty()) {
+			withList.put(e, withVars);
 		}
-		return references;
 
+		return e;
 	}
-
-	/**
-	 * This method returns a list with all the types that are referenced by the
-	 * imported FBTypes.
-	 * 
-	 * @param file - the file that is being checked if it has references
-	 * 
-	 * @return references - a list containing all the references
-	 */
-	public static List<String> getReferencedFBTypes(final File file) {
-		List<String> references = new ArrayList<>();
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db;
-
-		dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
-				Boolean.FALSE);
-		try {
-			db = dbf.newDocumentBuilder();
-			Document document = db.parse(file);
-			// parse document for "FBNetwork" tag
-			Node rootNode = document.getDocumentElement();
-			NodeList childNodes = rootNode.getChildNodes();
-			for (int i = 0; i < childNodes.getLength(); i++) {
-				Node n = childNodes.item(i);
-				if (n.getNodeName().equals(FBNETWORK_ELEMENT)) {
-					// add nodes to NodeList
-					for (int j = 0; j < n.getChildNodes().getLength(); j++) {
-						Node node = n.getChildNodes().item(j);
-						if (node.getNodeName().equals(FB_ELEMENT)) {
-							String fbType = ""; //$NON-NLS-1$
-							fbType = node.getAttributes().getNamedItem(TYPE_ATTRIBUTE).getNodeValue();
-							references.add(fbType);
-						}
-
-					}
-				}
-			}
-		} catch (Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-		}
-		return references;
-	}
-
 }

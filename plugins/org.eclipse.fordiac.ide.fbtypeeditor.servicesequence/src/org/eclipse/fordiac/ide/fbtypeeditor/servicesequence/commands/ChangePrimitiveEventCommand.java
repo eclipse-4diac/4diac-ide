@@ -37,6 +37,7 @@ public class ChangePrimitiveEventCommand extends Command {
 	public void undo() {
 		primitive.setEvent(oldEventName);
 	}
+
 	@Override
 	public void redo() {
 		primitive.setEvent(eventName);

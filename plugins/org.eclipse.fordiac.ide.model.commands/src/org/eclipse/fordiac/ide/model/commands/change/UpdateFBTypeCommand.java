@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
@@ -29,6 +30,7 @@ import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -36,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -79,14 +80,16 @@ public class UpdateFBTypeCommand extends Command {
 	public UpdateFBTypeCommand(FBNetworkElement fbnElement, PaletteEntry entry) {
 		this.fbnElement = fbnElement;
 		network = (FBNetwork) fbnElement.eContainer();
-		if (entry instanceof FBTypePaletteEntry || entry instanceof SubApplicationTypePaletteEntry) {
+		if ((entry instanceof FBTypePaletteEntry) || (entry instanceof SubApplicationTypePaletteEntry)) {
 			this.entry = entry;
+		} else {
+			this.entry = fbnElement.getPaletteEntry();
 		}
 	}
 
 	@Override
 	public boolean canExecute() {
-		return null != fbnElement.getType();
+		return (null != entry) && (null != fbnElement) && (null != network);
 	}
 
 	/*
@@ -226,7 +229,7 @@ public class UpdateFBTypeCommand extends Command {
 			cmd.execute();
 			deleteConnCmds.add(cmd);
 
-			if (source != null && dest != null) {
+			if ((source != null) && (dest != null)) {
 				// if source or dest is null it means that an interface element is not available
 				// any more
 				AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, fbn);
@@ -282,23 +285,16 @@ public class UpdateFBTypeCommand extends Command {
 	}
 
 	protected FBNetworkElement createCopiedFBEntry(FBNetworkElement srcElement) {
-		FBNetworkElement copy = null;
-
-		if (null == entry) {
-			if (srcElement instanceof SubApp) {
-				copy = LibraryElementFactory.eINSTANCE.createSubApp();
-			} else {
-				copy = LibraryElementFactory.eINSTANCE.createFB();
-			}
-			copy.setPaletteEntry(srcElement.getPaletteEntry());
+		FBNetworkElement copy;
+		if (entry instanceof SubApplicationTypePaletteEntry) {
+			copy = LibraryElementFactory.eINSTANCE.createSubApp();
+		} else if (entry instanceof AdapterTypePaletteEntry) {
+			copy = LibraryElementFactory.eINSTANCE.createAdapterFB();
+			((AdapterFB) copy).setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
 		} else {
-			if (entry instanceof SubApplicationTypePaletteEntry) {
-				copy = LibraryElementFactory.eINSTANCE.createSubApp();
-			} else {
-				copy = LibraryElementFactory.eINSTANCE.createFB();
-			}
-			copy.setPaletteEntry(entry);
+			copy = LibraryElementFactory.eINSTANCE.createFB();
 		}
+		copy.setPaletteEntry(entry);
 		return copy;
 	}
 
@@ -311,7 +307,7 @@ public class UpdateFBTypeCommand extends Command {
 
 	private void checkSourceParam(VarDeclaration var) {
 		VarDeclaration srcVar = fbnElement.getInterface().getVariable(var.getName());
-		if (null != srcVar && null != srcVar.getValue() && null != srcVar.getValue().getValue()) {
+		if ((null != srcVar) && (null != srcVar.getValue()) && (null != srcVar.getValue().getValue())) {
 			var.getValue().setValue(srcVar.getValue().getValue());
 		}
 	}
@@ -346,7 +342,7 @@ public class UpdateFBTypeCommand extends Command {
 			IInterfaceElement source = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement,
 					connData.source);
 			IInterfaceElement dest = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement, connData.dest);
-			if (source != null && dest != null) {
+			if ((source != null) && (dest != null)) {
 				// if source or dest is null it means that an interface element is not available
 				// any more
 				AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, copiedMappedElement.getFbNetwork());

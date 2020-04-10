@@ -26,8 +26,7 @@ public class ValueToolTipFigure extends ToolTipFigure {
 	/**
 	 * Instantiates a new tool tip figure.
 	 * 
-	 * @param element
-	 *            the element
+	 * @param element the element
 	 */
 	public ValueToolTipFigure(final INamedElement element, Value value) {
 		super(element);

@@ -22,7 +22,7 @@ import org.eclipse.gef.editparts.ZoomManager;
  * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
  */
 public class ResFBEditPart extends FBEditPart {
-	
+
 	public ResFBEditPart(ZoomManager zoomManager) {
 		super(zoomManager);
 	}

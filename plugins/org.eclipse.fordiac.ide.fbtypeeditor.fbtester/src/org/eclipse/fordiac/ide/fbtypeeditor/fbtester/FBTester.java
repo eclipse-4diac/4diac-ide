@@ -36,9 +36,9 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.TestData;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.TestdataFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
@@ -46,7 +46,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestDataLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
-import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -108,12 +108,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 public class FBTester extends GraphicalEditor implements IFBTEditorPart {
-	public static final String EXPECTED_EVENTS = "ExpectedEvents";
-	public static final String EVENT = "Event";
-	public static final String NAME = "Name";
-	public static final String COLUMN_TYPE = "ColumnType";
-	public static final String INPUT_VARIABLE = "InputVariable";
-	public static final String OUTPUT_VARIABLE = "OutputVariable";
+	public static final String EXPECTED_EVENTS = "ExpectedEvents"; //$NON-NLS-1$
+	public static final String EVENT = "Event"; //$NON-NLS-1$
+	public static final String NAME = "Name"; //$NON-NLS-1$
+	public static final String COLUMN_TYPE = "ColumnType"; //$NON-NLS-1$
+	public static final String INPUT_VARIABLE = "InputVariable"; //$NON-NLS-1$
+	public static final String OUTPUT_VARIABLE = "OutputVariable"; //$NON-NLS-1$
 	private FBType type;
 	private String path;
 	private KeyHandler sharedKeyHandler;
@@ -126,7 +126,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	private final Map<String, TableColumn> dataColumns = new HashMap<>();
 	private final List<TestData> testDataCollection = new ArrayList<>();
 
-	private EContentAdapter eContentAdapter = new EContentAdapter() {
+	private Adapter eContentAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
@@ -154,19 +154,11 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		if (input instanceof FBTypeEditorInput) {
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			type = untypedInput.getContent();
-
-			EObject group = untypedInput.getPaletteEntry().getGroup();
-
-			while (null != group.eContainer()) {
-				group = group.eContainer();
-			}
-			if (group instanceof Palette) {
-				palette = (Palette) group;
-			}
+			palette = untypedInput.getPaletteEntry().getPalette();
 		}
 		setSite(site);
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
-		setPartName("FBTester");
+		setPartName(Messages.FBTester_FBTester);
 		setTitleImage(FordiacImage.ICON_FB_TESTER.getImage());
 		super.init(site, input);
 
@@ -185,7 +177,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		interfaceEditing.setLayout(new GridLayout(2, false));
 
 		Label testConfiguraionLabel = new Label(interfaceEditing, SWT.NONE);
-		testConfiguraionLabel.setText("Test Configuration");
+		testConfiguraionLabel.setText(Messages.FBTester_TestConfiguration);
 
 		CCombo configurationCombo = ComboBoxWidgetFactory.createCombo(interfaceEditing);
 		configurationCombo.setItems(getTestConfigurations().toArray(new String[0]));
@@ -284,13 +276,13 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	private void createTestToolbar(Composite parent) {
 		ToolBar tb = new ToolBar(parent, SWT.FLAT | SWT.HORIZONTAL);
 		ToolItem runItem = new ToolItem(tb, SWT.NONE);
-		runItem.setToolTipText("Run selected Tests");
+		runItem.setToolTipText(Messages.FBTester_RunselectedTests);
 		runItem.setImage(FordiacImage.ICON_RUN_DEBUG.getImage());
 		ToolItem stopItem = new ToolItem(tb, SWT.NONE);
-		stopItem.setToolTipText("Stop");
+		stopItem.setToolTipText(Messages.FBTester_Stop);
 		stopItem.setImage(FordiacImage.ICON_STOP.getImage());
 		ToolItem saveItem = new ToolItem(tb, SWT.NONE);
-		saveItem.setToolTipText("Save Test Data");
+		saveItem.setToolTipText(Messages.FBTester_SaveTestData);
 		saveItem.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_SAVE_EDIT));
 		saveItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -299,7 +291,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 			}
 		});
 		ToolItem addItem = new ToolItem(tb, SWT.NONE);
-		addItem.setToolTipText("Add Test");
+		addItem.setToolTipText(Messages.FBTester_AddTest);
 		addItem.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		addItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -308,7 +300,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 			}
 		});
 		ToolItem deleteItem = new ToolItem(tb, SWT.NONE);
-		deleteItem.setToolTipText("Delete Test");
+		deleteItem.setToolTipText(Messages.FBTester_DeleteTest);
 		deleteItem.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		deleteItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -332,7 +324,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		eventCol.getColumn().setData(COLUMN_TYPE, EVENT);
 		TableViewerColumn expectedEvents = new TableViewerColumn(testDataViewer, SWT.LEFT);
 		expectedEvents.getColumn().setWidth(100);
-		expectedEvents.getColumn().setText("Expected Events");
+		expectedEvents.getColumn().setText(Messages.FBTester_ExpectedEvents);
 		expectedEvents.getColumn().setData(COLUMN_TYPE, EXPECTED_EVENTS);
 	}
 
@@ -427,7 +419,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditpartFactory());
 		// configure the context menu provider
-		ContextMenuProvider cmProvider = new ZoomUndoRedoContextMenuProvider(viewer, root.getZoomManager(),
+		ContextMenuProvider cmProvider = new FordiacContextMenuProvider(viewer, root.getZoomManager(),
 				getActionRegistry()) {
 			@Override
 			public void buildContextMenu(IMenuManager menu) {
@@ -477,7 +469,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		ArrayList<String> testConfigurations = new ArrayList<>();
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IExtensionPoint point = registry
-				.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.fbtester.fbTesterConfiguration");
+				.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.fbtester.fbTesterConfiguration"); //$NON-NLS-1$
 
 		for (IExtension extension : point.getExtensions()) {
 			IConfigurationElement[] elements = extension.getConfigurationElements();
@@ -509,7 +501,6 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 					Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (obj instanceof IFBTestConfiguratonCreator) {
 						((IFBTestConfiguratonCreator) obj).setType(type);
-						((IFBTestConfiguratonCreator) obj).setGroup(palette.getRootGroup());
 
 						IFBTestConfiguration configuration = ((IFBTestConfiguratonCreator) obj)
 								.createConfigurationPage(parent);
@@ -524,7 +515,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	}
 
 	void addTest() {
-		StringBuilder dataLine = new StringBuilder("Testname;");
+		StringBuilder dataLine = new StringBuilder("Testname;"); //$NON-NLS-1$
 		dataLine.append(type.getName());
 		dataLine.append(";"); //$NON-NLS-1$
 		if (!type.getInterfaceList().getEventInputs().isEmpty()) {
@@ -558,7 +549,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 
 	private class SaveTestDataAction extends Action {
 		public SaveTestDataAction() {
-			super("Save Testdata");
+			super(Messages.FBTester_SaveTestData);
 		}
 
 		@Override
@@ -569,7 +560,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 
 	private class NewTestDataAction extends Action {
 		public NewTestDataAction() {
-			super("New Test");
+			super(Messages.FBTester_NewTest);
 			setImageDescriptor(
 					PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		}

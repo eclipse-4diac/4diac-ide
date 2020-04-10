@@ -21,6 +21,20 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.messages"; //$NON-NLS-1$
 
+	public static String AbstractFileManagementHandler_CouldNotWriteFile;
+
+	public static String AbstractFileManagementHandler_FileExists;
+
+	public static String AbstractFileManagementHandler_CouldnotCreateFile;
+
+	public static String AbstractFileManagementHandler_CouldnotCreateFileWithError;
+
+	public static String AbstractMonitoringManager_ErrorInCreatingMonitoringManager;
+
+	public static String AbstractMonitoringManager_NoMonitoringManagerProvided;
+
+	public static String DeploymentCoordinator_DepoymentError;
+
 	/** The DeploymentCoordinator_ERROR_Message. */
 	public static String DeploymentCoordinator_ERROR_Message;
 
@@ -32,22 +46,23 @@ public class Messages extends NLS {
 
 	/** The DeploymentCoordinator_MESSAGE_DefinedProfileNotSupported. */
 	public static String DeploymentCoordinator_MESSAGE_DefinedProfileNotSupported;
-	
+
 	public static String DeploymentCoordinator_MESSAGE_ProfileNotSet;
 
 	public static String DownloadRunnable_DownloadErrorDetails;
 
 	public static String DownloadRunnable_MajorDownloadError;
-	
+
 	public static String DownloadRunnable_ResourceAlreadyExists;
-	
+
 	public static String DownloadRunnable_ResourceOverrideQuestion;
-	
+
 	public static String DownloadRunnable_Replace;
-	
+
 	public static String DownloadRunnable_ReplaceAll;
-	
+
 	public static String DownloadRunnable_ReassureOverideHeader;
+
 	public static String DownloadRunnable_ReassureOveride;
 
 	static {

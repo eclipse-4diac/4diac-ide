@@ -19,20 +19,22 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.jface.viewers.IFilter;
 
-public class AdapterInterfaceFilter implements IFilter{
+public class AdapterInterfaceFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if(toTest instanceof InterfaceEditPart && ((InterfaceEditPart) toTest).getCastedModel() instanceof AdapterDeclaration){
+		if (toTest instanceof InterfaceEditPart
+				&& ((InterfaceEditPart) toTest).getCastedModel() instanceof AdapterDeclaration) {
 			return true;
 		}
-		if(toTest instanceof TypeEditPart && ((TypeEditPart) toTest).getCastedModel() instanceof AdapterDeclaration){
+		if (toTest instanceof TypeEditPart && ((TypeEditPart) toTest).getCastedModel() instanceof AdapterDeclaration) {
 			return true;
 		}
-		if(toTest instanceof CommentEditPart && ((CommentEditPart) toTest).getCastedModel() instanceof AdapterDeclaration){
+		if (toTest instanceof CommentEditPart
+				&& ((CommentEditPart) toTest).getCastedModel() instanceof AdapterDeclaration) {
 			return true;
 		}
-		if(toTest instanceof AdapterDeclaration){
+		if (toTest instanceof AdapterDeclaration) {
 			return true;
 		}
 		return false;

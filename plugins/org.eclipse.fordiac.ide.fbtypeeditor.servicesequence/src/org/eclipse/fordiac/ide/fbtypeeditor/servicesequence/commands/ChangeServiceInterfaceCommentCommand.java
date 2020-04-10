@@ -21,37 +21,37 @@ public class ChangeServiceInterfaceCommentCommand extends Command {
 	private boolean isLeftInterface;
 	private String comment;
 	private String oldComment;
-	
-	public ChangeServiceInterfaceCommentCommand(String comment, Service service, boolean isLeftInterface){
+
+	public ChangeServiceInterfaceCommentCommand(String comment, Service service, boolean isLeftInterface) {
 		this.service = service;
 		this.isLeftInterface = isLeftInterface;
 		this.comment = comment;
 	}
-	
+
 	@Override
-	public void execute(){
-		if(isLeftInterface){
+	public void execute() {
+		if (isLeftInterface) {
 			oldComment = service.getLeftInterface().getComment();
-		}else{
+		} else {
 			oldComment = service.getRightInterface().getComment();
 		}
 		redo();
 	}
-	
+
 	@Override
 	public void undo() {
-		if(isLeftInterface){
+		if (isLeftInterface) {
 			service.getLeftInterface().setComment(oldComment);
-		}else{
+		} else {
 			service.getRightInterface().setComment(oldComment);
 		}
 	}
 
 	@Override
 	public void redo() {
-		if(isLeftInterface){
+		if (isLeftInterface) {
 			service.getLeftInterface().setComment(comment);
-		}else{
+		} else {
 			service.getRightInterface().setComment(comment);
 		}
 	}

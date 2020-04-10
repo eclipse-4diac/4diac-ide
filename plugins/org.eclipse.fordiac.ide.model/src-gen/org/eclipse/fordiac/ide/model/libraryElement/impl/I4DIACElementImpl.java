@@ -24,22 +24,23 @@ import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * <!-- begin-user-doc --> An implementation of the model object '
- * <em><b>I4DIAC Element</b></em>'. <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object ' <em><b>I4DIAC
+ * Element</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.I4DIACElementImpl#getAnnotations <em>Annotations</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.I4DIACElementImpl#getAnnotations
+ * <em>Annotations</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class I4DIACElementImpl extends EObjectImpl implements
-		I4DIACElement {
+public abstract class I4DIACElementImpl extends EObjectImpl implements I4DIACElement {
 	/**
-	 * The cached value of the '{@link #getAnnotations() <em>Annotations</em>}' reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getAnnotations() <em>Annotations</em>}'
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getAnnotations()
 	 * @generated
 	 * @ordered
@@ -48,6 +49,7 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected I4DIACElementImpl() {
@@ -56,6 +58,7 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -65,18 +68,21 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Annotation> getAnnotations() {
 		if (annotations == null) {
-			annotations = new EObjectResolvingEList<Annotation>(Annotation.class, this, LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS);
+			annotations = new EObjectResolvingEList<Annotation>(Annotation.class, this,
+					LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS);
 		}
 		return annotations;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -86,6 +92,7 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -95,56 +102,60 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS:
-				return getAnnotations();
+		case LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS:
+			return getAnnotations();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS:
-				getAnnotations().clear();
-				getAnnotations().addAll((Collection<? extends Annotation>)newValue);
-				return;
+		case LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS:
+			getAnnotations().clear();
+			getAnnotations().addAll((Collection<? extends Annotation>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS:
-				getAnnotations().clear();
-				return;
+		case LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS:
+			getAnnotations().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS:
-				return annotations != null && !annotations.isEmpty();
+		case LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS:
+			return annotations != null && !annotations.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -23,9 +23,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.viewer.composite.CompositeInstanceViewerInput;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
-import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPartFactory;
@@ -56,7 +55,7 @@ public class CompositeInstanceViewer extends DiagramEditor {
 
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer, ZoomManager zoomManager) {
-		return new ZoomUndoRedoContextMenuProvider(getGraphicalViewer(), zoomManager, getActionRegistry());
+		return new FordiacContextMenuProvider(getGraphicalViewer(), zoomManager, getActionRegistry());
 	}
 
 	@Override
@@ -87,10 +86,15 @@ public class CompositeInstanceViewer extends DiagramEditor {
 			Object content = untypedInput.getContent();
 			if ((content instanceof FB) && (((FB) content).getType() instanceof CompositeFBType)) {
 				fb = (FB) content;
-				setPartName(getNameHierarchy());
+				String name = getNameHierarchy();
+				setPartName(name);
 				// we need to copy the type so that we have an instance specific network
 				cfbt = createFBType((CompositeFBType) fb.getType(), fb.getInterface());
-				this.fbEditPart = untypedInput.getFbEditPart();
+				cfbt.setName(name); // we set the name of the type so internal function blocks can generate their
+									// hierarchy name from it
+				fbEditPart = untypedInput.getFbEditPart();
+				((CompositeInstanceViewerInput) input).setName(name); // the tooltip will show the whole name when
+																		// hovering
 			}
 		}
 	}
@@ -129,12 +133,8 @@ public class CompositeInstanceViewer extends DiagramEditor {
 		// TODO mabye a nice helper function to be put into the fb model
 		StringBuilder retVal = new StringBuilder(fb.getName());
 		EObject cont = fb.eContainer().eContainer();
-		while (cont instanceof INamedElement) {
+		if (cont instanceof INamedElement) {
 			retVal.insert(0, ((INamedElement) cont).getName() + "."); //$NON-NLS-1$
-			if (cont instanceof Application) {
-				break;
-			}
-			cont = cont.eContainer().eContainer();
 		}
 		return retVal.toString();
 	}

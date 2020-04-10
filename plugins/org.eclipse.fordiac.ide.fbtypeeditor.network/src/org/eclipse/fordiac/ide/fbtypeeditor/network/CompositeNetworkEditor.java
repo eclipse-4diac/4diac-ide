@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,8 +16,9 @@ package org.eclipse.fordiac.ide.fbtypeeditor.network;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.actions.UnmapAction;
 import org.eclipse.fordiac.ide.application.actions.UnmapAllAction;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
@@ -52,24 +53,23 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	private CompositeFBType fbType;
 	private CommandStack commandStack;
 	private Palette palette;
-	private EContentAdapter adapter = new EContentAdapter() {
+	private Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
 			// only refresh propertypage (page) if the event is not an
 			// REMOVING_ADAPTER event - otherwise, the remove adapter in the
 			// dispose method (called when closing the editor) will fail
-			if (notification.getEventType() != Notification.REMOVING_ADAPTER
-					&& (((notification.getNewValue() == null) && (notification
-							.getNewValue() != notification.getOldValue())) || ((notification
-							.getNewValue() != null) && !(notification
-							.getNewValue().equals(notification.getOldValue()))))) {
+			if (notification.getEventType() != Notification.REMOVING_ADAPTER && (((notification.getNewValue() == null)
+					&& (notification.getNewValue() != notification.getOldValue()))
+					|| ((notification.getNewValue() != null)
+							&& !(notification.getNewValue().equals(notification.getOldValue()))))) {
 				super.notifyChanged(notification);
 			}
 
 		}
 	};
-	
+
 	@Override
 	public void setCommonCommandStack(CommandStack commandStack) {
 		this.commandStack = commandStack;
@@ -77,19 +77,18 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
-		return new CompositeNetworkEditPartFactory(this, getZoomManger() );
+		return new CompositeNetworkEditPartFactory(this, getZoomManger());
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart part,
-			final ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		super.selectionChanged(part, selection);
 		updateActions(getSelectionActions());
 	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		//currently nothing needs to be done here
+		// currently nothing needs to be done here
 	}
 
 	@Override
@@ -102,20 +101,20 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	protected void createActions() {
 		ActionRegistry registry = getActionRegistry();
 		IAction action;
-		
+
 		super.createActions();
 
 		action = registry.getAction(UnmapAction.ID);
 		registry.removeAction(action);
-		
+
 		action = registry.getAction(UnmapAllAction.ID);
 		registry.removeAction(action);
-		
+
 		InterfaceContextMenuProvider.createInterfaceEditingActions(this, registry, fbType);
-		
+
 		super.createActions();
 	}
-	
+
 	@Override
 	public boolean outlineSelectionChanged(Object selectedElement) {
 
@@ -124,11 +123,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 			getGraphicalViewer().select(editPart);
 			return true;
 		}
-		if (selectedElement instanceof FBNetwork) {
-			return true;
-		}
-
-		return false;
+		return (selectedElement instanceof FBNetwork);
 	}
 
 	EditPart getEditPartForSelection(Object selectedElement) {
@@ -182,31 +177,30 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	protected void configurePalette(FBTypeEditorInput fbTypeEditorInput) {
-		Palette fbPallette = fbTypeEditorInput.getPaletteEntry().getGroup().getPallete();
-		if (null != fbPallette) {
-			palette = fbPallette;
+		Palette fbPalette = fbTypeEditorInput.getPaletteEntry().getPalette();
+		if (null != fbPalette) {
+			palette = fbPalette;
 		}
 	}
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-		return null;  //we are filling a the palete directly in the viewer so we don't need it here
+		return null; // we are filling a the palete directly in the viewer so we don't need it here
 	}
 
-	
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(fbType.getPaletteEntry().getFile().getProject(), getEditDomain(), getPalletNavigatorID());
+		return new FBTypePaletteViewerProvider(fbType.getPaletteEntry().getFile().getProject(), getEditDomain(),
+				getPalletNavigatorID());
 	}
-	
+
 	@Override
 	protected String getPalletNavigatorID() {
 		return "org.eclipse.fordiac.ide.compositefbpaletteviewer"; //$NON-NLS-1$
 	}
-	
+
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(
-			final ScrollingGraphicalViewer viewer,
+	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
 		return new CFBNetworkcontextMenuProvider(this, getActionRegistry(), zoomManager, getPalette());
 	}

@@ -43,7 +43,7 @@ public class DeleteInputPrimitiveCommand extends Command {
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void execute() {
 		if (null != parent) {

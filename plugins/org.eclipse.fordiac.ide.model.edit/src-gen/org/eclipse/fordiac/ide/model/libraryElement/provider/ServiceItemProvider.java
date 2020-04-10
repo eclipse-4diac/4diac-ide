@@ -15,7 +15,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -30,17 +29,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.Service} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.Service} object. <!--
+ * begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
-public class ServiceItemProvider
-	extends I4DIACElementItemProvider {
+public class ServiceItemProvider extends I4DIACElementItemProvider {
 	/**
-	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ServiceItemProvider(AdapterFactory adapterFactory) {
@@ -48,9 +47,9 @@ public class ServiceItemProvider
 	}
 
 	/**
-	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated not
 	 */
 	@Override
@@ -58,41 +57,35 @@ public class ServiceItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			//addRightInterfacePropertyDescriptor(object);
-			//addLeftInterfacePropertyDescriptor(object);
+			// addRightInterfacePropertyDescriptor(object);
+			// addLeftInterfacePropertyDescriptor(object);
 			addServiceSequencePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Service Sequence feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Service Sequence feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addServiceSequencePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Service_serviceSequence_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Service_serviceSequence_feature", "_UI_Service_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.SERVICE__SERVICE_SEQUENCE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Service_serviceSequence_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Service_serviceSequence_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Service_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.SERVICE__SERVICE_SEQUENCE, true, false, true, null, null, null));
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an
+	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
+	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -105,66 +98,52 @@ public class ServiceItemProvider
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
+		// Check the type of the specified child object and return the proper feature to
+		// use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
 	/**
-	 * This adds a property descriptor for the Right Interface feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Right Interface feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addRightInterfacePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Service_rightInterface_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Service_rightInterface_feature", "_UI_Service_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.SERVICE__RIGHT_INTERFACE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Service_rightInterface_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Service_rightInterface_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Service_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.SERVICE__RIGHT_INTERFACE, true, false, true, null, null, null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Left Interface feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Left Interface feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addLeftInterfacePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Service_leftInterface_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Service_leftInterface_feature", "_UI_Service_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.SERVICE__LEFT_INTERFACE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Service_leftInterface_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Service_leftInterface_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Service_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.SERVICE__LEFT_INTERFACE, true, false, true, null, null, null));
 	}
 
 	/**
-	 * This returns Service.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns Service.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -173,22 +152,22 @@ public class ServiceItemProvider
 	}
 
 	/**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated not
 	 */
 	@Override
 	public String getText(Object object) {
-		Service service = ((Service)object);
-		
-		String label = getString("_UI_Service_type") + ": ";
-		
-		if(null != service){
-			if(null != service.getLeftInterface()){
-				label += service.getLeftInterface().getName() + " / ";
+		Service service = ((Service) object);
+
+		String label = getString("_UI_Service_type") + ": "; //$NON-NLS-1$ //$NON-NLS-2$
+
+		if (null != service) {
+			if (null != service.getLeftInterface()) {
+				label += service.getLeftInterface().getName() + " / "; //$NON-NLS-1$
 			}
-			if(null != service.getRightInterface()){
+			if (null != service.getRightInterface()) {
 				label += service.getRightInterface().getName();
 			}
 		}
@@ -196,10 +175,10 @@ public class ServiceItemProvider
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -207,28 +186,26 @@ public class ServiceItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Service.class)) {
-			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-				return;
+		case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+			return;
 		}
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.SERVICE__SERVICE_SEQUENCE,
-				 LibraryElementFactory.eINSTANCE.createServiceSequence()));
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.SERVICE__SERVICE_SEQUENCE,
+				LibraryElementFactory.eINSTANCE.createServiceSequence()));
 	}
 
 }

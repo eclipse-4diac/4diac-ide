@@ -3,13 +3,15 @@
  */
 package org.eclipse.fordiac.ide.model.xtext.fbt.ide.contentassist.antlr;
 
-import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.eclipse.fordiac.ide.model.xtext.fbt.ide.contentassist.antlr.internal.InternalFBTypeParser;
 import org.eclipse.fordiac.ide.model.xtext.fbt.services.FBTypeGrammarAccess;
 import org.eclipse.xtext.AbstractElement;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.AbstractContentAssistParser;
+
+import com.google.inject.Inject;
 
 public class FBTypeParser extends AbstractContentAssistParser {
 
@@ -31,16 +33,17 @@ public class FBTypeParser extends AbstractContentAssistParser {
 			nameMappings = new HashMap<AbstractElement, String>() {
 				private static final long serialVersionUID = 1L;
 				{
-					put(grammarAccess.getLibraryElementAccess().getNameAssignment(), "rule__LibraryElement__NameAssignment");
+					put(grammarAccess.getLibraryElementAccess().getNameAssignment(),
+							"rule__LibraryElement__NameAssignment"); //$NON-NLS-1$
 				}
 			};
 		}
 		return nameMappings.get(element);
 	}
-			
+
 	@Override
 	protected String[] getInitialHiddenTokens() {
-		return new String[] { "RULE_WS", "RULE_ML_COMMENT", "RULE_SL_COMMENT" };
+		return new String[] { "RULE_WS", "RULE_ML_COMMENT", "RULE_SL_COMMENT" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	public FBTypeGrammarAccess getGrammarAccess() {

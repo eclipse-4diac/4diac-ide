@@ -28,15 +28,15 @@ public class MediaSpecificGeneratorFactory {
 	public void addGenerator(MediaSpecificGenerator generator) {
 		generators.put(generator.getProtocolId(), generator);
 	}
-	
+
 	public void removeGenerator(MediaSpecificGenerator generator) {
 		generators.remove(generator.getProtocolId());
 	}
-	
+
 	public MediaSpecificGenerator getForProtocolId(String protocolId) {
 		return generators.get(protocolId);
 	}
-	
+
 	public Collection<MediaSpecificGenerator> getForMediaType(String mediaType) {
 		HashSet<MediaSpecificGenerator> generatorsForMediaType = new HashSet<MediaSpecificGenerator>();
 		for (MediaSpecificGenerator generator : generators.values()) {
@@ -46,7 +46,7 @@ public class MediaSpecificGeneratorFactory {
 		}
 		return generatorsForMediaType;
 	}
-	
+
 	public void resetAllGenerators() {
 		for (MediaSpecificGenerator generator : generators.values()) {
 			generator.reset();

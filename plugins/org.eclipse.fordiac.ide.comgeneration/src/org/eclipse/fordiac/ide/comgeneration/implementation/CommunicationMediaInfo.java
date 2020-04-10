@@ -20,9 +20,8 @@ public class CommunicationMediaInfo {
 	private Link sourceLink;
 	private Link destinationLink;
 	private Segment segment;
-	
-	public CommunicationMediaInfo(Link sourceLink, Link destinationLink,
-			Segment segment) {
+
+	public CommunicationMediaInfo(Link sourceLink, Link destinationLink, Segment segment) {
 		super();
 		this.sourceLink = sourceLink;
 		this.destinationLink = destinationLink;
@@ -52,8 +51,5 @@ public class CommunicationMediaInfo {
 	public void setSegment(Segment segment) {
 		this.segment = segment;
 	}
-	
-	
-	
-	
+
 }

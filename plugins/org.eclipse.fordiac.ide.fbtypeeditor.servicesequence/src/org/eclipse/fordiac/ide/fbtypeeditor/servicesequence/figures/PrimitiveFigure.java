@@ -26,24 +26,24 @@ public class PrimitiveFigure extends Layer {
 	private Figure centerFigure;
 	private Figure leftFigure;
 	private Figure rightFigure;
-	
+
 	public PrimitiveFigure(boolean isLeftInterface, String name) {
 		GridLayout mainLayout;
 		setLayoutManager(mainLayout = new GridLayout(5, false));
 		mainLayout.marginHeight = 0;
 		mainLayout.marginWidth = 0;
 		mainLayout.horizontalSpacing = 0;
-		
+
 		centerFigure = new Figure();
 		GridData spaceData = new GridData();
-		spaceData.widthHint = 37;			
-		
+		spaceData.widthHint = 37;
+
 		nameLabel = new Label();
 		GridData nameLabelData = new GridData();
 		nameLabelData.widthHint = 100;
 		nameLabelData.grabExcessHorizontalSpace = true;
 		nameLabelData.horizontalAlignment = GridData.FILL;
-		
+
 		emptyLabel = new Label();
 		GridData emptyLabelData = new GridData();
 		emptyLabelData.widthHint = 100;
@@ -51,13 +51,13 @@ public class PrimitiveFigure extends Layer {
 		emptyLabelData.horizontalAlignment = GridData.FILL;
 
 		GridData arrowLeftData = new GridData();
-		arrowLeftData.widthHint = 50;		
+		arrowLeftData.widthHint = 50;
 		leftFigure = new Figure();
-		
+
 		GridData arrowRightData = new GridData();
-		arrowRightData.widthHint = 50;	
-		rightFigure = new Figure();		
-		
+		arrowRightData.widthHint = 50;
+		rightFigure = new Figure();
+
 		setInterfaceDirection(isLeftInterface);
 
 		nameLabel.setText(name);
@@ -67,19 +67,19 @@ public class PrimitiveFigure extends Layer {
 		setConstraint(rightFigure, arrowRightData);
 		setConstraint(nameLabel, nameLabelData);
 	}
-	
-	public void setInterfaceDirection(boolean interfaceDirection){
-		if(this.getChildren().size() > 0){
+
+	public void setInterfaceDirection(boolean interfaceDirection) {
+		if (this.getChildren().size() > 0) {
 			this.getChildren().clear();
 		}
-		if(interfaceDirection){
+		if (interfaceDirection) {
 			nameLabel.setLabelAlignment(PositionConstants.RIGHT);
 			add(nameLabel);
 			add(leftFigure);
 			add(centerFigure);
 			add(rightFigure);
 			add(emptyLabel);
-		}else{
+		} else {
 			nameLabel.setLabelAlignment(PositionConstants.LEFT);
 			add(emptyLabel);
 			add(leftFigure);
@@ -88,16 +88,16 @@ public class PrimitiveFigure extends Layer {
 			add(nameLabel);
 		}
 	}
-	
-	public Label getLabel(){
+
+	public Label getLabel() {
 		return nameLabel;
 	}
-	
-	public void setLabelText(String name){
+
+	public void setLabelText(String name) {
 		this.nameLabel.setText(null != name ? name : ""); //$NON-NLS-1$
 	}
-	
-	public Figure getCenterFigure(){
+
+	public Figure getCenterFigure() {
 		return centerFigure;
 	}
 }

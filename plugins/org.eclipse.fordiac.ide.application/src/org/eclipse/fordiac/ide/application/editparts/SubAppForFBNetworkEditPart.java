@@ -13,14 +13,19 @@
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed untyped subapp interface updates and according code cleanup
  *   Bianca Wiesmayr - fixed untyped subapp interface reorder/delete
+ *   Alois Zoitl - separated FBNetworkElement from instance name for better
+ *                 direct editing of instance names
+ *               - added update support for removing or readding subapp type
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction;
-import org.eclipse.fordiac.ide.application.figures.AbstractFBNetworkElementFigure;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -30,11 +35,44 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.ZoomManager;
 
-//TODO model refactoring - consder inheriting from fbeditpart when model refatoring is finished
 public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
+
+	private Adapter subAppInterfaceAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			switch (notification.getEventType()) {
+			case Notification.ADD:
+			case Notification.ADD_MANY:
+			case Notification.MOVE:
+			case Notification.REMOVE:
+			case Notification.REMOVE_MANY:
+				refreshChildren();
+				break;
+			default:
+				break;
+			}
+		}
+	};
 
 	public SubAppForFBNetworkEditPart(final ZoomManager zoomManager) {
 		super(zoomManager);
+	}
+
+	@Override
+	public void activate() {
+		super.activate();
+		if ((null != getModel()) && !getModel().getInterface().eAdapters().contains(subAppInterfaceAdapter)) {
+			getModel().getInterface().eAdapters().add(subAppInterfaceAdapter);
+		}
+	}
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		if (null != getModel()) {
+			getModel().getInterface().eAdapters().remove(subAppInterfaceAdapter);
+		}
 	}
 
 	@Override
@@ -43,13 +81,18 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	}
 
 	@Override
+	public SubAppForFbNetworkFigure getFigure() {
+		return (SubAppForFbNetworkFigure) super.getFigure();
+	}
+
+	@Override
 	public SubApp getModel() {
 		return (SubApp) super.getModel();
 	}
 
 	@Override
-	public EContentAdapter createContentAdapter() {
-		return new EContentAdapter() {
+	public Adapter createContentAdapter() {
+		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
@@ -91,11 +134,11 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		if (request.getType().equals(RequestConstants.REQ_OPEN)) {
 			if (null != getModel().getPaletteEntry()) {
 				// we have a type open the sub-app type editor
-				AbstractFBNetworkElementFigure.openTypeInEditor(getModel());
+				FBNetworkElementFigure.openTypeInEditor(getModel());
 			} else {
 				SubApp subApp = getModel();
 				if ((null == subApp.getSubAppNetwork()) && subApp.isMapped()) {
-					// we are mapped and the mirrord subapp located in the resource, get the one
+					// we are mapped and the mirrored subapp located in the resource, get the one
 					// from the application
 					subApp = (SubApp) subApp.getOpposite();
 				}
@@ -104,5 +147,11 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		} else {
 			super.performRequest(request);
 		}
+	}
+
+	@Override
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+		getFigure().updateTypeLabel(getModel());
 	}
 }

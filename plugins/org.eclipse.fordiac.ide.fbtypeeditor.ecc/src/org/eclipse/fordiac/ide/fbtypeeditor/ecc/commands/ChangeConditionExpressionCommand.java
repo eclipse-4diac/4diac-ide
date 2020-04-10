@@ -33,11 +33,10 @@ public class ChangeConditionExpressionCommand extends Command {
 	/**
 	 * Instantiates a new change condition command.
 	 * 
-	 * @param transition the transition
+	 * @param transition          the transition
 	 * @param conditionExpression the condition
 	 */
-	public ChangeConditionExpressionCommand(final ECTransition transition,
-			final String conditionExpression) {
+	public ChangeConditionExpressionCommand(final ECTransition transition, final String conditionExpression) {
 		super();
 		this.transition = transition;
 		this.conditionExpression = conditionExpression;

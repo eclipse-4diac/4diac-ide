@@ -21,16 +21,15 @@ import org.eclipse.gef.commands.Command;
  * The Class DeleteCompilerCommand.
  */
 public class DeleteCompilerCommand extends Command {
-	
+
 	/** The identification of the type. */
 	private CompilerInfo compilerInfo;
-	
+
 	/** The new Compiler value. */
 	private Compiler compiler;
-	
+
 	/** The old index. */
 	private int oldIndex;
-
 
 	public DeleteCompilerCommand(final CompilerInfo compilerInfo, Compiler compiler) {
 		super();

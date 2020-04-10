@@ -26,8 +26,9 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
@@ -41,8 +42,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -58,7 +59,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	private ValueEditPart referencedPart;
 	private int mouseState;
 
-	private EContentAdapter contentAdapter = null;
+	private Adapter contentAdapter = null;
 
 	public InterfaceEditPart() {
 		setConnectable(true);
@@ -152,8 +153,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	@SuppressWarnings("unchecked")
 	public void setInOutConnectionsWidth(int width) {
 		boolean hide = isEvent()
-				? Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON)
-				: Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON);
+				? UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON)
+				: UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON);
 
 		getSourceConnections().forEach(cep -> checkConnection(width, hide, (ConnectionEditPart) cep));
 		getTargetConnections().forEach(cep -> checkConnection(width, hide, (ConnectionEditPart) cep));
@@ -227,7 +228,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 	}
 
-	private EContentAdapter getContentAdapter() {
+	private Adapter getContentAdapter() {
 		if (null == contentAdapter) {
 			contentAdapter = createContentAdapter();
 		}
@@ -235,8 +236,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	// Allows childclasses to provide their own content adapters
-	protected EContentAdapter createContentAdapter() {
-		return new EContentAdapter() {
+	protected Adapter createContentAdapter() {
+		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				Object feature = notification.getFeature();

@@ -20,14 +20,12 @@ import org.eclipse.gef.commands.Command;
  * The Class ChangeCompilerProductCommand.
  */
 public class ChangeCompilerProductCommand extends Command {
-	
-	
+
 	/** The new Compiler value. */
 	private Compiler compiler;
-	
+
 	private String newProduct;
 	private String oldProduct;
-
 
 	public ChangeCompilerProductCommand(final Compiler compiler, final String newProduct) {
 		super();

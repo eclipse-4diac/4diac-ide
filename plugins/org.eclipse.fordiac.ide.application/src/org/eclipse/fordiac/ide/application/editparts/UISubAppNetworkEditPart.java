@@ -19,7 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
@@ -31,7 +33,7 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
 public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
-	private EContentAdapter contentAdapter = new EContentAdapter() {
+	private Adapter contentAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -52,13 +54,31 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 		}
 	};
 
+	private Adapter subAppInterfaceAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			switch (notification.getEventType()) {
+			case Notification.ADD:
+			case Notification.ADD_MANY:
+			case Notification.MOVE:
+			case Notification.REMOVE:
+			case Notification.REMOVE_MANY:
+				refreshChildren();
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
 	@Override
 	public void activate() {
 		super.activate();
 		if ((null != getModel()) && !getModel().eAdapters().contains(contentAdapter)) {
 			getModel().eAdapters().add(contentAdapter);
-			if ((null != getSubApp()) && !getSubApp().eAdapters().contains(contentAdapter)) {
-				getSubApp().eAdapters().add(contentAdapter);
+			if ((null != getSubApp()) && !getSubApp().getInterface().eAdapters().contains(subAppInterfaceAdapter)) {
+				getSubApp().getInterface().eAdapters().add(subAppInterfaceAdapter);
 			}
 		}
 	}
@@ -69,7 +89,7 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 		if (null != getModel()) {
 			getModel().eAdapters().remove(contentAdapter);
 			if (null != getSubApp()) {
-				getSubApp().eAdapters().remove(contentAdapter);
+				getSubApp().getInterface().eAdapters().remove(subAppInterfaceAdapter);
 			}
 		}
 	}

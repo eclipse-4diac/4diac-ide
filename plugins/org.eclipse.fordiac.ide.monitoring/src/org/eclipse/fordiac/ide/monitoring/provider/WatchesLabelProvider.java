@@ -22,9 +22,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
-
-public class WatchesLabelProvider extends LabelProvider implements
-		ITableLabelProvider, ITableColorProvider {
+public class WatchesLabelProvider extends LabelProvider implements ITableLabelProvider, ITableColorProvider {
 
 	@Override
 	public String getText(Object element) {

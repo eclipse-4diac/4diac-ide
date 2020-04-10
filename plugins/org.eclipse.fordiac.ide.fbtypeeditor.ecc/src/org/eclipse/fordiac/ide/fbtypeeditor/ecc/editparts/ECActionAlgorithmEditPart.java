@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2019 TU Wien ACIN, Profactor GmbH, fortiss GmbH, 
- * 								Johannes Kepler University Linz (JKU) 
- * 
+ * Copyright (c) 2011 - 2019 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * 								Johannes Kepler University Linz (JKU)
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,8 +23,9 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateAlgorithmCommand;
@@ -65,7 +66,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	private ECAlgorithmToolTipFigure algToolTip;
 
 	/** The adapter. */
-	private final EContentAdapter adapter = new EContentAdapter() {
+	private final Adapter adapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -76,7 +77,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	};
 
 	/** The algorithm adapter. */
-	private final EContentAdapter fbAdapter = new EContentAdapter() {
+	private final Adapter fbAdapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -104,7 +105,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
 	 */
 	@Override
@@ -125,7 +126,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
 	 */
 	@Override
@@ -143,7 +144,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
 	@Override
@@ -158,7 +159,8 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					List<Algorithm> algorithms = ECCContentAndLabelProvider.getAlgorithms(ECCContentAndLabelProvider.getFBType(getAction()));
+					List<Algorithm> algorithms = ECCContentAndLabelProvider
+							.getAlgorithms(ECCContentAndLabelProvider.getFBType(getAction()));
 					int selected = ((Integer) request.getCellEditor().getValue()).intValue();
 					Algorithm alg = null;
 					if (selected < algorithms.size()) {
@@ -193,7 +195,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef
 	 * .Request)
@@ -221,7 +223,8 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	 */
 	@Override
 	public void performDirectEdit() {
-		List<String> algNames = ECCContentAndLabelProvider.getAlgorithmNames(ECCContentAndLabelProvider.getFBType(getAction()));
+		List<String> algNames = ECCContentAndLabelProvider
+				.getAlgorithmNames(ECCContentAndLabelProvider.getFBType(getAction()));
 
 		int selected = (getAction().getAlgorithm() != null) ? algNames.indexOf(getAction().getAlgorithm().getName())
 				: algNames.size() - 1;

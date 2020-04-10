@@ -21,25 +21,27 @@ import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Color</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Color</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl#getRed <em>Red</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl#getGreen <em>Green</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl#getBlue <em>Blue</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl#getRed
+ * <em>Red</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl#getGreen
+ * <em>Green</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl#getBlue
+ * <em>Blue</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ColorImpl extends EObjectImpl implements Color {
 	/**
-	 * The default value of the '{@link #getRed() <em>Red</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getRed() <em>Red</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getRed()
 	 * @generated
 	 * @ordered
@@ -47,9 +49,9 @@ public class ColorImpl extends EObjectImpl implements Color {
 	protected static final int RED_EDEFAULT = 1;
 
 	/**
-	 * The cached value of the '{@link #getRed() <em>Red</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getRed() <em>Red</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getRed()
 	 * @generated
 	 * @ordered
@@ -57,9 +59,9 @@ public class ColorImpl extends EObjectImpl implements Color {
 	protected int red = RED_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getGreen() <em>Green</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getGreen() <em>Green</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getGreen()
 	 * @generated
 	 * @ordered
@@ -67,9 +69,9 @@ public class ColorImpl extends EObjectImpl implements Color {
 	protected static final int GREEN_EDEFAULT = 34;
 
 	/**
-	 * The cached value of the '{@link #getGreen() <em>Green</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getGreen() <em>Green</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getGreen()
 	 * @generated
 	 * @ordered
@@ -77,9 +79,9 @@ public class ColorImpl extends EObjectImpl implements Color {
 	protected int green = GREEN_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getBlue() <em>Blue</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getBlue() <em>Blue</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getBlue()
 	 * @generated
 	 * @ordered
@@ -87,9 +89,9 @@ public class ColorImpl extends EObjectImpl implements Color {
 	protected static final int BLUE_EDEFAULT = 105;
 
 	/**
-	 * The cached value of the '{@link #getBlue() <em>Blue</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getBlue() <em>Blue</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getBlue()
 	 * @generated
 	 * @ordered
@@ -97,8 +99,8 @@ public class ColorImpl extends EObjectImpl implements Color {
 	protected int blue = BLUE_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ColorImpl() {
@@ -106,8 +108,8 @@ public class ColorImpl extends EObjectImpl implements Color {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -116,8 +118,8 @@ public class ColorImpl extends EObjectImpl implements Color {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -126,8 +128,8 @@ public class ColorImpl extends EObjectImpl implements Color {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -139,8 +141,8 @@ public class ColorImpl extends EObjectImpl implements Color {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -149,8 +151,8 @@ public class ColorImpl extends EObjectImpl implements Color {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -162,8 +164,8 @@ public class ColorImpl extends EObjectImpl implements Color {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -172,8 +174,8 @@ public class ColorImpl extends EObjectImpl implements Color {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -185,91 +187,92 @@ public class ColorImpl extends EObjectImpl implements Color {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.COLOR__RED:
-				return getRed();
-			case LibraryElementPackage.COLOR__GREEN:
-				return getGreen();
-			case LibraryElementPackage.COLOR__BLUE:
-				return getBlue();
+		case LibraryElementPackage.COLOR__RED:
+			return getRed();
+		case LibraryElementPackage.COLOR__GREEN:
+			return getGreen();
+		case LibraryElementPackage.COLOR__BLUE:
+			return getBlue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.COLOR__RED:
-				setRed((Integer)newValue);
-				return;
-			case LibraryElementPackage.COLOR__GREEN:
-				setGreen((Integer)newValue);
-				return;
-			case LibraryElementPackage.COLOR__BLUE:
-				setBlue((Integer)newValue);
-				return;
+		case LibraryElementPackage.COLOR__RED:
+			setRed((Integer) newValue);
+			return;
+		case LibraryElementPackage.COLOR__GREEN:
+			setGreen((Integer) newValue);
+			return;
+		case LibraryElementPackage.COLOR__BLUE:
+			setBlue((Integer) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.COLOR__RED:
-				setRed(RED_EDEFAULT);
-				return;
-			case LibraryElementPackage.COLOR__GREEN:
-				setGreen(GREEN_EDEFAULT);
-				return;
-			case LibraryElementPackage.COLOR__BLUE:
-				setBlue(BLUE_EDEFAULT);
-				return;
+		case LibraryElementPackage.COLOR__RED:
+			setRed(RED_EDEFAULT);
+			return;
+		case LibraryElementPackage.COLOR__GREEN:
+			setGreen(GREEN_EDEFAULT);
+			return;
+		case LibraryElementPackage.COLOR__BLUE:
+			setBlue(BLUE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.COLOR__RED:
-				return red != RED_EDEFAULT;
-			case LibraryElementPackage.COLOR__GREEN:
-				return green != GREEN_EDEFAULT;
-			case LibraryElementPackage.COLOR__BLUE:
-				return blue != BLUE_EDEFAULT;
+		case LibraryElementPackage.COLOR__RED:
+			return red != RED_EDEFAULT;
+		case LibraryElementPackage.COLOR__GREEN:
+			return green != GREEN_EDEFAULT;
+		case LibraryElementPackage.COLOR__BLUE:
+			return blue != BLUE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (red: "); //$NON-NLS-1$
@@ -282,4 +285,4 @@ public class ColorImpl extends EObjectImpl implements Color {
 		return result.toString();
 	}
 
-} //ColorImpl
+} // ColorImpl

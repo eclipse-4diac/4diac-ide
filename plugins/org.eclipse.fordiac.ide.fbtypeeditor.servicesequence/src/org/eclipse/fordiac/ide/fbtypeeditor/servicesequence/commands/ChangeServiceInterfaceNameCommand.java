@@ -18,55 +18,55 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeServiceInterfaceNameCommand extends Command {
-	
+
 	private FBType fb;
 	private boolean isLeftInterface;
 	private String name;
 	private String oldName;
-	
-	public ChangeServiceInterfaceNameCommand(String name, FBType fb, boolean isLeftInterface){
+
+	public ChangeServiceInterfaceNameCommand(String name, FBType fb, boolean isLeftInterface) {
 		this.fb = fb;
 		this.isLeftInterface = isLeftInterface;
 		this.name = name;
 	}
-	
+
 	@Override
-	public void execute(){
-		if(fb.getService() == null){
+	public void execute() {
+		if (fb.getService() == null) {
 			fb.setService(LibraryElementFactory.eINSTANCE.createService());
 		}
-		if(isLeftInterface){
-			if(fb.getService().getLeftInterface() == null){
+		if (isLeftInterface) {
+			if (fb.getService().getLeftInterface() == null) {
 				fb.getService().setLeftInterface(LibraryElementFactory.eINSTANCE.createServiceInterface());
 				oldName = ""; //$NON-NLS-1$
-			}else{
+			} else {
 				oldName = fb.getService().getLeftInterface().getName();
-			}		
-		}else{
-			if(fb.getService().getRightInterface() == null){
+			}
+		} else {
+			if (fb.getService().getRightInterface() == null) {
 				fb.getService().setRightInterface(LibraryElementFactory.eINSTANCE.createServiceInterface());
 				oldName = ""; //$NON-NLS-1$
-			}else{
+			} else {
 				oldName = fb.getService().getRightInterface().getName();
 			}
 		}
 		redo();
 	}
-	
+
 	@Override
 	public void undo() {
-		if(isLeftInterface){
+		if (isLeftInterface) {
 			fb.getService().getLeftInterface().setName(oldName);
-		}else{
+		} else {
 			fb.getService().getRightInterface().setName(oldName);
 		}
 	}
 
 	@Override
 	public void redo() {
-		if(isLeftInterface){
+		if (isLeftInterface) {
 			fb.getService().getLeftInterface().setName(name);
-		}else{
+		} else {
 			fb.getService().getRightInterface().setName(name);
 		}
 	}

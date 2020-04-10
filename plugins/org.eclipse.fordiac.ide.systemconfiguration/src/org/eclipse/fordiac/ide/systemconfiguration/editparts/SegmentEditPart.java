@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2011 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH, 
- * 				 2018 - 2019 Johannes Kepler University
- * 
+ * Copyright (c) 2008, 2011 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * 				 2018 - 2020 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,9 +9,10 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - added diagram font preference 
+ *   Alois Zoitl - added diagram font preference
+ *   Bianca Wiesmayr - removed gradient
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 
@@ -34,8 +35,9 @@ import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
@@ -54,25 +56,19 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Pattern;
-import org.eclipse.swt.widgets.Display;
 
 public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPart {
 	/** necessary that the gradient pattern can be scaled accordingly */
-	private ZoomManager zoomManager;
 	private DiagramFontChangeListener fontChangeListener;
 
-	public SegmentEditPart(ZoomManager zoomManager) {
+	public SegmentEditPart() {
 		super();
 		setConnectable(true);
-		this.zoomManager = zoomManager;
 	}
 
 	@Override
@@ -105,8 +101,8 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	}
 
 	@Override
-	protected EContentAdapter createContentAdapter() {
-		return new EContentAdapter() {
+	protected Adapter createContentAdapter() {
+		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(Notification notification) {
 				Object feature = notification.getFeature();
@@ -136,7 +132,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	}
 
 	private SegmentFigure getCastedFigure() {
-		return (SegmentFigure) getFigure();
+		return getFigure();
 	}
 
 	@Override
@@ -167,7 +163,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			@Override
 			public Command getCommand(Request request) {
 				Object type = request.getType();
-				if (REQ_ALIGN.equals(type) && request instanceof AlignmentRequest) {
+				if (REQ_ALIGN.equals(type) && (request instanceof AlignmentRequest)) {
 					return getAlignCommand((AlignmentRequest) request);
 				}
 				return null;
@@ -214,52 +210,13 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 
 			@Override
 			protected void fillShape(Graphics graphics) {
-				Display display = Display.getCurrent();
-				Rectangle boundingRect = getBounds().getCopy();
-				boundingRect.scale(zoomManager.getZoom());
-				Point topLeft = boundingRect.getTopLeft();
-				Point bottomRight = boundingRect.getBottomRight();
-				Color first = ColorHelper.lighter(getBackgroundColor());
-				Pattern pattern = new Pattern(display, topLeft.x, topLeft.y + boundingRect.height / 2, topLeft.x,
-						bottomRight.y, getBackgroundColor(), first);
-				graphics.setBackgroundPattern(pattern);
 				graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
-				graphics.setBackgroundPattern(null);
-				pattern.dispose();
-				Color darker = ColorHelper.darker(getBackgroundColor());
-				pattern = new Pattern(display, topLeft.x, topLeft.y + boundingRect.height / 2, topLeft.x, bottomRight.y,
-						darker, getBackgroundColor());
-				graphics.setBackgroundPattern(pattern);
-				graphics.fillOval(getBounds().right() - (getBounds().height() * 2 / 3), getBounds().getTop().y,
-						(getBounds().height() * 2 / 3), getBounds().height());
-				graphics.setBackgroundPattern(null);
-				pattern.dispose();
-				pattern = new Pattern(display, topLeft.x, topLeft.y + getBounds().height / 2, topLeft.x, bottomRight.y,
-						first, getBackgroundColor());
-				graphics.setBackgroundPattern(pattern);
-				Rectangle clipRect = getBounds().getCopy();
-				clipRect.setHeight(clipRect.height / 2);
-				clipRect.setY(clipRect.y + clipRect.height);
-				graphics.clipRect(clipRect);
-				graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
-				graphics.setBackgroundPattern(null);
-				pattern.dispose();
-				first.dispose();
-				graphics.clipRect(getBounds().getCopy());
-				pattern = new Pattern(display, topLeft.x, topLeft.y + boundingRect.height / 2, topLeft.x, bottomRight.y,
-						getBackgroundColor(), darker);
-				graphics.setBackgroundPattern(pattern);
-				graphics.fillOval(getBounds().right() - (getBounds().height() * 2 / 3), getBounds().getTop().y,
-						(getBounds().height() * 2 / 3), getBounds().height());
-				graphics.setBackgroundPattern(null);
-				pattern.dispose();
-				darker.dispose();
 			}
 
 			@Override
 			public void setBounds(Rectangle rect) {
 				super.setBounds(rect);
-				setCornerDimensions(new Dimension(rect.height * 2 / 3, rect.height));
+				setCornerDimensions(new Dimension((rect.height * 2) / 3, rect.height));
 			}
 
 		};
@@ -346,7 +303,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			revalidate();
 		}
 
-		public void setInstanceAndTypeLabelFonts() {
+		private void setInstanceAndTypeLabelFonts() {
 			instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(PreferenceConstants.DIAGRAM_FONT));
 			typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
 		}

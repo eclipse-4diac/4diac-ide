@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,6 +21,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.TextUtilities;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventInputContainerLayoutEditPolicy;
@@ -42,16 +43,15 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 			layout.setMinorSpacing(0);
 			layout.setHorizontal(false);
 			layout.setStretchMinorAxis(true);
-			if (getModel() instanceof VariableInputContainer || 
-					getModel() instanceof SocketContainer){
-			  layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+			if (getModel() instanceof VariableInputContainer || getModel() instanceof SocketContainer) {
+				layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 			}
 			setLayoutManager(layout);
 			setPreferredSize(30, 10);
 		}
 	}
 
-	private final EContentAdapter econtentAdapter = new EContentAdapter() {
+	private final Adapter econtentAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			refreshChildren();
@@ -79,28 +79,22 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected void createEditPolicies() {
 		if (getModel() instanceof EventInputContainer) {
-			installEditPolicy(EditPolicy.LAYOUT_ROLE,
-					new EventInputContainerLayoutEditPolicy());
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new EventInputContainerLayoutEditPolicy());
 		}
 		if (getModel() instanceof EventOutputContainer) {
-			installEditPolicy(EditPolicy.LAYOUT_ROLE,
-					new EventOutputContainerLayoutEditPolicy());
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new EventOutputContainerLayoutEditPolicy());
 		}
-		if (getModel() instanceof VariableInputContainer){
-			installEditPolicy(EditPolicy.LAYOUT_ROLE,
-					new VariableInputContainerLayoutEditPolicy());
+		if (getModel() instanceof VariableInputContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VariableInputContainerLayoutEditPolicy());
 		}
-		if(getModel() instanceof SocketContainer){
-			installEditPolicy(EditPolicy.LAYOUT_ROLE,
-					new SocketContainerLayoutEditPolicy());
+		if (getModel() instanceof SocketContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new SocketContainerLayoutEditPolicy());
 		}
-		if (getModel() instanceof VariableOutputContainer ) {
-			installEditPolicy(EditPolicy.LAYOUT_ROLE,
-					new VariableOutputContainerLayoutEditPolicy());
+		if (getModel() instanceof VariableOutputContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VariableOutputContainerLayoutEditPolicy());
 		}
-		if(getModel() instanceof PlugContainer) {
-			installEditPolicy(EditPolicy.LAYOUT_ROLE,
-					new PlugContainerLayoutEditPolicy());
+		if (getModel() instanceof PlugContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new PlugContainerLayoutEditPolicy());
 		}
 	}
 
@@ -127,8 +121,9 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 	protected void removeChildVisual(EditPart childEditPart) {
 		super.removeChildVisual(childEditPart);
 		if (getContentPane().getChildren().size() == 0) {
-			Dimension dim = TextUtilities.INSTANCE.getTextExtents("INT", getContentPane().getFont());
-			dim.height =(int) (dim.height * 0.66);
+			Dimension dim = TextUtilities.INSTANCE.getTextExtents("INT", //$NON-NLS-1$
+					getContentPane().getFont());
+			dim.height = (int) (dim.height * 0.66);
 			getContentPane().setPreferredSize(dim);
 		}
 	}

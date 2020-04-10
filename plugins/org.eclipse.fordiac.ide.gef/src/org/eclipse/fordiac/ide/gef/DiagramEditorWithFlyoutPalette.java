@@ -25,15 +25,16 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.handles.AdvancedGraphicalViewerKeyHandler;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.FigureFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
+import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.util.UntypedEditorInput;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -43,7 +44,6 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
-import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
@@ -56,7 +56,6 @@ import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
-import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.IAction;
@@ -132,7 +131,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	protected void createGraphicalViewer(final Composite parent) {
 		rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
 
-		GraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
+		AdvancedScrollingGraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
 		viewer.createControl(rulerComp);
 		setGraphicalViewer(viewer);
 		configureGraphicalViewer();
@@ -146,11 +145,10 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 						PreferenceConstants.DIAGRAM_FONT));
 
 		JFaceResources.getFontRegistry().addListener(fontChangeListener);
-		viewer.getControl().addDisposeListener(e -> {
-			JFaceResources.getFontRegistry().removeListener(fontChangeListener);
-		});
+		viewer.getControl()
+				.addDisposeListener(e -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
 
-		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
+		rulerComp.setGraphicalViewer(getGraphicalViewer());
 	}
 
 	@Override
@@ -170,7 +168,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
+		AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
 
 		ScalableFreeformRootEditPart root = createRootEditPart();
 
@@ -184,10 +182,12 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditPartFactory());
 
-		KeyHandler viewerKeyHandler = new GraphicalViewerKeyHandler(viewer).setParent(getCommonKeyHandler());
-		viewer.setKeyHandler(viewerKeyHandler);
+		AdvancedGraphicalViewerKeyHandler keyHandler = new AdvancedGraphicalViewerKeyHandler(viewer);
+		keyHandler.setParent(getCommonKeyHandler());
+		viewer.setKeyHandler(keyHandler);
 
 		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
+
 	}
 
 	public ZoomManager getZoomManger() {
@@ -276,11 +276,16 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	protected void setModel(final IEditorInput input) {
 
 		setEditDomain(new DefaultEditDomain(this));
-		getEditDomain().setDefaultTool(new AdvancedPanningSelectionTool());
+		getEditDomain().setDefaultTool(createDefaultTool());
 		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
 		// use one "System - Wide" command stack to avoid incositensies due to
 		// undo redo
 		getEditDomain().setCommandStack(SystemManager.INSTANCE.getCommandStack(getSystem()));
+	}
+
+	@SuppressWarnings("static-method")
+	protected AdvancedPanningSelectionTool createDefaultTool() {
+		return new AdvancedPanningSelectionTool();
 	}
 
 	/**
@@ -329,10 +334,6 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 					getActionRegistry().getAction(ActionFactory.DELETE.getId()));
 			sharedKeyHandler.put(KeyStroke.getPressed(SWT.F2, 0),
 					getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
-			sharedKeyHandler.put(/* CTRL + '=' */
-					KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
-					getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
-
 		}
 		return sharedKeyHandler;
 	}
@@ -485,6 +486,11 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	@Override
 	public String getContributorId() {
 		return PROPERTY_CONTRIBUTOR_ID;
+	}
+
+	@Override
+	protected AdvancedScrollingGraphicalViewer getGraphicalViewer() {
+		return (AdvancedScrollingGraphicalViewer) super.getGraphicalViewer();
 	}
 
 }

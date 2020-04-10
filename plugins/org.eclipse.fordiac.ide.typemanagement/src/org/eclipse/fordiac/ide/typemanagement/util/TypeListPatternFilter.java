@@ -23,33 +23,32 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.dialogs.PatternFilter;
 
 public class TypeListPatternFilter extends PatternFilter {
-	
+
 	public TypeListPatternFilter() {
 		super();
 		setIncludeLeadingWildcard(true);
 	}
 
 	@Override
-	protected boolean isParentMatch(Viewer viewer, Object element){
-		//prevent children filtering if is a file, avoids type loading on filtering
-		if((element instanceof IFolder) ||
-				(element instanceof IProject)){
+	protected boolean isParentMatch(Viewer viewer, Object element) {
+		// prevent children filtering if is a file, avoids type loading on filtering
+		if ((element instanceof IFolder) || (element instanceof IProject)) {
 			return super.isParentMatch(viewer, element);
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
-	protected boolean isLeafMatch(Viewer viewer, Object element){
-		if((element instanceof EObject) ||
-		   (element instanceof TransientInterfaceListItemProvider) ||
-		   (element instanceof TransientBasicFBTypeListItemProvider) ||
-		   (element instanceof TransientLibraryElementItemProvider)){
-			//do not filter on type content
+	protected boolean isLeafMatch(Viewer viewer, Object element) {
+		if ((element instanceof EObject) || (element instanceof TransientInterfaceListItemProvider)
+				|| (element instanceof TransientBasicFBTypeListItemProvider)
+				|| (element instanceof TransientLibraryElementItemProvider)) {
+			// do not filter on type content
 			return true;
 		}
-		//TODO add also matching for other elements e.g., description ev. in is parent Match einbauen
+		// TODO add also matching for other elements e.g., description ev. in is parent
+		// Match einbauen
 		return super.isLeafMatch(viewer, element);
 	}
 

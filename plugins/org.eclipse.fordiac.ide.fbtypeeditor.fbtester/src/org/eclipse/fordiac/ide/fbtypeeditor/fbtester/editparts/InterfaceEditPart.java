@@ -27,8 +27,7 @@ import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 
-public class InterfaceEditPart extends
-		org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart {
+public class InterfaceEditPart extends org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart {
 
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
@@ -63,7 +62,7 @@ public class InterfaceEditPart extends
 	@Override
 	protected List getModelSourceConnections() {
 		if (isEvent()) {
-			return ((Event)getModel()).getWith();
+			return ((Event) getModel()).getWith();
 		}
 		return Collections.emptyList();
 	}
@@ -87,20 +86,18 @@ public class InterfaceEditPart extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
+	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
 	 * ConnectionEditPart)
 	 */
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(
-			final ConnectionEditPart connection) {
+	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		int pos = 1;
 		if (isInput()) {
 			pos = calculateInputWithPos(connection);
 			return new InputWithAnchor(getFigure(), pos, this);
-		} 
+		}
 		pos = calculateOutputWithPos(connection);
-		return new OutputWithAnchor(getFigure(), pos, this);		
+		return new OutputWithAnchor(getFigure(), pos, this);
 	}
 
 	private int calculateInputWithPos(final ConnectionEditPart connection) {
@@ -125,8 +122,7 @@ public class InterfaceEditPart extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
+	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
 	 * Request)
 	 */
 	@Override
@@ -137,27 +133,24 @@ public class InterfaceEditPart extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
+	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
 	 * ConnectionEditPart)
 	 */
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(
-			final ConnectionEditPart connection) {
+	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
 		int pos = 1;
 		if (isInput()) {
 			pos = calculateInputWithPos(connection);
 			return new InputWithAnchor(getFigure(), pos, this);
-		} 
+		}
 		pos = calculateOutputWithPos(connection);
-		return new OutputWithAnchor(getFigure(), pos, this);		
+		return new OutputWithAnchor(getFigure(), pos, this);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
+	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
 	 * Request)
 	 */
 	@Override

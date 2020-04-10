@@ -5,7 +5,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class SystemExplorer extends CommonNavigator implements ITabbedPropertySheetPageContributor{
+public class SystemExplorer extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
 	@Override
 	public String getContributorId() {

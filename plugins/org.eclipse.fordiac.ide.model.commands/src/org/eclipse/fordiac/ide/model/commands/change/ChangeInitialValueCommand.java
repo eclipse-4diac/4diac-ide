@@ -17,25 +17,25 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
-public class ChangeInitialValueCommand extends Command {	
+public class ChangeInitialValueCommand extends Command {
 	private VarDeclaration variable;
 	private String newInitialValue;
 	private String oldInitialValue;
-	
-	public ChangeInitialValueCommand(final VarDeclaration variable, final String newInitialValue){
+
+	public ChangeInitialValueCommand(final VarDeclaration variable, final String newInitialValue) {
 		super();
 		this.variable = variable;
 		this.newInitialValue = newInitialValue;
 	}
-	
+
 	@Override
 	public boolean canExecute() {
-		return (null != variable)&&(null != newInitialValue);
+		return (null != variable) && (null != newInitialValue);
 	}
-	
+
 	@Override
 	public void execute() {
-		
+
 		if (variable.getValue() != null) {
 			oldInitialValue = variable.getValue().getValue();
 		} else {
@@ -43,7 +43,7 @@ public class ChangeInitialValueCommand extends Command {
 		}
 		variable.getValue().setValue(newInitialValue);
 	}
-	
+
 	@Override
 	public void undo() {
 		variable.getValue().setValue(oldInitialValue);

@@ -21,21 +21,21 @@ import org.eclipse.gef.requests.DirectEditRequest;
 
 public class AbstractViewRenameEditPolicy extends DirectEditPolicy {
 
-    @Override
+	@Override
 	protected Command getDirectEditCommand(DirectEditRequest request) {
-        if (getHost() instanceof AbstractViewEditPart) {
-            AbstractViewEditPart viewEditPart = (AbstractViewEditPart) getHost();
-            return new ChangeNameCommand(viewEditPart.getINamedElement(), (String) request.getCellEditor().getValue());
-        }
-        return null;
-    }
+		if (getHost() instanceof AbstractViewEditPart) {
+			AbstractViewEditPart viewEditPart = (AbstractViewEditPart) getHost();
+			return new ChangeNameCommand(viewEditPart.getINamedElement(), (String) request.getCellEditor().getValue());
+		}
+		return null;
+	}
 
-    @Override
+	@Override
 	protected void showCurrentEditValue(DirectEditRequest request) {
-        String value = (String) request.getCellEditor().getValue();
-        if (getHost() instanceof AbstractViewEditPart) {
-            AbstractViewEditPart viewEditPart = (AbstractViewEditPart) getHost();
-            viewEditPart.getNameLabel().setText(value);
-        }
-    }
+		String value = (String) request.getCellEditor().getValue();
+		if (getHost() instanceof AbstractViewEditPart) {
+			AbstractViewEditPart viewEditPart = (AbstractViewEditPart) getHost();
+			viewEditPart.getNameLabel().setText(value);
+		}
+	}
 }

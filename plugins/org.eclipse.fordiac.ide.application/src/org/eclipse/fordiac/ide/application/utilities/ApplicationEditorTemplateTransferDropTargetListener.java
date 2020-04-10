@@ -28,25 +28,22 @@ import org.eclipse.swt.dnd.DND;
  * 
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
-public class ApplicationEditorTemplateTransferDropTargetListener extends
-		FbTypeTemplateTransferDropTargetListener {
+public class ApplicationEditorTemplateTransferDropTargetListener extends FbTypeTemplateTransferDropTargetListener {
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param viewer
-	 *            the viewer
+	 * @param viewer the viewer
 	 */
-	public ApplicationEditorTemplateTransferDropTargetListener(
-			final EditPartViewer viewer, final AutomationSystem system) {
+	public ApplicationEditorTemplateTransferDropTargetListener(final EditPartViewer viewer,
+			final AutomationSystem system) {
 		super(viewer, system);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.dnd.TemplateTransferDropTargetListener#getFactory(java
+	 * @see org.eclipse.gef.dnd.TemplateTransferDropTargetListener#getFactory(java
 	 * .lang.Object)
 	 */
 	@Override
@@ -55,12 +52,10 @@ public class ApplicationEditorTemplateTransferDropTargetListener extends
 
 		// TODO: is FBType used, does FBType actually work? Is this transfer
 		// used anywhere else?
-		if (template instanceof FBType
-				|| template instanceof FBTypePaletteEntry
-				|| template instanceof FBTypePaletteEntry[]
-				|| template instanceof TransferDataSelectionOfFb[]
-						|| template instanceof SubApplicationTypePaletteEntry
-						|| template instanceof SubApplicationTypePaletteEntry[]) {
+		if (template instanceof FBType || template instanceof FBTypePaletteEntry
+				|| template instanceof FBTypePaletteEntry[] || template instanceof TransferDataSelectionOfFb[]
+				|| template instanceof SubApplicationTypePaletteEntry
+				|| template instanceof SubApplicationTypePaletteEntry[]) {
 			return new FBTypeTemplateCreationFactory(template);
 		}
 		return null;

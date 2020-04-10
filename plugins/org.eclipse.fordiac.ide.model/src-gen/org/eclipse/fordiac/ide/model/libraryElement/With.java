@@ -16,15 +16,15 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 import org.eclipse.emf.ecore.EObject;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>With</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>With</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.With#getVariables <em>Variables</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.With#getVariables
+ * <em>Variables</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getWith()
@@ -33,14 +33,16 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface With extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Variables</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getWiths <em>Withs</em>}'.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Variables</b></em>' reference. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getWiths
+	 * <em>Withs</em>}'. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Variables</em>' reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Variables</em>' reference list isn't clear, there
+	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Variables</em>' reference.
 	 * @see #setVariables(VarDeclaration)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getWith_Variables()
@@ -51,9 +53,10 @@ public interface With extends EObject {
 	VarDeclaration getVariables();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.With#getVariables <em>Variables</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.With#getVariables
+	 * <em>Variables</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Variables</em>' reference.
 	 * @see #getVariables()
 	 * @generated

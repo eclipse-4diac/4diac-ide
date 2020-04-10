@@ -14,6 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +29,7 @@ import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractor
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor.IDeviceManagementInteractorCloser;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.AbstractMonitoringManager;
+import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -100,14 +102,13 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 
 			String currentMessage;
 
-			if (!lastCommand.equals("")) {
-				currentMessage = currentElement.getCurrentElementName() + "\n" + "Request: " + lastCommand
-						+ "\nProblem: " + response + "\nSource: " + source
-						+ "\nCheck the Deplopyment Console for more information";
+			if (!lastCommand.equals("")) { //$NON-NLS-1$
+				currentMessage = MessageFormat.format(Messages.AbstractDeploymentCommand_ExtendedDeploymentErrorMessage,
+						currentElement.getCurrentElementName(), lastCommand, response, source);
 
 			} else {
-				currentMessage = currentElement.getCurrentElementName() + "\n" + "Problem: " + response + "\nSource: "
-						+ source;
+				currentMessage = MessageFormat.format(Messages.AbstractDeploymentCommand_SimpleDeploymentErrorMessage,
+						currentElement.getCurrentElementName(), response, source);
 			}
 
 			if ((null == view || showWithConsole) && (!lastMessage.equals(currentMessage))) {

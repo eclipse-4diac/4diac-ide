@@ -25,25 +25,28 @@ public class DataInterfaceFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if(toTest instanceof InterfaceEditPart){
-			if(((InterfaceEditPart) toTest).getCastedModel() instanceof AdapterDeclaration || ((InterfaceEditPart) toTest).getCastedModel() instanceof Event){
+		if (toTest instanceof InterfaceEditPart) {
+			if (((InterfaceEditPart) toTest).getCastedModel() instanceof AdapterDeclaration
+					|| ((InterfaceEditPart) toTest).getCastedModel() instanceof Event) {
 				return false;
 			}
 			return true;
 		}
-		if(toTest instanceof TypeEditPart){
-			if(((TypeEditPart) toTest).getCastedModel() instanceof AdapterDeclaration || ((TypeEditPart) toTest).getCastedModel() instanceof Event){
+		if (toTest instanceof TypeEditPart) {
+			if (((TypeEditPart) toTest).getCastedModel() instanceof AdapterDeclaration
+					|| ((TypeEditPart) toTest).getCastedModel() instanceof Event) {
 				return false;
 			}
 			return true;
 		}
-		if(toTest instanceof CommentEditPart){
-			if(((CommentEditPart) toTest).getCastedModel() instanceof AdapterDeclaration || ((CommentEditPart) toTest).getCastedModel() instanceof Event){
+		if (toTest instanceof CommentEditPart) {
+			if (((CommentEditPart) toTest).getCastedModel() instanceof AdapterDeclaration
+					|| ((CommentEditPart) toTest).getCastedModel() instanceof Event) {
 				return false;
 			}
 			return true;
 		}
-		if(!(toTest instanceof AdapterDeclaration || toTest instanceof Event) && toTest instanceof VarDeclaration){
+		if (!(toTest instanceof AdapterDeclaration || toTest instanceof Event) && toTest instanceof VarDeclaration) {
 			return true;
 		}
 		return false;

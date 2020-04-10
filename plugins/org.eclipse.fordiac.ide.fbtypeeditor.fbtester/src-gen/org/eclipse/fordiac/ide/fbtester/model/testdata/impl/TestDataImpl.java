@@ -31,10 +31,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
-
 /**
- * <!-- begin-user-doc --> An implementation of the model object '
- * <em><b>Test Data</b></em>'. <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object ' <em><b>Test
+ * Data</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
@@ -52,10 +51,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  * <em>Values</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.impl.TestDataImpl#getResults
  * <em>Results</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.impl.TestDataImpl#getLine <em>
- * Line</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.impl.TestDataImpl#getType <em>
- * Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.impl.TestDataImpl#getLine
+ * <em> Line</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.impl.TestDataImpl#getType
+ * <em> Type</em>}</li>
  * </ul>
  * </p>
  * 
@@ -70,7 +69,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String TEST_NAME_EDEFAULT = "testName";
+	protected static final String TEST_NAME_EDEFAULT = "testName"; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getTestName() <em>Test Name</em>}'
@@ -83,8 +82,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	protected String testName = TEST_NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getEvent() <em>Event</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getEvent() <em>Event</em>}' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getEvent()
 	 * @generated
@@ -93,9 +92,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	protected Event event;
 
 	/**
-	 * The default value of the '{@link #getTestIntstance()
-	 * <em>Test Intstance</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * The default value of the '{@link #getTestIntstance() <em>Test
+	 * Intstance</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getTestIntstance()
 	 * @generated
@@ -104,9 +102,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	protected static final String TEST_INTSTANCE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getTestIntstance()
-	 * <em>Test Intstance</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * The cached value of the '{@link #getTestIntstance() <em>Test Intstance</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getTestIntstance()
 	 * @generated
@@ -115,9 +112,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	protected String testIntstance = TEST_INTSTANCE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getEventOutputs()
-	 * <em>Event Outputs</em>}' reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * The cached value of the '{@link #getEventOutputs() <em>Event Outputs</em>}'
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getEventOutputs()
 	 * @generated
@@ -136,8 +132,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	protected EList<ValuedVarDecl> values;
 
 	/**
-	 * The cached value of the '{@link #getResults() <em>Results</em>}'
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getResults() <em>Results</em>}' reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getResults()
 	 * @generated
@@ -146,8 +142,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	protected EList<ValuedVarDecl> results;
 
 	/**
-	 * The default value of the '{@link #getLine() <em>Line</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #getLine() <em>Line</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getLine()
 	 * @generated
@@ -156,8 +152,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	protected static final String LINE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getLine() <em>Line</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getLine() <em>Line</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getLine()
 	 * @generated
@@ -166,8 +162,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	protected String line = LINE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getType() <em>Type</em>}' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getType()
 	 * @generated
@@ -214,8 +210,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		String oldTestName = testName;
 		testName = newTestName;
 		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TestdataPackage.TEST_DATA__TEST_NAME, oldTestName, testName));
+			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.TEST_DATA__TEST_NAME, oldTestName,
+					testName));
 		}
 	}
 
@@ -231,8 +227,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 			event = (Event) eResolveProxy(oldEvent);
 			if (event != oldEvent) {
 				if (eNotificationRequired()) {
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							TestdataPackage.TEST_DATA__EVENT, oldEvent, event));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TestdataPackage.TEST_DATA__EVENT,
+							oldEvent, event));
 				}
 			}
 		}
@@ -258,8 +254,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		Event oldEvent = event;
 		event = newEvent;
 		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TestdataPackage.TEST_DATA__EVENT, oldEvent, event));
+			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.TEST_DATA__EVENT, oldEvent, event));
 		}
 	}
 
@@ -283,8 +278,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		String oldTestIntstance = testIntstance;
 		testIntstance = newTestIntstance;
 		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TestdataPackage.TEST_DATA__TEST_INTSTANCE,
+			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.TEST_DATA__TEST_INTSTANCE,
 					oldTestIntstance, testIntstance));
 		}
 	}
@@ -311,8 +305,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	@Override
 	public EList<ValuedVarDecl> getValues() {
 		if (values == null) {
-			values = new EObjectResolvingEList<ValuedVarDecl>(
-					ValuedVarDecl.class, this,
+			values = new EObjectResolvingEList<ValuedVarDecl>(ValuedVarDecl.class, this,
 					TestdataPackage.TEST_DATA__VALUES);
 		}
 		return values;
@@ -326,8 +319,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	@Override
 	public EList<ValuedVarDecl> getResults() {
 		if (results == null) {
-			results = new EObjectResolvingEList<ValuedVarDecl>(
-					ValuedVarDecl.class, this,
+			results = new EObjectResolvingEList<ValuedVarDecl>(ValuedVarDecl.class, this,
 					TestdataPackage.TEST_DATA__RESULTS);
 		}
 		return results;
@@ -354,8 +346,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		line = newLine;
 		parseData(line);
 		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TestdataPackage.TEST_DATA__LINE, oldLine, line));
+			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.TEST_DATA__LINE, oldLine, line));
 		}
 	}
 
@@ -369,10 +360,10 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		if (type != null && type.eIsProxy()) {
 			InternalEObject oldType = (InternalEObject) type;
 			type = (FBType) eResolveProxy(oldType);
-			if (type != (FBType)oldType) {
+			if (type != (FBType) oldType) {
 				if (eNotificationRequired()) {
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							TestdataPackage.TEST_DATA__TYPE, oldType, type));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TestdataPackage.TEST_DATA__TYPE, oldType,
+							type));
 				}
 			}
 		}
@@ -398,8 +389,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		FBType oldType = type;
 		type = newType;
 		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TestdataPackage.TEST_DATA__TYPE, oldType, type));
+			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.TEST_DATA__TYPE, oldType, type));
 		}
 	}
 
@@ -522,8 +512,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TestdataPackage.TEST_DATA__TEST_NAME:
-			return TEST_NAME_EDEFAULT == null ? testName != null
-					: !TEST_NAME_EDEFAULT.equals(testName);
+			return TEST_NAME_EDEFAULT == null ? testName != null : !TEST_NAME_EDEFAULT.equals(testName);
 		case TestdataPackage.TEST_DATA__EVENT:
 			return event != null;
 		case TestdataPackage.TEST_DATA__TEST_INTSTANCE:
@@ -536,8 +525,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		case TestdataPackage.TEST_DATA__RESULTS:
 			return results != null && !results.isEmpty();
 		case TestdataPackage.TEST_DATA__LINE:
-			return LINE_EDEFAULT == null ? line != null : !LINE_EDEFAULT
-					.equals(line);
+			return LINE_EDEFAULT == null ? line != null : !LINE_EDEFAULT.equals(line);
 		case TestdataPackage.TEST_DATA__TYPE:
 			return type != null;
 		}
@@ -556,11 +544,11 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		}
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (testName: ");
+		result.append(" (testName: "); //$NON-NLS-1$
 		result.append(testName);
-		result.append(", testIntstance: ");
+		result.append(", testIntstance: "); //$NON-NLS-1$
 		result.append(testIntstance);
-		result.append(", line: ");
+		result.append(", line: "); //$NON-NLS-1$
 		result.append(line);
 		result.append(')');
 		return result.toString();
@@ -568,8 +556,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	private void parseData(String line) {
 		System.out.println(line);
-		String[] lineArray = line
-				.split(";(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
+		String[] lineArray = line.split(";(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))"); //$NON-NLS-1$
 		System.out.println(lineArray.length);
 		if (lineArray.length > 1) {
 			setTestName(lineArray[0]);
@@ -590,11 +577,9 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 					currentPos++;
 					String val = lineArray[currentPos];
 					currentPos++;
-					VarDeclaration varDec = type.getInterfaceList()
-							.getVariable(port);
+					VarDeclaration varDec = type.getInterfaceList().getVariable(port);
 					if (varDec != null) {
-						ValuedVarDecl data = TestdataFactory.eINSTANCE
-								.createValuedVarDecl();
+						ValuedVarDecl data = TestdataFactory.eINSTANCE.createValuedVarDecl();
 						data.setValue(val);
 						data.setVarDeclaration(varDec);
 						getValues().add(data);
@@ -606,19 +591,16 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 			int nrOfEvents = Integer.parseInt(lineArray[currentPos]);
 			currentPos++;
 			for (int i = 0; i < nrOfEvents; i++) {
-				Event outputEvent = type.getInterfaceList().getEvent(
-						lineArray[currentPos]);
+				Event outputEvent = type.getInterfaceList().getEvent(lineArray[currentPos]);
 				getEventOutputs().add(outputEvent);
 				currentPos++;
 				int nrOfValues = Integer.parseInt(lineArray[currentPos]);
 				currentPos++;
 				for (int j = 0; j < nrOfValues; j++) {
-					VarDeclaration outputVar = type.getInterfaceList()
-							.getVariable(lineArray[currentPos]);
+					VarDeclaration outputVar = type.getInterfaceList().getVariable(lineArray[currentPos]);
 					currentPos++;
 					String result = lineArray[currentPos];
-					ValuedVarDecl var = TestdataFactory.eINSTANCE
-							.createValuedVarDecl();
+					ValuedVarDecl var = TestdataFactory.eINSTANCE.createValuedVarDecl();
 					var.setValue(result);
 					var.setVarDeclaration(outputVar);
 					getResults().add(var);
@@ -630,7 +612,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	@Override
 	public String getValueFor(String text) {
-		for (ValuedVarDecl valueVarDecl : getValues()){
+		for (ValuedVarDecl valueVarDecl : getValues()) {
 			if (valueVarDecl.getVarDeclaration().getName().equals(text)) {
 				return valueVarDecl.getValue();
 			}
@@ -640,7 +622,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	@Override
 	public void setValueFor(String text, String value) {
-		for (ValuedVarDecl valueVarDecl : getValues()){
+		for (ValuedVarDecl valueVarDecl : getValues()) {
 			if (valueVarDecl.getVarDeclaration().getName().equals(text)) {
 				valueVarDecl.setValue(value);
 			}
@@ -650,7 +632,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	//
 	@Override
 	public String getResultFor(String text) {
-		for (ValuedVarDecl valueVarDecl : getResults()){
+		for (ValuedVarDecl valueVarDecl : getResults()) {
 			if (valueVarDecl.getVarDeclaration() != null) {
 
 				if (valueVarDecl.getVarDeclaration().getName().equals(text)) {
@@ -664,7 +646,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	@Override
 	public void setResultFor(String text, String value) {
-		for (ValuedVarDecl valueVarDecl : getResults()){
+		for (ValuedVarDecl valueVarDecl : getResults()) {
 			if (valueVarDecl.getVarDeclaration().getName().equals(text)) {
 				valueVarDecl.setValue(value);
 			}
@@ -673,12 +655,12 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	@Override
 	public String getOutputEvents() {
-		String events = "";
+		String events = ""; //$NON-NLS-1$
 		for (int i = 0; i < getEventOutputs().size(); i++) {
 			Event e = getEventOutputs().get(i);
 			events += e.getName();
 			if (i + 1 < getEventOutputs().size()) {
-				events += ", ";
+				events += ", "; //$NON-NLS-1$
 			}
 		}
 		return events;
@@ -686,36 +668,35 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	@Override
 	public String _getLine() {
-		String dataLine = getTestName() + ";";
+		String dataLine = getTestName() + ";"; //$NON-NLS-1$
 		dataLine += type.getName();
-		dataLine += ";";
+		dataLine += ";"; //$NON-NLS-1$
 		Event event = null;
 		if (type.getInterfaceList().getEventInputs().size() > 0) {
 			event = type.getInterfaceList().getEventInputs().get(0);
 		}
 
-		dataLine += event.getWith().size() + ";"; // nr of inputs are the number
+		dataLine += event.getWith().size() + ";"; // nr of inputs are the number //$NON-NLS-1$
 		// of connected withs
 
 		for (With with : event.getWith()) {
 			VarDeclaration var = with.getVariables();
-			dataLine += var.getName() + ";" + getValueFor(var.getName()) + ";";
+			dataLine += var.getName() + ";" + getValueFor(var.getName()) + ";"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		dataLine += event.getName() + ";";
+		dataLine += event.getName() + ";"; //$NON-NLS-1$
 
 		if (type.getInterfaceList().getEventOutputs().size() > 0) {
-			dataLine += "1;";
-			dataLine += type.getInterfaceList().getEventOutputs().get(0)
-					.getName();
-			dataLine += ";";
+			dataLine += "1;"; //$NON-NLS-1$
+			dataLine += type.getInterfaceList().getEventOutputs().get(0).getName();
+			dataLine += ";"; //$NON-NLS-1$
 		} else {
-			dataLine += "0;";
+			dataLine += "0;"; //$NON-NLS-1$
 		}
 		if (type.getInterfaceList().getOutputVars().size() > 0) {
 			dataLine += type.getInterfaceList().getOutputVars().size();
-			dataLine += ";";
-			for (VarDeclaration var: type.getInterfaceList().getOutputVars()) {
-				dataLine += var.getName() + ";" + getResultFor(var.getName()) + ";";
+			dataLine += ";"; //$NON-NLS-1$
+			for (VarDeclaration var : type.getInterfaceList().getOutputVars()) {
+				dataLine += var.getName() + ";" + getResultFor(var.getName()) + ";"; //$NON-NLS-1$//$NON-NLS-2$
 			}
 		}
 

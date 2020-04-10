@@ -30,8 +30,7 @@ import org.eclipse.ui.Saveable;
 /**
  * The Class Input.
  */
-class Input implements IEditableContent, ITypedElement, IStreamContentAccessor,
-		ISaveablesSource {
+class Input implements IEditableContent, ITypedElement, IStreamContentAccessor, ISaveablesSource {
 
 	/** The content. */
 	private File fContent;
@@ -45,7 +44,9 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor,
 		fContent = f;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.compare.ITypedElement#getName()
 	 */
 	@Override
@@ -53,7 +54,9 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor,
 		return fContent != null ? fContent.getName() : ""; //$NON-NLS-1$
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.compare.ITypedElement#getImage()
 	 */
 	@Override
@@ -61,7 +64,9 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor,
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.compare.ITypedElement#getType()
 	 */
 	@Override
@@ -69,7 +74,9 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor,
 		return "cpp"; //$NON-NLS-1$
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.compare.IStreamContentAccessor#getContents()
 	 */
 	@Override
@@ -82,7 +89,9 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor,
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.compare.IEditableContent#isEditable()
 	 */
 	@Override
@@ -90,27 +99,34 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor,
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.compare.IEditableContent#replace(org.eclipse.compare.ITypedElement, org.eclipse.compare.ITypedElement)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.compare.IEditableContent#replace(org.eclipse.compare.
+	 * ITypedElement, org.eclipse.compare.ITypedElement)
 	 */
 	@Override
 	public ITypedElement replace(ITypedElement dest, ITypedElement src) {
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.compare.IEditableContent#setContent(byte[])
 	 */
 	@Override
 	public void setContent(byte[] newContent) {
-		try (FileOutputStream fo = new FileOutputStream(fContent);){			
+		try (FileOutputStream fo = new FileOutputStream(fContent);) {
 			fo.write(newContent);
 		} catch (Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.ISaveablesSource#getActiveSaveables()
 	 */
 	@Override
@@ -118,7 +134,9 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor,
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.ISaveablesSource#getSaveables()
 	 */
 	@Override

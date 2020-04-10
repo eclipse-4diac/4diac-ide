@@ -22,15 +22,15 @@ public class SubAppTypeEditor extends FBTypeEditor {
 
 	@Override
 	protected FBType getFBType(PaletteEntry paletteEntry) {
-		if(paletteEntry instanceof SubApplicationTypePaletteEntry){
-			return ((SubApplicationTypePaletteEntry)paletteEntry).getSubApplicationType();
+		if (paletteEntry instanceof SubApplicationTypePaletteEntry) {
+			return ((SubApplicationTypePaletteEntry) paletteEntry).getSubApplicationType();
 		}
 		return null;
 	}
 
 	@Override
 	protected boolean checkTypeEditorType(FBType fbType, String editorType) {
-		return ((editorType.equals("ForAllTypes")) ||  //$NON-NLS-1$
+		return ((editorType.equals("ForAllTypes")) || //$NON-NLS-1$
 				(editorType.equals("subapp"))); //$NON-NLS-1$
 	}
 }

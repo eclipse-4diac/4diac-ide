@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2016 Profactor GmbH, fortiss GmbH
- * 
+ * 				 2019 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - extracted common FB shape for interface and fbn editors
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
@@ -41,7 +43,7 @@ public class FBNetworkElementTooltipFigure extends Figure {
 
 	/**
 	 * Instantiates a new fB tooltip figure.
-	 * 
+	 *
 	 * @param fbView the fb view
 	 */
 	public FBNetworkElementTooltipFigure(final FBNetworkElement element) {
@@ -103,7 +105,7 @@ public class FBNetworkElementTooltipFigure extends Figure {
 	}
 
 	private void craeteTypeAndVersionLabel(FBNetworkElement element) {
-		String labelText = Messages.FBFigure_TYPE_NOT_SET;
+		String labelText = org.eclipse.fordiac.ide.gef.Messages.FBFigure_TYPE_NOT_SET;
 
 		LibraryElement type = element.getType();
 		if (type != null) {

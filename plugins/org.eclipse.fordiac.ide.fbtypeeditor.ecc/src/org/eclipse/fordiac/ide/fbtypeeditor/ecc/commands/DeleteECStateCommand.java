@@ -52,10 +52,11 @@ public class DeleteECStateCommand extends Command {
 		this.state = state;
 		parent = state.getECC();
 	}
-	
+
 	@Override
 	public boolean canExecute() {
-		return (null != state) && (null != parent) && (parent.getStart() != state);  //don't allow inital states to be deleted
+		return (null != state) && (null != parent) && (parent.getStart() != state); // don't allow inital states to be
+																					// deleted
 	}
 
 	/*
@@ -66,10 +67,8 @@ public class DeleteECStateCommand extends Command {
 	@Override
 	public void execute() {
 
-		
 		deleteActions = new CompoundCommand();
-		for (Iterator<?> iterator = state.getECAction().iterator(); iterator
-				.hasNext();) {
+		for (Iterator<?> iterator = state.getECAction().iterator(); iterator.hasNext();) {
 			ECAction ecAction = (ECAction) iterator.next();
 			deleteActions.add(new DeleteECActionCommand(ecAction));
 		}
@@ -79,29 +78,25 @@ public class DeleteECStateCommand extends Command {
 		}
 
 		deleteInTransitions = new CompoundCommand();
-		for (Iterator<?> iterator = state.getInTransitions().iterator(); iterator
-				.hasNext();) {
+		for (Iterator<?> iterator = state.getInTransitions().iterator(); iterator.hasNext();) {
 			ECTransition transition = (ECTransition) iterator.next();
-			DeleteTransitionCommand cmd = new DeleteTransitionCommand(
-					transition);
+			DeleteTransitionCommand cmd = new DeleteTransitionCommand(transition);
 			deleteInTransitions.add(cmd);
 		}
 		if (deleteInTransitions.canExecute()) {
 			deleteInTransitions.execute();
 		}
 		deleteOutTransitions = new CompoundCommand();
-		for (Iterator<?> iterator = state.getOutTransitions().iterator(); iterator
-				.hasNext();) {
+		for (Iterator<?> iterator = state.getOutTransitions().iterator(); iterator.hasNext();) {
 			ECTransition transition = (ECTransition) iterator.next();
-			DeleteTransitionCommand cmd = new DeleteTransitionCommand(
-					transition);
+			DeleteTransitionCommand cmd = new DeleteTransitionCommand(transition);
 			deleteOutTransitions.add(cmd);
 		}
 		if (deleteOutTransitions.canExecute()) {
 			deleteOutTransitions.execute();
 		}
 
-		if (parent != null) {			
+		if (parent != null) {
 			if (state.isStartState()) {
 				parent.setStart(null);
 			}

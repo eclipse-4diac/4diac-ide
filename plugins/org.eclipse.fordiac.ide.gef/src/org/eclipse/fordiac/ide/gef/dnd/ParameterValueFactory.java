@@ -17,19 +17,19 @@ import org.eclipse.gef.requests.CreationFactory;
 
 public class ParameterValueFactory implements CreationFactory {
 
-   private String text = ""; //$NON-NLS-1$
+	private String text = ""; //$NON-NLS-1$
 
-   @Override
-public Object getNewObject() {
-	   return text;
-   }
+	@Override
+	public Object getNewObject() {
+		return text;
+	}
 
-   @Override
-public Object getObjectType() {
-      return String.class;
-   }
+	@Override
+	public Object getObjectType() {
+		return String.class;
+	}
 
-   public void setText(String s) {
-      text = s;
-   }
+	public void setText(String s) {
+		text = s;
+	}
 }

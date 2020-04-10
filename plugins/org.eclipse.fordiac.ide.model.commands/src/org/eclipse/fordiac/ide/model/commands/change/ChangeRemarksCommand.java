@@ -20,9 +20,9 @@ import org.eclipse.gef.commands.Command;
  * The Class ChangeRemarksCommand.
  */
 public class ChangeRemarksCommand extends Command {
-	
+
 	private VersionInfo versionInfo;
-	
+
 	/** The new ApplicationDomain value. */
 	private String newRemarks;
 

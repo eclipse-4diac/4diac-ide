@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,21 +20,20 @@ import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
-import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
+import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>FB Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB Type
+ * Palette Entry</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePaletteEntry {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected FBTypePaletteEntryImpl() {
@@ -42,8 +41,8 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -51,50 +50,47 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 		return PalettePackage.Literals.FB_TYPE_PALETTE_ENTRY;
 	}
 
-	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public FBType getFBType() {
 		LibraryElement type = getType();
-		if((null !=type) && (type instanceof FBType)){
-		   return (FBType) type;
+		if (type instanceof FBType) {
+			return (FBType) type;
 		}
 		return null;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if((null != type) && (type instanceof FBType)){
+		if (type instanceof FBType) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
-				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no FBType as type entry for FBTypePaletteEntry");
+			if (null != type) {
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+						"tried to set no FBType as type entry for FBTypePaletteEntry"); //$NON-NLS-1$
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
 	}
 
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	protected LibraryElement loadType() {
-		LibraryElement retval = null;
-		Palette palette = getGroup().getPallete();
-		
-		retval = new FBTImporter().importType(getFile(), palette);
-		
-		if (retval == null) {
-			Activator.getDefault().logError("Error loading type: " + getFile().getName());
-		}
-		return retval;
+	public TypeImporter getTypeImporter(final Palette palette) {
+		return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(palette);
 	}
 
-} //FBTypePaletteEntryImpl
+} // FBTypePaletteEntryImpl

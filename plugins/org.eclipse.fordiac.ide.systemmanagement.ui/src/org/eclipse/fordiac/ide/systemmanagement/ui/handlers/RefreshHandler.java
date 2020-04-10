@@ -32,16 +32,16 @@ public class RefreshHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
-		if(part instanceof CommonNavigator){
-			CommonViewer viewer = ((CommonNavigator)part).getCommonViewer();
-			
-			Iterator runner = ((TreeSelection) selection).iterator();			
-			while(runner.hasNext()){
+		if (part instanceof CommonNavigator) {
+			CommonViewer viewer = ((CommonNavigator) part).getCommonViewer();
+
+			Iterator runner = ((TreeSelection) selection).iterator();
+			while (runner.hasNext()) {
 				Object obj = runner.next();
-				viewer.refresh(obj);				
+				viewer.refresh(obj);
 			}
-		}		
-		
+		}
+
 		return null;
 	}
 

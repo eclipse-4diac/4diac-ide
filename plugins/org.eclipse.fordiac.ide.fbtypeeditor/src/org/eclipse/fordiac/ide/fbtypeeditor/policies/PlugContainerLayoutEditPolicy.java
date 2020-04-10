@@ -17,7 +17,6 @@ import java.util.List;
 
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.AdapterInterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
@@ -29,17 +28,12 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.jface.preference.IPreferenceStore;
 
 public class PlugContainerLayoutEditPolicy extends AbstractInterfaceContainerLayoutEditPolicy {
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
-		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
-		if (cornerDim > 1) {
-			cornerDim = cornerDim / 2;
-		}
-		return new AbstractInterfaceSelectionEditPolicy(cornerDim, new Insets(1)){
+
+		return new AbstractInterfaceSelectionEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1)) {
 
 			@Override
 			protected List<? extends IInterfaceElement> getInterfaceElementList() {
@@ -47,15 +41,14 @@ public class PlugContainerLayoutEditPolicy extends AbstractInterfaceContainerLay
 			}
 
 			@Override
-			protected Command getIECreateCommand(DataType refElement, int ref) {				
+			protected Command getIECreateCommand(DataType refElement, int ref) {
 				return new CreateInterfaceElementCommand(refElement, getFBType().getInterfaceList(), false, ref);
 			}
 		};
 	}
 
 	@Override
-	protected Command createMoveChildCommand(final EditPart child,
-			final EditPart after) {
+	protected Command createMoveChildCommand(final EditPart child, final EditPart after) {
 		if (child instanceof AdapterInterfaceEditPart) {
 			AdapterInterfaceEditPart childEP = (AdapterInterfaceEditPart) child;
 			AdapterInterfaceEditPart afterEP = null;
@@ -70,7 +63,8 @@ public class PlugContainerLayoutEditPolicy extends AbstractInterfaceContainerLay
 				} else {
 					newIndex = getHost().getChildren().indexOf(after);
 				}
-				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(), ((IInterfaceElement)childEP.getModel()).isIsInput(), newIndex);
+				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(),
+						((IInterfaceElement) childEP.getModel()).isIsInput(), newIndex);
 			}
 
 		}
@@ -83,7 +77,7 @@ public class PlugContainerLayoutEditPolicy extends AbstractInterfaceContainerLay
 		FBType type = getFBType();
 		if (childClass instanceof AdapterType && type != null) {
 			int index = -1;
-			EditPart ref = getInsertionReference(request);		
+			EditPart ref = getInsertionReference(request);
 			if (ref != null) {
 				index = type.getInterfaceList().getPlugs().indexOf(ref.getModel());
 			}

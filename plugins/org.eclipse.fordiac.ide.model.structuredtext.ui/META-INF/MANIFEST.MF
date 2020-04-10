@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Structured Text UI (Incubation)
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 1.11.3.qualifier
+Bundle-Version: 1.12.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.structuredtext.ui;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.fordiac.ide.model,
@@ -15,8 +15,8 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.ui.editors,
  org.eclipse.compare,
  org.eclipse.xtext.ui.codetemplates.ui,
- org.antlr.runtime,
- org.eclipse.xtend.lib,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
+ org.eclipse.xtend.lib;bundle-version="2.14.0",
  org.eclipse.xtext.ui.shared
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr,

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2012, 2014 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *               2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -63,7 +63,7 @@ public class ForteLauncher implements IRuntimeLauncher {
 		} catch (NumberFormatException num) {
 			throw new LaunchRuntimeException(Messages.ForteLauncher_ERROR_WrongPort);
 		} catch (Exception ex) {
-			Activator.getDefault().logError("Could not launch FORTE", ex);
+			Activator.getDefault().logError(Messages.ForteLauncher_ERROR_CouldNotLaunchFORTE, ex);
 		}
 	}
 

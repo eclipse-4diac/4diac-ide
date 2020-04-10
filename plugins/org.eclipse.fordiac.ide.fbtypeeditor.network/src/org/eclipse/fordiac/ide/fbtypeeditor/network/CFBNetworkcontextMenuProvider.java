@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.network;
 
-import org.eclipse.fordiac.ide.application.editors.UIFBNetworkContextMenuProvider;
+import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -21,20 +21,17 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.action.IMenuManager;
 
-public class CFBNetworkcontextMenuProvider extends
-		UIFBNetworkContextMenuProvider {
+public class CFBNetworkcontextMenuProvider extends FBNetworkContextMenuProvider {
 
-	public CFBNetworkcontextMenuProvider(DiagramEditorWithFlyoutPalette editor,
-			ActionRegistry registry, ZoomManager zoomManager, Palette palette) {
+	public CFBNetworkcontextMenuProvider(DiagramEditorWithFlyoutPalette editor, ActionRegistry registry,
+			ZoomManager zoomManager, Palette palette) {
 		super(editor, registry, zoomManager, palette);
 	}
 
 	@Override
-	public void buildContextMenu(IMenuManager menu) {		
-		super.buildContextMenu(menu);		
+	public void buildContextMenu(IMenuManager menu) {
+		super.buildContextMenu(menu);
 		InterfaceContextMenuProvider.buildInterfaceEditEntries(menu, getRegistry());
 	}
-	
-	
 
 }

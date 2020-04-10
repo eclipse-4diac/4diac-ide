@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2019 fortiss GmbH
+ * 				 2020 Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,11 +11,14 @@
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl
+ *     - externalized all translatable strings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +33,7 @@ public abstract class ExportTemplate implements IExportTemplate {
 	private final List<String> infos = new ArrayList<>();
 
 	public ExportTemplate(String name) {
-		this(name, Paths.get(""));
+		this(name, Paths.get("")); //$NON-NLS-1$
 	}
 
 	public ExportTemplate(String name, Path prefix) {
@@ -72,15 +76,14 @@ public abstract class ExportTemplate implements IExportTemplate {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
+		if (!(obj instanceof ExportTemplate)) {
 			return false;
 		}
-		final ExportTemplate other = (ExportTemplate) obj;
-		return Objects.equals(path, other.path);
+		return Objects.equals(path, ((ExportTemplate) obj).path);
 	}
 
 	@Override
 	public String toString() {
-		return "ExportTemplate [" + path + "]";
+		return MessageFormat.format(Messages.ExportTemplate_ExportTemplate, path);
 	}
 }

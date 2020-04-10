@@ -34,7 +34,7 @@ public class CommunicationChannelDestination {
 	private boolean separated;
 	private String selectedProtocolId;
 	private CommunicationMediaInfo selectedMedia;
-	
+
 	public CommunicationChannelDestination(CommunicationChannel communicationChannel) {
 		super();
 		this.communicationChannel = communicationChannel;
@@ -82,9 +82,7 @@ public class CommunicationChannelDestination {
 	public void setSelectedProtocolId(String protocolId) {
 		this.selectedProtocolId = protocolId;
 	}
-	
-	
-	
+
 	public CommunicationMediaInfo getSelectedMedia() {
 		return selectedMedia;
 	}
@@ -97,9 +95,5 @@ public class CommunicationChannelDestination {
 		setSelectedMedia(mediaInfo);
 		setSelectedProtocolId(protocolId);
 	}
-	
-	
-	
-	
-	
+
 }

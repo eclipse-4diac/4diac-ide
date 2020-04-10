@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2014, 2017 Profactor GmbH, fortiss GmbH
- * 				 2018 - 2019 Johannes Keppler University, Linz
+ * 				 2018 - 2020 Johannes Keppler University, Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,14 +9,17 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl 
+ *   Gerhard Ebenhofer, Alois Zoitl
  *       - initial API and implementation and/or initial documentation
- *   Alois Zoitl - Refactored class hierarchy of xml exporters  
- *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export
+ *   Alois Zoitl - Refactored class hierarchy of xml exporters
+ *   			 - fixed coordinate system resolution conversion in in- and export
+ *               - changed exporting the Saxx cursor api
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import java.util.List;
+
+import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -33,131 +36,122 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
-class FBNetworkExporter extends CommonElementExporter{
-	
+class FBNetworkExporter extends CommonElementExporter {
 
-	FBNetworkExporter(Document dom) {
-		super(dom);
+	FBNetworkExporter(CommonElementExporter parent) {
+		super(parent);
 	}
-	
-	
-	Element createFBNetworkElement(final FBNetwork fbNetwork){
+
+	void createFBNetworkElement(final FBNetwork fbNetwork) throws XMLStreamException {
+		addStartElement(getMainElementName(fbNetwork));
+		addFBNetworkElements(fbNetwork);
+		addConnections(fbNetwork.getEventConnections(), LibraryElementTags.EVENT_CONNECTIONS_ELEMENT, fbNetwork);
+		addConnections(fbNetwork.getDataConnections(), LibraryElementTags.DATA_CONNECTIONS_ELEMENT, fbNetwork);
+		addConnections(fbNetwork.getAdapterConnections(), LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT, fbNetwork);
+		addEndElement();
+	}
+
+	private static String getMainElementName(final FBNetwork fbNetwork) {
 		String elementName = LibraryElementTags.SUBAPPNETWORK_ELEMENT;
-		if( (fbNetwork.eContainer() instanceof FBType && !(fbNetwork.eContainer() instanceof SubAppType)) ||
-				(fbNetwork.eContainer() instanceof Resource) ||
-				(fbNetwork.eContainer() instanceof ResourceType)){
+		if ((fbNetwork.eContainer() instanceof FBType && !(fbNetwork.eContainer() instanceof SubAppType))
+				|| (fbNetwork.eContainer() instanceof Resource) || (fbNetwork.eContainer() instanceof ResourceType)) {
 			elementName = LibraryElementTags.FBNETWORK_ELEMENT;
 		}
-		
-		Element fbNetworkElement = createElement(elementName); 
-		
-		addFBNetworkElements(fbNetworkElement, fbNetwork);
-		addConnections(fbNetworkElement, fbNetwork.getEventConnections(), LibraryElementTags.EVENT_CONNECTIONS_ELEMENT, fbNetwork);
-		addConnections(fbNetworkElement, fbNetwork.getDataConnections(), LibraryElementTags.DATA_CONNECTIONS_ELEMENT, fbNetwork);
-		addConnections(fbNetworkElement, fbNetwork.getAdapterConnections(), LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT, fbNetwork);
-
-		
-		return fbNetworkElement;
+		return elementName;
 	}
-	
-	private void addFBNetworkElements(final Element fbNetwork, final FBNetwork network) {
-		for (FBNetworkElement element : network.getNetworkElements()) {			
-			Element fbElement = createFNElementDomNode(element);
-			if(null != fbElement){				
-				setNameAttribute(fbElement, element.getName());
-				if(null != element.getType()){
-					setTypeAttribute(fbElement, element.getType());
+
+	private void addFBNetworkElements(final FBNetwork network) throws XMLStreamException {
+		for (FBNetworkElement fbnElement : network.getNetworkElements()) {
+			String nodeName = getFBNElementNodeName(fbnElement);
+			if (null != nodeName) {
+				addStartElement(nodeName);
+				addNameAttribute(fbnElement.getName());
+				if (null != fbnElement.getType()) {
+					addTypeAttribute(fbnElement.getType());
 				}
-				setCommentAttribute(fbElement, element);					
-				exportXandY(element, fbElement);					
-				addParamsConfig(fbElement, element.getInterface().getInputVars());
-				fbNetwork.appendChild(fbElement);
-			}
-		}
-	}
-	
-	private Element createFNElementDomNode(FBNetworkElement element) {
-		if (!(element.getType() instanceof AdapterFBType)) {
-			if((element instanceof FB) && !(element instanceof ResourceTypeFB)) {				
-				return createElement(LibraryElementTags.FB_ELEMENT);
-			}
-			if(element instanceof SubApp){
-				Element subAppElement = createElement(LibraryElementTags.SUBAPP_ELEMENT); 
-				if(null == ((SubApp)element).getType()){
-					//we have an untyped subapp therefore add the subapp contents to it
-					createUntypedSubAppcontents(subAppElement, (SubApp)element);
+				addCommentAttribute(fbnElement);
+				addXYAttributes(fbnElement);
+
+				if ((fbnElement instanceof SubApp) && (null == ((SubApp) fbnElement).getType())) {
+					// we have an untyped subapp therefore add the subapp contents to it
+					createUntypedSubAppcontents((SubApp) fbnElement);
 				}
-				return subAppElement;
+
+				addParamsConfig(fbnElement.getInterface().getInputVars());
+				addEndElement();
 			}
 		}
-		return null; 
 	}
-	
-	private void createUntypedSubAppcontents(Element subAppElement, SubApp element) {
-		new SubApplicationTypeExporter(getDom()).addInterfaceList(subAppElement, element.getInterface());	
-		if(null != element.getSubAppNetwork()){
-			//if mapped the subapp may be empty
-			subAppElement.appendChild(new FBNetworkExporter(getDom()).createFBNetworkElement(element.getSubAppNetwork()));
+
+	private static String getFBNElementNodeName(FBNetworkElement fbnElement) {
+		if (!(fbnElement.getType() instanceof AdapterFBType)) {
+			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB)) {
+				return LibraryElementTags.FB_ELEMENT;
+			}
+			if (fbnElement instanceof SubApp) {
+				return LibraryElementTags.SUBAPP_ELEMENT;
+			}
+		}
+		return null;
+	}
+
+	private void createUntypedSubAppcontents(SubApp element) throws XMLStreamException {
+		new SubApplicationTypeExporter(this).addInterfaceList(element.getInterface());
+		if (null != element.getSubAppNetwork()) {
+			// if mapped the subapp may be empty
+			new FBNetworkExporter(this).createFBNetworkElement(element.getSubAppNetwork());
 		}
 	}
 
-
-	private void addConnections(final Element fbNetworkElement, final List<? extends Connection> connections, 
-			final String connectionElementName, FBNetwork fbNetwork) {
-		Element connectionList = createElement(connectionElementName);
-		for (Connection connection : connections) {
-			addConnection(connectionList, connection, fbNetwork);
-		}
-
+	private void addConnections(final List<? extends Connection> connections, final String connectionElementName,
+			FBNetwork fbNetwork) throws XMLStreamException {
 		if (!connections.isEmpty()) {
-			fbNetworkElement.appendChild(connectionList);
+			addStartElement(connectionElementName);
+			for (Connection connection : connections) {
+				addConnection(connection, fbNetwork);
+			}
+			addEndElement();
 		}
 	}
 
-	private void addConnection(final Element connectionsContainer, final Connection connection, FBNetwork fbNetwork) {
-		Element connectionElement = createElement(LibraryElementTags.CONNECTION_ELEMENT);
-		if (connection.getSource() != null
-				&& connection.getSource().eContainer() instanceof InterfaceList) {
-			connectionElement.setAttribute(LibraryElementTags.SOURCE_ATTRIBUTE, 
-					getConnectionEndpointIdentifier(connection.getSource(), fbNetwork));			
-		} 
-		
-		if (connection.getDestination() != null
-				&& connection.getDestination().eContainer() instanceof InterfaceList) {
-			connectionElement.setAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE, 
+	private void addConnection(final Connection connection, FBNetwork fbNetwork) throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.CONNECTION_ELEMENT);
+		if (connection.getSource() != null && connection.getSource().eContainer() instanceof InterfaceList) {
+			getWriter().writeAttribute(LibraryElementTags.SOURCE_ATTRIBUTE,
+					getConnectionEndpointIdentifier(connection.getSource(), fbNetwork));
+		}
+
+		if (connection.getDestination() != null && connection.getDestination().eContainer() instanceof InterfaceList) {
+			getWriter().writeAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getDestination(), fbNetwork));
-		} 
-		setCommentAttribute(connectionElement, connection);
-		setConnectionCoordinates(connection, connectionElement);
-		connectionsContainer.appendChild(connectionElement);
+		}
+		addCommentAttribute(connection);
+		addConnectionCoordinates(connection);
 	}
 
 	private static String getConnectionEndpointIdentifier(IInterfaceElement interfaceElement, FBNetwork fbNetwork) {
 		String retVal = ""; //$NON-NLS-1$
-		if(null != interfaceElement.getFBNetworkElement() && 
-				interfaceElement.getFBNetworkElement().getFbNetwork() == fbNetwork){  // this is here to detect that interface elements of subapps
-			retVal = interfaceElement.getFBNetworkElement().getName() + ".";  ////$NON-NLS-1$
-		} 
-			
-		retVal += interfaceElement.getName();		
+		if (null != interfaceElement.getFBNetworkElement()
+				&& interfaceElement.getFBNetworkElement().getFbNetwork() == fbNetwork) {
+			// this is here to detect that interface elements of subapps
+			retVal = interfaceElement.getFBNetworkElement().getName() + "."; ////$NON-NLS-1$
+		}
+
+		retVal += interfaceElement.getName();
 		return retVal;
 	}
 
-
-	private static void setConnectionCoordinates(
-			final Connection connection, Element connectionElement) {
-		if(0 != connection.getDx1()) {
-			//only export connection routing information if not a straight line
-			connectionElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE,
+	private void addConnectionCoordinates(final Connection connection) throws XMLStreamException {
+		if (0 != connection.getDx1()) {
+			// only export connection routing information if not a straight line
+			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE,
 					CoordinateConverter.INSTANCE.convertTo1499XML(connection.getDx1()));
-			if(0 != connection.getDx2()) {
-				//only export the second two if a five segment connection
-				connectionElement.setAttribute(LibraryElementTags.DX2_ATTRIBUTE,
+			if (0 != connection.getDx2()) {
+				// only export the second two if a five segment connection
+				getWriter().writeAttribute(LibraryElementTags.DX2_ATTRIBUTE,
 						CoordinateConverter.INSTANCE.convertTo1499XML(connection.getDx2()));
-				connectionElement.setAttribute(LibraryElementTags.DY_ATTRIBUTE,
+				getWriter().writeAttribute(LibraryElementTags.DY_ATTRIBUTE,
 						CoordinateConverter.INSTANCE.convertTo1499XML(connection.getDy()));
 			}
 		}

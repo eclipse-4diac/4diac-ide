@@ -32,20 +32,20 @@ public class ChangeActionOrderCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return state.getECAction().size() > 1 && ( 
-				(up && index > 0) || (!up && index < (state.getECAction().size()-1)));
+		return state.getECAction().size() > 1
+				&& ((up && index > 0) || (!up && index < (state.getECAction().size() - 1)));
 	}
 
 	@Override
 	public void execute() {
 		state.getECAction().remove(state.getECAction().indexOf(action));
-		state.getECAction().add(up? (index - 1) : (index + 1), action);
+		state.getECAction().add(up ? (index - 1) : (index + 1), action);
 	}
 
 	@Override
 	public void redo() {
 		state.getECAction().remove(state.getECAction().indexOf(action));
-		state.getECAction().add(up? (index - 1) : (index + 1), action);
+		state.getECAction().add(up ? (index - 1) : (index + 1), action);
 	}
 
 	@Override

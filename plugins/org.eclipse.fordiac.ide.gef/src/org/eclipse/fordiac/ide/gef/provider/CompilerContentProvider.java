@@ -20,7 +20,7 @@ public class CompilerContentProvider implements IStructuredContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
 		if (inputElement instanceof FBType) {
-			return ((FBType)inputElement).getCompilerInfo().getCompiler().toArray();
+			return ((FBType) inputElement).getCompilerInfo().getCompiler().toArray();
 		}
 		return new Object[] {};
 	}

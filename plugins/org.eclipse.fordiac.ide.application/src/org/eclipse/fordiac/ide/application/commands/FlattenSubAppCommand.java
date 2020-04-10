@@ -89,8 +89,7 @@ public class FlattenSubAppCommand extends Command {
 		createCommands.execute();
 		mappCommands.execute();
 
-		ElementSelector selector = new ElementSelector();
-		selector.selectViewObjects(elements);
+		ElementSelector.selectViewObjects(elements);
 	}
 
 	@Override

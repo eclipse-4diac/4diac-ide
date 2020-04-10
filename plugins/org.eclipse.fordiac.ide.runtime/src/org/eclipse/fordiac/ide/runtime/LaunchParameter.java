@@ -21,7 +21,7 @@ public class LaunchParameter {
 	private String value;
 	private boolean fixedValues;
 	private String[] values;
-	
+
 	public boolean isFixedValues() {
 		return fixedValues;
 	}
@@ -46,7 +46,7 @@ public class LaunchParameter {
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * Sets the name.
 	 * 
@@ -55,7 +55,7 @@ public class LaunchParameter {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	/**
 	 * Gets the value.
 	 * 
@@ -64,7 +64,7 @@ public class LaunchParameter {
 	public String getValue() {
 		return value;
 	}
-	
+
 	/**
 	 * Sets the value.
 	 * 
@@ -73,6 +73,5 @@ public class LaunchParameter {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
-	
+
 }

@@ -29,7 +29,6 @@ public class RerouteAction implements IObjectActionDelegate {
 
 	private List<Connection> connections = new ArrayList<>();
 
-
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 	}
@@ -48,8 +47,7 @@ public class RerouteAction implements IObjectActionDelegate {
 		connections.clear();
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			for (Iterator iterator = structuredSelection.iterator(); iterator
-					.hasNext();) {
+			for (Iterator iterator = structuredSelection.iterator(); iterator.hasNext();) {
 				Object obj = iterator.next();
 				if (obj instanceof ConnectionEditPart) {
 					connections.add((Connection) ((ConnectionEditPart) obj).getFigure());

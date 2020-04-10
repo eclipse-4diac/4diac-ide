@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,12 +22,13 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.handles.AdvancedGraphicalViewerKeyHandler;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
+import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
-import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
@@ -36,7 +37,6 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
-import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -45,7 +45,6 @@ import org.eclipse.gef.ui.actions.AlignmentAction;
 import org.eclipse.gef.ui.actions.DirectEditAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
-import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.IAction;
@@ -65,7 +64,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 /**
  * A base editor for various graphical editors.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public abstract class DiagramEditor extends GraphicalEditor
@@ -88,7 +87,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util
 	 * .EventObject)
 	 */
@@ -128,7 +127,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 	/**
 	 * Create the root edit part used in this diagram editor. Editors which need
 	 * special behavior should override this function
-	 * 
+	 *
 	 * @return the new root edit part
 	 */
 	protected ScalableFreeformRootEditPart createRootEditPart() {
@@ -137,18 +136,18 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#configureGraphicalViewer()
 	 */
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
+		AdvancedScrollingGraphicalViewer viewer = (AdvancedScrollingGraphicalViewer) getGraphicalViewer();
 
 		ScalableFreeformRootEditPart root = createRootEditPart();
 
 		ContextMenuProvider cmp = getContextMenuProvider(viewer, root.getZoomManager());
-		if (cmp != null) {
+		if (null != cmp) {
 			viewer.setContextMenu(cmp);
 			getSite().registerContextMenu("org.eclipse.fordiac.ide.gef.contextmenu", //$NON-NLS-1$
 					cmp, viewer);
@@ -157,9 +156,9 @@ public abstract class DiagramEditor extends GraphicalEditor
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditPartFactory());
 
-		KeyHandler viewerKeyHandler = new GraphicalViewerKeyHandler(viewer).setParent(getCommonKeyHandler());
-
-		viewer.setKeyHandler(viewerKeyHandler);
+		AdvancedGraphicalViewerKeyHandler keyHandler = new AdvancedGraphicalViewerKeyHandler(viewer);
+		keyHandler.setParent(getCommonKeyHandler());
+		viewer.setKeyHandler(keyHandler);
 
 		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
 	}
@@ -170,17 +169,17 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Gets the edits the part factory.
-	 * 
+	 *
 	 * @return the edits the part factory
 	 */
 	protected abstract EditPartFactory getEditPartFactory();
 
 	/**
 	 * Gets the context menu provider.
-	 * 
+	 *
 	 * @param viewer the viewer
 	 * @param root   the root
-	 * 
+	 *
 	 * @return the context menu provider
 	 */
 	protected abstract ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer,
@@ -188,14 +187,14 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Creates the transfer drop target listener.
-	 * 
+	 *
 	 * @return the transfer drop target listener
 	 */
 	protected abstract TransferDropTargetListener createTransferDropTargetListener();
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#initializeGraphicalViewer()
 	 */
 	@Override
@@ -214,7 +213,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite,
 	 * org.eclipse.ui.IEditorInput)
 	 */
@@ -226,41 +225,46 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Sets the model.
-	 * 
+	 *
 	 * @param input the new model
 	 */
 	protected void setModel(final IEditorInput input) {
 		setEditDomain(new DefaultEditDomain(this));
-		getEditDomain().setDefaultTool(new AdvancedPanningSelectionTool());
+		getEditDomain().setDefaultTool(createDefaultTool());
 		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
 		// use one "System - Wide" command stack to avoid incositensies due to
 		// undo redo
 		getEditDomain().setCommandStack(SystemManager.INSTANCE.getCommandStack(getSystem()));
 	}
 
+	@SuppressWarnings("static-method")
+	protected AdvancedPanningSelectionTool createDefaultTool() {
+		return new AdvancedPanningSelectionTool();
+	}
+
 	/**
 	 * Gets the system.
-	 * 
+	 *
 	 * @return the system
 	 */
 	public abstract AutomationSystem getSystem();
 
 	/**
 	 * Gets the file name.
-	 * 
+	 *
 	 * @return the file name
 	 */
 	public abstract String getFileName();
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @seeorg.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.
 	 * IProgressMonitor)
 	 */
 	@Override
 	public abstract void doSave(final IProgressMonitor monitor);
-// TODO model refactoring - consider if a generic save would be possible here	
+// TODO model refactoring - consider if a generic save would be possible here
 //	{
 //		// TODO __gebenh error handling if save fails!
 //
@@ -273,7 +277,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#doSaveAs()
 	 */
 	@Override
@@ -283,7 +287,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#isSaveAsAllowed()
 	 */
 	@Override
@@ -293,7 +297,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Gets the common key handler.
-	 * 
+	 *
 	 * @return the common key handler
 	 */
 	protected KeyHandler getCommonKeyHandler() {
@@ -303,9 +307,9 @@ public abstract class DiagramEditor extends GraphicalEditor
 					getActionRegistry().getAction(ActionFactory.DELETE.getId()));
 			sharedKeyHandler.put(KeyStroke.getPressed(SWT.F2, 0),
 					getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
-			sharedKeyHandler.put(/* CTRL + '=' */
-					KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
-					getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
+//			sharedKeyHandler.put(/* CTRL + '=' */
+//					KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
+//					getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
 
 		}
 		return sharedKeyHandler;
@@ -313,7 +317,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(
 	 * java.lang.Class)
 	 */
@@ -335,7 +339,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Gets the editor.
-	 * 
+	 *
 	 * @return the editor
 	 */
 	protected FigureCanvas getEditor() {
@@ -344,7 +348,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#createActions()
 	 */
 	@SuppressWarnings("unchecked")
@@ -393,7 +397,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getSelectionActions()
 	 */
 	@SuppressWarnings("rawtypes")
@@ -404,7 +408,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Gets the sel actions.
-	 * 
+	 *
 	 * @return the sel actions
 	 */
 	@SuppressWarnings("rawtypes")
@@ -414,7 +418,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IWorkbenchPart#dispose()
 	 */
 	@Override
@@ -426,7 +430,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Returns the GraphicalViewer of this Editor.
-	 * 
+	 *
 	 * @return the GraphicalViewer
 	 */
 	public GraphicalViewer getViewer() {
@@ -435,7 +439,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor
 	 * #getContributorId()

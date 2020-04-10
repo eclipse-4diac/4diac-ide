@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2013, 2016, 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,11 +15,11 @@ package org.eclipse.fordiac.ide.systemimport;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
+import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -35,12 +35,12 @@ import org.eclipse.ui.IWorkbench;
 
 /**
  * The Class SystemImport.
- * 
+ *
  * @author gebenh, eisenmenger
  */
 public class SystemImport extends Wizard implements IImportWizard {
 	private static final String FORDIAC_SYSTEM_IMPORT_SECTION = "4DIAC_SYSTEM_IMPORT_SECTION"; //$NON-NLS-1$
-	
+
 	/**
 	 * Instantiates a new system import.
 	 */
@@ -59,7 +59,7 @@ public class SystemImport extends Wizard implements IImportWizard {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.wizard.Wizard#addPages()
 	 */
 	@Override
@@ -73,7 +73,7 @@ public class SystemImport extends Wizard implements IImportWizard {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	@Override
@@ -83,11 +83,11 @@ public class SystemImport extends Wizard implements IImportWizard {
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				AutomationSystem system = SystemManager.INSTANCE.createLocalProject(page.getProjectName());
-				try(InputStream stream = new FileInputStream(page.getSelectedSystemFile());) {
-					SystemImporter sysImporter = new SystemImporter();					
-					sysImporter.importSystem(stream, system);
+				SystemImporter sysImporter = new SystemImporter(system);
+				try {
+					sysImporter.importSystem(new FileInputStream(page.getSelectedSystemFile()));
 					SystemManager.INSTANCE.saveSystem(system);
-				} catch (IOException e) {
+				} catch (IOException | TypeImportException e) {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}
 			}
@@ -108,7 +108,7 @@ public class SystemImport extends Wizard implements IImportWizard {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
 	 * org.eclipse.jface.viewers.IStructuredSelection)
 	 */

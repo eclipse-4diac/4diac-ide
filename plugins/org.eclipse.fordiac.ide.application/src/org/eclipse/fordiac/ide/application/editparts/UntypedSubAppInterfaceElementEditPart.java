@@ -15,11 +15,11 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.Label;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
-import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
@@ -31,7 +31,6 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
-import org.eclipse.jface.viewers.TextCellEditor;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
 	private DirectEditManager manager;
@@ -63,19 +62,9 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		super.performRequest(request);
 	}
 
-	public DirectEditManager getManager() {
+	private DirectEditManager getManager() {
 		if (manager == null) {
-			Label l = getNameLabel();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
-					new IdentifierVerifyListener()) {
-				@Override
-				protected void bringDown() {
-					if (getEditPart() instanceof UntypedSubAppInterfaceElementEditPart) {
-						((UntypedSubAppInterfaceElementEditPart) getEditPart()).refresh();
-					}
-					super.bringDown();
-				}
-			}; // ensures that interface elements are only valid identifiers
+			manager = new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
 		}
 		return manager;
 	}
@@ -85,8 +74,8 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	}
 
 	@Override
-	protected EContentAdapter createContentAdapter() {
-		return new EContentAdapter() {
+	protected Adapter createContentAdapter() {
+		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				Object feature = notification.getFeature();
