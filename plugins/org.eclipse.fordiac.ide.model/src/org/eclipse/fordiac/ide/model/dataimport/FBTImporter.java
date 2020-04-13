@@ -29,7 +29,6 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
@@ -397,7 +396,7 @@ public class FBTImporter extends TypeImporter {
 			aFB.setY(position.getY());
 		}
 		if (null != aFB.getType() && null != aFB.getType().getInterfaceList()) {
-			aFB.setInterface(EcoreUtil.copy(aFB.getType().getInterfaceList()));
+			aFB.setInterface(aFB.getType().getInterfaceList().copy());
 		} else {
 			// if we don't have a type or interface list set an empty interface list to
 			// adapter

@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
@@ -96,7 +95,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 		if (null != subEntry) {
 			subApp.setPaletteEntry(subEntry);
-			subApp.setInterface(EcoreUtil.copy(subEntry.getSubApplicationType().getInterfaceList()));
+			subApp.setInterface(subEntry.getSubApplicationType().getInterfaceList().copy());
 			configureParameters(subApp.getInterface(), LibraryElementTags.SUBAPP_ELEMENT);
 		}
 	}

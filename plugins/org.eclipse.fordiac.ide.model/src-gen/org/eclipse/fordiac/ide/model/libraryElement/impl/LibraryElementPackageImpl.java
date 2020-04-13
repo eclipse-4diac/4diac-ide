@@ -3575,12 +3575,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(ecTransitionEClass, ECTransition.class, "ECTransition", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getECTransition_Comment(), theXMLTypePackage.getString(), "comment", null, 0, 1, //$NON-NLS-1$
+		initEAttribute(getECTransition_Comment(), theXMLTypePackage.getString(), "comment", "", 0, 1, //$NON-NLS-1$ //$NON-NLS-2$
 				ECTransition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				IS_DERIVED, IS_ORDERED);
+		initEAttribute(getECTransition_ConditionExpression(), theXMLTypePackage.getString(), "conditionExpression", "1", //$NON-NLS-1$ //$NON-NLS-2$
+				1, 1, ECTransition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
-		initEAttribute(getECTransition_ConditionExpression(), theXMLTypePackage.getString(), "conditionExpression", //$NON-NLS-1$
-				null, 1, 1, ECTransition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getECTransition_Source(), this.getECState(), this.getECState_OutTransitions(), "source", null, 1, //$NON-NLS-1$
 				1, ECTransition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3718,6 +3718,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		op = addEOperation(interfaceListEClass, this.getAdapterDeclaration(), "getAdapter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
 		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(interfaceListEClass, this.getInterfaceList(), "copy", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(linkEClass, Link.class, "Link", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getLink_Segment(), this.getSegment(), this.getSegment_OutConnections(), "segment", null, 0, 1, //$NON-NLS-1$

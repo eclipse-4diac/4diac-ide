@@ -25,7 +25,6 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -115,7 +114,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		if (null != entry) {
 			fb.setPaletteEntry(entry);
-			fb.setInterface(EcoreUtil.copy(fb.getType().getInterfaceList()));
+			fb.setInterface(fb.getType().getInterfaceList().copy());
 		} else {
 //TODO model refactoring - think about where and if such markers should be created maybe move to validator
 //				createFBTypeProblemMarker(IMarker.SEVERITY_ERROR, Messages.FBTImporter_REQUIRED_FB_TYPE_EXCEPTION + typeFbElement.getNodeValue() + " not available");

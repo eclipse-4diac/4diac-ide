@@ -283,6 +283,16 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
+	public InterfaceList copy() {
+		return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.INTERFACE_LIST__PLUGS:
