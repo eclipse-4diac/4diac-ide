@@ -14,9 +14,7 @@
 package org.eclipse.fordiac.ide.gef;
 
 import java.util.EventObject;
-import java.util.Iterator;
 import java.util.List;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
@@ -67,8 +65,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
-public abstract class DiagramEditor extends GraphicalEditor
-		implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
+public abstract class DiagramEditor extends GraphicalEditor implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
@@ -100,14 +97,12 @@ public abstract class DiagramEditor extends GraphicalEditor
 	/**
 	 * refresh all child editparts when editor gets focus.
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		for (Iterator iter = getGraphicalViewer().getRootEditPart().getChildren().iterator(); iter.hasNext();) {
-			EditPart ep = (EditPart) iter.next();
-			ep.refresh();
-		}
+		@SuppressWarnings("unchecked") // method returns child editparts
+		List<EditPart> children = getGraphicalViewer().getRootEditPart().getChildren();
+		children.forEach(EditPart::refresh);
 	}
 
 	@Override
@@ -264,16 +259,16 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 */
 	@Override
 	public abstract void doSave(final IProgressMonitor monitor);
-// TODO model refactoring - consider if a generic save would be possible here
-//	{
-//		// TODO __gebenh error handling if save fails!
-//
-//		SystemManager.getInstance().saveDiagram(getDiagramModel(), getSystem(),
-//				getFileName());
-//
-//		getCommandStack().markSaveLocation();
-//		firePropertyChange(IEditorPart.PROP_DIRTY);
-//	}
+	// TODO model refactoring - consider if a generic save would be possible here
+	//	{
+	//		// TODO __gebenh error handling if save fails!
+	//
+	//		SystemManager.getInstance().saveDiagram(getDiagramModel(), getSystem(),
+	//				getFileName());
+	//
+	//		getCommandStack().markSaveLocation();
+	//		firePropertyChange(IEditorPart.PROP_DIRTY);
+	//	}
 
 	/*
 	 * (non-Javadoc)
@@ -307,9 +302,9 @@ public abstract class DiagramEditor extends GraphicalEditor
 					getActionRegistry().getAction(ActionFactory.DELETE.getId()));
 			sharedKeyHandler.put(KeyStroke.getPressed(SWT.F2, 0),
 					getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
-//			sharedKeyHandler.put(/* CTRL + '=' */
-//					KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
-//					getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
+			//			sharedKeyHandler.put(/* CTRL + '=' */
+			//					KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
+			//					getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
 
 		}
 		return sharedKeyHandler;
