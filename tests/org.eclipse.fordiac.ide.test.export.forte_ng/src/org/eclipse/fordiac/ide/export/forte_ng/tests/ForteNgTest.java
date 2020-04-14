@@ -40,6 +40,8 @@ import org.junit.Test;
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
 public class ForteNgTest {
+	// DataTypeLibrary to be used for testing
+	private static final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
 	private BasicFBType functionBlock;
 	private List<String> errors;
@@ -65,7 +67,7 @@ public class ForteNgTest {
 		// create a VarDeclaration with given name and data-type
 		VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		variable.setName(variableName);
-		variable.setType(DataTypeLibrary.getInstance().getType(dataType));
+		variable.setType(dataTypeLib.getType(dataType));
 		return variable;
 	}
 

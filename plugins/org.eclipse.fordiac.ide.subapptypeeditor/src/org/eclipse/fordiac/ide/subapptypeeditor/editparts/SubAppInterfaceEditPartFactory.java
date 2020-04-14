@@ -15,15 +15,15 @@ package org.eclipse.fordiac.ide.subapptypeeditor.editparts;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class SubAppInterfaceEditPartFactory extends FBInterfaceEditPartFactory {
 
-	public SubAppInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette) {
-		super(editor, systemPalette);
+	public SubAppInterfaceEditPartFactory(GraphicalEditor editor, TypeLibrary typeLib) {
+		super(editor, typeLib);
 	}
 
 	@Override

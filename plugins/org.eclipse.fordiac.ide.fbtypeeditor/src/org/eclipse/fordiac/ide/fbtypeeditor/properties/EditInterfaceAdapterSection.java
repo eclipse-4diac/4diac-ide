@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
@@ -60,6 +61,11 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	@Override
 	protected FBType getType() {
 		return (FBType) type;
+	}
+
+	@Override
+	protected TypeLibrary getTypeLibrary() {
+		return TypeLibrary.getTypeLibraryForPaletteEntry(getType().getPaletteEntry());
 	}
 
 }

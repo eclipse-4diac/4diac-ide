@@ -1,6 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems,
- * 				 2018 Johannes Kepler University
+ * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems
+ * 				 2018, 2020 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,8 +12,8 @@
  *  Gerhard Ebenhofer, Martijn Rooker, Alois Zoitl, Monika Wenger, Jens Reimann,
  *  Waldemar Eisenmenger, Gerd Kainz
  *    - initial API and implementation and/or initial documentation
- *  Martin Melik-Merkumians
- *    - adds convenience methods
+ *  Martin Melik-Merkumians - adds convenience methods
+ *  Alois Zoitl - Changed to a per project Type and Data TypeLibrary
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -52,6 +52,10 @@ public final class TypeLibrary implements TypeLibraryTags {
 		return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
 	}
 
+	public static TypeLibrary getTypeLibraryForPaletteEntry(PaletteEntry entry) {
+		return getTypeLibrary(entry.getFile().getProject());
+	}
+
 	private final Palette blockTypeLib = PaletteFactory.eINSTANCE.createPalette();
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private final IProject project;
@@ -87,6 +91,10 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	public Palette getBlockTypeLib() {
 		return blockTypeLib;
+	}
+
+	public DataTypeLibrary getDataTypeLibrary() {
+		return dataTypeLib;
 	}
 
 	private EMap<String, ? extends PaletteEntry> getTypeList(IFile typeFile) {

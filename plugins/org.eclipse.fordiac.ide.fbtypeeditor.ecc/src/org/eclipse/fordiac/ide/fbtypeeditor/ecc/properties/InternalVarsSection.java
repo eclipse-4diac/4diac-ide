@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.InternalVarsLabelProvider;
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableComma
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -65,7 +67,8 @@ public class InternalVarsSection extends ECCSection {
 
 	private TableViewer internalVarsViewer;
 	private ComboBoxCellEditor typeDropDown;
-	private String[] dataTypes = new String[DataTypeLibrary.getInstance().getDataTypesSorted().size()];
+	private DataTypeLibrary dataLib;
+	private String[] dataTypes;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -83,10 +86,6 @@ public class InternalVarsSection extends ECCSection {
 
 		internalVarsViewer = TableWidgetFactory.createTableViewer(composite);
 		configureTableLayout(internalVarsViewer.getTable());
-
-		for (int i = 0; i < DataTypeLibrary.getInstance().getDataTypesSorted().size(); i++) {
-			dataTypes[i] = ((DataType) DataTypeLibrary.getInstance().getDataTypesSorted().toArray()[i]).getName();
-		}
 
 		internalVarsViewer.setCellEditors(createCellEditors(internalVarsViewer.getTable()));
 		internalVarsViewer.setColumnProperties(new String[] { IV_NAME, IV_TYPE, IV_ARRAY, IV_INIT, IV_COMMENT });
@@ -168,7 +167,9 @@ public class InternalVarsSection extends ECCSection {
 
 	@Override
 	protected void setInputInit() {
-		// for now nothing to be done here
+		dataLib = TypeLibrary.getTypeLibraryForPaletteEntry(getType().getPaletteEntry()).getDataTypeLibrary();
+		dataTypes = dataLib.getDataTypesSorted().stream().map(DataType::getName).collect(Collectors.toList())
+				.toArray(new String[0]);
 	}
 
 	private final class InternalVarsCellModifier implements ICellModifier {
@@ -204,7 +205,7 @@ public class InternalVarsSection extends ECCSection {
 				cmd = new ChangeNameCommand(data, value.toString());
 				break;
 			case IV_TYPE:
-				cmd = new ChangeTypeCommand(data, DataTypeLibrary.getInstance().getType(dataTypes[(int) value]));
+				cmd = new ChangeTypeCommand(data, dataLib.getType(dataTypes[(int) value]));
 				break;
 			case IV_COMMENT:
 				cmd = new ChangeCommentCommand(data, value.toString());

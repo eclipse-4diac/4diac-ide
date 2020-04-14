@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -63,17 +64,21 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	private TableViewer structViewer;
 	private ComboBoxCellEditor typeDropDown;
-	private final String[] dataTypes = new String[DataTypeLibrary.getInstance().getDataTypesSorted().size()];
+	private final DataTypeLibrary dataTypeLibrary;
+	private final String[] dataTypes;
 	private AddDeleteReorderListWidget buttons;
 	private final CommandStack cmdStack;
 	private TabbedPropertySheetWidgetFactory widgetFactory;
 
 	private final DataType dataType;
 
-	public StructViewingComposite(Composite parent, int style, CommandStack cmdStack, DataType dataType) {
+	public StructViewingComposite(Composite parent, int style, CommandStack cmdStack, DataType dataType,
+			DataTypeLibrary dataTypeLibrary) {
 		super(parent, style);
 		this.cmdStack = cmdStack;
 		this.dataType = dataType;
+		this.dataTypeLibrary = dataTypeLibrary;
+		dataTypes = new String[dataTypeLibrary.getDataTypes().size()];
 	}
 
 	public void createPartControl(Composite parent) {
@@ -81,8 +86,10 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		parent.setLayout(new GridLayout(2, false));
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		showLabel(parent);
-		for (int i = 0; i < DataTypeLibrary.getInstance().getDataTypesSorted().size(); i++) {
-			dataTypes[i] = ((DataType) DataTypeLibrary.getInstance().getDataTypesSorted().toArray()[i]).getName();
+
+		List<DataType> dataTypeList = dataTypeLibrary.getDataTypesSorted();
+		for (int i = 0; i < dataTypeLibrary.getDataTypesSorted().size(); i++) {
+			dataTypes[i] = dataTypeList.get(i).getName();
 		}
 
 		buttons = new AddDeleteReorderListWidget();
@@ -210,7 +217,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				cmd = new ChangeNameCommand(data, value.toString());
 				break;
 			case TYPE:
-				cmd = new ChangeTypeCommand(data, DataTypeLibrary.getInstance().getType(dataTypes[(int) value]));
+				cmd = new ChangeTypeCommand(data, dataTypeLibrary.getType(dataTypes[(int) value]));
 				break;
 			case COMMENT:
 				cmd = new ChangeCommentCommand(data, value.toString());

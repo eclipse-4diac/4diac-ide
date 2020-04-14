@@ -87,9 +87,7 @@
       <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getProjectRelativeTypePath"
           body="return getFile().getProjectRelativePath().toOSString();"/>
       <genOperations ecoreOperation="palette.ecore#//PaletteEntry/loadType" body="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.loadType(this);"/>
-      <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getTypeImporter">
-        <genParameters ecoreParameter="palette.ecore#//PaletteEntry/getTypeImporter/palette"/>
-      </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getTypeImporter"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//AdapterTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//AdapterTypePaletteEntry/getType"
@@ -99,9 +97,7 @@
         <genParameters ecoreParameter="palette.ecore#//AdapterTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//AdapterTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter();">
-        <genParameters ecoreParameter="palette.ecore#//AdapterTypePaletteEntry/getTypeImporter/palette"/>
-      </genOperations>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter();"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//DataTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//DataTypePaletteEntry/getType"
@@ -111,9 +107,7 @@
         <genParameters ecoreParameter="palette.ecore#//DataTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//DataTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter();">
-        <genParameters ecoreParameter="palette.ecore#//DataTypePaletteEntry/getTypeImporter/palette"/>
-      </genOperations>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter();"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//DeviceTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//DeviceTypePaletteEntry/getDeviceType"
@@ -123,9 +117,7 @@
         <genParameters ecoreParameter="palette.ecore#//DeviceTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//DeviceTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(palette);">
-        <genParameters ecoreParameter="palette.ecore#//DeviceTypePaletteEntry/getTypeImporter/palette"/>
-      </genOperations>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter();"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//FBTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/getFBType"
@@ -134,9 +126,7 @@
         <genParameters ecoreParameter="palette.ecore#//FBTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(palette);">
-        <genParameters ecoreParameter="palette.ecore#//FBTypePaletteEntry/getTypeImporter/palette"/>
-      </genOperations>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter();"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//ResourceTypeEntry">
       <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/getResourceType"
@@ -145,9 +135,7 @@
         <genParameters ecoreParameter="palette.ecore#//ResourceTypeEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(palette);">
-        <genParameters ecoreParameter="palette.ecore#//ResourceTypeEntry/getTypeImporter/palette"/>
-      </genOperations>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter();"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//SegmentTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//SegmentTypePaletteEntry/getSegmentType"
@@ -157,9 +145,7 @@
         <genParameters ecoreParameter="palette.ecore#//SegmentTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//SegmentTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter();">
-        <genParameters ecoreParameter="palette.ecore#//SegmentTypePaletteEntry/getTypeImporter/palette"/>
-      </genOperations>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter();"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//SubApplicationTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//SubApplicationTypePaletteEntry/getSubApplicationType"
@@ -169,9 +155,7 @@
         <genParameters ecoreParameter="palette.ecore#//SubApplicationTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//SubApplicationTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(palette);">
-        <genParameters ecoreParameter="palette.ecore#//SubApplicationTypePaletteEntry/getTypeImporter/palette"/>
-      </genOperations>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter();"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="LibraryElement" basePackage="org.eclipse.fordiac.ide.model"

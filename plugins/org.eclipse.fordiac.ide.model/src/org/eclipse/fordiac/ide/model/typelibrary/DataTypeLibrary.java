@@ -1,5 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2013, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2020 Johannes Kepler Universiy Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
+ *  Alois Zoitl - Changed to a per project Type and Data TypeLibrary
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -35,31 +37,12 @@ public final class DataTypeLibrary {
 	/**
 	 * Instantiates a new data type library.
 	 */
-	DataTypeLibrary() {
+	public DataTypeLibrary() {
 		initElementaryTypes();
 	}
 
 	public void addPaletteEntry(DataTypePaletteEntry entry) {
 		derivedTypeMap.put(entry.getLabel(), entry);
-	}
-
-	/** The instance. */
-	private static DataTypeLibrary instance;
-
-	/**
-	 * Gets the single instance of DataTypeLibrary.
-	 *
-	 * @return single instance of DataTypeLibrary
-	 * @deprecated will be replaced by a project specific datatype library managed
-	 *             by {@link TypeLibrary}
-	 */
-	@Deprecated
-	public static DataTypeLibrary getInstance() {
-		if (instance == null) {
-			instance = new DataTypeLibrary();
-
-		}
-		return instance;
 	}
 
 	/**

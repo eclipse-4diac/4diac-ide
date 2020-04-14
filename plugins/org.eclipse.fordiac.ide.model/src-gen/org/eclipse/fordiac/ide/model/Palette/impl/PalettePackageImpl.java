@@ -1001,8 +1001,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		addEOperation(paletteEntryEClass, theLibraryElementPackage.getLibraryElement(), "loadType", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
 
-		op = addEOperation(paletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(paletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(adapterTypePaletteEntryEClass, AdapterTypePaletteEntry.class, "AdapterTypePaletteEntry", //$NON-NLS-1$
 				!IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1013,9 +1012,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(adapterTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(adapterTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+		addEOperation(adapterTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(dataTypePaletteEntryEClass, DataTypePaletteEntry.class, "DataTypePaletteEntry", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1026,9 +1024,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(dataTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(dataTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+		addEOperation(dataTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(deviceTypePaletteEntryEClass, DeviceTypePaletteEntry.class, "DeviceTypePaletteEntry", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1039,9 +1036,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(deviceTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(deviceTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+		addEOperation(deviceTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(fbTypePaletteEntryEClass, FBTypePaletteEntry.class, "FBTypePaletteEntry", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1052,9 +1048,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(fbTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(fbTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
-				IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(fbTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(resourceTypeEntryEClass, ResourceTypeEntry.class, "ResourceTypeEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -1065,9 +1059,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(resourceTypeEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(resourceTypeEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
-				IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(resourceTypeEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(segmentTypePaletteEntryEClass, SegmentTypePaletteEntry.class, "SegmentTypePaletteEntry", //$NON-NLS-1$
 				!IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1078,9 +1070,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(segmentTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(segmentTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+		addEOperation(segmentTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(subApplicationTypePaletteEntryEClass, SubApplicationTypePaletteEntry.class,
 				"SubApplicationTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -1091,9 +1082,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(subApplicationTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(subApplicationTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, //$NON-NLS-1$
-				IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(subApplicationTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(iFileEDataType, IFile.class, "IFile", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

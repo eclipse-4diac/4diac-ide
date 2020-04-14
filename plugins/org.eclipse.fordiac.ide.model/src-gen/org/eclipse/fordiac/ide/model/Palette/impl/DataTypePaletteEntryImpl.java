@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
@@ -91,7 +90,7 @@ public class DataTypePaletteEntryImpl extends PaletteEntryImpl implements DataTy
 	 * @generated
 	 */
 	@Override
-	public TypeImporter getTypeImporter(final Palette palette) {
+	public TypeImporter getTypeImporter() {
 		return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter();
 	}
 

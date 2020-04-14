@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 fortiss GmbH
+ *               2020 Johannes Kepler University Linz   
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,8 +9,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Martin Jobst 
- *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Changed to a per project Type and Data TypeLibrary
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.structuredtext.scoping
 
@@ -37,9 +38,11 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvider {
 
 	def scope_DataType(EObject context, EReference ref) {
-		val candidates = DataTypeLibrary.getInstance.dataTypes
-		// create scope explicitly since Scopes.scopedElementsFor passes ignoreCase as false
-		new SimpleScope(Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), true)
+	    return IScope.NULLSCOPE;
+	    
+//		val candidates = DataTypeLibrary.getInstance.dataTypes
+//		// create scope explicitly since Scopes.scopedElementsFor passes ignoreCase as false
+//		new SimpleScope(Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), true)
 	}
 
 	def scope_AdapterVariable_var(AdapterVariable context, EReference ref) {

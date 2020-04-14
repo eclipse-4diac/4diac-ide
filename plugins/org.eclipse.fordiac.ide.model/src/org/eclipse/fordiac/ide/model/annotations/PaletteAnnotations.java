@@ -84,7 +84,7 @@ public final class PaletteAnnotations {
 	public static LibraryElement loadType(PaletteEntryImpl paletteEntryImpl) {
 		LibraryElement retval = null;
 		try {
-			TypeImporter importer = paletteEntryImpl.getTypeImporter(paletteEntryImpl.getPalette());
+			TypeImporter importer = paletteEntryImpl.getTypeImporter();
 			retval = importer.importType(paletteEntryImpl.getFile());
 		} catch (TypeImportException e) {
 			Activator.getDefault().logError("Error loading type: " + paletteEntryImpl.getFile().getName(), //$NON-NLS-1$

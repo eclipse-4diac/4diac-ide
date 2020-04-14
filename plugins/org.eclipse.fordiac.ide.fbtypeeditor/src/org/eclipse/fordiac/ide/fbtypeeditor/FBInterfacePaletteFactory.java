@@ -15,10 +15,9 @@ package org.eclipse.fordiac.ide.fbtypeeditor;
 
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
@@ -31,13 +30,13 @@ public final class FBInterfacePaletteFactory {
 			"FBInterfacePaletteFactory.Size", //$NON-NLS-1$
 			"FBInterfacePaletteFactory.State"); //$NON-NLS-1$
 
-	public static PaletteRoot createPalette(Palette systemPalette) {
+	public static PaletteRoot createPalette(TypeLibrary typeLib) {
 		final PaletteRoot palette = new PaletteRoot();
-		fillPalette(systemPalette, palette);
+		fillPalette(typeLib, palette);
 		return palette;
 	}
 
-	private static void fillPalette(Palette systemPalette, final PaletteRoot palette) {
+	private static void fillPalette(TypeLibrary typeLib, final PaletteRoot palette) {
 		PaletteDrawer drawer = new PaletteDrawer(Messages.FBInterfacePaletteFactory_EventTypes);
 
 		for (DataType type : EventTypeLibrary.getInstance().getEventTypes()) {
@@ -50,7 +49,7 @@ public final class FBInterfacePaletteFactory {
 
 		drawer = new PaletteDrawer(Messages.FBInterfacePaletteFactory_DataTypes);
 
-		for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
+		for (DataType dataType : typeLib.getDataTypeLibrary().getDataTypesSorted()) {
 			ImageDescriptor desc = FordiacImage.ICON_DATA_TYPE.getImageDescriptor();
 			CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(dataType.getName(),
 					dataType.getComment(), new DataTypeCreationFactory(dataType), desc, desc);
@@ -58,14 +57,14 @@ public final class FBInterfacePaletteFactory {
 		}
 		palette.add(drawer);
 
-		createAdapterEntry(palette, systemPalette);
+		createAdapterEntry(palette, typeLib);
 
 	}
 
-	private static void createAdapterEntry(final PaletteRoot palette, final Palette systemPalette) {
+	private static void createAdapterEntry(final PaletteRoot palette, final TypeLibrary typeLib) {
 		PaletteDrawer drawer = new PaletteDrawer("Adapters");
 
-		for (AdapterTypePaletteEntry entry : systemPalette.getAdapterTypesSorted()) {
+		for (AdapterTypePaletteEntry entry : typeLib.getBlockTypeLib().getAdapterTypesSorted()) {
 			ImageDescriptor desc = FordiacImage.ICON_DATA_TYPE.getImageDescriptor();
 			drawer.add(new CombinedTemplateCreationEntry(entry.getLabel(), entry.getType().getComment(),
 					new DataTypeCreationFactory(entry.getType()), desc, desc));

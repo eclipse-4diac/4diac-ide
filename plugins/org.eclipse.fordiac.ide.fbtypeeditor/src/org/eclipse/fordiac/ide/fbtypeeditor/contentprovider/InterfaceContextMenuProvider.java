@@ -49,8 +49,12 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 	private static final String CREATE_PLUG = Messages.InterfaceContextMenuProvider_CreatePlug;
 	private static final String CREATE_SOCKET = Messages.InterfaceContextMenuProvider_CreateSocket;
 
-	public InterfaceContextMenuProvider(EditPartViewer viewer, ZoomManager zoomManager, ActionRegistry registry) {
+	private final DataTypeLibrary dataTypeLib;
+
+	public InterfaceContextMenuProvider(EditPartViewer viewer, ZoomManager zoomManager, ActionRegistry registry,
+			DataTypeLibrary dataTypeLib) {
 		super(viewer, zoomManager, registry);
+		this.dataTypeLib = dataTypeLib;
 	}
 
 	@Override
@@ -66,10 +70,11 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 		action = getRegistry().getAction(ActionFactory.DELETE.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
-		buildInterfaceEditEntries(menu, getRegistry());
+		buildInterfaceEditEntries(menu, getRegistry(), dataTypeLib);
 	}
 
-	public static void buildInterfaceEditEntries(IMenuManager menu, ActionRegistry registry) {
+	public static void buildInterfaceEditEntries(IMenuManager menu, ActionRegistry registry,
+			DataTypeLibrary dataTypeLib) {
 		IAction action;
 
 		action = registry.getAction(CreateInputEventAction.ID);
@@ -84,7 +89,7 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 		MenuManager submenu = new MenuManager(Messages.InterfaceContextMenuProvider_CreateDataInput);
 		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
 
-		for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
+		for (DataType dataType : dataTypeLib.getDataTypesSorted()) {
 			action = registry.getAction(CreateInputVariableAction.getID(dataType.getName()));
 			if (null == action) {
 				action = new CreateInputVariableAction(part, fbType, dataType);
@@ -96,7 +101,7 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 		submenu = new MenuManager(Messages.InterfaceContextMenuProvider_CreateDataOutput);
 		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
 
-		for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
+		for (DataType dataType : dataTypeLib.getDataTypesSorted()) {
 			action = registry.getAction(CreateOutputVariableAction.getID(dataType.getName()));
 			if (null == action) {
 				action = new CreateOutputVariableAction(part, fbType, dataType);

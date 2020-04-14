@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
@@ -29,12 +28,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  */
 
 public final class RESImporter extends TypeImporter {
-
-	private final Palette palette;
-
-	public RESImporter(final Palette palette) {
-		this.palette = palette;
-	}
 
 	@Override
 	protected ResourceType getType() {
@@ -73,8 +66,9 @@ public final class RESImporter extends TypeImporter {
 				// TODO __gebenh import "supported fbtypes"
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				getType().setFBNetwork(new ResDevFBNetworkImporter(palette, getType().getVarDeclaration(), getReader())
-						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
+				getType().setFBNetwork(
+						new ResDevFBNetworkImporter(getTypeLib(), getType().getVarDeclaration(), getReader())
+								.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
 				break;
 			default:
 				return false;

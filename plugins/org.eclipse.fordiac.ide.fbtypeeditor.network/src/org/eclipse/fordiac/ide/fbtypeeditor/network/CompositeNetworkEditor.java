@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
@@ -52,7 +53,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	private CompositeFBType fbType;
 	private CommandStack commandStack;
-	private Palette palette;
+	private TypeLibrary typeLib;
 	private Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -150,12 +151,12 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected Palette getPalette() {
-		return palette;
+		return typeLib.getBlockTypeLib();
 	}
 
 	@Override
 	public AutomationSystem getSystem() {
-		return palette.getAutomationSystem();
+		return null;
 	}
 
 	@Override
@@ -177,10 +178,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	protected void configurePalette(FBTypeEditorInput fbTypeEditorInput) {
-		Palette fbPalette = fbTypeEditorInput.getPaletteEntry().getPalette();
-		if (null != fbPalette) {
-			palette = fbPalette;
-		}
+		typeLib = TypeLibrary.getTypeLibraryForPaletteEntry(fbTypeEditorInput.getPaletteEntry());
 	}
 
 	@Override
@@ -202,6 +200,6 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
-		return new CFBNetworkcontextMenuProvider(this, getActionRegistry(), zoomManager, getPalette());
+		return new CFBNetworkcontextMenuProvider(this, getActionRegistry(), zoomManager, typeLib);
 	}
 }

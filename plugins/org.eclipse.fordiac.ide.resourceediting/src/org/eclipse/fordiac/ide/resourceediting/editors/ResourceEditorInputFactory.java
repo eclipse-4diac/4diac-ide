@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2015 - 2017 fortiss GmbH
+ * 				 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,8 +9,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Initial API and implementation and/or initial documentation
+ *   			 - New Project Explorer layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.resourceediting.editors;
 

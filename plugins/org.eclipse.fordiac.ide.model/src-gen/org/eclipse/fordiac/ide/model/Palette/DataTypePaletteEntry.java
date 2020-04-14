@@ -52,10 +52,11 @@ public interface DataTypePaletteEntry extends PaletteEntry {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @model dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
+	 * @model kind="operation"
+	 *        dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
 	 * @generated
 	 */
 	@Override
-	TypeImporter getTypeImporter(Palette palette);
+	TypeImporter getTypeImporter();
 
 } // DataTypePaletteEntry

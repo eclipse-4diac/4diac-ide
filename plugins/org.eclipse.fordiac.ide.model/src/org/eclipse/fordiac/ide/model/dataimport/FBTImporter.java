@@ -68,6 +68,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * Managing class for importing *.fbt files
@@ -97,28 +98,17 @@ public class FBTImporter extends TypeImporter {
 
 	private Map<Event, List<String>> withList = new HashMap<>();
 
-	private Palette palette;
-
 	@Override
 	protected FBType getType() {
 		return (FBType) super.getType();
 	}
 
-	protected Palette getPalette() {
-		return palette;
+	public FBTImporter() {
+		super();
 	}
 
-	protected void setPalette(Palette palette) {
-		this.palette = palette;
-	}
-
-	public FBTImporter(final Palette palette) {
-		this.palette = palette;
-	}
-
-	protected FBTImporter(final XMLStreamReader reader, final Palette palette) {
-		super(reader);
-		this.palette = palette;
+	protected FBTImporter(final XMLStreamReader reader, final TypeLibrary typeLib) {
+		super(reader, typeLib);
 	}
 
 	@Override
@@ -375,8 +365,8 @@ public class FBTImporter extends TypeImporter {
 	 */
 	private void parseFBNetwork(final CompositeFBType type) throws TypeImportException, XMLStreamException {
 		FBNetwork fbNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
-		adapters.values().forEach(adapter -> addAdapterFB(fbNetwork, adapter, palette));
-		FBNetworkImporter fbnInmporter = new FBNetworkImporter(palette, fbNetwork, type.getInterfaceList(),
+		adapters.values().forEach(adapter -> addAdapterFB(fbNetwork, adapter, getPalette()));
+		FBNetworkImporter fbnInmporter = new FBNetworkImporter(getTypeLib(), fbNetwork, type.getInterfaceList(),
 				getReader());
 		type.setFBNetwork(fbnInmporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
 	}
@@ -910,7 +900,7 @@ public class FBTImporter extends TypeImporter {
 		readNameCommentAttributes(a);
 		String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
-			AdapterTypePaletteEntry entry = palette.getAdapterTypeEntry(typeName);
+			AdapterTypePaletteEntry entry = getPalette().getAdapterTypeEntry(typeName);
 			a.setPaletteEntry(entry);
 			AdapterType dataType = null;
 			if (null != entry) {

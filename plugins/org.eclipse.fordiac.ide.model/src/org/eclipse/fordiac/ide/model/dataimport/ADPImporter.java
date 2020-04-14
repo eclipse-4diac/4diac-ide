@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * Managing class for importing *.atp files
@@ -40,7 +41,7 @@ public final class ADPImporter extends TypeImporter {
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(getType());
 
-			FBTImporter importer = new FBTImporter(getReader(), null) {
+			FBTImporter importer = new FBTImporter(getReader(), TypeLibrary.getTypeLibrary(typeFile.getProject())) {
 				@Override
 				public IChildHandler getTypeChildrenHandler() {
 					return name -> {

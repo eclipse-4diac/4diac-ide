@@ -27,7 +27,6 @@ import javax.xml.stream.XMLStreamException;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -46,11 +45,8 @@ import org.w3c.dom.NodeList;
 
 public final class DEVImporter extends TypeImporter {
 
-	private final Palette palette;
-
-	public DEVImporter(final Palette palette) {
+	public DEVImporter() {
 		super();
-		this.palette = palette;
 	}
 
 	@Override
@@ -93,8 +89,9 @@ public final class DEVImporter extends TypeImporter {
 				getType().getResource().add(parseResource());
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				getType().setFBNetwork(new ResDevFBNetworkImporter(palette, getType().getVarDeclaration(), getReader())
-						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
+				getType().setFBNetwork(
+						new ResDevFBNetworkImporter(getTypeLib(), getType().getVarDeclaration(), getReader())
+								.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
 				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseDeviceTypeAttribute();
@@ -124,7 +121,7 @@ public final class DEVImporter extends TypeImporter {
 
 		String resType = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != resType) {
-			res.setPaletteEntry(palette.getResourceTypeEntry(resType));
+			res.setPaletteEntry(getPalette().getResourceTypeEntry(resType));
 		} else {
 			throw new TypeImportException(Messages.DEVImporter_ERROR_ResourceTypeHasToBeSet);
 		}
@@ -144,7 +141,7 @@ public final class DEVImporter extends TypeImporter {
 				res.getVarDeclarations().add(parseParameter());
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				res.setFBNetwork(new ResDevFBNetworkImporter(palette, res.getVarDeclarations(), getReader())
+				res.setFBNetwork(new ResDevFBNetworkImporter(getTypeLib(), res.getVarDeclarations(), getReader())
 						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
 				break;
 			default:

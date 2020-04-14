@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2015 fortiss GmbH
+ *               2020 Johannes Kepler University Linz
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,21 +9,18 @@
  * SPDX-License-Identifier: EPL-2.0
  * 
  * Contributors:
- *   Martin Jobst
- *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Changed to a per project Type and Data TypeLibrary
  */
 package org.eclipse.fordiac.ide.model.structuredtext.scoping;
 
 import java.util.ArrayList;
-import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.scoping.IScope;
@@ -39,14 +37,8 @@ import org.eclipse.xtext.util.SimpleAttributeResolver;
  */
 @SuppressWarnings("all")
 public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvider {
-  public SimpleScope scope_DataType(final EObject context, final EReference ref) {
-    SimpleScope _xblockexpression = null;
-    {
-      final List<DataType> candidates = DataTypeLibrary.getInstance().getDataTypes();
-      Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
-      _xblockexpression = new SimpleScope(_scopedElementsFor, true);
-    }
-    return _xblockexpression;
+  public IScope scope_DataType(final EObject context, final EReference ref) {
+    return IScope.NULLSCOPE;
   }
   
   public IScope scope_AdapterVariable_var(final AdapterVariable context, final EReference ref) {

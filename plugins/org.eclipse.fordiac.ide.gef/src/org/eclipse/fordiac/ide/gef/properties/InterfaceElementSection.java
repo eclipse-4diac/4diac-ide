@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
@@ -91,7 +92,7 @@ public class InterfaceElementSection extends AbstractSection {
 			} else {
 				if (getType() instanceof VarDeclaration) {
 					cmd = newChangeTypeCommand((VarDeclaration) getType(),
-							DataTypeLibrary.getInstance().getType(typeCombo.getText()));
+							getDataTypeLib().getType(typeCombo.getText()));
 				}
 			}
 			executeCommand(cmd);
@@ -114,7 +115,7 @@ public class InterfaceElementSection extends AbstractSection {
 				getPalette().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getType().getName()));
 			}
 		} else if (getType() instanceof VarDeclaration) {
-			DataTypeLibrary.getInstance().getDataTypesSorted().forEach(dataType -> typeCombo.add(dataType.getName()));
+			getDataTypeLib().getDataTypesSorted().forEach(dataType -> typeCombo.add(dataType.getName()));
 		}
 
 		if (typeCombo.getItems().length > 0) {
@@ -126,8 +127,17 @@ public class InterfaceElementSection extends AbstractSection {
 		}
 	}
 
+	private TypeLibrary getTypeLib() {
+		return TypeLibrary.getTypeLibrary(getType().getFBNetworkElement().getFbNetwork().getApplication()
+				.getAutomationSystem().getSystemFile().getProject());
+	}
+
+	private DataTypeLibrary getDataTypeLib() {
+		return getTypeLib().getDataTypeLibrary();
+	}
+
 	private Palette getPalette() {
-		return getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette();
+		return getTypeLib().getBlockTypeLib();
 	}
 
 	@Override

@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
@@ -89,6 +90,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			boolean moveUp);
 
 	protected abstract String[] fillTypeCombo();
+
+	protected abstract TypeLibrary getTypeLibrary();
 
 	@Override
 	protected abstract INamedElement getInputType(Object input);
@@ -304,12 +307,11 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	}
 
 	protected Palette getPalette() {
-		if (getType() instanceof SubApp) {
-			return ((SubApp) getType()).getFbNetwork().getApplication().getAutomationSystem().getPalette();
-		} else if (getType() instanceof FBType) {
-			return ((FBType) getType()).getPaletteEntry().getPalette();
-		}
-		return null;
+		return getTypeLibrary().getBlockTypeLib();
+	}
+
+	protected DataTypeLibrary getDataTypeLib() {
+		return getTypeLibrary().getDataTypeLibrary();
 	}
 
 	private class InterfaceCellModifier implements ICellModifier {
@@ -364,8 +366,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 					cmd = newChangeTypeCommand((VarDeclaration) data, newType);
 				} else {
 					if (data instanceof VarDeclaration) {
-						cmd = newChangeTypeCommand((VarDeclaration) data,
-								DataTypeLibrary.getInstance().getType(dataTypeName));
+						cmd = newChangeTypeCommand((VarDeclaration) data, getDataTypeLib().getType(dataTypeName));
 					}
 				}
 				break;

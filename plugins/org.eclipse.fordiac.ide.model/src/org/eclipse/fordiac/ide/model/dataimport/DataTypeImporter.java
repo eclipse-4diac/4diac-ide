@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import java.text.MessageFormat;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -40,10 +39,6 @@ public class DataTypeImporter extends TypeImporter {
 	}
 
 	public DataTypeImporter() {
-	}
-
-	protected DataTypeImporter(final XMLStreamReader reader) {
-		super(reader);
 	}
 
 	@Override
@@ -83,7 +78,7 @@ public class DataTypeImporter extends TypeImporter {
 				setType(convertToStructuredType(getType()));
 				parseStructuredType((StructuredType) getType());
 				break;
-				// TODO support other AnyDerivedTypes such as ArrayType
+			// TODO support other AnyDerivedTypes such as ArrayType
 			default:
 				return false;
 			}

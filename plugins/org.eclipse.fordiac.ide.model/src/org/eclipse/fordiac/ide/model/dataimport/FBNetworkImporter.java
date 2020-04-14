@@ -40,10 +40,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 class FBNetworkImporter extends CommonElementImporter {
 
-	private final Palette palette;
+	private final TypeLibrary typeLib;
 	private final FBNetwork fbNetwork;
 	// this is the interface list needed for checking connection to the containg
 	// types interface
@@ -51,28 +52,32 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	protected final Map<String, FBNetworkElement> fbNetworkElementMap = new HashMap<>();
 
-	public FBNetworkImporter(Palette palette, XMLStreamReader reader) {
+	public FBNetworkImporter(TypeLibrary typeLib, XMLStreamReader reader) {
 		// so we need an empty interface list
 		// this is a type with no external interface (currently only application)
-		this(palette, LibraryElementFactory.eINSTANCE.createFBNetwork(),
+		this(typeLib, LibraryElementFactory.eINSTANCE.createFBNetwork(),
 				LibraryElementFactory.eINSTANCE.createInterfaceList(), reader);
 	}
 
-	public FBNetworkImporter(Palette palette, FBNetwork fbNetwork, InterfaceList interfaceList,
+	public FBNetworkImporter(TypeLibrary typeLib, FBNetwork fbNetwork, InterfaceList interfaceList,
 			XMLStreamReader reader) {
 		super(reader);
-		this.palette = palette;
+		this.typeLib = typeLib;
 		this.fbNetwork = fbNetwork;
 		this.interfaceList = interfaceList;
 		fbNetwork.getNetworkElements().forEach(element -> fbNetworkElementMap.put(element.getName(), element));
 	}
 
-	protected FBNetworkImporter(Palette palette, FBNetwork fbNetwork, XMLStreamReader reader) {
-		this(palette, fbNetwork, LibraryElementFactory.eINSTANCE.createInterfaceList(), reader);
+	protected FBNetworkImporter(TypeLibrary typeLib, FBNetwork fbNetwork, XMLStreamReader reader) {
+		this(typeLib, fbNetwork, LibraryElementFactory.eINSTANCE.createInterfaceList(), reader);
+	}
+
+	protected TypeLibrary getTypeLib() {
+		return typeLib;
 	}
 
 	public Palette getPalette() {
-		return palette;
+		return typeLib.getBlockTypeLib();
 	}
 
 	public FBNetwork getFbNetwork() {
@@ -141,7 +146,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	private FBTypePaletteEntry getTypeEntry() {
 		String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeFbElement) {
-			return palette.getFBTypeEntry(typeFbElement);
+			return getPalette().getFBTypeEntry(typeFbElement);
 		}
 		return null;
 	}

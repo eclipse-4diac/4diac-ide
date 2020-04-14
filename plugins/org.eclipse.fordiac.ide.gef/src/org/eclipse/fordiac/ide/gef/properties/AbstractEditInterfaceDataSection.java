@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.jface.viewers.IContentProvider;
 
 public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection {
@@ -41,7 +40,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	@Override
 	protected String[] fillTypeCombo() {
 		List<String> list = new ArrayList<>();
-		for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
+		for (DataType dataType : getDataTypeLib().getDataTypesSorted()) {
 			list.add(dataType.getName());
 		}
 		return list.toArray(new String[0]);
@@ -56,7 +55,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (!dataList.isEmpty()) {
 			return dataList.get(dataList.size() - 1).getType();
 		}
-		return DataTypeLibrary.getInstance().getType("bool");//$NON-NLS-1$ // bool is default
+		return getDataTypeLib().getType("bool");//$NON-NLS-1$ // bool is default
 	}
 
 	@Override

@@ -21,6 +21,6 @@ public class SubAppInterfaceEditor extends FBInterfaceEditor {
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		return new SubAppInterfaceEditPartFactory(this, getPalette());
+		return new SubAppInterfaceEditPartFactory(this, getTypeLib());
 	}
 }

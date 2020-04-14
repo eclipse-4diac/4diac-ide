@@ -20,12 +20,12 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * Managing class for importing SubApplication files.
@@ -34,23 +34,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
  */
 public class SubAppTImporter extends FBTImporter {
 
-	public SubAppTImporter(Palette palette) {
-		super(palette);
+	public SubAppTImporter() {
+		super();
 	}
 
-	public SubAppTImporter(XMLStreamReader reader, Palette palette) {
-		super(reader, palette);
-	}
-
-	/**
-	 * This allows that the typeimporter can also be utilized to parse untyped
-	 * subapp interfaces
-	 *
-	 * @param palette
-	 */
-	@Override
-	public void setPalette(Palette palette) {
-		super.setPalette(palette);
+	public SubAppTImporter(XMLStreamReader reader, final TypeLibrary typeLib) {
+		super(reader, typeLib);
 	}
 
 	@Override
@@ -97,7 +86,7 @@ public class SubAppTImporter extends FBTImporter {
 				break;
 			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
 				getType()
-						.setFBNetwork(new SubAppNetworkImporter(getPalette(), getType().getInterfaceList(), getReader())
+						.setFBNetwork(new SubAppNetworkImporter(getTypeLib(), getType().getInterfaceList(), getReader())
 								.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT));
 				break;
 			default:

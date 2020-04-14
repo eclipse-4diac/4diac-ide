@@ -27,27 +27,38 @@ import javax.xml.stream.XMLStreamReader;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public abstract class TypeImporter extends CommonElementImporter {
 	private LibraryElement type;
+	private TypeLibrary typeLib;
 
 	protected TypeImporter() {
 		super();
 	}
 
-	protected TypeImporter(XMLStreamReader reader) {
+	protected TypeImporter(XMLStreamReader reader, TypeLibrary typeLib) {
 		super(reader);
+		this.typeLib = typeLib;
 	}
 
 	protected LibraryElement getType() {
 		return type;
+	}
+
+	protected TypeLibrary getTypeLib() {
+		return typeLib;
+	}
+
+	protected final Palette getPalette() {
+		return getTypeLib().getBlockTypeLib();
 	}
 
 	public void setType(LibraryElement type) {
@@ -56,6 +67,7 @@ public abstract class TypeImporter extends CommonElementImporter {
 
 	public LibraryElement importType(IFile typeFile) throws TypeImportException {
 		try (ImporterStreams streams = createInputStreams(typeFile.getContents())) {
+			typeLib = TypeLibrary.getTypeLibrary(typeFile.getProject());
 			type = createType();
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(type);
@@ -89,7 +101,7 @@ public abstract class TypeImporter extends CommonElementImporter {
 
 		String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
-			DataType dataType = DataTypeLibrary.getInstance().getType(typeName);
+			DataType dataType = typeLib.getDataTypeLibrary().getType(typeName);
 			v.setTypeName(typeName);
 			if (dataType != null) {
 				v.setType(dataType);

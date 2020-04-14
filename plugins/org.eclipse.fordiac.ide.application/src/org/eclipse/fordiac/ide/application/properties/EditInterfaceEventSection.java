@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
@@ -65,5 +66,10 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 	@Override
 	protected SubApp getType() {
 		return (SubApp) type;
+	}
+
+	@Override
+	protected TypeLibrary getTypeLibrary() {
+		return TypeLibrary.getTypeLibrary(getType().getFbNetwork().getAutomationSystem().getSystemFile().getProject());
 	}
 }

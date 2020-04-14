@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
@@ -45,7 +44,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 
 public final class NameRepository {
@@ -228,11 +226,6 @@ public final class NameRepository {
 	private static String checkReservedKeyWords(String name) {
 		if (RESERVED_KEYWORDS.contains(name.toUpperCase())) {
 			return name + "1"; //$NON-NLS-1$
-		}
-		for (final DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
-			if (dataType.getName().equalsIgnoreCase(name)) {
-				return name + "1"; //$NON-NLS-1$
-			}
 		}
 		return name;
 	}

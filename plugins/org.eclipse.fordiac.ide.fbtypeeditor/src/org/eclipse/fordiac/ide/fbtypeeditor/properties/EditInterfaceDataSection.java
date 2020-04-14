@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
@@ -37,7 +37,7 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected INamedElement getInputType(Object input) {
+	protected FBType getInputType(Object input) {
 		if (input instanceof FBTypeEditPart) {
 			return ((FBTypeEditPart) input).getModel();
 		}
@@ -61,6 +61,11 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
 	protected FBType getType() {
 		return (FBType) type;
+	}
+
+	@Override
+	protected TypeLibrary getTypeLibrary() {
+		return TypeLibrary.getTypeLibraryForPaletteEntry(getType().getPaletteEntry());
 	}
 
 }

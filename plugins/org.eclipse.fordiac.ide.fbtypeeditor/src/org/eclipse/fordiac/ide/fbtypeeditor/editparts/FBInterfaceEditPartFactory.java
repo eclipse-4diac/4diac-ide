@@ -14,22 +14,22 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 
-	private Palette systemPalette;
+	private TypeLibrary typeLib;
 
-	public FBInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette) {
+	public FBInterfaceEditPartFactory(GraphicalEditor editor, TypeLibrary typeLib) {
 		super(editor);
-		this.systemPalette = systemPalette;
+		this.typeLib = typeLib;
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 		}
 		if (modelElement instanceof VarDeclaration) {
 			if (modelElement instanceof AdapterDeclaration) {
-				return new AdapterInterfaceEditPart(systemPalette);
+				return new AdapterInterfaceEditPart(typeLib.getBlockTypeLib());
 			} else {
 				return createInterfaceEditPart();
 			}
@@ -69,7 +69,7 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 			return new CommentEditPart();
 		}
 		if (modelElement instanceof TypeField) {
-			return new TypeEditPart(systemPalette);
+			return new TypeEditPart(typeLib);
 		}
 		throw createEditpartCreationException(modelElement);
 	}

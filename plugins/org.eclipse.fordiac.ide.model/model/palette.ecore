@@ -110,9 +110,7 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.loadType(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getTypeImporter" eType="#//TypeImporter">
-      <eParameters name="palette" eType="#//Palette"/>
-    </eOperations>
+    <eOperations name="getTypeImporter" eType="#//TypeImporter"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" eType="#//IFile"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastModificationTimestamp"
@@ -139,7 +137,6 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter();"/>
       </eAnnotations>
-      <eParameters name="palette" eType="#//Palette"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataTypePaletteEntry" eSuperTypes="#//PaletteEntry">
@@ -158,7 +155,6 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter();"/>
       </eAnnotations>
-      <eParameters name="palette" eType="#//Palette"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DeviceTypePaletteEntry" eSuperTypes="#//PaletteEntry">
@@ -175,9 +171,8 @@
     </eOperations>
     <eOperations name="getTypeImporter" eType="#//TypeImporter">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(palette);"/>
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter();"/>
       </eAnnotations>
-      <eParameters name="palette" eType="#//Palette"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FBTypePaletteEntry" eSuperTypes="#//PaletteEntry">
@@ -194,9 +189,8 @@
     </eOperations>
     <eOperations name="getTypeImporter" eType="#//TypeImporter">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(palette);"/>
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter();"/>
       </eAnnotations>
-      <eParameters name="palette" eType="#//Palette"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ResourceTypeEntry" eSuperTypes="#//PaletteEntry">
@@ -213,9 +207,8 @@
     </eOperations>
     <eOperations name="getTypeImporter" eType="#//TypeImporter">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(palette);"/>
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter();"/>
       </eAnnotations>
-      <eParameters name="palette" eType="#//Palette"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SegmentTypePaletteEntry" eSuperTypes="#//PaletteEntry">
@@ -234,7 +227,6 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter();"/>
       </eAnnotations>
-      <eParameters name="palette" eType="#//Palette"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SubApplicationTypePaletteEntry" eSuperTypes="#//PaletteEntry">
@@ -251,9 +243,8 @@
     </eOperations>
     <eOperations name="getTypeImporter" eType="#//TypeImporter">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(palette);"/>
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter();"/>
       </eAnnotations>
-      <eParameters name="palette" eType="#//Palette"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>

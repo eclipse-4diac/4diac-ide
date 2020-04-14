@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2017 TU Wien ACIN, Profactor GmbH, fortiss GmbH
+ * 				 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - New Project Explorer layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 

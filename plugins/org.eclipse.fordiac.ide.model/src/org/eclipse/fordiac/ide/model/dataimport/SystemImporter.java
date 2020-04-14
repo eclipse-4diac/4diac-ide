@@ -61,12 +61,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class SystemImporter extends CommonElementImporter {
 	private final AutomationSystem system;
+	private final TypeLibrary typeLib;
+
+	public TypeLibrary getTypeLib() {
+		return typeLib;
+	}
 
 	private Palette getPalette() {
-		return system.getPalette();
+		return getTypeLib().getBlockTypeLib();
 	}
 
 	/**
@@ -78,6 +84,7 @@ public class SystemImporter extends CommonElementImporter {
 	public SystemImporter(AutomationSystem system) {
 		super();
 		this.system = system;
+		typeLib = TypeLibrary.getTypeLibrary(system.getSystemFile().getProject());
 	}
 
 	/**
@@ -410,7 +417,7 @@ public class SystemImporter extends CommonElementImporter {
 			switch (name) {
 			case LibraryElementTags.FBNETWORK_ELEMENT:
 				resource.setFBNetwork(
-						new ResDevFBNetworkImporter(getPalette(), fbNetwork, resource.getVarDeclarations(), getReader())
+						new ResDevFBNetworkImporter(getTypeLib(), fbNetwork, resource.getVarDeclarations(), getReader())
 								.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
 				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
@@ -459,7 +466,7 @@ public class SystemImporter extends CommonElementImporter {
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
 				break;
 			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
-				application.setFBNetwork(new SubAppNetworkImporter(getPalette(), getReader())
+				application.setFBNetwork(new SubAppNetworkImporter(getTypeLib(), getReader())
 						.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT));
 				break;
 			default:

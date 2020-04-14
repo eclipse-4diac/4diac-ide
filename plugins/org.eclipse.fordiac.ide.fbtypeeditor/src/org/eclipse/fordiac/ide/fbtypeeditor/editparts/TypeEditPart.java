@@ -28,14 +28,13 @@ import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -49,14 +48,14 @@ import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
 public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
-	private Palette systemPalette;
+	private TypeLibrary typeLib;
 	private Label comment;
 
 	private DiagramFontChangeListener fontChangeListener;
 
-	public TypeEditPart(Palette systemPalette) {
+	public TypeEditPart(TypeLibrary typeLib) {
 		super();
-		this.systemPalette = systemPalette;
+		this.typeLib = typeLib;
 	}
 
 	@Override
@@ -157,10 +156,10 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 						if (getCastedModel() instanceof AdapterDeclaration) {
 							// TODO change to own command in order to update cfb internals
 							cmd = new ChangeTypeCommand((VarDeclaration) getCastedModel(),
-									systemPalette.getAdapterTypeEntry(typeName).getType());
+									typeLib.getBlockTypeLib().getAdapterTypeEntry(typeName).getType());
 						} else {
 							cmd = new ChangeTypeCommand((VarDeclaration) getCastedModel(),
-									DataTypeLibrary.getInstance().getType(typeName));
+									typeLib.getDataTypeLibrary().getType(typeName));
 						}
 						return cmd;
 					}
@@ -198,9 +197,10 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 		// First update the list of available types
 		ArrayList<String> dataTypeNames = new ArrayList<>();
 		if (getCastedModel() instanceof AdapterDeclaration) {
-			systemPalette.getAdapterTypesSorted().forEach(adapterType -> dataTypeNames.add(adapterType.getLabel()));
+			typeLib.getBlockTypeLib().getAdapterTypesSorted()
+					.forEach(adapterType -> dataTypeNames.add(adapterType.getLabel()));
 		} else {
-			for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
+			for (DataType dataType : typeLib.getDataTypeLibrary().getDataTypesSorted()) {
 				dataTypeNames.add(dataType.getName());
 			}
 		}

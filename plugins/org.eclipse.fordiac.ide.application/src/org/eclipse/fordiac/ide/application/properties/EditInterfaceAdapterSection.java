@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
@@ -73,5 +74,10 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	@Override
 	protected SubApp getType() {
 		return (SubApp) type;
+	}
+
+	@Override
+	protected TypeLibrary getTypeLibrary() {
+		return TypeLibrary.getTypeLibrary(getType().getFbNetwork().getAutomationSystem().getSystemFile().getProject());
 	}
 }

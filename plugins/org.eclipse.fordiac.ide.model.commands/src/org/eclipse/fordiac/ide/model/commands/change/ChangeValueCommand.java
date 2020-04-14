@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2019 Johannes Keppler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo 
+ *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.gef.commands.Command;
 
@@ -39,8 +38,8 @@ public class ChangeValueCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		if (var != null && var.getType() != null && var.getType().equals(DataTypeLibrary.getInstance().getType("ANY")) //$NON-NLS-1$
-				&& null != newValue) {
+		if ((null != var) && (null != var.getType()) && ("ANY".equals(var.getTypeName())) //$NON-NLS-1$
+				&& (null != newValue)) {
 			if ((!newValue.equals("")) && (!newValue.contains("#"))) { //$NON-NLS-1$ //$NON-NLS-2$
 				Abstract4DIACUIPlugin.statusLineErrorMessage("Constant Values are not allowed on ANY Input!"); //$NON-NLS-1$
 				return false;

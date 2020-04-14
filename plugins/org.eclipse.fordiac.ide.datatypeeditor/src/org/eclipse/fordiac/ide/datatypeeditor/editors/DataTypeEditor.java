@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -138,7 +139,8 @@ public class DataTypeEditor extends EditorPart
 	@Override
 	public void createPartControl(Composite parent) {
 		if ((dataType instanceof StructuredType) && (!importFailed)) {
-			editComposite = new StructViewingComposite(parent, 1, commandStack, dataType);
+			editComposite = new StructViewingComposite(parent, 1, commandStack, dataType,
+					TypeLibrary.getTypeLibrary(file.getProject()).getDataTypeLibrary());
 			editComposite.createPartControl(parent);
 		} else if (importFailed) {
 			createErrorComposite(parent, Messages.ErrorCompositeMessage);

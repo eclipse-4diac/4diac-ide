@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- * 				 2018 Johannes Kepler University
+ * 				 2018, 2020 Johannes Kepler University Linz
  *
  *
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,8 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch, Filip Andren,
  *   Waldemar Eisenmenger, Martin Melik Merkumians
  *     - initial API and implementation and/or initial documentation
- *  Alois Zoitl - Refactored class hierarchy of xml exporters
+ *   Alois Zoitl - Refactored class hierarchy of xml exporters
+ *   			 - New Project Explorer layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
@@ -48,7 +49,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
@@ -118,7 +118,6 @@ public enum SystemManager {
 	 * Instantiates a new system manager.
 	 */
 	private SystemManager() {
-		DataTypeLibrary.getInstance(); // get the datatype library setup
 		// Correctly setup the tool library needs to be done before loading any systems
 		// and adding the resource change listener
 		TypeLibrary.loadToolLibrary();
