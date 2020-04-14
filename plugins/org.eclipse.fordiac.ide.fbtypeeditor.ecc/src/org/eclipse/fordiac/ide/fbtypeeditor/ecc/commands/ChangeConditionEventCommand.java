@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2015, 2016 TU Wien ACIN, fortiss GmbH
  *               2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
-*   Bianca Wiesmayr
+ *   Bianca Wiesmayr
  *    - consistent dropdown menu edit
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.gef.commands.Command;
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider.*;
 
 public class ChangeConditionEventCommand extends Command {
 
@@ -54,16 +55,19 @@ public class ChangeConditionEventCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return conditionEvent.equals("") || !eventList.isEmpty(); //$NON-NLS-1$
+		return conditionEvent.equals(ECCContentAndLabelProvider.EMPTY_FIELD)
+				|| conditionEvent.contentEquals(ONE_CONDITION)
+				|| !eventList.isEmpty();
 	}
 
 	@Override
 	public void execute() {
-		oldConditionEvent = transition.getConditionEvent() != null ? transition.getConditionEvent().getName() : ""; //$NON-NLS-1$
-		if (conditionEvent.equals("1")) { //$NON-NLS-1$
+		oldConditionEvent = transition.getConditionEvent() != null ? transition.getConditionEvent().getName()
+				: ""; //$NON-NLS-1$
+		if (ONE_CONDITION.equals(conditionEvent)) {
 			oldConditionExpression = transition.getConditionExpression();
 		}
-		if ("1".equals(transition.getConditionExpression())) { //$NON-NLS-1$
+		if (ONE_CONDITION.equals(transition.getConditionExpression())) {
 			oldConditionExpression = transition.getConditionExpression();
 			transition.setConditionExpression(""); //$NON-NLS-1$
 		}
@@ -80,9 +84,9 @@ public class ChangeConditionEventCommand extends Command {
 
 	@Override
 	public void redo() {
-		if (conditionEvent.equals("1")) { //$NON-NLS-1$
+		if (conditionEvent.equals(ONE_CONDITION)) {
 			// one has been selected
-			transition.setConditionExpression("1"); //$NON-NLS-1$
+			transition.setConditionExpression(ONE_CONDITION);
 			transition.setConditionEvent(null);
 		} else {
 			transition.setConditionEvent(getEvent(conditionEvent));

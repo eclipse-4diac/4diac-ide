@@ -160,7 +160,7 @@ public class TransitionSection extends AbstractECSection {
 		eventCombo.addListener(SWT.Selection, event -> {
 			removeContentAdapter();
 			executeCommand(new ChangeConditionEventCommand(getType(), eventCombo.getText()));
-			checkEnablement();
+			setExpressionTextboxEnablement();
 			addContentAdapter();
 		});
 
@@ -211,7 +211,7 @@ public class TransitionSection extends AbstractECSection {
 						.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
 				copier.copy(adapter.getType());
 				adapterResource.getContents()
-						.add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
+				.add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
 			}
 
 			protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
@@ -240,19 +240,19 @@ public class TransitionSection extends AbstractECSection {
 	public void refresh() {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if (null != type && null != getBasicFBType()) {
-			setEventConditionDropdown();
+		if ((null != type) && (null != getBasicFBType())) {
+			fillEventConditionDropdown();
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			updateConditionExpressionText(getType().getConditionExpression());
-			if (getType().getConditionExpression() != null
+			if ((getType().getConditionExpression() != null)
 					&& getType().getConditionExpression().equals(ECCContentAndLabelProvider.ONE_CONDITION)) {
 				eventCombo.select(eventCombo.indexOf(ECCContentAndLabelProvider.ONE_CONDITION));
 			} else {
 				eventCombo.select(getType().getConditionEvent() != null
 						? eventCombo.indexOf(getType().getConditionEvent().getName())
-						: eventCombo.getItemCount() - 1);
+								: (eventCombo.getItemCount() - 1));
 			}
-			checkEnablement();
+			setExpressionTextboxEnablement();
 		}
 		commandStack = commandStackBuffer;
 	}
@@ -263,10 +263,10 @@ public class TransitionSection extends AbstractECSection {
 		}
 	}
 
-	private void checkEnablement() {
+	private void setExpressionTextboxEnablement() {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if (getType().getConditionExpression() != null
+		if ((getType().getConditionExpression() != null)
 				&& getType().getConditionExpression().equals(ECCContentAndLabelProvider.ONE_CONDITION)) {
 			updateConditionExpressionText(""); //$NON-NLS-1$
 			editor.getViewer().getControl().setEnabled(false);
@@ -276,9 +276,9 @@ public class TransitionSection extends AbstractECSection {
 		commandStack = commandStackBuffer;
 	}
 
-	public void setEventConditionDropdown() {
+	public void fillEventConditionDropdown() {
 		eventCombo.removeAll();
 		ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType()).stream()
-				.forEach(name -> eventCombo.add(name));
+		.forEach(name -> eventCombo.add(name));
 	}
 }
