@@ -17,7 +17,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.gef.properties.CompilableTypeInfoSection;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -31,8 +31,7 @@ public class FBTypeInfoSection extends CompilableTypeInfoSection {
 	@Override
 	protected LibraryElement getInputType(Object input) {
 		if (input instanceof IFile) {
-			IFile file = ((IFile) input);
-			PaletteEntry entry = FBTypeUtils.getPaletteEntryForFile(file);
+			PaletteEntry entry = TypeLibrary.getPaletteEntryForFile((IFile) input);
 			if (null != entry) {
 				return entry.getType();
 			}

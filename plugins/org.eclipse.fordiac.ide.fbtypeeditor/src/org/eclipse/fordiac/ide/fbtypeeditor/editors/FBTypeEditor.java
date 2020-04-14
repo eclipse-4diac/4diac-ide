@@ -52,8 +52,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
-import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -159,7 +159,7 @@ public class FBTypeEditor extends FormEditor
 						new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.FBTypeEditor_TypeFileDoesnotExist));
 			}
 
-			paletteEntry = FBTypeUtils.getPaletteEntryForFile(fbTypeFile);
+			paletteEntry = TypeLibrary.getPaletteEntryForFile(fbTypeFile);
 		} else if (editorInput instanceof FBTypeEditorInput) {
 			paletteEntry = ((FBTypeEditorInput) editorInput).getPaletteEntry();
 		}

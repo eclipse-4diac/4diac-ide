@@ -49,7 +49,7 @@ public final class DataTypeLibrary {
 	/**
 	 * Instantiates a new data type library.
 	 */
-	private DataTypeLibrary() {
+	DataTypeLibrary() {
 		typeMap = new HashMap<>();
 		initElementaryTypes();
 	}
@@ -61,7 +61,10 @@ public final class DataTypeLibrary {
 	 * Gets the single instance of DataTypeLibrary.
 	 *
 	 * @return single instance of DataTypeLibrary
+	 * @deprecated will be replaced by a project specific datatype library managed
+	 *             by {@link TypeLibrary}
 	 */
+	@Deprecated
 	public static DataTypeLibrary getInstance() {
 		if (instance == null) {
 			instance = new DataTypeLibrary();

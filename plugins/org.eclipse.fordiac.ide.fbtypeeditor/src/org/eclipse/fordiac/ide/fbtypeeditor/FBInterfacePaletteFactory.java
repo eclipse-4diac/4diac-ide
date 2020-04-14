@@ -19,7 +19,6 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
@@ -64,16 +63,9 @@ public final class FBInterfacePaletteFactory {
 	}
 
 	private static void createAdapterEntry(final PaletteRoot palette, final Palette systemPalette) {
-		Palette pal = null;
-		if (systemPalette == null) {
-			pal = TypeLibrary.getInstance().getPalette();
-		} else {
-			pal = systemPalette;
-		}
-
 		PaletteDrawer drawer = new PaletteDrawer("Adapters");
 
-		for (AdapterTypePaletteEntry entry : pal.getAdapterTypesSorted()) {
+		for (AdapterTypePaletteEntry entry : systemPalette.getAdapterTypesSorted()) {
 			ImageDescriptor desc = FordiacImage.ICON_DATA_TYPE.getImageDescriptor();
 			drawer.add(new CombinedTemplateCreationEntry(entry.getLabel(), entry.getType().getComment(),
 					new DataTypeCreationFactory(entry.getType()), desc, desc));

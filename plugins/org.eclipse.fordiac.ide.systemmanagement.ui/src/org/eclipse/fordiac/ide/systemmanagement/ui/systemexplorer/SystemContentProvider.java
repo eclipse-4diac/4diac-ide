@@ -49,8 +49,7 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 		if (parentElement instanceof IResource) {
 			Object[] children = workbenchContentProvider.getChildren(parentElement);
 			List<Object> newChildren = new ArrayList<>(children.length);
-			for (int i = 0; i < children.length; i++) {
-				Object child = children[i];
+			for (Object child : children) {
 				if ((child instanceof IFile) && ("sys".equalsIgnoreCase(((IFile) child).getFileExtension()))) {
 					child = SystemManager.INSTANCE.getSystem((IFile) child);
 				}

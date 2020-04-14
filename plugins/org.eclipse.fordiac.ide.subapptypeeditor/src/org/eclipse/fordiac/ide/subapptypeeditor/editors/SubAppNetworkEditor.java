@@ -32,7 +32,7 @@ public class SubAppNetworkEditor extends CompositeNetworkEditor {
 	}
 
 	@Override
-	protected String getPalletNavigatorID() {
+	protected String getPaletteNavigatorID() {
 		// for subapp types we want to show the same as for applications. If we wouldn't
 		// provide this here
 		// we would get the palette of the composite FB type editor

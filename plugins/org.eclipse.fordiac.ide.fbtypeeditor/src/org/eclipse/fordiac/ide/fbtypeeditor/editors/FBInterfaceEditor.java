@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -64,9 +63,6 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			fbType = untypedInput.getContent();
 			palette = untypedInput.getPaletteEntry().getPalette();
-			if (null == palette) {
-				palette = TypeLibrary.getInstance().getPalette();
-			}
 		}
 		super.init(site, input);
 		setPartName(FordiacMessages.Interface);

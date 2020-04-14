@@ -192,7 +192,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 	}
 
 	private void createFBMenuEntry(IMenuManager submenu, IFile typeFile) {
-		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(typeFile, palette);
+		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(typeFile);
 		if ((entry instanceof FBTypePaletteEntry) || (entry instanceof SubApplicationTypePaletteEntry)) {
 			Action action = getActionForPaletteEntry(entry);
 			setActionIcon(action, entry);

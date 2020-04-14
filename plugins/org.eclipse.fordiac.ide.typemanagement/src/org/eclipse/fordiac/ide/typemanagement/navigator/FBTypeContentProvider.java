@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.jface.viewers.Viewer;
 
 public class FBTypeContentProvider extends AdapterFactoryContentProvider {
@@ -53,7 +53,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof IFile) {
 			IFile element = (IFile) parentElement;
-			PaletteEntry entry = FBTypeUtils.getPaletteEntryForFile(element);
+			PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(element);
 			if (null != entry) {
 				parentElement = entry.getType();
 				if (parentElement instanceof AdapterType) {

@@ -71,8 +71,6 @@ public enum SystemManager {
 	/** The model systems. */
 	private Map<IProject, Map<IFile, AutomationSystem>> allSystemsInWS = new HashMap<>();
 
-	private Map<IProject, Palette> pallets = new HashMap<>();
-
 	private Map<AutomationSystem, Runnable> runningJobs = new HashMap<>();
 
 	private final Map<AutomationSystem, ArrayList<ITagProvider>> tagProviders = new HashMap<>();
@@ -121,10 +119,9 @@ public enum SystemManager {
 	 */
 	private SystemManager() {
 		DataTypeLibrary.getInstance(); // get the datatype library setup
-		TypeLibrary.getInstance(); // this will correctly setup the tool library
-									// and initialize important stuff. should be
-									// done before loading any systems and
-									// adding the resource change listener
+		// Correctly setup the tool library needs to be done before loading any systems
+		// and adding the resource change listener
+		TypeLibrary.loadToolLibrary();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
 	}
 
@@ -143,7 +140,7 @@ public enum SystemManager {
 
 	private static void initializePalette(AutomationSystem system) {
 		// load palette of the system and initialize the types
-		Palette palette = TypeLibrary.getInstance().getPalette(system.getSystemFile().getProject());
+		Palette palette = TypeLibrary.getTypeLibrary(system.getSystemFile().getProject()).getBlockTypeLib();
 		system.setPalette(palette);
 	}
 

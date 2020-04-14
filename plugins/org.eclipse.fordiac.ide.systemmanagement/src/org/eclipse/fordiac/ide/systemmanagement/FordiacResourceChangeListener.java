@@ -154,10 +154,10 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	protected static void handleFileDelete(IResourceDelta delta) {
-		Palette palette = TypeLibrary.getInstance().getPalette(delta.getResource().getProject());
+		Palette palette = TypeLibrary.getTypeLibrary(delta.getResource().getProject()).getBlockTypeLib();
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
 
-		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file, palette);
+		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 		if (null != entry) {
 			closeAllFBTypeEditor(entry);
 			palette.removePaletteEntry(entry);
@@ -165,11 +165,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	protected void handleFileCopy(IResourceDelta delta) {
-		Palette dstPalette = TypeLibrary.getInstance().getPalette(delta.getResource().getProject());
+		Palette dstPalette = TypeLibrary.getTypeLibrary(delta.getResource().getProject()).getBlockTypeLib();
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
 
 		if (!TypeLibrary.paletteContainsType(dstPalette, file)) {
-			PaletteEntry entry = TypeLibrary.createPaleteEntry(dstPalette, file);
+			PaletteEntry entry = TypeLibrary.createPaletteEntry(dstPalette, file);
 			if (null != entry) {
 				updatePaletteEntry(file, entry);
 			}
@@ -246,8 +246,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private static void handleFileRename(IResourceDelta delta, IFile src) {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
-		Palette dstPalette = TypeLibrary.getInstance().getPalette(file.getProject());
-		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src, dstPalette);
+		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src);
 		updatePaletteEntry(file, entry);
 	}
 

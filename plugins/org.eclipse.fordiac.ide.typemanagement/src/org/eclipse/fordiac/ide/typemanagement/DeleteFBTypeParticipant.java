@@ -65,7 +65,8 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 	private static RefactoringStatus verifyAffectedChildren(IResourceDelta[] affectedChildren) {
 		for (IResourceDelta resourceDelta : affectedChildren) {
 			if (resourceDelta.getResource() instanceof IFile) {
-				Palette palette = TypeLibrary.getInstance().getPalette(resourceDelta.getResource().getProject());
+				Palette palette = TypeLibrary.getTypeLibrary(resourceDelta.getResource().getProject())
+						.getBlockTypeLib();
 
 				String typeNameToDelete = TypeLibrary.getTypeNameFromFile((IFile) resourceDelta.getResource());
 				List<String> typeNames = checkTypeContainment(palette, typeNameToDelete);

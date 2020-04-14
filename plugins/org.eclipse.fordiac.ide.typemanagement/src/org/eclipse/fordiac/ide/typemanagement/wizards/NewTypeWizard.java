@@ -24,7 +24,6 @@ import java.text.MessageFormat;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
@@ -34,7 +33,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
-import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -118,12 +116,11 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 	}
 
 	private boolean finishFBTypeCreation(IFile targetTypeFile) {
-		Palette palette = TypeLibrary.getInstance().getPalette(targetTypeFile.getProject());
-		entry = TypeLibrary.getPaletteEntryForFile(targetTypeFile, palette);
+		entry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
 		if (null == entry) {
 			// refresh the palette and retry to fetch the entry
-			TypeLibrary.refreshPalette(palette);
-			entry = FBTypeUtils.getPaletteEntryForFile(targetTypeFile);
+			TypeLibrary.refreshTypeLib(targetTypeFile);
+			entry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
 		}
 		LibraryElement type = entry.getType();
 		type.setName(TypeLibrary.getTypeNameFromFile(targetTypeFile));

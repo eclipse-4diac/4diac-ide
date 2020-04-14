@@ -191,11 +191,11 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
 		return new FBTypePaletteViewerProvider(fbType.getPaletteEntry().getFile().getProject(), getEditDomain(),
-				getPalletNavigatorID());
+				getPaletteNavigatorID());
 	}
 
 	@Override
-	protected String getPalletNavigatorID() {
+	protected String getPaletteNavigatorID() {
 		return "org.eclipse.fordiac.ide.compositefbpaletteviewer"; //$NON-NLS-1$
 	}
 

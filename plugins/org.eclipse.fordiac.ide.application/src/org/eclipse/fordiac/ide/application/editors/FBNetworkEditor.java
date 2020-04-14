@@ -207,7 +207,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
 		return new FBTypePaletteViewerProvider(getSystem().getSystemFile().getProject(), getEditDomain(),
-				getPalletNavigatorID());
+				getPaletteNavigatorID());
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	 * @return the navigator id
 	 */
 	@SuppressWarnings("static-method")
-	protected String getPalletNavigatorID() {
+	protected String getPaletteNavigatorID() {
 		return "org.eclipse.fordiac.ide.fbpaletteviewer"; //$NON-NLS-1$
 	}
 

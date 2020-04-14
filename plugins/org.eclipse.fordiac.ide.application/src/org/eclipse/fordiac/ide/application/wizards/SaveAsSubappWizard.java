@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.CommandUtil;
 import org.eclipse.fordiac.ide.gef.Activator;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
@@ -47,7 +46,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
-import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -171,13 +169,12 @@ public class SaveAsSubappWizard extends Wizard {
 	}
 
 	private PaletteEntry getPalletEntry() {
-		Palette palette = getSystem().getPalette();
 		IFile targetTypeFile = getTargetTypeFile();
-		PaletteEntry newEntry = FBTypeUtils.getPaletteEntryForFile(targetTypeFile);
+		PaletteEntry newEntry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
 		if (null == newEntry) {
 			// refresh the palette and retry to fetch the entry
-			TypeLibrary.refreshPalette(palette);
-			newEntry = FBTypeUtils.getPaletteEntryForFile(targetTypeFile);
+			TypeLibrary.refreshTypeLib(targetTypeFile);
+			newEntry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
 		}
 
 		return newEntry;

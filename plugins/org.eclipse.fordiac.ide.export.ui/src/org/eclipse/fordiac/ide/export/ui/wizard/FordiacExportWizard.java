@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.ui.Activator;
 import org.eclipse.fordiac.ide.export.ui.Messages;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -118,8 +117,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 					if (object instanceof IFile) {
 						IFile file = (IFile) object;
 
-						Palette palette = TypeLibrary.getInstance().getPalette(file.getProject());
-						PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file, palette);
+						PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 						LibraryElement type = entry.getType();
 
 						monitor.subTask(

@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.metrics.analyzers.MetricData;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -140,7 +140,7 @@ public class CalculateCodeMetrics extends AbstractHandler {
 	}
 
 	private static INamedElement checkSelectedFile(IFile file) {
-		PaletteEntry entry = FBTypeUtils.getPaletteEntryForFile(file);
+		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 		if (entry instanceof FBTypePaletteEntry) {
 			return ((FBTypePaletteEntry) entry).getFBType();
 		}
