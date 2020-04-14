@@ -18,6 +18,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.Palette.*;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -127,6 +128,11 @@ public class PaletteAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseAdapterTypePaletteEntry(AdapterTypePaletteEntry object) {
 			return createAdapterTypePaletteEntryAdapter();
+		}
+
+		@Override
+		public Adapter caseDataTypePaletteEntry(DataTypePaletteEntry object) {
+			return createDataTypePaletteEntryAdapter();
 		}
 
 		@Override
@@ -368,6 +374,22 @@ public class PaletteAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAdapterTypePaletteEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry <em>Data
+	 * Type Palette Entry</em>}'. <!-- begin-user-doc --> This default
+	 * implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway. <!--
+	 * end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry
+	 * @generated
+	 */
+	public Adapter createDataTypePaletteEntryAdapter() {
 		return null;
 	}
 

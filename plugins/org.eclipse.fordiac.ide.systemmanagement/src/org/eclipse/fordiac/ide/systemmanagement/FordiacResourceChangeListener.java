@@ -165,11 +165,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	protected void handleFileCopy(IResourceDelta delta) {
-		Palette dstPalette = TypeLibrary.getTypeLibrary(delta.getResource().getProject()).getBlockTypeLib();
+		TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
 
-		if (!TypeLibrary.paletteContainsType(dstPalette, file)) {
-			PaletteEntry entry = TypeLibrary.createPaletteEntry(dstPalette, file);
+		if (!typeLib.paletteContainsType(file)) {
+			PaletteEntry entry = typeLib.createPaletteEntry(file);
 			if (null != entry) {
 				updatePaletteEntry(file, entry);
 			}

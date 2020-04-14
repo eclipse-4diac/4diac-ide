@@ -41,6 +41,12 @@
    <extension
          point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
       <PaletteEntryCreator
+            class="org.eclipse.fordiac.ide.model.typelibrary.CreateDataTypePaletteEntry">
+      </PaletteEntryCreator>
+   </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
+      <PaletteEntryCreator
             class="org.eclipse.fordiac.ide.model.typelibrary.CreateFBTypePaletteEntry">
       </PaletteEntryCreator>
    </extension>

@@ -14,7 +14,7 @@
 package org.eclipse.fordiac.ide.model.structuredtext.scoping;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -42,7 +42,7 @@ public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvide
   public SimpleScope scope_DataType(final EObject context, final EReference ref) {
     SimpleScope _xblockexpression = null;
     {
-      final Collection<DataType> candidates = DataTypeLibrary.getInstance().getDataTypes();
+      final List<DataType> candidates = DataTypeLibrary.getInstance().getDataTypes();
       Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
       _xblockexpression = new SimpleScope(_scopedElementsFor, true);
     }

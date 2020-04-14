@@ -33,7 +33,7 @@ public interface AdapterTypePaletteEntry extends PaletteEntry {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model kind="operation"
 	 * @generated
 	 */
@@ -42,7 +42,7 @@ public interface AdapterTypePaletteEntry extends PaletteEntry {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model
 	 * @generated
 	 */
@@ -51,7 +51,7 @@ public interface AdapterTypePaletteEntry extends PaletteEntry {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
 	 * @generated
 	 */

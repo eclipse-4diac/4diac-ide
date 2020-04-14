@@ -17,6 +17,7 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+import org.eclipse.fordiac.ide.model.Palette.*;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -149,6 +150,15 @@ public class PaletteSwitch<T> extends Switch<T> {
 			T result = caseAdapterTypePaletteEntry(adapterTypePaletteEntry);
 			if (result == null)
 				result = casePaletteEntry(adapterTypePaletteEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.DATA_TYPE_PALETTE_ENTRY: {
+			DataTypePaletteEntry dataTypePaletteEntry = (DataTypePaletteEntry) theEObject;
+			T result = caseDataTypePaletteEntry(dataTypePaletteEntry);
+			if (result == null)
+				result = casePaletteEntry(dataTypePaletteEntry);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -405,6 +415,22 @@ public class PaletteSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAdapterTypePaletteEntry(AdapterTypePaletteEntry object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Data
+	 * Type Palette Entry</em>'. <!-- begin-user-doc --> This implementation returns
+	 * null; returning a non-null result will terminate the switch. <!--
+	 * end-user-doc -->
+	 * 
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Data
+	 *         Type Palette Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDataTypePaletteEntry(DataTypePaletteEntry object) {
 		return null;
 	}
 

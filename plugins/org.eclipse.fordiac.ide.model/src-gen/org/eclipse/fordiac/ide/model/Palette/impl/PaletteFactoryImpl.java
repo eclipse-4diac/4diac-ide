@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.fordiac.ide.model.Palette.*;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -96,6 +97,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 			return (EObject) createStringToSubApplicationTypePaletteEntryMap();
 		case PalettePackage.ADAPTER_TYPE_PALETTE_ENTRY:
 			return createAdapterTypePaletteEntry();
+		case PalettePackage.DATA_TYPE_PALETTE_ENTRY:
+			return createDataTypePaletteEntry();
 		case PalettePackage.DEVICE_TYPE_PALETTE_ENTRY:
 			return createDeviceTypePaletteEntry();
 		case PalettePackage.FB_TYPE_PALETTE_ENTRY:
@@ -281,6 +284,17 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	public AdapterTypePaletteEntry createAdapterTypePaletteEntry() {
 		AdapterTypePaletteEntryImpl adapterTypePaletteEntry = new AdapterTypePaletteEntryImpl();
 		return adapterTypePaletteEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public DataTypePaletteEntry createDataTypePaletteEntry() {
+		DataTypePaletteEntryImpl dataTypePaletteEntry = new DataTypePaletteEntryImpl();
+		return dataTypePaletteEntry;
 	}
 
 	/**

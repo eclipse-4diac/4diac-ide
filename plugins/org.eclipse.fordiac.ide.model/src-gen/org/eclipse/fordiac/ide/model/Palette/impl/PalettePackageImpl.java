@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -140,6 +141,13 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * @generated
 	 */
 	private EClass adapterTypePaletteEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	private EClass dataTypePaletteEntryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -653,6 +661,16 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getDataTypePaletteEntry() {
+		return dataTypePaletteEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public EClass getSubApplicationTypePaletteEntry() {
 		return subApplicationTypePaletteEntryEClass;
 	}
@@ -783,6 +801,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		adapterTypePaletteEntryEClass = createEClass(ADAPTER_TYPE_PALETTE_ENTRY);
 
+		dataTypePaletteEntryEClass = createEClass(DATA_TYPE_PALETTE_ENTRY);
+
 		deviceTypePaletteEntryEClass = createEClass(DEVICE_TYPE_PALETTE_ENTRY);
 
 		fbTypePaletteEntryEClass = createEClass(FB_TYPE_PALETTE_ENTRY);
@@ -830,6 +850,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 				.getEPackage(LibraryElementPackage.eNS_URI);
 		XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
 				.getEPackage(XMLTypePackage.eNS_URI);
+		DataPackage theDataPackage = (DataPackage) EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -837,6 +858,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		// Add supertypes to classes
 		adapterTypePaletteEntryEClass.getESuperTypes().add(this.getPaletteEntry());
+		dataTypePaletteEntryEClass.getESuperTypes().add(this.getPaletteEntry());
 		deviceTypePaletteEntryEClass.getESuperTypes().add(this.getPaletteEntry());
 		fbTypePaletteEntryEClass.getESuperTypes().add(this.getPaletteEntry());
 		resourceTypeEntryEClass.getESuperTypes().add(this.getPaletteEntry());
@@ -992,6 +1014,19 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(adapterTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
+		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(dataTypePaletteEntryEClass, DataTypePaletteEntry.class, "DataTypePaletteEntry", !IS_ABSTRACT, //$NON-NLS-1$
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		addEOperation(dataTypePaletteEntryEClass, theDataPackage.getAnyDerivedType(), "getType", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
+
+		op = addEOperation(dataTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(dataTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
 		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 

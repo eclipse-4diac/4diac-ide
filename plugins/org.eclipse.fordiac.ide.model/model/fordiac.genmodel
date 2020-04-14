@@ -103,6 +103,18 @@
         <genParameters ecoreParameter="palette.ecore#//AdapterTypePaletteEntry/getTypeImporter/palette"/>
       </genOperations>
     </genClasses>
+    <genClasses ecoreClass="palette.ecore#//DataTypePaletteEntry">
+      <genOperations ecoreOperation="palette.ecore#//DataTypePaletteEntry/getType"
+          body="LibraryElement type = super.getType();&#xA;if (type instanceof AnyDerivedType) {&#xA;&#x9;return (AnyDerivedType) type;&#xA;}&#xA;return null;"/>
+      <genOperations ecoreOperation="palette.ecore#//DataTypePaletteEntry/setType"
+          body="if (type instanceof AnyDerivedType) {&#xA;&#x9;super.setType(type);&#xA;} else {&#xA;&#x9;super.setType(null);&#xA;&#x9;if (null != type) {&#xA;&#x9;&#x9;Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,&#xA;&#x9;&#x9;&#x9;&#x9;&quot;tried to set no AnyDerivedType as type entry for DataTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
+        <genParameters ecoreParameter="palette.ecore#//DataTypePaletteEntry/setType/type"/>
+      </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//DataTypePaletteEntry/getTypeImporter"
+          body="return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter();">
+        <genParameters ecoreParameter="palette.ecore#//DataTypePaletteEntry/getTypeImporter/palette"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="palette.ecore#//DeviceTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//DeviceTypePaletteEntry/getDeviceType"
           body="LibraryElement type = getType();&#xA;if(type instanceof DeviceType){&#xA;   return (DeviceType) type;&#xA;}&#xA;return null;"/>

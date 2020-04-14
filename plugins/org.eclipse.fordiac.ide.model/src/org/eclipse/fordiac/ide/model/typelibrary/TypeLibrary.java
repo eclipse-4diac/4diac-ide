@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
@@ -51,8 +52,8 @@ public final class TypeLibrary implements TypeLibraryTags {
 		return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
 	}
 
-	private final Palette blockTypeLib;
-	private final DataTypeLibrary dataTypeLib;
+	private final Palette blockTypeLib = PaletteFactory.eINSTANCE.createPalette();
+	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private final IProject project;
 
 	/** An array of palette entry creators */
@@ -116,8 +117,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	 */
 	private TypeLibrary(IProject project) {
 		this.project = project;
-		this.dataTypeLib = new DataTypeLibrary();
-		blockTypeLib = loadPalette(project);
+		loadPaletteFolderMembers(project);
 	}
 
 	public static synchronized void loadToolLibrary() {
@@ -140,13 +140,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 		return new TypeLibrary(toolLibProject);
 	}
 
-	private static Palette loadPalette(IContainer container) {
-		Palette newPalette = PaletteFactory.eINSTANCE.createPalette();
-		loadPaletteFolderMembers(newPalette, container);
-		return newPalette;
-	}
-
-	private static void loadPaletteFolderMembers(Palette palette, IContainer container) {
+	private void loadPaletteFolderMembers(IContainer container) {
 		IResource[] members;
 		try {
 			if (!ResourcesPlugin.getWorkspace().isTreeLocked()) {
@@ -156,10 +150,10 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 			for (IResource iResource : members) {
 				if (iResource instanceof IFolder) {
-					loadPaletteFolderMembers(palette, (IFolder) iResource);
+					loadPaletteFolderMembers((IFolder) iResource);
 				}
 				if (iResource instanceof IFile) {
-					createPaletteEntry(palette, (IFile) iResource);
+					createPaletteEntry((IFile) iResource);
 				}
 			}
 		} catch (CoreException e) {
@@ -173,16 +167,25 @@ public final class TypeLibrary implements TypeLibraryTags {
 	 * @param file
 	 * @return
 	 */
-	public static PaletteEntry createPaletteEntry(Palette palette, IFile file) {
+	public PaletteEntry createPaletteEntry(IFile file) {
 		PaletteEntry entry = null;
 		for (IPaletteEntryCreator in : getPaletteCreators()) {
 			if (in.canHandle(file)) {
 				entry = in.createPaletteEntry();
 				configurePaletteEntry(entry, file);
-				palette.addPaletteEntry(entry);
+				addPaletteEntry(entry);
 			}
 		}
 		return entry;
+	}
+
+	private void addPaletteEntry(PaletteEntry entry) {
+		if (entry instanceof DataTypePaletteEntry) {
+			dataTypeLib.addPaletteEntry((DataTypePaletteEntry) entry);
+		} else {
+			blockTypeLib.addPaletteEntry(entry);
+		}
+
 	}
 
 	/**
@@ -259,9 +262,9 @@ public final class TypeLibrary implements TypeLibraryTags {
 				if (iResource instanceof IFolder) {
 					checkAdditions((IFolder) iResource);
 				}
-				if ((iResource instanceof IFile) && (!paletteContainsType(blockTypeLib, (IFile) iResource))) {
+				if ((iResource instanceof IFile) && (!paletteContainsType((IFile) iResource))) {
 					// only add new entry if it does not exist
-					createPaletteEntry(blockTypeLib, (IFile) iResource);
+					createPaletteEntry((IFile) iResource);
 				}
 			}
 		} catch (CoreException e) {
@@ -270,11 +273,14 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	}
 
-	public static boolean paletteContainsType(Palette palette, IFile file) {
+	public boolean paletteContainsType(IFile file) {
 		String typeName = getTypeNameFromFile(file);
-		return ((null != palette.getAdapterTypeEntry(typeName)) || (null != palette.getDeviceTypeEntry(typeName))
-				|| (null != palette.getFBTypeEntry(typeName)) || (null != palette.getResourceTypeEntry(typeName))
-				|| (null != palette.getSegmentTypeEntry(typeName)) || (null != palette.getSubAppTypeEntry(typeName)));
+		return ((null != blockTypeLib.getAdapterTypeEntry(typeName))
+				|| (null != blockTypeLib.getDeviceTypeEntry(typeName))
+				|| (null != blockTypeLib.getFBTypeEntry(typeName))
+				|| (null != blockTypeLib.getResourceTypeEntry(typeName))
+				|| (null != blockTypeLib.getSegmentTypeEntry(typeName))
+				|| (null != blockTypeLib.getSubAppTypeEntry(typeName)));
 	}
 
 	/**

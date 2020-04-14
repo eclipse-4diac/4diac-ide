@@ -33,7 +33,7 @@ public interface FBTypePaletteEntry extends PaletteEntry {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
@@ -41,7 +41,7 @@ public interface FBTypePaletteEntry extends PaletteEntry {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model
 	 * @generated
 	 */
@@ -50,7 +50,7 @@ public interface FBTypePaletteEntry extends PaletteEntry {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
 	 * @generated
 	 */
