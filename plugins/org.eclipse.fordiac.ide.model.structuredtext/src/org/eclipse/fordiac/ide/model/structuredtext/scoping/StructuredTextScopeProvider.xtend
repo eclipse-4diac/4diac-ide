@@ -26,7 +26,10 @@ import org.eclipse.xtext.util.SimpleAttributeResolver
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
+import org.eclipse.xtext.resource.XtextResource
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
 
 /**
  * This class contains custom scoping description.
@@ -38,11 +41,13 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvider {
 
 	def scope_DataType(EObject context, EReference ref) {
+	    if(context instanceof LocalVariable){
+	        val res = (context.eContainer as StructuredTextAlgorithm).eResource as XtextResource
+            val candidates = (res.resourceSet.resources.get(0)?.contents?.get(0) as FBType).typeLibrary.dataTypeLibrary.dataTypes
+		// create scope explicitly since Scopes.scopedElementsFor passes ignoreCase as false
+            return new SimpleScope(Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), true)
+	    }
 	    return IScope.NULLSCOPE;
-	    
-//		val candidates = DataTypeLibrary.getInstance.dataTypes
-//		// create scope explicitly since Scopes.scopedElementsFor passes ignoreCase as false
-//		new SimpleScope(Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), true)
 	}
 
 	def scope_AdapterVariable_var(AdapterVariable context, EReference ref) {
