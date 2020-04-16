@@ -66,7 +66,7 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart {
 				}
 
 				Display.getDefault().asyncExec(() -> {
-					if ((null != getFigure()) && (getFigure().isShowing())) {
+					if ((null != getParent()) && (null != getFigure()) && (getFigure().isShowing())) {
 						refresh();
 					}
 				});

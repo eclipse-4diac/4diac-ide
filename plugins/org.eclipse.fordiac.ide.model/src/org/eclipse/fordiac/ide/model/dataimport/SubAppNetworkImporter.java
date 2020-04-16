@@ -96,8 +96,12 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		if (null != subEntry) {
 			subApp.setPaletteEntry(subEntry);
 			subApp.setInterface(subEntry.getSubApplicationType().getInterfaceList().copy());
-			configureParameters(subApp.getInterface(), LibraryElementTags.SUBAPP_ELEMENT);
+		} else {
+			// TODO add error marker
+			// put an empty interface list so that the system can load
+			subApp.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		}
+		configureParameters(subApp.getInterface(), LibraryElementTags.SUBAPP_ELEMENT);
 	}
 
 	private void parseUntypedSubapp(SubApp subApp) throws TypeImportException, XMLStreamException {
