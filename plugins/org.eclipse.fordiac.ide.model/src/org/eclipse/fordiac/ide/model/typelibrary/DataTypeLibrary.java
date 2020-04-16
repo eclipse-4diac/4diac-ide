@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
@@ -65,7 +66,8 @@ public final class DataTypeLibrary {
 		List<DataType> dataTypes = new ArrayList<>(typeMap.size() + derivedTypeMap.size());
 		dataTypes.addAll(typeMap.values());
 		dataTypes.addAll(
-				derivedTypeMap.values().stream().map(DataTypePaletteEntry::getType).collect(Collectors.toList()));
+				derivedTypeMap.values().stream().map(DataTypePaletteEntry::getType)
+				.filter(Objects::nonNull).collect(Collectors.toList()));
 		return dataTypes;
 	}
 
