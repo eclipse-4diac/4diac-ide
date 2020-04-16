@@ -86,7 +86,6 @@ public class InternalVarsSection extends ECCSection {
 		internalVarsViewer = TableWidgetFactory.createTableViewer(composite);
 		configureTableLayout(internalVarsViewer.getTable());
 
-		internalVarsViewer.setCellEditors(createCellEditors(internalVarsViewer.getTable()));
 		internalVarsViewer.setColumnProperties(new String[] { IV_NAME, IV_TYPE, IV_ARRAY, IV_INIT, IV_COMMENT });
 		internalVarsViewer.setContentProvider(new ArrayContentProvider());
 		internalVarsViewer.setLabelProvider(new InternalVarsLabelProvider());
@@ -169,6 +168,7 @@ public class InternalVarsSection extends ECCSection {
 		dataLib = getType().getTypeLibrary().getDataTypeLibrary();
 		dataTypes = dataLib.getDataTypesSorted().stream().map(DataType::getName).collect(Collectors.toList())
 				.toArray(new String[0]);
+		internalVarsViewer.setCellEditors(createCellEditors(internalVarsViewer.getTable()));
 	}
 
 	private final class InternalVarsCellModifier implements ICellModifier {

@@ -56,8 +56,6 @@
       <eParameters name="entry" lowerBound="1" eType="#//PaletteEntry"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" eType="#//IProject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="automationSystem" eType="ecore:EClass lib.ecore#//AutomationSystem"
-        eOpposite="lib.ecore#//AutomationSystem/palette"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeLibrary" eType="#//TypeLibrary"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterTypes" upperBound="-1"
         eType="#//StringToAdapterTypePaletteEntryMap" containment="true"/>
