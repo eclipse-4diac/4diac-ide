@@ -84,7 +84,7 @@ public class SystemImporter extends CommonElementImporter {
 	public SystemImporter(AutomationSystem system) {
 		super();
 		this.system = system;
-		typeLib = TypeLibrary.getTypeLibrary(system.getSystemFile().getProject());
+		typeLib = system.getPalette().getTypeLibrary();
 	}
 
 	/**

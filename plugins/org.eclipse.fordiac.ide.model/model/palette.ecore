@@ -58,6 +58,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" eType="#//IProject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="automationSystem" eType="ecore:EClass lib.ecore#//AutomationSystem"
         eOpposite="lib.ecore#//AutomationSystem/palette"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeLibrary" eType="#//TypeLibrary"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterTypes" upperBound="-1"
         eType="#//StringToAdapterTypePaletteEntryMap" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="deviceTypes" upperBound="-1"
@@ -111,6 +112,11 @@
       </eAnnotations>
     </eOperations>
     <eOperations name="getTypeImporter" eType="#//TypeImporter"/>
+    <eOperations name="getTypeLibrary" eType="#//TypeLibrary">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getPalette().getTypeLibrary();"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" eType="#//IFile"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastModificationTimestamp"
@@ -252,4 +258,5 @@
   <eClassifiers xsi:type="ecore:EDataType" name="TypeImporter" instanceClassName="org.eclipse.fordiac.ide.model.dataimport.TypeImporter"/>
   <eClassifiers xsi:type="ecore:EDataType" name="XMLStreamException" instanceClassName="javax.xml.stream.XMLStreamException"/>
   <eClassifiers xsi:type="ecore:EDataType" name="CoreException" instanceClassName="org.eclipse.core.runtime.CoreException"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TypeLibrary" instanceClassName="org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary"/>
 </ecore:EPackage>

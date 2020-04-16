@@ -70,6 +70,6 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 
 	@Override
 	protected TypeLibrary getTypeLibrary() {
-		return TypeLibrary.getTypeLibrary(getType().getFbNetwork().getAutomationSystem().getSystemFile().getProject());
+		return getType().getFbNetwork().getAutomationSystem().getPalette().getTypeLibrary();
 	}
 }

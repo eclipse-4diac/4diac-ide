@@ -51,6 +51,10 @@ public interface ConfigurableObject extends INamedElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 *  searches for an existing Parameter with the specified parameterName. it is
+	 *  NOT case sensitive! If there is no Parameter available a new one will be created. 
+	 * <!-- end-model-doc -->
 	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String" typeDataType="org.eclipse.emf.ecore.xml.type.String" valueDataType="org.eclipse.emf.ecore.xml.type.String" commentDataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */

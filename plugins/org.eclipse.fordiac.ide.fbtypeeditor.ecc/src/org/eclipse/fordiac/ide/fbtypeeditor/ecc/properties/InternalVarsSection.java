@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableComma
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -167,7 +166,7 @@ public class InternalVarsSection extends ECCSection {
 
 	@Override
 	protected void setInputInit() {
-		dataLib = TypeLibrary.getTypeLibraryForPaletteEntry(getType().getPaletteEntry()).getDataTypeLibrary();
+		dataLib = getType().getTypeLibrary().getDataTypeLibrary();
 		dataTypes = dataLib.getDataTypesSorted().stream().map(DataType::getName).collect(Collectors.toList())
 				.toArray(new String[0]);
 	}

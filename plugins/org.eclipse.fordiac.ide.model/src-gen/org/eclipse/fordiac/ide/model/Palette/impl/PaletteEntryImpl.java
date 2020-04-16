@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object
@@ -310,6 +311,15 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TypeLibrary getTypeLibrary() {
+		return getPalette().getTypeLibrary();
 	}
 
 	/**

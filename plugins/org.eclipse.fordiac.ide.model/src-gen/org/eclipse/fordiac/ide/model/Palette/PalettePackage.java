@@ -91,13 +91,22 @@ public interface PalettePackage extends EPackage {
 	int PALETTE__AUTOMATION_SYSTEM = 1;
 
 	/**
+	 * The feature id for the '<em><b>Type Library</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PALETTE__TYPE_LIBRARY = 2;
+
+	/**
 	 * The feature id for the '<em><b>Adapter Types</b></em>' map. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__ADAPTER_TYPES = 2;
+	int PALETTE__ADAPTER_TYPES = 3;
 
 	/**
 	 * The feature id for the '<em><b>Device Types</b></em>' map. <!--
@@ -106,7 +115,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__DEVICE_TYPES = 3;
+	int PALETTE__DEVICE_TYPES = 4;
 
 	/**
 	 * The feature id for the '<em><b>Fb Types</b></em>' map.
@@ -115,7 +124,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__FB_TYPES = 4;
+	int PALETTE__FB_TYPES = 5;
 
 	/**
 	 * The feature id for the '<em><b>Resource Types</b></em>' map. <!--
@@ -124,7 +133,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__RESOURCE_TYPES = 5;
+	int PALETTE__RESOURCE_TYPES = 6;
 
 	/**
 	 * The feature id for the '<em><b>Segment Types</b></em>' map. <!--
@@ -133,7 +142,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__SEGMENT_TYPES = 6;
+	int PALETTE__SEGMENT_TYPES = 7;
 
 	/**
 	 * The feature id for the '<em><b>Sub App Types</b></em>' map. <!--
@@ -142,7 +151,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__SUB_APP_TYPES = 7;
+	int PALETTE__SUB_APP_TYPES = 8;
 
 	/**
 	 * The number of structural features of the '<em>Palette</em>' class. <!--
@@ -151,7 +160,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE_FEATURE_COUNT = 8;
+	int PALETTE_FEATURE_COUNT = 9;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToFBTypePaletteEntryMapImpl <em>String To FB Type Palette Entry Map</em>}' class.
@@ -924,6 +933,16 @@ public interface PalettePackage extends EPackage {
 	int CORE_EXCEPTION = 19;
 
 	/**
+	 * The meta object id for the '<em>Type Library</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
+	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getTypeLibrary()
+	 * @generated
+	 */
+	int TYPE_LIBRARY = 20;
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.Palette.Palette <em>Palette</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Palette</em>'.
@@ -951,6 +970,17 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPalette_AutomationSystem();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary <em>Type Library</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type Library</em>'.
+	 * @see org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary()
+	 * @see #getPalette()
+	 * @generated
+	 */
+	EAttribute getPalette_TypeLibrary();
 
 	/**
 	 * Returns the meta object for the map '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getFbTypes <em>Fb Types</em>}'.
@@ -1387,6 +1417,17 @@ public interface PalettePackage extends EPackage {
 	EDataType getCoreException();
 
 	/**
+	 * Returns the meta object for data type '{@link org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary <em>Type Library</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Type Library</em>'.
+	 * @see org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
+	 * @model instanceClass="org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary"
+	 * @generated
+	 */
+	EDataType getTypeLibrary();
+
+	/**
 	 * Returns the factory that creates the instances of the model. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -1429,6 +1470,14 @@ public interface PalettePackage extends EPackage {
 		 * @generated
 		 */
 		EReference PALETTE__AUTOMATION_SYSTEM = eINSTANCE.getPalette_AutomationSystem();
+
+		/**
+		 * The meta object literal for the '<em><b>Type Library</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PALETTE__TYPE_LIBRARY = eINSTANCE.getPalette_TypeLibrary();
 
 		/**
 		 * The meta object literal for the '<em><b>Fb Types</b></em>' map feature. <!--
@@ -1793,6 +1842,16 @@ public interface PalettePackage extends EPackage {
 		 * @generated
 		 */
 		EDataType CORE_EXCEPTION = eINSTANCE.getCoreException();
+
+		/**
+		 * The meta object literal for the '<em>Type Library</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
+		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getTypeLibrary()
+		 * @generated
+		 */
+		EDataType TYPE_LIBRARY = eINSTANCE.getTypeLibrary();
 
 	}
 

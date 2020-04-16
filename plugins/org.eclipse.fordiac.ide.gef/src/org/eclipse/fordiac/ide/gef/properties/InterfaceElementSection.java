@@ -128,8 +128,8 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 
 	private TypeLibrary getTypeLib() {
-		return TypeLibrary.getTypeLibrary(getType().getFBNetworkElement().getFbNetwork().getApplication()
-				.getAutomationSystem().getSystemFile().getProject());
+		return getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette()
+				.getTypeLibrary();
 	}
 
 	private DataTypeLibrary getDataTypeLib() {

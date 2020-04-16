@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Library
@@ -292,6 +293,19 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY, newPaletteEntry, newPaletteEntry));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TypeLibrary getTypeLibrary() {
+		if (null != getPaletteEntry()) {
+			return getPaletteEntry().getTypeLibrary();
+		}
+		return null;
 	}
 
 	/**

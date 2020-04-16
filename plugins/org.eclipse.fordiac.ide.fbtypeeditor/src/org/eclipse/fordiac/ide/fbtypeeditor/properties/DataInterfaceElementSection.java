@@ -22,7 +22,6 @@ import java.util.Collection;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventLabelProvider;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
@@ -33,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
@@ -169,8 +167,6 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	@Override
 	protected Collection<DataType> getTypes() {
 		FBType fbType = (FBType) getType().eContainer().eContainer();
-		PaletteEntry entry = fbType.getPaletteEntry();
-
-		return TypeLibrary.getTypeLibraryForPaletteEntry(entry).getDataTypeLibrary().getDataTypesSorted();
+		return fbType.getTypeLibrary().getDataTypeLibrary().getDataTypesSorted();
 	}
 }

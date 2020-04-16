@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
@@ -115,6 +116,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 				return createXMLStreamExceptionFromString(eDataType, initialValue);
 			case PalettePackage.CORE_EXCEPTION:
 				return createCoreExceptionFromString(eDataType, initialValue);
+			case PalettePackage.TYPE_LIBRARY:
+				return createTypeLibraryFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -137,6 +140,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 				return convertXMLStreamExceptionToString(eDataType, instanceValue);
 			case PalettePackage.CORE_EXCEPTION:
 				return convertCoreExceptionToString(eDataType, instanceValue);
+			case PalettePackage.TYPE_LIBRARY:
+				return convertTypeLibraryToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -353,6 +358,24 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * @generated
 	 */
 	public String convertCoreExceptionToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TypeLibrary createTypeLibraryFromString(EDataType eDataType, String initialValue) {
+		return (TypeLibrary)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertTypeLibraryToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

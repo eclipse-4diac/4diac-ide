@@ -154,7 +154,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		if (input instanceof FBTypeEditorInput) {
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			type = untypedInput.getContent();
-			typeLib = TypeLibrary.getTypeLibraryForPaletteEntry(untypedInput.getPaletteEntry());
+			typeLib = type.getTypeLibrary();
 		}
 		setSite(site);
 		setEditDomain(new FBTypeEditDomain(this, commandStack));

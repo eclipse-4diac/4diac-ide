@@ -62,7 +62,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 		if (input instanceof FBTypeEditorInput) {
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			fbType = untypedInput.getContent();
-			typeLib = TypeLibrary.getTypeLibraryForPaletteEntry(untypedInput.getPaletteEntry());
+			typeLib = untypedInput.getPaletteEntry().getTypeLibrary();
 		}
 		super.init(site, input);
 		setPartName(FordiacMessages.Interface);

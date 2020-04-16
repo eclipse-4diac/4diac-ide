@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>Typed
@@ -73,5 +74,13 @@ public interface TypedConfigureableObject extends ConfigurableObject {
 	 * @generated
 	 */
 	LibraryElement getType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary" required="true"
+	 * @generated
+	 */
+	TypeLibrary getTypeLibrary();
 
 } // TypedConfigureableObject

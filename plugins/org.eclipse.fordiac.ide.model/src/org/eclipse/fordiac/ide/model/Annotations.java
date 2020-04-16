@@ -64,6 +64,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public final class Annotations {
 
@@ -578,6 +579,13 @@ public final class Annotations {
 	public static LibraryElement getType(TypedConfigureableObject tco) {
 		if (null != tco.getPaletteEntry()) {
 			return tco.getPaletteEntry().getType();
+		}
+		return null;
+	}
+
+	public static TypeLibrary getTypeLibrary(TypedConfigureableObject tco) {
+		if (null != tco.getPaletteEntry()) {
+			return tco.getPaletteEntry().getTypeLibrary();
 		}
 		return null;
 	}

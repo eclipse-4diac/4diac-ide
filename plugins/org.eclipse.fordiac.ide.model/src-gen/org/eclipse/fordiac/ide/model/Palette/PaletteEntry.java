@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object
@@ -184,5 +185,13 @@ public interface PaletteEntry extends EObject {
 	 * @generated
 	 */
 	TypeImporter getTypeImporter();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary"
+	 * @generated
+	 */
+	TypeLibrary getTypeLibrary();
 
 } // PaletteEntry

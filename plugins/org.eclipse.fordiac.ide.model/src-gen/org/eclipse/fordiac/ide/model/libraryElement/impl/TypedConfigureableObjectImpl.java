@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Typed
@@ -114,6 +115,16 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	@Override
 	public LibraryElement getType() {
 		return org.eclipse.fordiac.ide.model.Annotations.getType(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TypeLibrary getTypeLibrary() {
+		return org.eclipse.fordiac.ide.model.Annotations.getTypeLibrary(this);
 	}
 
 	/**

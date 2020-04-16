@@ -65,7 +65,7 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 
 	@Override
 	protected TypeLibrary getTypeLibrary() {
-		return TypeLibrary.getTypeLibraryForPaletteEntry(getType().getPaletteEntry());
+		return getType().getTypeLibrary();
 	}
 
 }

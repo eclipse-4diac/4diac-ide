@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object
@@ -29,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject <em>Project</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem <em>Automation System</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary <em>Type Library</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAdapterTypes <em>Adapter Types</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getDeviceTypes <em>Device Types</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getFbTypes <em>Fb Types</em>}</li>
@@ -95,6 +97,28 @@ public interface Palette extends EObject {
 	 * @generated
 	 */
 	void setAutomationSystem(AutomationSystem value);
+
+	/**
+	 * Returns the value of the '<em><b>Type Library</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Type Library</em>' attribute.
+	 * @see #setTypeLibrary(TypeLibrary)
+	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_TypeLibrary()
+	 * @model dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary"
+	 * @generated
+	 */
+	TypeLibrary getTypeLibrary();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary <em>Type Library</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Type Library</em>' attribute.
+	 * @see #getTypeLibrary()
+	 * @generated
+	 */
+	void setTypeLibrary(TypeLibrary value);
 
 	/**
 	 * Returns the value of the '<em><b>Fb Types</b></em>' map. The key is of type

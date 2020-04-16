@@ -65,7 +65,7 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 
 	@Override
 	protected TypeLibrary getTypeLibrary() {
-		return TypeLibrary.getTypeLibraryForPaletteEntry(getType().getPaletteEntry());
+		return getType().getTypeLibrary();
 	}
 
 }

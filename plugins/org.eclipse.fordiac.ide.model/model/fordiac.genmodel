@@ -15,9 +15,11 @@
     <genDataTypes ecoreDataType="palette.ecore#//TypeImporter"/>
     <genDataTypes ecoreDataType="palette.ecore#//XMLStreamException"/>
     <genDataTypes ecoreDataType="palette.ecore#//CoreException"/>
+    <genDataTypes ecoreDataType="palette.ecore#//TypeLibrary"/>
     <genClasses ecoreClass="palette.ecore#//Palette">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute palette.ecore#//Palette/project"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference palette.ecore#//Palette/automationSystem"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute palette.ecore#//Palette/typeLibrary"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference palette.ecore#//Palette/adapterTypes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference palette.ecore#//Palette/deviceTypes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference palette.ecore#//Palette/fbTypes"/>
@@ -88,6 +90,8 @@
           body="return getFile().getProjectRelativePath().toOSString();"/>
       <genOperations ecoreOperation="palette.ecore#//PaletteEntry/loadType" body="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.loadType(this);"/>
       <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getTypeImporter"/>
+      <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getTypeLibrary"
+          body="return getPalette().getTypeLibrary();"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//AdapterTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//AdapterTypePaletteEntry/getType"
@@ -452,6 +456,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/versionInfo"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/identification"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/paletteEntry"/>
+      <genOperations ecoreOperation="lib.ecore#//LibraryElement/getTypeLibrary" body="if (null != getPaletteEntry()) {&#xA;&#x9;return getPaletteEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CompilableType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilableType/compilerInfo"/>
@@ -567,6 +572,8 @@
           body="return org.eclipse.fordiac.ide.model.Annotations.getTypeName(this);"/>
       <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getType"
           body="return org.eclipse.fordiac.ide.model.Annotations.getType(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getTypeLibrary"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getTypeLibrary(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterFB">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterFB/adapterDecl"/>

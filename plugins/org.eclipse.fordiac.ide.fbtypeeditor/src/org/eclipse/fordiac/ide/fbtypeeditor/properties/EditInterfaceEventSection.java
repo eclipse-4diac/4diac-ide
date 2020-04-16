@@ -66,7 +66,7 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 
 	@Override
 	protected TypeLibrary getTypeLibrary() {
-		return TypeLibrary.getTypeLibraryForPaletteEntry(getType().getPaletteEntry());
+		return getType().getTypeLibrary();
 	}
 
 }

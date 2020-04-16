@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '
@@ -46,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getProject <em>Project</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getAutomationSystem <em>Automation System</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getTypeLibrary <em>Type Library</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getAdapterTypes <em>Adapter Types</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getDeviceTypes <em>Device Types</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getFbTypes <em>Fb Types</em>}</li>
@@ -83,6 +85,26 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * @ordered
 	 */
 	protected AutomationSystem automationSystem;
+
+	/**
+	 * The default value of the '{@link #getTypeLibrary() <em>Type Library</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTypeLibrary()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final TypeLibrary TYPE_LIBRARY_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getTypeLibrary() <em>Type Library</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTypeLibrary()
+	 * @generated
+	 * @ordered
+	 */
+	protected TypeLibrary typeLibrary = TYPE_LIBRARY_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getAdapterTypes() <em>Adapter Types</em>}' map.
@@ -233,6 +255,29 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__AUTOMATION_SYSTEM, newAutomationSystem, newAutomationSystem));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TypeLibrary getTypeLibrary() {
+		return typeLibrary;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTypeLibrary(TypeLibrary newTypeLibrary) {
+		TypeLibrary oldTypeLibrary = typeLibrary;
+		typeLibrary = newTypeLibrary;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__TYPE_LIBRARY, oldTypeLibrary, typeLibrary));
 	}
 
 	/**
@@ -440,6 +485,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
 				if (resolve) return getAutomationSystem();
 				return basicGetAutomationSystem();
+			case PalettePackage.PALETTE__TYPE_LIBRARY:
+				return getTypeLibrary();
 			case PalettePackage.PALETTE__ADAPTER_TYPES:
 				if (coreType) return getAdapterTypes();
 				else return getAdapterTypes().map();
@@ -474,6 +521,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 				return;
 			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
 				setAutomationSystem((AutomationSystem)newValue);
+				return;
+			case PalettePackage.PALETTE__TYPE_LIBRARY:
+				setTypeLibrary((TypeLibrary)newValue);
 				return;
 			case PalettePackage.PALETTE__ADAPTER_TYPES:
 				((EStructuralFeature.Setting)getAdapterTypes()).set(newValue);
@@ -510,6 +560,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
 				setAutomationSystem((AutomationSystem)null);
 				return;
+			case PalettePackage.PALETTE__TYPE_LIBRARY:
+				setTypeLibrary(TYPE_LIBRARY_EDEFAULT);
+				return;
 			case PalettePackage.PALETTE__ADAPTER_TYPES:
 				getAdapterTypes().clear();
 				return;
@@ -543,6 +596,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 				return PROJECT_EDEFAULT == null ? project != null : !PROJECT_EDEFAULT.equals(project);
 			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
 				return automationSystem != null;
+			case PalettePackage.PALETTE__TYPE_LIBRARY:
+				return TYPE_LIBRARY_EDEFAULT == null ? typeLibrary != null : !TYPE_LIBRARY_EDEFAULT.equals(typeLibrary);
 			case PalettePackage.PALETTE__ADAPTER_TYPES:
 				return adapterTypes != null && !adapterTypes.isEmpty();
 			case PalettePackage.PALETTE__DEVICE_TYPES:
@@ -570,6 +625,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (project: "); //$NON-NLS-1$
 		result.append(project);
+		result.append(", typeLibrary: "); //$NON-NLS-1$
+		result.append(typeLibrary);
 		result.append(')');
 		return result.toString();
 	}

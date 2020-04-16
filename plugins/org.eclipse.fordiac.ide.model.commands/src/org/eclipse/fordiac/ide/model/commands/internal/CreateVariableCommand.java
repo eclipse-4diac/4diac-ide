@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
 /**
@@ -55,8 +54,7 @@ public abstract class CreateVariableCommand extends AbstractCreationCommand {
 	protected CreateVariableCommand(final LibraryElement type, int index, String name, DataType dataType) {
 		this.dataType = dataType;
 		if (null == this.dataType) {
-			DataTypeLibrary dataLib = TypeLibrary.getTypeLibraryForPaletteEntry(type.getPaletteEntry())
-					.getDataTypeLibrary();
+			DataTypeLibrary dataLib = type.getTypeLibrary().getDataTypeLibrary();
 			this.dataType = dataLib.getType("BOOL"); //$NON-NLS-1$
 		}
 		this.name = (null != name) ? name : getDefaultVarName();

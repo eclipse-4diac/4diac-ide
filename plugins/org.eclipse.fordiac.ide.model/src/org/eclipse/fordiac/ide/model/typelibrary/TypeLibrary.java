@@ -52,10 +52,6 @@ public final class TypeLibrary implements TypeLibraryTags {
 		return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
 	}
 
-	public static TypeLibrary getTypeLibraryForPaletteEntry(PaletteEntry entry) {
-		return getTypeLibrary(entry.getFile().getProject());
-	}
-
 	private final Palette blockTypeLib = PaletteFactory.eINSTANCE.createPalette();
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private final IProject project;
@@ -125,6 +121,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	 */
 	private TypeLibrary(IProject project) {
 		this.project = project;
+		blockTypeLib.setTypeLibrary(this);
 		loadPaletteFolderMembers(project);
 	}
 
