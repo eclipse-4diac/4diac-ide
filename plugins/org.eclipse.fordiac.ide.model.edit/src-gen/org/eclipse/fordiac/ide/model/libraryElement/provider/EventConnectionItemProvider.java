@@ -24,10 +24,8 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 
 /**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.libraryElement.EventConnection} object.
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.EventConnection} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
- * 
  * @generated
  */
 public class EventConnectionItemProvider extends ConnectionItemProvider {
@@ -68,23 +66,23 @@ public class EventConnectionItemProvider extends ConnectionItemProvider {
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((EventConnection) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_EventConnection_type") : //$NON-NLS-1$
-				getString("_UI_EventConnection_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((EventConnection)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_EventConnection_type") : //$NON-NLS-1$
+			getString("_UI_EventConnection_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -94,10 +92,10 @@ public class EventConnectionItemProvider extends ConnectionItemProvider {
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

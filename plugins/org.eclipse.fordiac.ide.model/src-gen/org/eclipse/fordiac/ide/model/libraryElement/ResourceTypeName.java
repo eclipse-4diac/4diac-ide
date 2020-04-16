@@ -23,8 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName#getName
- * <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName#getName <em>Name</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getResourceTypeName()
@@ -51,10 +50,8 @@ public interface ResourceTypeName extends EObject {
 	String getName();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName#getName
-	 * <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated

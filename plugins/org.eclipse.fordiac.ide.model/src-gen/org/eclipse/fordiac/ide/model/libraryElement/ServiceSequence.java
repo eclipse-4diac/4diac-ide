@@ -23,10 +23,8 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceTransaction
- * <em>Service Transaction</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult
- * <em>Test Result</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceTransaction <em>Service Transaction</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult <em>Test Result</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceSequence()
@@ -55,22 +53,20 @@ public interface ServiceSequence extends INamedElement {
 	EList<ServiceTransaction> getServiceTransaction();
 
 	/**
-	 * Returns the value of the '<em><b>Test Result</b></em>' attribute. The default
-	 * value is <code>"0"</code>. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Test Result</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Test Result</em>' attribute isn't clear, there
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Test Result</em>' attribute.
 	 * @see #isSetTestResult()
 	 * @see #unsetTestResult()
 	 * @see #setTestResult(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceSequence_TestResult()
-	 * @model default="0" unsettable="true"
-	 *        dataType="org.eclipse.emf.ecore.xml.type.Int" volatile="true"
-	 *        ordered="false"
+	 * @model default="0" unsettable="true" dataType="org.eclipse.emf.ecore.xml.type.Int" volatile="true" ordered="false"
 	 * @generated
 	 */
 	int getTestResult();
@@ -103,11 +99,9 @@ public interface ServiceSequence extends INamedElement {
 	void unsetTestResult();
 
 	/**
-	 * Returns whether the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult
-	 * <em>Test Result</em>}' attribute is set. <!-- begin-user-doc --> <!--
+	 * Returns whether the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult <em>Test Result</em>}' attribute is set.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @return whether the value of the '<em>Test Result</em>' attribute is set.
 	 * @see #unsetTestResult()
 	 * @see #getTestResult()

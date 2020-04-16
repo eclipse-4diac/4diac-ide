@@ -21,8 +21,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive#getTestResult
- * <em>Test Result</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive#getTestResult <em>Test Result</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getOutputPrimitive()
@@ -31,21 +30,20 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  */
 public interface OutputPrimitive extends Primitive {
 	/**
-	 * Returns the value of the '<em><b>Test Result</b></em>' attribute. The default
-	 * value is <code>"0"</code>. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Test Result</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Test Result</em>' attribute isn't clear, there
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Test Result</em>' attribute.
 	 * @see #isSetTestResult()
 	 * @see #unsetTestResult()
 	 * @see #setTestResult(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getOutputPrimitive_TestResult()
-	 * @model default="0" unique="false" unsettable="true"
-	 *        dataType="org.eclipse.emf.ecore.xml.type.Int" volatile="true"
+	 * @model default="0" unique="false" unsettable="true" dataType="org.eclipse.emf.ecore.xml.type.Int" volatile="true"
 	 * @generated
 	 */
 	int getTestResult();
@@ -78,11 +76,9 @@ public interface OutputPrimitive extends Primitive {
 	void unsetTestResult();
 
 	/**
-	 * Returns whether the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive#getTestResult
-	 * <em>Test Result</em>}' attribute is set. <!-- begin-user-doc --> <!--
+	 * Returns whether the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive#getTestResult <em>Test Result</em>}' attribute is set.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @return whether the value of the '<em>Test Result</em>' attribute is set.
 	 * @see #unsetTestResult()
 	 * @see #getTestResult()

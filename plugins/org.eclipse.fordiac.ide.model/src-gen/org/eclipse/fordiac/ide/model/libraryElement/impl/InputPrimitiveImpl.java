@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 public class InputPrimitiveImpl extends PrimitiveImpl implements InputPrimitive {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected InputPrimitiveImpl() {
@@ -35,7 +34,6 @@ public class InputPrimitiveImpl extends PrimitiveImpl implements InputPrimitive 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

@@ -30,10 +30,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl#getFrom
- * <em>From</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl#getTo
- * <em>To</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl#getFrom <em>From</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl#getTo <em>To</em>}</li>
  * </ul>
  *
  * @generated
@@ -61,7 +59,6 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected MappingImpl() {
@@ -70,7 +67,6 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -80,18 +76,16 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public FBNetworkElement getFrom() {
 		if (from != null && from.eIsProxy()) {
-			InternalEObject oldFrom = (InternalEObject) from;
-			from = (FBNetworkElement) eResolveProxy(oldFrom);
+			InternalEObject oldFrom = (InternalEObject)from;
+			from = (FBNetworkElement)eResolveProxy(oldFrom);
 			if (from != oldFrom) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.MAPPING__FROM,
-							oldFrom, from));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.MAPPING__FROM, oldFrom, from));
 			}
 		}
 		return from;
@@ -99,7 +93,6 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public FBNetworkElement basicGetFrom() {
@@ -108,7 +101,6 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -121,18 +113,16 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public FBNetworkElement getTo() {
 		if (to != null && to.eIsProxy()) {
-			InternalEObject oldTo = (InternalEObject) to;
-			to = (FBNetworkElement) eResolveProxy(oldTo);
+			InternalEObject oldTo = (InternalEObject)to;
+			to = (FBNetworkElement)eResolveProxy(oldTo);
 			if (to != oldTo) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.MAPPING__TO, oldTo,
-							to));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.MAPPING__TO, oldTo, to));
 			}
 		}
 		return to;
@@ -140,7 +130,6 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public FBNetworkElement basicGetTo() {
@@ -149,7 +138,6 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -162,7 +150,6 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -172,72 +159,66 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.MAPPING__FROM:
-			if (resolve)
-				return getFrom();
-			return basicGetFrom();
-		case LibraryElementPackage.MAPPING__TO:
-			if (resolve)
-				return getTo();
-			return basicGetTo();
+			case LibraryElementPackage.MAPPING__FROM:
+				if (resolve) return getFrom();
+				return basicGetFrom();
+			case LibraryElementPackage.MAPPING__TO:
+				if (resolve) return getTo();
+				return basicGetTo();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.MAPPING__FROM:
-			setFrom((FBNetworkElement) newValue);
-			return;
-		case LibraryElementPackage.MAPPING__TO:
-			setTo((FBNetworkElement) newValue);
-			return;
+			case LibraryElementPackage.MAPPING__FROM:
+				setFrom((FBNetworkElement)newValue);
+				return;
+			case LibraryElementPackage.MAPPING__TO:
+				setTo((FBNetworkElement)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.MAPPING__FROM:
-			setFrom((FBNetworkElement) null);
-			return;
-		case LibraryElementPackage.MAPPING__TO:
-			setTo((FBNetworkElement) null);
-			return;
+			case LibraryElementPackage.MAPPING__FROM:
+				setFrom((FBNetworkElement)null);
+				return;
+			case LibraryElementPackage.MAPPING__TO:
+				setTo((FBNetworkElement)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.MAPPING__FROM:
-			return from != null;
-		case LibraryElementPackage.MAPPING__TO:
-			return to != null;
+			case LibraryElementPackage.MAPPING__FROM:
+				return from != null;
+			case LibraryElementPackage.MAPPING__TO:
+				return to != null;
 		}
 		return super.eIsSet(featureID);
 	}

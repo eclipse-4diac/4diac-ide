@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceTypeEntry {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected ResourceTypeEntryImpl() {
@@ -41,7 +40,6 @@ public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceT
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -51,32 +49,29 @@ public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceT
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public ResourceType getResourceType() {
 		LibraryElement type = getType();
-		if (type instanceof ResourceType) {
-			return (ResourceType) type;
+		if(type instanceof ResourceType){
+		   return (ResourceType) type;
 		}
 		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if (type instanceof ResourceType) {
+		if(type instanceof ResourceType){
 			super.setType(type);
-		} else {
+		}else{
 			super.setType(null);
-			if (null != type) {
-				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-						"tried to set no ResourceType as type entry for ResourceTypeEntry"); //$NON-NLS-1$
+			if(null != type){
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no ResourceType as type entry for ResourceTypeEntry"); //$NON-NLS-1$
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
@@ -84,7 +79,6 @@ public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceT
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

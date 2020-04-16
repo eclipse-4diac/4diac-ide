@@ -25,7 +25,6 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 public interface DataConnection extends Connection {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
@@ -33,7 +32,6 @@ public interface DataConnection extends Connection {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

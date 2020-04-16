@@ -35,19 +35,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl#getECC
- * <em>ECC</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl#getAlgorithm
- * <em>Algorithm</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl#getECC <em>ECC</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl#getAlgorithm <em>Algorithm</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 	/**
-	 * The cached value of the '{@link #getECC() <em>ECC</em>}' containment
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getECC() <em>ECC</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getECC()
 	 * @generated
 	 * @ordered
@@ -55,9 +52,8 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 	protected ECC eCC;
 
 	/**
-	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}'
-	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getAlgorithm()
 	 * @generated
 	 * @ordered
@@ -66,7 +62,6 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected BasicFBTypeImpl() {
@@ -75,7 +70,6 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -85,7 +79,6 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -95,26 +88,20 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetECC(ECC newECC, NotificationChain msgs) {
 		ECC oldECC = eCC;
 		eCC = newECC;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-					LibraryElementPackage.BASIC_FB_TYPE__ECC, oldECC, newECC);
-			if (msgs == null)
-				msgs = notification;
-			else
-				msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.BASIC_FB_TYPE__ECC, oldECC, newECC);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -122,36 +109,30 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 		if (newECC != eCC) {
 			NotificationChain msgs = null;
 			if (eCC != null)
-				msgs = ((InternalEObject) eCC).eInverseRemove(this, LibraryElementPackage.ECC__BASIC_FB_TYPE, ECC.class,
-						msgs);
+				msgs = ((InternalEObject)eCC).eInverseRemove(this, LibraryElementPackage.ECC__BASIC_FB_TYPE, ECC.class, msgs);
 			if (newECC != null)
-				msgs = ((InternalEObject) newECC).eInverseAdd(this, LibraryElementPackage.ECC__BASIC_FB_TYPE, ECC.class,
-						msgs);
+				msgs = ((InternalEObject)newECC).eInverseAdd(this, LibraryElementPackage.ECC__BASIC_FB_TYPE, ECC.class, msgs);
 			msgs = basicSetECC(newECC, msgs);
-			if (msgs != null)
-				msgs.dispatch();
-		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.BASIC_FB_TYPE__ECC, newECC,
-					newECC));
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.BASIC_FB_TYPE__ECC, newECC, newECC));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Algorithm> getAlgorithm() {
 		if (algorithm == null) {
-			algorithm = new EObjectContainmentEList<Algorithm>(Algorithm.class, this,
-					LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM);
+			algorithm = new EObjectContainmentEList<Algorithm>(Algorithm.class, this, LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM);
 		}
 		return algorithm;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -161,103 +142,96 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryElementPackage.BASIC_FB_TYPE__ECC:
-			if (eCC != null)
-				msgs = ((InternalEObject) eCC).eInverseRemove(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.BASIC_FB_TYPE__ECC, null, msgs);
-			return basicSetECC((ECC) otherEnd, msgs);
+			case LibraryElementPackage.BASIC_FB_TYPE__ECC:
+				if (eCC != null)
+					msgs = ((InternalEObject)eCC).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.BASIC_FB_TYPE__ECC, null, msgs);
+				return basicSetECC((ECC)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryElementPackage.BASIC_FB_TYPE__ECC:
-			return basicSetECC(null, msgs);
-		case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
-			return ((InternalEList<?>) getAlgorithm()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.BASIC_FB_TYPE__ECC:
+				return basicSetECC(null, msgs);
+			case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
+				return ((InternalEList<?>)getAlgorithm()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.BASIC_FB_TYPE__ECC:
-			return getECC();
-		case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
-			return getAlgorithm();
+			case LibraryElementPackage.BASIC_FB_TYPE__ECC:
+				return getECC();
+			case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
+				return getAlgorithm();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.BASIC_FB_TYPE__ECC:
-			setECC((ECC) newValue);
-			return;
-		case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
-			getAlgorithm().clear();
-			getAlgorithm().addAll((Collection<? extends Algorithm>) newValue);
-			return;
+			case LibraryElementPackage.BASIC_FB_TYPE__ECC:
+				setECC((ECC)newValue);
+				return;
+			case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
+				getAlgorithm().clear();
+				getAlgorithm().addAll((Collection<? extends Algorithm>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.BASIC_FB_TYPE__ECC:
-			setECC((ECC) null);
-			return;
-		case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
-			getAlgorithm().clear();
-			return;
+			case LibraryElementPackage.BASIC_FB_TYPE__ECC:
+				setECC((ECC)null);
+				return;
+			case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
+				getAlgorithm().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.BASIC_FB_TYPE__ECC:
-			return eCC != null;
-		case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
-			return algorithm != null && !algorithm.isEmpty();
+			case LibraryElementPackage.BASIC_FB_TYPE__ECC:
+				return eCC != null;
+			case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
+				return algorithm != null && !algorithm.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

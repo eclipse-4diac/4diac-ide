@@ -23,8 +23,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getAdapterFBType
- * <em>Adapter FB Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getAdapterFBType <em>Adapter FB Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterType()
@@ -39,7 +38,6 @@ public interface AdapterType extends DataType {
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation"
 	 * @generated
 	 */
@@ -64,11 +62,9 @@ public interface AdapterType extends DataType {
 	AdapterFBType getAdapterFBType();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getAdapterFBType
-	 * <em>Adapter FB Type</em>}' reference. <!-- begin-user-doc --> <!--
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getAdapterFBType <em>Adapter FB Type</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @param value the new value of the '<em>Adapter FB Type</em>' reference.
 	 * @see #getAdapterFBType()
 	 * @generated
@@ -82,7 +78,6 @@ public interface AdapterType extends DataType {
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation"
 	 * @generated
 	 */
@@ -95,7 +90,6 @@ public interface AdapterType extends DataType {
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation"
 	 * @generated
 	 */

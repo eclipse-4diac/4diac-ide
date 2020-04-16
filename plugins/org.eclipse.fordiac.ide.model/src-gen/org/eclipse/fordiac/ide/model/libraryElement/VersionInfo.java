@@ -23,16 +23,11 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getAuthor
- * <em>Author</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getDate
- * <em>Date</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getOrganization
- * <em>Organization</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getRemarks
- * <em>Remarks</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getVersion
- * <em>Version</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getAuthor <em>Author</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getDate <em>Date</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getOrganization <em>Organization</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getRemarks <em>Remarks</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getVersion <em>Version</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getVersionInfo()
@@ -59,10 +54,8 @@ public interface VersionInfo extends EObject {
 	String getAuthor();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getAuthor
-	 * <em>Author</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getAuthor <em>Author</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Author</em>' attribute.
 	 * @see #getAuthor()
 	 * @generated
@@ -88,10 +81,8 @@ public interface VersionInfo extends EObject {
 	String getDate();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getDate
-	 * <em>Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getDate <em>Date</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Date</em>' attribute.
 	 * @see #getDate()
 	 * @generated
@@ -147,10 +138,8 @@ public interface VersionInfo extends EObject {
 	String getRemarks();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getRemarks
-	 * <em>Remarks</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getRemarks <em>Remarks</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Remarks</em>' attribute.
 	 * @see #getRemarks()
 	 * @generated
@@ -176,10 +165,8 @@ public interface VersionInfo extends EObject {
 	String getVersion();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getVersion
-	 * <em>Version</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getVersion <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Version</em>' attribute.
 	 * @see #getVersion()
 	 * @generated

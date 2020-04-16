@@ -107,9 +107,8 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 			case DataPackage.DERIVED_TYPE__BASE_TYPE:
 				if (resolve) return getBaseType();
 				return basicGetBaseType();
-			default:
-				return super.eGet(featureID, resolve, coreType);
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -122,10 +121,8 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 			case DataPackage.DERIVED_TYPE__BASE_TYPE:
 				setBaseType((ElementaryType)newValue);
 				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -138,10 +135,8 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 			case DataPackage.DERIVED_TYPE__BASE_TYPE:
 				setBaseType((ElementaryType)null);
 				return;
-			default:
-				super.eUnset(featureID);
-				return;
 		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -153,9 +148,8 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 		switch (featureID) {
 			case DataPackage.DERIVED_TYPE__BASE_TYPE:
 				return baseType != null;
-			default:
-				return super.eIsSet(featureID);
 		}
+		return super.eIsSet(featureID);
 	}
 
 } // DerivedTypeImpl

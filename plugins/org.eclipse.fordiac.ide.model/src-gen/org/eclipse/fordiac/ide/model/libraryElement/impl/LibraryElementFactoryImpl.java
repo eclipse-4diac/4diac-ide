@@ -91,24 +91,23 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
  * end-user-doc -->
- * 
  * @generated
  */
 public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryElementFactory {
 	/**
-	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * Creates the default factory implementation.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public static LibraryElementFactory init() {
 		try {
-			LibraryElementFactory theLibraryElementFactory = (LibraryElementFactory) EPackage.Registry.INSTANCE
-					.getEFactory(LibraryElementPackage.eNS_URI);
+			LibraryElementFactory theLibraryElementFactory = (LibraryElementFactory)EPackage.Registry.INSTANCE.getEFactory(LibraryElementPackage.eNS_URI);
 			if (theLibraryElementFactory != null) {
 				return theLibraryElementFactory;
 			}
-		} catch (Exception exception) {
+		}
+		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new LibraryElementFactoryImpl();
@@ -126,186 +125,118 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-		case LibraryElementPackage.ADAPTER_DECLARATION:
-			return createAdapterDeclaration();
-		case LibraryElementPackage.ADAPTER_TYPE:
-			return createAdapterType();
-		case LibraryElementPackage.APPLICATION:
-			return createApplication();
-		case LibraryElementPackage.BASIC_FB_TYPE:
-			return createBasicFBType();
-		case LibraryElementPackage.COMPILER_INFO:
-			return createCompilerInfo();
-		case LibraryElementPackage.COMPILER:
-			return createCompiler();
-		case LibraryElementPackage.DEVICE:
-			return createDevice();
-		case LibraryElementPackage.DEVICE_TYPE:
-			return createDeviceType();
-		case LibraryElementPackage.EC_ACTION:
-			return createECAction();
-		case LibraryElementPackage.ECC:
-			return createECC();
-		case LibraryElementPackage.EC_STATE:
-			return createECState();
-		case LibraryElementPackage.EC_TRANSITION:
-			return createECTransition();
-		case LibraryElementPackage.EVENT:
-			return createEvent();
-		case LibraryElementPackage.FB:
-			return createFB();
-		case LibraryElementPackage.FB_NETWORK_ELEMENT:
-			return createFBNetworkElement();
-		case LibraryElementPackage.SUB_APP:
-			return createSubApp();
-		case LibraryElementPackage.FB_TYPE:
-			return createFBType();
-		case LibraryElementPackage.IDENTIFICATION:
-			return createIdentification();
-		case LibraryElementPackage.INPUT_PRIMITIVE:
-			return createInputPrimitive();
-		case LibraryElementPackage.INTERFACE_LIST:
-			return createInterfaceList();
-		case LibraryElementPackage.LINK:
-			return createLink();
-		case LibraryElementPackage.MAPPING:
-			return createMapping();
-		case LibraryElementPackage.OTHER_ALGORITHM:
-			return createOtherAlgorithm();
-		case LibraryElementPackage.OUTPUT_PRIMITIVE:
-			return createOutputPrimitive();
-		case LibraryElementPackage.ATTRIBUTE:
-			return createAttribute();
-		case LibraryElementPackage.RESOURCE:
-			return createResource();
-		case LibraryElementPackage.RESOURCE_TYPE_NAME:
-			return createResourceTypeName();
-		case LibraryElementPackage.RESOURCE_TYPE:
-			return createResourceType();
-		case LibraryElementPackage.SEGMENT:
-			return createSegment();
-		case LibraryElementPackage.SERVICE_SEQUENCE:
-			return createServiceSequence();
-		case LibraryElementPackage.SERVICE_TRANSACTION:
-			return createServiceTransaction();
-		case LibraryElementPackage.SERVICE_INTERFACE_FB_TYPE:
-			return createServiceInterfaceFBType();
-		case LibraryElementPackage.ST_ALGORITHM:
-			return createSTAlgorithm();
-		case LibraryElementPackage.FB_NETWORK:
-			return createFBNetwork();
-		case LibraryElementPackage.SUB_APP_TYPE:
-			return createSubAppType();
-		case LibraryElementPackage.AUTOMATION_SYSTEM:
-			return createAutomationSystem();
-		case LibraryElementPackage.VAR_DECLARATION:
-			return createVarDeclaration();
-		case LibraryElementPackage.VERSION_INFO:
-			return createVersionInfo();
-		case LibraryElementPackage.WITH:
-			return createWith();
-		case LibraryElementPackage.LIBRARY_ELEMENT:
-			return createLibraryElement();
-		case LibraryElementPackage.COMPILABLE_TYPE:
-			return createCompilableType();
-		case LibraryElementPackage.CONFIGURABLE_OBJECT:
-			return createConfigurableObject();
-		case LibraryElementPackage.COMPOSITE_FB_TYPE:
-			return createCompositeFBType();
-		case LibraryElementPackage.DATA_CONNECTION:
-			return createDataConnection();
-		case LibraryElementPackage.EVENT_CONNECTION:
-			return createEventConnection();
-		case LibraryElementPackage.ADAPTER_CONNECTION:
-			return createAdapterConnection();
-		case LibraryElementPackage.SERVICE_INTERFACE:
-			return createServiceInterface();
-		case LibraryElementPackage.VALUE:
-			return createValue();
-		case LibraryElementPackage.SYSTEM_CONFIGURATION:
-			return createSystemConfiguration();
-		case LibraryElementPackage.RESOURCE_TYPE_FB:
-			return createResourceTypeFB();
-		case LibraryElementPackage.SEGMENT_TYPE:
-			return createSegmentType();
-		case LibraryElementPackage.ADAPTER_FB_TYPE:
-			return createAdapterFBType();
-		case LibraryElementPackage.ANNOTATION:
-			return createAnnotation();
-		case LibraryElementPackage.ADAPTER_EVENT:
-			return createAdapterEvent();
-		case LibraryElementPackage.SERVICE:
-			return createService();
-		case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT:
-			return createTypedConfigureableObject();
-		case LibraryElementPackage.ADAPTER_FB:
-			return createAdapterFB();
-		case LibraryElementPackage.PRIMITIVE:
-			return createPrimitive();
-		case LibraryElementPackage.POSITIONABLE_ELEMENT:
-			return createPositionableElement();
-		case LibraryElementPackage.COLOR:
-			return createColor();
-		case LibraryElementPackage.COLORIZABLE_ELEMENT:
-			return createColorizableElement();
-		case LibraryElementPackage.ATTRIBUTE_DECLARATION:
-			return createAttributeDeclaration();
-		case LibraryElementPackage.SIMPLE_FB_TYPE:
-			return createSimpleFBType();
-		case LibraryElementPackage.BASE_FB_TYPE:
-			return createBaseFBType();
-		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+			case LibraryElementPackage.ADAPTER_DECLARATION: return createAdapterDeclaration();
+			case LibraryElementPackage.ADAPTER_TYPE: return createAdapterType();
+			case LibraryElementPackage.APPLICATION: return createApplication();
+			case LibraryElementPackage.BASIC_FB_TYPE: return createBasicFBType();
+			case LibraryElementPackage.COMPILER_INFO: return createCompilerInfo();
+			case LibraryElementPackage.COMPILER: return createCompiler();
+			case LibraryElementPackage.DEVICE: return createDevice();
+			case LibraryElementPackage.DEVICE_TYPE: return createDeviceType();
+			case LibraryElementPackage.EC_ACTION: return createECAction();
+			case LibraryElementPackage.ECC: return createECC();
+			case LibraryElementPackage.EC_STATE: return createECState();
+			case LibraryElementPackage.EC_TRANSITION: return createECTransition();
+			case LibraryElementPackage.EVENT: return createEvent();
+			case LibraryElementPackage.FB: return createFB();
+			case LibraryElementPackage.FB_NETWORK_ELEMENT: return createFBNetworkElement();
+			case LibraryElementPackage.SUB_APP: return createSubApp();
+			case LibraryElementPackage.FB_TYPE: return createFBType();
+			case LibraryElementPackage.IDENTIFICATION: return createIdentification();
+			case LibraryElementPackage.INPUT_PRIMITIVE: return createInputPrimitive();
+			case LibraryElementPackage.INTERFACE_LIST: return createInterfaceList();
+			case LibraryElementPackage.LINK: return createLink();
+			case LibraryElementPackage.MAPPING: return createMapping();
+			case LibraryElementPackage.OTHER_ALGORITHM: return createOtherAlgorithm();
+			case LibraryElementPackage.OUTPUT_PRIMITIVE: return createOutputPrimitive();
+			case LibraryElementPackage.ATTRIBUTE: return createAttribute();
+			case LibraryElementPackage.RESOURCE: return createResource();
+			case LibraryElementPackage.RESOURCE_TYPE_NAME: return createResourceTypeName();
+			case LibraryElementPackage.RESOURCE_TYPE: return createResourceType();
+			case LibraryElementPackage.SEGMENT: return createSegment();
+			case LibraryElementPackage.SERVICE_SEQUENCE: return createServiceSequence();
+			case LibraryElementPackage.SERVICE_TRANSACTION: return createServiceTransaction();
+			case LibraryElementPackage.SERVICE_INTERFACE_FB_TYPE: return createServiceInterfaceFBType();
+			case LibraryElementPackage.ST_ALGORITHM: return createSTAlgorithm();
+			case LibraryElementPackage.FB_NETWORK: return createFBNetwork();
+			case LibraryElementPackage.SUB_APP_TYPE: return createSubAppType();
+			case LibraryElementPackage.AUTOMATION_SYSTEM: return createAutomationSystem();
+			case LibraryElementPackage.VAR_DECLARATION: return createVarDeclaration();
+			case LibraryElementPackage.VERSION_INFO: return createVersionInfo();
+			case LibraryElementPackage.WITH: return createWith();
+			case LibraryElementPackage.LIBRARY_ELEMENT: return createLibraryElement();
+			case LibraryElementPackage.COMPILABLE_TYPE: return createCompilableType();
+			case LibraryElementPackage.CONFIGURABLE_OBJECT: return createConfigurableObject();
+			case LibraryElementPackage.COMPOSITE_FB_TYPE: return createCompositeFBType();
+			case LibraryElementPackage.DATA_CONNECTION: return createDataConnection();
+			case LibraryElementPackage.EVENT_CONNECTION: return createEventConnection();
+			case LibraryElementPackage.ADAPTER_CONNECTION: return createAdapterConnection();
+			case LibraryElementPackage.SERVICE_INTERFACE: return createServiceInterface();
+			case LibraryElementPackage.VALUE: return createValue();
+			case LibraryElementPackage.SYSTEM_CONFIGURATION: return createSystemConfiguration();
+			case LibraryElementPackage.RESOURCE_TYPE_FB: return createResourceTypeFB();
+			case LibraryElementPackage.SEGMENT_TYPE: return createSegmentType();
+			case LibraryElementPackage.ADAPTER_FB_TYPE: return createAdapterFBType();
+			case LibraryElementPackage.ANNOTATION: return createAnnotation();
+			case LibraryElementPackage.ADAPTER_EVENT: return createAdapterEvent();
+			case LibraryElementPackage.SERVICE: return createService();
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT: return createTypedConfigureableObject();
+			case LibraryElementPackage.ADAPTER_FB: return createAdapterFB();
+			case LibraryElementPackage.PRIMITIVE: return createPrimitive();
+			case LibraryElementPackage.POSITIONABLE_ELEMENT: return createPositionableElement();
+			case LibraryElementPackage.COLOR: return createColor();
+			case LibraryElementPackage.COLORIZABLE_ELEMENT: return createColorizableElement();
+			case LibraryElementPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
+			case LibraryElementPackage.SIMPLE_FB_TYPE: return createSimpleFBType();
+			case LibraryElementPackage.BASE_FB_TYPE: return createBaseFBType();
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-		case LibraryElementPackage.LANGUAGE:
-			return createLanguageFromString(eDataType, initialValue);
-		case LibraryElementPackage.IPROJECT:
-			return createIProjectFromString(eDataType, initialValue);
-		case LibraryElementPackage.IFILE:
-			return createIFileFromString(eDataType, initialValue);
-		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+			case LibraryElementPackage.LANGUAGE:
+				return createLanguageFromString(eDataType, initialValue);
+			case LibraryElementPackage.IPROJECT:
+				return createIProjectFromString(eDataType, initialValue);
+			case LibraryElementPackage.IFILE:
+				return createIFileFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-		case LibraryElementPackage.LANGUAGE:
-			return convertLanguageToString(eDataType, instanceValue);
-		case LibraryElementPackage.IPROJECT:
-			return convertIProjectToString(eDataType, instanceValue);
-		case LibraryElementPackage.IFILE:
-			return convertIFileToString(eDataType, instanceValue);
-		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+			case LibraryElementPackage.LANGUAGE:
+				return convertLanguageToString(eDataType, instanceValue);
+			case LibraryElementPackage.IPROJECT:
+				return convertIProjectToString(eDataType, instanceValue);
+			case LibraryElementPackage.IFILE:
+				return convertIFileToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -316,7 +247,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -327,7 +257,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -338,7 +267,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -349,7 +277,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -360,7 +287,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -371,7 +297,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -382,7 +307,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -393,7 +317,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -404,7 +327,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -415,7 +337,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -426,7 +347,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -437,7 +357,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -448,7 +367,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -459,7 +377,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -470,7 +387,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -481,7 +397,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -492,7 +407,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -503,7 +417,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -514,7 +427,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -525,7 +437,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -536,7 +447,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -547,7 +457,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -558,7 +467,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -569,7 +477,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -580,7 +487,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -591,7 +497,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -602,7 +507,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -613,7 +517,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -624,7 +527,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -635,7 +537,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -646,7 +547,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -657,7 +557,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -668,7 +567,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -679,7 +577,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -690,7 +587,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -701,7 +597,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -712,7 +607,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -723,7 +617,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -734,7 +627,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -745,7 +637,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -756,7 +647,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -767,7 +657,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -778,7 +667,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -789,7 +677,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -800,7 +687,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -811,7 +697,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -822,7 +707,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -833,7 +717,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -844,7 +727,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -855,7 +737,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -866,7 +747,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -877,7 +757,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -888,7 +767,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -899,7 +777,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -910,7 +787,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -921,7 +797,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -932,7 +807,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -943,7 +817,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -954,7 +827,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -965,7 +837,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -976,7 +847,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -987,7 +857,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -998,7 +867,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -1009,20 +877,16 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Language createLanguageFromString(EDataType eDataType, String initialValue) {
 		Language result = Language.get(initialValue);
-		if (result == null)
-			throw new IllegalArgumentException(
-					"The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public String convertLanguageToString(EDataType eDataType, Object instanceValue) {
@@ -1031,16 +895,14 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public IProject createIProjectFromString(EDataType eDataType, String initialValue) {
-		return (IProject) super.createFromString(eDataType, initialValue);
+		return (IProject)super.createFromString(eDataType, initialValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public String convertIProjectToString(EDataType eDataType, Object instanceValue) {
@@ -1049,16 +911,14 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public IFile createIFileFromString(EDataType eDataType, String initialValue) {
-		return (IFile) super.createFromString(eDataType, initialValue);
+		return (IFile)super.createFromString(eDataType, initialValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public String convertIFileToString(EDataType eDataType, Object instanceValue) {
@@ -1067,17 +927,15 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public LibraryElementPackage getLibraryElementPackage() {
-		return (LibraryElementPackage) getEPackage();
+		return (LibraryElementPackage)getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @deprecated
 	 * @generated
 	 */

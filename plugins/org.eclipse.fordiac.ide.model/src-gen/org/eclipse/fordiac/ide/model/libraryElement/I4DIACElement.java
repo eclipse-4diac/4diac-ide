@@ -24,8 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement#getAnnotations
- * <em>Annotations</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement#getAnnotations <em>Annotations</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getI4DIACElement()
@@ -54,7 +53,6 @@ public interface I4DIACElement extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */
@@ -62,7 +60,6 @@ public interface I4DIACElement extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model
 	 * @generated
 	 */

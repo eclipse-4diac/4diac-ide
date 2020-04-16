@@ -27,8 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeNameImpl#getName
- * <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeNameImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -56,7 +55,6 @@ public class ResourceTypeNameImpl extends EObjectImpl implements ResourceTypeNam
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected ResourceTypeNameImpl() {
@@ -65,7 +63,6 @@ public class ResourceTypeNameImpl extends EObjectImpl implements ResourceTypeNam
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -75,7 +72,6 @@ public class ResourceTypeNameImpl extends EObjectImpl implements ResourceTypeNam
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -85,7 +81,6 @@ public class ResourceTypeNameImpl extends EObjectImpl implements ResourceTypeNam
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -93,77 +88,70 @@ public class ResourceTypeNameImpl extends EObjectImpl implements ResourceTypeNam
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.RESOURCE_TYPE_NAME__NAME,
-					oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.RESOURCE_TYPE_NAME__NAME, oldName, name));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
-			return getName();
+			case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
+				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
-			setName((String) newValue);
-			return;
+			case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
+				setName((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
-			setName(NAME_EDEFAULT);
-			return;
+			case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
+				setName(NAME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$

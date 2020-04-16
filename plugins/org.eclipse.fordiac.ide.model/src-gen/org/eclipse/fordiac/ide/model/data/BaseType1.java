@@ -681,8 +681,8 @@ public enum BaseType1 implements Enumerator {
 			case DINT_VALUE: return DINT;
 			case UDINT_VALUE: return UDINT;
 			case ANY_VALUE: return ANY;
-			default: return null;
 		}
+		return null;
 	}
 
 	/**

@@ -29,10 +29,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition} object.
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
- * 
  * @generated
  */
 public class ECTransitionItemProvider extends PositionableElementItemProvider {
@@ -67,19 +65,25 @@ public class ECTransitionItemProvider extends PositionableElementItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Comment feature. <!-- begin-user-doc
+	 * This adds a property descriptor for the Comment feature.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected void addCommentPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_ECTransition_comment_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_comment_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ECTransition_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.EC_TRANSITION__COMMENT, true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ECTransition_comment_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_comment_feature", "_UI_ECTransition_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.EC_TRANSITION__COMMENT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -89,28 +93,41 @@ public class ECTransitionItemProvider extends PositionableElementItemProvider {
 	 * @generated
 	 */
 	protected void addConditionExpressionPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_ECTransition_conditionExpression_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_conditionExpression_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ECTransition_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.EC_TRANSITION__CONDITION_EXPRESSION, true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ECTransition_conditionExpression_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_conditionExpression_feature", "_UI_ECTransition_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.EC_TRANSITION__CONDITION_EXPRESSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Source feature. <!-- begin-user-doc
+	 * This adds a property descriptor for the Source feature.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected void addSourcePropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_ECTransition_source_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_source_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ECTransition_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.EC_TRANSITION__SOURCE, true, false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ECTransition_source_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_source_feature", "_UI_ECTransition_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.EC_TRANSITION__SOURCE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -120,12 +137,19 @@ public class ECTransitionItemProvider extends PositionableElementItemProvider {
 	 * @generated
 	 */
 	protected void addDestinationPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ECTransition_destination_feature"), //$NON-NLS-1$
-				getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_destination_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_ECTransition_type"), //$NON-NLS-1$
-				LibraryElementPackage.Literals.EC_TRANSITION__DESTINATION, true, false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ECTransition_destination_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_destination_feature", "_UI_ECTransition_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.EC_TRANSITION__DESTINATION,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -135,12 +159,19 @@ public class ECTransitionItemProvider extends PositionableElementItemProvider {
 	 * @generated
 	 */
 	protected void addConditionEventPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ECTransition_conditionEvent_feature"), //$NON-NLS-1$
-				getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_conditionEvent_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_ECTransition_type"), //$NON-NLS-1$
-				LibraryElementPackage.Literals.EC_TRANSITION__CONDITION_EVENT, true, false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ECTransition_conditionEvent_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_conditionEvent_feature", "_UI_ECTransition_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.EC_TRANSITION__CONDITION_EVENT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -162,8 +193,8 @@ public class ECTransitionItemProvider extends PositionableElementItemProvider {
 	}
 
 	/**
-	 * This returns ECTransition.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This returns ECTransition.gif.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -186,10 +217,9 @@ public class ECTransitionItemProvider extends PositionableElementItemProvider {
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -197,19 +227,19 @@ public class ECTransitionItemProvider extends PositionableElementItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(ECTransition.class)) {
-		case LibraryElementPackage.EC_TRANSITION__COMMENT:
-		case LibraryElementPackage.EC_TRANSITION__CONDITION_EXPRESSION:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-			return;
+			case LibraryElementPackage.EC_TRANSITION__COMMENT:
+			case LibraryElementPackage.EC_TRANSITION__CONDITION_EXPRESSION:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

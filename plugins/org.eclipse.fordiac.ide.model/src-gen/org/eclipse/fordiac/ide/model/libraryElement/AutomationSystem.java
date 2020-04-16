@@ -25,16 +25,11 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getApplication
- * <em>Application</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getMapping
- * <em>Mapping</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette
- * <em>Palette</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration
- * <em>System Configuration</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemFile
- * <em>System File</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getApplication <em>Application</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getMapping <em>Mapping</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette <em>Palette</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration <em>System Configuration</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemFile <em>System File</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAutomationSystem()
@@ -98,10 +93,8 @@ public interface AutomationSystem extends LibraryElement {
 	Palette getPalette();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette
-	 * <em>Palette</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette <em>Palette</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Palette</em>' reference.
 	 * @see #getPalette()
 	 * @generated
@@ -109,16 +102,14 @@ public interface AutomationSystem extends LibraryElement {
 	void setPalette(Palette value);
 
 	/**
-	 * Returns the value of the '<em><b>System Configuration</b></em>' containment
-	 * reference. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>System Configuration</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>System Configuration</em>' containment reference
 	 * isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
-	 * @return the value of the '<em>System Configuration</em>' containment
-	 *         reference.
+	 * @return the value of the '<em>System Configuration</em>' containment reference.
 	 * @see #setSystemConfiguration(SystemConfiguration)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAutomationSystem_SystemConfiguration()
 	 * @model containment="true" resolveProxies="true" required="true"
@@ -127,13 +118,10 @@ public interface AutomationSystem extends LibraryElement {
 	SystemConfiguration getSystemConfiguration();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration
-	 * <em>System Configuration</em>}' containment reference. <!-- begin-user-doc
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration <em>System Configuration</em>}' containment reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
-	 * @param value the new value of the '<em>System Configuration</em>' containment
-	 *              reference.
+	 * @param value the new value of the '<em>System Configuration</em>' containment reference.
 	 * @see #getSystemConfiguration()
 	 * @generated
 	 */
@@ -166,7 +154,6 @@ public interface AutomationSystem extends LibraryElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model required="true" nameRequired="true"
 	 * @generated
 	 */
@@ -174,7 +161,6 @@ public interface AutomationSystem extends LibraryElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model required="true" nameRequired="true"
 	 * @generated
 	 */

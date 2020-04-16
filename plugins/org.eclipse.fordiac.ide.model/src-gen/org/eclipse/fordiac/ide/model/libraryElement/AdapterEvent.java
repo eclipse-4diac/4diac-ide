@@ -21,8 +21,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent#getAdapterDeclaration
- * <em>Adapter Declaration</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent#getAdapterDeclaration <em>Adapter Declaration</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterEvent()
@@ -38,7 +37,6 @@ public interface AdapterEvent extends Event {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Adapter Declaration</em>' reference.
 	 * @see #setAdapterDeclaration(AdapterDeclaration)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterEvent_AdapterDeclaration()
@@ -48,11 +46,9 @@ public interface AdapterEvent extends Event {
 	AdapterDeclaration getAdapterDeclaration();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent#getAdapterDeclaration
-	 * <em>Adapter Declaration</em>}' reference. <!-- begin-user-doc --> <!--
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent#getAdapterDeclaration <em>Adapter Declaration</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @param value the new value of the '<em>Adapter Declaration</em>' reference.
 	 * @see #getAdapterDeclaration()
 	 * @generated

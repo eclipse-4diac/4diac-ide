@@ -127,10 +127,8 @@ public class StructuredTypeItemProvider extends AnyDerivedTypeItemProvider {
 			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
-			default:
-				super.notifyChanged(notification);
-				return;
-			}
+		}
+		super.notifyChanged(notification);
 	}
 
 	/**

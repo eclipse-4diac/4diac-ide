@@ -86,9 +86,8 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 		switch (featureID) {
 			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
 				return ((InternalEList<?>)getEnumeratedValue()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -100,9 +99,8 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 		switch (featureID) {
 			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
 				return getEnumeratedValue();
-			default:
-				return super.eGet(featureID, resolve, coreType);
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -117,10 +115,8 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 				getEnumeratedValue().clear();
 				getEnumeratedValue().addAll((Collection<? extends EnumeratedValue>)newValue);
 				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -133,10 +129,8 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
 				getEnumeratedValue().clear();
 				return;
-			default:
-				super.eUnset(featureID);
-				return;
 		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -148,9 +142,8 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 		switch (featureID) {
 			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
 				return enumeratedValue != null && !enumeratedValue.isEmpty();
-			default:
-				return super.eIsSet(featureID);
 		}
+		return super.eIsSet(featureID);
 	}
 
 } // EnumeratedTypeImpl

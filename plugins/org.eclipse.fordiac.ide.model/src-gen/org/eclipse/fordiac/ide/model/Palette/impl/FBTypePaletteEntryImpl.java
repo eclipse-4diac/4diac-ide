@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePaletteEntry {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected FBTypePaletteEntryImpl() {
@@ -41,7 +40,6 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -51,32 +49,29 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public FBType getFBType() {
 		LibraryElement type = getType();
-		if (type instanceof FBType) {
-			return (FBType) type;
+		if(type instanceof FBType){
+		   return (FBType) type;
 		}
 		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if (type instanceof FBType) {
+		if(type instanceof FBType){
 			super.setType(type);
-		} else {
+		}else{
 			super.setType(null);
-			if (null != type) {
-				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-						"tried to set no FBType as type entry for FBTypePaletteEntry"); //$NON-NLS-1$
+			if(null != type){
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no FBType as type entry for FBTypePaletteEntry"); //$NON-NLS-1$
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
@@ -84,7 +79,6 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

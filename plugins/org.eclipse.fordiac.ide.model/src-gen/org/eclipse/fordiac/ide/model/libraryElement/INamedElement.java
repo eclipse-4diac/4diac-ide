@@ -21,10 +21,8 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getName
- * <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getComment
- * <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getComment <em>Comment</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getINamedElement()
@@ -33,28 +31,25 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  */
 public interface INamedElement extends I4DIACElement {
 	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute. The default value
-	 * is <code>""</code>. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * The default value is <code>""</code>.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Name</em>' attribute isn't clear, there really
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getINamedElement_Name()
-	 * @model default="" dataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        required="true"
+	 * @model default="" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
 	 * @generated
 	 */
 	String getName();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getName
-	 * <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated
@@ -62,14 +57,14 @@ public interface INamedElement extends I4DIACElement {
 	void setName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Comment</b></em>' attribute. The default
-	 * value is <code>""</code>. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Comment</b></em>' attribute.
+	 * The default value is <code>""</code>.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Comment</em>' attribute isn't clear, there really
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Comment</em>' attribute.
 	 * @see #setComment(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getINamedElement_Comment()
@@ -79,10 +74,8 @@ public interface INamedElement extends I4DIACElement {
 	String getComment();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getComment
-	 * <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getComment <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Comment</em>' attribute.
 	 * @see #getComment()
 	 * @generated

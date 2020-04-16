@@ -77,27 +77,41 @@ public class ECActionItemProvider extends ItemProviderAdapter implements IEditin
 	 * @generated
 	 */
 	protected void addAlgorithmPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_ECAction_algorithm_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_ECAction_algorithm_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ECAction_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.EC_ACTION__ALGORITHM, true, false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ECAction_algorithm_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECAction_algorithm_feature", "_UI_ECAction_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.EC_ACTION__ALGORITHM,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Output feature. <!-- begin-user-doc
+	 * This adds a property descriptor for the Output feature.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected void addOutputPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_ECAction_output_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_ECAction_output_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ECAction_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.EC_ACTION__OUTPUT, true, false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ECAction_output_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECAction_output_feature", "_UI_ECAction_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.EC_ACTION__OUTPUT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -136,10 +150,9 @@ public class ECActionItemProvider extends ItemProviderAdapter implements IEditin
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -149,10 +162,10 @@ public class ECActionItemProvider extends ItemProviderAdapter implements IEditin
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

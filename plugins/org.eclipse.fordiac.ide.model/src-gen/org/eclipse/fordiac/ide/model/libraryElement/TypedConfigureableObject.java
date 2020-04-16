@@ -23,8 +23,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject#getPaletteEntry
- * <em>Palette Entry</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject#getPaletteEntry <em>Palette Entry</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTypedConfigureableObject()
@@ -63,7 +62,6 @@ public interface TypedConfigureableObject extends ConfigurableObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
@@ -71,7 +69,6 @@ public interface TypedConfigureableObject extends ConfigurableObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

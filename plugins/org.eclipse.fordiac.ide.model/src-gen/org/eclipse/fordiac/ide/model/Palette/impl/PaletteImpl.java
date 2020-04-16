@@ -44,22 +44,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getProject
- * <em>Project</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getAutomationSystem
- * <em>Automation System</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getAdapterTypes
- * <em>Adapter Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getDeviceTypes
- * <em>Device Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getFbTypes
- * <em>Fb Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getResourceTypes
- * <em>Resource Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getSegmentTypes
- * <em>Segment Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getSubAppTypes
- * <em>Sub App Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getProject <em>Project</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getAutomationSystem <em>Automation System</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getAdapterTypes <em>Adapter Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getDeviceTypes <em>Device Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getFbTypes <em>Fb Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getResourceTypes <em>Resource Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getSegmentTypes <em>Segment Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getSubAppTypes <em>Sub App Types</em>}</li>
  * </ul>
  *
  * @generated
@@ -68,7 +60,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The default value of the '{@link #getProject() <em>Project</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getProject()
 	 * @generated
 	 * @ordered
@@ -78,7 +69,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The cached value of the '{@link #getProject() <em>Project</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getProject()
 	 * @generated
 	 * @ordered
@@ -86,9 +76,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	protected IProject project = PROJECT_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAutomationSystem() <em>Automation
-	 * System</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getAutomationSystem() <em>Automation System</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getAutomationSystem()
 	 * @generated
 	 * @ordered
@@ -96,9 +85,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	protected AutomationSystem automationSystem;
 
 	/**
-	 * The cached value of the '{@link #getAdapterTypes() <em>Adapter Types</em>}'
-	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getAdapterTypes() <em>Adapter Types</em>}' map.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getAdapterTypes()
 	 * @generated
 	 * @ordered
@@ -106,9 +94,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	protected EMap<String, AdapterTypePaletteEntry> adapterTypes;
 
 	/**
-	 * The cached value of the '{@link #getDeviceTypes() <em>Device Types</em>}'
-	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getDeviceTypes() <em>Device Types</em>}' map.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDeviceTypes()
 	 * @generated
 	 * @ordered
@@ -126,9 +113,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	protected EMap<String, FBTypePaletteEntry> fbTypes;
 
 	/**
-	 * The cached value of the '{@link #getResourceTypes() <em>Resource Types</em>}'
-	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getResourceTypes() <em>Resource Types</em>}' map.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getResourceTypes()
 	 * @generated
 	 * @ordered
@@ -136,9 +122,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	protected EMap<String, ResourceTypeEntry> resourceTypes;
 
 	/**
-	 * The cached value of the '{@link #getSegmentTypes() <em>Segment Types</em>}'
-	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getSegmentTypes() <em>Segment Types</em>}' map.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getSegmentTypes()
 	 * @generated
 	 * @ordered
@@ -146,9 +131,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	protected EMap<String, SegmentTypePaletteEntry> segmentTypes;
 
 	/**
-	 * The cached value of the '{@link #getSubAppTypes() <em>Sub App Types</em>}'
-	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getSubAppTypes() <em>Sub App Types</em>}' map.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getSubAppTypes()
 	 * @generated
 	 * @ordered
@@ -157,7 +141,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected PaletteImpl() {
@@ -166,7 +149,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -176,7 +158,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -186,7 +167,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -194,24 +174,21 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		IProject oldProject = project;
 		project = newProject;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__PROJECT, oldProject,
-					project));
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__PROJECT, oldProject, project));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public AutomationSystem getAutomationSystem() {
 		if (automationSystem != null && automationSystem.eIsProxy()) {
-			InternalEObject oldAutomationSystem = (InternalEObject) automationSystem;
-			automationSystem = (AutomationSystem) eResolveProxy(oldAutomationSystem);
+			InternalEObject oldAutomationSystem = (InternalEObject)automationSystem;
+			automationSystem = (AutomationSystem)eResolveProxy(oldAutomationSystem);
 			if (automationSystem != oldAutomationSystem) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PalettePackage.PALETTE__AUTOMATION_SYSTEM,
-							oldAutomationSystem, automationSystem));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PalettePackage.PALETTE__AUTOMATION_SYSTEM, oldAutomationSystem, automationSystem));
 			}
 		}
 		return automationSystem;
@@ -219,7 +196,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public AutomationSystem basicGetAutomationSystem() {
@@ -228,26 +204,20 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetAutomationSystem(AutomationSystem newAutomationSystem, NotificationChain msgs) {
 		AutomationSystem oldAutomationSystem = automationSystem;
 		automationSystem = newAutomationSystem;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-					PalettePackage.PALETTE__AUTOMATION_SYSTEM, oldAutomationSystem, newAutomationSystem);
-			if (msgs == null)
-				msgs = notification;
-			else
-				msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__AUTOMATION_SYSTEM, oldAutomationSystem, newAutomationSystem);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -255,112 +225,90 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		if (newAutomationSystem != automationSystem) {
 			NotificationChain msgs = null;
 			if (automationSystem != null)
-				msgs = ((InternalEObject) automationSystem).eInverseRemove(this,
-						LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
+				msgs = ((InternalEObject)automationSystem).eInverseRemove(this, LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
 			if (newAutomationSystem != null)
-				msgs = ((InternalEObject) newAutomationSystem).eInverseAdd(this,
-						LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
+				msgs = ((InternalEObject)newAutomationSystem).eInverseAdd(this, LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
 			msgs = basicSetAutomationSystem(newAutomationSystem, msgs);
-			if (msgs != null)
-				msgs.dispatch();
-		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__AUTOMATION_SYSTEM,
-					newAutomationSystem, newAutomationSystem));
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__AUTOMATION_SYSTEM, newAutomationSystem, newAutomationSystem));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EMap<String, FBTypePaletteEntry> getFbTypes() {
 		if (fbTypes == null) {
-			fbTypes = new EcoreEMap<String, FBTypePaletteEntry>(
-					PalettePackage.Literals.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP,
-					StringToFBTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__FB_TYPES);
+			fbTypes = new EcoreEMap<String,FBTypePaletteEntry>(PalettePackage.Literals.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP, StringToFBTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__FB_TYPES);
 		}
 		return fbTypes;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EMap<String, ResourceTypeEntry> getResourceTypes() {
 		if (resourceTypes == null) {
-			resourceTypes = new EcoreEMap<String, ResourceTypeEntry>(
-					PalettePackage.Literals.STRING_TO_RESOURCE_TYPE_ENTRY_MAP, StringToResourceTypeEntryMapImpl.class,
-					this, PalettePackage.PALETTE__RESOURCE_TYPES);
+			resourceTypes = new EcoreEMap<String,ResourceTypeEntry>(PalettePackage.Literals.STRING_TO_RESOURCE_TYPE_ENTRY_MAP, StringToResourceTypeEntryMapImpl.class, this, PalettePackage.PALETTE__RESOURCE_TYPES);
 		}
 		return resourceTypes;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EMap<String, DeviceTypePaletteEntry> getDeviceTypes() {
 		if (deviceTypes == null) {
-			deviceTypes = new EcoreEMap<String, DeviceTypePaletteEntry>(
-					PalettePackage.Literals.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP,
-					StringToFDeviceTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__DEVICE_TYPES);
+			deviceTypes = new EcoreEMap<String,DeviceTypePaletteEntry>(PalettePackage.Literals.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP, StringToFDeviceTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__DEVICE_TYPES);
 		}
 		return deviceTypes;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EMap<String, SegmentTypePaletteEntry> getSegmentTypes() {
 		if (segmentTypes == null) {
-			segmentTypes = new EcoreEMap<String, SegmentTypePaletteEntry>(
-					PalettePackage.Literals.STRING_TO_SEGMENT_TYPE_PALETTE_ENTRY_MAP,
-					StringToSegmentTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__SEGMENT_TYPES);
+			segmentTypes = new EcoreEMap<String,SegmentTypePaletteEntry>(PalettePackage.Literals.STRING_TO_SEGMENT_TYPE_PALETTE_ENTRY_MAP, StringToSegmentTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__SEGMENT_TYPES);
 		}
 		return segmentTypes;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EMap<String, SubApplicationTypePaletteEntry> getSubAppTypes() {
 		if (subAppTypes == null) {
-			subAppTypes = new EcoreEMap<String, SubApplicationTypePaletteEntry>(
-					PalettePackage.Literals.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP,
-					StringToSubApplicationTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__SUB_APP_TYPES);
+			subAppTypes = new EcoreEMap<String,SubApplicationTypePaletteEntry>(PalettePackage.Literals.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP, StringToSubApplicationTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__SUB_APP_TYPES);
 		}
 		return subAppTypes;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EMap<String, AdapterTypePaletteEntry> getAdapterTypes() {
 		if (adapterTypes == null) {
-			adapterTypes = new EcoreEMap<String, AdapterTypePaletteEntry>(
-					PalettePackage.Literals.STRING_TO_ADAPTER_TYPE_PALETTE_ENTRY_MAP,
-					StringToAdapterTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__ADAPTER_TYPES);
+			adapterTypes = new EcoreEMap<String,AdapterTypePaletteEntry>(PalettePackage.Literals.STRING_TO_ADAPTER_TYPE_PALETTE_ENTRY_MAP, StringToAdapterTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__ADAPTER_TYPES);
 		}
 		return adapterTypes;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -370,7 +318,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -380,7 +327,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -390,7 +336,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -400,7 +345,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -410,7 +354,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -420,7 +363,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -430,7 +372,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -440,7 +381,6 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -450,204 +390,182 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-			if (automationSystem != null)
-				msgs = ((InternalEObject) automationSystem).eInverseRemove(this,
-						LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
-			return basicSetAutomationSystem((AutomationSystem) otherEnd, msgs);
+			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
+				if (automationSystem != null)
+					msgs = ((InternalEObject)automationSystem).eInverseRemove(this, LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
+				return basicSetAutomationSystem((AutomationSystem)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-			return basicSetAutomationSystem(null, msgs);
-		case PalettePackage.PALETTE__ADAPTER_TYPES:
-			return ((InternalEList<?>) getAdapterTypes()).basicRemove(otherEnd, msgs);
-		case PalettePackage.PALETTE__DEVICE_TYPES:
-			return ((InternalEList<?>) getDeviceTypes()).basicRemove(otherEnd, msgs);
-		case PalettePackage.PALETTE__FB_TYPES:
-			return ((InternalEList<?>) getFbTypes()).basicRemove(otherEnd, msgs);
-		case PalettePackage.PALETTE__RESOURCE_TYPES:
-			return ((InternalEList<?>) getResourceTypes()).basicRemove(otherEnd, msgs);
-		case PalettePackage.PALETTE__SEGMENT_TYPES:
-			return ((InternalEList<?>) getSegmentTypes()).basicRemove(otherEnd, msgs);
-		case PalettePackage.PALETTE__SUB_APP_TYPES:
-			return ((InternalEList<?>) getSubAppTypes()).basicRemove(otherEnd, msgs);
+			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
+				return basicSetAutomationSystem(null, msgs);
+			case PalettePackage.PALETTE__ADAPTER_TYPES:
+				return ((InternalEList<?>)getAdapterTypes()).basicRemove(otherEnd, msgs);
+			case PalettePackage.PALETTE__DEVICE_TYPES:
+				return ((InternalEList<?>)getDeviceTypes()).basicRemove(otherEnd, msgs);
+			case PalettePackage.PALETTE__FB_TYPES:
+				return ((InternalEList<?>)getFbTypes()).basicRemove(otherEnd, msgs);
+			case PalettePackage.PALETTE__RESOURCE_TYPES:
+				return ((InternalEList<?>)getResourceTypes()).basicRemove(otherEnd, msgs);
+			case PalettePackage.PALETTE__SEGMENT_TYPES:
+				return ((InternalEList<?>)getSegmentTypes()).basicRemove(otherEnd, msgs);
+			case PalettePackage.PALETTE__SUB_APP_TYPES:
+				return ((InternalEList<?>)getSubAppTypes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case PalettePackage.PALETTE__PROJECT:
-			return getProject();
-		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-			if (resolve)
-				return getAutomationSystem();
-			return basicGetAutomationSystem();
-		case PalettePackage.PALETTE__ADAPTER_TYPES:
-			if (coreType)
-				return getAdapterTypes();
-			else
-				return getAdapterTypes().map();
-		case PalettePackage.PALETTE__DEVICE_TYPES:
-			if (coreType)
-				return getDeviceTypes();
-			else
-				return getDeviceTypes().map();
-		case PalettePackage.PALETTE__FB_TYPES:
-			if (coreType)
-				return getFbTypes();
-			else
-				return getFbTypes().map();
-		case PalettePackage.PALETTE__RESOURCE_TYPES:
-			if (coreType)
-				return getResourceTypes();
-			else
-				return getResourceTypes().map();
-		case PalettePackage.PALETTE__SEGMENT_TYPES:
-			if (coreType)
-				return getSegmentTypes();
-			else
-				return getSegmentTypes().map();
-		case PalettePackage.PALETTE__SUB_APP_TYPES:
-			if (coreType)
-				return getSubAppTypes();
-			else
-				return getSubAppTypes().map();
+			case PalettePackage.PALETTE__PROJECT:
+				return getProject();
+			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
+				if (resolve) return getAutomationSystem();
+				return basicGetAutomationSystem();
+			case PalettePackage.PALETTE__ADAPTER_TYPES:
+				if (coreType) return getAdapterTypes();
+				else return getAdapterTypes().map();
+			case PalettePackage.PALETTE__DEVICE_TYPES:
+				if (coreType) return getDeviceTypes();
+				else return getDeviceTypes().map();
+			case PalettePackage.PALETTE__FB_TYPES:
+				if (coreType) return getFbTypes();
+				else return getFbTypes().map();
+			case PalettePackage.PALETTE__RESOURCE_TYPES:
+				if (coreType) return getResourceTypes();
+				else return getResourceTypes().map();
+			case PalettePackage.PALETTE__SEGMENT_TYPES:
+				if (coreType) return getSegmentTypes();
+				else return getSegmentTypes().map();
+			case PalettePackage.PALETTE__SUB_APP_TYPES:
+				if (coreType) return getSubAppTypes();
+				else return getSubAppTypes().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case PalettePackage.PALETTE__PROJECT:
-			setProject((IProject) newValue);
-			return;
-		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-			setAutomationSystem((AutomationSystem) newValue);
-			return;
-		case PalettePackage.PALETTE__ADAPTER_TYPES:
-			((EStructuralFeature.Setting) getAdapterTypes()).set(newValue);
-			return;
-		case PalettePackage.PALETTE__DEVICE_TYPES:
-			((EStructuralFeature.Setting) getDeviceTypes()).set(newValue);
-			return;
-		case PalettePackage.PALETTE__FB_TYPES:
-			((EStructuralFeature.Setting) getFbTypes()).set(newValue);
-			return;
-		case PalettePackage.PALETTE__RESOURCE_TYPES:
-			((EStructuralFeature.Setting) getResourceTypes()).set(newValue);
-			return;
-		case PalettePackage.PALETTE__SEGMENT_TYPES:
-			((EStructuralFeature.Setting) getSegmentTypes()).set(newValue);
-			return;
-		case PalettePackage.PALETTE__SUB_APP_TYPES:
-			((EStructuralFeature.Setting) getSubAppTypes()).set(newValue);
-			return;
+			case PalettePackage.PALETTE__PROJECT:
+				setProject((IProject)newValue);
+				return;
+			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
+				setAutomationSystem((AutomationSystem)newValue);
+				return;
+			case PalettePackage.PALETTE__ADAPTER_TYPES:
+				((EStructuralFeature.Setting)getAdapterTypes()).set(newValue);
+				return;
+			case PalettePackage.PALETTE__DEVICE_TYPES:
+				((EStructuralFeature.Setting)getDeviceTypes()).set(newValue);
+				return;
+			case PalettePackage.PALETTE__FB_TYPES:
+				((EStructuralFeature.Setting)getFbTypes()).set(newValue);
+				return;
+			case PalettePackage.PALETTE__RESOURCE_TYPES:
+				((EStructuralFeature.Setting)getResourceTypes()).set(newValue);
+				return;
+			case PalettePackage.PALETTE__SEGMENT_TYPES:
+				((EStructuralFeature.Setting)getSegmentTypes()).set(newValue);
+				return;
+			case PalettePackage.PALETTE__SUB_APP_TYPES:
+				((EStructuralFeature.Setting)getSubAppTypes()).set(newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case PalettePackage.PALETTE__PROJECT:
-			setProject(PROJECT_EDEFAULT);
-			return;
-		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-			setAutomationSystem((AutomationSystem) null);
-			return;
-		case PalettePackage.PALETTE__ADAPTER_TYPES:
-			getAdapterTypes().clear();
-			return;
-		case PalettePackage.PALETTE__DEVICE_TYPES:
-			getDeviceTypes().clear();
-			return;
-		case PalettePackage.PALETTE__FB_TYPES:
-			getFbTypes().clear();
-			return;
-		case PalettePackage.PALETTE__RESOURCE_TYPES:
-			getResourceTypes().clear();
-			return;
-		case PalettePackage.PALETTE__SEGMENT_TYPES:
-			getSegmentTypes().clear();
-			return;
-		case PalettePackage.PALETTE__SUB_APP_TYPES:
-			getSubAppTypes().clear();
-			return;
+			case PalettePackage.PALETTE__PROJECT:
+				setProject(PROJECT_EDEFAULT);
+				return;
+			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
+				setAutomationSystem((AutomationSystem)null);
+				return;
+			case PalettePackage.PALETTE__ADAPTER_TYPES:
+				getAdapterTypes().clear();
+				return;
+			case PalettePackage.PALETTE__DEVICE_TYPES:
+				getDeviceTypes().clear();
+				return;
+			case PalettePackage.PALETTE__FB_TYPES:
+				getFbTypes().clear();
+				return;
+			case PalettePackage.PALETTE__RESOURCE_TYPES:
+				getResourceTypes().clear();
+				return;
+			case PalettePackage.PALETTE__SEGMENT_TYPES:
+				getSegmentTypes().clear();
+				return;
+			case PalettePackage.PALETTE__SUB_APP_TYPES:
+				getSubAppTypes().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case PalettePackage.PALETTE__PROJECT:
-			return PROJECT_EDEFAULT == null ? project != null : !PROJECT_EDEFAULT.equals(project);
-		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-			return automationSystem != null;
-		case PalettePackage.PALETTE__ADAPTER_TYPES:
-			return adapterTypes != null && !adapterTypes.isEmpty();
-		case PalettePackage.PALETTE__DEVICE_TYPES:
-			return deviceTypes != null && !deviceTypes.isEmpty();
-		case PalettePackage.PALETTE__FB_TYPES:
-			return fbTypes != null && !fbTypes.isEmpty();
-		case PalettePackage.PALETTE__RESOURCE_TYPES:
-			return resourceTypes != null && !resourceTypes.isEmpty();
-		case PalettePackage.PALETTE__SEGMENT_TYPES:
-			return segmentTypes != null && !segmentTypes.isEmpty();
-		case PalettePackage.PALETTE__SUB_APP_TYPES:
-			return subAppTypes != null && !subAppTypes.isEmpty();
+			case PalettePackage.PALETTE__PROJECT:
+				return PROJECT_EDEFAULT == null ? project != null : !PROJECT_EDEFAULT.equals(project);
+			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
+				return automationSystem != null;
+			case PalettePackage.PALETTE__ADAPTER_TYPES:
+				return adapterTypes != null && !adapterTypes.isEmpty();
+			case PalettePackage.PALETTE__DEVICE_TYPES:
+				return deviceTypes != null && !deviceTypes.isEmpty();
+			case PalettePackage.PALETTE__FB_TYPES:
+				return fbTypes != null && !fbTypes.isEmpty();
+			case PalettePackage.PALETTE__RESOURCE_TYPES:
+				return resourceTypes != null && !resourceTypes.isEmpty();
+			case PalettePackage.PALETTE__SEGMENT_TYPES:
+				return segmentTypes != null && !segmentTypes.isEmpty();
+			case PalettePackage.PALETTE__SUB_APP_TYPES:
+				return subAppTypes != null && !subAppTypes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (project: "); //$NON-NLS-1$

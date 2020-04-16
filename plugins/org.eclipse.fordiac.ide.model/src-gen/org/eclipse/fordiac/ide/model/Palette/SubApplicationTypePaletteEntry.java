@@ -30,7 +30,6 @@ public interface SubApplicationTypePaletteEntry extends PaletteEntry {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
@@ -38,7 +37,6 @@ public interface SubApplicationTypePaletteEntry extends PaletteEntry {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model
 	 * @generated
 	 */
@@ -47,9 +45,7 @@ public interface SubApplicationTypePaletteEntry extends PaletteEntry {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @model kind="operation"
-	 *        dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
 	 * @generated
 	 */
 	@Override

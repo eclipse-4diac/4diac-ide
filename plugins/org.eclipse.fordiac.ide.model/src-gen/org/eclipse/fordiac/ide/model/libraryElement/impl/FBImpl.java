@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 public class FBImpl extends FBNetworkElementImpl implements FB {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected FBImpl() {
@@ -38,7 +37,6 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -48,7 +46,6 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -58,7 +55,6 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

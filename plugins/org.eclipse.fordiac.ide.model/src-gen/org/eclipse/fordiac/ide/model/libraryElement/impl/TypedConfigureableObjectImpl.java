@@ -29,17 +29,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl#getPaletteEntry
- * <em>Palette Entry</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl#getPaletteEntry <em>Palette Entry</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl implements TypedConfigureableObject {
 	/**
-	 * The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPaletteEntry()
 	 * @generated
 	 * @ordered
@@ -48,7 +46,6 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected TypedConfigureableObjectImpl() {
@@ -57,7 +54,6 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -67,19 +63,16 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public PaletteEntry getPaletteEntry() {
 		if (paletteEntry != null && paletteEntry.eIsProxy()) {
-			InternalEObject oldPaletteEntry = (InternalEObject) paletteEntry;
-			paletteEntry = (PaletteEntry) eResolveProxy(oldPaletteEntry);
+			InternalEObject oldPaletteEntry = (InternalEObject)paletteEntry;
+			paletteEntry = (PaletteEntry)eResolveProxy(oldPaletteEntry);
 			if (paletteEntry != oldPaletteEntry) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY, oldPaletteEntry,
-							paletteEntry));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY, oldPaletteEntry, paletteEntry));
 			}
 		}
 		return paletteEntry;
@@ -87,7 +80,6 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public PaletteEntry basicGetPaletteEntry() {
@@ -96,7 +88,6 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -104,13 +95,11 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 		PaletteEntry oldPaletteEntry = paletteEntry;
 		paletteEntry = newPaletteEntry;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY, oldPaletteEntry, paletteEntry));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY, oldPaletteEntry, paletteEntry));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -120,7 +109,6 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -130,60 +118,55 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
-			if (resolve)
-				return getPaletteEntry();
-			return basicGetPaletteEntry();
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
+				if (resolve) return getPaletteEntry();
+				return basicGetPaletteEntry();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
-			setPaletteEntry((PaletteEntry) newValue);
-			return;
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
+				setPaletteEntry((PaletteEntry)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
-			setPaletteEntry((PaletteEntry) null);
-			return;
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
+				setPaletteEntry((PaletteEntry)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
-			return paletteEntry != null;
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
+				return paletteEntry != null;
 		}
 		return super.eIsSet(featureID);
 	}

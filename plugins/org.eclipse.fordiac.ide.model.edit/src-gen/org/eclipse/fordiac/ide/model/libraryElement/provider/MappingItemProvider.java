@@ -71,36 +71,52 @@ public class MappingItemProvider extends ItemProviderAdapter implements IEditing
 	}
 
 	/**
-	 * This adds a property descriptor for the From feature. <!-- begin-user-doc -->
+	 * This adds a property descriptor for the From feature.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected void addFromPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_Mapping_from_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_Mapping_from_feature", "_UI_Mapping_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						LibraryElementPackage.Literals.MAPPING__FROM, true, false, false, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Mapping_from_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Mapping_from_feature", "_UI_Mapping_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.MAPPING__FROM,
+				 true,
+				 false,
+				 false,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the To feature. <!-- begin-user-doc -->
+	 * This adds a property descriptor for the To feature.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected void addToPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_Mapping_to_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_Mapping_to_feature", "_UI_Mapping_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						LibraryElementPackage.Literals.MAPPING__TO, true, false, false, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Mapping_to_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Mapping_to_feature", "_UI_Mapping_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.MAPPING__TO,
+				 true,
+				 false,
+				 false,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This returns Mapping.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This returns Mapping.gif.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -109,9 +125,9 @@ public class MappingItemProvider extends ItemProviderAdapter implements IEditing
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -120,10 +136,9 @@ public class MappingItemProvider extends ItemProviderAdapter implements IEditing
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -131,19 +146,19 @@ public class MappingItemProvider extends ItemProviderAdapter implements IEditing
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Mapping.class)) {
-		case LibraryElementPackage.MAPPING__FROM:
-		case LibraryElementPackage.MAPPING__TO:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-			return;
+			case LibraryElementPackage.MAPPING__FROM:
+			case LibraryElementPackage.MAPPING__TO:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

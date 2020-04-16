@@ -27,22 +27,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject
- * <em>Project</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem
- * <em>Automation System</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAdapterTypes
- * <em>Adapter Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getDeviceTypes
- * <em>Device Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getFbTypes <em>Fb
- * Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getResourceTypes
- * <em>Resource Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getSegmentTypes
- * <em>Segment Types</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getSubAppTypes
- * <em>Sub App Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject <em>Project</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem <em>Automation System</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAdapterTypes <em>Adapter Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getDeviceTypes <em>Device Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getFbTypes <em>Fb Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getResourceTypes <em>Resource Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getSegmentTypes <em>Segment Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getSubAppTypes <em>Sub App Types</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette()
@@ -68,10 +60,8 @@ public interface Palette extends EObject {
 	IProject getProject();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject
-	 * <em>Project</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject <em>Project</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Project</em>' attribute.
 	 * @see #getProject()
 	 * @generated
@@ -79,16 +69,14 @@ public interface Palette extends EObject {
 	void setProject(IProject value);
 
 	/**
-	 * Returns the value of the '<em><b>Automation System</b></em>' reference. It is
-	 * bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette
-	 * <em>Palette</em>}'. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Automation System</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette <em>Palette</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Automation System</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Automation System</em>' reference.
 	 * @see #setAutomationSystem(AutomationSystem)
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_AutomationSystem()
@@ -99,11 +87,9 @@ public interface Palette extends EObject {
 	AutomationSystem getAutomationSystem();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem
-	 * <em>Automation System</em>}' reference. <!-- begin-user-doc --> <!--
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem <em>Automation System</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @param value the new value of the '<em>Automation System</em>' reference.
 	 * @see #getAutomationSystem()
 	 * @generated
@@ -167,15 +153,13 @@ public interface Palette extends EObject {
 	EMap<String, SegmentTypePaletteEntry> getSegmentTypes();
 
 	/**
-	 * Returns the value of the '<em><b>Sub App Types</b></em>' map. The key is of
-	 * type {@link java.lang.String}, and the value is of type
-	 * {@link org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry},
+	 * Returns the value of the '<em><b>Sub App Types</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry},
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Sub App Types</em>' map.
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_SubAppTypes()
-	 * @model mapType="org.eclipse.fordiac.ide.model.Palette.StringToSubApplicationTypePaletteEntryMap&lt;org.eclipse.emf.ecore.EString,
-	 *        org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry&gt;"
+	 * @model mapType="org.eclipse.fordiac.ide.model.Palette.StringToSubApplicationTypePaletteEntryMap&lt;org.eclipse.emf.ecore.EString, org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry&gt;"
 	 * @generated
 	 */
 	EMap<String, SubApplicationTypePaletteEntry> getSubAppTypes();
@@ -196,7 +180,6 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation"
 	 * @generated
 	 */
@@ -204,7 +187,6 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -212,7 +194,6 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -220,7 +201,6 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -228,7 +208,6 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -236,7 +215,6 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -244,7 +222,6 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -252,7 +229,6 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model entryRequired="true"
 	 * @generated
 	 */
@@ -260,7 +236,6 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model entryRequired="true"
 	 * @generated
 	 */

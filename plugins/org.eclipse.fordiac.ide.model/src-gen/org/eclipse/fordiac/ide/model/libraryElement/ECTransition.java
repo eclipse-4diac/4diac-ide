@@ -21,18 +21,12 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getComment
- * <em>Comment</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionExpression
- * <em>Condition Expression</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource
- * <em>Source</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getDestination
- * <em>Destination</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionEvent
- * <em>Condition Event</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getECC
- * <em>ECC</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionExpression <em>Condition Expression</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource <em>Source</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getDestination <em>Destination</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionEvent <em>Condition Event</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getECC <em>ECC</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition()
@@ -59,10 +53,8 @@ public interface ECTransition extends PositionableElement {
 	String getComment();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getComment
-	 * <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getComment <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Comment</em>' attribute.
 	 * @see #getComment()
 	 * @generated
@@ -71,28 +63,26 @@ public interface ECTransition extends PositionableElement {
 
 	/**
 	 * Returns the value of the '<em><b>Condition Expression</b></em>' attribute.
-	 * The default value is <code>"1"</code>. <!-- begin-user-doc -->
+	 * The default value is <code>"1"</code>.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Condition Expression</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Condition Expression</em>' attribute.
 	 * @see #setConditionExpression(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition_ConditionExpression()
-	 * @model default="1" dataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        required="true" extendedMetaData="kind='attribute' name='Condition'"
+	 * @model default="1" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+	 *        extendedMetaData="kind='attribute' name='Condition'"
 	 * @generated
 	 */
 	String getConditionExpression();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionExpression
-	 * <em>Condition Expression</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionExpression <em>Condition Expression</em>}' attribute.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @param value the new value of the '<em>Condition Expression</em>' attribute.
 	 * @see #getConditionExpression()
 	 * @generated
@@ -100,16 +90,14 @@ public interface ECTransition extends PositionableElement {
 	void setConditionExpression(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Destination</b></em>' reference. It is
-	 * bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getInTransitions
-	 * <em>In Transitions</em>}'. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Destination</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getInTransitions <em>In Transitions</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Destination</em>' attribute isn't clear, there
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Destination</em>' reference.
 	 * @see #setDestination(ECState)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition_Destination()
@@ -149,11 +137,9 @@ public interface ECTransition extends PositionableElement {
 	Event getConditionEvent();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionEvent
-	 * <em>Condition Event</em>}' reference. <!-- begin-user-doc --> <!--
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionEvent <em>Condition Event</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @param value the new value of the '<em>Condition Event</em>' reference.
 	 * @see #getConditionEvent()
 	 * @generated
@@ -162,27 +148,22 @@ public interface ECTransition extends PositionableElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        required="true"
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
 	 * @generated
 	 */
 	String getConditionText();
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
 	int getPriority();
 
 	/**
-	 * Returns the value of the '<em><b>ECC</b></em>' container reference. It is
-	 * bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECTransition
-	 * <em>EC Transition</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the value of the '<em><b>ECC</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECTransition <em>EC Transition</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the value of the '<em>ECC</em>' container reference.
 	 * @see #setECC(ECC)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition_ECC()
@@ -205,16 +186,14 @@ public interface ECTransition extends PositionableElement {
 	void setECC(ECC value);
 
 	/**
-	 * Returns the value of the '<em><b>Source</b></em>' reference. It is
-	 * bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getOutTransitions
-	 * <em>Out Transitions</em>}'. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Source</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getOutTransitions <em>Out Transitions</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Source</em>' attribute isn't clear, there really
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Source</em>' reference.
 	 * @see #setSource(ECState)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition_Source()
@@ -225,10 +204,8 @@ public interface ECTransition extends PositionableElement {
 	ECState getSource();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource
-	 * <em>Source</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource <em>Source</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Source</em>' reference.
 	 * @see #getSource()
 	 * @generated

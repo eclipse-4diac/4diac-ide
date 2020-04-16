@@ -63,28 +63,32 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Profile feature. <!-- begin-user-doc
+	 * This adds a property descriptor for the Profile feature.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected void addProfilePropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_DeviceType_profile_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_DeviceType_profile_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_DeviceType_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.DEVICE_TYPE__PROFILE, true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DeviceType_profile_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_DeviceType_profile_feature", "_UI_DeviceType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.DEVICE_TYPE__PROFILE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an
-	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
-	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -101,21 +105,19 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to
-		// use for
+		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
 	/**
-	 * This returns DeviceType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This returns DeviceType.gif.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -124,23 +126,23 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((DeviceType) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_DeviceType_type") : //$NON-NLS-1$
-				getString("_UI_DeviceType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((DeviceType)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_DeviceType_type") : //$NON-NLS-1$
+			getString("_UI_DeviceType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -148,48 +150,60 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(DeviceType.class)) {
-		case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
-		case LibraryElementPackage.DEVICE_TYPE__PROFILE:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-			return;
-		case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
-		case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
-		case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
-		case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-			return;
+			case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
+			case LibraryElementPackage.DEVICE_TYPE__PROFILE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
+			case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
+			case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
+			case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__VAR_DECLARATION,
-				LibraryElementFactory.eINSTANCE.createVarDeclaration()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.DEVICE_TYPE__VAR_DECLARATION,
+				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__VAR_DECLARATION,
-				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.DEVICE_TYPE__VAR_DECLARATION,
+				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__RESOURCE_TYPE_NAME,
-				LibraryElementFactory.eINSTANCE.createResourceTypeName()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.DEVICE_TYPE__RESOURCE_TYPE_NAME,
+				 LibraryElementFactory.eINSTANCE.createResourceTypeName()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__RESOURCE,
-				LibraryElementFactory.eINSTANCE.createResource()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.DEVICE_TYPE__RESOURCE,
+				 LibraryElementFactory.eINSTANCE.createResource()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__FB_NETWORK,
-				LibraryElementFactory.eINSTANCE.createFBNetwork()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.DEVICE_TYPE__FB_NETWORK,
+				 LibraryElementFactory.eINSTANCE.createFBNetwork()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS,
-				LibraryElementFactory.eINSTANCE.createAttributeDeclaration()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS,
+				 LibraryElementFactory.eINSTANCE.createAttributeDeclaration()));
 	}
 
 }

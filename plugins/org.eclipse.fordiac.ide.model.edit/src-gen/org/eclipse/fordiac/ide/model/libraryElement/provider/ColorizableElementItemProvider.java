@@ -35,10 +35,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement}
- * object. <!-- begin-user-doc --> <!-- end-user-doc -->
- * 
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement} object.
+ * <!-- begin-user-doc --> <!-- end-user-doc -->
  * @generated
  */
 public class ColorizableElementItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
@@ -69,9 +67,9 @@ public class ColorizableElementItemProvider extends ItemProviderAdapter implemen
 	}
 
 	/**
-	 * This returns ColorizableElement.gif. <!-- begin-user-doc --> <!--
+	 * This returns ColorizableElement.gif.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -80,9 +78,9 @@ public class ColorizableElementItemProvider extends ItemProviderAdapter implemen
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -91,10 +89,9 @@ public class ColorizableElementItemProvider extends ItemProviderAdapter implemen
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -102,26 +99,28 @@ public class ColorizableElementItemProvider extends ItemProviderAdapter implemen
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(ColorizableElement.class)) {
-		case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-			return;
+			case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.COLORIZABLE_ELEMENT__COLOR,
-				LibraryElementFactory.eINSTANCE.createColor()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.COLORIZABLE_ELEMENT__COLOR,
+				 LibraryElementFactory.eINSTANCE.createColor()));
 	}
 
 	/**

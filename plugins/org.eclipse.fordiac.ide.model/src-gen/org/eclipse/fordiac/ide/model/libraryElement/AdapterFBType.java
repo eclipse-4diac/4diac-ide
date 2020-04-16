@@ -21,8 +21,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType#getAdapterType
- * <em>Adapter Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType#getAdapterType <em>Adapter Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterFBType()

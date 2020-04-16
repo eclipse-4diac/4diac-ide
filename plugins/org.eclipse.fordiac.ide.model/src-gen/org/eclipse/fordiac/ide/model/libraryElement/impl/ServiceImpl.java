@@ -35,22 +35,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getRightInterface
- * <em>Right Interface</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getLeftInterface
- * <em>Left Interface</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getServiceSequence
- * <em>Service Sequence</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getRightInterface <em>Right Interface</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getLeftInterface <em>Left Interface</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getServiceSequence <em>Service Sequence</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ServiceImpl extends I4DIACElementImpl implements Service {
 	/**
-	 * The cached value of the '{@link #getRightInterface() <em>Right
-	 * Interface</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * The cached value of the '{@link #getRightInterface() <em>Right Interface</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getRightInterface()
 	 * @generated
 	 * @ordered
@@ -58,9 +54,8 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 	protected ServiceInterface rightInterface;
 
 	/**
-	 * The cached value of the '{@link #getLeftInterface() <em>Left Interface</em>}'
-	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getLeftInterface() <em>Left Interface</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getLeftInterface()
 	 * @generated
 	 * @ordered
@@ -68,10 +63,9 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 	protected ServiceInterface leftInterface;
 
 	/**
-	 * The cached value of the '{@link #getServiceSequence() <em>Service
-	 * Sequence</em>}' containment reference list. <!-- begin-user-doc --> <!--
+	 * The cached value of the '{@link #getServiceSequence() <em>Service Sequence</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getServiceSequence()
 	 * @generated
 	 * @ordered
@@ -80,7 +74,6 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected ServiceImpl() {
@@ -89,7 +82,6 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -99,41 +91,34 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<ServiceSequence> getServiceSequence() {
 		if (serviceSequence == null) {
-			serviceSequence = new EObjectContainmentEList.Resolving<ServiceSequence>(ServiceSequence.class, this,
-					LibraryElementPackage.SERVICE__SERVICE_SEQUENCE);
+			serviceSequence = new EObjectContainmentEList.Resolving<ServiceSequence>(ServiceSequence.class, this, LibraryElementPackage.SERVICE__SERVICE_SEQUENCE);
 		}
 		return serviceSequence;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public ServiceInterface getRightInterface() {
 		if (rightInterface != null && rightInterface.eIsProxy()) {
-			InternalEObject oldRightInterface = (InternalEObject) rightInterface;
-			rightInterface = (ServiceInterface) eResolveProxy(oldRightInterface);
+			InternalEObject oldRightInterface = (InternalEObject)rightInterface;
+			rightInterface = (ServiceInterface)eResolveProxy(oldRightInterface);
 			if (rightInterface != oldRightInterface) {
-				InternalEObject newRightInterface = (InternalEObject) rightInterface;
-				NotificationChain msgs = oldRightInterface.eInverseRemove(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__RIGHT_INTERFACE, null, null);
+				InternalEObject newRightInterface = (InternalEObject)rightInterface;
+				NotificationChain msgs = oldRightInterface.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__RIGHT_INTERFACE, null, null);
 				if (newRightInterface.eInternalContainer() == null) {
-					msgs = newRightInterface.eInverseAdd(this,
-							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__RIGHT_INTERFACE, null, msgs);
+					msgs = newRightInterface.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__RIGHT_INTERFACE, null, msgs);
 				}
-				if (msgs != null)
-					msgs.dispatch();
+				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							LibraryElementPackage.SERVICE__RIGHT_INTERFACE, oldRightInterface, rightInterface));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SERVICE__RIGHT_INTERFACE, oldRightInterface, rightInterface));
 			}
 		}
 		return rightInterface;
@@ -141,7 +126,6 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public ServiceInterface basicGetRightInterface() {
@@ -150,26 +134,20 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetRightInterface(ServiceInterface newRightInterface, NotificationChain msgs) {
 		ServiceInterface oldRightInterface = rightInterface;
 		rightInterface = newRightInterface;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-					LibraryElementPackage.SERVICE__RIGHT_INTERFACE, oldRightInterface, newRightInterface);
-			if (msgs == null)
-				msgs = notification;
-			else
-				msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE__RIGHT_INTERFACE, oldRightInterface, newRightInterface);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -177,42 +155,34 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 		if (newRightInterface != rightInterface) {
 			NotificationChain msgs = null;
 			if (rightInterface != null)
-				msgs = ((InternalEObject) rightInterface).eInverseRemove(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__RIGHT_INTERFACE, null, msgs);
+				msgs = ((InternalEObject)rightInterface).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__RIGHT_INTERFACE, null, msgs);
 			if (newRightInterface != null)
-				msgs = ((InternalEObject) newRightInterface).eInverseAdd(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__RIGHT_INTERFACE, null, msgs);
+				msgs = ((InternalEObject)newRightInterface).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__RIGHT_INTERFACE, null, msgs);
 			msgs = basicSetRightInterface(newRightInterface, msgs);
-			if (msgs != null)
-				msgs.dispatch();
-		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE__RIGHT_INTERFACE,
-					newRightInterface, newRightInterface));
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE__RIGHT_INTERFACE, newRightInterface, newRightInterface));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public ServiceInterface getLeftInterface() {
 		if (leftInterface != null && leftInterface.eIsProxy()) {
-			InternalEObject oldLeftInterface = (InternalEObject) leftInterface;
-			leftInterface = (ServiceInterface) eResolveProxy(oldLeftInterface);
+			InternalEObject oldLeftInterface = (InternalEObject)leftInterface;
+			leftInterface = (ServiceInterface)eResolveProxy(oldLeftInterface);
 			if (leftInterface != oldLeftInterface) {
-				InternalEObject newLeftInterface = (InternalEObject) leftInterface;
-				NotificationChain msgs = oldLeftInterface.eInverseRemove(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__LEFT_INTERFACE, null, null);
+				InternalEObject newLeftInterface = (InternalEObject)leftInterface;
+				NotificationChain msgs = oldLeftInterface.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__LEFT_INTERFACE, null, null);
 				if (newLeftInterface.eInternalContainer() == null) {
-					msgs = newLeftInterface.eInverseAdd(this,
-							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__LEFT_INTERFACE, null, msgs);
+					msgs = newLeftInterface.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__LEFT_INTERFACE, null, msgs);
 				}
-				if (msgs != null)
-					msgs.dispatch();
+				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							LibraryElementPackage.SERVICE__LEFT_INTERFACE, oldLeftInterface, leftInterface));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SERVICE__LEFT_INTERFACE, oldLeftInterface, leftInterface));
 			}
 		}
 		return leftInterface;
@@ -220,7 +190,6 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public ServiceInterface basicGetLeftInterface() {
@@ -229,26 +198,20 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetLeftInterface(ServiceInterface newLeftInterface, NotificationChain msgs) {
 		ServiceInterface oldLeftInterface = leftInterface;
 		leftInterface = newLeftInterface;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-					LibraryElementPackage.SERVICE__LEFT_INTERFACE, oldLeftInterface, newLeftInterface);
-			if (msgs == null)
-				msgs = notification;
-			else
-				msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE__LEFT_INTERFACE, oldLeftInterface, newLeftInterface);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -256,117 +219,107 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 		if (newLeftInterface != leftInterface) {
 			NotificationChain msgs = null;
 			if (leftInterface != null)
-				msgs = ((InternalEObject) leftInterface).eInverseRemove(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__LEFT_INTERFACE, null, msgs);
+				msgs = ((InternalEObject)leftInterface).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__LEFT_INTERFACE, null, msgs);
 			if (newLeftInterface != null)
-				msgs = ((InternalEObject) newLeftInterface).eInverseAdd(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__LEFT_INTERFACE, null, msgs);
+				msgs = ((InternalEObject)newLeftInterface).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__LEFT_INTERFACE, null, msgs);
 			msgs = basicSetLeftInterface(newLeftInterface, msgs);
-			if (msgs != null)
-				msgs.dispatch();
-		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE__LEFT_INTERFACE,
-					newLeftInterface, newLeftInterface));
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE__LEFT_INTERFACE, newLeftInterface, newLeftInterface));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryElementPackage.SERVICE__RIGHT_INTERFACE:
-			return basicSetRightInterface(null, msgs);
-		case LibraryElementPackage.SERVICE__LEFT_INTERFACE:
-			return basicSetLeftInterface(null, msgs);
-		case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
-			return ((InternalEList<?>) getServiceSequence()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.SERVICE__RIGHT_INTERFACE:
+				return basicSetRightInterface(null, msgs);
+			case LibraryElementPackage.SERVICE__LEFT_INTERFACE:
+				return basicSetLeftInterface(null, msgs);
+			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
+				return ((InternalEList<?>)getServiceSequence()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.SERVICE__RIGHT_INTERFACE:
-			if (resolve)
-				return getRightInterface();
-			return basicGetRightInterface();
-		case LibraryElementPackage.SERVICE__LEFT_INTERFACE:
-			if (resolve)
-				return getLeftInterface();
-			return basicGetLeftInterface();
-		case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
-			return getServiceSequence();
+			case LibraryElementPackage.SERVICE__RIGHT_INTERFACE:
+				if (resolve) return getRightInterface();
+				return basicGetRightInterface();
+			case LibraryElementPackage.SERVICE__LEFT_INTERFACE:
+				if (resolve) return getLeftInterface();
+				return basicGetLeftInterface();
+			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
+				return getServiceSequence();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.SERVICE__RIGHT_INTERFACE:
-			setRightInterface((ServiceInterface) newValue);
-			return;
-		case LibraryElementPackage.SERVICE__LEFT_INTERFACE:
-			setLeftInterface((ServiceInterface) newValue);
-			return;
-		case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
-			getServiceSequence().clear();
-			getServiceSequence().addAll((Collection<? extends ServiceSequence>) newValue);
-			return;
+			case LibraryElementPackage.SERVICE__RIGHT_INTERFACE:
+				setRightInterface((ServiceInterface)newValue);
+				return;
+			case LibraryElementPackage.SERVICE__LEFT_INTERFACE:
+				setLeftInterface((ServiceInterface)newValue);
+				return;
+			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
+				getServiceSequence().clear();
+				getServiceSequence().addAll((Collection<? extends ServiceSequence>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.SERVICE__RIGHT_INTERFACE:
-			setRightInterface((ServiceInterface) null);
-			return;
-		case LibraryElementPackage.SERVICE__LEFT_INTERFACE:
-			setLeftInterface((ServiceInterface) null);
-			return;
-		case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
-			getServiceSequence().clear();
-			return;
+			case LibraryElementPackage.SERVICE__RIGHT_INTERFACE:
+				setRightInterface((ServiceInterface)null);
+				return;
+			case LibraryElementPackage.SERVICE__LEFT_INTERFACE:
+				setLeftInterface((ServiceInterface)null);
+				return;
+			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
+				getServiceSequence().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.SERVICE__RIGHT_INTERFACE:
-			return rightInterface != null;
-		case LibraryElementPackage.SERVICE__LEFT_INTERFACE:
-			return leftInterface != null;
-		case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
-			return serviceSequence != null && !serviceSequence.isEmpty();
+			case LibraryElementPackage.SERVICE__RIGHT_INTERFACE:
+				return rightInterface != null;
+			case LibraryElementPackage.SERVICE__LEFT_INTERFACE:
+				return leftInterface != null;
+			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
+				return serviceSequence != null && !serviceSequence.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

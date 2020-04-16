@@ -28,10 +28,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 
 /**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface} object.
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
- * 
  * @generated
  */
 public class ServiceInterfaceItemProvider extends I4DIACElementItemProvider {
@@ -63,35 +61,47 @@ public class ServiceInterfaceItemProvider extends I4DIACElementItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Name feature. <!-- begin-user-doc -->
+	 * This adds a property descriptor for the Name feature.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_INamedElement_name_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_INamedElement_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_INamedElement_name_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", "_UI_INamedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.INAMED_ELEMENT__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Comment feature. <!-- begin-user-doc
+	 * This adds a property descriptor for the Comment feature.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected void addCommentPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_INamedElement_comment_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_INamedElement_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.INAMED_ELEMENT__COMMENT, true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_INamedElement_comment_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", "_UI_INamedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.INAMED_ELEMENT__COMMENT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -106,23 +116,23 @@ public class ServiceInterfaceItemProvider extends I4DIACElementItemProvider {
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ServiceInterface) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_ServiceInterface_type") : //$NON-NLS-1$
-				getString("_UI_ServiceInterface_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((ServiceInterface)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_ServiceInterface_type") : //$NON-NLS-1$
+			getString("_UI_ServiceInterface_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -130,19 +140,19 @@ public class ServiceInterfaceItemProvider extends I4DIACElementItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(ServiceInterface.class)) {
-		case LibraryElementPackage.SERVICE_INTERFACE__NAME:
-		case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-			return;
+			case LibraryElementPackage.SERVICE_INTERFACE__NAME:
+			case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

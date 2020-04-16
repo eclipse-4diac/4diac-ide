@@ -23,8 +23,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject#getAttributes
- * <em>Attributes</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject#getAttributes <em>Attributes</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConfigurableObject()
@@ -52,18 +51,13 @@ public interface ConfigurableObject extends INamedElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        typeDataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        valueDataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        commentDataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String" typeDataType="org.eclipse.emf.ecore.xml.type.String" valueDataType="org.eclipse.emf.ecore.xml.type.String" commentDataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */
 	void setAttribute(String attributeName, String type, String value, String comment);
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */
@@ -71,9 +65,7 @@ public interface ConfigurableObject extends INamedElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */
 	String getAttributeValue(String attributeName);

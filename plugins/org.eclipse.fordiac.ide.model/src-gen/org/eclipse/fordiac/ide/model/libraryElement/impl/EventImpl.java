@@ -39,22 +39,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getName
- * <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getComment
- * <em>Comment</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#isIsInput
- * <em>Is Input</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getInputConnections
- * <em>Input Connections</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getOutputConnections
- * <em>Output Connections</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getType
- * <em>Type</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getTypeName
- * <em>Type Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getWith
- * <em>With</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#isIsInput <em>Is Input</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getInputConnections <em>Input Connections</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getOutputConnections <em>Output Connections</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getTypeName <em>Type Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getWith <em>With</em>}</li>
  * </ul>
  *
  * @generated
@@ -83,7 +75,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -93,7 +84,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -103,7 +93,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	/**
 	 * The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered
@@ -113,7 +102,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	/**
 	 * The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered
@@ -153,9 +141,8 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	protected DataType type;
 
 	/**
-	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getTypeName()
 	 * @generated
 	 * @ordered
@@ -163,9 +150,8 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	protected static final String TYPE_NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getTypeName()
 	 * @generated
 	 * @ordered
@@ -173,9 +159,8 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	protected String typeName = TYPE_NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getWith() <em>With</em>}' containment
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getWith() <em>With</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWith()
 	 * @generated
 	 * @ordered
@@ -184,7 +169,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected EventImpl() {
@@ -193,7 +177,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -203,7 +186,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -216,7 +198,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -226,7 +207,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -236,7 +216,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -244,13 +223,11 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 		String oldComment = comment;
 		comment = newComment;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__COMMENT, oldComment,
-					comment));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__COMMENT, oldComment, comment));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -276,7 +253,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -286,7 +262,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -294,52 +269,45 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 		boolean oldIsInput = isInput;
 		isInput = newIsInput;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__IS_INPUT, oldIsInput,
-					isInput));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__IS_INPUT, oldIsInput, isInput));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this,
-					LibraryElementPackage.EVENT__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
+			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.EVENT__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
 		}
 		return inputConnections;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this,
-					LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
+			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
 		}
 		return outputConnections;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public DataType getType() {
 		if (type != null && type.eIsProxy()) {
-			InternalEObject oldType = (InternalEObject) type;
-			type = (DataType) eResolveProxy(oldType);
+			InternalEObject oldType = (InternalEObject)type;
+			type = (DataType)eResolveProxy(oldType);
 			if (type != oldType) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.EVENT__TYPE,
-							oldType, type));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.EVENT__TYPE, oldType, type));
 			}
 		}
 		return type;
@@ -347,7 +315,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public DataType basicGetType() {
@@ -356,7 +323,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -369,7 +335,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -379,7 +344,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -387,189 +351,178 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 		String oldTypeName = typeName;
 		typeName = newTypeName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__TYPE_NAME, oldTypeName,
-					typeName));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__TYPE_NAME, oldTypeName, typeName));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryElementPackage.EVENT__INPUT_CONNECTIONS:
-			return ((InternalEList<InternalEObject>) (InternalEList<?>) getInputConnections()).basicAdd(otherEnd, msgs);
-		case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
-			return ((InternalEList<InternalEObject>) (InternalEList<?>) getOutputConnections()).basicAdd(otherEnd,
-					msgs);
+			case LibraryElementPackage.EVENT__INPUT_CONNECTIONS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputConnections()).basicAdd(otherEnd, msgs);
+			case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputConnections()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryElementPackage.EVENT__INPUT_CONNECTIONS:
-			return ((InternalEList<?>) getInputConnections()).basicRemove(otherEnd, msgs);
-		case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
-			return ((InternalEList<?>) getOutputConnections()).basicRemove(otherEnd, msgs);
-		case LibraryElementPackage.EVENT__WITH:
-			return ((InternalEList<?>) getWith()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.EVENT__INPUT_CONNECTIONS:
+				return ((InternalEList<?>)getInputConnections()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
+				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.EVENT__WITH:
+				return ((InternalEList<?>)getWith()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.EVENT__NAME:
-			return getName();
-		case LibraryElementPackage.EVENT__COMMENT:
-			return getComment();
-		case LibraryElementPackage.EVENT__IS_INPUT:
-			return isIsInput();
-		case LibraryElementPackage.EVENT__INPUT_CONNECTIONS:
-			return getInputConnections();
-		case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
-			return getOutputConnections();
-		case LibraryElementPackage.EVENT__TYPE:
-			if (resolve)
-				return getType();
-			return basicGetType();
-		case LibraryElementPackage.EVENT__TYPE_NAME:
-			return getTypeName();
-		case LibraryElementPackage.EVENT__WITH:
-			return getWith();
+			case LibraryElementPackage.EVENT__NAME:
+				return getName();
+			case LibraryElementPackage.EVENT__COMMENT:
+				return getComment();
+			case LibraryElementPackage.EVENT__IS_INPUT:
+				return isIsInput();
+			case LibraryElementPackage.EVENT__INPUT_CONNECTIONS:
+				return getInputConnections();
+			case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
+				return getOutputConnections();
+			case LibraryElementPackage.EVENT__TYPE:
+				if (resolve) return getType();
+				return basicGetType();
+			case LibraryElementPackage.EVENT__TYPE_NAME:
+				return getTypeName();
+			case LibraryElementPackage.EVENT__WITH:
+				return getWith();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.EVENT__NAME:
-			setName((String) newValue);
-			return;
-		case LibraryElementPackage.EVENT__COMMENT:
-			setComment((String) newValue);
-			return;
-		case LibraryElementPackage.EVENT__IS_INPUT:
-			setIsInput((Boolean) newValue);
-			return;
-		case LibraryElementPackage.EVENT__INPUT_CONNECTIONS:
-			getInputConnections().clear();
-			getInputConnections().addAll((Collection<? extends Connection>) newValue);
-			return;
-		case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
-			getOutputConnections().clear();
-			getOutputConnections().addAll((Collection<? extends Connection>) newValue);
-			return;
-		case LibraryElementPackage.EVENT__TYPE:
-			setType((DataType) newValue);
-			return;
-		case LibraryElementPackage.EVENT__TYPE_NAME:
-			setTypeName((String) newValue);
-			return;
-		case LibraryElementPackage.EVENT__WITH:
-			getWith().clear();
-			getWith().addAll((Collection<? extends With>) newValue);
-			return;
+			case LibraryElementPackage.EVENT__NAME:
+				setName((String)newValue);
+				return;
+			case LibraryElementPackage.EVENT__COMMENT:
+				setComment((String)newValue);
+				return;
+			case LibraryElementPackage.EVENT__IS_INPUT:
+				setIsInput((Boolean)newValue);
+				return;
+			case LibraryElementPackage.EVENT__INPUT_CONNECTIONS:
+				getInputConnections().clear();
+				getInputConnections().addAll((Collection<? extends Connection>)newValue);
+				return;
+			case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
+				getOutputConnections().clear();
+				getOutputConnections().addAll((Collection<? extends Connection>)newValue);
+				return;
+			case LibraryElementPackage.EVENT__TYPE:
+				setType((DataType)newValue);
+				return;
+			case LibraryElementPackage.EVENT__TYPE_NAME:
+				setTypeName((String)newValue);
+				return;
+			case LibraryElementPackage.EVENT__WITH:
+				getWith().clear();
+				getWith().addAll((Collection<? extends With>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.EVENT__NAME:
-			setName(NAME_EDEFAULT);
-			return;
-		case LibraryElementPackage.EVENT__COMMENT:
-			setComment(COMMENT_EDEFAULT);
-			return;
-		case LibraryElementPackage.EVENT__IS_INPUT:
-			setIsInput(IS_INPUT_EDEFAULT);
-			return;
-		case LibraryElementPackage.EVENT__INPUT_CONNECTIONS:
-			getInputConnections().clear();
-			return;
-		case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
-			getOutputConnections().clear();
-			return;
-		case LibraryElementPackage.EVENT__TYPE:
-			setType((DataType) null);
-			return;
-		case LibraryElementPackage.EVENT__TYPE_NAME:
-			setTypeName(TYPE_NAME_EDEFAULT);
-			return;
-		case LibraryElementPackage.EVENT__WITH:
-			getWith().clear();
-			return;
+			case LibraryElementPackage.EVENT__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case LibraryElementPackage.EVENT__COMMENT:
+				setComment(COMMENT_EDEFAULT);
+				return;
+			case LibraryElementPackage.EVENT__IS_INPUT:
+				setIsInput(IS_INPUT_EDEFAULT);
+				return;
+			case LibraryElementPackage.EVENT__INPUT_CONNECTIONS:
+				getInputConnections().clear();
+				return;
+			case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
+				getOutputConnections().clear();
+				return;
+			case LibraryElementPackage.EVENT__TYPE:
+				setType((DataType)null);
+				return;
+			case LibraryElementPackage.EVENT__TYPE_NAME:
+				setTypeName(TYPE_NAME_EDEFAULT);
+				return;
+			case LibraryElementPackage.EVENT__WITH:
+				getWith().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.EVENT__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case LibraryElementPackage.EVENT__COMMENT:
-			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
-		case LibraryElementPackage.EVENT__IS_INPUT:
-			return isInput != IS_INPUT_EDEFAULT;
-		case LibraryElementPackage.EVENT__INPUT_CONNECTIONS:
-			return inputConnections != null && !inputConnections.isEmpty();
-		case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
-			return outputConnections != null && !outputConnections.isEmpty();
-		case LibraryElementPackage.EVENT__TYPE:
-			return type != null;
-		case LibraryElementPackage.EVENT__TYPE_NAME:
-			return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
-		case LibraryElementPackage.EVENT__WITH:
-			return with != null && !with.isEmpty();
+			case LibraryElementPackage.EVENT__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case LibraryElementPackage.EVENT__COMMENT:
+				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			case LibraryElementPackage.EVENT__IS_INPUT:
+				return isInput != IS_INPUT_EDEFAULT;
+			case LibraryElementPackage.EVENT__INPUT_CONNECTIONS:
+				return inputConnections != null && !inputConnections.isEmpty();
+			case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
+				return outputConnections != null && !outputConnections.isEmpty();
+			case LibraryElementPackage.EVENT__TYPE:
+				return type != null;
+			case LibraryElementPackage.EVENT__TYPE_NAME:
+				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
+			case LibraryElementPackage.EVENT__WITH:
+				return with != null && !with.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$

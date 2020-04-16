@@ -26,8 +26,7 @@ import org.eclipse.fordiac.ide.model.data.BaseType1;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement#getType
- * <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement#getType <em>Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTypedElement()
@@ -36,15 +35,15 @@ import org.eclipse.fordiac.ide.model.data.BaseType1;
  */
 public interface TypedElement extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Type</b></em>' attribute. The default value
-	 * is <code>"STRING"</code>. The literals are from the enumeration
-	 * {@link org.eclipse.fordiac.ide.model.data.BaseType1}. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Type</b></em>' attribute.
+	 * The default value is <code>"STRING"</code>.
+	 * The literals are from the enumeration {@link org.eclipse.fordiac.ide.model.data.BaseType1}.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Type</em>' attribute isn't clear, there really
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Type</em>' attribute.
 	 * @see org.eclipse.fordiac.ide.model.data.BaseType1
 	 * @see #setType(BaseType1)
@@ -55,10 +54,8 @@ public interface TypedElement extends EObject {
 	BaseType1 getType();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement#getType
-	 * <em>Type</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement#getType <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Type</em>' attribute.
 	 * @see org.eclipse.fordiac.ide.model.data.BaseType1
 	 * @see #getType()

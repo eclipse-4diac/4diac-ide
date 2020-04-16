@@ -30,17 +30,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl#getColor
- * <em>Color</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl#getColor <em>Color</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ColorizableElementImpl extends EObjectImpl implements ColorizableElement {
 	/**
-	 * The cached value of the '{@link #getColor() <em>Color</em>}' containment
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getColor() <em>Color</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getColor()
 	 * @generated
 	 * @ordered
@@ -49,7 +47,6 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected ColorizableElementImpl() {
@@ -58,7 +55,6 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -68,27 +64,22 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Color getColor() {
 		if (color != null && color.eIsProxy()) {
-			InternalEObject oldColor = (InternalEObject) color;
-			color = (Color) eResolveProxy(oldColor);
+			InternalEObject oldColor = (InternalEObject)color;
+			color = (Color)eResolveProxy(oldColor);
 			if (color != oldColor) {
-				InternalEObject newColor = (InternalEObject) color;
-				NotificationChain msgs = oldColor.eInverseRemove(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, null);
+				InternalEObject newColor = (InternalEObject)color;
+				NotificationChain msgs = oldColor.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, null);
 				if (newColor.eInternalContainer() == null) {
-					msgs = newColor.eInverseAdd(this,
-							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, msgs);
+					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, msgs);
 				}
-				if (msgs != null)
-					msgs.dispatch();
+				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, oldColor, color));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, oldColor, color));
 			}
 		}
 		return color;
@@ -96,7 +87,6 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Color basicGetColor() {
@@ -105,26 +95,20 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetColor(Color newColor, NotificationChain msgs) {
 		Color oldColor = color;
 		color = newColor;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-					LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, oldColor, newColor);
-			if (msgs == null)
-				msgs = notification;
-			else
-				msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, oldColor, newColor);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -132,42 +116,34 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 		if (newColor != color) {
 			NotificationChain msgs = null;
 			if (color != null)
-				msgs = ((InternalEObject) color).eInverseRemove(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, msgs);
+				msgs = ((InternalEObject)color).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, msgs);
 			if (newColor != null)
-				msgs = ((InternalEObject) newColor).eInverseAdd(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, msgs);
+				msgs = ((InternalEObject)newColor).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, msgs);
 			msgs = basicSetColor(newColor, msgs);
-			if (msgs != null)
-				msgs.dispatch();
-		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR,
-					newColor, newColor));
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, newColor, newColor));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Color getColorGen() {
 		if (color != null && color.eIsProxy()) {
-			InternalEObject oldColor = (InternalEObject) color;
-			color = (Color) eResolveProxy(oldColor);
+			InternalEObject oldColor = (InternalEObject)color;
+			color = (Color)eResolveProxy(oldColor);
 			if (color != oldColor) {
-				InternalEObject newColor = (InternalEObject) color;
-				NotificationChain msgs = oldColor.eInverseRemove(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, null);
+				InternalEObject newColor = (InternalEObject)color;
+				NotificationChain msgs = oldColor.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, null);
 				if (newColor.eInternalContainer() == null) {
-					msgs = newColor.eInverseAdd(this,
-							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, msgs);
+					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, msgs);
 				}
-				if (msgs != null)
-					msgs.dispatch();
+				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, oldColor, color));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, oldColor, color));
 			}
 		}
 		return color;
@@ -175,74 +151,68 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
-			return basicSetColor(null, msgs);
+			case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
+				return basicSetColor(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
-			if (resolve)
-				return getColor();
-			return basicGetColor();
+			case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
+				if (resolve) return getColor();
+				return basicGetColor();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
-			setColor((Color) newValue);
-			return;
+			case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
+				setColor((Color)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
-			setColor((Color) null);
-			return;
+			case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
+				setColor((Color)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
-			return color != null;
+			case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
+				return color != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 public class DeviceTypePaletteEntryImpl extends PaletteEntryImpl implements DeviceTypePaletteEntry {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected DeviceTypePaletteEntryImpl() {
@@ -41,7 +40,6 @@ public class DeviceTypePaletteEntryImpl extends PaletteEntryImpl implements Devi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -51,32 +49,29 @@ public class DeviceTypePaletteEntryImpl extends PaletteEntryImpl implements Devi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public DeviceType getDeviceType() {
 		LibraryElement type = getType();
-		if (type instanceof DeviceType) {
-			return (DeviceType) type;
+		if(type instanceof DeviceType){
+		   return (DeviceType) type;
 		}
 		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if (type instanceof DeviceType) {
+		if(type instanceof DeviceType){
 			super.setType(type);
-		} else {
+		}else{
 			super.setType(null);
-			if (null != type) {
-				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-						"tried to set no DeviceType as type entry for DeviceTypePaletteEntry"); //$NON-NLS-1$
+			if(null != type){
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no DeviceType as type entry for DeviceTypePaletteEntry");  //$NON-NLS-1$
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
@@ -84,7 +79,6 @@ public class DeviceTypePaletteEntryImpl extends PaletteEntryImpl implements Devi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

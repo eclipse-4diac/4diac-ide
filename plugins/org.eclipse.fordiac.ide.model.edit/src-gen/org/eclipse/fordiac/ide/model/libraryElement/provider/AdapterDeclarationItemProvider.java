@@ -27,10 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration}
- * object. <!-- begin-user-doc --> <!-- end-user-doc -->
- * 
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration} object.
+ * <!-- begin-user-doc --> <!-- end-user-doc -->
  * @generated
  */
 public class AdapterDeclarationItemProvider extends VarDeclarationItemProvider {
@@ -68,12 +66,19 @@ public class AdapterDeclarationItemProvider extends VarDeclarationItemProvider {
 	 * @generated
 	 */
 	protected void addAdapterFBPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_AdapterDeclaration_adapterFB_feature"), //$NON-NLS-1$
-				getString("_UI_PropertyDescriptor_description", "_UI_AdapterDeclaration_adapterFB_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_AdapterDeclaration_type"), //$NON-NLS-1$
-				LibraryElementPackage.Literals.ADAPTER_DECLARATION__ADAPTER_FB, true, false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AdapterDeclaration_adapterFB_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_AdapterDeclaration_adapterFB_feature", "_UI_AdapterDeclaration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.ADAPTER_DECLARATION__ADAPTER_FB,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -83,13 +88,19 @@ public class AdapterDeclarationItemProvider extends VarDeclarationItemProvider {
 	 * @generated
 	 */
 	protected void addPaletteEntryPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_AdapterDeclaration_paletteEntry_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_AdapterDeclaration_paletteEntry_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_AdapterDeclaration_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.ADAPTER_DECLARATION__PALETTE_ENTRY, true, false, true, null,
-						null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AdapterDeclaration_paletteEntry_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_AdapterDeclaration_paletteEntry_feature", "_UI_AdapterDeclaration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.ADAPTER_DECLARATION__PALETTE_ENTRY,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -117,10 +128,9 @@ public class AdapterDeclarationItemProvider extends VarDeclarationItemProvider {
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -130,10 +140,10 @@ public class AdapterDeclarationItemProvider extends VarDeclarationItemProvider {
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

@@ -76,16 +76,24 @@ public class WithItemProvider extends ItemProviderAdapter implements IEditingDom
 	 * @generated
 	 */
 	protected void addVariablesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_With_variables_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_With_variables_feature", "_UI_With_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						LibraryElementPackage.Literals.WITH__VARIABLES, true, false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_With_variables_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_With_variables_feature", "_UI_With_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.WITH__VARIABLES,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This returns With.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This returns With.gif.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -113,10 +121,9 @@ public class WithItemProvider extends ItemProviderAdapter implements IEditingDom
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -126,10 +133,10 @@ public class WithItemProvider extends ItemProviderAdapter implements IEditingDom
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

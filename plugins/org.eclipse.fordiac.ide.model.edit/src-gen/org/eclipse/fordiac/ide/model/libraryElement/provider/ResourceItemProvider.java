@@ -66,33 +66,47 @@ public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the X feature. <!-- begin-user-doc -->
+	 * This adds a property descriptor for the X feature.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected void addXPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_Resource_x_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_Resource_x_feature", "_UI_Resource_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						LibraryElementPackage.Literals.RESOURCE__X, true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Resource_x_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Resource_x_feature", "_UI_Resource_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.RESOURCE__X,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Y feature. <!-- begin-user-doc -->
+	 * This adds a property descriptor for the Y feature.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected void addYPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_Resource_y_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_Resource_y_feature", "_UI_Resource_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						LibraryElementPackage.Literals.RESOURCE__Y, true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Resource_y_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Resource_y_feature", "_UI_Resource_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.RESOURCE__Y,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -102,13 +116,19 @@ public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
 	 * @generated
 	 */
 	protected void addDeviceTypeResourcePropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_Resource_deviceTypeResource_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_Resource_deviceTypeResource_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_Resource_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.RESOURCE__DEVICE_TYPE_RESOURCE, true, false, false,
-						ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Resource_deviceTypeResource_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Resource_deviceTypeResource_feature", "_UI_Resource_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.RESOURCE__DEVICE_TYPE_RESOURCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -134,10 +154,9 @@ public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -145,36 +164,42 @@ public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Resource.class)) {
-		case LibraryElementPackage.RESOURCE__VAR_DECLARATIONS:
-		case LibraryElementPackage.RESOURCE__FB_NETWORK:
-		case LibraryElementPackage.RESOURCE__X:
-		case LibraryElementPackage.RESOURCE__Y:
-		case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-			return;
+			case LibraryElementPackage.RESOURCE__VAR_DECLARATIONS:
+			case LibraryElementPackage.RESOURCE__FB_NETWORK:
+			case LibraryElementPackage.RESOURCE__X:
+			case LibraryElementPackage.RESOURCE__Y:
+			case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.IVAR_ELEMENT__VAR_DECLARATIONS,
-				LibraryElementFactory.eINSTANCE.createVarDeclaration()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.IVAR_ELEMENT__VAR_DECLARATIONS,
+				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.IVAR_ELEMENT__VAR_DECLARATIONS,
-				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.IVAR_ELEMENT__VAR_DECLARATIONS,
+				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.RESOURCE__FB_NETWORK,
-				LibraryElementFactory.eINSTANCE.createFBNetwork()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.RESOURCE__FB_NETWORK,
+				 LibraryElementFactory.eINSTANCE.createFBNetwork()));
 	}
 
 }

@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 public class STAlgorithmImpl extends TextAlgorithmImpl implements STAlgorithm {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected STAlgorithmImpl() {
@@ -35,7 +34,6 @@ public class STAlgorithmImpl extends TextAlgorithmImpl implements STAlgorithm {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

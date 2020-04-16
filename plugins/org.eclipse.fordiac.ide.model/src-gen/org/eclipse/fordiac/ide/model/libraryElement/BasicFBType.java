@@ -23,10 +23,8 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getECC
- * <em>ECC</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getAlgorithm
- * <em>Algorithm</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getECC <em>ECC</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getAlgorithm <em>Algorithm</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getBasicFBType()
@@ -35,33 +33,28 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface BasicFBType extends BaseFBType {
 	/**
-	 * Returns the value of the '<em><b>ECC</b></em>' containment reference. It is
-	 * bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType
-	 * <em>Basic FB Type</em>}'. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>ECC</b></em>' containment reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType <em>Basic FB Type</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>ECC</em>' containment reference isn't clear, there
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>ECC</em>' containment reference.
 	 * @see #setECC(ECC)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getBasicFBType_ECC()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType
 	 * @model opposite="basicFBType" containment="true"
-	 *        extendedMetaData="kind='element' name='ECC'
-	 *        namespace='##targetNamespace'"
+	 *        extendedMetaData="kind='element' name='ECC' namespace='##targetNamespace'"
 	 * @generated
 	 */
 	ECC getECC();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getECC
-	 * <em>ECC</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getECC <em>ECC</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @param value the new value of the '<em>ECC</em>' containment reference.
 	 * @see #getECC()
 	 * @generated
@@ -89,7 +82,6 @@ public interface BasicFBType extends BaseFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model required="true" nameRequired="true"
 	 * @generated
 	 */

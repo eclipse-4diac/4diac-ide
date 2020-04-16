@@ -23,8 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement#getColor
- * <em>Color</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement#getColor <em>Color</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getColorizableElement()
@@ -50,11 +49,9 @@ public interface ColorizableElement extends EObject {
 	Color getColor();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement#getColor
-	 * <em>Color</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement#getColor <em>Color</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @param value the new value of the '<em>Color</em>' containment reference.
 	 * @see #getColor()
 	 * @generated

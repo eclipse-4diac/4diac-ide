@@ -27,10 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl#getName
- * <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl#getComment
- * <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl#getComment <em>Comment</em>}</li>
  * </ul>
  *
  * @generated
@@ -59,7 +57,6 @@ public abstract class AlgorithmImpl extends I4DIACElementImpl implements Algorit
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -69,7 +66,6 @@ public abstract class AlgorithmImpl extends I4DIACElementImpl implements Algorit
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -78,7 +74,6 @@ public abstract class AlgorithmImpl extends I4DIACElementImpl implements Algorit
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected AlgorithmImpl() {
@@ -87,7 +82,6 @@ public abstract class AlgorithmImpl extends I4DIACElementImpl implements Algorit
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -97,7 +91,6 @@ public abstract class AlgorithmImpl extends I4DIACElementImpl implements Algorit
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -107,7 +100,6 @@ public abstract class AlgorithmImpl extends I4DIACElementImpl implements Algorit
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -115,13 +107,11 @@ public abstract class AlgorithmImpl extends I4DIACElementImpl implements Algorit
 		String oldComment = comment;
 		comment = newComment;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ALGORITHM__COMMENT, oldComment,
-					comment));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ALGORITHM__COMMENT, oldComment, comment));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -146,81 +136,75 @@ public abstract class AlgorithmImpl extends I4DIACElementImpl implements Algorit
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.ALGORITHM__NAME:
-			return getName();
-		case LibraryElementPackage.ALGORITHM__COMMENT:
-			return getComment();
+			case LibraryElementPackage.ALGORITHM__NAME:
+				return getName();
+			case LibraryElementPackage.ALGORITHM__COMMENT:
+				return getComment();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.ALGORITHM__NAME:
-			setName((String) newValue);
-			return;
-		case LibraryElementPackage.ALGORITHM__COMMENT:
-			setComment((String) newValue);
-			return;
+			case LibraryElementPackage.ALGORITHM__NAME:
+				setName((String)newValue);
+				return;
+			case LibraryElementPackage.ALGORITHM__COMMENT:
+				setComment((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.ALGORITHM__NAME:
-			setName(NAME_EDEFAULT);
-			return;
-		case LibraryElementPackage.ALGORITHM__COMMENT:
-			setComment(COMMENT_EDEFAULT);
-			return;
+			case LibraryElementPackage.ALGORITHM__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case LibraryElementPackage.ALGORITHM__COMMENT:
+				setComment(COMMENT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.ALGORITHM__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case LibraryElementPackage.ALGORITHM__COMMENT:
-			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			case LibraryElementPackage.ALGORITHM__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case LibraryElementPackage.ALGORITHM__COMMENT:
+				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$

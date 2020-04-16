@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 public class ResourceTypeFBImpl extends FBImpl implements ResourceTypeFB {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected ResourceTypeFBImpl() {
@@ -38,7 +37,6 @@ public class ResourceTypeFBImpl extends FBImpl implements ResourceTypeFB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -48,7 +46,6 @@ public class ResourceTypeFBImpl extends FBImpl implements ResourceTypeFB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

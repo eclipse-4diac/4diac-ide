@@ -23,12 +23,9 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getVarDeclaration
- * <em>Var Declaration</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getFBNetwork
- * <em>FB Network</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getSupportedFBTypes
- * <em>Supported FB Types</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getVarDeclaration <em>Var Declaration</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getFBNetwork <em>FB Network</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getSupportedFBTypes <em>Supported FB Types</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getResourceType()
@@ -63,7 +60,6 @@ public interface ResourceType extends CompilableType {
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>FB Network</em>' containment reference.
 	 * @see #setFBNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getResourceType_FBNetwork()
@@ -73,13 +69,10 @@ public interface ResourceType extends CompilableType {
 	FBNetwork getFBNetwork();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getFBNetwork
-	 * <em>FB Network</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getFBNetwork <em>FB Network</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
-	 * @param value the new value of the '<em>FB Network</em>' containment
-	 *              reference.
+	 * @param value the new value of the '<em>FB Network</em>' containment reference.
 	 * @see #getFBNetwork()
 	 * @generated
 	 */
@@ -103,11 +96,9 @@ public interface ResourceType extends CompilableType {
 	FBType getSupportedFBTypes();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getSupportedFBTypes
-	 * <em>Supported FB Types</em>}' reference. <!-- begin-user-doc --> <!--
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getSupportedFBTypes <em>Supported FB Types</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @param value the new value of the '<em>Supported FB Types</em>' reference.
 	 * @see #getSupportedFBTypes()
 	 * @generated

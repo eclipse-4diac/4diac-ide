@@ -36,22 +36,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getInputPrimitive
- * <em>Input Primitive</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getOutputPrimitive
- * <em>Output Primitive</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getTestResult
- * <em>Test Result</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getInputPrimitive <em>Input Primitive</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getOutputPrimitive <em>Output Primitive</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getTestResult <em>Test Result</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransaction {
 	/**
-	 * The cached value of the '{@link #getInputPrimitive() <em>Input
-	 * Primitive</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * The cached value of the '{@link #getInputPrimitive() <em>Input Primitive</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getInputPrimitive()
 	 * @generated
 	 * @ordered
@@ -59,10 +55,9 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	protected InputPrimitive inputPrimitive;
 
 	/**
-	 * The cached value of the '{@link #getOutputPrimitive() <em>Output
-	 * Primitive</em>}' containment reference list. <!-- begin-user-doc --> <!--
+	 * The cached value of the '{@link #getOutputPrimitive() <em>Output Primitive</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getOutputPrimitive()
 	 * @generated
 	 * @ordered
@@ -70,9 +65,8 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	protected EList<OutputPrimitive> outputPrimitive;
 
 	/**
-	 * The default value of the '{@link #getTestResult() <em>Test Result</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getTestResult() <em>Test Result</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getTestResult()
 	 * @generated
 	 * @ordered
@@ -83,7 +77,6 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected ServiceTransactionImpl() {
@@ -92,7 +85,6 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -102,7 +94,6 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -112,26 +103,20 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetInputPrimitive(InputPrimitive newInputPrimitive, NotificationChain msgs) {
 		InputPrimitive oldInputPrimitive = inputPrimitive;
 		inputPrimitive = newInputPrimitive;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-					LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, oldInputPrimitive, newInputPrimitive);
-			if (msgs == null)
-				msgs = notification;
-			else
-				msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, oldInputPrimitive, newInputPrimitive);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -139,31 +124,24 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		if (newInputPrimitive != inputPrimitive) {
 			NotificationChain msgs = null;
 			if (inputPrimitive != null)
-				msgs = ((InternalEObject) inputPrimitive).eInverseRemove(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, null,
-						msgs);
+				msgs = ((InternalEObject)inputPrimitive).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, null, msgs);
 			if (newInputPrimitive != null)
-				msgs = ((InternalEObject) newInputPrimitive).eInverseAdd(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, null,
-						msgs);
+				msgs = ((InternalEObject)newInputPrimitive).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, null, msgs);
 			msgs = basicSetInputPrimitive(newInputPrimitive, msgs);
-			if (msgs != null)
-				msgs.dispatch();
-		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, newInputPrimitive, newInputPrimitive));
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, newInputPrimitive, newInputPrimitive));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<OutputPrimitive> getOutputPrimitive() {
 		if (outputPrimitive == null) {
-			outputPrimitive = new EObjectContainmentEList<OutputPrimitive>(OutputPrimitive.class, this,
-					LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE);
+			outputPrimitive = new EObjectContainmentEList<OutputPrimitive>(OutputPrimitive.class, this, LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE);
 		}
 		return outputPrimitive;
 	}
@@ -227,96 +205,91 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE:
-			return basicSetInputPrimitive(null, msgs);
-		case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
-			return ((InternalEList<?>) getOutputPrimitive()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE:
+				return basicSetInputPrimitive(null, msgs);
+			case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
+				return ((InternalEList<?>)getOutputPrimitive()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE:
-			return getInputPrimitive();
-		case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
-			return getOutputPrimitive();
-		case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
-			return getTestResult();
+			case LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE:
+				return getInputPrimitive();
+			case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
+				return getOutputPrimitive();
+			case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
+				return getTestResult();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE:
-			setInputPrimitive((InputPrimitive) newValue);
-			return;
-		case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
-			getOutputPrimitive().clear();
-			getOutputPrimitive().addAll((Collection<? extends OutputPrimitive>) newValue);
-			return;
-		case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
-			setTestResult((Integer) newValue);
-			return;
+			case LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE:
+				setInputPrimitive((InputPrimitive)newValue);
+				return;
+			case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
+				getOutputPrimitive().clear();
+				getOutputPrimitive().addAll((Collection<? extends OutputPrimitive>)newValue);
+				return;
+			case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
+				setTestResult((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE:
-			setInputPrimitive((InputPrimitive) null);
-			return;
-		case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
-			getOutputPrimitive().clear();
-			return;
-		case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
-			unsetTestResult();
-			return;
+			case LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE:
+				setInputPrimitive((InputPrimitive)null);
+				return;
+			case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
+				getOutputPrimitive().clear();
+				return;
+			case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
+				unsetTestResult();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE:
-			return inputPrimitive != null;
-		case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
-			return outputPrimitive != null && !outputPrimitive.isEmpty();
-		case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
-			return isSetTestResult();
+			case LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE:
+				return inputPrimitive != null;
+			case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
+				return outputPrimitive != null && !outputPrimitive.isEmpty();
+			case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
+				return isSetTestResult();
 		}
 		return super.eIsSet(featureID);
 	}

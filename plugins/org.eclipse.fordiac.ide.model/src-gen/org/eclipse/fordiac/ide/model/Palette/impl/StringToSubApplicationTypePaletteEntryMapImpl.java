@@ -36,20 +36,17 @@ import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToSubApplicationTypePaletteEntryMapImpl#getTypedKey
- * <em>Key</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToSubApplicationTypePaletteEntryMapImpl#getTypedValue
- * <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToSubApplicationTypePaletteEntryMapImpl#getTypedKey <em>Key</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToSubApplicationTypePaletteEntryMapImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
-		implements BasicEMap.Entry<String, SubApplicationTypePaletteEntry> {
+		implements BasicEMap.Entry<String,SubApplicationTypePaletteEntry> {
 	/**
 	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -69,7 +66,6 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 	/**
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getTypedValue()
 	 * @generated
 	 * @ordered
@@ -78,7 +74,6 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected StringToSubApplicationTypePaletteEntryMapImpl() {
@@ -87,7 +82,6 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -97,7 +91,6 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public String getTypedKey() {
@@ -106,30 +99,26 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setTypedKey(String newKey) {
 		String oldKey = key;
 		key = newKey;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__KEY, oldKey, key));
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__KEY, oldKey, key));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public SubApplicationTypePaletteEntry getTypedValue() {
 		if (value != null && value.eIsProxy()) {
-			InternalEObject oldValue = (InternalEObject) value;
-			value = (SubApplicationTypePaletteEntry) eResolveProxy(oldValue);
+			InternalEObject oldValue = (InternalEObject)value;
+			value = (SubApplicationTypePaletteEntry)eResolveProxy(oldValue);
 			if (value != oldValue) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE, oldValue, value));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE, oldValue, value));
 			}
 		}
 		return value;
@@ -137,7 +126,6 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public SubApplicationTypePaletteEntry basicGetTypedValue() {
@@ -146,96 +134,87 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setTypedValue(SubApplicationTypePaletteEntry newValue) {
 		SubApplicationTypePaletteEntry oldValue = value;
 		value = newValue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE, oldValue, value));
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE, oldValue, value));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__KEY:
-			return getTypedKey();
-		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE:
-			if (resolve)
-				return getTypedValue();
-			return basicGetTypedValue();
+			case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__KEY:
+				return getTypedKey();
+			case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE:
+				if (resolve) return getTypedValue();
+				return basicGetTypedValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__KEY:
-			setTypedKey((String) newValue);
-			return;
-		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE:
-			setTypedValue((SubApplicationTypePaletteEntry) newValue);
-			return;
+			case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__KEY:
+				setTypedKey((String)newValue);
+				return;
+			case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE:
+				setTypedValue((SubApplicationTypePaletteEntry)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__KEY:
-			setTypedKey(KEY_EDEFAULT);
-			return;
-		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE:
-			setTypedValue((SubApplicationTypePaletteEntry) null);
-			return;
+			case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__KEY:
+				setTypedKey(KEY_EDEFAULT);
+				return;
+			case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE:
+				setTypedValue((SubApplicationTypePaletteEntry)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__KEY:
-			return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
-		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE:
-			return value != null;
+			case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__KEY:
+				return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
+			case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE:
+				return value != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (key: "); //$NON-NLS-1$
@@ -246,14 +225,12 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected int hash = -1;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -267,7 +244,6 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -277,7 +253,6 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -287,7 +262,6 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -297,7 +271,6 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -307,7 +280,6 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -319,14 +291,12 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	public EMap<String, SubApplicationTypePaletteEntry> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null
-				: (EMap<String, SubApplicationTypePaletteEntry>) container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<String, SubApplicationTypePaletteEntry>)container.eGet(eContainmentFeature());
 	}
 
 } // StringToSubApplicationTypePaletteEntryMapImpl

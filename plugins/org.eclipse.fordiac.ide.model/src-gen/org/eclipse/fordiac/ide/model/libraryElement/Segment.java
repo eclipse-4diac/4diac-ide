@@ -23,12 +23,9 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getWidth
- * <em>Width</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getVarDeclarations
- * <em>Var Declarations</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getOutConnections
- * <em>Out Connections</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getWidth <em>Width</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getVarDeclarations <em>Var Declarations</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getOutConnections <em>Out Connections</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSegment()
@@ -37,14 +34,14 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface Segment extends TypedConfigureableObject, PositionableElement, ColorizableElement {
 	/**
-	 * Returns the value of the '<em><b>Width</b></em>' attribute. The default value
-	 * is <code>"200"</code>. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Width</b></em>' attribute.
+	 * The default value is <code>"200"</code>.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Width</em>' attribute isn't clear, there really
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Width</em>' attribute.
 	 * @see #setWidth(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSegment_Width()
@@ -55,10 +52,8 @@ public interface Segment extends TypedConfigureableObject, PositionableElement, 
 	int getWidth();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getWidth
-	 * <em>Width</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getWidth <em>Width</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Width</em>' attribute.
 	 * @see #getWidth()
 	 * @generated
@@ -86,17 +81,14 @@ public interface Segment extends TypedConfigureableObject, PositionableElement, 
 
 	/**
 	 * Returns the value of the '<em><b>Out Connections</b></em>' reference list.
-	 * The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.libraryElement.Link}. It is
-	 * bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Link#getSegment
-	 * <em>Segment</em>}'. <!-- begin-user-doc -->
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.Link}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.Link#getSegment <em>Segment</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Out Connections</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Out Connections</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSegment_OutConnections()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Link#getSegment
@@ -107,7 +99,6 @@ public interface Segment extends TypedConfigureableObject, PositionableElement, 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

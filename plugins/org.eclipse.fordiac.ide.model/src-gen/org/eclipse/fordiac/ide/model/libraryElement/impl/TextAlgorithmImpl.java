@@ -26,8 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextAlgorithmImpl#getText
- * <em>Text</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextAlgorithmImpl#getText <em>Text</em>}</li>
  * </ul>
  *
  * @generated
@@ -54,7 +53,6 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected TextAlgorithmImpl() {
@@ -63,7 +61,6 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -73,7 +70,6 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -83,7 +79,6 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -91,77 +86,70 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 		String oldText = text;
 		text = newText;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.TEXT_ALGORITHM__TEXT, oldText,
-					text));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.TEXT_ALGORITHM__TEXT, oldText, text));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
-			return getText();
+			case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
+				return getText();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
-			setText((String) newValue);
-			return;
+			case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
+				setText((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
-			setText(TEXT_EDEFAULT);
-			return;
+			case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
+				setText(TEXT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
-			return TEXT_EDEFAULT == null ? text != null : !TEXT_EDEFAULT.equals(text);
+			case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
+				return TEXT_EDEFAULT == null ? text != null : !TEXT_EDEFAULT.equals(text);
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (text: "); //$NON-NLS-1$

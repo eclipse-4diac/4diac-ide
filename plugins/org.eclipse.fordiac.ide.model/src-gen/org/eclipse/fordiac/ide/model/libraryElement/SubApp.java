@@ -21,8 +21,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork
- * <em>Sub App Network</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork <em>Sub App Network</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp()
@@ -31,14 +30,13 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  */
 public interface SubApp extends FBNetworkElement {
 	/**
-	 * Returns the value of the '<em><b>Sub App Network</b></em>' containment
-	 * reference. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Sub App Network</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Sub App Network</em>' containment reference isn't
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Sub App Network</em>' containment reference.
 	 * @see #setSubAppNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp_SubAppNetwork()
@@ -48,13 +46,10 @@ public interface SubApp extends FBNetworkElement {
 	FBNetwork getSubAppNetwork();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork
-	 * <em>Sub App Network</em>}' containment reference. <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork <em>Sub App Network</em>}' containment reference.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value the new value of the '<em>Sub App Network</em>' containment
-	 *              reference.
+	 * @param value the new value of the '<em>Sub App Network</em>' containment reference.
 	 * @see #getSubAppNetwork()
 	 * @generated
 	 */
@@ -62,7 +57,6 @@ public interface SubApp extends FBNetworkElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

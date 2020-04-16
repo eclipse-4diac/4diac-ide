@@ -61,12 +61,10 @@ public class FBTypeItemProvider extends CompilableTypeItemProvider {
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an
-	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
-	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -81,21 +79,19 @@ public class FBTypeItemProvider extends CompilableTypeItemProvider {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to
-		// use for
+		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
 	/**
-	 * This returns FBType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This returns FBType.gif.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -104,23 +100,23 @@ public class FBTypeItemProvider extends CompilableTypeItemProvider {
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((FBType) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_FBType_type") : //$NON-NLS-1$
-				getString("_UI_FBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((FBType)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_FBType_type") : //$NON-NLS-1$
+			getString("_UI_FBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -128,30 +124,34 @@ public class FBTypeItemProvider extends CompilableTypeItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(FBType.class)) {
-		case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
-		case LibraryElementPackage.FB_TYPE__SERVICE:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-			return;
+			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
+			case LibraryElementPackage.FB_TYPE__SERVICE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.FB_TYPE__INTERFACE_LIST,
-				LibraryElementFactory.eINSTANCE.createInterfaceList()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.FB_TYPE__INTERFACE_LIST,
+				 LibraryElementFactory.eINSTANCE.createInterfaceList()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.FB_TYPE__SERVICE,
-				LibraryElementFactory.eINSTANCE.createService()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.FB_TYPE__SERVICE,
+				 LibraryElementFactory.eINSTANCE.createService()));
 	}
 
 }
