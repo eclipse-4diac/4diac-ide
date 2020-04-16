@@ -351,8 +351,7 @@
                viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
             <includes>
                <contentExtension
-                     isRoot="true"
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent">
+                    pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent">
                	</contentExtension> 
                <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
               <!-- <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.navigator.filters.showonly61499Types"/> -->
@@ -360,7 +359,8 @@
                		</contentExtension> 
                <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.typelib.systemexplorer">
               		</contentExtension> 
-      		   <contentExtension pattern="org.eclipse.ui.navigator.resourceContent"/>             
+      		   <contentExtension  isRoot="true"
+                     pattern="org.eclipse.ui.navigator.resourceContent"/>             
                <contentExtension
                      pattern="org.eclipse.ui.navigator.resources.filters.*">
                </contentExtension>
@@ -407,9 +407,16 @@
             <or>
                <instanceof 
 	                     value="org.eclipse.emf.ecore.EObject"/>
-               <instanceof 
-                     value="org.eclipse.core.resources.IFile">
-               </instanceof>
+                <and>
+                   <instanceof 
+                         value="org.eclipse.core.resources.IFile">
+                   </instanceof>
+                   <test
+                         forcePluginActivation="true"   
+                         property="org.eclipse.core.resources.extension"
+                         value="sys">
+                   </test>
+               </and>
             </or>
             </triggerPoints>
             <commonSorter
@@ -445,7 +452,7 @@
                   </or>
                </parentExpression>
             </commonSorter>          
-      </navigatorContent>
+       </navigatorContent>          
       <commonWizard
             type="new"
             wizardId="org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard">

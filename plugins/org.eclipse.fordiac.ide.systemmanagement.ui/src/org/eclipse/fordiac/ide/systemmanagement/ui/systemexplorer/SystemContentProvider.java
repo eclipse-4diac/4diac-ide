@@ -19,22 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemmanagement.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 
 public class SystemContentProvider extends AdapterFactoryContentProvider implements DistributedSystemListener {
 
 	private static ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
-
-	private BaseWorkbenchContentProvider workbenchContentProvider = new BaseWorkbenchContentProvider();
 
 	public SystemContentProvider() {
 		super(systemAdapterFactory);
@@ -48,32 +44,30 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof IResource) {
-			Object[] children = workbenchContentProvider.getChildren(parentElement);
-			List<Object> newChildren = new ArrayList<>(children.length);
-			for (Object child : children) {
-				if ((child instanceof IFile) && ("sys".equalsIgnoreCase(((IFile) child).getFileExtension()))) {
-					child = SystemManager.INSTANCE.getSystem((IFile) child);
-				}
-				newChildren.add(child);
-			}
-			return newChildren.toArray();
+		if (parentElement instanceof IFile) {
+			// retrieve the children for the Automation system
+			return super.getChildren(SystemManager.INSTANCE.getSystem((IFile) parentElement));
 		}
 		return super.getChildren(parentElement);
 	}
 
 	@Override
 	public Object getParent(Object object) {
-		if (object instanceof AutomationSystem) {
-			return ((AutomationSystem) object).getSystemFile().getParent();
+		if (object instanceof Application) {
+			return ((Application) object).getAutomationSystem().getSystemFile();
+		}
+		if (object instanceof SystemConfiguration) {
+			return ((SystemConfiguration) object).getAutomationSystem().getSystemFile();
 		}
 		return super.getParent(object);
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if (element instanceof IProject) {
-			return (null != SystemManager.INSTANCE.getSystemForName(((IProject) element).getName()));
+		if (element instanceof IFile) {
+			// if we are here the file is a system configuration file. For this we always
+			// have children
+			return true;
 		}
 		return super.hasChildren(element);
 	}

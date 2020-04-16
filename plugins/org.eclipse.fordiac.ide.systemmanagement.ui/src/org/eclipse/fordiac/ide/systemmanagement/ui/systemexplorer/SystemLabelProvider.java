@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,24 +16,22 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.navigator.IDescriptionProvider;
 
 public class SystemLabelProvider extends AdapterFactoryLabelProvider implements IDescriptionProvider {
 
 	private static ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 
-	private ILabelProvider workbenchLabelProvider = WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider();
+//	private ILabelProvider workbenchLabelProvider = WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider();
 
 	public SystemLabelProvider() {
 		super(systemAdapterFactory);
@@ -41,7 +39,7 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	@Override
 	public void dispose() {
-		workbenchLabelProvider.dispose();
+//		workbenchLabelProvider.dispose();
 		super.dispose();
 	}
 
@@ -55,11 +53,10 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	@Override
 	public Image getImage(Object object) {
-		if (object instanceof AutomationSystem) {
+		if (object instanceof IFile) {
+			// provide the icon for the system configuration file,
+			// TODO this should in the future provided by a dedicated editor
 			return FordiacImage.ICON_SYSTEM_PERSPECTIVE.getImage();
-		}
-		if (object instanceof IResource) {
-			return null;
 		}
 		return super.getImage(object);
 	}
@@ -71,7 +68,7 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static List<AdapterFactory> createFactoryList() {
-		ArrayList<AdapterFactory> factories = new ArrayList<AdapterFactory>();
+		ArrayList<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new LibraryElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());
 		return factories;
