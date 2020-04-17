@@ -15,10 +15,12 @@ package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeMemberVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateMemberVariableCommand;
@@ -65,10 +67,8 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	private TableViewer structViewer;
 	private ComboBoxCellEditor typeDropDown;
 	private final DataTypeLibrary dataTypeLibrary;
-	private final String[] dataTypes;
-	private AddDeleteReorderListWidget buttons;
+	private String[] dataTypes;
 	private final CommandStack cmdStack;
-	private TabbedPropertySheetWidgetFactory widgetFactory;
 
 	private final DataType dataType;
 
@@ -78,28 +78,29 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		this.cmdStack = cmdStack;
 		this.dataType = dataType;
 		this.dataTypeLibrary = dataTypeLibrary;
-		dataTypes = new String[dataTypeLibrary.getDataTypes().size()];
 	}
 
 	public void createPartControl(Composite parent) {
-		widgetFactory = new TabbedPropertySheetWidgetFactory();
+		TabbedPropertySheetWidgetFactory widgetFactory = new TabbedPropertySheetWidgetFactory();
 		parent.setLayout(new GridLayout(2, false));
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		showLabel(parent);
 
 		List<DataType> dataTypeList = dataTypeLibrary.getDataTypesSorted();
-		for (int i = 0; i < dataTypeLibrary.getDataTypesSorted().size(); i++) {
-			dataTypes[i] = dataTypeList.get(i).getName();
-		}
 
-		buttons = new AddDeleteReorderListWidget();
+		dataTypes = dataTypeList.stream().filter(Objects::nonNull).map(DataType::getName).toArray(String[]::new);
+
+		AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(parent, widgetFactory);
 
 		showTable(parent);
 
 		buttons.bindToTableViewer(structViewer, this,
 				ref -> new CreateMemberVariableCommand(getType(), getInsertionIndex(), getVarName(), getDataType()),
-				ref -> new DeleteMemberVariableCommand(getType(), (VarDeclaration) ref));
+				ref -> new DeleteMemberVariableCommand(getType(), (VarDeclaration) ref),
+				ref -> new ChangeMemberVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, true),
+				ref -> new ChangeMemberVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref,
+						false));
 	}
 
 	private void showLabel(Composite parent) {
@@ -126,6 +127,10 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	private String getVarName() {
 		return (null != getLastSelectedVariable()) ? getLastSelectedVariable().getName() : null;
+	}
+
+	public TableViewer getStructViewer() {
+		return structViewer;
 	}
 
 	private int getInsertionIndex() {

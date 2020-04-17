@@ -14,6 +14,9 @@
 
 package org.eclipse.fordiac.ide.datatypeeditor.editors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
@@ -31,6 +34,12 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
+import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.actions.RedoAction;
+import org.eclipse.gef.ui.actions.UndoAction;
+import org.eclipse.gef.ui.actions.UpdateAction;
+import org.eclipse.gef.ui.properties.UndoablePropertySheetPage;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
@@ -39,12 +48,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
@@ -60,14 +71,17 @@ public class DataTypeEditor extends EditorPart
 	private Composite errorComposite;
 	private boolean importFailed;
 	private boolean outsideWorkspace;
-	private boolean dirtyFlag;
+
+	private ActionRegistry actionRegistry;
+	private ArrayList<String> selectionActions = new ArrayList<>();
+	private ArrayList<String> stackActions = new ArrayList<>();
+	private ArrayList<String> propertyActions = new ArrayList<>();
 
 	@Override
 	public void stackChanged(CommandStackEvent event) {
-		if (event.isPostChangeEvent()) {
-			dirtyFlag = true;
-			firePropertyChange(IEditorPart.PROP_DIRTY);
-		}
+		updateActions(stackActions);
+		firePropertyChange(IEditorPart.PROP_DIRTY);
+		editComposite.getStructViewer().refresh();
 	}
 
 	@Override
@@ -76,11 +90,25 @@ public class DataTypeEditor extends EditorPart
 	}
 
 	@Override
+	public void dispose() {
+		getCommandStack().removeCommandStackEventListener(this);
+		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
+		getActionRegistry().dispose();
+		super.dispose();
+	}
+
+	@Override
+	protected void firePropertyChange(int property) {
+		super.firePropertyChange(property);
+		updateActions(propertyActions);
+	}
+
+	@Override
 	public void doSave(IProgressMonitor monitor) {
 		DataTypeExporter exporter = new DataTypeExporter((AnyDerivedType) dataType);
 		try {
 			exporter.saveType(file);
-			dirtyFlag = false;
+			commandStack.markSaveLocation();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
 		} catch (XMLStreamException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
@@ -97,6 +125,16 @@ public class DataTypeEditor extends EditorPart
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		importType(input);
+		setInput(input);
+		setSite(site);
+		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
+		getCommandStack().addCommandStackEventListener(this);
+		initializeActionRegistry();
+		setActionHandlers(site);
+	}
+
+	private void importType(IEditorInput input) throws PartInitException {
 		final DataTypeImporter importer = new DataTypeImporter();
 
 		if (input instanceof FileEditorInput) {
@@ -118,17 +156,23 @@ public class DataTypeEditor extends EditorPart
 		} catch (final Exception e) {
 			throw new PartInitException(e.getMessage(), e);
 		}
+	}
 
-		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
-		getCommandStack().addCommandStackEventListener(this);
-
-		setInput(input);
-		setSite(site);
+	private void setActionHandlers(IEditorSite site) {
+		ActionRegistry registry = getActionRegistry();
+		IActionBars bars = site.getActionBars();
+		String id = ActionFactory.UNDO.getId();
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+		id = ActionFactory.REDO.getId();
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+		id = ActionFactory.DELETE.getId();
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+		bars.updateActionBars();
 	}
 
 	@Override
 	public boolean isDirty() {
-		return dirtyFlag;
+		return getCommandStack().isDirty();
 	}
 
 	@Override
@@ -174,9 +218,76 @@ public class DataTypeEditor extends EditorPart
 		return commandStack;
 	}
 
-	// ISelectionListener
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		// TODO Auto-generated method stub
+		if (this.equals(getSite().getPage().getActiveEditor())) {
+			updateActions(selectionActions);
+			firePropertyChange(IEditorPart.PROP_DIRTY);
+		}
+	}
+
+	private void createActions() {
+		ActionRegistry registry = getActionRegistry();
+		IAction action;
+
+		action = new UndoAction(this);
+		registry.registerAction(action);
+		getStackActions().add(action.getId());
+
+		action = new RedoAction(this);
+		registry.registerAction(action);
+		getStackActions().add(action.getId());
+	}
+
+	@Override
+	public Object getAdapter(Class key) {
+		if (key == org.eclipse.ui.views.properties.IPropertySheetPage.class) {
+			return new UndoablePropertySheetPage(getCommandStack(),
+					getActionRegistry().getAction(ActionFactory.UNDO.getId()),
+					getActionRegistry().getAction(ActionFactory.REDO.getId()));
+		}
+		if (key == CommandStack.class) {
+			return getCommandStack();
+		}
+		if (key == ActionRegistry.class) {
+			return getActionRegistry();
+		}
+
+		return super.getAdapter(key);
+	}
+
+	private List<String> getPropertyActions() {
+		return propertyActions;
+	}
+
+	private List<String> getSelectionActions() {
+		return selectionActions;
+	}
+
+	private List<String> getStackActions() {
+		return stackActions;
+	}
+
+	private void initializeActionRegistry() {
+		createActions();
+		updateActions(propertyActions);
+		updateActions(stackActions);
+	}
+
+	private void updateActions(List<String> actionIds) {
+		ActionRegistry registry = getActionRegistry();
+		actionIds.forEach(id -> {
+			IAction action = registry.getAction(id);
+			if (action instanceof UpdateAction) {
+				((UpdateAction) action).update();
+			}
+		});
+	}
+
+	private ActionRegistry getActionRegistry() {
+		if (null == actionRegistry) {
+			actionRegistry = new ActionRegistry();
+		}
+		return actionRegistry;
 	}
 }

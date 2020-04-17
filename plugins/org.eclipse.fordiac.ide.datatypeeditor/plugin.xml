@@ -6,7 +6,7 @@
       <editor
             name="Data Type Editor"
             extensions="dtp"
-            contributorClass="org.eclipse.fordiac.ide.util.ZoomUndoRedoActionBarContributor"
+            contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             default="true"
             class="org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor"
             id="org.eclipse.fordiac.ide.datatypeeditor.editors.DTPFileEditor">

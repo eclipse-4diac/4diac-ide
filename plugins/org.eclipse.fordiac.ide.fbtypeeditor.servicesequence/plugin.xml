@@ -13,7 +13,7 @@
          point="org.eclipse.ui.editors">
       <editor
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceSequenceEditor"
-            contributorClass="org.eclipse.fordiac.ide.util.ZoomUndoRedoActionBarContributor"
+            contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             default="false"
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editor1"
             name="Servicesequence Editor">

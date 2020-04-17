@@ -5,7 +5,7 @@
          point="org.eclipse.ui.editors">
 <editor
             class="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer"
-            contributorClass="org.eclipse.fordiac.ide.util.ZoomUndoRedoActionBarContributor"
+            contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             default="true"
             icon="fordiacimage://ICON_COMPOSITE_FB"
             id="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer"
