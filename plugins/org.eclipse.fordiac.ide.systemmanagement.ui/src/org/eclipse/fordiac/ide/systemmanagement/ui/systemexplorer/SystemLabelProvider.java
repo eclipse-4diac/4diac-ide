@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 fortiss GmbH
+ * 				 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,20 +11,19 @@
  * Contributors:
  *   Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Reworked system explorer layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.navigator.IDescriptionProvider;
 
@@ -31,16 +31,8 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	private static ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 
-//	private ILabelProvider workbenchLabelProvider = WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider();
-
 	public SystemLabelProvider() {
 		super(systemAdapterFactory);
-	}
-
-	@Override
-	public void dispose() {
-//		workbenchLabelProvider.dispose();
-		super.dispose();
 	}
 
 	@Override
@@ -53,10 +45,8 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	@Override
 	public Image getImage(Object object) {
-		if (object instanceof IFile) {
-			// provide the icon for the system configuration file,
-			// TODO this should in the future provided by a dedicated editor
-			return FordiacImage.ICON_SYSTEM_PERSPECTIVE.getImage();
+		if (object instanceof IResource) {
+			return null;
 		}
 		return super.getImage(object);
 	}
