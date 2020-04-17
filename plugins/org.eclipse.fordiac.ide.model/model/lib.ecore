@@ -821,7 +821,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="palette" lowerBound="1"
-        eType="ecore:EClass palette.ecore#//Palette" eOpposite="palette.ecore#//Palette/automationSystem"/>
+        eType="ecore:EClass palette.ecore#//Palette"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="systemConfiguration" lowerBound="1"
         eType="#//SystemConfiguration" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="systemFile" eType="#//IFile"

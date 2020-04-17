@@ -320,16 +320,14 @@ public enum SystemManager {
 
 	public AutomationSystem getSystem(IFile systemFile) {
 		Map<IFile, AutomationSystem> projectSystems = getProjectSystems(systemFile.getProject());
-		AutomationSystem system = projectSystems.get(systemFile);
-		if (null == system) {
+		return projectSystems.computeIfAbsent(systemFile, sysFile -> {
 			long startTime = System.currentTimeMillis();
-			system = loadSystem(systemFile);
+			AutomationSystem system = loadSystem(systemFile);
 			long endTime = System.currentTimeMillis();
 			System.out.println(
 					"Loading time for System (" + systemFile.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			projectSystems.put(systemFile, system);
-		}
-		return system;
+			return system;
+		});
 	}
 
 	Map<IFile, AutomationSystem> getProjectSystems(IProject project) {

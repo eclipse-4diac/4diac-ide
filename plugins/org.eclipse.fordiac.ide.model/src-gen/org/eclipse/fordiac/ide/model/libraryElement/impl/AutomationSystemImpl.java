@@ -26,7 +26,6 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -181,33 +180,12 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetPalette(Palette newPalette, NotificationChain msgs) {
-		Palette oldPalette = palette;
-		palette = newPalette;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, oldPalette, newPalette);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public void setPalette(Palette newPalette) {
-		if (newPalette != palette) {
-			NotificationChain msgs = null;
-			if (palette != null)
-				msgs = ((InternalEObject)palette).eInverseRemove(this, PalettePackage.PALETTE__AUTOMATION_SYSTEM, Palette.class, msgs);
-			if (newPalette != null)
-				msgs = ((InternalEObject)newPalette).eInverseAdd(this, PalettePackage.PALETTE__AUTOMATION_SYSTEM, Palette.class, msgs);
-			msgs = basicSetPalette(newPalette, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, newPalette, newPalette));
+		Palette oldPalette = palette;
+		palette = newPalette;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, oldPalette, palette));
 	}
 
 	/**
@@ -319,29 +297,12 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE:
-				if (palette != null)
-					msgs = ((InternalEObject)palette).eInverseRemove(this, PalettePackage.PALETTE__AUTOMATION_SYSTEM, Palette.class, msgs);
-				return basicSetPalette((Palette)otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				return ((InternalEList<?>)getApplication()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
 				return ((InternalEList<?>)getMapping()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE:
-				return basicSetPalette(null, msgs);
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 				return basicSetSystemConfiguration(null, msgs);
 		}
