@@ -34,7 +34,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -156,21 +155,21 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	protected static void handleFileDelete(IResourceDelta delta) {
-		Palette palette = TypeLibrary.getTypeLibrary(delta.getResource().getProject()).getBlockTypeLib();
+		TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
 
 		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 		if (null != entry) {
 			closeAllFBTypeEditor(entry);
-			palette.removePaletteEntry(entry);
+			typeLib.removePaletteEntry(entry);
 		}
 	}
 
-	protected void handleFileCopy(IResourceDelta delta) {
+	protected static void handleFileCopy(IResourceDelta delta) {
 		TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
 
-		if (!typeLib.paletteContainsType(file)) {
+		if (!typeLib.containsType(file)) {
 			PaletteEntry entry = typeLib.createPaletteEntry(file);
 			if (null != entry) {
 				updatePaletteEntry(file, entry);

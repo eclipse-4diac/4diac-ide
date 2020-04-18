@@ -46,6 +46,10 @@ public final class DataTypeLibrary {
 		derivedTypeMap.put(entry.getLabel(), entry);
 	}
 
+	public void removePaletteEntry(DataTypePaletteEntry entry) {
+		derivedTypeMap.remove(entry.getLabel());
+	}
+
 	/**
 	 * Inits the elementary types.
 	 */
@@ -57,6 +61,10 @@ public final class DataTypeLibrary {
 		});
 	}
 
+	public Map<String, DataTypePaletteEntry> getDerivedDataTypes() {
+		return derivedTypeMap;
+	}
+
 	/**
 	 * Gets the data types.
 	 *
@@ -65,9 +73,8 @@ public final class DataTypeLibrary {
 	public List<DataType> getDataTypes() {
 		List<DataType> dataTypes = new ArrayList<>(typeMap.size() + derivedTypeMap.size());
 		dataTypes.addAll(typeMap.values());
-		dataTypes.addAll(
-				derivedTypeMap.values().stream().map(DataTypePaletteEntry::getType)
-				.filter(Objects::nonNull).collect(Collectors.toList()));
+		dataTypes.addAll(derivedTypeMap.values().stream().map(DataTypePaletteEntry::getType).filter(Objects::nonNull)
+				.collect(Collectors.toList()));
 		return dataTypes;
 	}
 

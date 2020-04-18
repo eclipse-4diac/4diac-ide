@@ -17,6 +17,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,11 +79,19 @@ public final class TypeLibrary implements TypeLibraryTags {
 	}
 
 	public PaletteEntry getPaletteEntry(IFile typeFile) {
-		EMap<String, ? extends PaletteEntry> typeEntryList = getTypeList(typeFile);
-		if (null != typeEntryList) {
-			return typeEntryList.get(TypeLibrary.getTypeNameFromFile(typeFile));
+		if (isDataTypeFile(typeFile)) {
+			dataTypeLib.getDerivedDataTypes().get(TypeLibrary.getTypeNameFromFile(typeFile));
+		} else {
+			EMap<String, ? extends PaletteEntry> typeEntryList = getTypeList(typeFile);
+			if (null != typeEntryList) {
+				return typeEntryList.get(TypeLibrary.getTypeNameFromFile(typeFile));
+			}
 		}
 		return null;
+	}
+
+	private static boolean isDataTypeFile(IFile typeFile) {
+		return TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(typeFile.getFileExtension());
 	}
 
 	public Palette getBlockTypeLib() {
@@ -190,7 +199,14 @@ public final class TypeLibrary implements TypeLibraryTags {
 		} else {
 			blockTypeLib.addPaletteEntry(entry);
 		}
+	}
 
+	public void removePaletteEntry(PaletteEntry entry) {
+		if (entry instanceof DataTypePaletteEntry) {
+			dataTypeLib.removePaletteEntry((DataTypePaletteEntry) entry);
+		} else {
+			blockTypeLib.removePaletteEntry(entry);
+		}
 	}
 
 	/**
@@ -247,29 +263,30 @@ public final class TypeLibrary implements TypeLibraryTags {
 	}
 
 	private void checkDeletions() {
-		checkDeletionsForTypeGroup(blockTypeLib.getAdapterTypes());
-		checkDeletionsForTypeGroup(blockTypeLib.getDeviceTypes());
-		checkDeletionsForTypeGroup(blockTypeLib.getFbTypes());
-		checkDeletionsForTypeGroup(blockTypeLib.getResourceTypes());
-		checkDeletionsForTypeGroup(blockTypeLib.getSegmentTypes());
-		checkDeletionsForTypeGroup(blockTypeLib.getSubAppTypes());
+		checkDeletionsForTypeGroup(blockTypeLib.getAdapterTypes().values());
+		checkDeletionsForTypeGroup(blockTypeLib.getDeviceTypes().values());
+		checkDeletionsForTypeGroup(blockTypeLib.getFbTypes().values());
+		checkDeletionsForTypeGroup(blockTypeLib.getResourceTypes().values());
+		checkDeletionsForTypeGroup(blockTypeLib.getSegmentTypes().values());
+		checkDeletionsForTypeGroup(blockTypeLib.getSubAppTypes().values());
+		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes().values());
 	}
 
-	private static void checkDeletionsForTypeGroup(EMap<String, ? extends PaletteEntry> types) {
-		types.entrySet().removeIf(e -> (!e.getValue().getFile().exists()));
+	private static void checkDeletionsForTypeGroup(Collection<? extends PaletteEntry> typeEntries) {
+		typeEntries.removeIf(e -> (!e.getFile().exists()));
 	}
 
 	private void checkAdditions(IContainer container) {
 		try {
 			IResource[] members = container.members();
 
-			for (IResource iResource : members) {
-				if (iResource instanceof IFolder) {
-					checkAdditions((IFolder) iResource);
+			for (IResource resource : members) {
+				if (resource instanceof IFolder) {
+					checkAdditions((IFolder) resource);
 				}
-				if ((iResource instanceof IFile) && (!paletteContainsType((IFile) iResource))) {
+				if ((resource instanceof IFile) && (!containsType((IFile) resource))) {
 					// only add new entry if it does not exist
-					createPaletteEntry((IFile) iResource);
+					createPaletteEntry((IFile) resource);
 				}
 			}
 		} catch (CoreException e) {
@@ -278,14 +295,8 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	}
 
-	public boolean paletteContainsType(IFile file) {
-		String typeName = getTypeNameFromFile(file);
-		return ((null != blockTypeLib.getAdapterTypeEntry(typeName))
-				|| (null != blockTypeLib.getDeviceTypeEntry(typeName))
-				|| (null != blockTypeLib.getFBTypeEntry(typeName))
-				|| (null != blockTypeLib.getResourceTypeEntry(typeName))
-				|| (null != blockTypeLib.getSegmentTypeEntry(typeName))
-				|| (null != blockTypeLib.getSubAppTypeEntry(typeName)));
+	public boolean containsType(IFile file) {
+		return (null != getPaletteEntry(file));
 	}
 
 	/**
