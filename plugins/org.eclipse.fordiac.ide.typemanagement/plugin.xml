@@ -382,7 +382,7 @@
       </commonWizard>
       <commonWizard
             type="new"
-            wizardId="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard">
+            wizardId="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard">
          <enablement></enablement>
       </commonWizard>      
    </extension>

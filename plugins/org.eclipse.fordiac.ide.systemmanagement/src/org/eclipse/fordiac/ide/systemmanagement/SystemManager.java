@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -35,7 +36,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -66,7 +69,10 @@ public enum SystemManager {
 	public static final String FORDIAC_PROJECT_NATURE_ID = "org.eclipse.fordiac.ide.systemmanagement.FordiacNature"; //$NON-NLS-1$
 	public static final String OLD_DISTRIBUTED_PROJECT_NATURE_ID = "org.fordiac.systemManagement.DistributedNature"; //$NON-NLS-1$
 
-	static final String SYSTEM_FILE_ENDING = ".sys"; //$NON-NLS-1$
+	public static final String SYSTEM_FILE_ENDING = "sys"; //$NON-NLS-1$
+	public static final String SYSTEM_FILE_ENDING_WITH_DOT = ".sys"; //$NON-NLS-1$
+
+	public static final String TYPE_LIB_FOLDER_NAME = "Type Library"; //$NON-NLS-1$
 
 	/** The model systems. */
 	private Map<IProject, Map<IFile, AutomationSystem>> allSystemsInWS = new HashMap<>();
@@ -120,6 +126,38 @@ public enum SystemManager {
 		// and adding the resource change listener
 		TypeLibrary.loadToolLibrary();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
+	}
+
+	public IProject createNew4diacProject(String projectName, IPath location, boolean importDefaultPalette,
+			IProgressMonitor monitor) throws CoreException {
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+
+		IProject project = root.getProject(projectName);
+		IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(project.getName());
+
+		if (!Platform.getLocation().equals(location)) {
+			description.setLocation(location);
+		}
+
+		description.setNatureIds(getNatureIDs());
+
+		project.create(description, monitor);
+		project.open(monitor);
+
+		// configure palette
+		if (importDefaultPalette) {
+			SystemPaletteManagement.copyToolTypeLibToDestination(project.getFolder(TYPE_LIB_FOLDER_NAME));
+		}
+		getProjectSystems(project); // insert the project into the project list
+		return project;
+	}
+
+	public AutomationSystem createNewSystem(IContainer location, String name) {
+		IFile systemFile = location.getFile(new Path(name + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT));
+		Map<IFile, AutomationSystem> projectSystems = getProjectSystems(location.getProject());
+		AutomationSystem system = projectSystems.computeIfAbsent(systemFile, this::createAutomationSystem);
+		saveSystem(system);
+		return system;
 	}
 
 	void removeProject(IProject project) {
@@ -194,9 +232,9 @@ public enum SystemManager {
 		return null;
 	}
 
-	public AutomationSystem createAutomationSystem(IFile systemFile) {
+	private AutomationSystem createAutomationSystem(IFile systemFile) {
 		AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
-		system.setName(systemFile.getName());
+		system.setName(TypeLibrary.getTypeNameFromFile(systemFile));
 		system.setSystemFile(systemFile);
 
 		// create PhysicalConfiguration
@@ -419,7 +457,7 @@ public enum SystemManager {
 			project.create(description, monitor);
 			project.open(monitor);
 
-			SystemPaletteManagement.copyToolTypeLibToProject(project);
+			SystemPaletteManagement.copyToolTypeLibToDestination(project);
 
 //			AutomationSystem system = createAutomationSystem(project);
 //			INSTANCE.addSystem(system);
@@ -436,6 +474,10 @@ public enum SystemManager {
 			monitor.done();
 		}
 		return null;
+	}
+
+	private static String[] getNatureIDs() {
+		return new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID };
 	}
 
 }

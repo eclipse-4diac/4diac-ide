@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2014 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -58,12 +58,13 @@ public class Messages extends NLS {
 	public static String NewSystemWizard_HideAdvanced;
 
 	/** The New system wizard_ wizard desc. */
-	public static String NewSystemWizard_WizardDesc;
+	public static String New4diacProjectWizard_WizardDesc;
 
 	/** The New system wizard_ wizard name. */
-	public static String NewSystemWizard_WizardName;
+	public static String New4diacProjectWizard_WizardName;
 
-	public static String NewSystemWizard_InitialApplicationName;
+	public static String New4diacProjectWizard_InitialSystemName;
+	public static String New4diacProjectWizard_InitialApplicationName;
 
 	/** The Palette management page_ labe l_ default palette. */
 	public static String PaletteManagementPage_LABEL_DefaultTypeLibrary;

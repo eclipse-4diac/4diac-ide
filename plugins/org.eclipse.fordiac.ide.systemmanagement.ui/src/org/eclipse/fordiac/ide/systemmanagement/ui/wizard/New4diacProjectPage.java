@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2014  fortiss GmbH
- * 
+ * 				 2020 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,8 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - changed new system wizard to a new 4diac project wizard for
+ *                 the new project layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
@@ -26,21 +29,20 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
-public class NewSystemPage extends WizardNewProjectCreationPage {
+public class New4diacProjectPage extends WizardNewProjectCreationPage {
 
-	private static final String APPLICATION_NAME_PREFIX = "App"; //$NON-NLS-1$
+	private static final String APPLICATION_NAME_POSTFIX = "App"; //$NON-NLS-1$
 
 	private boolean importDefaultPalette = true;
 	private boolean openApplication = true;
 
 	private Button advancedButton;
 
-	private Text applicationName;
+	private InitialNameGroup systemName;
+	private InitialNameGroup applicationName;
 
 	/**
 	 * Height of the "advanced" linked resource group. Set when the advanced group
@@ -50,32 +52,26 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 
 	/**
 	 * Container for the advanced section in the creation wizard
-	 * 
+	 *
 	 */
 	private Composite advancedGroupContainer;
 
 	private Composite advancedGroupParent;
 
-	// flag indicating if the user changed the initial application name if yes do
-	// not update the name any more
-	private boolean appNameManuallyChanged = false;
-
 	private boolean blockListeners = false;
 
-	private Listener applicationNameModifyListener = e -> {
+	private Listener nameModifyListener = e -> {
 		if (!blockListeners) {
-			appNameManuallyChanged = true;
-			boolean valid = validatePage();
-			setPageComplete(valid);
+			setPageComplete(validatePage());
 		}
 	};
 
 	/**
 	 * Creates a new project creation wizard page.
-	 * 
+	 *
 	 * @param pageName the name of this page
 	 */
-	public NewSystemPage(String pageName) {
+	public New4diacProjectPage(String pageName) {
 		super(pageName);
 		setPageComplete(false);
 	}
@@ -84,7 +80,11 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 
-		createApplicationNameGroup((Composite) getControl());
+		systemName = new InitialNameGroup((Composite) getControl(), Messages.New4diacProjectWizard_InitialSystemName);
+		systemName.addNameModifyListener(nameModifyListener);
+		applicationName = new InitialNameGroup((Composite) getControl(),
+				Messages.New4diacProjectWizard_InitialApplicationName);
+		applicationName.addNameModifyListener(nameModifyListener);
 
 		createAdvancedControls((Composite) getControl());
 
@@ -96,48 +96,39 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 		Dialog.applyDialogFont(composite);
 	}
 
-	private void createApplicationNameGroup(Composite parent) {
-		Composite applicationNameGroup = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
-		applicationNameGroup.setLayout(layout);
-		applicationNameGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		Label applicationLabel = new Label(applicationNameGroup, SWT.NONE);
-		applicationLabel.setText(Messages.NewSystemWizard_InitialApplicationName);
-		applicationLabel.setFont(parent.getFont());
-
-		// new project name entry field
-		applicationName = new Text(applicationNameGroup, SWT.BORDER);
-		GridData data = new GridData(GridData.FILL_HORIZONTAL);
-		applicationName.setLayoutData(data);
-		applicationName.setFont(parent.getFont());
-		applicationName.addListener(SWT.Modify, applicationNameModifyListener);
-	}
-
 	@Override
 	protected boolean validatePage() {
-		if (!IdentifierVerifyer.isValidIdentifier(getProjectName())) {
-			setErrorMessage(Messages.SystemNameNotValid);
-			return false;
-		}
-		if (!SystemManager.isUniqueSystemName(getProjectName())) {
-			setErrorMessage(Messages.SystemNameAlreadyUsed);
-			return false;
-		}
-		if (!appNameManuallyChanged) {
-			blockListeners = true;
-			applicationName.setText(getProjectName() + APPLICATION_NAME_PREFIX);
+		blockListeners = true;
+		try {
+			if (!IdentifierVerifyer.isValidIdentifier(getProjectName())) {
+				setErrorMessage(Messages.SystemNameNotValid);
+				return false;
+			}
+			if (!SystemManager.isUniqueSystemName(getProjectName())) {
+				setErrorMessage(Messages.SystemNameAlreadyUsed);
+				return false;
+			}
+
+			if (!systemName.validateName(getProjectName())) {
+				return false;
+			}
+
+			if (!applicationName.validateName(getProjectName() + APPLICATION_NAME_POSTFIX)) {
+				return false;
+			}
+
+			return super.validatePage();
+		} finally {
 			blockListeners = false;
 		}
-		if (!IdentifierVerifyer.isValidIdentifier(getInitialApplicationName())) {
-			return false;
-		}
-		return super.validatePage();
+	}
+
+	public String getInitialSystemName() {
+		return systemName.getInitialName();
 	}
 
 	public String getInitialApplicationName() {
-		return applicationName.getText();
+		return applicationName.getInitialName();
 	}
 
 	public boolean getOpenApplication() {

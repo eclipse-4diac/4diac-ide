@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2010, 2015 Profactor GbmH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -84,7 +84,7 @@ public class DeploymentPerspective implements IPerspectiveFactory {
 	 * Adds the new wizard shortcuts.
 	 */
 	private void addNewWizardShortcuts() {
-		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"); //$NON-NLS-1$
+		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard"); //$NON-NLS-1$
 		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"); //$NON-NLS-1$
 		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard"); //$NON-NLS-1$
 	}

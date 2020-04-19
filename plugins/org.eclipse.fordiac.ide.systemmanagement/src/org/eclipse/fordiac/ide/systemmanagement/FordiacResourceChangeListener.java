@@ -201,7 +201,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 							IPath path = file.getProjectRelativePath();
 							path = path.removeLastSegments(1);
-							path = path.append(project.getName() + SystemManager.SYSTEM_FILE_ENDING);
+							path = path.append(project.getName() + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT);
 							try {
 								file.move(path, true, null);
 								// TODO model refactoring - should we remove the old system first?
@@ -318,7 +318,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	protected static void renameSystem(final AutomationSystem system, final IProject project) {
-		IFile oldSystemFile = project.getFile(system.getName() + SystemManager.SYSTEM_FILE_ENDING);
+		IFile oldSystemFile = project.getFile(system.getName() + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT);
 		String newProjectName = project.getName();
 		system.setName(newProjectName);
 

@@ -118,8 +118,8 @@
    <extension
          point="org.eclipse.ui.intro.quicklinks">
        <command
-            id="org.eclipse.ui.newWizard(newWizardId=org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard)"
-            description="Create a new IEC 61499 system"
+            id="org.eclipse.ui.newWizard(newWizardId=org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard)"
+            description="Create a new 4diac IDE project"
             label="Create New System"
             importance="medium"
             resolution="launchbar">
