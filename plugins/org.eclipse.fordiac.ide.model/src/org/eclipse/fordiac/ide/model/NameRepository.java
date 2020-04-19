@@ -30,7 +30,6 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -40,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -52,7 +50,7 @@ public final class NameRepository {
 	private static final Pattern GET_LAST_NUMBER_PATTERN = Pattern.compile("\\d+$"); //$NON-NLS-1$
 
 	private static final Set<String> RESERVED_KEYWORDS = Collections
-			.unmodifiableSet(new HashSet<>(Arrays.asList(new String[] { "VAR", "END_VAR", "CONSTANT", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			.unmodifiableSet(new HashSet<>(Arrays.asList("VAR", "END_VAR", "CONSTANT", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					"SUPER", "RETURN", //$NON-NLS-1$ //$NON-NLS-2$
 					"IF", "THEN", "END_IF", "ELSIF", "ELSE", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 					"CASE", "OF", "END_CASE", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -71,24 +69,10 @@ public final class NameRepository {
 					"DATE", "LDATE", //$NON-NLS-1$ //$NON-NLS-2$
 					"DATE_AND_TIME", "LDATE_AND_TIME", //$NON-NLS-1$ //$NON-NLS-2$
 					"BOOL" //$NON-NLS-1$
-			})));
+			)));
 
 	private NameRepository() {
 		// empty private constructor
-	}
-
-	public static void checkNameIdentifier(INamedElement element) {
-		// check if an annotation list is present, as getAnnotations will create one
-		// this saves quite some memory
-		if (element.eIsSet(LibraryElementPackage.eINSTANCE.getI4DIACElement_Annotations())) {
-			// we have annotations set clear them
-			element.getAnnotations().clear();
-		}
-		if (!IdentifierVerifyer.isValidIdentifier(element.getName())) {
-			final Annotation ano = element.createAnnotation(
-					MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, element.getName()));
-			ano.setServity(2); // 2 means error!
-		}
 	}
 
 	/**

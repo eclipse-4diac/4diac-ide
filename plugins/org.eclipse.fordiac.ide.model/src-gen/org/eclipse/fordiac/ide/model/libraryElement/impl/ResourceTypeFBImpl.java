@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,10 +13,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 
@@ -51,17 +48,6 @@ public class ResourceTypeFBImpl extends FBImpl implements ResourceTypeFB {
 	@Override
 	public boolean isResourceTypeFB() {
 		return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB();
-	}
-
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		NameRepository.checkNameIdentifier(this);
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONFIGURABLE_OBJECT__NAME,
-					oldName, name));
-
 	}
 
 } // ResourceTypeFBImpl

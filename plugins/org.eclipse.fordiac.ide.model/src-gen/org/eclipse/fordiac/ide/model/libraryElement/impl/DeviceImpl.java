@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -25,7 +25,6 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
@@ -61,7 +60,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	/**
 	 * The default value of the '{@link #getX() <em>X</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getX()
 	 * @generated
 	 * @ordered
@@ -71,7 +70,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	/**
 	 * The cached value of the '{@link #getX() <em>X</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getX()
 	 * @generated
 	 * @ordered
@@ -81,7 +80,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	/**
 	 * The default value of the '{@link #getY() <em>Y</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getY()
 	 * @generated
 	 * @ordered
@@ -91,7 +90,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	/**
 	 * The cached value of the '{@link #getY() <em>Y</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getY()
 	 * @generated
 	 * @ordered
@@ -626,18 +625,4 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return result.toString();
 	}
 
-	@Override
-	public void setName(String newName) {
-		if (newName.equals(name)) {
-			return;
-		}
-		String oldName = name;
-		name = newName;
-		NameRepository.checkNameIdentifier(this);
-
-		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONFIGURABLE_OBJECT__NAME,
-					oldName, name));
-		}
-	}
 } // DeviceImpl

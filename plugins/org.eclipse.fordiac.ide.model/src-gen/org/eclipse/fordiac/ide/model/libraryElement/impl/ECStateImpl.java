@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -25,7 +25,6 @@ import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -56,7 +55,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -66,7 +65,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -94,7 +93,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	/**
 	 * The default value of the '{@link #getX() <em>X</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getX()
 	 * @generated
 	 * @ordered
@@ -104,7 +103,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	/**
 	 * The cached value of the '{@link #getX() <em>X</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getX()
 	 * @generated
 	 * @ordered
@@ -114,7 +113,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	/**
 	 * The default value of the '{@link #getY() <em>Y</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getY()
 	 * @generated
 	 * @ordered
@@ -124,7 +123,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	/**
 	 * The cached value of the '{@link #getY() <em>Y</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getY()
 	 * @generated
 	 * @ordered
@@ -144,7 +143,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * The cached value of the '{@link #getOutTransitions() <em>Out
 	 * Transitions</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getOutTransitions()
 	 * @generated
 	 * @ordered
@@ -263,26 +262,14 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
-		Boolean differentName = true;
-		if (oldName != null) {
-			differentName = !oldName.equals(name);
-		}
-
-		if (differentName) {
-			// only check and notify if the name has realy changed
-			NameRepository.checkNameIdentifier(this);
-			if (eNotificationRequired()) {
-				eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_STATE__NAME, oldName,
-						name));
-			}
-		}
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_STATE__NAME, oldName, name));
 	}
 
 	/**
