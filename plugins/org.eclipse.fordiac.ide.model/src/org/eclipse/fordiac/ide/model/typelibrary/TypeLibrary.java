@@ -53,6 +53,10 @@ public final class TypeLibrary implements TypeLibraryTags {
 		return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
 	}
 
+	public static void removeProject(IProject project) {
+		typeLibraryList.remove(project);
+	}
+
 	private final Palette blockTypeLib = PaletteFactory.eINSTANCE.createPalette();
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private final IProject project;

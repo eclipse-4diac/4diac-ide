@@ -71,8 +71,6 @@ public enum SystemManager {
 	/** The model systems. */
 	private Map<IProject, Map<IFile, AutomationSystem>> allSystemsInWS = new HashMap<>();
 
-	private Map<AutomationSystem, Runnable> runningJobs = new HashMap<>();
-
 	private final Map<AutomationSystem, ArrayList<ITagProvider>> tagProviders = new HashMap<>();
 
 	/** The listeners. */
@@ -124,17 +122,21 @@ public enum SystemManager {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
 	}
 
+	void removeProject(IProject project) {
+		allSystemsInWS.remove(project);
+		notifyListeners();
+	}
+
 	/**
 	 * Remove a system from the set of systems managed by the system manager
 	 *
 	 * @param system to be added
 	 */
 	public void removeSystem(final AutomationSystem system) {
-//		if (systems.remove(system)) {
-		// TODO cleanup other hash tables the system may be in
-		notifyListeners();
-//	}
-
+		Map<IFile, AutomationSystem> projectSystems = getProjectSystems(system.getSystemFile().getProject());
+		if (null != projectSystems.remove(system.getSystemFile())) {
+			notifyListeners();
+		}
 	}
 
 	private static void initializePalette(AutomationSystem system) {
@@ -330,13 +332,8 @@ public enum SystemManager {
 		});
 	}
 
-	Map<IFile, AutomationSystem> getProjectSystems(IProject project) {
-		Map<IFile, AutomationSystem> projectSystems = allSystemsInWS.get(project);
-		if (null == projectSystems) {
-			projectSystems = new HashMap<>();
-			allSystemsInWS.put(project, projectSystems);
-		}
-		return projectSystems;
+	public Map<IFile, AutomationSystem> getProjectSystems(IProject project) {
+		return allSystemsInWS.computeIfAbsent(project, p -> new HashMap<>());
 	}
 
 	/**
