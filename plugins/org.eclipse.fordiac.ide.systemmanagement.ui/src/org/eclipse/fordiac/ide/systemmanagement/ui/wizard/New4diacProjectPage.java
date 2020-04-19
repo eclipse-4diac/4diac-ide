@@ -34,7 +34,7 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
 public class New4diacProjectPage extends WizardNewProjectCreationPage {
 
-	private static final String APPLICATION_NAME_POSTFIX = "App"; //$NON-NLS-1$
+	public static final String APPLICATION_NAME_POSTFIX = "App"; //$NON-NLS-1$
 
 	private boolean importDefaultPalette = true;
 	private boolean openApplication = true;

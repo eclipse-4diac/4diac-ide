@@ -12,9 +12,9 @@
  * Contributors:
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl 
+ *   Alois Zoitl
  *     - moved preference messages from utils plugin
- *   Andrea Zoitl 
+ *   Andrea Zoitl
  *     - Externalized translatable strings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui;
@@ -55,6 +55,7 @@ public class FordiacMessages extends NLS {
 	public static String ND;
 	public static String Name;
 	public static String NewType;
+	public static String NewSystem;
 	public static String Organization;
 	public static String Product;
 	public static String Properties;
@@ -62,6 +63,7 @@ public class FordiacMessages extends NLS {
 	public static String Resource;
 	public static String SelectType;
 	public static String Standard;
+	public static String SystemName;
 	public static String Type;
 	public static String TypeLibrary;
 	public static String TypeName;

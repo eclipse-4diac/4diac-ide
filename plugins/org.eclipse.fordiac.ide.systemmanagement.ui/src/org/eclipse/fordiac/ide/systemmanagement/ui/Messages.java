@@ -42,9 +42,6 @@ public class Messages extends NLS {
 	/** The New application page_ parent system label. */
 	public static String NewElementPage_ParentSystemLabel;
 
-	/** The New application wizard_ comment. */
-	public static String NewApplicationWizard_Comment;
-
 	/** The New application wizard_ description. */
 	public static String NewApplicationWizard_Description;
 
@@ -65,6 +62,8 @@ public class Messages extends NLS {
 
 	public static String New4diacProjectWizard_InitialSystemName;
 	public static String New4diacProjectWizard_InitialApplicationName;
+
+	public static String NewSystemWizardPage_CreateNewSystem;
 
 	/** The Palette management page_ labe l_ default palette. */
 	public static String PaletteManagementPage_LABEL_DefaultTypeLibrary;

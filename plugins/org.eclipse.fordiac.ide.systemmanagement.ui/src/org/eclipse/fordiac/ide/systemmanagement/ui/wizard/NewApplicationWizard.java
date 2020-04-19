@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2009 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz	
- * 
+ * 				 2019 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - reworked selection check code to handle more cases correctly  
+ *   Alois Zoitl - reworked selection check code to handle more cases correctly
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
@@ -38,7 +38,7 @@ import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 
 /**
  * The Class NewApplicationWizard.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class NewApplicationWizard extends Wizard implements INewWizard {
@@ -63,7 +63,7 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
 	 */
 	@Override
@@ -74,10 +74,10 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 
 	/**
 	 * This method performs the creation process and opens the editor if necessary
-	 * 
+	 *
 	 * This method has been extracted as static method so that other wizards like
 	 * the system creation wizard can utilize this code as well.
-	 * 
+	 *
 	 * @param system          the system where the application should be created
 	 * @param appName         the application name for the new application
 	 * @param openApplication boolean flag indicating if the editor for this
@@ -86,7 +86,7 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 	 */
 	public static void performApplicationCreation(AutomationSystem system, String appName, boolean openApplication,
 			Shell shell) {
-		NewAppCommand cmd = new NewAppCommand(system, appName, Messages.NewApplicationWizard_Comment);
+		NewAppCommand cmd = new NewAppCommand(system, appName, ""); //$NON-NLS-1$
 
 		// TODO check how to get the command stack here getCommandStack().execute(cmd);
 
@@ -109,7 +109,7 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.wizard.IWizard#addPages()
 	 */
 	@Override

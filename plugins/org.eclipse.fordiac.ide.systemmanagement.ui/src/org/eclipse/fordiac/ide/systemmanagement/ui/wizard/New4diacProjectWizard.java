@@ -108,8 +108,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	}
 
 	private void createInitialApplication(final IProgressMonitor monitor, AutomationSystem system) {
-		NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(),
-				Messages.NewApplicationWizard_Comment);
+		NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(), ""); //$NON-NLS-1$
 		cmd.execute(monitor, null);
 
 		Application app = cmd.getApplication();
