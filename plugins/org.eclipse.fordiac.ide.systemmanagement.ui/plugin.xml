@@ -460,7 +460,7 @@
                          forcePluginActivation="true"   
                          property="org.eclipse.core.resources.extension"
                          value="sys">
-                   </test>
+                   </test>                   
                </and>
             </or>
             </triggerPoints>
@@ -521,7 +521,11 @@
       <commonWizard
             type="new"
             wizardId="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard">
-         <enablement></enablement>
+         <enablement>
+            <adapt type="org.eclipse.core.resources.IFile" >
+                <test property="org.eclipse.core.resources.extension" value="sys"/>
+            </adapt>
+         </enablement>
       </commonWizard>
       <actionProvider
             class="org.eclipse.fordiac.ide.systemmanagement.ui.actions.SystemExplorerNewActionProvider"

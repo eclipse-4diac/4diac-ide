@@ -30,6 +30,7 @@ public class FordiacMessages extends NLS {
 	public static String Algorithm;
 	public static String Algorithms;
 	public static String ApplicationDomain;
+	public static String ApplicationName;
 	public static String ArraySize;
 	public static String Author;
 	public static String Classdef;

@@ -25,11 +25,12 @@ public class Messages extends NLS {
 
 	public static String OpenEditorProvider_OpenWithMenu_label;
 
-	/** The New application page_ applcation name label. */
-	public static String NewElementPage_ElementNameLabel;
+	public static String NewApplicationWizardTitle;
+
+	public static String NewApplicationPage_NewApplicationDescription;
 
 	/** The New application page_ error message_ empty app name. */
-	public static String NewElementPage_ErrorMessage_EmptyElementName;
+	public static String NewApplicationPage_ErrorMessage_EmptyElementName;
 
 	/** The New application page_ error message invalid app name. */
 	public static String NewApplicationPage_ErrorMessageInvalidAppName;
@@ -37,16 +38,7 @@ public class Messages extends NLS {
 	public static String NewApplicationPage_OpenApplicationForEditing;
 
 	/** The New application page_ error message no system selected. */
-	public static String NewElementPage_ErrorMessageNoSystemSelected;
-
-	/** The New application page_ parent system label. */
-	public static String NewElementPage_ParentSystemLabel;
-
-	/** The New application wizard_ description. */
-	public static String NewApplicationWizard_Description;
-
-	/** The New application wizard_ title. */
-	public static String NewApplicationWizard_Title;
+	public static String NewApplicationPage_ErrorMessageNoSystemSelected;
 
 	public static String NewApplicationCommand_LABEL_NewApplication;
 
