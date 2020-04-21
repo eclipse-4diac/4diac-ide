@@ -27,7 +27,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkElementInsertAction;
-import org.eclipse.fordiac.ide.application.actions.MapAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
@@ -39,7 +38,6 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -53,7 +51,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
@@ -222,14 +219,4 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		return action;
 	}
 
-	@SuppressWarnings("static-method") // currently needed to be overrideable by SubAppNetworkEditor
-	protected IAction getMapAction(IEditorPart activeEditor, Resource res) {
-		if (res != null) {
-			IAction action;
-			action = new MapAction(activeEditor, res);
-			action.setImageDescriptor(FordiacImage.ICON_RESOURCE.getImageDescriptor());
-			return action;
-		}
-		return null;
-	}
 }

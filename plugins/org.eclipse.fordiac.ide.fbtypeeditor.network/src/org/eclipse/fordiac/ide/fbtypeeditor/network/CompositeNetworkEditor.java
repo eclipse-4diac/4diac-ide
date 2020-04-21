@@ -19,8 +19,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.application.actions.UnmapAction;
-import org.eclipse.fordiac.ide.application.actions.UnmapAllAction;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.FBTypePaletteViewerProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
@@ -41,10 +39,8 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
-import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
@@ -100,20 +96,8 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected void createActions() {
-		ActionRegistry registry = getActionRegistry();
-		IAction action;
-
 		super.createActions();
-
-		action = registry.getAction(UnmapAction.ID);
-		registry.removeAction(action);
-
-		action = registry.getAction(UnmapAllAction.ID);
-		registry.removeAction(action);
-
-		InterfaceContextMenuProvider.createInterfaceEditingActions(this, registry, fbType);
-
-		super.createActions();
+		InterfaceContextMenuProvider.createInterfaceEditingActions(this, getActionRegistry(), fbType);
 	}
 
 	@Override

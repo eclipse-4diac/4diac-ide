@@ -132,11 +132,6 @@ public class Messages extends NLS {
 
 	public static String UIFBNetworkContextMenuProvider_ChangeType;
 
-	/** The Unmap action_ unmap_ label. */
-	public static String UnmapAction_Unmap_Label;
-
-	public static String UnmapAllAction_Text;
-
 	public static String UntypeSubappCommand_Label;
 
 	public static String UpdateFBTypeAction_Text;
