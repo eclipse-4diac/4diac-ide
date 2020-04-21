@@ -73,31 +73,13 @@ public interface PalettePackage extends EPackage {
 	int PALETTE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Project</b></em>' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int PALETTE__PROJECT = 0;
-
-	/**
-	 * The feature id for the '<em><b>Automation System</b></em>' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int PALETTE__AUTOMATION_SYSTEM = 1;
-
-	/**
 	 * The feature id for the '<em><b>Type Library</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__TYPE_LIBRARY = 2;
+	int PALETTE__TYPE_LIBRARY = 0;
 
 	/**
 	 * The feature id for the '<em><b>Adapter Types</b></em>' map. <!--
@@ -106,7 +88,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__ADAPTER_TYPES = 3;
+	int PALETTE__ADAPTER_TYPES = 1;
 
 	/**
 	 * The feature id for the '<em><b>Device Types</b></em>' map. <!--
@@ -115,7 +97,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__DEVICE_TYPES = 4;
+	int PALETTE__DEVICE_TYPES = 2;
 
 	/**
 	 * The feature id for the '<em><b>Fb Types</b></em>' map.
@@ -124,7 +106,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__FB_TYPES = 5;
+	int PALETTE__FB_TYPES = 3;
 
 	/**
 	 * The feature id for the '<em><b>Resource Types</b></em>' map. <!--
@@ -133,7 +115,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__RESOURCE_TYPES = 6;
+	int PALETTE__RESOURCE_TYPES = 4;
 
 	/**
 	 * The feature id for the '<em><b>Segment Types</b></em>' map. <!--
@@ -142,7 +124,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__SEGMENT_TYPES = 7;
+	int PALETTE__SEGMENT_TYPES = 5;
 
 	/**
 	 * The feature id for the '<em><b>Sub App Types</b></em>' map. <!--
@@ -151,7 +133,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__SUB_APP_TYPES = 8;
+	int PALETTE__SUB_APP_TYPES = 6;
 
 	/**
 	 * The number of structural features of the '<em>Palette</em>' class. <!--
@@ -160,7 +142,7 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE_FEATURE_COUNT = 9;
+	int PALETTE_FEATURE_COUNT = 7;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToFBTypePaletteEntryMapImpl <em>String To FB Type Palette Entry Map</em>}' class.
@@ -952,26 +934,6 @@ public interface PalettePackage extends EPackage {
 	EClass getPalette();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject <em>Project</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Project</em>'.
-	 * @see org.eclipse.fordiac.ide.model.Palette.Palette#getProject()
-	 * @see #getPalette()
-	 * @generated
-	 */
-	EAttribute getPalette_Project();
-
-	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem <em>Automation System</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Automation System</em>'.
-	 * @see org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem()
-	 * @see #getPalette()
-	 * @generated
-	 */
-	EReference getPalette_AutomationSystem();
-
-	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary <em>Type Library</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1456,20 +1418,6 @@ public interface PalettePackage extends EPackage {
 		 * @generated
 		 */
 		EClass PALETTE = eINSTANCE.getPalette();
-
-		/**
-		 * The meta object literal for the '<em><b>Project</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PALETTE__PROJECT = eINSTANCE.getPalette_Project();
-
-		/**
-		 * The meta object literal for the '<em><b>Automation System</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PALETTE__AUTOMATION_SYSTEM = eINSTANCE.getPalette_AutomationSystem();
 
 		/**
 		 * The meta object literal for the '<em><b>Type Library</b></em>' attribute feature.

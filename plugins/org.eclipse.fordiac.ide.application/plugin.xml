@@ -380,6 +380,12 @@
             id="org.eclipse.fordiac.ide.application.commands.insertFB"
             name="Insert FB">
       </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.ChangeType"
+            id="org.eclipse.fordiac.ide.application.commands.changeType"
+            name="Change Type">
+      </command>
        <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
             description="Update all FB types"
@@ -559,6 +565,13 @@
             </command>
       </menuContribution>            
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup"> 
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.changeType"
+                  label="Change Type">
+                <visibleWhen>
+                    <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                </visibleWhen>
+            </command>
             <menu
                   id="org.eclipse.4diac.ide.mapto.menu"
                   label="Map To ...">
@@ -574,9 +587,6 @@
                               value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
                         </equals>
                      </with>
-                  <reference
-                        definitionId="org.eclipse.fordiac.ide.application.FBNSelection">
-                  </reference>
                      </and>
                </visibleWhen>
             </menu>
@@ -739,7 +749,14 @@
       </menuContribution>
       <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?endof=group.add">
-               <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType">
+        <command
+              commandId="org.eclipse.fordiac.ide.application.commands.changeType"
+              label="Change Type">
+            <visibleWhen>
+                <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+            </visibleWhen>
+        </command>
+         <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType">
             <visibleWhen checkEnabled="true">
                <reference
                      definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
@@ -912,6 +929,17 @@
               </iterate>
            </with>
         </definition>
+	   <definition
+          id="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection">
+            <with variable="selection">
+                    <count value="1" />
+                <iterate operator="and" ifEmpty="false">
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+                    </instanceof>
+                </iterate>
+             </with> 
+          </definition>
     <definition
           id="org.eclipse.fordiac.ide.application.UnmapAllActivation">
        <with

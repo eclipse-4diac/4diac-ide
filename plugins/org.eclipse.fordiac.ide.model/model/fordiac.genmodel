@@ -17,7 +17,6 @@
     <genDataTypes ecoreDataType="palette.ecore#//CoreException"/>
     <genDataTypes ecoreDataType="palette.ecore#//TypeLibrary"/>
     <genClasses ecoreClass="palette.ecore#//Palette">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute palette.ecore#//Palette/project"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute palette.ecore#//Palette/typeLibrary"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference palette.ecore#//Palette/adapterTypes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference palette.ecore#//Palette/deviceTypes"/>
@@ -54,6 +53,7 @@
       <genOperations ecoreOperation="palette.ecore#//Palette/removePaletteEntry" body="org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.removeTypeEntry(this, entry);">
         <genParameters ecoreParameter="palette.ecore#//Palette/removePaletteEntry/entry"/>
       </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//Palette/getProject" body="return getTypeLibrary().getProject();"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//StringToAdapterTypePaletteEntryMap">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute palette.ecore#//StringToAdapterTypePaletteEntryMap/key"/>

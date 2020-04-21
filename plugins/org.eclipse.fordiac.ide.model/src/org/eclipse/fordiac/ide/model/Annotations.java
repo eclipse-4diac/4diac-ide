@@ -392,8 +392,6 @@ public final class Annotations {
 		}
 		if (fbn.isResourceNetwork()) {
 			return ((Resource) fbn.eContainer()).getAutomationSystem();
-		} else if (fbn.isCFBTypeNetwork()) {
-			return ((CompositeFBType) fbn.eContainer()).getPaletteEntry().getPalette().getAutomationSystem();
 		}
 		return null;
 	}

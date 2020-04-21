@@ -67,11 +67,13 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	}
 
 	private final Palette palette;
+	private final boolean useChangeFBType;
 	private String initialValue;
 
-	public NewInstanceDirectEditManager(GraphicalEditPart source, Palette palette) {
+	public NewInstanceDirectEditManager(GraphicalEditPart source, Palette palette, boolean useChangeFBType) {
 		super(source, NewInstanceCellEditor.class, new NewInstanceCellEditorLocator());
 		this.palette = palette;
+		this.useChangeFBType = useChangeFBType;
 	}
 
 	@Override
@@ -122,7 +124,8 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	private void showFBInsertPopUpMenu() {
 		EditPartViewer viewer = getEditPart().getViewer();
 		MenuManager mgr = new MenuManager();
-		((FBNetworkContextMenuProvider) viewer.getContextMenu()).buildFBInsertMenu(mgr, getLocator().getRefPoint());
+		((FBNetworkContextMenuProvider) viewer.getContextMenu()).buildFBInsertMenu(mgr, getLocator().getRefPoint(),
+				useChangeFBType);
 		Menu menu = mgr.createContextMenu(viewer.getControl());
 		menu.setVisible(true);
 		// put the menu on top of the editor

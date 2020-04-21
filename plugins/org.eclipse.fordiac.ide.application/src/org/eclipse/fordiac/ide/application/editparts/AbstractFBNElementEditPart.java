@@ -24,21 +24,26 @@ import java.util.List;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteFBNElementEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNElementSelectionPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.tools.ScrollingDragEditPartsTracker;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -46,15 +51,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editpolicies.DirectEditPolicy;
+import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.graphics.Point;
 
 /**
  * This class implements an EditPart for a FunctionBlock.
@@ -189,6 +198,24 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 		// FBNetwork elements renaming is done in a dedicated editpart
 		removeEditPolicy(EditPolicy.DIRECT_EDIT_ROLE);
+
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
+
+			@Override
+			protected Command getDirectEditCommand(DirectEditRequest request) {
+				Object value = request.getCellEditor().getValue();
+				if (value instanceof PaletteEntry) {
+					return new UpdateFBTypeCommand(getModel(), (PaletteEntry) value);
+				}
+				return null;
+			}
+
+			@Override
+			protected void showCurrentEditValue(DirectEditRequest request) {
+				// as we want to change the type we will not show the new type
+			}
+
+		});
 	}
 
 	/** The listener. */
@@ -330,9 +357,22 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
-	protected void performDirectEdit() {
-		// don't do anything here as direct editing of fbnetwork element instances names
-		// is handled in an own editpart
+	public void performRequest(final Request request) {
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+			// currently we don't want to be direct editable through double or long dobule
+			// click or
+			return;
+		}
+		super.performRequest(request);
+	}
+
+	@Override
+	public void performDirectEdit() {
+		NewInstanceDirectEditManager directEditManager = getManager();
+		Rectangle typeLabelBounds = getFigure().getTypeLabel().getBounds();
+		Point refPoint = new Point(typeLabelBounds.x, typeLabelBounds.y);
+		directEditManager.updateRefPosition(refPoint);
+		directEditManager.show(getModel().getTypeName());
 	}
 
 	@Override
@@ -346,8 +386,21 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
+	protected NewInstanceDirectEditManager getManager() {
+		return (NewInstanceDirectEditManager) super.getManager();
+	}
+
+	@Override
 	protected DirectEditManager createDirectEditManager() {
-		return new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
+		return new NewInstanceDirectEditManager(this, getPalette(), true);
+	}
+
+	private Palette getPalette() {
+		if (getModel().eContainer().eContainer() instanceof FBType) {
+			return ((FBType) getModel().eContainer().eContainer()).getPaletteEntry().getPalette();
+		}
+		// we are in an app or supp
+		return getModel().getFbNetwork().getAutomationSystem().getPalette();
 	}
 
 	@Override

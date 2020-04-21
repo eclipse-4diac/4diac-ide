@@ -261,11 +261,12 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public EAttribute getPalette_Project() {
+	public EAttribute getPalette_TypeLibrary() {
 		return (EAttribute)paletteEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -274,27 +275,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPalette_AutomationSystem() {
-		return (EReference)paletteEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getPalette_TypeLibrary() {
-		return (EAttribute)paletteEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getPalette_FbTypes() {
-		return (EReference)paletteEClass.getEStructuralFeatures().get(5);
+		return (EReference)paletteEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -303,15 +285,6 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 */
 	@Override
 	public EReference getPalette_ResourceTypes() {
-		return (EReference)paletteEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getPalette_DeviceTypes() {
 		return (EReference)paletteEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -320,8 +293,17 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getPalette_DeviceTypes() {
+		return (EReference)paletteEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getPalette_SegmentTypes() {
-		return (EReference)paletteEClass.getEStructuralFeatures().get(7);
+		return (EReference)paletteEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -330,7 +312,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 */
 	@Override
 	public EReference getPalette_SubAppTypes() {
-		return (EReference)paletteEClass.getEStructuralFeatures().get(8);
+		return (EReference)paletteEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -339,7 +321,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 */
 	@Override
 	public EReference getPalette_AdapterTypes() {
-		return (EReference)paletteEClass.getEStructuralFeatures().get(3);
+		return (EReference)paletteEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -704,8 +686,6 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		// Create classes and their features
 		paletteEClass = createEClass(PALETTE);
-		createEAttribute(paletteEClass, PALETTE__PROJECT);
-		createEReference(paletteEClass, PALETTE__AUTOMATION_SYSTEM);
 		createEAttribute(paletteEClass, PALETTE__TYPE_LIBRARY);
 		createEReference(paletteEClass, PALETTE__ADAPTER_TYPES);
 		createEReference(paletteEClass, PALETTE__DEVICE_TYPES);
@@ -791,8 +771,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
 		XMLTypePackage theXMLTypePackage = (XMLTypePackage)EPackage.Registry.INSTANCE.getEPackage(XMLTypePackage.eNS_URI);
+		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
 		DataPackage theDataPackage = (DataPackage)EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
 
 		// Create type parameters
@@ -810,8 +790,6 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(paletteEClass, Palette.class, "Palette", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getPalette_Project(), this.getIProject(), "project", null, 0, 1, Palette.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getPalette_AutomationSystem(), theLibraryElementPackage.getAutomationSystem(), theLibraryElementPackage.getAutomationSystem_Palette(), "automationSystem", null, 0, 1, Palette.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getPalette_TypeLibrary(), this.getTypeLibrary(), "typeLibrary", null, 0, 1, Palette.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPalette_AdapterTypes(), this.getStringToAdapterTypePaletteEntryMap(), null, "adapterTypes", null, 0, -1, Palette.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPalette_DeviceTypes(), this.getStringToFDeviceTypePaletteEntryMap(), null, "deviceTypes", null, 0, -1, Palette.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -845,6 +823,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		op = addEOperation(paletteEClass, null, "removePaletteEntry", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getPaletteEntry(), "entry", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(paletteEClass, this.getIProject(), "getProject", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stringToAdapterTypePaletteEntryMapEClass, Map.Entry.class, "StringToAdapterTypePaletteEntryMap", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getStringToAdapterTypePaletteEntryMap_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

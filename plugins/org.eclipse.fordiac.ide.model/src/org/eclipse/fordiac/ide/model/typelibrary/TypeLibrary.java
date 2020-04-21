@@ -106,6 +106,10 @@ public final class TypeLibrary implements TypeLibraryTags {
 		return dataTypeLib;
 	}
 
+	public IProject getProject() {
+		return project;
+	}
+
 	private EMap<String, ? extends PaletteEntry> getTypeList(IFile typeFile) {
 		String extension = typeFile.getFileExtension();
 		if (null != extension) {

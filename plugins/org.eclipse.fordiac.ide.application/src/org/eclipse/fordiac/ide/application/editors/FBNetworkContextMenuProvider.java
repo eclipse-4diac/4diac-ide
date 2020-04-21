@@ -20,21 +20,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
-import java.util.List;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.FigureCanvas;
-import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkElementInsertAction;
 import org.eclipse.fordiac.ide.application.actions.MapAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.model.Activator;
@@ -122,8 +117,6 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 
 		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 
-		createFBMenus(menu);
-
 		action = getRegistry().getAction(ActionFactory.CUT.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
@@ -142,28 +135,9 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 
 	private boolean useChangeFBType;
 
-	@SuppressWarnings("rawtypes")
-	private void createFBMenus(final IMenuManager menu) {
-		useChangeFBType = false;
-		String text = Messages.UIFBNetworkContextMenuProvider_InsertFB;
-		List eps = editor.getViewer().getSelectedEditParts();
-		for (Object ep : eps) {
-			if ((ep instanceof FBEditPart) || (ep instanceof SubAppForFBNetworkEditPart)) {
-				text = Messages.UIFBNetworkContextMenuProvider_ChangeType;
-				useChangeFBType = true;
-				break;
-			}
-		}
-		if (useChangeFBType) {
-			MenuManager submenu = new MenuManager(text);
-			menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
-			fillMenuForFolder(submenu, palette.getProject());
-		}
-	}
-
-	public void buildFBInsertMenu(final IMenuManager menu, Point point) {
+	public void buildFBInsertMenu(final IMenuManager menu, Point point, boolean useChangeFBType) {
 		pt = point;
-		useChangeFBType = false;
+		this.useChangeFBType = useChangeFBType;
 		fillMenuForFolder(menu, palette.getProject());
 	}
 

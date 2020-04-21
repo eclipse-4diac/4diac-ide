@@ -14,6 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.gef.utilities.TemplateCreationFactory;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
@@ -29,7 +30,7 @@ import org.eclipse.swt.dnd.DND;
 
 public class SysConfTemplateTransferDropTargetListener extends TemplateTransferDropTargetListener {
 
-	private AutomationSystem system;
+	private final IProject targetProject;
 
 	private static class SysConfTemplateCreationFactory implements CreationFactory {
 
@@ -59,7 +60,7 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 	 */
 	public SysConfTemplateTransferDropTargetListener(final EditPartViewer viewer, AutomationSystem system) {
 		super(viewer);
-		this.system = system;
+		targetProject = (null != system) ? system.getSystemFile().getProject() : null;
 	}
 
 	@Override
@@ -73,11 +74,11 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 		} else {
 			if (TemplateTransfer.getInstance().getTemplate() instanceof PaletteEntry) {
 				PaletteEntry entry = (PaletteEntry) TemplateTransfer.getInstance().getTemplate();
-				AutomationSystem paletteSystem = entry.getPalette().getAutomationSystem();
+				IProject srcProject = entry.getFile().getProject();
 
 				// If project is null it is an entry from the tool palette
-				if (isSysConfEditorType(TemplateTransfer.getInstance().getTemplate()) && (null != paletteSystem)
-						&& (paletteSystem.equals(system))) {
+				if (isSysConfEditorType(TemplateTransfer.getInstance().getTemplate()) && (null != targetProject)
+						&& (targetProject.equals(srcProject))) {
 					getCurrentEvent().detail = DND.DROP_COPY;
 				} else {
 					getCurrentEvent().detail = DND.DROP_NONE;

@@ -123,7 +123,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 
 	private NewInstanceDirectEditManager getManager() {
 		if (null == manager) {
-			manager = new NewInstanceDirectEditManager(this, palette);
+			manager = new NewInstanceDirectEditManager(this, palette, false);
 		}
 		return manager;
 	}
