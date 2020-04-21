@@ -43,7 +43,6 @@
 		<module>../org.eclipse.fordiac.ide.resourceediting</module>
 		<module>../org.eclipse.fordiac.ide.runtime</module>
 		<module>../org.eclipse.fordiac.ide.subapptypeeditor</module>
-		<module>../org.eclipse.fordiac.ide.systemimport</module>
 		<module>../org.eclipse.fordiac.ide.systemconfiguration</module>
 		<module>../org.eclipse.fordiac.ide.ui</module>
 		<module>../org.eclipse.fordiac.ide.util</module>
@@ -56,7 +55,6 @@
 		<module>../../features/org.eclipse.fordiac.ide.deployment.feature</module>
 		<module>../../features/org.eclipse.fordiac.ide.export.feature</module>
 		<module>../../features/org.eclipse.fordiac.ide.runtime.feature</module>
-		<module>../../features/org.eclipse.fordiac.ide.systemimport.feature</module>
 		<module>../../features/org.eclipse.fordiac.ide.typeeditor.feature</module>
 		<module>../../features/org.eclipse.fordiac.ide.workbench.feature</module>
 		<module>../../features/org.eclipse.fordiac.ide.comgeneration.feature</module>

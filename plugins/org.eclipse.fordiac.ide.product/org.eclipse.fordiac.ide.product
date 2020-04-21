@@ -270,7 +270,6 @@
       <feature id="org.eclipse.fordiac.ide.deployment.feature"/>
       <feature id="org.eclipse.fordiac.ide.export.feature"/>
       <feature id="org.eclipse.fordiac.ide.runtime.feature"/>
-      <feature id="org.eclipse.fordiac.ide.systemimport.feature"/>
       <feature id="org.eclipse.fordiac.ide.typeeditor.feature"/>
       <feature id="org.eclipse.fordiac.ide.workbench.feature"/>
       <feature id="org.eclipse.xtext.xbase.lib"/>
