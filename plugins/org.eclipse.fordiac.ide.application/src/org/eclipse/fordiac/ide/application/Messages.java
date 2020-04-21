@@ -24,6 +24,12 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.application.messages"; //$NON-NLS-1$
 
+	public static String AddFBBookMark_AddBookmark;
+
+	public static String AddFBBookMark_AddBookMarkTitle;
+
+	public static String AddFBBookMark_EnterBookmarkName;
+
 	public static String ConnectionConstraintsPrefernecePage_Description;
 
 	public static String ConnectionConstraintsPrefernecePage_EnableFORTETypeCasts;
