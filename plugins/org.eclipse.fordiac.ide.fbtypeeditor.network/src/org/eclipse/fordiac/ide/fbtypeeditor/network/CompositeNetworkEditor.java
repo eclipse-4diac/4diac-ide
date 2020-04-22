@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.network;
 
 import java.util.Map;
 
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -26,11 +28,13 @@ import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenu
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -186,4 +190,33 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 			final ZoomManager zoomManager) {
 		return new CFBNetworkcontextMenuProvider(this, getActionRegistry(), zoomManager, typeLib);
 	}
+
+	@Override
+	public void gotoMarker(IMarker marker) {
+		try {
+			Map<String, Object> attributes = marker.getAttributes();
+			if (FordiacMarkerHelper.markerTargetsFBNetworkElement(attributes)) {
+				Object location = attributes.get(IMarker.LOCATION);
+				if (location instanceof String) {
+					FBNetworkElement fbne = getModel().getElementNamed((String) location);
+					if (null != fbne) {
+						selectElement(fbne);
+					}
+				}
+			}
+		} catch (CoreException e) {
+			Activator.getDefault().logError("Could not get marker attributes", e); //$NON-NLS-1$
+		}
+	}
+
+	@Override
+	public boolean isMarkerTarget(IMarker marker) {
+		try {
+			return FordiacMarkerHelper.markerTargetsFBNetworkElement(marker.getAttributes());
+		} catch (CoreException e) {
+			Activator.getDefault().logError("Could not get marker attributes", e); //$NON-NLS-1$
+		}
+		return false;
+	}
+
 }

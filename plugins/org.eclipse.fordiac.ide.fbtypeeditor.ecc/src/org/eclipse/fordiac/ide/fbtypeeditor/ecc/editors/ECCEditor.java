@@ -16,6 +16,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
@@ -94,7 +95,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
+		ScrollingGraphicalViewer viewer = getGraphicalViewer();
 
 		// set the control for the new state action so that it can get the correct
 		// position for state creation
@@ -281,6 +282,17 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	@Override
 	public void doSaveAs() {
 		// nothing to do here
+	}
+
+	@Override
+	public void gotoMarker(IMarker marker) {
+		// For now we don't handle markers in this editor
+	}
+
+	@Override
+	public boolean isMarkerTarget(IMarker marker) {
+		// For now we don't handle markers in this editor
+		return false;
 	}
 
 }

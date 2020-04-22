@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -580,4 +581,16 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	public void setCommonCommandStack(CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
+
+	@Override
+	public void gotoMarker(IMarker marker) {
+		// For now we don't handle markers in this editor
+	}
+
+	@Override
+	public boolean isMarkerTarget(IMarker marker) {
+		// For now we don't handle markers in this editor
+		return false;
+	}
+
 }

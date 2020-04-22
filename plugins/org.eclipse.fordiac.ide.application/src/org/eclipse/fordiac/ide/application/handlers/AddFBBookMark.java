@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -52,6 +53,7 @@ public class AddFBBookMark extends AbstractHandler {
 				Map<String, String> attrs = new HashMap<>();
 				attrs.put(IMarker.MESSAGE, description);
 				attrs.put(IMarker.LOCATION, getLocation(element));
+				FordiacMarkerHelper.addTargetIdentifier(element, attrs);
 				CreateMarkersOperation op = new CreateMarkersOperation(IMarker.BOOKMARK, attrs, getFile(element),
 						Messages.AddFBBookMark_AddBookmark);
 				try {

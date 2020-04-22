@@ -7,12 +7,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Peter Gsellmann 
+ *   Peter Gsellmann
  *   - initial implementation and/or initial documentation
  *   Alois Zoitl - reworked algorithm edting to reduce duplicated code
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.simplefb;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB;
@@ -118,4 +119,16 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		super.dispose();
 	}
+
+	@Override
+	public void gotoMarker(IMarker marker) {
+		// For now we don't handle markers in this editor
+	}
+
+	@Override
+	public boolean isMarkerTarget(IMarker marker) {
+		// For now we don't handle markers in this editor
+		return false;
+	}
+
 }

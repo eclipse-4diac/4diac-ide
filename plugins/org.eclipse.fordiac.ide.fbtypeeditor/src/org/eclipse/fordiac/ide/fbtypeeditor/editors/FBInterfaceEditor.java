@@ -16,6 +16,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBInterfacePaletteFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
@@ -170,6 +171,17 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	@Override
 	public void doSaveAs() {
 		// nothing to do here
+	}
+
+	@Override
+	public void gotoMarker(IMarker marker) {
+		// For now we don't handle markers in this editor
+	}
+
+	@Override
+	public boolean isMarkerTarget(IMarker marker) {
+		// For now we don't handle markers in this editor
+		return false;
 	}
 
 }

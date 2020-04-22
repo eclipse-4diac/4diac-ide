@@ -27,6 +27,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -69,6 +70,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -76,7 +78,7 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class FBTypeEditor extends FormEditor
-		implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPageContributor {
+		implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker {
 
 	private Collection<IFBTEditorPart> editors;
 	private PaletteEntry paletteEntry;
@@ -320,6 +322,9 @@ public class FBTypeEditor extends FormEditor
 		if (adapter == IPropertySheetPage.class) {
 			return adapter.cast(new TabbedPropertySheetPage(this));
 		}
+		if (adapter == IGotoMarker.class) {
+			return adapter.cast(this);
+		}
 		return super.getAdapter(adapter);
 	}
 
@@ -351,4 +356,16 @@ public class FBTypeEditor extends FormEditor
 		return "property.contributor.fb"; //$NON-NLS-1$
 	}
 
+	@Override
+	public void gotoMarker(IMarker marker) {
+		int i = 0;
+		for (IFBTEditorPart editorPart : editors) {
+			if (editorPart.isMarkerTarget(marker)) {
+				setActivePage(i);
+				editorPart.gotoMarker(marker);
+				break;
+			}
+			i++;
+		}
+	}
 }

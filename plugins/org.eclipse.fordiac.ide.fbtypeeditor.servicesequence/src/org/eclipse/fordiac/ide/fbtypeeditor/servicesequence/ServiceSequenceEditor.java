@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH.
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
@@ -175,4 +176,16 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 	public void setCommonCommandStack(CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
+
+	@Override
+	public void gotoMarker(IMarker marker) {
+		// For now we don't handle markers in this editor
+	}
+
+	@Override
+	public boolean isMarkerTarget(IMarker marker) {
+		// For now we don't handle markers in this editor
+		return false;
+	}
+
 }
