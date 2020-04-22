@@ -985,7 +985,8 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getVarDeclaration(this);"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SystemConfiguration" eSuperTypes="#//I4DIACElement">
     <eOperations name="getAutomationSystem" lowerBound="1" eType="#//AutomationSystem">
