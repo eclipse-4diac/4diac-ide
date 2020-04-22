@@ -39,8 +39,10 @@ public class PaletteFilter {
 	public List<PaletteEntry> findTypes(final String searchString,
 			final Stream<Entry<String, ? extends PaletteEntry>> stream) {
 		final StringMatcher matcher = setMatcher(searchString);
-		return stream.filter(entry -> matcher.match(entry.getKey())).map(entry -> entry.getValue())
-				.collect(Collectors.toList());
+		return stream.filter(entry -> matcher.match(entry.getKey()))
+				.filter(entry -> (null != entry.getValue().getType())). // only forward types that can be loaded
+																		// correctly
+				map(entry -> entry.getValue()).collect(Collectors.toList());
 	}
 
 	private StringMatcher setMatcher(final String searchString) {
