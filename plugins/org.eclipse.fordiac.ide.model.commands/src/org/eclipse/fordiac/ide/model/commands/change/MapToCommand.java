@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -189,8 +189,8 @@ public class MapToCommand extends Command {
 			VarDeclaration srcVar = srcInputs.get(i);
 			VarDeclaration dstVar = destInputs.get(i);
 
-			if (null != srcVar.getValue()) {
-				if (null != dstVar.getValue()) {
+			if ((null != srcVar.getValue()) && (!srcVar.getValue().getValue().isEmpty())) {
+				if (null == dstVar.getValue()) {
 					dstVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 				}
 				dstVar.getValue().setValue(srcVar.getValue().getValue());
@@ -280,10 +280,10 @@ public class MapToCommand extends Command {
 	// deleted
 	/*
 	 * public void oldExecute() { boolean deletedConnections = false;
-	 * 
+	 *
 	 * uiResourceEditor.getResourceElement().getFBNetwork().getMappedFBs().add(
 	 * mappedFBView.getFb());
-	 * 
+	 *
 	 * for (InterfaceElementView interfaceElement : fbView.getInterfaceElements()) {
 	 * for (ConnectionView connectionView : interfaceElement.getInConnections()) {
 	 * if (connectionView.getSource().eContainer() instanceof FBView) { FBView
@@ -301,7 +301,7 @@ public class MapToCommand extends Command {
 	 * uiResourceEditor.getResourceElement());
 	 * connectionView.getConnectionElement().setBrokenConnection(false);
 	 * System.out.println("notBroken: " + connectionView);
-	 * 
+	 *
 	 * for (ConnectionView temp :
 	 * connectionView.getSource().getMappedInterfaceElement() .getOutConnections())
 	 * { System.out.println( "Is Resource Connection " +

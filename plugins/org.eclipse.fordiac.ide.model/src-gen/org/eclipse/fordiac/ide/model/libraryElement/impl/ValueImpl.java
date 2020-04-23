@@ -42,7 +42,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VALUE_EDEFAULT = null;
+	protected static final String VALUE_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute. <!--
