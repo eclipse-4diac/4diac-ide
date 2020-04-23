@@ -238,7 +238,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		}
 	}
 
-	private class StructVarsLabelProvider extends LabelProvider implements ITableLabelProvider {
+	private static final class StructVarsLabelProvider extends LabelProvider implements ITableLabelProvider {
 		@Override
 		public Image getColumnImage(final Object element, final int columnIndex) {
 			return null;

@@ -37,20 +37,14 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
@@ -184,26 +178,6 @@ public enum SystemManager {
 	}
 
 	/**
-	 * Checks if is distributed system.
-	 *
-	 * @param project the project
-	 *
-	 * @return true, if is distributed system
-	 */
-	private static boolean isDistributedSystem(final IProject project) {
-		boolean retval = false;
-		try {
-			retval = (project.getNature(FORDIAC_PROJECT_NATURE_ID) != null)
-					|| (project.getNature(OLD_DISTRIBUTED_PROJECT_NATURE_ID) != null); // Allow that also pre eclipse
-																						// 4diac projects are loaded
-																						// correctly
-		} catch (CoreException e) {
-			Activator.getDefault().logWarning(e.getMessage(), e);
-		}
-		return retval;
-	}
-
-	/**
 	 * Load system.
 	 *
 	 *
@@ -288,52 +262,13 @@ public enum SystemManager {
 		return result;
 	}
 
-	private static Runnable createUniqueFBNamesValidity(final AutomationSystem system) {
-
-		return new Runnable() {
-			@Override
-			public void run() {
-				for (Application app : system.getApplication()) {
-					checkAndCreateAnnotation(system, app.getFBNetwork().getNetworkElements());
-				}
-				checkDevices(system, system.getSystemConfiguration().getDevices());
-			}
-
-			private void checkDevices(AutomationSystem system, EList<Device> devices) {
-				for (Device device : devices) {
-					for (org.eclipse.fordiac.ide.model.libraryElement.Resource res : device.getResource()) {
-						checkAndCreateAnnotation(system, res.getFBNetwork().getNetworkElements());
-					}
-				}
-			}
-
-			private void checkAndCreateAnnotation(AutomationSystem system, List<FBNetworkElement> element) {
-				for (FBNetworkElement fb : element) {
-					fb.getAnnotations().clear();
-					// TODO model refactoring - check if this is necessary in the new
-					// version if yes:
-					// check how we can use the same functionality as in set name
-					// if
-					// (!NameRepository.getInstance().addSystemUniqueFBInstanceName(system,
-					// fb.getName(), fb.getId())) {
-					// Annotation anno = fb.createAnnotation("FB name not unique");
-					// anno.setServity(IMarker.SEVERITY_ERROR);
-					// }
-					if (element instanceof SubApp) {
-						checkAndCreateAnnotation(system, ((SubApp) element).getFbNetwork().getNetworkElements());
-					}
-				}
-			}
-		};
-	}
-
 	/**
 	 * Save system.
 	 *
 	 * @param system the system
 	 * @param all    the all
 	 */
-	public void saveSystem(final org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem system) {
+	public static void saveSystem(final AutomationSystem system) {
 		SystemExporter systemExporter = new SystemExporter(system);
 		systemExporter.saveSystem(system.getSystemFile());
 	}
@@ -374,43 +309,6 @@ public enum SystemManager {
 		return allSystemsInWS.computeIfAbsent(project, p -> new HashMap<>());
 	}
 
-	/**
-	 * Gets the project handle.
-	 *
-	 * @param name the name
-	 *
-	 * @return the project handle
-	 */
-	private static IProject getProjectHandle(String name) {
-		return ResourcesPlugin.getWorkspace().getRoot().getProject(name);
-	}
-
-	/**
-	 * returns a unique/valid name for a system.
-	 *
-	 * @param name the name
-	 *
-	 * @return a unique/valid system name
-	 */
-	private static String getValidSystemName(final String name) {
-
-		if (isUniqueSystemName(name)) {
-			return name;
-		} else {
-			int i = 1;
-			String temp = name + "_" + i; //$NON-NLS-1$
-			while ((INSTANCE.getSystemForName(temp) != null) || getProjectHandle(temp).exists()) {
-				i++;
-				temp = name + "_" + i; //$NON-NLS-1$
-			}
-			return temp;
-		}
-	}
-
-	public static boolean isUniqueSystemName(final String name) {
-		return ((INSTANCE.getSystemForName(name) == null) && !getProjectHandle(name).exists());
-	}
-
 	public ITagProvider getTagProvider(Class<?> class1, AutomationSystem system) {
 		if (!tagProviders.containsKey(system)) {
 			tagProviders.put(system, new ArrayList<ITagProvider>());
@@ -441,39 +339,6 @@ public enum SystemManager {
 			}
 		}
 		return provider;
-	}
-
-	public AutomationSystem createLocalProject(String projectName) {
-		NullProgressMonitor monitor = new NullProgressMonitor();
-		try {
-			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			String systemName = SystemManager.getValidSystemName(projectName);
-
-			IProject project = root.getProject(systemName);
-			IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(project.getName());
-
-			description.setNatureIds(new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID });
-
-			project.create(description, monitor);
-			project.open(monitor);
-
-			SystemPaletteManagement.copyToolTypeLibToDestination(project);
-
-//			AutomationSystem system = createAutomationSystem(project);
-//			INSTANCE.addSystem(system);
-
-//			AutomationSystem sys2 = INSTANCE.getSystemForName(system.getName());
-//			if ((sys2 != null) && !sys2.equals(system)) {
-//				system = sys2;
-//			}
-//
-//			return system;
-		} catch (CoreException x) {
-			Activator.getDefault().logError(x.getMessage(), x);
-		} finally {
-			monitor.done();
-		}
-		return null;
 	}
 
 	private static String[] getNatureIDs() {

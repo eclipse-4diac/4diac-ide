@@ -1,6 +1,5 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.systemmanagement.contentprovider,
  org.eclipse.fordiac.ide.systemmanagement.extension,
  org.eclipse.fordiac.ide.systemmanagement.nature,
  org.eclipse.fordiac.ide.systemmanagement.util
