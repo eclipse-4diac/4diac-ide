@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
+import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -57,7 +58,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class StructViewingComposite extends Composite implements CommandExecutor {
+public class StructViewingComposite extends Composite implements CommandExecutor, I4diacTableUtil {
 	private static final String NAME = "NAME"; //$NON-NLS-1$
 	private static final String TYPE = "DATATYPE"; //$NON-NLS-1$
 	private static final String INIT = "INITIAL_VALUE"; //$NON-NLS-1$
@@ -127,10 +128,6 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	private String getVarName() {
 		return (null != getLastSelectedVariable()) ? getLastSelectedVariable().getName() : null;
-	}
-
-	public TableViewer getStructViewer() {
-		return structViewer;
 	}
 
 	private int getInsertionIndex() {
@@ -268,5 +265,33 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			}
 			return element.toString();
 		}
+	}
+
+	@Override
+	public TableViewer getViewer() {
+		return structViewer;
+	}
+
+	@Override
+	public void addEntry(Object entry, int index) {
+		if (entry instanceof VarDeclaration) {
+			VarDeclaration varEntry = (VarDeclaration) entry;
+			CreateMemberVariableCommand cmd = new CreateMemberVariableCommand(getType(), index, varEntry.getName(),
+					varEntry.getType());
+			executeCommand(cmd);
+		}
+	}
+
+	@Override
+	public Object removeEntry(int index) {
+		VarDeclaration entry = (VarDeclaration) getEntry(index);
+		DeleteMemberVariableCommand cmd = new DeleteMemberVariableCommand(getType(), entry);
+		executeCommand(cmd);
+		return entry;
+	}
+
+	@Override
+	public Object getEntry(int index) {
+		return getType().getMemberVariables().get(index);
 	}
 }

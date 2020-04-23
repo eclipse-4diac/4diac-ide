@@ -18,6 +18,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
+import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
@@ -27,6 +32,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.handlers.IHandlerService;
 
 public final class TableWidgetFactory {
 
@@ -66,10 +73,11 @@ public final class TableWidgetFactory {
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
 			@Override
 			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
-				return event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL
-						|| event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION
-						|| (event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED && event.keyCode == SWT.CR)
-						|| event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC;
+				return (event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL)
+						|| (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
+						|| ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED)
+								&& (event.keyCode == SWT.CR))
+						|| (event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC);
 			}
 		};
 
@@ -86,5 +94,50 @@ public final class TableWidgetFactory {
 
 	private TableWidgetFactory() {
 		throw new UnsupportedOperationException("Widget Factory should not be instantiated"); //$NON-NLS-1$
+	}
+
+	public static void enableCopyPasteCut(final IWorkbenchPart part, I4diacTableUtil parent) {
+		IHandlerService serv = part.getSite().getService(IHandlerService.class);
+		Clipboard cb = Clipboard.getDefault();
+		Table table = parent.getViewer().getTable();
+
+		serv.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_COPY, new AbstractHandler() {
+			@Override
+			public Object execute(ExecutionEvent event) throws ExecutionException {
+				int index = table.getSelectionIndex();
+				if (index < 0) {
+					return Status.CANCEL_STATUS;
+				}
+				Object entry = parent.getEntry(index);
+				cb.setContents(entry);
+				return Status.OK_STATUS;
+			}
+		});
+
+		serv.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_PASTE, new AbstractHandler() {
+			@Override
+			public Object execute(ExecutionEvent event) throws ExecutionException {
+				Object entry = Clipboard.getDefault().getContents();
+				int index = table.getSelectionIndex();
+				if (index < 0) {
+					index = table.getItemCount();
+				}
+				parent.addEntry(entry, index);
+				return Status.OK_STATUS;
+			}
+		});
+
+		serv.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_CUT, new AbstractHandler() {
+			@Override
+			public Object execute(ExecutionEvent event) throws ExecutionException {
+				int index = table.getSelectionIndex();
+				if (index < 0) {
+					return Status.CANCEL_STATUS;
+				}
+				Object entry = parent.removeEntry(index);
+				cb.setContents(entry);
+				return Status.OK_STATUS;
+			}
+		});
 	}
 }

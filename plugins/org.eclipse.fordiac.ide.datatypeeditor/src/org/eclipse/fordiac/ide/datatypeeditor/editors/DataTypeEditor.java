@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -81,7 +82,7 @@ public class DataTypeEditor extends EditorPart
 	public void stackChanged(CommandStackEvent event) {
 		updateActions(stackActions);
 		firePropertyChange(IEditorPart.PROP_DIRTY);
-		editComposite.getStructViewer().refresh();
+		editComposite.getViewer().refresh();
 	}
 
 	@Override
@@ -186,6 +187,7 @@ public class DataTypeEditor extends EditorPart
 			editComposite = new StructViewingComposite(parent, 1, commandStack, dataType,
 					TypeLibrary.getTypeLibrary(file.getProject()).getDataTypeLibrary());
 			editComposite.createPartControl(parent);
+			TableWidgetFactory.enableCopyPasteCut(this, editComposite);
 		} else if (importFailed) {
 			createErrorComposite(parent, Messages.ErrorCompositeMessage);
 			if (outsideWorkspace) {
