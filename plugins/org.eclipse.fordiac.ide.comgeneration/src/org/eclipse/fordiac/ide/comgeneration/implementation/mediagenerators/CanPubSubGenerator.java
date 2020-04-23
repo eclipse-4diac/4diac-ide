@@ -63,7 +63,7 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 		}
 
 		String sourceValue = sourceId.getValue().getValue();
-		if (sourceValue == null) {
+		if (sourceValue.isEmpty()) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("CAN:"); //$NON-NLS-1$
 			sb.append(mediaInfo.getSegment().getName());

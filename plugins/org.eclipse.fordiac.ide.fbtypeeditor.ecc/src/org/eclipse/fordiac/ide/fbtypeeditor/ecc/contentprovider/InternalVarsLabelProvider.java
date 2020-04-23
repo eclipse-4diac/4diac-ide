@@ -40,9 +40,7 @@ public class InternalVarsLabelProvider extends LabelProvider implements ITableLa
 			case 2:
 				return (varDecl.getArraySize() > 0) ? Integer.toString(varDecl.getArraySize()) : ""; //$NON-NLS-1$
 			case 3:
-				return (varDecl.getValue() != null && varDecl.getValue().getValue() != null)
-						? varDecl.getValue().getValue()
-						: ""; //$NON-NLS-1$
+				return (varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""; //$NON-NLS-1$
 			case 4:
 				return varDecl.getComment();
 			default:

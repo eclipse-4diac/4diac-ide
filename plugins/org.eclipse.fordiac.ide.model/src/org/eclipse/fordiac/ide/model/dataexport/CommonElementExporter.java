@@ -402,8 +402,7 @@ abstract class CommonElementExporter {
 
 	protected void addParamsConfig(EList<VarDeclaration> inputVars) throws XMLStreamException {
 		for (VarDeclaration var : inputVars) {
-			if ((null != var.getValue()) && (null != var.getValue().getValue())
-					&& !var.getValue().getValue().equals("")) { //$NON-NLS-1$
+			if ((null != var.getValue()) && !var.getValue().getValue().isEmpty()) {
 				addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
 				addNameAttribute(var.getName());
 				writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, var.getValue().getValue());

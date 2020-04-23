@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH, 
+ * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH,
  * 							 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - reworked deployment to detect if monitoring was enabled  
+ *   Alois Zoitl - reworked deployment to detect if monitoring was enabled
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment;
 
@@ -64,7 +64,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 
 	/**
 	 * set of automation systems where monitoring was active during deployment.
-	 * 
+	 *
 	 * For these automation systems monitoring was disabled and need to be renabled
 	 * after deployment.
 	 */
@@ -72,7 +72,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 
 	/**
 	 * DownloadRunnable constructor.
-	 * 
+	 *
 	 * @param deploymentData            the collection of elements to deploy
 	 * @param overrideDevMgmCommHandler if not null this device management
 	 *                                  communication should be used instead the one
@@ -92,9 +92,9 @@ class DownloadRunnable implements IRunnableWithProgress {
 
 	/**
 	 * Runs the check.
-	 * 
+	 *
 	 * @param monitor the progress monitor
-	 * 
+	 *
 	 * @throws InvocationTargetException the invocation target exception
 	 * @throws InterruptedException      the interrupted exception
 	 */
@@ -153,7 +153,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 	/**
 	 * Check if the resource exists already in the device and if yes ask the user
 	 * how to behave (i.e., abort, override, or override all).
-	 * 
+	 *
 	 * @param res           the resource that should be deployed
 	 * @param resourceNames the names of all resources currently in the device
 	 * @param executor      the deployment executor
@@ -236,8 +236,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 	private static int countResourceParams(final Resource res) {
 		int work = 0;
 		for (VarDeclaration varDecl : res.getVarDeclarations()) {
-			if (varDecl.getValue() != null && varDecl.getValue().getValue() != null
-					&& varDecl.getValue().getValue().equals("")) { //$NON-NLS-1$
+			if ((varDecl.getValue() != null) && (!varDecl.getValue().getValue().isEmpty())) {
 				work++;
 			}
 		}

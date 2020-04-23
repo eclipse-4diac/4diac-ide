@@ -201,7 +201,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			case COMMENT:
 				return var.getComment();
 			case INIT:
-				return (var.getValue() == null) ? "" : var.getValue().getValue();
+				return (var.getValue() == null) ? "" : var.getValue().getValue(); //$NON-NLS-1$
 			case ARRAY:
 				return Integer.toString(var.getArraySize());
 			default:
@@ -254,11 +254,11 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				case 1:
 					return varDecl.getType().getName();
 				case 2:
-					return (varDecl.getValue() == null) ? "" : varDecl.getValue().getValue();
+					return varDecl.getValue().getValue();
 				case 3:
 					return varDecl.getComment();
 				case 4:
-					return (varDecl.getArraySize() > 0) ? Integer.toString(varDecl.getArraySize()) : "";
+					return (varDecl.getArraySize() > 0) ? Integer.toString(varDecl.getArraySize()) : ""; //$NON-NLS-1$
 				default:
 					break;
 				}

@@ -55,14 +55,14 @@ public class ChangeValueCommand extends Command {
 	@Override
 	public void execute() {
 		mirroredVar = getMirroredVariable();
-		if (var.getValue() == null) {
+		if (null == var.getValue()) {
 			var.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			if (null != mirroredVar) {
 				mirroredVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			}
 			oldValue = ""; //$NON-NLS-1$
 		} else {
-			oldValue = var.getValue().getValue() != null ? var.getValue().getValue() : ""; //$NON-NLS-1$
+			oldValue = var.getValue().getValue();
 		}
 		if ("".equals(newValue)) { //$NON-NLS-1$
 			newValue = null;

@@ -21,7 +21,7 @@ public interface DeploymentHelper {
 
 	static String getVariableValue(VarDeclaration varDecl, AutomationSystem system) {
 		Value value = varDecl.getValue();
-		if (null != value && null != value.getValue() && !"".equals(value.getValue())) { //$NON-NLS-1$
+		if (null != value && !value.getValue().isEmpty()) {
 			String val = value.getValue();
 			if (val.contains("%")) { //$NON-NLS-1$
 				String replaced = SystemManager.INSTANCE.getReplacedString(system, val);

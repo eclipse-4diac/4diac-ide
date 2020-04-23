@@ -155,9 +155,7 @@ public class InterfaceElementSection extends AbstractSection {
 				if (getType().isIsInput()) {
 					parameterText.setVisible(true);
 					valueCLabel.setVisible(true);
-					parameterText.setText(
-							var.getValue() != null && var.getValue().getValue() != null ? var.getValue().getValue()
-									: ""); //$NON-NLS-1$
+					parameterText.setText((var.getValue() != null) ? var.getValue().getValue() : ""); //$NON-NLS-1$
 				} else {
 					valueCLabel.setVisible(false);
 					parameterText.setVisible(false);

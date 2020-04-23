@@ -102,7 +102,7 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 			getWriter().writeAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE,
 					Integer.toString(varDecl.getArraySize()));
 		}
-		if ((null != varDecl.getValue()) && (null != varDecl.getValue().getValue())) {
+		if ((null != varDecl.getValue()) && (!varDecl.getValue().getValue().isEmpty())) {
 			getWriter().writeAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl.getValue().getValue());
 		}
 	}

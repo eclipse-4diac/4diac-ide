@@ -1636,7 +1636,7 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 					if (value != null && v.getInputConnections().isEmpty()) {
 						// to be sure that there is no input connection --> the input can have a
 						// parameter
-						if (value.getValue() != null && !value.getValue().isEmpty()) {
+						if (!value.getValue().isEmpty()) {
 							// to be sure that value is not null(not set) and value is not empty
 							paramString.append("  {"); //$NON-NLS-1$
 							paramString.append(getCompFBIndex(fbs, fb));

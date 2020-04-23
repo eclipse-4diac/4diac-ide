@@ -66,7 +66,7 @@ public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
 		}
 
 		String sourceValue = sourceId.getValue().getValue();
-		if (sourceValue == null) {
+		if (sourceValue.isEmpty()) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(host);
 			sb.append(":"); //$NON-NLS-1$

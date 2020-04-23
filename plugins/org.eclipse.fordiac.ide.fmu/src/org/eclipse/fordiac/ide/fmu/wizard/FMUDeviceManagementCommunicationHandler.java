@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 - 2018 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -710,8 +710,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			returnValue.setType(getInfoFromConnectedFB(commFB, paFBNetwork, fbName, var));
 		}
 
-		if (value != null && null != value.getValue() && !"".equals(value.getValue())) { // has some //$NON-NLS-1$
-																							// literal
+		if (value != null && !value.getValue().isEmpty()) { // has some literal
 			initialValue = value.getValue();
 			if (initialValue.contains("%")) { //$NON-NLS-1$
 				String replaced = SystemManager.INSTANCE.getReplacedString(paFBNetwork.getAutomationSystem(),

@@ -579,7 +579,7 @@ public class CompositeFBFilter {
     for (final FBNetworkElement ne : fbs) {
       EList<VarDeclaration> _inputVars = ne.getInterface().getInputVars();
       for (final VarDeclaration iv : _inputVars) {
-        if ((((null != iv.getValue()) && (null != iv.getValue().getValue())) && (!iv.getValue().getValue().isEmpty()))) {
+        if (((null != iv.getValue()) && (!iv.getValue().getValue().isEmpty()))) {
           ArrayList<Object> list = new ArrayList<Object>();
           list.add(Integer.valueOf(fbs.indexOf(ne)));
           list.add(iv.getName());

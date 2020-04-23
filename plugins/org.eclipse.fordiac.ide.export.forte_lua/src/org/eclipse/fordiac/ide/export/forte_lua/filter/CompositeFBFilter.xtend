@@ -178,7 +178,7 @@ class CompositeFBFilter {
 		var parameters = new ArrayList<ArrayList<?>>
 		for(ne : fbs){
 			for(iv : ne.interface.inputVars){
-				if(null !== iv.value && null !== iv.value.value && !iv.value.value.empty){
+				if(null !== iv.value && !iv.value.value.empty){
 					var list = new ArrayList<Object>
 					list.add(fbs.indexOf(ne))
 					list.add(iv.name)
