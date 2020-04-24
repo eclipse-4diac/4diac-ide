@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,8 @@
  *     - changed editor activation behavior to double click and added tab through
  *       cells behavior
  *     - extracted helper for ComboCellEditors that unfold on activation
+ *   Daniel Lindhuber
+ *     - added enableCopyPasteCut method
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
@@ -104,12 +106,15 @@ public final class TableWidgetFactory {
 		serv.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_COPY, new AbstractHandler() {
 			@Override
 			public Object execute(ExecutionEvent event) throws ExecutionException {
-				int index = table.getSelectionIndex();
-				if (index < 0) {
+				int[] indices = table.getSelectionIndices();
+				if (indices.length == 0) {
 					return Status.CANCEL_STATUS;
 				}
-				Object entry = parent.getEntry(index);
-				cb.setContents(entry);
+				Object[] entries = new Object[indices.length];
+				for (int i = 0; i < indices.length; i++) {
+					entries[i] = parent.getEntry(indices[i]);
+				}
+				cb.setContents(entries);
 				return Status.OK_STATUS;
 			}
 		});
@@ -117,12 +122,17 @@ public final class TableWidgetFactory {
 		serv.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_PASTE, new AbstractHandler() {
 			@Override
 			public Object execute(ExecutionEvent event) throws ExecutionException {
-				Object entry = Clipboard.getDefault().getContents();
-				int index = table.getSelectionIndex();
+				if (cb.getContents() == null) {
+					return Status.CANCEL_STATUS;
+				}
+				Object[] entries = (Object[]) cb.getContents();
+				int index = table.getSelectionIndex() + 1;
 				if (index < 0) {
 					index = table.getItemCount();
 				}
-				parent.addEntry(entry, index);
+				for (Object entry : entries) {
+					parent.addEntry(entry, index++);
+				}
 				return Status.OK_STATUS;
 			}
 		});
@@ -130,12 +140,15 @@ public final class TableWidgetFactory {
 		serv.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_CUT, new AbstractHandler() {
 			@Override
 			public Object execute(ExecutionEvent event) throws ExecutionException {
-				int index = table.getSelectionIndex();
-				if (index < 0) {
+				int[] indices = table.getSelectionIndices();
+				if (indices.length == 0) {
 					return Status.CANCEL_STATUS;
 				}
-				Object entry = parent.removeEntry(index);
-				cb.setContents(entry);
+				Object[] entries = new Object[indices.length];
+				for (int i = 0; i < indices.length; i++) {
+					entries[i] = parent.removeEntry(indices[i] - i);
+				}
+				cb.setContents(entries);
 				return Status.OK_STATUS;
 			}
 		});
