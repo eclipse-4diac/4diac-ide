@@ -193,11 +193,11 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
     String _name = event.getAdapterDeclaration().getName();
     _builder.append(_name);
     _builder.append("AdpNum, FORTE_");
-    String _name_1 = event.getAdapterDeclaration().getAdapterFB().getName();
-    _builder.append(_name_1);
+    String _typeName = event.getAdapterDeclaration().getTypeName();
+    _builder.append(_typeName);
     _builder.append("::scm_nEvent");
-    String _name_2 = event.getName();
-    _builder.append(_name_2);
+    String _name_1 = event.getName();
+    _builder.append(_name_1);
     _builder.append("ID);");
     _builder.newLineIfNotEmpty();
     return _builder;

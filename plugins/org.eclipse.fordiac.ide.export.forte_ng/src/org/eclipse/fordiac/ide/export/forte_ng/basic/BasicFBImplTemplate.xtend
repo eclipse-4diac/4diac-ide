@@ -84,7 +84,7 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 	'''
 
 	def protected dispatch CharSequence generateSendEvent(AdapterEvent event) '''
-		sendAdapterEvent(scm_n«event.adapterDeclaration.name»AdpNum, FORTE_«event.adapterDeclaration.adapterFB.name»::scm_nEvent«event.name»ID);
+		sendAdapterEvent(scm_n«event.adapterDeclaration.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«event.name»ID);
 	'''
 	
 	def protected CharSequence generateECC() '''

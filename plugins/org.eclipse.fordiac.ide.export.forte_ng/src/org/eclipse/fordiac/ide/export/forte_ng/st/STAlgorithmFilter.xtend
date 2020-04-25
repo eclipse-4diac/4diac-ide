@@ -62,22 +62,51 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocatedVariab
 
 import org.eclipse.xtext.validation.CheckMode
 import org.eclipse.xtext.util.CancelIndicator
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.xtext.resource.XtextResourceSet
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 
 class STAlgorithmFilter {
 
-	static final URI SYNTHETIC_FB_URI = URI.createFileURI("__synthetic.xtextfbt")
-	static final URI SYNTHETIC_ST_URI = URI.createFileURI("__synthetic.st")
+	static final String SYNTHETIC_URI_NAME = "__synthetic" //$NON-NLS-1$
+	static final String URI_SEPERATOR = "." //$NON-NLS-1$
+	static final String FB_URI_EXTENSION = "xtextfbt" //$NON-NLS-1$
+	static final String ST_URI_EXTENSION = "st" //$NON-NLS-1$
 
-	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(SYNTHETIC_ST_URI)
+	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI(SYNTHETIC_URI_NAME + URI_SEPERATOR + ST_URI_EXTENSION))
+
+	def createFBResource(XtextResourceSet resourceSet, BaseFBType fbType) {
+		// create resource for function block and add copy
+		val fbResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION))
+		fbResource.contents.add(fbType)
+		for (AdapterDeclaration adapter : fbType.getInterfaceList().getSockets()) {
+			createAdapterResource(resourceSet, adapter)
+		}
+		for (AdapterDeclaration adapter : fbType.getInterfaceList().getPlugs()) {
+			createAdapterResource(resourceSet, adapter)
+		}
+	}
+
+	def createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
+		val adapterResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
+		adapterResource.getContents().add(adapter.getType().getAdapterFBType());
+	}
+
+	def protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
+		for (i: 0..<Integer.MAX_VALUE) {
+			val syntheticUri = URI.createURI(SYNTHETIC_URI_NAME + i + URI_SEPERATOR + fileExtension) //$NON-NLS-1$
+			if (resourceSet.getResource(syntheticUri, false) === null) {
+				return syntheticUri
+			}
+		}
+		throw new IllegalStateException()
+	}
 
 	def CharSequence generate(STAlgorithm alg, List<String> errors) {
-		val resourceSet = SERVICE_PROVIDER.get(ResourceSet)
-		// create resource for function block and add copy
-		val fbResource = resourceSet.createResource(SYNTHETIC_FB_URI)
-		val fbCopy = alg.rootContainer.copy
-		fbResource.contents.add(fbCopy)
+		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
+		createFBResource(resourceSet, alg.rootContainer as BaseFBType)
 		// create resource for algorithm
-		val resource = resourceSet.createResource(SYNTHETIC_ST_URI) as XtextResource
+		val resource = resourceSet.createResource(resourceSet.computeUnusedUri(ST_URI_EXTENSION)) as XtextResource
 		resource.load(new LazyStringInputStream(alg.text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
 		val parseResult = resource.parseResult
 		val validator = resource.resourceServiceProvider.resourceValidator
@@ -91,20 +120,17 @@ class STAlgorithmFilter {
 	}
 
 	def CharSequence generate(String expression, BasicFBType fb, List<String> errors) {
-		val resourceSet = SERVICE_PROVIDER.get(ResourceSet)
-		// create resource for function block and add copy
-		val fbResource = resourceSet.createResource(SYNTHETIC_FB_URI)
-		val fbCopy = fb.copy
-		fbResource.contents.add(fbCopy)
-		// create resource for algorithm
-		val resource = resourceSet.createResource(SYNTHETIC_ST_URI) as XtextResource
+		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
+		createFBResource(resourceSet, fb.copy as BaseFBType)
+ 		// create resource for algorithm
+		val resource = resourceSet.createResource(resourceSet.computeUnusedUri(ST_URI_EXTENSION)) as XtextResource
 		val parser = resource.parser as StructuredTextParser
 		resource.load(new LazyStringInputStream(expression), #{StructuredTextResource.OPTION_PARSER_RULE -> parser.grammarAccess.expressionRule})
 		val parseResult = resource.parseResult
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
 		if (!issues.empty) {
-			errors.addAll(issues.map["Line " + Long.toString(it.lineNumber) + ": " + it.message])
+			errors.addAll(issues.map[it.message])
 			return null
 		}
 		val expr = parseResult.rootASTElement as Expression

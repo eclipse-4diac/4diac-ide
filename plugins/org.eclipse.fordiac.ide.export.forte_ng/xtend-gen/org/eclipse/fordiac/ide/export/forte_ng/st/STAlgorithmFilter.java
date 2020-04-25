@@ -24,6 +24,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -68,6 +70,7 @@ import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.resource.XtextResourceSet;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.util.LazyStringInputStream;
 import org.eclipse.xtext.util.Strings;
@@ -76,25 +79,67 @@ import org.eclipse.xtext.validation.IResourceValidator;
 import org.eclipse.xtext.validation.Issue;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
+import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 @SuppressWarnings("all")
 public class STAlgorithmFilter {
-  private static final URI SYNTHETIC_FB_URI = URI.createFileURI("__synthetic.xtextfbt");
+  private static final String SYNTHETIC_URI_NAME = "__synthetic";
   
-  private static final URI SYNTHETIC_ST_URI = URI.createFileURI("__synthetic.st");
+  private static final String URI_SEPERATOR = ".";
   
-  private static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(STAlgorithmFilter.SYNTHETIC_ST_URI);
+  private static final String FB_URI_EXTENSION = "xtextfbt";
+  
+  private static final String ST_URI_EXTENSION = "st";
+  
+  private static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI(((STAlgorithmFilter.SYNTHETIC_URI_NAME + STAlgorithmFilter.URI_SEPERATOR) + STAlgorithmFilter.ST_URI_EXTENSION)));
+  
+  public void createFBResource(final XtextResourceSet resourceSet, final BaseFBType fbType) {
+    final Resource fbResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
+    fbResource.getContents().add(fbType);
+    EList<AdapterDeclaration> _sockets = fbType.getInterfaceList().getSockets();
+    for (final AdapterDeclaration adapter : _sockets) {
+      this.createAdapterResource(resourceSet, adapter);
+    }
+    EList<AdapterDeclaration> _plugs = fbType.getInterfaceList().getPlugs();
+    for (final AdapterDeclaration adapter_1 : _plugs) {
+      this.createAdapterResource(resourceSet, adapter_1);
+    }
+  }
+  
+  public boolean createAdapterResource(final XtextResourceSet resourceSet, final AdapterDeclaration adapter) {
+    boolean _xblockexpression = false;
+    {
+      final Resource adapterResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
+      _xblockexpression = adapterResource.getContents().add(adapter.getType().getAdapterFBType());
+    }
+    return _xblockexpression;
+  }
+  
+  protected URI computeUnusedUri(final ResourceSet resourceSet, final String fileExtension) {
+    ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, Integer.MAX_VALUE, true);
+    for (final Integer i : _doubleDotLessThan) {
+      {
+        final URI syntheticUri = URI.createURI((((STAlgorithmFilter.SYNTHETIC_URI_NAME + i) + STAlgorithmFilter.URI_SEPERATOR) + fileExtension));
+        Resource _resource = resourceSet.getResource(syntheticUri, false);
+        boolean _tripleEquals = (_resource == null);
+        if (_tripleEquals) {
+          return syntheticUri;
+        }
+      }
+    }
+    throw new IllegalStateException();
+  }
   
   public CharSequence generate(final STAlgorithm alg, final List<String> errors) {
     try {
-      final ResourceSet resourceSet = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
-      final Resource fbResource = resourceSet.createResource(STAlgorithmFilter.SYNTHETIC_FB_URI);
-      final EObject fbCopy = EcoreUtil.<EObject>copy(EcoreUtil.getRootContainer(alg));
-      fbResource.getContents().add(fbCopy);
-      Resource _createResource = resourceSet.createResource(STAlgorithmFilter.SYNTHETIC_ST_URI);
+      ResourceSet _get = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
+      final XtextResourceSet resourceSet = ((XtextResourceSet) _get);
+      EObject _rootContainer = EcoreUtil.getRootContainer(alg);
+      this.createFBResource(resourceSet, ((BaseFBType) _rootContainer));
+      Resource _createResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.ST_URI_EXTENSION));
       final XtextResource resource = ((XtextResource) _createResource);
       String _text = alg.getText();
       LazyStringInputStream _lazyStringInputStream = new LazyStringInputStream(_text);
@@ -128,11 +173,11 @@ public class STAlgorithmFilter {
   
   public CharSequence generate(final String expression, final BasicFBType fb, final List<String> errors) {
     try {
-      final ResourceSet resourceSet = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
-      final Resource fbResource = resourceSet.createResource(STAlgorithmFilter.SYNTHETIC_FB_URI);
-      final BasicFBType fbCopy = EcoreUtil.<BasicFBType>copy(fb);
-      fbResource.getContents().add(fbCopy);
-      Resource _createResource = resourceSet.createResource(STAlgorithmFilter.SYNTHETIC_ST_URI);
+      ResourceSet _get = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
+      final XtextResourceSet resourceSet = ((XtextResourceSet) _get);
+      BasicFBType _copy = EcoreUtil.<BasicFBType>copy(fb);
+      this.createFBResource(resourceSet, ((BaseFBType) _copy));
+      Resource _createResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.ST_URI_EXTENSION));
       final XtextResource resource = ((XtextResource) _createResource);
       IParser _parser = resource.getParser();
       final StructuredTextParser parser = ((StructuredTextParser) _parser);
@@ -147,11 +192,7 @@ public class STAlgorithmFilter {
       boolean _not = (!_isEmpty);
       if (_not) {
         final Function1<Issue, String> _function = (Issue it) -> {
-          String _string = Long.toString((it.getLineNumber()).intValue());
-          String _plus = ("Line " + _string);
-          String _plus_1 = (_plus + ": ");
-          String _message = it.getMessage();
-          return (_plus_1 + _message);
+          return it.getMessage();
         };
         errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
         return null;
