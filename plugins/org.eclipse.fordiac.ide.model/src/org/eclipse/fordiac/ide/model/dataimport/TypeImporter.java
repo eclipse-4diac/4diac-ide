@@ -22,69 +22,25 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public abstract class TypeImporter extends CommonElementImporter {
-	private LibraryElement type;
-	private TypeLibrary typeLib;
 
-	protected TypeImporter() {
-		super();
+	protected TypeImporter(IFile file) {
+		super(file);
 	}
 
-	protected TypeImporter(XMLStreamReader reader, TypeLibrary typeLib) {
-		super(reader);
-		this.typeLib = typeLib;
+	protected TypeImporter(CommonElementImporter importer) {
+		super(importer);
 	}
-
-	protected LibraryElement getType() {
-		return type;
-	}
-
-	protected TypeLibrary getTypeLib() {
-		return typeLib;
-	}
-
-	protected final Palette getPalette() {
-		return getTypeLib().getBlockTypeLib();
-	}
-
-	public void setType(LibraryElement type) {
-		this.type = type;
-	}
-
-	public LibraryElement importType(IFile typeFile) throws TypeImportException {
-		try (ImporterStreams streams = createInputStreams(typeFile.getContents())) {
-			typeLib = TypeLibrary.getTypeLibrary(typeFile.getProject());
-			type = createType();
-			proceedToStartElementNamed(getStartElementName());
-			readNameCommentAttributes(type);
-			processChildren(getStartElementName(), getTypeChildrenHandler());
-		} catch (TypeImportException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new TypeImportException(e.getMessage(), e);
-		}
-		return type;
-	}
-
-	protected abstract LibraryElement createType();
-
-	protected abstract String getStartElementName();
-
-	protected abstract IChildHandler getTypeChildrenHandler();
 
 	/**
 	 * This method parses VariableDeclaration.
@@ -101,7 +57,7 @@ public abstract class TypeImporter extends CommonElementImporter {
 
 		String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
-			DataType dataType = typeLib.getDataTypeLibrary().getType(typeName);
+			DataType dataType = getDataTypeLibrary().getType(typeName);
 			v.setTypeName(typeName);
 			if (dataType != null) {
 				v.setType(dataType);

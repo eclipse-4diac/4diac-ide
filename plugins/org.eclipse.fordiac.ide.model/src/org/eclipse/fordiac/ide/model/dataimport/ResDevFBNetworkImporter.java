@@ -15,27 +15,23 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import javax.xml.stream.XMLStreamReader;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 class ResDevFBNetworkImporter extends SubAppNetworkImporter {
 
 	private final EList<VarDeclaration> varInputs;
 
-	ResDevFBNetworkImporter(TypeLibrary typeLib, EList<VarDeclaration> varInputs, XMLStreamReader reader) {
-		super(typeLib, reader);
+	ResDevFBNetworkImporter(CommonElementImporter importer, EList<VarDeclaration> varInputs) {
+		super(importer);
 		this.varInputs = varInputs;
 	}
 
-	ResDevFBNetworkImporter(TypeLibrary typeLib, FBNetwork fbNetwork, EList<VarDeclaration> varInputs,
-			XMLStreamReader reader) {
-		super(typeLib, fbNetwork, reader);
+	ResDevFBNetworkImporter(CommonElementImporter importer, FBNetwork fbNetwork, EList<VarDeclaration> varInputs) {
+		super(importer, fbNetwork);
 		this.varInputs = varInputs;
 	}
 

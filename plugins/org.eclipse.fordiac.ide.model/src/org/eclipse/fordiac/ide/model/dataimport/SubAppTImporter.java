@@ -16,16 +16,11 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import javax.xml.stream.XMLStreamReader;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * Managing class for importing SubApplication files.
@@ -34,30 +29,24 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  */
 public class SubAppTImporter extends FBTImporter {
 
-	public SubAppTImporter() {
-		super();
+	public SubAppTImporter(IFile typeFile) {
+		super(typeFile);
 	}
 
-	public SubAppTImporter(XMLStreamReader reader, final TypeLibrary typeLib) {
-		super(reader, typeLib);
-	}
-
-	@Override
-	public LibraryElement importType(IFile typeFile) throws TypeImportException {
-		LibraryElement newType = super.importType(typeFile);
-		return (newType instanceof SubAppType) ? newType : null;
+	public SubAppTImporter(final CommonElementImporter importer) {
+		super(importer);
 	}
 
 	@Override
-	protected FBType createType() {
+	protected FBType createRootModelElement() {
 		SubAppType newType = LibraryElementFactory.eINSTANCE.createSubAppType();
 		newType.setService(LibraryElementFactory.eINSTANCE.createService());
 		return newType;
 	}
 
 	@Override
-	protected SubAppType getType() {
-		return (SubAppType) super.getType();
+	public SubAppType getElement() {
+		return (SubAppType) super.getElement();
 	}
 
 	@Override
@@ -66,28 +55,27 @@ public class SubAppTImporter extends FBTImporter {
 	}
 
 	@Override
-	protected IChildHandler getTypeChildrenHandler() {
+	protected IChildHandler getBaseChildrenHandler() {
 		return name -> {
 			switch (name) {
 			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getType());
+				parseIdentification(getElement());
 				break;
 			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getType());
+				parseVersionInfo(getElement());
 				break;
 			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				parseCompilerInfo(getType());
+				parseCompilerInfo(getElement());
 				break;
 			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT:
-				getType().setInterfaceList(parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
+				getElement().setInterfaceList(parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
 				break;
 			case LibraryElementTags.SERVICE_ELEMENT:
-				parseService(getType());
+				parseService(getElement());
 				break;
 			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
-				getType()
-						.setFBNetwork(new SubAppNetworkImporter(getTypeLib(), getType().getInterfaceList(), getReader())
-								.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT));
+				getElement().setFBNetwork(new SubAppNetworkImporter(this, getElement().getInterfaceList())
+						.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT));
 				break;
 			default:
 				return false;

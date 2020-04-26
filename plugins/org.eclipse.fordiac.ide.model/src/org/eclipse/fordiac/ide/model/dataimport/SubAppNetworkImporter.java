@@ -16,7 +16,6 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
@@ -27,20 +26,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 class SubAppNetworkImporter extends FBNetworkImporter {
 
-	public SubAppNetworkImporter(TypeLibrary typeLib, XMLStreamReader reader) {
-		super(typeLib, reader);
+	public SubAppNetworkImporter(CommonElementImporter importer) {
+		super(importer);
 	}
 
-	public SubAppNetworkImporter(TypeLibrary typeLib, InterfaceList interfaceList, XMLStreamReader reader) {
-		super(typeLib, LibraryElementFactory.eINSTANCE.createFBNetwork(), interfaceList, reader);
+	public SubAppNetworkImporter(CommonElementImporter importer, InterfaceList interfaceList) {
+		super(importer, LibraryElementFactory.eINSTANCE.createFBNetwork(), interfaceList);
 	}
 
-	protected SubAppNetworkImporter(TypeLibrary typeLib, FBNetwork fbNetwork, XMLStreamReader reader) {
-		super(typeLib, fbNetwork, reader);
+	protected SubAppNetworkImporter(CommonElementImporter importer, FBNetwork fbNetwork) {
+		super(importer, fbNetwork);
 	}
 
 	@Override
@@ -108,12 +106,12 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		processChildren(LibraryElementTags.SUBAPP_ELEMENT, name -> {
 			switch (name) {
 			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT:
-				SubAppTImporter interfaceImporter = new SubAppTImporter(getReader(), getTypeLib());
+				SubAppTImporter interfaceImporter = new SubAppTImporter(this);
 				subApp.setInterface(
 						interfaceImporter.parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
 				break;
 			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
-				subApp.setSubAppNetwork(new SubAppNetworkImporter(getTypeLib(), subApp.getInterface(), getReader())
+				subApp.setSubAppNetwork(new SubAppNetworkImporter(this, subApp.getInterface())
 						.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT));
 				break;
 			case LibraryElementTags.PARAMETER_ELEMENT:

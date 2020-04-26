@@ -83,7 +83,7 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 	 */
 	@Override
 	public TypeImporter getTypeImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter();
+		return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(getFile());
 	}
 
 } // SubApplicationTypePaletteEntryImpl

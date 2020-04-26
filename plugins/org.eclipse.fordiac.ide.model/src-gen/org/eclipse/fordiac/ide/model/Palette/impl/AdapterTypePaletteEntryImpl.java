@@ -83,7 +83,7 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 	 */
 	@Override
 	public TypeImporter getTypeImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter();
+		return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter(getFile());
 	}
 
 } // AdapterTypePaletteEntryImpl

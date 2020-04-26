@@ -83,7 +83,7 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 	 */
 	@Override
 	public TypeImporter getTypeImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter();
+		return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter(getFile());
 	}
 
 } // SegmentTypePaletteEntryImpl

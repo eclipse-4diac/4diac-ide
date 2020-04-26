@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
-import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
@@ -136,7 +135,6 @@ public class DataTypeEditor extends EditorPart
 	}
 
 	private void importType(IEditorInput input) throws PartInitException {
-		final DataTypeImporter importer = new DataTypeImporter();
 
 		if (input instanceof FileEditorInput) {
 			file = ((FileEditorInput) input).getFile();
@@ -149,11 +147,10 @@ public class DataTypeEditor extends EditorPart
 		try {
 			if (null != file) {
 				setPartName(file.getName().substring(0, file.getName().lastIndexOf('.')));
-				dataType = (DataType) importer.importType(file);
+				final DataTypeImporter importer = new DataTypeImporter(file);
+				importer.loadElement();
+				dataType = importer.getElement();
 			}
-		} catch (final TypeImportException e) {
-			importFailed = true;
-			Activator.getDefault().logError(e.getMessage(), e);
 		} catch (final Exception e) {
 			throw new PartInitException(e.getMessage(), e);
 		}

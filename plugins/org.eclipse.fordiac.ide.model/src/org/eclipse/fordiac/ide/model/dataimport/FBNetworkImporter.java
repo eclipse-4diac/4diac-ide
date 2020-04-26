@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -29,7 +28,6 @@ import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -37,14 +35,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 class FBNetworkImporter extends CommonElementImporter {
 
-	private final TypeLibrary typeLib;
 	private final FBNetwork fbNetwork;
 	// this is the interface list needed for checking connection to the containg
 	// types interface
@@ -52,32 +49,22 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	protected final Map<String, FBNetworkElement> fbNetworkElementMap = new HashMap<>();
 
-	public FBNetworkImporter(TypeLibrary typeLib, XMLStreamReader reader) {
+	public FBNetworkImporter(CommonElementImporter importer) {
 		// so we need an empty interface list
 		// this is a type with no external interface (currently only application)
-		this(typeLib, LibraryElementFactory.eINSTANCE.createFBNetwork(),
-				LibraryElementFactory.eINSTANCE.createInterfaceList(), reader);
+		this(importer, LibraryElementFactory.eINSTANCE.createFBNetwork(),
+				LibraryElementFactory.eINSTANCE.createInterfaceList());
 	}
 
-	public FBNetworkImporter(TypeLibrary typeLib, FBNetwork fbNetwork, InterfaceList interfaceList,
-			XMLStreamReader reader) {
-		super(reader);
-		this.typeLib = typeLib;
+	public FBNetworkImporter(CommonElementImporter importer, FBNetwork fbNetwork, InterfaceList interfaceList) {
+		super(importer);
 		this.fbNetwork = fbNetwork;
 		this.interfaceList = interfaceList;
 		fbNetwork.getNetworkElements().forEach(element -> fbNetworkElementMap.put(element.getName(), element));
 	}
 
-	protected FBNetworkImporter(TypeLibrary typeLib, FBNetwork fbNetwork, XMLStreamReader reader) {
-		this(typeLib, fbNetwork, LibraryElementFactory.eINSTANCE.createInterfaceList(), reader);
-	}
-
-	protected TypeLibrary getTypeLib() {
-		return typeLib;
-	}
-
-	public Palette getPalette() {
-		return typeLib.getBlockTypeLib();
+	protected FBNetworkImporter(CommonElementImporter importer, FBNetwork fbNetwork) {
+		this(importer, fbNetwork, LibraryElementFactory.eINSTANCE.createInterfaceList());
 	}
 
 	public FBNetwork getFbNetwork() {
@@ -361,6 +348,24 @@ class FBNetworkImporter extends CommonElementImporter {
 		} catch (NumberFormatException ex) {
 			return 0;
 		}
+	}
+
+	@Override
+	protected LibraryElement createRootModelElement() {
+		// Nothing to be done for FBNetworks
+		return null;
+	}
+
+	@Override
+	protected String getStartElementName() {
+		// Nothing to be done for FBNetworks
+		return null;
+	}
+
+	@Override
+	protected IChildHandler getBaseChildrenHandler() {
+		// Nothing to be done for FBNetworks
+		return null;
 	}
 
 }

@@ -83,7 +83,7 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 	 */
 	@Override
 	public TypeImporter getTypeImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter();
+		return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(getFile());
 	}
 
 } // FBTypePaletteEntryImpl

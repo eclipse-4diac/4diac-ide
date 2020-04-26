@@ -24,9 +24,16 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
@@ -42,15 +49,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * The Class CommonElementImporter.
  */
-class CommonElementImporter {
+abstract class CommonElementImporter {
 
-	private XMLStreamReader reader;
-
-	protected static class ImporterStreams implements AutoCloseable {
+	private static class ImporterStreams implements AutoCloseable {
 		private final InputStream inputStream;
 		private final XMLStreamReader reader;
 
@@ -66,14 +73,83 @@ class CommonElementImporter {
 		}
 	}
 
-	protected CommonElementImporter() {
+	private XMLStreamReader reader;
+	private final IFile file;
+	private final TypeLibrary typeLibrary;
+	private LibraryElement element;
+
+	protected IFile getFile() {
+		return file;
 	}
 
-	protected CommonElementImporter(XMLStreamReader reader) {
-		this.reader = reader;
+	protected TypeLibrary getTypeLibrary() {
+		return typeLibrary;
 	}
 
-	protected ImporterStreams createInputStreams(InputStream fileInputStream) throws XMLStreamException {
+	protected Palette getPalette() {
+		return getTypeLibrary().getBlockTypeLib();
+	}
+
+	protected DataTypeLibrary getDataTypeLibrary() {
+		return getTypeLibrary().getDataTypeLibrary();
+	}
+
+	public LibraryElement getElement() {
+		return element;
+	}
+
+	protected void setElement(LibraryElement element) {
+		this.element = element;
+	}
+
+	protected CommonElementImporter(IFile file) {
+		Assert.isNotNull(file);
+		this.file = file;
+		typeLibrary = TypeLibrary.getTypeLibrary(file.getProject());
+	}
+
+	protected CommonElementImporter(CommonElementImporter importer) {
+		Assert.isNotNull(importer);
+		reader = importer.reader;
+		file = importer.file;
+		typeLibrary = importer.typeLibrary;
+	}
+
+	public void loadElement() {
+		element = createRootModelElement();
+		try (ImporterStreams streams = createInputStreams(file.getContents())) {
+			deleteMarkers();
+			proceedToStartElementNamed(getStartElementName());
+			readNameCommentAttributes(element);
+			processChildren(getStartElementName(), getBaseChildrenHandler());
+		} catch (Exception e) {
+			createErrorMarker(e.getMessage());
+		}
+	}
+
+	protected void createErrorMarker(String message) {
+		try {
+			IMarker marker = file.createMarker(IMarker.PROBLEM);
+			if (marker.exists()) {
+				marker.setAttribute(IMarker.MESSAGE, message);
+				marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+			}
+		} catch (CoreException e) {
+			Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
+		}
+	}
+
+	protected abstract LibraryElement createRootModelElement();
+
+	protected abstract String getStartElementName();
+
+	protected abstract IChildHandler getBaseChildrenHandler();
+
+	protected void deleteMarkers() throws CoreException {
+		file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+	}
+
+	private ImporterStreams createInputStreams(InputStream fileInputStream) throws XMLStreamException {
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 		factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
 		factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
@@ -81,7 +157,7 @@ class CommonElementImporter {
 		return new ImporterStreams(fileInputStream, reader);
 	}
 
-	public XMLStreamReader getReader() {
+	protected XMLStreamReader getReader() {
 		return reader;
 	}
 

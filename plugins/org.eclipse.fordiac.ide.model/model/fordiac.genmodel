@@ -100,7 +100,7 @@
         <genParameters ecoreParameter="palette.ecore#//AdapterTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//AdapterTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter();"/>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//DataTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//DataTypePaletteEntry/getType"
@@ -110,7 +110,7 @@
         <genParameters ecoreParameter="palette.ecore#//DataTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//DataTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter();"/>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//DeviceTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//DeviceTypePaletteEntry/getDeviceType"
@@ -120,7 +120,7 @@
         <genParameters ecoreParameter="palette.ecore#//DeviceTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//DeviceTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter();"/>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//FBTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/getFBType"
@@ -129,7 +129,7 @@
         <genParameters ecoreParameter="palette.ecore#//FBTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter();"/>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//ResourceTypeEntry">
       <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/getResourceType"
@@ -138,7 +138,7 @@
         <genParameters ecoreParameter="palette.ecore#//ResourceTypeEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter();"/>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//SegmentTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//SegmentTypePaletteEntry/getSegmentType"
@@ -148,7 +148,7 @@
         <genParameters ecoreParameter="palette.ecore#//SegmentTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//SegmentTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter();"/>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//SubApplicationTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//SubApplicationTypePaletteEntry/getSubApplicationType"
@@ -158,7 +158,7 @@
         <genParameters ecoreParameter="palette.ecore#//SubApplicationTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//SubApplicationTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter();"/>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(getFile());"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="LibraryElement" basePackage="org.eclipse.fordiac.ide.model"

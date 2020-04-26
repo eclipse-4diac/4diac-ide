@@ -86,7 +86,7 @@ public class DataTypePaletteEntryImpl extends PaletteEntryImpl implements DataTy
 	 */
 	@Override
 	public TypeImporter getTypeImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter();
+		return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter(getFile());
 	}
 
 } // DataTypePaletteEntryImpl

@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
  * Managing class for importing *.dtp files
@@ -34,25 +33,25 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 public class DataTypeImporter extends TypeImporter {
 
 	@Override
-	protected AnyDerivedType getType() {
-		return (AnyDerivedType) super.getType();
+	public AnyDerivedType getElement() {
+		return (AnyDerivedType) super.getElement();
 	}
 
-	public DataTypeImporter() {
+	public DataTypeImporter(IFile typeFile) {
+		super(typeFile);
 	}
 
 	@Override
-	public LibraryElement importType(IFile typeFile) throws TypeImportException {
-		LibraryElement type = super.importType(typeFile);
-		if (!(type instanceof StructuredType)) {
-			throw new TypeImportException(
-					MessageFormat.format(Messages.DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE, typeFile.getName()));
+	public void loadElement() {
+		super.loadElement();
+		if (!(getElement() instanceof StructuredType)) {
+			createErrorMarker(
+					MessageFormat.format(Messages.DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE, getFile().getName()));
 		}
-		return type;
 	}
 
 	@Override
-	protected AnyDerivedType createType() {
+	protected AnyDerivedType createRootModelElement() {
 		return DataFactory.eINSTANCE.createAnyDerivedType();
 	}
 
@@ -62,21 +61,21 @@ public class DataTypeImporter extends TypeImporter {
 	}
 
 	@Override
-	protected IChildHandler getTypeChildrenHandler() {
+	protected IChildHandler getBaseChildrenHandler() {
 		return name -> {
 			switch (name) {
 			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getType());
+				parseIdentification(getElement());
 				break;
 			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getType());
+				parseVersionInfo(getElement());
 				break;
 			case LibraryElementTags.ASN1_TAG:
-				parseASN1Tag(getType());
+				parseASN1Tag(getElement());
 				break;
 			case LibraryElementTags.STRUCTURED_TYPE_ELEMENT:
-				setType(convertToStructuredType(getType()));
-				parseStructuredType((StructuredType) getType());
+				setElement(convertToStructuredType(getElement()));
+				parseStructuredType((StructuredType) getElement());
 				break;
 			// TODO support other AnyDerivedTypes such as ArrayType
 			default:

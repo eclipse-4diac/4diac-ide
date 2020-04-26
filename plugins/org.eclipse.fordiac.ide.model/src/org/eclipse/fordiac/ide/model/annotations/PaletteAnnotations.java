@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
-import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public final class PaletteAnnotations {
@@ -82,14 +81,9 @@ public final class PaletteAnnotations {
 	}
 
 	public static LibraryElement loadType(PaletteEntryImpl paletteEntryImpl) {
-		LibraryElement retval = null;
-		try {
-			TypeImporter importer = paletteEntryImpl.getTypeImporter();
-			retval = importer.importType(paletteEntryImpl.getFile());
-		} catch (TypeImportException e) {
-			Activator.getDefault().logError("Error loading type: " + paletteEntryImpl.getFile().getName(), //$NON-NLS-1$
-					e);
-		}
+		TypeImporter importer = paletteEntryImpl.getTypeImporter();
+		importer.loadElement();
+		LibraryElement retval = importer.getElement();
 
 		if (null == retval) {
 			Activator.getDefault().logError("Error loading type: " + paletteEntryImpl.getFile().getName()); //$NON-NLS-1$

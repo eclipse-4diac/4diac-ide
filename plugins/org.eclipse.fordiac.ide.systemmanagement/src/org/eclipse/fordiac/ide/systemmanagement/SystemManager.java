@@ -26,10 +26,8 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -42,10 +40,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
-import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
@@ -149,7 +144,7 @@ public enum SystemManager {
 	public AutomationSystem createNewSystem(IContainer location, String name) {
 		IFile systemFile = location.getFile(new Path(name + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT));
 		Map<IFile, AutomationSystem> projectSystems = getProjectSystems(location.getProject());
-		AutomationSystem system = projectSystems.computeIfAbsent(systemFile, this::createAutomationSystem);
+		AutomationSystem system = projectSystems.computeIfAbsent(systemFile, SystemImporter::createAutomationSystem);
 		saveSystem(system);
 		return system;
 	}
@@ -185,39 +180,13 @@ public enum SystemManager {
 	 *
 	 * @return the automation system
 	 */
-	private AutomationSystem loadSystem(final IFile systemFile) {
-		// TODO model refactoring - check if the marker deletion is a good idea here
-		try {
-			systemFile.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-		} catch (CoreException e1) {
-			Activator.getDefault().logError(e1.getMessage(), e1);
-		}
-
+	private static AutomationSystem loadSystem(final IFile systemFile) {
 		if (systemFile.exists()) {
-			AutomationSystem system = createAutomationSystem(systemFile);
-			SystemImporter sysImporter = new SystemImporter(system);
-			try {
-				sysImporter.importSystem(systemFile.getContents());
-			} catch (CoreException | TypeImportException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-			}
-			return system;
+			SystemImporter sysImporter = new SystemImporter(systemFile);
+			sysImporter.loadElement();
+			return sysImporter.getElement();
 		}
 		return null;
-	}
-
-	private AutomationSystem createAutomationSystem(IFile systemFile) {
-		AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
-		system.setName(TypeLibrary.getTypeNameFromFile(systemFile));
-		system.setSystemFile(systemFile);
-
-		// create PhysicalConfiguration
-		SystemConfiguration sysConf = LibraryElementFactory.eINSTANCE.createSystemConfiguration();
-		system.setSystemConfiguration(sysConf);
-
-		initializePalette(system);
-		loadTagProvider(system);
-		return system;
 	}
 
 	private void loadTagProvider(AutomationSystem system) {

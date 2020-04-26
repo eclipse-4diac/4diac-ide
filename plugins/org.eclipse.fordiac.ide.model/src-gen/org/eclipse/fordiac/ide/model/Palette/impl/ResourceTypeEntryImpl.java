@@ -83,7 +83,7 @@ public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceT
 	 */
 	@Override
 	public TypeImporter getTypeImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.RESImporter();
+		return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(getFile());
 	}
 
 } // ResourceTypeEntryImpl

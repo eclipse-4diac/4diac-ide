@@ -83,7 +83,7 @@ public class DeviceTypePaletteEntryImpl extends PaletteEntryImpl implements Devi
 	 */
 	@Override
 	public TypeImporter getTypeImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter();
+		return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(getFile());
 	}
 
 } // DeviceTypePaletteEntryImpl
