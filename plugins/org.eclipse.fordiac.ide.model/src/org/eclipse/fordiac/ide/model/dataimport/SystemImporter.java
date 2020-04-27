@@ -364,7 +364,7 @@ public class SystemImporter extends CommonElementImporter {
 			Value value = LibraryElementFactory.eINSTANCE.createValue();
 			varDecl.setValue(value);
 			VarDeclaration typeVar = getTypeVariable(varDecl);
-			if (null != typeVar && null != typeVar.getValue() && null != typeVar.getValue().getValue()) {
+			if (null != typeVar && null != typeVar.getValue()) {
 				value.setValue(typeVar.getValue().getValue());
 			}
 		}

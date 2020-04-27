@@ -142,7 +142,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 	}
 
 	private static String getVarDeclarationValue(VarDeclaration v) {
-		return (v.getValue() != null) && (v.getValue().getValue() != null) ? v.getValue().getValue() : ""; //$NON-NLS-1$
+		return (v.getValue() != null) ? v.getValue().getValue() : ""; //$NON-NLS-1$
 	}
 
 	@Override
