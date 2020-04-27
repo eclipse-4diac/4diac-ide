@@ -74,9 +74,9 @@ public class DataTypeEditor extends EditorPart
 	private boolean outsideWorkspace;
 
 	private ActionRegistry actionRegistry;
-	private ArrayList<String> selectionActions = new ArrayList<>();
-	private ArrayList<String> stackActions = new ArrayList<>();
-	private ArrayList<String> propertyActions = new ArrayList<>();
+	private List<String> selectionActions = new ArrayList<>();
+	private List<String> stackActions = new ArrayList<>();
+	private List<String> propertyActions = new ArrayList<>();
 
 	@Override
 	public void stackChanged(CommandStackEvent event) {
@@ -256,14 +256,6 @@ public class DataTypeEditor extends EditorPart
 		}
 
 		return super.getAdapter(key);
-	}
-
-	private List<String> getPropertyActions() {
-		return propertyActions;
-	}
-
-	private List<String> getSelectionActions() {
-		return selectionActions;
 	}
 
 	private List<String> getStackActions() {

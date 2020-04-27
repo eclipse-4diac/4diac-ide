@@ -150,8 +150,8 @@ public class ECTransitionFigure extends PolylineConnection {
 		return rectDec;
 	}
 
-	private static int VERTICAL_MARGIN = 2;
-	private static int HORIZONTAL_MARGIN = 4;
+	private static final int VERTICAL_MARGIN = 2;
+	private static final int HORIZONTAL_MARGIN = 4;
 
 	private void createConditionLabel(String conditionText) {
 		condition = new Label(conditionText);

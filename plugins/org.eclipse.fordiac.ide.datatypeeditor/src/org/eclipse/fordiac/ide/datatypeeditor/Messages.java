@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.datatypeeditor;
 
 import org.eclipse.osgi.util.NLS;
 
-public class Messages extends NLS {
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.datatypeeditor.messages"; //$NON-NLS-1$
 	public static String MessageDialogTitle_SaveError;
 	public static String MessageDialogContent_SaveError;

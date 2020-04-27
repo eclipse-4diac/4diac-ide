@@ -58,16 +58,14 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 			WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 				@Override
 				protected void execute(IProgressMonitor monitor) {
-					if (null == monitor) {
-						monitor = new NullProgressMonitor();
-					}
+					IProgressMonitor monitorToUse = (null == monitor) ? new NullProgressMonitor() : monitor;
 
 					IPath targetPath = ResourcesPlugin.getWorkspace().getRoot().getLocation()
 							.append(page.getContainerFullPath());
 					IContainer location = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(targetPath);
 					AutomationSystem system = SystemManager.INSTANCE.createNewSystem(location, page.getSystemName());
 					TypeManagementPreferencesHelper.setupVersionInfo(system);
-					createInitialApplication(monitor, system);
+					createInitialApplication(monitorToUse, system);
 				}
 			};
 			getContainer().run(false, true, op);
