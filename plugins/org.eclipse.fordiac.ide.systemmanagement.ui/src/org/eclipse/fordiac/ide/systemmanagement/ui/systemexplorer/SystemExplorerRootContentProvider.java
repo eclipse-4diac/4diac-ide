@@ -38,7 +38,7 @@ public class SystemExplorerRootContentProvider implements ITreeContentProvider {
 			return Arrays.stream(root.getProjects()).filter(SystemExplorerRootContentProvider::projectToShow)
 					.collect(Collectors.toList()).toArray(new IProject[0]);
 		}
-		if (parentElement instanceof IProject) {
+		if ((parentElement instanceof IProject) && ((IProject) parentElement).isOpen()) {
 			try {
 				return ((IProject) parentElement).members();
 			} catch (CoreException e) {
