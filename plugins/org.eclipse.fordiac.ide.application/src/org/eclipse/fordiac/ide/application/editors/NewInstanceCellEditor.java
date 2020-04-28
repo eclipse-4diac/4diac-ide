@@ -54,6 +54,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	private TableViewer tableViewer;
 	private PaletteFilter paletteFilter;
 	private boolean blockTableSelection = false;
+	private PaletteEntry selectedEntry = null;
 
 	public NewInstanceCellEditor() {
 		super();
@@ -124,8 +125,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	@Override
 	protected Object doGetValue() {
-		if (tableViewer.getTable().getSelectionIndex() != -1) {
-			return tableViewer.getStructuredSelection().getFirstElement();
+		if (null != selectedEntry) {
+			return selectedEntry;
 		}
 		return super.doGetValue();
 	}
@@ -189,8 +190,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 				break;
 			case SWT.CR:
 				if (popupShell.isVisible() && (tableViewer.getTable().getSelectionIndex() != -1)) {
-					textControl.setText(
-							((PaletteEntry) tableViewer.getStructuredSelection().getFirstElement()).getLabel());
+					selectedEntry = (PaletteEntry) tableViewer.getStructuredSelection().getFirstElement();
+					textControl.setText(selectedEntry.getLabel());
 				} else {
 					event.doit = false;
 				}
@@ -218,8 +219,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	private void selectItemAtIndex(int index) {
 		blockTableSelection = true;
 		Object element = tableViewer.getElementAt(index);
-		tableViewer.setSelection(new StructuredSelection(element));
-		tableViewer.reveal(element);
+		tableViewer.setSelection(new StructuredSelection(element), true);
 		blockTableSelection = false;
 	}
 
