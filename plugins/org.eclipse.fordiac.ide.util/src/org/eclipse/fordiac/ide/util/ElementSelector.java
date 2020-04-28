@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -29,15 +30,16 @@ public final class ElementSelector {
 	 *
 	 * @param viewObjects list with objects to select
 	 */
-	@SuppressWarnings("rawtypes")
-	public static void selectViewObjects(Collection viewObjects) {
+	public static void selectViewObjects(Collection<? extends EObject> viewObjects) {
 		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
-			List<EditPart> editParts = getSelectableEditParts(viewer, viewObjects);
-			viewer.setSelection(new StructuredSelection(editParts));
 			viewer.flush();
-			viewer.reveal(editParts.get(0));
+			List<EditPart> editParts = getSelectableEditParts(viewer, viewObjects);
+			if (!editParts.isEmpty()) {
+				viewer.setSelection(new StructuredSelection(editParts));
+				viewer.reveal(editParts.get(0));
+			}
 		}
 
 	}
