@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide;
 import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImageURLStreamHandlerService;
 import org.eclipse.jface.util.Policy;
 import org.eclipse.jface.util.StatusHandler;
@@ -58,6 +59,11 @@ public class Activator extends AbstractUIPlugin {
 		setPluginInstance(this);
 		addLogListener();
 		disableJFaceErrorMessages();
+		// As the ide plugin is the very first plugin loaded get here the system manager
+		// instance to initialize the toollib and resource change listener.
+		// The variable is not needed therefore the suppress warning
+		@SuppressWarnings("unused")
+		SystemManager mgr = SystemManager.INSTANCE;
 	}
 
 	/*
