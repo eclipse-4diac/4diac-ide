@@ -54,4 +54,15 @@ public class ForteNgTest extends ForteNgTestBase {
 		assertNotNull(generatedCode);
 		assertEquals("B() = 1;\n", generatedCode.toString());
 	}
+
+	@Test
+	public void functionSQRTExpression() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration("variableA", "REAL"));
+
+		CharSequence generatedCode = stAlgorithmFilter.generate("SQRT(variableA)", functionBlock, errors);
+
+		assertNoErrors(errors); // Expression can not be an assignment
+		assertNotNull(generatedCode);
+		assertEquals("SQRT(variableA())", generatedCode.toString());
+	}
 }

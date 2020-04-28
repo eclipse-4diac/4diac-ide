@@ -65,6 +65,7 @@ import org.eclipse.xtext.util.CancelIndicator
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument
 
 class STAlgorithmFilter {
 
@@ -284,6 +285,14 @@ class STAlgorithmFilter {
 		  «stmt.statements.generateStatementList»
 		} while(!((«stmt.expression.generateExpression»)));
 	'''
+
+	def protected dispatch CharSequence generateExpression(Call expr) {
+		'''«expr.func»(«FOR arg : expr.args SEPARATOR ', '»«arg.generateExpression»«ENDFOR»)'''
+	}
+	
+	def protected dispatch CharSequence generateExpression(InArgument arg) {
+		arg.expr.generateExpression
+	}
 
 	def protected dispatch CharSequence generateExpression(Expression expr) {
 		throw new UnsupportedOperationException(expr.eClass + " not supported");

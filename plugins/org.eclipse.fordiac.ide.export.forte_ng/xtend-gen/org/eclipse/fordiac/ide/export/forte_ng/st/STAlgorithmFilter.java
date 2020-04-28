@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser;
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ArrayVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AssignmentStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.BinaryExpression;
@@ -48,6 +49,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ExitStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IntLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocatedVariable;
@@ -714,6 +716,32 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
+  protected CharSequence _generateExpression(final Call expr) {
+    StringConcatenation _builder = new StringConcatenation();
+    String _func = expr.getFunc();
+    _builder.append(_func);
+    _builder.append("(");
+    {
+      EList<Argument> _args = expr.getArgs();
+      boolean _hasElements = false;
+      for(final Argument arg : _args) {
+        if (!_hasElements) {
+          _hasElements = true;
+        } else {
+          _builder.appendImmediate(", ", "");
+        }
+        CharSequence _generateExpression = this.generateExpression(arg);
+        _builder.append(_generateExpression);
+      }
+    }
+    _builder.append(")");
+    return _builder;
+  }
+  
+  protected CharSequence _generateExpression(final InArgument arg) {
+    return this.generateExpression(arg.getExpr());
+  }
+  
   protected CharSequence _generateExpression(final Expression expr) {
     EClass _eClass = expr.eClass();
     String _plus = (_eClass + " not supported");
@@ -1068,7 +1096,7 @@ public class STAlgorithmFilter {
     }
   }
   
-  protected CharSequence generateExpression(final Expression expr) {
+  protected CharSequence generateExpression(final EObject expr) {
     if (expr instanceof IntLiteral) {
       return _generateExpression((IntLiteral)expr);
     } else if (expr instanceof RealLiteral) {
@@ -1085,10 +1113,14 @@ public class STAlgorithmFilter {
       return _generateExpression((StringLiteral)expr);
     } else if (expr instanceof BinaryExpression) {
       return _generateExpression((BinaryExpression)expr);
+    } else if (expr instanceof Call) {
+      return _generateExpression((Call)expr);
+    } else if (expr instanceof InArgument) {
+      return _generateExpression((InArgument)expr);
     } else if (expr instanceof UnaryExpression) {
       return _generateExpression((UnaryExpression)expr);
-    } else if (expr != null) {
-      return _generateExpression(expr);
+    } else if (expr instanceof Expression) {
+      return _generateExpression((Expression)expr);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
         Arrays.<Object>asList(expr).toString());
