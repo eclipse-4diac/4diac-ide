@@ -312,8 +312,9 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 				return getStandard();
 			case LibraryElementPackage.IDENTIFICATION__TYPE:
 				return getType();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -341,8 +342,10 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 			case LibraryElementPackage.IDENTIFICATION__TYPE:
 				setType((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -370,8 +373,10 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 			case LibraryElementPackage.IDENTIFICATION__TYPE:
 				setType(TYPE_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -393,8 +398,9 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 				return STANDARD_EDEFAULT == null ? standard != null : !STANDARD_EDEFAULT.equals(standard);
 			case LibraryElementPackage.IDENTIFICATION__TYPE:
 				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

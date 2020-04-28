@@ -305,8 +305,9 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 				return ((InternalEList<?>)getMapping()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 				return basicSetSystemConfiguration(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -328,8 +329,9 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 				return basicGetSystemConfiguration();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
 				return getSystemFile();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -357,8 +359,10 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
 				setSystemFile((IFile)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -383,8 +387,10 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
 				setSystemFile(SYSTEM_FILE_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -404,8 +410,9 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 				return systemConfiguration != null;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
 				return SYSTEM_FILE_EDEFAULT == null ? systemFile != null : !SYSTEM_FILE_EDEFAULT.equals(systemFile);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

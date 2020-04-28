@@ -14,6 +14,7 @@
  *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export
  *   			 - Changed XML parsing to Staxx cursor interface for improved
  *  			   parsing performance
+ *   Bianca Wiesmayr - mux support
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -28,6 +29,7 @@ import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -38,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 class FBNetworkImporter extends CommonElementImporter {
@@ -118,7 +121,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		getXandY(fb);
 
-		configureParameters(fb.getInterface(), LibraryElementTags.FB_ELEMENT);
+		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 
 		for (VarDeclaration var : fb.getInterface().getInputVars()) {
 			if (null == var.getValue()) {
@@ -126,8 +129,24 @@ class FBNetworkImporter extends CommonElementImporter {
 			}
 		}
 
+		if ((fb.getType().getName().equals("STRUCT_MUX")) || (fb.getType().getName().contentEquals("STRUCT_DEMUX"))) {
+			fb = convertFBtoMux(fb);
+		}
 		fbNetwork.getNetworkElements().add(fb);
 		fbNetworkElementMap.put(fb.getName(), fb);
+	}
+
+	private FB convertFBtoMux(FB fb) {
+		Multiplexer mux = LibraryElementFactory.eINSTANCE.createMultiplexer();
+		mux.setName(fb.getName());
+		mux.setComment(fb.getComment());
+		mux.setX(fb.getX());
+		mux.setY(fb.getY());
+		mux.setPaletteEntry(fb.getPaletteEntry());
+		mux.setInterface(fb.getInterface());
+		String structName = fb.getAttributeValue("StructuredType"); //$NON-NLS-1$
+		mux.setStructType((StructuredType) getDataTypeLibrary().getType(structName));
+		return mux;
 	}
 
 	private FBTypePaletteEntry getTypeEntry() {
@@ -152,18 +171,27 @@ class FBNetworkImporter extends CommonElementImporter {
 //		return marker;
 //	}
 
-	protected void configureParameters(InterfaceList interfaceList, String parentNodeName)
+	protected void parseFBChildren(FBNetworkElement block, String parentNodeName)
 			throws TypeImportException, XMLStreamException {
 		processChildren(parentNodeName, name -> {
-			if (LibraryElementTags.PARAMETER_ELEMENT.equals(name)) {
-				VarDeclaration paramter = parseParameter();
-				VarDeclaration vInput = getVarNamed(interfaceList, paramter.getName(), true);
+			switch (name) {
+			case LibraryElementTags.PARAMETER_ELEMENT: {
+				VarDeclaration parameter = parseParameter();
+				VarDeclaration vInput = getVarNamed(block.getInterface(), parameter.getName(), true);
 				if (null != vInput) {
-					vInput.setValue(paramter.getValue());
+					vInput.setValue(parameter.getValue());
 				}
 				return true;
 			}
-			return false;
+
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(block);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+
+				return true;
+			default:
+				return false;
+			}
 		});
 	}
 

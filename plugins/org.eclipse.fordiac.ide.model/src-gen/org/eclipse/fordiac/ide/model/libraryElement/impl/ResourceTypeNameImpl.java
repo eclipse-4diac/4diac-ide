@@ -100,8 +100,9 @@ public class ResourceTypeNameImpl extends EObjectImpl implements ResourceTypeNam
 		switch (featureID) {
 			case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
 				return getName();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -114,8 +115,10 @@ public class ResourceTypeNameImpl extends EObjectImpl implements ResourceTypeNam
 			case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
 				setName((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -128,8 +131,10 @@ public class ResourceTypeNameImpl extends EObjectImpl implements ResourceTypeNam
 			case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -141,8 +146,9 @@ public class ResourceTypeNameImpl extends EObjectImpl implements ResourceTypeNam
 		switch (featureID) {
 			case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

@@ -346,8 +346,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
 				return basicSetECC((ECC)otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -363,8 +364,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 				return basicSetDestination(null, msgs);
 			case LibraryElementPackage.EC_TRANSITION__ECC:
 				return basicSetECC(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -376,8 +378,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		switch (eContainerFeatureID()) {
 			case LibraryElementPackage.EC_TRANSITION__ECC:
 				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.ECC__EC_TRANSITION, ECC.class, msgs);
+			default:
+				return super.eBasicRemoveFromContainerFeature(msgs);
 		}
-		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -461,8 +464,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 			case LibraryElementPackage.EC_TRANSITION__ECC:
 				if (resolve) return getECC();
 				return basicGetECC();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -490,8 +494,10 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 			case LibraryElementPackage.EC_TRANSITION__ECC:
 				setECC((ECC)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -519,8 +525,10 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 			case LibraryElementPackage.EC_TRANSITION__ECC:
 				setECC((ECC)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -542,8 +550,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 				return conditionEvent != null;
 			case LibraryElementPackage.EC_TRANSITION__ECC:
 				return basicGetECC() != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

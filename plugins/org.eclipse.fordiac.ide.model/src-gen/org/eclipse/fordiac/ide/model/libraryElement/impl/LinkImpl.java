@@ -204,8 +204,9 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 				if (device != null)
 					msgs = ((InternalEObject)device).eInverseRemove(this, LibraryElementPackage.DEVICE__IN_CONNECTIONS, Device.class, msgs);
 				return basicSetDevice((Device)otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -219,8 +220,9 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 				return basicSetSegment(null, msgs);
 			case LibraryElementPackage.LINK__DEVICE:
 				return basicSetDevice(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -236,8 +238,9 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 			case LibraryElementPackage.LINK__DEVICE:
 				if (resolve) return getDevice();
 				return basicGetDevice();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -253,8 +256,10 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 			case LibraryElementPackage.LINK__DEVICE:
 				setDevice((Device)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -270,8 +275,10 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 			case LibraryElementPackage.LINK__DEVICE:
 				setDevice((Device)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -285,8 +292,9 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 				return segment != null;
 			case LibraryElementPackage.LINK__DEVICE:
 				return device != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	public IInterfaceElement getIInterfaceElementDestination() {

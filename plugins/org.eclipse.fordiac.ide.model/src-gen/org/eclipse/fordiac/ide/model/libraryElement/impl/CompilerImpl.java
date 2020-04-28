@@ -258,8 +258,9 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 				return getVendor();
 			case LibraryElementPackage.COMPILER__VERSION:
 				return getVersion();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -281,8 +282,10 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 			case LibraryElementPackage.COMPILER__VERSION:
 				setVersion((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -304,8 +307,10 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 			case LibraryElementPackage.COMPILER__VERSION:
 				setVersion(VERSION_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -323,8 +328,9 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 				return VENDOR_EDEFAULT == null ? vendor != null : !VENDOR_EDEFAULT.equals(vendor);
 			case LibraryElementPackage.COMPILER__VERSION:
 				return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

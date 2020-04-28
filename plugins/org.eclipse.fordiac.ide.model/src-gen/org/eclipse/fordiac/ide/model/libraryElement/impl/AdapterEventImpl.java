@@ -107,8 +107,9 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 			case LibraryElementPackage.ADAPTER_EVENT__ADAPTER_DECLARATION:
 				if (resolve) return getAdapterDeclaration();
 				return basicGetAdapterDeclaration();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -121,8 +122,10 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 			case LibraryElementPackage.ADAPTER_EVENT__ADAPTER_DECLARATION:
 				setAdapterDeclaration((AdapterDeclaration)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -135,8 +138,10 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 			case LibraryElementPackage.ADAPTER_EVENT__ADAPTER_DECLARATION:
 				setAdapterDeclaration((AdapterDeclaration)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -148,8 +153,9 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 		switch (featureID) {
 			case LibraryElementPackage.ADAPTER_EVENT__ADAPTER_DECLARATION:
 				return adapterDeclaration != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	@Override

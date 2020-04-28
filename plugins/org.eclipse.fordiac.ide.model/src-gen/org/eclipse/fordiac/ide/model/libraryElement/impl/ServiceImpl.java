@@ -242,8 +242,9 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 				return basicSetLeftInterface(null, msgs);
 			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
 				return ((InternalEList<?>)getServiceSequence()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -261,8 +262,9 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 				return basicGetLeftInterface();
 			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
 				return getServiceSequence();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -283,8 +285,10 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 				getServiceSequence().clear();
 				getServiceSequence().addAll((Collection<? extends ServiceSequence>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -303,8 +307,10 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
 				getServiceSequence().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -320,8 +326,9 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 				return leftInterface != null;
 			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
 				return serviceSequence != null && !serviceSequence.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // ServiceImpl

@@ -259,7 +259,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	private Device findDevice() {
 		Resource res = null;
-		if (null != getModel() && getModel().isMapped()) {
+		if ((null != getModel()) && getModel().isMapped()) {
 			res = getModel().getResource();
 		}
 		return (null != res) ? res.getDevice() : null;
@@ -358,7 +358,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	@Override
 	public void performRequest(final Request request) {
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
+				|| (request.getType() == RequestConstants.REQ_OPEN)) {
 			// currently we don't want to be direct editable through double or long dobule
 			// click or
 			return;

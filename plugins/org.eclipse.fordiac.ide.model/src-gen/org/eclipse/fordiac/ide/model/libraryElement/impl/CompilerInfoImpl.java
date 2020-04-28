@@ -167,8 +167,9 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 		switch (featureID) {
 			case LibraryElementPackage.COMPILER_INFO__COMPILER:
 				return ((InternalEList<?>)getCompiler()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -184,8 +185,9 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 				return getClassdef();
 			case LibraryElementPackage.COMPILER_INFO__HEADER:
 				return getHeader();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -206,8 +208,10 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 			case LibraryElementPackage.COMPILER_INFO__HEADER:
 				setHeader((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -226,8 +230,10 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 			case LibraryElementPackage.COMPILER_INFO__HEADER:
 				setHeader(HEADER_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -243,8 +249,9 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 				return CLASSDEF_EDEFAULT == null ? classdef != null : !CLASSDEF_EDEFAULT.equals(classdef);
 			case LibraryElementPackage.COMPILER_INFO__HEADER:
 				return HEADER_EDEFAULT == null ? header != null : !HEADER_EDEFAULT.equals(header);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

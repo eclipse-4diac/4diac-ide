@@ -268,8 +268,9 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 				return getRemarks();
 			case LibraryElementPackage.VERSION_INFO__VERSION:
 				return getVersion();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -294,8 +295,10 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 			case LibraryElementPackage.VERSION_INFO__VERSION:
 				setVersion((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -320,8 +323,10 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 			case LibraryElementPackage.VERSION_INFO__VERSION:
 				setVersion(VERSION_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -341,8 +346,9 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 				return REMARKS_EDEFAULT == null ? remarks != null : !REMARKS_EDEFAULT.equals(remarks);
 			case LibraryElementPackage.VERSION_INFO__VERSION:
 				return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

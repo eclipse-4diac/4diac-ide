@@ -101,8 +101,9 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements I4DIACEle
 		switch (featureID) {
 			case LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS:
 				return getAnnotations();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -117,8 +118,10 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements I4DIACEle
 				getAnnotations().clear();
 				getAnnotations().addAll((Collection<? extends Annotation>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -131,8 +134,10 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements I4DIACEle
 			case LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS:
 				getAnnotations().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -144,8 +149,9 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements I4DIACEle
 		switch (featureID) {
 			case LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS:
 				return annotations != null && !annotations.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // I4DIACElementImpl

@@ -137,8 +137,9 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
 				if (resolve) return getPaletteEntry();
 				return basicGetPaletteEntry();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -151,8 +152,10 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
 				setPaletteEntry((PaletteEntry)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -165,8 +168,10 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
 				setPaletteEntry((PaletteEntry)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -178,8 +183,9 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 		switch (featureID) {
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
 				return paletteEntry != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // TypedConfigureableObjectImpl

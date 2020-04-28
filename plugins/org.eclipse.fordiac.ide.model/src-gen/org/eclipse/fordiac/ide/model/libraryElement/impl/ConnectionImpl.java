@@ -475,8 +475,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 				if (destination != null)
 					msgs = ((InternalEObject)destination).eInverseRemove(this, LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS, IInterfaceElement.class, msgs);
 				return basicSetDestination((IInterfaceElement)otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -490,8 +491,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 				return basicSetSource(null, msgs);
 			case LibraryElementPackage.CONNECTION__DESTINATION:
 				return basicSetDestination(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -517,8 +519,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 			case LibraryElementPackage.CONNECTION__DESTINATION:
 				if (resolve) return getDestination();
 				return basicGetDestination();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -549,8 +552,10 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 			case LibraryElementPackage.CONNECTION__DESTINATION:
 				setDestination((IInterfaceElement)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -581,8 +586,10 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 			case LibraryElementPackage.CONNECTION__DESTINATION:
 				setDestination((IInterfaceElement)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -606,8 +613,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 				return source != null;
 			case LibraryElementPackage.CONNECTION__DESTINATION:
 				return destination != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

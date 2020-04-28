@@ -314,8 +314,9 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 				if (paletteEntry != null)
 					msgs = ((InternalEObject)paletteEntry).eInverseRemove(this, PalettePackage.PALETTE_ENTRY__TYPE, PaletteEntry.class, msgs);
 				return basicSetPaletteEntry((PaletteEntry)otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -331,8 +332,9 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 				return basicSetIdentification(null, msgs);
 			case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
 				return basicSetPaletteEntry(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -353,8 +355,9 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 				return basicGetIdentification();
 			case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
 				return getPaletteEntry();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -381,8 +384,10 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 			case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
 				setPaletteEntry((PaletteEntry)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -407,8 +412,10 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 			case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
 				setPaletteEntry((PaletteEntry)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -428,8 +435,9 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 				return identification != null;
 			case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
 				return paletteEntry != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

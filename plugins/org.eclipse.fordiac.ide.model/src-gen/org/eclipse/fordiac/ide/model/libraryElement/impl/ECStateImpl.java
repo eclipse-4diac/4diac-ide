@@ -372,8 +372,9 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
 				return basicSetECC((ECC)otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -391,8 +392,9 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 				return ((InternalEList<?>)getInTransitions()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.EC_STATE__ECC:
 				return basicSetECC(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -404,8 +406,9 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 		switch (eContainerFeatureID()) {
 			case LibraryElementPackage.EC_STATE__ECC:
 				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.ECC__EC_STATE, ECC.class, msgs);
+			default:
+				return super.eBasicRemoveFromContainerFeature(msgs);
 		}
-		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -432,8 +435,9 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 			case LibraryElementPackage.EC_STATE__ECC:
 				if (resolve) return getECC();
 				return basicGetECC();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -471,8 +475,10 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 			case LibraryElementPackage.EC_STATE__ECC:
 				setECC((ECC)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -506,8 +512,10 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 			case LibraryElementPackage.EC_STATE__ECC:
 				setECC((ECC)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -533,8 +541,9 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 				return inTransitions != null && !inTransitions.isEmpty();
 			case LibraryElementPackage.EC_STATE__ECC:
 				return basicGetECC() != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

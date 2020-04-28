@@ -87,8 +87,9 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 		switch (featureID) {
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 				return ((InternalEList<?>)getInternalVars()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -100,8 +101,9 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 		switch (featureID) {
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 				return getInternalVars();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -116,8 +118,10 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 				getInternalVars().clear();
 				getInternalVars().addAll((Collection<? extends VarDeclaration>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -130,8 +134,10 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 				getInternalVars().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -143,8 +149,9 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 		switch (featureID) {
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 				return internalVars != null && !internalVars.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // BaseFBTypeImpl

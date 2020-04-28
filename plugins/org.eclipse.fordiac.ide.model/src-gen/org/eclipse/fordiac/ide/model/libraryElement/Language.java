@@ -196,8 +196,8 @@ public enum Language implements Enumerator {
 			case OTHER_VALUE: return OTHER;
 			case JAVA_VALUE: return JAVA;
 			case CPP_VALUE: return CPP;
+			default: return null;
 		}
-		return null;
 	}
 
 	/**

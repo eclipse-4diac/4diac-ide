@@ -142,8 +142,9 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 				return getName();
 			case LibraryElementPackage.ANNOTATION__SERVITY:
 				return getServity();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -159,8 +160,10 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 			case LibraryElementPackage.ANNOTATION__SERVITY:
 				setServity((Integer)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -176,8 +179,10 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 			case LibraryElementPackage.ANNOTATION__SERVITY:
 				setServity(SERVITY_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -191,8 +196,9 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case LibraryElementPackage.ANNOTATION__SERVITY:
 				return servity != SERVITY_EDEFAULT;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

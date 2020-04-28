@@ -41,6 +41,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
@@ -362,6 +363,13 @@ abstract class CommonElementExporter {
 		addNameAttribute(namedElement.getName());
 		addTypeAttribute(type);
 		addCommentAttribute(namedElement);
+	}
+
+	protected void addAttributes(EList<Attribute> attributes) throws XMLStreamException {
+		for (Attribute attribute : attributes) {
+			addAttributeElement(attribute.getName(), attribute.getType().getName(), attribute.getValue(),
+					attribute.getComment());
+		}
 	}
 
 	/**

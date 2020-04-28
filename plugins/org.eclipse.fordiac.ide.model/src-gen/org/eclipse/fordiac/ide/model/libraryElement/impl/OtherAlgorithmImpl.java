@@ -97,8 +97,9 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 		switch (featureID) {
 			case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
 				return getLanguage();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -111,8 +112,10 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 			case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
 				setLanguage((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -125,8 +128,10 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 			case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
 				setLanguage(LANGUAGE_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -138,8 +143,9 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 		switch (featureID) {
 			case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
 				return LANGUAGE_EDEFAULT == null ? language != null : !LANGUAGE_EDEFAULT.equals(language);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

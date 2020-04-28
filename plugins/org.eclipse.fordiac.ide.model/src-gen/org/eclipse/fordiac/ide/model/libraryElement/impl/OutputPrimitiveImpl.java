@@ -122,8 +122,9 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 		switch (featureID) {
 			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
 				return getTestResult();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -136,8 +137,10 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
 				setTestResult((Integer)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -150,8 +153,10 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
 				unsetTestResult();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -163,8 +168,9 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 		switch (featureID) {
 			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
 				return isSetTestResult();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // OutputPrimitiveImpl

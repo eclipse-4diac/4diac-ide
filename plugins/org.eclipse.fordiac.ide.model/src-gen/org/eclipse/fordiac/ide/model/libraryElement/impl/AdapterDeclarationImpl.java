@@ -190,8 +190,9 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 				if (adapterFB != null)
 					msgs = ((InternalEObject)adapterFB).eInverseRemove(this, LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL, AdapterFB.class, msgs);
 				return basicSetAdapterFB((AdapterFB)otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -203,8 +204,9 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 		switch (featureID) {
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				return basicSetAdapterFB(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -220,8 +222,9 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 			case LibraryElementPackage.ADAPTER_DECLARATION__PALETTE_ENTRY:
 				if (resolve) return getPaletteEntry();
 				return basicGetPaletteEntry();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -237,8 +240,10 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 			case LibraryElementPackage.ADAPTER_DECLARATION__PALETTE_ENTRY:
 				setPaletteEntry((AdapterTypePaletteEntry)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -254,8 +259,10 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 			case LibraryElementPackage.ADAPTER_DECLARATION__PALETTE_ENTRY:
 				setPaletteEntry((AdapterTypePaletteEntry)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -269,8 +276,9 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 				return adapterFB != null;
 			case LibraryElementPackage.ADAPTER_DECLARATION__PALETTE_ENTRY:
 				return paletteEntry != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // AdapterDeclarationImpl

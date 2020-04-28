@@ -240,8 +240,9 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 		switch (featureID) {
 			case LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION:
 				return ((InternalEList<?>)getServiceTransaction()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -259,8 +260,9 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 				return getServiceTransaction();
 			case LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT:
 				return getTestResult();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -284,8 +286,10 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 			case LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT:
 				setTestResult((Integer)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -307,8 +311,10 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 			case LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT:
 				unsetTestResult();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -326,8 +332,9 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 				return serviceTransaction != null && !serviceTransaction.isEmpty();
 			case LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT:
 				return isSetTestResult();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

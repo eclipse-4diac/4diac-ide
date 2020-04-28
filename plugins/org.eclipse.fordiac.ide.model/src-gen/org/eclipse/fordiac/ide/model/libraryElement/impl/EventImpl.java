@@ -361,8 +361,9 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputConnections()).basicAdd(otherEnd, msgs);
 			case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputConnections()).basicAdd(otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -378,8 +379,9 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.EVENT__WITH:
 				return ((InternalEList<?>)getWith()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -406,8 +408,9 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 				return getTypeName();
 			case LibraryElementPackage.EVENT__WITH:
 				return getWith();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -445,8 +448,10 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 				getWith().clear();
 				getWith().addAll((Collection<? extends With>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -480,8 +485,10 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 			case LibraryElementPackage.EVENT__WITH:
 				getWith().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -507,8 +514,9 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case LibraryElementPackage.EVENT__WITH:
 				return with != null && !with.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

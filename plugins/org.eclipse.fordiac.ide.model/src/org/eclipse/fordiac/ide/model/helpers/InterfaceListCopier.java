@@ -40,7 +40,7 @@ public final class InterfaceListCopier {
 		return copy;
 	}
 
-	private static void copyVarList(EList<VarDeclaration> destVars, final EList<VarDeclaration> srcVars) {
+	public static void copyVarList(EList<VarDeclaration> destVars, final EList<VarDeclaration> srcVars) {
 		srcVars.forEach(var -> destVars.add(copyVar(var)));
 	}
 

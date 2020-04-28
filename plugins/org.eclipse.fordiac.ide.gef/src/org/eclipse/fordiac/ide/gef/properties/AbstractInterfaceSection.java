@@ -109,6 +109,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();
 		});
+
 	}
 
 	private void createInputInfoGroup(Composite parent) {

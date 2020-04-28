@@ -121,7 +121,7 @@ public class InterfaceElementSection extends AbstractSection {
 
 		if (typeCombo.getItems().length > 0) {
 			int i = typeCombo.getItems().length - 1;
-			while (!text.equals(typeCombo.getItems()[i]) && i > 0) {
+			while (!text.equals(typeCombo.getItems()[i]) && (i > 0)) {
 				--i;
 			}
 			typeCombo.select(i);

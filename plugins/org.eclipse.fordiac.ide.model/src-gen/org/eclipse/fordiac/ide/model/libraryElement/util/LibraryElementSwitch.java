@@ -62,6 +62,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
@@ -761,6 +762,19 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseLibraryElement(baseFBType);
 				if (result == null) result = caseINamedElement(baseFBType);
 				if (result == null) result = caseI4DIACElement(baseFBType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.MULTIPLEXER: {
+				Multiplexer multiplexer = (Multiplexer)theEObject;
+				T result = caseMultiplexer(multiplexer);
+				if (result == null) result = caseFB(multiplexer);
+				if (result == null) result = caseFBNetworkElement(multiplexer);
+				if (result == null) result = caseTypedConfigureableObject(multiplexer);
+				if (result == null) result = casePositionableElement(multiplexer);
+				if (result == null) result = caseConfigurableObject(multiplexer);
+				if (result == null) result = caseINamedElement(multiplexer);
+				if (result == null) result = caseI4DIACElement(multiplexer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1709,6 +1723,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseBaseFBType(BaseFBType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Multiplexer</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Multiplexer</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMultiplexer(Multiplexer object) {
 		return null;
 	}
 

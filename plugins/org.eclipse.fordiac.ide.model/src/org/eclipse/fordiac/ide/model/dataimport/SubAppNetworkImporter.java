@@ -99,7 +99,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			// put an empty interface list so that the system can load
 			subApp.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		}
-		configureParameters(subApp.getInterface(), LibraryElementTags.SUBAPP_ELEMENT);
+		parseFBChildren(subApp, LibraryElementTags.SUBAPP_ELEMENT);
 	}
 
 	private void parseUntypedSubapp(SubApp subApp) throws TypeImportException, XMLStreamException {

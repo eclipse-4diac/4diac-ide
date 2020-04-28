@@ -210,8 +210,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
 				return basicSetECState((ECState)otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -223,8 +224,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		switch (featureID) {
 			case LibraryElementPackage.EC_ACTION__EC_STATE:
 				return basicSetECState(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -236,8 +238,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		switch (eContainerFeatureID()) {
 			case LibraryElementPackage.EC_ACTION__EC_STATE:
 				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.EC_STATE__EC_ACTION, ECState.class, msgs);
+			default:
+				return super.eBasicRemoveFromContainerFeature(msgs);
 		}
-		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -256,8 +259,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 			case LibraryElementPackage.EC_ACTION__EC_STATE:
 				if (resolve) return getECState();
 				return basicGetECState();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -276,8 +280,10 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 			case LibraryElementPackage.EC_ACTION__EC_STATE:
 				setECState((ECState)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -296,8 +302,10 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 			case LibraryElementPackage.EC_ACTION__EC_STATE:
 				setECState((ECState)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -313,8 +321,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 				return output != null;
 			case LibraryElementPackage.EC_ACTION__EC_STATE:
 				return basicGetECState() != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // ECActionImpl

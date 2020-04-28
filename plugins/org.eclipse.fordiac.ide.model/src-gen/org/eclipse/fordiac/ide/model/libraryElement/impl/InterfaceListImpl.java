@@ -273,8 +273,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return ((InternalEList<?>)getInputVars()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
 				return ((InternalEList<?>)getOutputVars()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -296,8 +297,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return getInputVars();
 			case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
 				return getOutputVars();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -332,8 +334,10 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				getOutputVars().clear();
 				getOutputVars().addAll((Collection<? extends VarDeclaration>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -361,8 +365,10 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 			case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
 				getOutputVars().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -384,8 +390,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return inputVars != null && !inputVars.isEmpty();
 			case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
 				return outputVars != null && !outputVars.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // InterfaceListImpl

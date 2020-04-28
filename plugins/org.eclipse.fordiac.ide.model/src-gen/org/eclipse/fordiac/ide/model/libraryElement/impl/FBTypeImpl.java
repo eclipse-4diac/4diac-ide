@@ -167,8 +167,9 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 				return basicSetInterfaceList(null, msgs);
 			case LibraryElementPackage.FB_TYPE__SERVICE:
 				return basicSetService(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -182,8 +183,9 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 				return getInterfaceList();
 			case LibraryElementPackage.FB_TYPE__SERVICE:
 				return getService();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -199,8 +201,10 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 			case LibraryElementPackage.FB_TYPE__SERVICE:
 				setService((Service)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -216,8 +220,10 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 			case LibraryElementPackage.FB_TYPE__SERVICE:
 				setService((Service)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -231,8 +237,9 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 				return interfaceList != null;
 			case LibraryElementPackage.FB_TYPE__SERVICE:
 				return service != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // FBTypeImpl

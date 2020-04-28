@@ -408,8 +408,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getResource()).basicAdd(otherEnd, msgs);
 			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInConnections()).basicAdd(otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -427,8 +428,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 				return ((InternalEList<?>)getResource()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
 				return ((InternalEList<?>)getInConnections()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -453,8 +455,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 				return getProfile();
 			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
 				return getInConnections();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -489,8 +492,10 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 				getInConnections().clear();
 				getInConnections().addAll((Collection<? extends Link>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -521,8 +526,10 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
 				getInConnections().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -546,8 +553,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 				return PROFILE_EDEFAULT == null ? profile != null : !PROFILE_EDEFAULT.equals(profile);
 			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
 				return inConnections != null && !inConnections.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

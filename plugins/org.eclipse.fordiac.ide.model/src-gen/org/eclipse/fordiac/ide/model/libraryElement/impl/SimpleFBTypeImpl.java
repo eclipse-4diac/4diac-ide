@@ -114,8 +114,9 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 		switch (featureID) {
 			case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
 				return basicSetAlgorithm(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -127,8 +128,9 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 		switch (featureID) {
 			case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
 				return getAlgorithm();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -141,8 +143,10 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 			case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
 				setAlgorithm((Algorithm)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -155,8 +159,10 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 			case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
 				setAlgorithm((Algorithm)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -168,8 +174,9 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 		switch (featureID) {
 			case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
 				return algorithm != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // SimpleFBTypeImpl

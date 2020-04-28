@@ -118,9 +118,8 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart {
 		Display.getDefault().asyncExec(() -> getNameLabel().setText(getINamedElement().getName()));
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	protected List getModelChildren() {
+	protected List<Object> getModelChildren() {
 		if (null == eic) {
 			eic = new EventInputContainer(getModel());
 		}
@@ -223,7 +222,7 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart {
 					Point p = getParent().getViewer().getControl().getSize();
 					Dimension dim = getFigure().getPreferredSize(-1, -1);
 
-					Rectangle rect = new Rectangle(p.x / 2 - dim.width / 2, p.y / 2 - dim.height / 2, -1, -1);
+					Rectangle rect = new Rectangle((p.x / 2) - (dim.width / 2), (p.y / 2) - (dim.height / 2), -1, -1);
 					// rectangle rect = new Rectangle()
 
 					update(rect);
@@ -239,7 +238,7 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart {
 		}
 		Point p = getParent().getViewer().getControl().getSize();
 		Dimension dim = getFigure().getPreferredSize(-1, -1);
-		Rectangle rect = new Rectangle(p.x / 2 - dim.width / 2, p.y / 2 - dim.height / 2, -1, -1);
+		Rectangle rect = new Rectangle((p.x / 2) - (dim.width / 2), (p.y / 2) - (dim.height / 2), -1, -1);
 		update(rect);
 	}
 

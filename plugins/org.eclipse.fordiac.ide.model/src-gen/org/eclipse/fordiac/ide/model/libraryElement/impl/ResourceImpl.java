@@ -345,8 +345,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
 				return basicSetDevice((Device)otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -362,8 +363,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 				return basicSetFBNetwork(null, msgs);
 			case LibraryElementPackage.RESOURCE__DEVICE:
 				return basicSetDevice(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -375,8 +377,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		switch (eContainerFeatureID()) {
 			case LibraryElementPackage.RESOURCE__DEVICE:
 				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.DEVICE__RESOURCE, Device.class, msgs);
+			default:
+				return super.eBasicRemoveFromContainerFeature(msgs);
 		}
-		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -399,8 +402,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 				return basicGetDevice();
 			case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
 				return isDeviceTypeResource();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -430,8 +434,10 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 			case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
 				setDeviceTypeResource((Boolean)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -459,8 +465,10 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 			case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
 				setDeviceTypeResource(DEVICE_TYPE_RESOURCE_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -482,8 +490,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 				return basicGetDevice() != null;
 			case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
 				return deviceTypeResource != DEVICE_TYPE_RESOURCE_EDEFAULT;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

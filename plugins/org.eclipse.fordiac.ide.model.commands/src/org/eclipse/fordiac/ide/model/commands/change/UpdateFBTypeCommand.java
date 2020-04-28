@@ -79,7 +79,7 @@ public class UpdateFBTypeCommand extends Command {
 
 	public UpdateFBTypeCommand(FBNetworkElement fbnElement, PaletteEntry entry) {
 		this.fbnElement = fbnElement;
-		network = (FBNetwork) fbnElement.eContainer();
+		network = fbnElement.getFbNetwork();
 		if ((entry instanceof FBTypePaletteEntry) || (entry instanceof SubApplicationTypePaletteEntry)) {
 			this.entry = entry;
 		} else {

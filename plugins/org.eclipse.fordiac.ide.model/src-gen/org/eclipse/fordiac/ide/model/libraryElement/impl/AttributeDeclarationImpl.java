@@ -231,8 +231,9 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 				return getType();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 				return getInitialValue();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -254,8 +255,10 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 				setInitialValue((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -277,8 +280,10 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 				setInitialValue(INITIAL_VALUE_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -296,8 +301,9 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 				return type != TYPE_EDEFAULT;
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 				return INITIAL_VALUE_EDEFAULT == null ? initialValue != null : !INITIAL_VALUE_EDEFAULT.equals(initialValue);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

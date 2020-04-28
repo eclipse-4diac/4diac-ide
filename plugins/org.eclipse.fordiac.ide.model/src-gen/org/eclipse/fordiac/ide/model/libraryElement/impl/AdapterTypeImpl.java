@@ -118,8 +118,9 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 		switch (featureID) {
 			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
 				return getAdapterFBType();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -132,8 +133,10 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
 				setAdapterFBType((AdapterFBType)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -146,8 +149,10 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
 				setAdapterFBType((AdapterFBType)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -159,8 +164,9 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 		switch (featureID) {
 			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
 				return adapterFBType != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	// TODO move to model and annotations

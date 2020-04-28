@@ -486,8 +486,9 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputConnections()).basicAdd(otherEnd, msgs);
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getWiths()).basicAdd(otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -505,8 +506,9 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 				return ((InternalEList<?>)getWiths()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.VAR_DECLARATION__VALUE:
 				return basicSetValue(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -538,8 +540,9 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			case LibraryElementPackage.VAR_DECLARATION__VALUE:
 				if (resolve) return getValue();
 				return basicGetValue();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -583,8 +586,10 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			case LibraryElementPackage.VAR_DECLARATION__VALUE:
 				setValue((Value)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -624,8 +629,10 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			case LibraryElementPackage.VAR_DECLARATION__VALUE:
 				setValue((Value)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -655,8 +662,9 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 				return withs != null && !withs.isEmpty();
 			case LibraryElementPackage.VAR_DECLARATION__VALUE:
 				return value != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

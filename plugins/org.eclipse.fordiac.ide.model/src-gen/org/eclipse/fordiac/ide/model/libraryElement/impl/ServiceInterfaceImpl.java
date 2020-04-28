@@ -141,8 +141,9 @@ public class ServiceInterfaceImpl extends I4DIACElementImpl implements ServiceIn
 				return getName();
 			case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
 				return getComment();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -158,8 +159,10 @@ public class ServiceInterfaceImpl extends I4DIACElementImpl implements ServiceIn
 			case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
 				setComment((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -175,8 +178,10 @@ public class ServiceInterfaceImpl extends I4DIACElementImpl implements ServiceIn
 			case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
 				setComment(COMMENT_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -190,8 +195,9 @@ public class ServiceInterfaceImpl extends I4DIACElementImpl implements ServiceIn
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

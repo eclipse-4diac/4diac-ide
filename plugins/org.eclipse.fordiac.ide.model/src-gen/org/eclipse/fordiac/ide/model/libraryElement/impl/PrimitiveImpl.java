@@ -194,8 +194,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 			case LibraryElementPackage.PRIMITIVE__INTERFACE:
 				if (resolve) return getInterface();
 				return basicGetInterface();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -214,8 +215,10 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 			case LibraryElementPackage.PRIMITIVE__INTERFACE:
 				setInterface((ServiceInterface)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -234,8 +237,10 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 			case LibraryElementPackage.PRIMITIVE__INTERFACE:
 				setInterface((ServiceInterface)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -251,8 +256,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 				return PARAMETERS_EDEFAULT == null ? parameters != null : !PARAMETERS_EDEFAULT.equals(parameters);
 			case LibraryElementPackage.PRIMITIVE__INTERFACE:
 				return interface_ != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

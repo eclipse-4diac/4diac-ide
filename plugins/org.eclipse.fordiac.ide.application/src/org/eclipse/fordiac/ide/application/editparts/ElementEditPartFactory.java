@@ -52,7 +52,12 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 				part = new FBNetworkEditPart();
 			}
 		} else if (modelElement instanceof FB) {
-			part = new FBEditPart();
+			if ((((FB) modelElement).getType().getName().contentEquals("STRUCT_MUX"))
+					|| (((FB) modelElement).getType().getName().contentEquals("STRUCT_DEMUX"))) {
+				part = new MultiplexEditPart();
+			} else {
+				part = new FBEditPart();
+			}
 		} else if (modelElement instanceof InstanceName) {
 			part = new InstanceNameEditPart();
 		} else if (modelElement instanceof Connection) {
@@ -61,7 +66,8 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			part = new SubAppForFBNetworkEditPart();
 		} else if (modelElement instanceof IInterfaceElement) {
 			IInterfaceElement element = (IInterfaceElement) modelElement;
-			if (element.getFBNetworkElement() instanceof SubApp && null == element.getFBNetworkElement().getType()) {
+			if ((element.getFBNetworkElement() instanceof SubApp)
+					&& (null == element.getFBNetworkElement().getType())) {
 				part = new UntypedSubAppInterfaceElementEditPart();
 			} else {
 				part = new InterfaceEditPartForFBNetwork();

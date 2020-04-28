@@ -348,8 +348,9 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		switch (featureID) {
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
 				return basicSetInterface(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -369,8 +370,9 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
 				if (resolve) return getMapping();
 				return basicGetMapping();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -392,8 +394,10 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
 				setMapping((Mapping)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -415,8 +419,10 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
 				setMapping((Mapping)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -434,8 +440,9 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 				return interface_ != null;
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
 				return mapping != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

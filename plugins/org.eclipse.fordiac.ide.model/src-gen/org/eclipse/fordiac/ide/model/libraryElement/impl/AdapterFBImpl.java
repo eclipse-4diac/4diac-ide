@@ -140,8 +140,9 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 				if (adapterDecl != null)
 					msgs = ((InternalEObject)adapterDecl).eInverseRemove(this, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, AdapterDeclaration.class, msgs);
 				return basicSetAdapterDecl((AdapterDeclaration)otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -153,8 +154,9 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 		switch (featureID) {
 			case LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL:
 				return basicSetAdapterDecl(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -185,8 +187,9 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 			case LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL:
 				if (resolve) return getAdapterDecl();
 				return basicGetAdapterDecl();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -199,8 +202,10 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 			case LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL:
 				setAdapterDecl((AdapterDeclaration)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -213,8 +218,10 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 			case LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL:
 				setAdapterDecl((AdapterDeclaration)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -226,8 +233,9 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 		switch (featureID) {
 			case LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL:
 				return adapterDecl != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // AdapterFBImpl

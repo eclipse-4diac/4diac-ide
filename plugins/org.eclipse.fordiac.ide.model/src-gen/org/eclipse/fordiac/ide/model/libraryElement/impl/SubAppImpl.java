@@ -150,8 +150,9 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 		switch (featureID) {
 			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
 				return basicSetSubAppNetwork(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -164,8 +165,9 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
 				if (resolve) return getSubAppNetwork();
 				return basicGetSubAppNetwork();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -178,8 +180,10 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
 				setSubAppNetwork((FBNetwork)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -192,8 +196,10 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
 				setSubAppNetwork((FBNetwork)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -205,8 +211,9 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 		switch (featureID) {
 			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
 				return subAppNetwork != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // SubAppImpl

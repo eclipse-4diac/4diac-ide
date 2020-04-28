@@ -192,8 +192,9 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 		switch (featureID) {
 			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
 				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -209,8 +210,9 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 				return getComment();
 			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
 				return getAttributes();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -231,8 +233,10 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 				getAttributes().clear();
 				getAttributes().addAll((Collection<? extends Attribute>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -251,8 +255,10 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
 				getAttributes().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -268,8 +274,9 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
 				return attributes != null && !attributes.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

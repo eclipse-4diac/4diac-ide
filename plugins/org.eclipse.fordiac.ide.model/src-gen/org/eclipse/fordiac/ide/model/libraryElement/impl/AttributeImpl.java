@@ -285,8 +285,9 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 				return basicGetAttributeDeclaration();
 			case LibraryElementPackage.ATTRIBUTE__VALUE:
 				return getValue();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -311,8 +312,10 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 			case LibraryElementPackage.ATTRIBUTE__VALUE:
 				setValue((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -337,8 +340,10 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 			case LibraryElementPackage.ATTRIBUTE__VALUE:
 				setValue(VALUE_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -358,8 +363,9 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 				return attributeDeclaration != null;
 			case LibraryElementPackage.ATTRIBUTE__VALUE:
 				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

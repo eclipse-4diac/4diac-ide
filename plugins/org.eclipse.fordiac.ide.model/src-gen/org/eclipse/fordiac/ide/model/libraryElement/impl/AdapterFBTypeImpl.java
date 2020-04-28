@@ -107,8 +107,9 @@ public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
 			case LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE:
 				if (resolve) return getAdapterType();
 				return basicGetAdapterType();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -121,8 +122,10 @@ public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
 			case LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE:
 				setAdapterType((AdapterType)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -135,8 +138,10 @@ public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
 			case LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE:
 				setAdapterType((AdapterType)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -148,8 +153,9 @@ public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
 		switch (featureID) {
 			case LibraryElementPackage.ADAPTER_FB_TYPE__ADAPTER_TYPE:
 				return adapterType != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // AdapterFBTypeImpl

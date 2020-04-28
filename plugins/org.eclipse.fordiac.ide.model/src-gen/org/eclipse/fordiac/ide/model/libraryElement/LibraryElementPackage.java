@@ -5459,13 +5459,122 @@ public interface LibraryElementPackage extends EPackage {
 	int SIMPLE_FB_TYPE_FEATURE_COUNT = BASE_FB_TYPE_FEATURE_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl <em>Multiplexer</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMultiplexer()
+	 * @generated
+	 */
+	int MULTIPLEXER = 72;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__ANNOTATIONS = FB__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__NAME = FB__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__COMMENT = FB__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__ATTRIBUTES = FB__ATTRIBUTES;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__PALETTE_ENTRY = FB__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>X</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__X = FB__X;
+
+	/**
+	 * The feature id for the '<em><b>Y</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__Y = FB__Y;
+
+	/**
+	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__INTERFACE = FB__INTERFACE;
+
+	/**
+	 * The feature id for the '<em><b>Mapping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__MAPPING = FB__MAPPING;
+
+	/**
+	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__STRUCT_TYPE = FB_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Multiplexer</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Language
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 72;
+	int LANGUAGE = 73;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
@@ -5475,7 +5584,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 73;
+	int IPROJECT = 74;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -5485,7 +5594,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 74;
+	int IFILE = 75;
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration <em>Adapter Declaration</em>}'.
@@ -7616,6 +7725,27 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getBaseFBType_InternalVars();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Multiplexer <em>Multiplexer</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Multiplexer</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Multiplexer
+	 * @generated
+	 */
+	EClass getMultiplexer();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Multiplexer#getStructType <em>Struct Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Struct Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Multiplexer#getStructType()
+	 * @see #getMultiplexer()
+	 * @generated
+	 */
+	EReference getMultiplexer_StructType();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute <em>Attribute</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Attribute</em>'.
@@ -9482,6 +9612,24 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference BASE_FB_TYPE__INTERNAL_VARS = eINSTANCE.getBaseFBType_InternalVars();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl <em>Multiplexer</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMultiplexer()
+		 * @generated
+		 */
+		EClass MULTIPLEXER = eINSTANCE.getMultiplexer();
+
+		/**
+		 * The meta object literal for the '<em><b>Struct Type</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MULTIPLEXER__STRUCT_TYPE = eINSTANCE.getMultiplexer_StructType();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl <em>Attribute</em>}' class.
