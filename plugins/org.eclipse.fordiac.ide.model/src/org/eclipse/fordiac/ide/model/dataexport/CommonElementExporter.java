@@ -136,6 +136,13 @@ abstract class CommonElementExporter {
 			}
 			currentDataBuffer.put(b, off, len);
 		}
+
+		@Override
+		public void close() throws IOException {
+			dataBuffers.clear();
+			super.close();
+		}
+
 	}
 
 	public static final String LINE_END = "\n"; //$NON-NLS-1$
@@ -236,14 +243,17 @@ abstract class CommonElementExporter {
 			writer.writeCharacters(LINE_END);
 			writer.writeEndDocument();
 			writer.close();
-			ByteBufferInputStream inputStream = new ByteBufferInputStream(outputStream.getDataBuffers());
-			if (iFile.exists()) {
-				iFile.setContents(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
-			} else {
-				checkAndCreateFolderHierarchy(iFile);
-				iFile.create(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
+			try (ByteBufferInputStream inputStream = new ByteBufferInputStream(outputStream.getDataBuffers())) {
+				if (iFile.exists()) {
+					iFile.setContents(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
+				} else {
+					checkAndCreateFolderHierarchy(iFile);
+					iFile.create(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
+				}
+			} finally {
+				outputStream.close();
 			}
-		} catch (CoreException | XMLStreamException e) {
+		} catch (CoreException | XMLStreamException | IOException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 		long endTime = System.currentTimeMillis();
