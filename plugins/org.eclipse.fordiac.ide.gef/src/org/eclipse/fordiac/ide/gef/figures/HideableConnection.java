@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2015, 2017 Profactor GbmH, fortiss GmbH
+ * 				 2018 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Muddasir Shakil - Added double line for Adapter and Struct connection
+ *
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
@@ -20,11 +23,16 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 
 public class HideableConnection extends PolylineConnection {
 
 	public static final int BEND_POINT_BEVEL_SIZE = 5;
-
+	private static final int NORMAL_DOUBLE_LINE_WIDTH = 3;
+	private static final int NORMAL_INNER_LINE_WIDTH = 1;
 	private boolean hidden = false;
 	private String label = ""; //$NON-NLS-1$
 	private Rectangle moveRect = new Rectangle();
@@ -70,21 +78,53 @@ public class HideableConnection extends PolylineConnection {
 			moveRect.width = 5;
 			moveRect.height = 5;
 		} else {
-			drawBeveledPolyline(g);
+			if (isAdapterConnectionOrStructConnection()) {
+				drawDoublePolyline(g, getBeveledPoints());
+			} else {
+				g.drawPolyline(getBeveledPoints());
+			}
 		}
 	}
 
-	private void drawBeveledPolyline(Graphics g) {
+	private boolean isAdapterConnectionOrStructConnection() {
+		return (model instanceof AdapterConnection
+				|| (model instanceof DataConnection && model.getSource().getType() instanceof StructuredType));
+	}
+
+	private void drawDoublePolyline(Graphics g, PointList beveledPoints) {
+		setOuterLineWidth();
+		g.drawPolyline(beveledPoints);
+		g.setLineWidth(NORMAL_INNER_LINE_WIDTH);
+		g.setForegroundColor(getBackgroundColor());
+		g.drawPolyline(beveledPoints);
+	}
+
+	private void setOuterLineWidth() {
+		if (getLineWidth() != ConnectionPreferenceValues.SELECTED_LINE_WIDTH) {
+			if (getNormalLineWidth() <= 1) {
+				setLineWidth(NORMAL_DOUBLE_LINE_WIDTH);
+			} else {
+				setLineWidth(1 + 2 * getNormalLineWidth());
+			}
+		}
+	}
+
+	// suppress the dead-code warning due to NORMAL_LINE_WIDTH being a static final value in setOuterLineWidth
+	private int getNormalLineWidth() {
+		return ConnectionPreferenceValues.NORMAL_LINE_WIDTH;
+	}
+
+	private PointList getBeveledPoints() {
 		PointList beveledPoints = new PointList();
 
 		beveledPoints.addPoint(getPoints().getFirstPoint());
 
 		for (int i = 1; i < getPoints().size() - 1; i++) {
-			Point bevore = getPoints().getPoint(i - 1);
+			Point before = getPoints().getPoint(i - 1);
 			Point after = getPoints().getPoint(i + 1);
 
-			int verDistance = Math.abs(bevore.y - after.y);
-			int horDistance = Math.abs(bevore.y - after.y);
+			int verDistance = Math.abs(before.y - after.y);
+			int horDistance = Math.abs(before.y - after.y);
 			int bevelSize = BEND_POINT_BEVEL_SIZE;
 			if (verDistance < 2 * BEND_POINT_BEVEL_SIZE) {
 				bevelSize = verDistance / 2;
@@ -93,16 +133,15 @@ public class HideableConnection extends PolylineConnection {
 				bevelSize = horDistance / 2;
 			}
 
-			beveledPoints.addPoint(calcualtedBeveledPoint(getPoints().getPoint(i), bevore, bevelSize));
-			beveledPoints.addPoint(calcualtedBeveledPoint(getPoints().getPoint(i), after, bevelSize));
+			beveledPoints.addPoint(calculatedBeveledPoint(getPoints().getPoint(i), before, bevelSize));
+			beveledPoints.addPoint(calculatedBeveledPoint(getPoints().getPoint(i), after, bevelSize));
 		}
 
 		beveledPoints.addPoint(getPoints().getLastPoint());
-
-		g.drawPolyline(beveledPoints);
+		return beveledPoints;
 	}
 
-	private static Point calcualtedBeveledPoint(Point refPoint, Point otherPoint, int bevelSize) {
+	private static Point calculatedBeveledPoint(Point refPoint, Point otherPoint, int bevelSize) {
 		if (0 == (refPoint.x - otherPoint.x)) {
 			return new Point(refPoint.x, refPoint.y + (((refPoint.y - otherPoint.y) > 0) ? -bevelSize : bevelSize));
 		}
