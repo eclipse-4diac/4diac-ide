@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariab
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral
 
 /**
  * This class contains custom validation rules.
@@ -125,6 +126,14 @@ class StructuredTextValidator extends AbstractStructuredTextValidator {
 				error("Piecewise located variables cannot access more bits than are available in the destination", StructuredTextPackage.Literals.LOCAL_VARIABLE__LOCATED)
 			if (v.BitSize == 0 && v.location.BitSize == 0 && !(v.location.extractTypeInformation(v.location.extractTypeInformation) == v.extractTypeInformation))
 				error("General located variables must have matching types", StructuredTextPackage.Literals.LOCAL_VARIABLE__LOCATED)
+		}
+	}
+	
+	@Check 
+	def validateTimeLiteral(TimeLiteral expr){
+		val literal = new DatetimeLiteral(expr.literal)
+		if (!literal.isValid()) {
+			error("Invalid Literal", StructuredTextPackage.Literals.TIME_LITERAL__LITERAL);
 		}
 	}
 

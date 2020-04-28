@@ -63,4 +63,56 @@ class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 				generatedCode.toString())
 	}
 
+	@Test
+	def timeAssignmentAlgorithm() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "TIME"))//$NON-NLS-1$
+		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := TIME#1m;'''))
+
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
+
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals('''«EXPORTED_VARIABLE_NAME»() = CIEC_TIME("T#1m");
+'''.toString(), generatedCode.toString())
+	}
+
+	@Test
+	def dateAssignmentAlgorithm() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "DATE"))//$NON-NLS-1$
+		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := D#1996-08-12;'''))
+
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
+
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals('''«EXPORTED_VARIABLE_NAME»() = CIEC_DATE("D#1996-08-12");
+'''.toString(), generatedCode.toString())
+	}
+
+	@Test
+	def todAssignmentAlgorithm() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "TOD"))//$NON-NLS-1$
+		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := TOD#06:06:59;'''))
+
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
+
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals('''«EXPORTED_VARIABLE_NAME»() = CIEC_TIME_OF_DAY("TOD#06:06:59");
+'''.toString(), generatedCode.toString())
+	}
+
+	@Test
+	def datetimeAssignmentAlgorithm() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "DT"))//$NON-NLS-1$
+		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := DT#1989-06-15-13:56:14.77;'''))
+
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
+
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals('''«EXPORTED_VARIABLE_NAME»() = CIEC_DATE_AND_TIME("DT#1989-06-15-13:56:14.770000000");
+'''.toString(), generatedCode.toString())
+	}
+
 }
