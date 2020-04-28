@@ -580,8 +580,14 @@
       </menuContribution>    
       <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
-         <command
-               commandId="org.eclipse.fordiac.ide.application.commands.insertFB" >
+         <command commandId="org.eclipse.fordiac.ide.application.commands.insertFB" >
+             <visibleWhen>
+                <or> 
+                    <with variable="activeEditor">
+                        <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+                    </with>
+                </or>
+             </visibleWhen>
          </command>
          <command
                commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
@@ -657,11 +663,17 @@
                commandId="org.eclipse.fordiac.ide.application.unmap"
                label="Unmap"
                style="push">
+           <visibleWhen>
+                <reference definitionId="org.eclipse.fordiac.ide.application.UnmapAllActivation" />
+           </visibleWhen>
          </command>
          <command
                commandId="org.eclipse.fordiac.ide.application.unmapAll"
                label="Unmap All"
                style="push">
+           <visibleWhen>
+                <reference definitionId="org.eclipse.fordiac.ide.application.UnmapAllActivation" />
+           </visibleWhen>
          </command>
              </menuContribution>
          <menuContribution
