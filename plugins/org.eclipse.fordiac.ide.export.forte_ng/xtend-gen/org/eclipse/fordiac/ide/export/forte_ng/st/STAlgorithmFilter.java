@@ -749,18 +749,51 @@ public class STAlgorithmFilter {
   }
   
   protected CharSequence _generateExpression(final BinaryExpression expr) {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("(");
-    CharSequence _generateExpression = this.generateExpression(expr.getLeft());
-    _builder.append(_generateExpression);
-    _builder.append(" ");
-    CharSequence _generateBinaryOperator = this.generateBinaryOperator(expr.getOperator());
-    _builder.append(_generateBinaryOperator);
-    _builder.append(" ");
-    CharSequence _generateExpression_1 = this.generateExpression(expr.getRight());
-    _builder.append(_generateExpression_1);
-    _builder.append(")");
-    return _builder;
+    CharSequence _switchResult = null;
+    BinaryOperator _operator = expr.getOperator();
+    if (_operator != null) {
+      switch (_operator) {
+        case POWER:
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("EXPT(");
+          CharSequence _generateExpression = this.generateExpression(expr.getLeft());
+          _builder.append(_generateExpression);
+          _builder.append(", ");
+          CharSequence _generateExpression_1 = this.generateExpression(expr.getRight());
+          _builder.append(_generateExpression_1);
+          _builder.append(")");
+          _switchResult = _builder;
+          break;
+        default:
+          StringConcatenation _builder_1 = new StringConcatenation();
+          _builder_1.append("(");
+          CharSequence _generateExpression_2 = this.generateExpression(expr.getLeft());
+          _builder_1.append(_generateExpression_2);
+          _builder_1.append(" ");
+          CharSequence _generateBinaryOperator = this.generateBinaryOperator(expr.getOperator());
+          _builder_1.append(_generateBinaryOperator);
+          _builder_1.append(" ");
+          CharSequence _generateExpression_3 = this.generateExpression(expr.getRight());
+          _builder_1.append(_generateExpression_3);
+          _builder_1.append(")");
+          _switchResult = _builder_1;
+          break;
+      }
+    } else {
+      StringConcatenation _builder_1 = new StringConcatenation();
+      _builder_1.append("(");
+      CharSequence _generateExpression_2 = this.generateExpression(expr.getLeft());
+      _builder_1.append(_generateExpression_2);
+      _builder_1.append(" ");
+      CharSequence _generateBinaryOperator = this.generateBinaryOperator(expr.getOperator());
+      _builder_1.append(_generateBinaryOperator);
+      _builder_1.append(" ");
+      CharSequence _generateExpression_3 = this.generateExpression(expr.getRight());
+      _builder_1.append(_generateExpression_3);
+      _builder_1.append(")");
+      _switchResult = _builder_1;
+    }
+    return _switchResult;
   }
   
   protected CharSequence generateBinaryOperator(final BinaryOperator op) {

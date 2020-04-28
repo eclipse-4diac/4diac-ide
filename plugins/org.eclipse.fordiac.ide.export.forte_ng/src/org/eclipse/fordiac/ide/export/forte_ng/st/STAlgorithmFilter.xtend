@@ -299,7 +299,14 @@ class STAlgorithmFilter {
 	}
 
 	def protected dispatch CharSequence generateExpression(
-		BinaryExpression expr) '''(«expr.left.generateExpression» «expr.operator.generateBinaryOperator» «expr.right.generateExpression»)'''
+		BinaryExpression expr) {
+			switch (expr.operator) {
+			case POWER:
+				'''EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			default:
+				'''(«expr.left.generateExpression» «expr.operator.generateBinaryOperator» «expr.right.generateExpression»)'''
+			}
+		}
 
 	def protected CharSequence generateBinaryOperator(BinaryOperator op) {
 		switch (op) {

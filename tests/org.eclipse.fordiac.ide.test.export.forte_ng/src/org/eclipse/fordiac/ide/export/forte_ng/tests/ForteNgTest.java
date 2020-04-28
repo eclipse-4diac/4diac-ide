@@ -65,4 +65,16 @@ public class ForteNgTest extends ForteNgTestBase {
 		assertNotNull(generatedCode);
 		assertEquals("SQRT(variableA())", generatedCode.toString());
 	}
+
+	@Test
+	public void powerExpression() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration("variableA", "REAL"));
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration("variableB", "REAL"));
+
+		CharSequence generatedCode = stAlgorithmFilter.generate("variableA ** variableB", functionBlock, errors);
+
+		assertNoErrors(errors); // Expression can not be an assignment
+		assertNotNull(generatedCode);
+		assertEquals("EXPT(variableA(), variableB())", generatedCode.toString());
+	}
 }
