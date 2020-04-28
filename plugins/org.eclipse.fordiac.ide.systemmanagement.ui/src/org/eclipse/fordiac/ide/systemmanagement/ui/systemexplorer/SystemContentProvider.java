@@ -16,17 +16,27 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemmanagement.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 
 public class SystemContentProvider extends AdapterFactoryContentProvider implements DistributedSystemListener {
 
@@ -44,30 +54,40 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof IFile) {
-			// retrieve the children for the Automation system
-			return super.getChildren(SystemManager.INSTANCE.getSystem((IFile) parentElement));
+		if (parentElement instanceof IResource) {
+			return getResourceChildren((IResource) parentElement);
 		}
 		return super.getChildren(parentElement);
 	}
 
 	@Override
 	public Object getParent(Object object) {
+		if (object instanceof IResource) {
+			return ((IResource) object).getParent();
+		}
 		if (object instanceof Application) {
-			return ((Application) object).getAutomationSystem().getSystemFile();
+			Application app = (Application) object;
+			// the automation system can be null if the the app was just deleted
+			return (null != app.getAutomationSystem()) ? app.getAutomationSystem().getSystemFile() : null;
 		}
 		if (object instanceof SystemConfiguration) {
 			return ((SystemConfiguration) object).getAutomationSystem().getSystemFile();
+		}
+		if (object instanceof AutomationSystem) {
+			return ((AutomationSystem) object).getSystemFile();
 		}
 		return super.getParent(object);
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if (element instanceof IFile) {
-			// if we are here the file is a system configuration file. For this we always
-			// have children
-			return true;
+		if (element instanceof IResource) {
+			if (element instanceof IProject) {
+				return ((IProject) element).isAccessible();
+			}
+			if (FordiacProjectSorter.isSystemFile(element)) {
+				return true;
+			}
 		}
 		return super.hasChildren(element);
 	}
@@ -80,10 +100,55 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	}
 
 	@Override
+	public void notifyChanged(Notification notification) {
+		if (notification.getNotifier() instanceof AutomationSystem) {
+			// as the automation system is changed we need to perform a special refresh here
+			// distributedSystemWorkspaceChanged();
+			AutomationSystem system = (AutomationSystem) notification.getNotifier();
+			super.notifyChanged(new ViewerNotification(notification, system.getSystemFile()));
+		} else {
+			super.notifyChanged(notification);
+		}
+	}
+
+	@Override
 	public void distributedSystemWorkspaceChanged() {
 		if (null != viewer && null != viewer.getControl() && null != viewer.getControl().getDisplay()) {
 			viewer.getControl().getDisplay().asyncExec(() -> viewer.refresh());
 		}
+	}
+
+	private Object[] getResourceChildren(IResource resource) {
+		if (resource instanceof IWorkspaceRoot) {
+			// show only 4diac or closed projects
+			IWorkspaceRoot root = (IWorkspaceRoot) resource;
+			return Arrays.stream(root.getProjects()).filter(proj -> projectToShow(proj)).collect(Collectors.toList())
+					.toArray(new IProject[0]);
+		}
+		if ((resource instanceof IProject) && ((IProject) resource).isOpen()) {
+			try {
+				return ((IProject) resource).members();
+			} catch (CoreException e) {
+				Activator.getDefault().logError("Could not read project children", e); //$NON-NLS-1$
+			}
+		}
+
+		if (FordiacProjectSorter.isSystemFile(resource)) {
+			// retrieve the children for the Automation system
+			return super.getChildren(SystemManager.INSTANCE.getSystem((IFile) resource));
+		}
+
+		return new Object[0];
+	}
+
+	private static boolean projectToShow(IProject proj) {
+		// if the project is closed or a 4diac project return true
+		try {
+			return !proj.isOpen() || proj.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID);
+		} catch (CoreException e) {
+			Activator.getDefault().logError("Could not read project nature", e); //$NON-NLS-1$
+		}
+		return false;
 	}
 
 }

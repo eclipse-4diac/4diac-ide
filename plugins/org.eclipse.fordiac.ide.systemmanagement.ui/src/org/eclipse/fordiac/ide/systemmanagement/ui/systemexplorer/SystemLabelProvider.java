@@ -24,6 +24,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.navigator.IDescriptionProvider;
 
@@ -46,9 +47,23 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 	@Override
 	public Image getImage(Object object) {
 		if (object instanceof IResource) {
-			return null;
+			return getImageForResource((IResource) object);
 		}
 		return super.getImage(object);
+	}
+
+	private static Image getImageForResource(IResource resource) {
+		if (FordiacProjectSorter.isSystemFile(resource)) {
+			// provide the icon for the system configuration file,
+			// TODO this should in the future provided by a dedicated editor
+			return FordiacImage.ICON_SYSTEM_PERSPECTIVE.getImage();
+		}
+
+		if (FordiacProjectSorter.isTypeLibFolder(resource)) {
+			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
+		}
+
+		return null;
 	}
 
 	@Override
