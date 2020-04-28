@@ -62,6 +62,17 @@ public abstract class CreateVariableCommand extends AbstractCreationCommand {
 		this.type = type;
 	}
 
+	protected CreateVariableCommand(final LibraryElement type, int index, String name, DataType dataType,
+			DataTypeLibrary dataTypeLibrary) {
+		this.dataType = dataType;
+		if (null == this.dataType) {
+			this.dataType = dataTypeLibrary.getType("BOOL"); //$NON-NLS-1$
+		}
+		this.name = (null != name) ? name : getDefaultVarName();
+		this.index = index;
+		this.type = type;
+	}
+
 	/**
 	 * subclasses most provide the list, to which the newly created variable shall
 	 * be added

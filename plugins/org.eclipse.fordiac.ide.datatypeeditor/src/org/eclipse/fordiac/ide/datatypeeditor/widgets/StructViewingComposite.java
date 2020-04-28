@@ -97,7 +97,8 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		showTable(parent);
 
 		buttons.bindToTableViewer(structViewer, this,
-				ref -> new CreateMemberVariableCommand(getType(), getInsertionIndex(), getVarName(), getDataType()),
+				ref -> new CreateMemberVariableCommand(getType(), getInsertionIndex(), getVarName(), getDataType(),
+						dataTypeLibrary),
 				ref -> new DeleteMemberVariableCommand(getType(), (VarDeclaration) ref),
 				ref -> new ChangeMemberVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, true),
 				ref -> new ChangeMemberVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref,
@@ -254,7 +255,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				case 1:
 					return varDecl.getType().getName();
 				case 2:
-					return varDecl.getValue().getValue();
+					return varDecl.getValue() == null ? "" : varDecl.getValue().getValue();
 				case 3:
 					return varDecl.getComment();
 				case 4:
@@ -276,8 +277,8 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	public void addEntry(Object entry, int index) {
 		if (entry instanceof VarDeclaration) {
 			VarDeclaration varEntry = (VarDeclaration) entry;
-			CreateMemberVariableCommand cmd = new CreateMemberVariableCommand(getType(), index, varEntry.getName(),
-					varEntry.getType());
+			Command cmd = new CreateMemberVariableCommand(getType(), index, varEntry.getName(), varEntry.getType(),
+					dataTypeLibrary);
 			executeCommand(cmd);
 		}
 	}
@@ -285,7 +286,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	@Override
 	public Object removeEntry(int index) {
 		VarDeclaration entry = (VarDeclaration) getEntry(index);
-		DeleteMemberVariableCommand cmd = new DeleteMemberVariableCommand(getType(), entry);
+		Command cmd = new DeleteMemberVariableCommand(getType(), entry);
 		executeCommand(cmd);
 		return entry;
 	}
