@@ -123,6 +123,7 @@ abstract class CommonElementImporter {
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());
 		} catch (Exception e) {
+			Activator.getDefault().logWarning("Type Loading issue", e);
 			createErrorMarker(e.getMessage());
 		}
 	}
@@ -133,6 +134,7 @@ abstract class CommonElementImporter {
 			if (marker.exists()) {
 				marker.setAttribute(IMarker.MESSAGE, message);
 				marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 			}
 		} catch (CoreException e) {
 			Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
