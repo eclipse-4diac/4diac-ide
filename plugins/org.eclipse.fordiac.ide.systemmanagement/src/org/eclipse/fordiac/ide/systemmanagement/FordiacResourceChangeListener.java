@@ -254,8 +254,10 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private static void updatePaletteEntry(final IFile newFile, final PaletteEntry entry) {
 		if (null != entry) {
 			String newTypeName = TypeLibrary.getTypeNameFromFile(newFile);
+			entry.getTypeLibrary().removePaletteEntry(entry);
 			entry.setLabel(newTypeName);
 			entry.setFile(newFile);
+			entry.getTypeLibrary().addPaletteEntry(entry);
 
 			WorkspaceJob job = new WorkspaceJob("Save Renamed type: " + entry.getLabel()) {
 				@Override

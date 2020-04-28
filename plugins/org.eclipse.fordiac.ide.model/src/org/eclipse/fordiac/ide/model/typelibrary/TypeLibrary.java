@@ -201,7 +201,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 		return entry;
 	}
 
-	private void addPaletteEntry(PaletteEntry entry) {
+	public void addPaletteEntry(PaletteEntry entry) {
 		if (entry instanceof DataTypePaletteEntry) {
 			dataTypeLib.addPaletteEntry((DataTypePaletteEntry) entry);
 		} else {
