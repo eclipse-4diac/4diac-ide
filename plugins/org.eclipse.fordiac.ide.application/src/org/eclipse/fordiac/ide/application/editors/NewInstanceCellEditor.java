@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.PaletteFilter;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -238,6 +239,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 						return FordiacImage.ICON_SUB_APP.getImage();
 					} else if (entry.getType() instanceof BasicFBType) {
 						return FordiacImage.ICON_BASIC_FB.getImage();
+					} else if (entry.getType() instanceof SimpleFBType) {
+						return FordiacImage.ICON_SIMPLE_FB.getImage();
 					} else if (entry.getType() instanceof CompositeFBType) {
 						return FordiacImage.ICON_COMPOSITE_FB.getImage();
 					} else {

@@ -27,19 +27,20 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a
  * {@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
- * 
+ *
  * @generated
  */
 public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public DeviceTypeItemProvider(AdapterFactory adapterFactory) {
@@ -49,7 +50,7 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	/**
 	 * This returns the property descriptors for the adapted class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -65,7 +66,7 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	/**
 	 * This adds a property descriptor for the Profile feature. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected void addProfilePropertyDescriptor(Object object) {
@@ -84,7 +85,7 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -101,7 +102,7 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -115,18 +116,18 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 
 	/**
 	 * This returns DeviceType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
+	 *
+	 * @generated not
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/DeviceType")); //$NON-NLS-1$
+		return overlayImage(object, FordiacImage.ICON_DEVICE.getImage());
 	}
 
 	/**
 	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -140,7 +141,7 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	 * This handles model notifications by calling {@link #updateChildren} to update
 	 * any cached children and by creating a viewer notification, which it passes to
 	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -166,7 +167,7 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
 	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override

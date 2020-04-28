@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2017 TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -34,7 +34,7 @@ final class FBTypeComposedAdapterFactory {
 	}
 
 	private static List<AdapterFactory> createFactoryList() {
-		ArrayList<AdapterFactory> factories = new ArrayList<AdapterFactory>();
+		List<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new LibraryElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());
 		return factories;
