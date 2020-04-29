@@ -16,8 +16,8 @@ package org.eclipse.fordiac.ide.export.forte_ng.tests;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +39,11 @@ import org.junit.BeforeClass;
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
 public class ForteNgTestBase {
+
+	static final String ALGORITHM_NAME = "algorithm"; //$NON-NLS-1$
+	static final String VARIABLE_NAME = "variable"; //$NON-NLS-1$
+	static final String VARIABLE2_NAME = "variable2"; //$NON-NLS-1$
+
 	private static final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	protected STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
 	protected BasicFBType functionBlock;
@@ -98,7 +103,9 @@ public class ForteNgTestBase {
 	 * @param errors list of errormessages
 	 */
 	protected static void assertNoErrors(List<String> errors) {
-		assertTrue("No error messages expected.", errors.isEmpty()); //$NON-NLS-1$
+		assertTrue(MessageFormat.format("No error messages expected. First error message received: {0}.", //$NON-NLS-1$
+				(!errors.isEmpty() ? errors.get(0) : "")), //$NON-NLS-1$
+				errors.isEmpty());
 	}
 
 	/**
@@ -134,12 +141,8 @@ public class ForteNgTestBase {
 	 * @return the cast algorithm-object
 	 */
 	protected STAlgorithm castAlgorithm(Algorithm algorithm) {
-		if (algorithm instanceof STAlgorithm) {
-			return (STAlgorithm) algorithm;
-		} else {
-			fail("Programming error in JUnit test: incompatible algorithm (Only STAlgorithm is allowed here)."); //$NON-NLS-1$
-			return null;
-		}
+		assert (algorithm instanceof STAlgorithm);
+		return (STAlgorithm) algorithm;
 	}
 
 	/**
@@ -156,7 +159,7 @@ public class ForteNgTestBase {
 			for (String error : errors) {
 				contained = contained || error.contains(message);
 			}
-			assertTrue("Missing error message: " + message, contained);
+			assertTrue(MessageFormat.format("Missing error message: {0}", message), contained); //$NON-NLS-1$
 		}
 	}
 

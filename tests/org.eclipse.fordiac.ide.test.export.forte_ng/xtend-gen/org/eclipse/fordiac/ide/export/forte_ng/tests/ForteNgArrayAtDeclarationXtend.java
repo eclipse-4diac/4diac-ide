@@ -18,8 +18,6 @@ import org.junit.Assert;
 
 @SuppressWarnings("all")
 public abstract class ForteNgArrayAtDeclarationXtend extends ForteNgTestBase {
-  private static final String ALGORITHM_NAME = "algorithm";
-  
   protected static final boolean VALID_DECLARATION = true;
   
   protected static final boolean INVALID_DECLARATION = (!ForteNgArrayAtDeclarationXtend.VALID_DECLARATION);
@@ -29,12 +27,16 @@ public abstract class ForteNgArrayAtDeclarationXtend extends ForteNgTestBase {
     _builder.append("VAR");
     _builder.newLine();
     _builder.append("  ");
-    _builder.append("variable : ");
+    _builder.append(ForteNgTestBase.VARIABLE_NAME, "  ");
+    _builder.append(" : ");
     _builder.append(sourceType, "  ");
     _builder.append(";");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    _builder.append("atLocation AT variable : ARRAY [");
+    _builder.append(ForteNgTestBase.VARIABLE2_NAME, "  ");
+    _builder.append(" AT ");
+    _builder.append(ForteNgTestBase.VARIABLE_NAME, "  ");
+    _builder.append(" : ARRAY [");
     _builder.append(arrayStart, "  ");
     _builder.append("..");
     _builder.append(arrayStop, "  ");
@@ -43,15 +45,17 @@ public abstract class ForteNgArrayAtDeclarationXtend extends ForteNgTestBase {
     _builder.append(";");
     _builder.newLineIfNotEmpty();
     _builder.append("END_VAR");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgArrayAtDeclarationXtend.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgArrayAtDeclarationXtend.ALGORITHM_NAME)), this.errors);
+    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
     if ((isValid == ForteNgArrayAtDeclarationXtend.VALID_DECLARATION)) {
       ForteNgTestBase.assertNoErrors(this.errors);
       Assert.assertNotNull(generatedCode);
       StringConcatenation _builder_1 = new StringConcatenation();
       _builder_1.append("CIEC_");
       _builder_1.append(sourceType);
-      _builder_1.append(" variable;");
+      _builder_1.append(" ");
+      _builder_1.append(ForteNgTestBase.VARIABLE_NAME);
+      _builder_1.append(";");
       _builder_1.newLineIfNotEmpty();
       _builder_1.append("ARRAY_AT<CIEC_");
       _builder_1.append(accessType);
@@ -61,7 +65,11 @@ public abstract class ForteNgArrayAtDeclarationXtend extends ForteNgTestBase {
       _builder_1.append(arrayStart);
       _builder_1.append(", ");
       _builder_1.append(arrayStop);
-      _builder_1.append("> atLocation(variable);");
+      _builder_1.append("> ");
+      _builder_1.append(ForteNgTestBase.VARIABLE2_NAME);
+      _builder_1.append("(");
+      _builder_1.append(ForteNgTestBase.VARIABLE_NAME);
+      _builder_1.append(");");
       _builder_1.newLineIfNotEmpty();
       Assert.assertEquals(_builder_1.toString(), generatedCode.toString());
     } else {

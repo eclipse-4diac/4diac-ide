@@ -21,19 +21,17 @@ import static org.junit.Assert.assertEquals
 
 abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
 
-	static final String ALGORITHM_NAME = "algorithm" //$NON-NLS-1$
 	protected static final boolean VALID_ACCESS = true
 	protected static final boolean INVALID_ACCESS = !VALID_ACCESS
-	
 
 	def protected void testLocatedArrayAtAccess(String sourceType, String accessType, int arrayStart, int arrayStop, String accessor, int index, String value, boolean isValid) {
 		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
-		  variable : «sourceType»;
-		  partial AT variable : ARRAY [«arrayStart»..«arrayStop»] OF «accessType»;
+		  «VARIABLE_NAME» : «sourceType»;
+		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : ARRAY [«arrayStart»..«arrayStop»] OF «accessType»;
 		END_VAR
-		
-		partial.«accessor»«index» := «value»;'''))
+
+		«VARIABLE2_NAME».«accessor»«index» := «value»;'''))
 
 		var generatedCode = stAlgorithmFilter
 				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
@@ -42,15 +40,15 @@ abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
 			assertNoErrors(errors);
 			assertNotNull(generatedCode);
 			assertEquals('''
-			CIEC_«sourceType» variable;
-			ARRAY_AT<CIEC_«accessType», CIEC_«sourceType», «arrayStart», «arrayStop»> partial(variable);
-			partial.partial<CIEC_«accessType»,«index»>() = «value»;
+			CIEC_«sourceType» «VARIABLE_NAME»;
+			ARRAY_AT<CIEC_«accessType», CIEC_«sourceType», «arrayStart», «arrayStop»> «VARIABLE2_NAME»(«VARIABLE_NAME»);
+			«VARIABLE2_NAME».partial<CIEC_«accessType»,«index»>() = «value»;
 			'''.toString(), generatedCode.toString())
 		} else {
 			assertErrors(errors);
 			assertNull(generatedCode);
-			
-			assertErrorMessages(errors, "Incorrect partial access: index not within limits.")
+
+			assertErrorMessages(errors, "Incorrect partial access: index not within limits.") //$NON-NLS-1$
 		}
 	}
 

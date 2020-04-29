@@ -18,8 +18,6 @@ import org.junit.Assert;
 
 @SuppressWarnings("all")
 public abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
-  private static final String ALGORITHM_NAME = "algorithm";
-  
   protected static final boolean VALID_ACCESS = true;
   
   protected static final boolean INVALID_ACCESS = (!ForteNgArrayAtAccessXtend.VALID_ACCESS);
@@ -29,12 +27,16 @@ public abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
     _builder.append("VAR");
     _builder.newLine();
     _builder.append("  ");
-    _builder.append("variable : ");
+    _builder.append(ForteNgTestBase.VARIABLE_NAME, "  ");
+    _builder.append(" : ");
     _builder.append(sourceType, "  ");
     _builder.append(";");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    _builder.append("partial AT variable : ARRAY [");
+    _builder.append(ForteNgTestBase.VARIABLE2_NAME, "  ");
+    _builder.append(" AT ");
+    _builder.append(ForteNgTestBase.VARIABLE_NAME, "  ");
+    _builder.append(" : ARRAY [");
     _builder.append(arrayStart, "  ");
     _builder.append("..");
     _builder.append(arrayStop, "  ");
@@ -45,21 +47,24 @@ public abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
     _builder.append("END_VAR");
     _builder.newLine();
     _builder.newLine();
-    _builder.append("partial.");
+    _builder.append(ForteNgTestBase.VARIABLE2_NAME);
+    _builder.append(".");
     _builder.append(accessor);
     _builder.append(index);
     _builder.append(" := ");
     _builder.append(value);
     _builder.append(";");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgArrayAtAccessXtend.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgArrayAtAccessXtend.ALGORITHM_NAME)), this.errors);
+    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
     if ((isValid == ForteNgArrayAtAccessXtend.VALID_ACCESS)) {
       ForteNgTestBase.assertNoErrors(this.errors);
       Assert.assertNotNull(generatedCode);
       StringConcatenation _builder_1 = new StringConcatenation();
       _builder_1.append("CIEC_");
       _builder_1.append(sourceType);
-      _builder_1.append(" variable;");
+      _builder_1.append(" ");
+      _builder_1.append(ForteNgTestBase.VARIABLE_NAME);
+      _builder_1.append(";");
       _builder_1.newLineIfNotEmpty();
       _builder_1.append("ARRAY_AT<CIEC_");
       _builder_1.append(accessType);
@@ -69,9 +74,14 @@ public abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
       _builder_1.append(arrayStart);
       _builder_1.append(", ");
       _builder_1.append(arrayStop);
-      _builder_1.append("> partial(variable);");
+      _builder_1.append("> ");
+      _builder_1.append(ForteNgTestBase.VARIABLE2_NAME);
+      _builder_1.append("(");
+      _builder_1.append(ForteNgTestBase.VARIABLE_NAME);
+      _builder_1.append(");");
       _builder_1.newLineIfNotEmpty();
-      _builder_1.append("partial.partial<CIEC_");
+      _builder_1.append(ForteNgTestBase.VARIABLE2_NAME);
+      _builder_1.append(".partial<CIEC_");
       _builder_1.append(accessType);
       _builder_1.append(",");
       _builder_1.append(index);

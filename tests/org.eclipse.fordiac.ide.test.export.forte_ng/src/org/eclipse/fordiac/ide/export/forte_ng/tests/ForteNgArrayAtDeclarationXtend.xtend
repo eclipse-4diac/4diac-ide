@@ -21,15 +21,14 @@ import static org.junit.Assert.assertEquals
 
 abstract class ForteNgArrayAtDeclarationXtend extends ForteNgTestBase {
 
-	static final String ALGORITHM_NAME = "algorithm" //$NON-NLS-1$
 	protected static final boolean VALID_DECLARATION = true
 	protected static final boolean INVALID_DECLARATION = !VALID_DECLARATION
 
 	def protected void testLocatedArrayDeclaration(String sourceType, String accessType, int arrayStart, int arrayStop, boolean isValid) {
 		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
-		  variable : «sourceType»;
-		  atLocation AT variable : ARRAY [«arrayStart»..«arrayStop»] OF «accessType»;
+		  «VARIABLE_NAME» : «sourceType»;
+		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : ARRAY [«arrayStart»..«arrayStop»] OF «accessType»;
 		END_VAR'''))
 
 		var generatedCode = stAlgorithmFilter
@@ -39,12 +38,12 @@ abstract class ForteNgArrayAtDeclarationXtend extends ForteNgTestBase {
 			assertNoErrors(errors);
 			assertNotNull(generatedCode);
 			assertEquals('''
-			CIEC_«sourceType» variable;
-			ARRAY_AT<CIEC_«accessType», CIEC_«sourceType», «arrayStart», «arrayStop»> atLocation(variable);
+			CIEC_«sourceType» «VARIABLE_NAME»;
+			ARRAY_AT<CIEC_«accessType», CIEC_«sourceType», «arrayStart», «arrayStop»> «VARIABLE2_NAME»(«VARIABLE_NAME»);
 			'''.toString(), generatedCode.toString())
 		} else {
 			assertErrors(errors);
-			assertNull(generatedCode);			
+			assertNull(generatedCode);
 		}
 	}
 

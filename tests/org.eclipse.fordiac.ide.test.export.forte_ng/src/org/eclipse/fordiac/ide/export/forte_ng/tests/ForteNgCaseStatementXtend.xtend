@@ -19,12 +19,8 @@ import static org.junit.Assert.assertEquals;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
-	
-	static final String ALGORITHM_NAME = "algorithm" //$NON-NLS-1$
-	static final String VARIABLE_NAME = "variable" //$NON-NLS-1$
-	static final String DINT = "DINT" //$NON-NLS-1$
-	
+abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implements DatatypeConstants {
+
 	@Test
 	def void validCaseStatement() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
@@ -35,10 +31,10 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
 			2: «VARIABLE_NAME» := «VARIABLE_NAME» + 1;
 			255: «VARIABLE_NAME» := 0;
 		END_CASE;'''))
-		
+
 		var generatedCode = stAlgorithmFilter
 				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
-				
+
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
@@ -58,7 +54,7 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
 		}
 		'''.toString(), generatedCode.toString())
 	}
-	
+
 	@Test
 	def void validCaseStatementWithList() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
@@ -67,10 +63,10 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
 			0, 1, 2: «VARIABLE_NAME» := «VARIABLE_NAME» + 1;
 			255: «VARIABLE_NAME» := 0;
 		END_CASE;'''))
-		
+
 		var generatedCode = stAlgorithmFilter
 				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
-				
+
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
@@ -84,7 +80,7 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
 		}
 		'''.toString(), generatedCode.toString())
 	}
-	
+
 	@Test
 	def void validCaseStatementWithElse() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
@@ -95,10 +91,10 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
 		ELSE
 			«VARIABLE_NAME» := 255;
 		END_CASE;'''))
-		
+
 		var generatedCode = stAlgorithmFilter
 				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
-				
+
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
@@ -115,13 +111,13 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
 		}
 		'''.toString(), generatedCode.toString())
 	}
-	
+
 	@Test
 	def void validCaseStatementWithIfInside() {
 		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
 		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		CASE variable OF
-			0: 
+			0:
 				IF «VARIABLE_NAME» < 20 THEN
 			 		«VARIABLE_NAME» := «VARIABLE_NAME» + 1;
 			 	ELSE
@@ -131,10 +127,10 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
 		ELSE
 			«VARIABLE_NAME» := 255;
 		END_CASE;'''))
-		
+
 		var generatedCode = stAlgorithmFilter
 				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
-				
+
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''

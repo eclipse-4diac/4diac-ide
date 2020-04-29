@@ -23,7 +23,7 @@ import org.junit.runners.Parameterized;
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
 @RunWith(Parameterized.class)
-public class ForteNgAtArrayDeclarationTest extends ForteNgArrayAtDeclarationXtend {
+public class ForteNgAtArrayDeclarationTest extends ForteNgArrayAtDeclarationXtend implements DatatypeConstants {
 
 	private String sourceType;
 	private String accessType;
@@ -31,11 +31,13 @@ public class ForteNgAtArrayDeclarationTest extends ForteNgArrayAtDeclarationXten
 	private int arrayStop;
 	private boolean isValid;
 
-	private static final String LWORD = "LWORD"; //$NON-NLS-1$
-	private static final String DWORD = "DWORD"; //$NON-NLS-1$
-	private static final String WORD = "WORD"; //$NON-NLS-1$
-	private static final String BYTE = "BYTE"; //$NON-NLS-1$
-	private static final String BOOL = "BOOL"; //$NON-NLS-1$
+	static int getSize(String type) {
+		return DatatypeConstants.getSize(type);
+	}
+
+	static int indexStop(String sourceType, String accessType) {
+		return DatatypeConstants.indexStop(sourceType, accessType);
+	}
 
 	public ForteNgAtArrayDeclarationTest(String sourceType, String accessType, int arrayStart, int arrayStop,
 			boolean isValid) {
@@ -48,34 +50,34 @@ public class ForteNgAtArrayDeclarationTest extends ForteNgArrayAtDeclarationXten
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Parameterized.Parameters
+	@Parameterized.Parameters(name = "{index}: {0}->{1}[{2}..{3}]")
 	public static Collection testCases() {
 		return Arrays.asList(new Object[][] { //
-				{ LWORD, DWORD, 0, 1, VALID_DECLARATION }, //
-				{ LWORD, WORD, 0, 3, VALID_DECLARATION }, //
-				{ LWORD, BYTE, 0, 7, VALID_DECLARATION }, //
-				{ LWORD, BOOL, 0, 63, VALID_DECLARATION }, //
-				{ LWORD, DWORD, 0, 2, INVALID_DECLARATION }, //
-				{ LWORD, WORD, 0, 4, INVALID_DECLARATION }, //
-				{ LWORD, BYTE, 0, 8, INVALID_DECLARATION }, //
-				{ LWORD, BOOL, 0, 64, INVALID_DECLARATION }, //
-				{ DWORD, WORD, 0, 1, VALID_DECLARATION }, //
-				{ DWORD, BYTE, 0, 3, VALID_DECLARATION }, //
-				{ DWORD, BOOL, 0, 31, VALID_DECLARATION }, //
-				{ DWORD, WORD, 0, 2, INVALID_DECLARATION }, //
-				{ DWORD, BYTE, 0, 4, INVALID_DECLARATION }, //
-				{ DWORD, BOOL, 0, 32, INVALID_DECLARATION }, //
-				{ WORD, BYTE, 0, 1, VALID_DECLARATION }, //
-				{ WORD, BOOL, 0, 15, VALID_DECLARATION }, //
-				{ WORD, BYTE, 0, 2, INVALID_DECLARATION }, //
-				{ WORD, BOOL, 0, 16, INVALID_DECLARATION }, //
-				{ BYTE, BOOL, 0, 7, VALID_DECLARATION }, //
-				{ BYTE, BOOL, 0, 8, INVALID_DECLARATION }, //
-				{ "LINT", BOOL, 0, 8, INVALID_DECLARATION }, //$NON-NLS-1$
-				{ "DINT", BOOL, 0, 8, INVALID_DECLARATION }, //$NON-NLS-1$
-				{ "INT", BOOL, 0, 8, INVALID_DECLARATION }, //$NON-NLS-1$
-				{ "SINT", BOOL, 0, 8, INVALID_DECLARATION }, //$NON-NLS-1$
-				{ "REAL", BOOL, 0, 8, INVALID_DECLARATION }, //$NON-NLS-1$
+				{ LWORD, DWORD, INDEX_START, indexStop(LWORD, DWORD), VALID_DECLARATION }, //
+				{ LWORD, WORD, INDEX_START, indexStop(LWORD, WORD), VALID_DECLARATION }, //
+				{ LWORD, BYTE, INDEX_START, indexStop(LWORD, BYTE), VALID_DECLARATION }, //
+				{ LWORD, BOOL, INDEX_START, indexStop(LWORD, BOOL), VALID_DECLARATION }, //
+				{ LWORD, DWORD, INDEX_START, indexStop(LWORD, DWORD) + 1, INVALID_DECLARATION }, //
+				{ LWORD, WORD, INDEX_START, indexStop(LWORD, WORD) + 1, INVALID_DECLARATION }, //
+				{ LWORD, BYTE, INDEX_START, indexStop(LWORD, BYTE) + 1, INVALID_DECLARATION }, //
+				{ LWORD, BOOL, INDEX_START, indexStop(LWORD, BOOL) + 1, INVALID_DECLARATION }, //
+				{ DWORD, WORD, INDEX_START, indexStop(DWORD, WORD), VALID_DECLARATION }, //
+				{ DWORD, BYTE, INDEX_START, indexStop(DWORD, BYTE), VALID_DECLARATION }, //
+				{ DWORD, BOOL, INDEX_START, indexStop(DWORD, BOOL), VALID_DECLARATION }, //
+				{ DWORD, WORD, INDEX_START, indexStop(DWORD, WORD) + 1, INVALID_DECLARATION }, //
+				{ DWORD, BYTE, INDEX_START, indexStop(DWORD, BYTE) + 1, INVALID_DECLARATION }, //
+				{ DWORD, BOOL, INDEX_START, indexStop(DWORD, BOOL) + 1, INVALID_DECLARATION }, //
+				{ WORD, BYTE, INDEX_START, indexStop(WORD, BYTE), VALID_DECLARATION }, //
+				{ WORD, BOOL, INDEX_START, indexStop(WORD, BOOL), VALID_DECLARATION }, //
+				{ WORD, BYTE, INDEX_START, indexStop(WORD, BYTE) + 1, INVALID_DECLARATION }, //
+				{ WORD, BOOL, INDEX_START, indexStop(WORD, BOOL) + 1, INVALID_DECLARATION }, //
+				{ BYTE, BOOL, INDEX_START, indexStop(BYTE, BOOL), VALID_DECLARATION }, //
+				{ BYTE, BOOL, INDEX_START, indexStop(BYTE, BOOL) + 1, INVALID_DECLARATION }, //
+				{ "LINT", BOOL, INDEX_START, 8, INVALID_DECLARATION }, //$NON-NLS-1$
+				{ DINT, BOOL, INDEX_START, 8, INVALID_DECLARATION }, //
+				{ "INT", BOOL, INDEX_START, 8, INVALID_DECLARATION }, //$NON-NLS-1$
+				{ "SINT", BOOL, INDEX_START, 8, INVALID_DECLARATION }, //$NON-NLS-1$
+				{ REAL, BOOL, INDEX_START, 8, INVALID_DECLARATION }, //
 		});
 	}
 
