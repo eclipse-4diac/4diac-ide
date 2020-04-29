@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -128,6 +129,14 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 
 	private TypeLibrary getTypeLib() {
+		if (getType().eContainer().eContainer() instanceof FBType) {
+			return ((FBType) getType().eContainer().eContainer()).getTypeLibrary();
+		}
+
+		if (getType().getFBNetworkElement().getFbNetwork().eContainer() instanceof FBType) {
+			return ((FBType) getType().getFBNetworkElement().getFbNetwork().eContainer()).getTypeLibrary();
+		}
+
 		return getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette()
 				.getTypeLibrary();
 	}

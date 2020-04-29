@@ -56,7 +56,7 @@
                label="Connection">
          </propertyTab>
          <propertyTab
-               category="Connection"
+               category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.CreateConnection"
                label="Create Connection">
          </propertyTab>
