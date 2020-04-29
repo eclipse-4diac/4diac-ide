@@ -63,13 +63,10 @@ public class FordiacLogListener implements ILogListener {
 	@Override
 	public void logging(IStatus status, String plugin) {
 
-		if (status.getSeverity() == IStatus.ERROR) {
+		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException())) {
 			// inform the user that an error has happened
-			IStatus displayStatus = status;
-			if (null != status.getException()) {
-				displayStatus = createStatusWithStackTrace(status);
-			}
-			showErrorDialog(displayStatus);
+			// we currently only treat errors with exception as notworthy
+			showErrorDialog(createStatusWithStackTrace(status));
 		}
 	}
 
