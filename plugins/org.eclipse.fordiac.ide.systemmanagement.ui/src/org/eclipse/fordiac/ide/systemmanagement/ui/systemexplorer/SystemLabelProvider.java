@@ -12,18 +12,22 @@
  *   Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Reworked system explorer layout
+ *   Daniel Lindhuber - Changed getText method to suppress file endings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.navigator.IDescriptionProvider;
@@ -38,10 +42,25 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	@Override
 	public String getText(Object object) {
+		if (object instanceof IFile) {
+			return getTextForFiles((IFile) object);
+		}
 		if (object instanceof IResource) {
 			return null;
 		}
 		return super.getText(object);
+	}
+
+	private String getTextForFiles(IFile element) {
+		String text = null;
+		if (TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
+				|| TypeLibraryTags.DEVICE_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
+				|| TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
+				|| TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
+				|| TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
+			text = TypeLibrary.getTypeNameFromFile(element);
+		}
+		return text;
 	}
 
 	@Override
