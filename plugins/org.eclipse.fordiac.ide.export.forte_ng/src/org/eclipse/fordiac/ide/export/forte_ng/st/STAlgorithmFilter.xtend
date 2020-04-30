@@ -236,9 +236,15 @@ class STAlgorithmFilter {
 	def protected dispatch CharSequence generateStatement(ContinueStatement stmt) '''continue;'''
 
 	def protected dispatch CharSequence generateStatement(ForStatement stmt) '''
-		for «stmt.variable.generateExpression» = «stmt.from.generateExpression», «stmt.to.generateExpression»«IF stmt.by !== null», «stmt.by.generateExpression»«ENDIF» do
-		  «stmt.statements.generateStatementList»
-		end
+		// as it is done in lua: https://www.lua.org/manual/5.1/manual.html#2.4.5
+		auto by = «IF stmt.by !== null »«stmt.by.generateExpression»« ELSE »1« ENDIF»;
+		auto to = «stmt.to.generateExpression»;
+		for(«stmt.variable.generateExpression» = «stmt.from.generateExpression»;
+		    (by >  0 && «stmt.variable.generateExpression» <= to) ||
+		    (by <= 0 && «stmt.variable.generateExpression» >= to);
+		    «stmt.variable.generateExpression» = «stmt.variable.generateExpression» + by){
+			«stmt.statements.generateStatementList»
+		}
 	'''
 
 	def protected dispatch CharSequence generateStatement(WhileStatement stmt) '''
