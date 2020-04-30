@@ -40,7 +40,7 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
 
 		var generatedCode = stAlgorithmFilter
 				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
-				
+
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
@@ -69,10 +69,10 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
 			0, 1, 2: «VARIABLE_NAME» := «VARIABLE_NAME» + 1;
 			255: «VARIABLE_NAME» := 0;
 		END_CASE;'''))
-		
+
 		var generatedCode = stAlgorithmFilter
 				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
-				
+
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
@@ -173,7 +173,7 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
 		ELSE
 			«VARIABLE_NAME» := 0;
 		END_IF;'''))
-		
+
 		var generatedCode = stAlgorithmFilter
 				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
 
@@ -192,6 +192,36 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
 		}
 		else {
 			«VARIABLE_NAME»() = 0;
+		}
+		'''.toString(), generatedCode.toString())
+	}
+
+	@Test
+	def void validCaseStatementWithMultipleOnSingleLine() {
+		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
+		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE2_NAME, BOOL))
+		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		CASE variable OF
+			255: «VARIABLE_NAME» := 0; «VARIABLE2_NAME» := TRUE;
+		ELSE
+			«VARIABLE2_NAME» := FALSE; «VARIABLE_NAME» := 255;
+		END_CASE;'''))
+
+		var generatedCode = stAlgorithmFilter
+				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+
+		assertNoErrors(errors);
+		assertNotNull(generatedCode);
+		assertEquals('''
+		switch («VARIABLE_NAME»()) {
+			case 255:
+				«VARIABLE_NAME»() = 0;
+				«VARIABLE2_NAME»() = true;
+				break;
+			default:
+				«VARIABLE2_NAME»() = false;
+				«VARIABLE_NAME»() = 255;
+				break;
 		}
 		'''.toString(), generatedCode.toString())
 	}
