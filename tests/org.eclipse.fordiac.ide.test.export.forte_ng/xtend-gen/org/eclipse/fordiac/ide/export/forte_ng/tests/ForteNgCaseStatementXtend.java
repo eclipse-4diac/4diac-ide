@@ -23,7 +23,11 @@ public abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
   
   private static final String VARIABLE_NAME = "variable";
   
+  private static final String VARIABLE2_NAME = "variable";
+  
   private static final String DINT = "DINT";
+  
+  private static final String BOOL = "BOOL";
   
   @Test
   public void validCaseStatement() {
@@ -349,6 +353,87 @@ public abstract class ForteNgCaseStatementXtend extends ForteNgTestBase {
     _builder_1.append("\t\t");
     _builder_1.append("break;");
     _builder_1.newLine();
+    _builder_1.append("}");
+    _builder_1.newLine();
+    Assert.assertEquals(_builder_1.toString(), generatedCode.toString());
+  }
+  
+  @Test
+  public void validCaseStatementInsideIf() {
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgCaseStatementXtend.VARIABLE_NAME, ForteNgCaseStatementXtend.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgCaseStatementXtend.VARIABLE2_NAME, ForteNgCaseStatementXtend.BOOL));
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("IF ");
+    _builder.append(ForteNgCaseStatementXtend.VARIABLE2_NAME);
+    _builder.append(" THEN");
+    _builder.newLineIfNotEmpty();
+    _builder.append("CASE variable OF");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("255: ");
+    _builder.append(ForteNgCaseStatementXtend.VARIABLE_NAME, "\t");
+    _builder.append(" := 0;");
+    _builder.newLineIfNotEmpty();
+    _builder.append("ELSE");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append(ForteNgCaseStatementXtend.VARIABLE_NAME, "\t");
+    _builder.append(" := 255;");
+    _builder.newLineIfNotEmpty();
+    _builder.append("END_CASE;");
+    _builder.newLine();
+    _builder.append("ELSE");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append(ForteNgCaseStatementXtend.VARIABLE_NAME, "\t");
+    _builder.append(" := 0;");
+    _builder.newLineIfNotEmpty();
+    _builder.append("END_IF;");
+    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgCaseStatementXtend.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgCaseStatementXtend.ALGORITHM_NAME)), this.errors);
+    ForteNgTestBase.assertNoErrors(this.errors);
+    Assert.assertNotNull(generatedCode);
+    StringConcatenation _builder_1 = new StringConcatenation();
+    _builder_1.append("if(");
+    _builder_1.append(ForteNgCaseStatementXtend.VARIABLE2_NAME);
+    _builder_1.append("()) {");
+    _builder_1.newLineIfNotEmpty();
+    _builder_1.append("\t");
+    _builder_1.append("switch (");
+    _builder_1.append(ForteNgCaseStatementXtend.VARIABLE_NAME, "\t");
+    _builder_1.append("()) {");
+    _builder_1.newLineIfNotEmpty();
+    _builder_1.append("\t\t");
+    _builder_1.append("case 255:");
+    _builder_1.newLine();
+    _builder_1.append("\t\t\t");
+    _builder_1.append(ForteNgCaseStatementXtend.VARIABLE_NAME, "\t\t\t");
+    _builder_1.append("() = 0;");
+    _builder_1.newLineIfNotEmpty();
+    _builder_1.append("\t\t\t");
+    _builder_1.append("break;");
+    _builder_1.newLine();
+    _builder_1.append("\t\t");
+    _builder_1.append("default:");
+    _builder_1.newLine();
+    _builder_1.append("\t\t\t");
+    _builder_1.append(ForteNgCaseStatementXtend.VARIABLE_NAME, "\t\t\t");
+    _builder_1.append("() = 255;");
+    _builder_1.newLineIfNotEmpty();
+    _builder_1.append("\t\t\t");
+    _builder_1.append("break;");
+    _builder_1.newLine();
+    _builder_1.append("\t");
+    _builder_1.append("}");
+    _builder_1.newLine();
+    _builder_1.append("}");
+    _builder_1.newLine();
+    _builder_1.append("else {");
+    _builder_1.newLine();
+    _builder_1.append("\t");
+    _builder_1.append(ForteNgCaseStatementXtend.VARIABLE_NAME, "\t");
+    _builder_1.append("() = 0;");
+    _builder_1.newLineIfNotEmpty();
     _builder_1.append("}");
     _builder_1.newLine();
     Assert.assertEquals(_builder_1.toString(), generatedCode.toString());
