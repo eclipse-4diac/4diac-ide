@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2015, 2017 Profactor GbmH, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019, 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added diagram font preference
  *               - added separate colors for different data types
+ *   Ernst Blecha - add allocation block size
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.preferences;
 
@@ -57,8 +58,15 @@ public final class PreferenceConstants {
 				|| P_ANY_STRING_CONNECTOR_COLOR.equals(property) || P_REMAINING_DATA_CONNECTOR_COLOR.equals(property);
 	}
 
-	private PreferenceConstants() {
-		throw new UnsupportedOperationException("PreferenceConstants utility class should not be instantiated!"); //$NON-NLS-1$
-	}
+	/**
+	 * Allocation block size used during xml file export.
+	 *
+	 * Additional constants defined in
+	 * org.eclipse.fordiac.ide.model.PreferenceConstants
+	 */
+	public static final String P_ALLOCATION_SIZE = "allocationSize"; //$NON-NLS-1$
+	public static final int P_ALLOCATION_SIZE_DEFAULT_VALUE = 100;
+	public static final int P_ALLOCATION_SIZE_MIN_VALUE = 50;
+	public static final int P_ALLOCATION_SIZE_MAX_VALUE = 1000;
 
 }

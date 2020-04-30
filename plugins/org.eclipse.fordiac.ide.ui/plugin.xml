@@ -10,6 +10,15 @@
       </page>
    </extension>
    <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.ui.preferences.ModelPreferences"
+            id="org.eclipse.fordiac.ide.ui.preferences.ModelPreferences"
+            name="Model Preferences">
+      </page>
+   </extension>
+   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.eclipse.fordiac.ide.ui.preferences.PreferenceInitializer">

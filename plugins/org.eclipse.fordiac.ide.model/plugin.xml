@@ -83,7 +83,12 @@
             class="org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage"
             genModel="model/virtualDNS.genmodel"/>
    </extension>
-   
+      <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.model.PreferenceInitializer">
+      </initializer>
+   </extension>
    <!-- this is needed to load old pre eclipse version projects -->
 null
 </plugin>
