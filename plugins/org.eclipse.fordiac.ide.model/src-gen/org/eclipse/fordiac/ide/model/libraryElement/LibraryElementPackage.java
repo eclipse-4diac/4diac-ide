@@ -5459,14 +5459,14 @@ public interface LibraryElementPackage extends EPackage {
 	int SIMPLE_FB_TYPE_FEATURE_COUNT = BASE_FB_TYPE_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl <em>Multiplexer</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl <em>Struct Manipulator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMultiplexer()
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStructManipulator()
 	 * @generated
 	 */
-	int MULTIPLEXER = 72;
+	int STRUCT_MANIPULATOR = 72;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
@@ -5475,7 +5475,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULTIPLEXER__ANNOTATIONS = FB__ANNOTATIONS;
+	int STRUCT_MANIPULATOR__ANNOTATIONS = FB__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5484,7 +5484,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULTIPLEXER__NAME = FB__NAME;
+	int STRUCT_MANIPULATOR__NAME = FB__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -5493,7 +5493,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULTIPLEXER__COMMENT = FB__COMMENT;
+	int STRUCT_MANIPULATOR__COMMENT = FB__COMMENT;
 
 	/**
 	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
@@ -5502,7 +5502,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULTIPLEXER__ATTRIBUTES = FB__ATTRIBUTES;
+	int STRUCT_MANIPULATOR__ATTRIBUTES = FB__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
@@ -5511,7 +5511,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULTIPLEXER__PALETTE_ENTRY = FB__PALETTE_ENTRY;
+	int STRUCT_MANIPULATOR__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
 	/**
 	 * The feature id for the '<em><b>X</b></em>' attribute.
@@ -5520,7 +5520,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULTIPLEXER__X = FB__X;
+	int STRUCT_MANIPULATOR__X = FB__X;
 
 	/**
 	 * The feature id for the '<em><b>Y</b></em>' attribute.
@@ -5529,7 +5529,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULTIPLEXER__Y = FB__Y;
+	int STRUCT_MANIPULATOR__Y = FB__Y;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -5538,7 +5538,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULTIPLEXER__INTERFACE = FB__INTERFACE;
+	int STRUCT_MANIPULATOR__INTERFACE = FB__INTERFACE;
 
 	/**
 	 * The feature id for the '<em><b>Mapping</b></em>' reference.
@@ -5547,7 +5547,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULTIPLEXER__MAPPING = FB__MAPPING;
+	int STRUCT_MANIPULATOR__MAPPING = FB__MAPPING;
 
 	/**
 	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
@@ -5556,7 +5556,225 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULTIPLEXER__STRUCT_TYPE = FB_FEATURE_COUNT + 0;
+	int STRUCT_MANIPULATOR__STRUCT_TYPE = FB_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Struct Manipulator</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRUCT_MANIPULATOR_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl <em>Demultiplexer</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDemultiplexer()
+	 * @generated
+	 */
+	int DEMULTIPLEXER = 73;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__ANNOTATIONS = STRUCT_MANIPULATOR__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__NAME = STRUCT_MANIPULATOR__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__COMMENT = STRUCT_MANIPULATOR__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__ATTRIBUTES = STRUCT_MANIPULATOR__ATTRIBUTES;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__PALETTE_ENTRY = STRUCT_MANIPULATOR__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>X</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__X = STRUCT_MANIPULATOR__X;
+
+	/**
+	 * The feature id for the '<em><b>Y</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__Y = STRUCT_MANIPULATOR__Y;
+
+	/**
+	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__INTERFACE = STRUCT_MANIPULATOR__INTERFACE;
+
+	/**
+	 * The feature id for the '<em><b>Mapping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__MAPPING = STRUCT_MANIPULATOR__MAPPING;
+
+	/**
+	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__STRUCT_TYPE = STRUCT_MANIPULATOR__STRUCT_TYPE;
+
+	/**
+	 * The number of structural features of the '<em>Demultiplexer</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER_FEATURE_COUNT = STRUCT_MANIPULATOR_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl <em>Multiplexer</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMultiplexer()
+	 * @generated
+	 */
+	int MULTIPLEXER = 74;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__ANNOTATIONS = STRUCT_MANIPULATOR__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__NAME = STRUCT_MANIPULATOR__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__COMMENT = STRUCT_MANIPULATOR__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__ATTRIBUTES = STRUCT_MANIPULATOR__ATTRIBUTES;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__PALETTE_ENTRY = STRUCT_MANIPULATOR__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>X</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__X = STRUCT_MANIPULATOR__X;
+
+	/**
+	 * The feature id for the '<em><b>Y</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__Y = STRUCT_MANIPULATOR__Y;
+
+	/**
+	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__INTERFACE = STRUCT_MANIPULATOR__INTERFACE;
+
+	/**
+	 * The feature id for the '<em><b>Mapping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__MAPPING = STRUCT_MANIPULATOR__MAPPING;
+
+	/**
+	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__STRUCT_TYPE = STRUCT_MANIPULATOR__STRUCT_TYPE;
 
 	/**
 	 * The number of structural features of the '<em>Multiplexer</em>' class.
@@ -5565,7 +5783,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULTIPLEXER_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
+	int MULTIPLEXER_FEATURE_COUNT = STRUCT_MANIPULATOR_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
@@ -5574,7 +5792,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 73;
+	int LANGUAGE = 75;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
@@ -5584,7 +5802,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 74;
+	int IPROJECT = 76;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -5594,7 +5812,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 75;
+	int IFILE = 77;
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration <em>Adapter Declaration</em>}'.
@@ -7725,6 +7943,37 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getBaseFBType_InternalVars();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator <em>Struct Manipulator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Struct Manipulator</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.StructManipulator
+	 * @generated
+	 */
+	EClass getStructManipulator();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator#getStructType <em>Struct Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Struct Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.StructManipulator#getStructType()
+	 * @see #getStructManipulator()
+	 * @generated
+	 */
+	EReference getStructManipulator_StructType();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer <em>Demultiplexer</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Demultiplexer</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer
+	 * @generated
+	 */
+	EClass getDemultiplexer();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Multiplexer <em>Multiplexer</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7733,17 +7982,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getMultiplexer();
-
-	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Multiplexer#getStructType <em>Struct Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Struct Type</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.Multiplexer#getStructType()
-	 * @see #getMultiplexer()
-	 * @generated
-	 */
-	EReference getMultiplexer_StructType();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute <em>Attribute</em>}'.
@@ -9614,6 +9852,34 @@ public interface LibraryElementPackage extends EPackage {
 		EReference BASE_FB_TYPE__INTERNAL_VARS = eINSTANCE.getBaseFBType_InternalVars();
 
 		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl <em>Struct Manipulator</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStructManipulator()
+		 * @generated
+		 */
+		EClass STRUCT_MANIPULATOR = eINSTANCE.getStructManipulator();
+
+		/**
+		 * The meta object literal for the '<em><b>Struct Type</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference STRUCT_MANIPULATOR__STRUCT_TYPE = eINSTANCE.getStructManipulator_StructType();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl <em>Demultiplexer</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDemultiplexer()
+		 * @generated
+		 */
+		EClass DEMULTIPLEXER = eINSTANCE.getDemultiplexer();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl <em>Multiplexer</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -9622,14 +9888,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass MULTIPLEXER = eINSTANCE.getMultiplexer();
-
-		/**
-		 * The meta object literal for the '<em><b>Struct Type</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MULTIPLEXER__STRUCT_TYPE = eINSTANCE.getMultiplexer_StructType();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl <em>Attribute</em>}' class.

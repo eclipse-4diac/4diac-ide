@@ -20,26 +20,26 @@ import java.util.Collection;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Multiplexer</b></em>'. <!-- end-user-doc -->
+ * '<em><b>Demultiplexer</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
-public class MultiplexerImpl extends StructManipulatorImpl implements Multiplexer {
+public class DemultiplexerImpl extends StructManipulatorImpl implements Demultiplexer {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
-	protected MultiplexerImpl() {
+	protected DemultiplexerImpl() {
 		super();
 	}
 
@@ -50,16 +50,16 @@ public class MultiplexerImpl extends StructManipulatorImpl implements Multiplexe
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return LibraryElementPackage.Literals.MULTIPLEXER;
+		return LibraryElementPackage.Literals.DEMULTIPLEXER;
 	}
 
 	@Override
 	protected void setMemberVariablesAsPorts(StructuredType newStructType) {
-		// create member variables of struct as data input ports
-		getInterface().getInputVars().clear();
+		// create member variables of struct as data output ports
+		getInterface().getOutputVars().clear();
 		Collection<VarDeclaration> list = EcoreUtil.copyAll(newStructType.getMemberVariables());
-		list.forEach(varDecl -> varDecl.setIsInput(true));
-		Event ev = getInterface().getEventInputs().get(0);
+		list.forEach(varDecl -> varDecl.setIsInput(false));
+		Event ev = getInterface().getEventOutputs().get(0);
 
 		// create with constructs
 		list.forEach(varDecl -> {
@@ -68,10 +68,10 @@ public class MultiplexerImpl extends StructManipulatorImpl implements Multiplexe
 			ev.getWith().add(with);
 		});
 
-		// add data input ports to the interface
-		getInterface().getInputVars().addAll(list);
-		getInterface().getOutputVars().get(0).setType(newStructType); // there should be only one output
+		// add data output ports to the interface
+		getInterface().getOutputVars().addAll(list);
+		getInterface().getInputVars().get(0).setType(newStructType); // there should be only one output
 		setAttribute("StructuredType", "STRING", getStructType().getName(), COMMENT_EDEFAULT); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-} // MultiplexerImpl
+} // DemultiplexerImpl

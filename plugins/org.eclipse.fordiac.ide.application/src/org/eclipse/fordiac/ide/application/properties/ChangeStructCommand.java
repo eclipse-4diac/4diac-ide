@@ -27,12 +27,14 @@ import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateComman
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -40,15 +42,15 @@ import org.eclipse.gef.commands.CompoundCommand;
 public class ChangeStructCommand extends Command {
 
 	private StructuredType newStruct;
-	private Multiplexer newMux;
-	private Multiplexer oldMux;
+	private StructManipulator newMux;
+	private StructManipulator oldMux;
 	private PaletteEntry entry;
 	private FBNetwork network;
 
 	private CompoundCommand deleteConnCmds = new CompoundCommand();
 	private CompoundCommand connCreateCmds = new CompoundCommand();
 
-	public ChangeStructCommand(Multiplexer mux, StructuredType struct) {
+	public ChangeStructCommand(StructManipulator mux, StructuredType struct) {
 		this.oldMux = mux;
 		newStruct = struct;
 		entry = mux.getPaletteEntry();
@@ -64,7 +66,11 @@ public class ChangeStructCommand extends Command {
 	}
 
 	private void createNewMux() {
-		newMux = LibraryElementFactory.eINSTANCE.createMultiplexer();
+		if (oldMux instanceof Multiplexer) {
+			newMux = LibraryElementFactory.eINSTANCE.createMultiplexer();
+		} else if (oldMux instanceof Demultiplexer) {
+			newMux = LibraryElementFactory.eINSTANCE.createDemultiplexer();
+		}
 		newMux.setInterface(EcoreUtil.copy(oldMux.getType().getInterfaceList()));
 		newMux.setName(oldMux.getName());
 		newMux.setX(oldMux.getX());
@@ -115,7 +121,7 @@ public class ChangeStructCommand extends Command {
 		}
 	}
 
-	private static List<Connection> getAllConnections(Multiplexer mux) {
+	private static List<Connection> getAllConnections(StructManipulator mux) {
 		List<Connection> retVal = new ArrayList<>();
 		for (IInterfaceElement ifEle : mux.getInterface().getAllInterfaceElements()) {
 			if (ifEle.isIsInput()) {

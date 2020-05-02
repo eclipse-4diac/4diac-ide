@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -41,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 class FBNetworkImporter extends CommonElementImporter {
@@ -129,15 +131,18 @@ class FBNetworkImporter extends CommonElementImporter {
 			}
 		}
 
-		if ((fb.getType().getName().equals("STRUCT_MUX")) || (fb.getType().getName().contentEquals("STRUCT_DEMUX"))) {
-			fb = convertFBtoMux(fb);
+		if (fb.getType().getName().equals("STRUCT_MUX")) { //$NON-NLS-1$
+			Multiplexer mux = LibraryElementFactory.eINSTANCE.createMultiplexer();
+			fb = convertFBtoMux(fb, mux);
+		} else if (fb.getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
+			Demultiplexer demux = LibraryElementFactory.eINSTANCE.createDemultiplexer();
+			fb = convertFBtoMux(fb, demux);
 		}
 		fbNetwork.getNetworkElements().add(fb);
 		fbNetworkElementMap.put(fb.getName(), fb);
 	}
 
-	private FB convertFBtoMux(FB fb) {
-		Multiplexer mux = LibraryElementFactory.eINSTANCE.createMultiplexer();
+	private FB convertFBtoMux(FB fb, StructManipulator mux) {
 		mux.setName(fb.getName());
 		mux.setComment(fb.getComment());
 		mux.setX(fb.getX());

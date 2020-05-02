@@ -15,14 +15,16 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+
 /**
- * <!-- begin-user-doc --> A representation of the model object
- * '<em><b>Multiplexer</b></em>'. <!-- end-user-doc -->
+ * <!-- begin-user-doc -->
+ * A representation of the model object '<em><b>Demultiplexer</b></em>'.
+ * <!-- end-user-doc -->
  *
  *
- * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getMultiplexer()
+ * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDemultiplexer()
  * @model
  * @generated
  */
-public interface Multiplexer extends StructManipulator {
-} // Multiplexer
+public interface Demultiplexer extends StructManipulator {
+} // Demultiplexer

@@ -17,12 +17,12 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.application.editparts.MultiplexEditPart;
+import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.custom.CCombo;
@@ -38,8 +38,8 @@ public class InterfaceSection extends AbstractInterfaceSection {
 
 	@Override
 	protected FBNetworkElement getInputType(Object input) {
-		if (input instanceof MultiplexEditPart) {
-			return ((MultiplexEditPart) input).getModel();
+		if (input instanceof StructManipulatorEditPart) {
+			return ((StructManipulatorEditPart) input).getModel();
 		} else if (input instanceof AbstractFBNElementEditPart) {
 			return ((AbstractFBNElementEditPart) input).getModel();
 		} else if (input instanceof FBNetworkElement) {
@@ -55,7 +55,7 @@ public class InterfaceSection extends AbstractInterfaceSection {
 	}
 
 	private void createStructInfo(Composite composite) {
-		muxLabel = getWidgetFactory().createCLabel(composite, "Structured Type" + ":");
+		muxLabel = getWidgetFactory().createCLabel(composite, "Structured Type:");
 		muxLabel.setVisible(false);
 		muxStructSelector = getWidgetFactory().createCCombo(composite);
 		muxStructSelector.setVisible(false);
@@ -64,10 +64,10 @@ public class InterfaceSection extends AbstractInterfaceSection {
 	@Override
 	public void refresh() {
 		super.refresh();
-		if ((getType() instanceof Multiplexer) && (((Multiplexer) getType()).getFbNetwork() != null)) {
+		if ((getType() instanceof StructManipulator) && (((StructManipulator) getType()).getFbNetwork() != null)) {
 			muxLabel.setVisible(true);
 			muxStructSelector.setVisible(true);
-			String structName = ((Multiplexer) getType()).getStructType().getName();
+			String structName = ((StructManipulator) getType()).getStructType().getName();
 			muxStructSelector.removeAll();
 			for (DataType dtp : getDatatypeLibrary().getDataTypesSorted()) {
 				if (dtp instanceof StructuredType) {
@@ -83,9 +83,9 @@ public class InterfaceSection extends AbstractInterfaceSection {
 				public void widgetSelected(SelectionEvent e) {
 					int index = muxStructSelector.getSelectionIndex();
 					String structName = muxStructSelector.getItem(index);
-					if (!structName.contentEquals(((Multiplexer) getType()).getStructType().getName())
+					if (!structName.contentEquals(((StructManipulator) getType()).getStructType().getName())
 							&& (null != getDatatypeLibrary())) {
-						Command cmd = new ChangeStructCommand((Multiplexer) getType(),
+						Command cmd = new ChangeStructCommand((StructManipulator) getType(),
 								(StructuredType) getDatatypeLibrary().getType(structName));
 						commandStack.execute(cmd);
 					}
@@ -104,7 +104,7 @@ public class InterfaceSection extends AbstractInterfaceSection {
 
 	private DataTypeLibrary getDatatypeLibrary() {
 		try {
-			return ((Multiplexer) getType()).getFbNetwork().getAutomationSystem().getPalette().getTypeLibrary()
+			return ((StructManipulator) getType()).getFbNetwork().getAutomationSystem().getPalette().getTypeLibrary()
 					.getDataTypeLibrary();
 		} catch (NullPointerException e) {
 			return null;

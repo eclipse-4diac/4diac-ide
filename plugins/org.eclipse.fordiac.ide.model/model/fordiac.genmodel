@@ -612,9 +612,11 @@
     <genClasses ecoreClass="lib.ecore#//BaseFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalVars"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Multiplexer">
-      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//Multiplexer/structType"/>
+    <genClasses ecoreClass="lib.ecore#//StructManipulator">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Demultiplexer"/>
+    <genClasses ecoreClass="lib.ecore#//Multiplexer"/>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">

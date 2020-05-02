@@ -51,6 +51,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -92,6 +93,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -534,6 +536,20 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass baseFBTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass structManipulatorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass demultiplexerEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2601,8 +2617,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EClass getMultiplexer() {
-		return multiplexerEClass;
+	public EClass getStructManipulator() {
+		return structManipulatorEClass;
 	}
 
 	/**
@@ -2611,8 +2627,28 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EReference getMultiplexer_StructType() {
-		return (EReference)multiplexerEClass.getEStructuralFeatures().get(0);
+	public EReference getStructManipulator_StructType() {
+		return (EReference)structManipulatorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getDemultiplexer() {
+		return demultiplexerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMultiplexer() {
+		return multiplexerEClass;
 	}
 
 	/**
@@ -3008,8 +3044,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		baseFBTypeEClass = createEClass(BASE_FB_TYPE);
 		createEReference(baseFBTypeEClass, BASE_FB_TYPE__INTERNAL_VARS);
 
+		structManipulatorEClass = createEClass(STRUCT_MANIPULATOR);
+		createEReference(structManipulatorEClass, STRUCT_MANIPULATOR__STRUCT_TYPE);
+
+		demultiplexerEClass = createEClass(DEMULTIPLEXER);
+
 		multiplexerEClass = createEClass(MULTIPLEXER);
-		createEReference(multiplexerEClass, MULTIPLEXER__STRUCT_TYPE);
 
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
@@ -3112,7 +3152,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		attributeDeclarationEClass.getESuperTypes().add(this.getTypedElement());
 		simpleFBTypeEClass.getESuperTypes().add(this.getBaseFBType());
 		baseFBTypeEClass.getESuperTypes().add(this.getFBType());
-		multiplexerEClass.getESuperTypes().add(this.getFB());
+		structManipulatorEClass.getESuperTypes().add(this.getFB());
+		demultiplexerEClass.getESuperTypes().add(this.getStructManipulator());
+		multiplexerEClass.getESuperTypes().add(this.getStructManipulator());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterDeclarationEClass, AdapterDeclaration.class, "AdapterDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -3591,8 +3633,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(baseFBTypeEClass, BaseFBType.class, "BaseFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getBaseFBType_InternalVars(), this.getVarDeclaration(), null, "internalVars", null, 0, -1, BaseFBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
+		initEClass(structManipulatorEClass, StructManipulator.class, "StructManipulator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getStructManipulator_StructType(), theDataPackage.getStructuredType(), null, "structType", null, 1, 1, StructManipulator.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(demultiplexerEClass, Demultiplexer.class, "Demultiplexer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
 		initEClass(multiplexerEClass, Multiplexer.class, "Multiplexer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getMultiplexer_StructType(), theDataPackage.getStructuredType(), null, "structType", null, 1, 1, Multiplexer.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$

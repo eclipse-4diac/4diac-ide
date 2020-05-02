@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -195,6 +196,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
 			case LibraryElementPackage.SIMPLE_FB_TYPE: return createSimpleFBType();
 			case LibraryElementPackage.BASE_FB_TYPE: return createBaseFBType();
+			case LibraryElementPackage.DEMULTIPLEXER: return createDemultiplexer();
 			case LibraryElementPackage.MULTIPLEXER: return createMultiplexer();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -865,6 +867,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public BaseFBType createBaseFBType() {
 		BaseFBTypeImpl baseFBType = new BaseFBTypeImpl();
 		return baseFBType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Demultiplexer createDemultiplexer() {
+		DemultiplexerImpl demultiplexer = new DemultiplexerImpl();
+		return demultiplexer;
 	}
 
 	/**

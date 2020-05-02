@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -80,6 +81,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -765,9 +767,37 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.STRUCT_MANIPULATOR: {
+				StructManipulator structManipulator = (StructManipulator)theEObject;
+				T result = caseStructManipulator(structManipulator);
+				if (result == null) result = caseFB(structManipulator);
+				if (result == null) result = caseFBNetworkElement(structManipulator);
+				if (result == null) result = caseTypedConfigureableObject(structManipulator);
+				if (result == null) result = casePositionableElement(structManipulator);
+				if (result == null) result = caseConfigurableObject(structManipulator);
+				if (result == null) result = caseINamedElement(structManipulator);
+				if (result == null) result = caseI4DIACElement(structManipulator);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.DEMULTIPLEXER: {
+				Demultiplexer demultiplexer = (Demultiplexer)theEObject;
+				T result = caseDemultiplexer(demultiplexer);
+				if (result == null) result = caseStructManipulator(demultiplexer);
+				if (result == null) result = caseFB(demultiplexer);
+				if (result == null) result = caseFBNetworkElement(demultiplexer);
+				if (result == null) result = caseTypedConfigureableObject(demultiplexer);
+				if (result == null) result = casePositionableElement(demultiplexer);
+				if (result == null) result = caseConfigurableObject(demultiplexer);
+				if (result == null) result = caseINamedElement(demultiplexer);
+				if (result == null) result = caseI4DIACElement(demultiplexer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.MULTIPLEXER: {
 				Multiplexer multiplexer = (Multiplexer)theEObject;
 				T result = caseMultiplexer(multiplexer);
+				if (result == null) result = caseStructManipulator(multiplexer);
 				if (result == null) result = caseFB(multiplexer);
 				if (result == null) result = caseFBNetworkElement(multiplexer);
 				if (result == null) result = caseTypedConfigureableObject(multiplexer);
@@ -1723,6 +1753,36 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseBaseFBType(BaseFBType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Struct Manipulator</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Struct Manipulator</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStructManipulator(StructManipulator object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Demultiplexer</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Demultiplexer</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDemultiplexer(Demultiplexer object) {
 		return null;
 	}
 

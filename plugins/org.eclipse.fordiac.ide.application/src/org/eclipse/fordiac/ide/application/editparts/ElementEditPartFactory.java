@@ -54,7 +54,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		} else if (modelElement instanceof FB) {
 			if ((((FB) modelElement).getType().getName().contentEquals("STRUCT_MUX"))
 					|| (((FB) modelElement).getType().getName().contentEquals("STRUCT_DEMUX"))) {
-				part = new MultiplexEditPart();
+				part = new StructManipulatorEditPart();
 			} else {
 				part = new FBEditPart();
 			}

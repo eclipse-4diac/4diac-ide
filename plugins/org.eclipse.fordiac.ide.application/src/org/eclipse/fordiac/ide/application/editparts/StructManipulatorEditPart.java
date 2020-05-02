@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University
+ * Copyright (c) 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,10 +18,10 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 
-public class MultiplexEditPart extends AbstractFBNElementEditPart {
-	public MultiplexEditPart() {
+public class StructManipulatorEditPart extends AbstractFBNElementEditPart {
+	public StructManipulatorEditPart() {
 		super();
 	}
 
@@ -31,8 +31,8 @@ public class MultiplexEditPart extends AbstractFBNElementEditPart {
 	}
 
 	@Override
-	public Multiplexer getModel() {
-		return (Multiplexer) super.getModel();
+	public StructManipulator getModel() {
+		return (StructManipulator) super.getModel();
 	}
 
 	private Adapter multiplexInterfaceAdapter = new EContentAdapter() {

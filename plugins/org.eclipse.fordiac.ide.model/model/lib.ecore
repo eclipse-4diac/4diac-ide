@@ -1209,8 +1209,10 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Multiplexer" eSuperTypes="#//FB">
+  <eClassifiers xsi:type="ecore:EClass" name="StructManipulator" abstract="true" eSuperTypes="#//FB">
     <eStructuralFeatures xsi:type="ecore:EReference" name="structType" lowerBound="1"
         eType="ecore:EClass data.ecore#//StructuredType" transient="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Demultiplexer" eSuperTypes="#//StructManipulator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Multiplexer" eSuperTypes="#//StructManipulator"/>
 </ecore:EPackage>

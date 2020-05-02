@@ -598,6 +598,15 @@ public interface LibraryElementFactory extends EFactory {
 	BaseFBType createBaseFBType();
 
 	/**
+	 * Returns a new object of class '<em>Demultiplexer</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Demultiplexer</em>'.
+	 * @generated
+	 */
+	Demultiplexer createDemultiplexer();
+
+	/**
 	 * Returns a new object of class '<em>Multiplexer</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

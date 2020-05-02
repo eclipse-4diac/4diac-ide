@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.commands.create;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -34,9 +35,10 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	private static FB createNewFb(FBTypePaletteEntry paletteEntry) {
-		if (paletteEntry.getFBType().getName().equals("STRUCT_MUX")
-				|| paletteEntry.getFBType().getName().equals("STRUCT_DEMUX")) {
+		if (paletteEntry.getFBType().getName().equals("STRUCT_MUX")) { //$NON-NLS-1$
 			return LibraryElementFactory.eINSTANCE.createMultiplexer();
+		} else if (paletteEntry.getFBType().getName().equals("STRUCT_DEMUX")) { //$NON-NLS-1$
+			return LibraryElementFactory.eINSTANCE.createDemultiplexer();
 		} else {
 			return LibraryElementFactory.eINSTANCE.createFB();
 		}
@@ -68,6 +70,9 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 		if (getFB() instanceof Multiplexer) {
 			((Multiplexer) getFB()).setStructType(
 					(StructuredType) paletteEntry.getFBType().getInterfaceList().getOutputVars().get(0).getType());
+		} else if (getFB() instanceof Demultiplexer) {
+			((Demultiplexer) getFB()).setStructType(
+					(StructuredType) paletteEntry.getFBType().getInterfaceList().getInputVars().get(0).getType());
 		}
 	}
 
