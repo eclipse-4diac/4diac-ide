@@ -37,14 +37,16 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
 
 /**
  * The Class SystemManager.
@@ -160,16 +162,16 @@ public enum SystemManager {
 	 * @param system to be added
 	 */
 	public void removeSystem(final AutomationSystem system) {
-		Map<IFile, AutomationSystem> projectSystems = getProjectSystems(system.getSystemFile().getProject());
-		if (null != projectSystems.remove(system.getSystemFile())) {
-			notifyListeners();
-		}
+		removeSystem(system.getSystemFile());
 	}
 
-	private static void initializePalette(AutomationSystem system) {
-		// load palette of the system and initialize the types
-		Palette palette = TypeLibrary.getTypeLibrary(system.getSystemFile().getProject()).getBlockTypeLib();
-		system.setPalette(palette);
+	public void removeSystem(final IFile systemFile) {
+		Map<IFile, AutomationSystem> projectSystems = getProjectSystems(systemFile.getProject());
+		AutomationSystem refSystem = projectSystems.remove(systemFile);
+		if (null != refSystem) {
+			closeAllSystemEditors(projectSystems.remove(systemFile));
+			notifyListeners();
+		}
 	}
 
 	/**
@@ -312,6 +314,15 @@ public enum SystemManager {
 
 	private static String[] getNatureIDs() {
 		return new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID };
+	}
+
+	private static void closeAllSystemEditors(final AutomationSystem refSystem) {
+		// display related stuff needs to run in a display thread
+		Display.getDefault().asyncExec(() -> {
+			EditorUtils.closeEditorsFiltered((IEditorPart editor) -> (editor instanceof ISystemEditor)
+					&& (refSystem.equals(((ISystemEditor) editor).getSystem())));
+		});
+
 	}
 
 }

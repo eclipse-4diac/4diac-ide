@@ -203,6 +203,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	public void addPaletteEntry(PaletteEntry entry) {
 		if (entry instanceof DataTypePaletteEntry) {
+			entry.setPalette(blockTypeLib); // for data type entries the palette will not be automatically set
 			dataTypeLib.addPaletteEntry((DataTypePaletteEntry) entry);
 		} else {
 			blockTypeLib.addPaletteEntry(entry);
