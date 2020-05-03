@@ -530,11 +530,24 @@
       <actionProvider
             class="org.eclipse.ui.navigator.resources.GoIntoActionProvider"
             id="org.eclipse.fordiac.ide.systemmanagement.GoIntoActions">
-			<enablement>
-				<or>
-               <instanceof value="org.eclipse.emf.ecore.EObject"> </instanceof>
-            </or>
-			</enablement>
+        <enablement>
+		  <or>
+            <instanceof value="org.eclipse.emf.ecore.EObject"> </instanceof>
+            <and>
+                <instanceof value="org.eclipse.core.resources.IFile" />
+                <or>
+                    <test forcePluginActivation="true"
+                        property="org.eclipse.core.resources.extension"
+                        value="sys">
+                    </test>                   
+                    <test forcePluginActivation="true"
+                        property="org.eclipse.core.resources.extension"
+                        value="fbt">
+                    </test>
+                </or>                   
+            </and>
+          </or>
+		</enablement>
       </actionProvider>
       <actionProvider
             class="org.eclipse.fordiac.ide.systemmanagement.ui.actions.CloseSystemActionProvider"
