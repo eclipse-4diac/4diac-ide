@@ -421,6 +421,7 @@
             <triggerPoints>
                 <or>
                     <instanceof value="org.eclipse.emf.ecore.EObject"/>
+                    <instanceof value="org.eclipse.core.resources.IFolder"/>
                     <adapt type="org.eclipse.core.resources.IProject" >
                         <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature"/>
                     </adapt>

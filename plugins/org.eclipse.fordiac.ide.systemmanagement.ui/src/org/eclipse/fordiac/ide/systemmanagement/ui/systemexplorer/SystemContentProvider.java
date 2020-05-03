@@ -20,7 +20,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -125,9 +127,9 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 			return Arrays.stream(root.getProjects()).filter(proj -> projectToShow(proj)).collect(Collectors.toList())
 					.toArray(new IProject[0]);
 		}
-		if ((resource instanceof IProject) && ((IProject) resource).isOpen()) {
+		if (((resource instanceof IProject) && ((IProject) resource).isOpen()) || (resource instanceof IFolder)) {
 			try {
-				return ((IProject) resource).members();
+				return ((IContainer) resource).members();
 			} catch (CoreException e) {
 				Activator.getDefault().logError("Could not read project children", e); //$NON-NLS-1$
 			}
