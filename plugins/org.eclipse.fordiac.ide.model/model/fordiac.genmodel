@@ -617,6 +617,11 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Demultiplexer"/>
     <genClasses ecoreClass="lib.ecore#//Multiplexer"/>
+    <genClasses ecoreClass="lib.ecore#//LocalVariable">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStart"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStop"/>
+      <genOperations ecoreOperation="lib.ecore#//LocalVariable/getArraySize" body="return arrayStop-arrayStart+1;"/>
+    </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">
