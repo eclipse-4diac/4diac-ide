@@ -52,7 +52,6 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IntLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocatedVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RealLiteral;
@@ -64,7 +63,6 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StringLiteral
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.ParserRule;
@@ -260,72 +258,47 @@ public class STAlgorithmFilter {
     return _switchResult;
   }
   
-  protected CharSequence generateArrayDecl(final LocatedVariable variable) {
-    CharSequence _xblockexpression = null;
-    {
-      final Variable l = variable.getLocation();
-      CharSequence _switchResult = null;
-      boolean _matched = false;
-      if (l instanceof PrimaryVariable) {
-        _matched=true;
-        StringConcatenation _builder = new StringConcatenation();
-        {
-          if (((this.BitSize(variable.getType().getName()) > 0) && (this.BitSize(((PrimaryVariable)l).getVar().getType().getName()) > 0))) {
-            {
-              int _BitSize = this.BitSize(((PrimaryVariable)l).getVar().getType().getName());
-              int _BitSize_1 = this.BitSize(variable.getType().getName());
-              boolean _greaterThan = (_BitSize > _BitSize_1);
-              if (_greaterThan) {
-                _builder.append("ARRAY_AT<CIEC_");
-                String _name = variable.getType().getName();
-                _builder.append(_name);
-                _builder.append(", CIEC_");
-                String _name_1 = ((PrimaryVariable)l).getVar().getType().getName();
-                _builder.append(_name_1);
-                _builder.append(", 0, ");
-                int _arraySize = variable.getArraySize();
-                int _minus = (_arraySize - 1);
-                _builder.append(_minus);
-                _builder.append("> ");
-                String _name_2 = variable.getName();
-                _builder.append(_name_2);
-                _builder.append("(");
-                String _name_3 = ((PrimaryVariable)l).getVar().getName();
-                _builder.append(_name_3);
-                _builder.append(");");
-                _builder.newLineIfNotEmpty();
-              } else {
-                _builder.append("#error Accessing CIEC_");
-                String _name_4 = ((PrimaryVariable)l).getVar().getType().getName();
-                _builder.append(_name_4);
-                _builder.append(" via CIEC_");
-                String _name_5 = variable.getType().getName();
-                _builder.append(_name_5);
-                _builder.append(" would result in undefined behaviour");
-                _builder.newLineIfNotEmpty();
-              }
-            }
-          } else {
-            _builder.append("#error Piecewise access is supported only for types with defined bit-representation (e.g. not CIEC_");
-            String _name_6 = ((PrimaryVariable)l).getVar().getType().getName();
-            _builder.append(_name_6);
-            _builder.append(" via CIEC_");
-            String _name_7 = variable.getType().getName();
-            _builder.append(_name_7);
-            _builder.append(") ");
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        _switchResult = _builder;
-      }
-      if (!_matched) {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("#error unhandled located array");
-        _switchResult = _builder;
-      }
-      _xblockexpression = _switchResult;
-    }
-    return _xblockexpression;
+  protected CharSequence generateArrayDecl(final /* LocatedVariable */Object variable) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nlocation cannot be resolved"
+      + "\ntype cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\nBitSize cannot be resolved"
+      + "\n> cannot be resolved"
+      + "\n&& cannot be resolved"
+      + "\n^var cannot be resolved"
+      + "\ntype cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\nBitSize cannot be resolved"
+      + "\n> cannot be resolved"
+      + "\n^var cannot be resolved"
+      + "\ntype cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\nBitSize cannot be resolved"
+      + "\n> cannot be resolved"
+      + "\ntype cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\nBitSize cannot be resolved"
+      + "\ntype cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\n^var cannot be resolved"
+      + "\ntype cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\narraySize cannot be resolved"
+      + "\n- cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\n^var cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\n^var cannot be resolved"
+      + "\ntype cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\ntype cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\n^var cannot be resolved"
+      + "\ntype cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\ntype cannot be resolved"
+      + "\nname cannot be resolved");
   }
   
   protected CharSequence generateArrayDecl(final LocalVariable variable) {
@@ -347,34 +320,12 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
-  protected CharSequence generateVariableDecl(final LocatedVariable variable) {
-    CharSequence _xblockexpression = null;
-    {
-      final Variable l = variable.getLocation();
-      CharSequence _switchResult = null;
-      boolean _matched = false;
-      if (l instanceof PrimaryVariable) {
-        _matched=true;
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("// replacing all instances of ");
-        String _extractTypeInformation = this.extractTypeInformation(variable);
-        _builder.append(_extractTypeInformation);
-        _builder.append(":");
-        String _name = variable.getName();
-        _builder.append(_name);
-        _builder.append(" with ");
-        CharSequence _generateVarAccess = this.generateVarAccess(variable);
-        _builder.append(_generateVarAccess);
-        _switchResult = _builder;
-      }
-      if (!_matched) {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("#error located variable of unhandled type");
-        _switchResult = _builder;
-      }
-      _xblockexpression = _switchResult;
-    }
-    return _xblockexpression;
+  protected CharSequence generateVariableDecl(final /* LocatedVariable */Object variable) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nlocation cannot be resolved"
+      + "\nextractTypeInformation cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\ngenerateVarAccess cannot be resolved");
   }
   
   protected CharSequence generateVariableDecl(final LocalVariable variable) {
@@ -393,49 +344,13 @@ public class STAlgorithmFilter {
   }
   
   protected CharSequence generateLocalVariables(final List<VarDeclaration> variables) {
-    StringConcatenation _builder = new StringConcatenation();
-    {
-      for(final VarDeclaration variable : variables) {
-        CharSequence _switchResult = null;
-        boolean _matched = false;
-        if (variable instanceof LocalVariable) {
-          boolean _isArray = ((LocalVariable)variable).isArray();
-          boolean _not = (!_isArray);
-          if (_not) {
-            _matched=true;
-            _switchResult = this.generateVariableDecl(((LocalVariable)variable));
-          }
-        }
-        if (!_matched) {
-          if (variable instanceof LocalVariable) {
-            boolean _isArray = ((LocalVariable)variable).isArray();
-            if (_isArray) {
-              _matched=true;
-              _switchResult = this.generateArrayDecl(((LocalVariable)variable));
-            }
-          }
-        }
-        if (!_matched) {
-          if (variable instanceof LocatedVariable) {
-            if (((null != ((LocatedVariable)variable).getLocation()) && (!((LocatedVariable)variable).isArray()))) {
-              _matched=true;
-              _switchResult = this.generateVariableDecl(((LocatedVariable)variable));
-            }
-          }
-        }
-        if (!_matched) {
-          if (variable instanceof LocatedVariable) {
-            if (((null != ((LocatedVariable)variable).getLocation()) && ((LocatedVariable)variable).isArray())) {
-              _matched=true;
-              _switchResult = this.generateArrayDecl(((LocatedVariable)variable));
-            }
-          }
-        }
-        _builder.append(_switchResult);
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    return _builder;
+    throw new Error("Unresolved compilation problems:"
+      + "\nLocatedVariable cannot be resolved to a type."
+      + "\nLocatedVariable cannot be resolved to a type."
+      + "\nThe method or field location is undefined for the type VarDeclaration"
+      + "\nThe method or field location is undefined for the type VarDeclaration"
+      + "\nThe method generateVariableDecl(LocatedVariable) from the type STAlgorithmFilter refers to the missing type LocatedVariable"
+      + "\nThe method generateArrayDecl(LocatedVariable) from the type STAlgorithmFilter refers to the missing type LocatedVariable");
   }
   
   protected CharSequence generateLocalVariableInitializer(final VarDeclaration variable) {
@@ -973,21 +888,15 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
-  protected CharSequence _generateVarAccess(final LocatedVariable variable) {
-    StringConcatenation _builder = new StringConcatenation();
-    {
-      boolean _isArray = variable.isArray();
-      if (_isArray) {
-        String _name = variable.getName();
-        _builder.append(_name);
-      } else {
-        CharSequence _generateExpression = this.generateExpression(variable.getLocation());
-        _builder.append(_generateExpression);
-        CharSequence _generateBitaccess = this.generateBitaccess(this.extractTypeInformation(variable.getLocation()), this.extractTypeInformation(variable), 0);
-        _builder.append(_generateBitaccess);
-      }
-    }
-    return _builder;
+  protected CharSequence _generateVarAccess(final /* LocatedVariable */Object variable) {
+    throw new Error("Unresolved compilation problems:"
+      + "\narray cannot be resolved"
+      + "\nname cannot be resolved"
+      + "\nlocation cannot be resolved"
+      + "\ngenerateExpression cannot be resolved"
+      + "\nlocation cannot be resolved"
+      + "\nextractTypeInformation cannot be resolved"
+      + "\nextractTypeInformation cannot be resolved");
   }
   
   protected CharSequence generateBitaccess(final AdapterVariable variable) {
@@ -1163,8 +1072,8 @@ public class STAlgorithmFilter {
   protected CharSequence generateVarAccess(final VarDeclaration variable) {
     if (variable instanceof LocalVariable) {
       return _generateVarAccess((LocalVariable)variable);
-    } else if (variable instanceof LocatedVariable) {
-      return _generateVarAccess((LocatedVariable)variable);
+    } else if (variable != null) {
+      return _generateVarAccess(variable);
     } else if (variable != null) {
       return _generateVarAccess(variable);
     } else {

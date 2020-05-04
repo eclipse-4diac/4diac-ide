@@ -13,15 +13,12 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext.validation;
 
-import com.google.common.base.Objects;
 import java.util.Arrays;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocatedVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
 import org.eclipse.fordiac.ide.model.structuredtext.validation.AbstractStructuredTextValidator;
 import org.eclipse.xtext.validation.Check;
@@ -34,7 +31,8 @@ import org.eclipse.xtext.validation.Check;
 @SuppressWarnings("all")
 public class StructuredTextValidator extends AbstractStructuredTextValidator {
   private int AccessBits(final PartialAccess part) {
-    return this.BitSize(this.extractTypeInformation(part, ""));
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method BitSize(LocatedVariable) from the type StructuredTextValidator refers to the missing type LocatedVariable");
   }
   
   private boolean isIndexInRange(final PartialAccess p, final int size) {
@@ -43,40 +41,26 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
   
   @Check
   public void checkPartialAccess(final PrimaryVariable v) {
-    PartialAccess _part = v.getPart();
-    boolean _tripleNotEquals = (null != _part);
-    if (_tripleNotEquals) {
-      int _BitSize = this.BitSize(v.getVar().getType().getName());
-      int _AccessBits = this.AccessBits(v.getPart());
-      final int indexSize = (_BitSize / _AccessBits);
-      if (((this.AccessBits(v.getPart()) > 0) && (this.BitSize(v.getVar().getType().getName()) > this.AccessBits(v.getPart())))) {
-        boolean _isIndexInRange = this.isIndexInRange(v.getPart(), indexSize);
-        boolean _not = (!_isIndexInRange);
-        if (_not) {
-          this.error("Incorrect partial access: index not within limits.", StructuredTextPackage.Literals.PRIMARY_VARIABLE__VAR);
-        } else {
-          if (((this.AccessBits(v.getPart()) == 0) || (this.BitSize(v.getVar().getType().getName()) == 0))) {
-            this.error("Incorrect partial access: datatypes other than ANY_BIT.", StructuredTextPackage.Literals.PRIMARY_VARIABLE__VAR);
-          } else {
-            if ((indexSize < 1)) {
-              this.error("Incorrect partial access: access dataype must be smaller than storage datatype.", StructuredTextPackage.Literals.PRIMARY_VARIABLE__VAR);
-            }
-          }
-        }
-      }
-    }
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method BitSize(LocatedVariable) from the type StructuredTextValidator refers to the missing type LocatedVariable"
+      + "\nThe method BitSize(LocatedVariable) from the type StructuredTextValidator refers to the missing type LocatedVariable"
+      + "\nThe method BitSize(LocatedVariable) from the type StructuredTextValidator refers to the missing type LocatedVariable");
   }
   
   private int _BitSize(final VarDeclaration v) {
-    return this.BitSize(this.extractTypeInformation(v));
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method BitSize(LocatedVariable) from the type StructuredTextValidator refers to the missing type LocatedVariable");
   }
   
   private int _BitSize(final PrimaryVariable v) {
-    return this.BitSize(this.extractTypeInformation(v));
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method BitSize(LocatedVariable) from the type StructuredTextValidator refers to the missing type LocatedVariable");
   }
   
-  private int _BitSize(final LocatedVariable v) {
-    return this.BitSize(this.extractTypeInformation(v));
+  private int _BitSize(final /* LocatedVariable */Object v) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method BitSize(LocatedVariable) from the type StructuredTextValidator refers to the missing type LocatedVariable"
+      + "\nextractTypeInformation cannot be resolved");
   }
   
   private int _BitSize(final String str) {
@@ -198,34 +182,58 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
   }
   
   @Check
-  public void checkAtLocation(final LocatedVariable v) {
-    Variable _location = v.getLocation();
-    boolean _tripleNotEquals = (null != _location);
-    if (_tripleNotEquals) {
-      if (((this.BitSize(v) == 0) && v.isArray())) {
-        this.error("Piecewise located variables are allowed only for variables of type ANY_BIT", StructuredTextPackage.Literals.LOCATED_VARIABLE__LOCATION);
-      }
-      if ((((this.BitSize(v) > 0) && v.isArray()) && (v.getArraySize() == 0))) {
-        this.error("Piecewise located variables must have at least an array size of 1", StructuredTextPackage.Literals.LOCATED_VARIABLE__LOCATION);
-      }
-      if ((((this.BitSize(v) > 0) && v.isArray()) && (v.getArraySize() > this.BitSize(v.getLocation())))) {
-        this.error("Piecewise located variables cannot access more bits than are available in the destination", StructuredTextPackage.Literals.LOCATED_VARIABLE__LOCATION);
-      }
-      if ((((this.BitSize(v) == 0) && (this.BitSize(v.getLocation()) == 0)) && (!Objects.equal(this.extractTypeInformation(v.getLocation(), this.extractTypeInformation(v.getLocation())), this.extractTypeInformation(v))))) {
-        this.error("General located variables must have matching types", StructuredTextPackage.Literals.LOCATED_VARIABLE__LOCATION);
-      }
-    }
+  public void checkAtLocation(final /* LocatedVariable */Object v) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method or field LOCATED_VARIABLE__LOCATION is undefined for the type Class<Literals>"
+      + "\nThe method or field LOCATED_VARIABLE__LOCATION is undefined for the type Class<Literals>"
+      + "\nThe method or field LOCATED_VARIABLE__LOCATION is undefined for the type Class<Literals>"
+      + "\nThe method or field LOCATED_VARIABLE__LOCATION is undefined for the type Class<Literals>"
+      + "\nlocation cannot be resolved"
+      + "\nBitSize cannot be resolved"
+      + "\n== cannot be resolved"
+      + "\n&& cannot be resolved"
+      + "\narray cannot be resolved"
+      + "\nBitSize cannot be resolved"
+      + "\n> cannot be resolved"
+      + "\n&& cannot be resolved"
+      + "\narray cannot be resolved"
+      + "\n&& cannot be resolved"
+      + "\narraySize cannot be resolved"
+      + "\n== cannot be resolved"
+      + "\nBitSize cannot be resolved"
+      + "\n> cannot be resolved"
+      + "\n&& cannot be resolved"
+      + "\narray cannot be resolved"
+      + "\n&& cannot be resolved"
+      + "\narraySize cannot be resolved"
+      + "\n> cannot be resolved"
+      + "\nlocation cannot be resolved"
+      + "\nBitSize cannot be resolved"
+      + "\nBitSize cannot be resolved"
+      + "\n== cannot be resolved"
+      + "\n&& cannot be resolved"
+      + "\nlocation cannot be resolved"
+      + "\nBitSize cannot be resolved"
+      + "\n== cannot be resolved"
+      + "\n&& cannot be resolved"
+      + "\nlocation cannot be resolved"
+      + "\nextractTypeInformation cannot be resolved"
+      + "\nlocation cannot be resolved"
+      + "\nextractTypeInformation cannot be resolved"
+      + "\n== cannot be resolved"
+      + "\nextractTypeInformation cannot be resolved"
+      + "\n! cannot be resolved");
   }
   
-  private int BitSize(final Object v) {
-    if (v instanceof LocatedVariable) {
-      return _BitSize((LocatedVariable)v);
-    } else if (v instanceof VarDeclaration) {
-      return _BitSize((VarDeclaration)v);
-    } else if (v instanceof PrimaryVariable) {
-      return _BitSize((PrimaryVariable)v);
-    } else if (v instanceof String) {
-      return _BitSize((String)v);
+  private int BitSize(final LocatedVariable v) {
+    if (v != null) {
+      return _BitSize(v);
+    } else if (v != null) {
+      return _BitSize(v);
+    } else if (v != null) {
+      return _BitSize(v);
+    } else if (v != null) {
+      return _BitSize(v);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
         Arrays.<Object>asList(v).toString());
