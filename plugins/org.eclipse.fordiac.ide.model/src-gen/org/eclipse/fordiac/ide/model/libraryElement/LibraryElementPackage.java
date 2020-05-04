@@ -5786,13 +5786,149 @@ public interface LibraryElementPackage extends EPackage {
 	int MULTIPLEXER_FEATURE_COUNT = STRUCT_MANIPULATOR_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl <em>Local Variable</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLocalVariable()
+	 * @generated
+	 */
+	int LOCAL_VARIABLE = 75;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__ANNOTATIONS = VAR_DECLARATION__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__NAME = VAR_DECLARATION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__COMMENT = VAR_DECLARATION__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Is Input</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__IS_INPUT = VAR_DECLARATION__IS_INPUT;
+
+	/**
+	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__INPUT_CONNECTIONS = VAR_DECLARATION__INPUT_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__OUTPUT_CONNECTIONS = VAR_DECLARATION__OUTPUT_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__TYPE = VAR_DECLARATION__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Type Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__TYPE_NAME = VAR_DECLARATION__TYPE_NAME;
+
+	/**
+	 * The feature id for the '<em><b>Array Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__ARRAY_SIZE = VAR_DECLARATION__ARRAY_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Withs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__WITHS = VAR_DECLARATION__WITHS;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__VALUE = VAR_DECLARATION__VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Array Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__ARRAY_START = VAR_DECLARATION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Array Stop</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE__ARRAY_STOP = VAR_DECLARATION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Local Variable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_VARIABLE_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 2;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Language
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 75;
+	int LANGUAGE = 76;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
@@ -5802,7 +5938,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 76;
+	int IPROJECT = 77;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -5812,7 +5948,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 77;
+	int IFILE = 78;
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration <em>Adapter Declaration</em>}'.
@@ -7984,6 +8120,38 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getMultiplexer();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable <em>Local Variable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Local Variable</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LocalVariable
+	 * @generated
+	 */
+	EClass getLocalVariable();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStart <em>Array Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Array Start</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStart()
+	 * @see #getLocalVariable()
+	 * @generated
+	 */
+	EAttribute getLocalVariable_ArrayStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStop <em>Array Stop</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Array Stop</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStop()
+	 * @see #getLocalVariable()
+	 * @generated
+	 */
+	EAttribute getLocalVariable_ArrayStop();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute <em>Attribute</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Attribute</em>'.
@@ -9888,6 +10056,32 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass MULTIPLEXER = eINSTANCE.getMultiplexer();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl <em>Local Variable</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLocalVariable()
+		 * @generated
+		 */
+		EClass LOCAL_VARIABLE = eINSTANCE.getLocalVariable();
+
+		/**
+		 * The meta object literal for the '<em><b>Array Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOCAL_VARIABLE__ARRAY_START = eINSTANCE.getLocalVariable_ArrayStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Array Stop</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOCAL_VARIABLE__ARRAY_STOP = eINSTANCE.getLocalVariable_ArrayStop();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl <em>Attribute</em>}' class.

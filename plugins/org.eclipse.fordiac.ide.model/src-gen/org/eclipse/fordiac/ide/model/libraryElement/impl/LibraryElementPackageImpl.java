@@ -74,6 +74,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
+import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
@@ -557,6 +558,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass multiplexerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass localVariableEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2652,6 +2660,36 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getLocalVariable() {
+		return localVariableEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getLocalVariable_ArrayStart() {
+		return (EAttribute)localVariableEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getLocalVariable_ArrayStop() {
+		return (EAttribute)localVariableEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -3051,6 +3089,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		multiplexerEClass = createEClass(MULTIPLEXER);
 
+		localVariableEClass = createEClass(LOCAL_VARIABLE);
+		createEAttribute(localVariableEClass, LOCAL_VARIABLE__ARRAY_START);
+		createEAttribute(localVariableEClass, LOCAL_VARIABLE__ARRAY_STOP);
+
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
 
@@ -3155,6 +3197,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		structManipulatorEClass.getESuperTypes().add(this.getFB());
 		demultiplexerEClass.getESuperTypes().add(this.getStructManipulator());
 		multiplexerEClass.getESuperTypes().add(this.getStructManipulator());
+		localVariableEClass.getESuperTypes().add(this.getVarDeclaration());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterDeclarationEClass, AdapterDeclaration.class, "AdapterDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -3640,6 +3683,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(multiplexerEClass, Multiplexer.class, "Multiplexer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
+		initEClass(localVariableEClass, LocalVariable.class, "LocalVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getLocalVariable_ArrayStart(), theXMLTypePackage.getInt(), "arrayStart", null, 0, 1, LocalVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getLocalVariable_ArrayStop(), theXMLTypePackage.getInt(), "arrayStop", null, 0, 1, LocalVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(localVariableEClass, theXMLTypePackage.getInt(), "getArraySize", 0, 1, !IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$
 		addEEnumLiteral(languageEEnum, Language.C);
@@ -4082,7 +4131,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   source,
 		   new String[] {
 			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
-			   "name", "ArraySize" //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "arraySize" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
 		  (getVersionInfo_Author(),

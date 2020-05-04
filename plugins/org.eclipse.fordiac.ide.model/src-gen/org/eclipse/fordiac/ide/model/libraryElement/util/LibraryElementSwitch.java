@@ -62,6 +62,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
+import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
@@ -805,6 +806,16 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseConfigurableObject(multiplexer);
 				if (result == null) result = caseINamedElement(multiplexer);
 				if (result == null) result = caseI4DIACElement(multiplexer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.LOCAL_VARIABLE: {
+				LocalVariable localVariable = (LocalVariable)theEObject;
+				T result = caseLocalVariable(localVariable);
+				if (result == null) result = caseVarDeclaration(localVariable);
+				if (result == null) result = caseIInterfaceElement(localVariable);
+				if (result == null) result = caseINamedElement(localVariable);
+				if (result == null) result = caseI4DIACElement(localVariable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1798,6 +1809,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMultiplexer(Multiplexer object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Local Variable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Local Variable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLocalVariable(LocalVariable object) {
 		return null;
 	}
 

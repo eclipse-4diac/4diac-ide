@@ -62,6 +62,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
+import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
@@ -198,6 +199,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.BASE_FB_TYPE: return createBaseFBType();
 			case LibraryElementPackage.DEMULTIPLEXER: return createDemultiplexer();
 			case LibraryElementPackage.MULTIPLEXER: return createMultiplexer();
+			case LibraryElementPackage.LOCAL_VARIABLE: return createLocalVariable();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -889,6 +891,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public Multiplexer createMultiplexer() {
 		MultiplexerImpl multiplexer = new MultiplexerImpl();
 		return multiplexer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LocalVariable createLocalVariable() {
+		LocalVariableImpl localVariable = new LocalVariableImpl();
+		return localVariable;
 	}
 
 	/**

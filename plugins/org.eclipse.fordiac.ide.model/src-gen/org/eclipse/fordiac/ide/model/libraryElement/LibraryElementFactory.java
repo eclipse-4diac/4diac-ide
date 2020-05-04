@@ -616,6 +616,15 @@ public interface LibraryElementFactory extends EFactory {
 	Multiplexer createMultiplexer();
 
 	/**
+	 * Returns a new object of class '<em>Local Variable</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Local Variable</em>'.
+	 * @generated
+	 */
+	LocalVariable createLocalVariable();
+
+	/**
 	 * Returns a new object of class '<em>Attribute</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
