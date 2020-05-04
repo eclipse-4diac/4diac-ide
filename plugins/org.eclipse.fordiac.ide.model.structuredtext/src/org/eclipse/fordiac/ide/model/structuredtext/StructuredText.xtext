@@ -32,20 +32,14 @@ StructuredTextAlgorithm: {StructuredTextAlgorithm}
 ;
 
 Var_Decl_Init returns libraryElement::VarDeclaration:
-	Var_Decl_Local | Var_Decl_Located
+	Var_Decl_Local
 ;
 
-Var_Decl_Local returns LocalVariable:
-	{LocalVariable} (constant ?= 'CONSTANT')? name=ID ':'
+Var_Decl_Local returns libraryElement::LocalVariable:
+	{LocalVariable} (constant ?= 'CONSTANT')? name=ID (located?='AT' location=Variable)? ':'
+	( array?='ARRAY' '[' arrayStart=Array_Size '..' arrayStop=Array_Size ']' 'OF')?
 	type=[datatype::DataType|Type_Name]
-	(array?='[' arraySize=Array_Size ']')?
-	(':=' initialValue=Constant)?
-;
-
-Var_Decl_Located returns LocatedVariable:
-	{LocatedVariable} name=ID ('AT' location=Variable) ':'
-	type=[datatype::DataType|Type_Name]
-	(array?='[' arraySize=Array_Size ']')?
+	( initalized?=':=' initialValue=Constant)?
 ;
 
 /************************************************************************
