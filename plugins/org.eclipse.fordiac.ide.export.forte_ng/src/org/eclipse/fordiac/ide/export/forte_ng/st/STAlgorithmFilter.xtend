@@ -154,7 +154,14 @@ class STAlgorithmFilter {
 		}
 	}
 
-	def protected CharSequence generateArrayDecl(LocatedVariable variable) {
+	def protected CharSequence generateArrayDecl(LocalVariable variable) 
+	'''«IF variable.located
+			»«variable.generateArrayDeclLocated»«
+		ELSE
+			»«variable.generateArrayDeclLocal»«
+		ENDIF»'''
+
+	def protected CharSequence generateArrayDeclLocated(LocalVariable variable) {
 		val l = variable.location
 		switch (l) {
 			PrimaryVariable: '''
@@ -172,11 +179,11 @@ class STAlgorithmFilter {
 		}
 	}
 
-	def protected CharSequence generateArrayDecl(LocalVariable variable) '''
+	def protected CharSequence generateArrayDeclLocal(LocalVariable variable) '''
 		CIEC_«variable.type.name» «variable.name»[«variable.arraySize»]«variable.generateLocalVariableInitializer»;
 	'''
 
-	def protected CharSequence generateVariableDecl(LocatedVariable variable) {
+	def protected CharSequence generateVariableDeclLocated(LocalVariable variable) {
 		val l = variable.location
 		switch (l) {
 			PrimaryVariable: '''// replacing all instances of «variable.extractTypeInformation»:«variable.name» with «variable.generateVarAccess»''' //names will just be replaced during export
@@ -184,17 +191,17 @@ class STAlgorithmFilter {
 		}
 	}
 
-	def protected CharSequence generateVariableDecl(LocalVariable variable) '''
+	def protected CharSequence generateVariableDeclLocal(LocalVariable variable) '''
 		CIEC_«variable.type.name» «variable.name»«variable.generateLocalVariableInitializer»;
 	'''
 
 	def protected CharSequence generateLocalVariables(List<VarDeclaration> variables) '''
 		«FOR variable : variables»
 			«switch (variable) {
-				LocalVariable case !variable.array             : variable.generateVariableDecl
-				LocalVariable case  variable.array             : variable.generateArrayDecl
-				LocatedVariable case null !== variable.location && !variable.array : variable.generateVariableDecl
-				LocatedVariable case null !== variable.location &&  variable.array : variable.generateArrayDecl
+				LocalVariable case !variable.located && !variable.array             : variable.generateVariableDeclLocal
+				LocalVariable case !variable.located &&  variable.array             : variable.generateArrayDeclLocal
+				LocalVariable case variable.located && null !== variable.location && !variable.array : variable.generateVariableDeclLocated
+				LocalVariable case variable.located && null !== variable.location &&  variable.array : variable.generateArrayDeclLocated
 			}»
 		«ENDFOR»
 	'''
@@ -379,31 +386,38 @@ class STAlgorithmFilter {
 
 	def protected dispatch CharSequence generateExpression(PrimaryVariable expr)  '''«expr.^var.generateVarAccess»«expr.generateBitaccess»'''
 
-	def protected dispatch CharSequence generateVarAccess(LocalVariable variable) '''«variable.name»'''
-
 	def protected dispatch CharSequence generateVarAccess(VarDeclaration variable) '''«variable.name»()'''
 
-	def protected dispatch CharSequence generateVarAccess(LocatedVariable variable)
+	def protected dispatch CharSequence generateVarAccess(LocalVariable variable) 	
+	'''«IF variable.located
+			»«variable.generateVarAccessLocated»«
+		ELSE
+			»«variable.generateVarAccessLocal»«
+		ENDIF»'''
+
+	def protected CharSequence generateVarAccessLocal(LocalVariable variable) '''«variable.name»'''
+
+	def protected CharSequence generateVarAccessLocated(LocalVariable variable)
 		'''«IF variable.array
 				»«variable.name»«
 			ELSE
-				»«variable.location.generateExpression»«generateBitaccess(variable.location.extractTypeInformation,variable.extractTypeInformation,0)»«
+				»«variable.location.generateExpression»«generateBitaccess(variable, variable.location.extractTypeInformation,variable.extractTypeInformation,0)»«
 			ENDIF»'''
 
 	def protected CharSequence generateBitaccess(AdapterVariable variable) {
 		if (null !== variable.part) {
-			generateBitaccess(variable.^var.type.name, variable.extractTypeInformation, variable.part.index)
+			generateBitaccess(variable.^var, variable.^var.type.name, variable.extractTypeInformation, variable.part.index)
 		}
 	}
 
 	def protected CharSequence generateBitaccess(PrimaryVariable variable) {
 		if (null !== variable.part) {
-			generateBitaccess(variable.^var.type.name, variable.extractTypeInformation, variable.part.index)
+			generateBitaccess(variable.^var, variable.^var.type.name, variable.extractTypeInformation, variable.part.index)
 		}
 	}
 
-	def protected CharSequence generateBitaccess(String DataType, String AccessorType, int Index) {
-		if (BitSize(AccessorType) > 0 && BitSize(DataType) > BitSize(AccessorType)) {
+	def protected CharSequence generateBitaccess(VarDeclaration variable, String DataType, String AccessorType, int Index) {
+		if (BitSize(AccessorType) > 0 && variable.array && variable.arraySize * BitSize(DataType) > BitSize(AccessorType)) {
 			'''.partial<CIEC_«AccessorType»,«Long.toString(Index)»>()'''
 		} else if (BitSize(DataType) == BitSize(AccessorType)) {
 			''''''
