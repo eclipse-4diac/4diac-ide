@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -29,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetup;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -61,8 +64,17 @@ public class ForteNgTestBase {
 		functionBlock = LibraryElementFactory.eINSTANCE.createBasicFBType();
 		functionBlock.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 
+		setupTypeLib();
+
 		// clear the errors-list
 		errors = new ArrayList<>();
+	}
+
+	private void setupTypeLib() {
+		FBTypePaletteEntry pallEntry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
+		TypeLibrary typelib = TypeLibrary.getTypeLibrary(null);
+		pallEntry.setPalette(typelib.getBlockTypeLib());
+		functionBlock.setPaletteEntry(pallEntry);
 	}
 
 	/**

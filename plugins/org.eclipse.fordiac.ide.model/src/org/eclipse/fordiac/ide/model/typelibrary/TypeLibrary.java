@@ -139,7 +139,9 @@ public final class TypeLibrary implements TypeLibraryTags {
 	private TypeLibrary(IProject project) {
 		this.project = project;
 		blockTypeLib.setTypeLibrary(this);
-		loadPaletteFolderMembers(project);
+		if (null != project) {
+			loadPaletteFolderMembers(project);
+		}
 	}
 
 	public static synchronized void loadToolLibrary() {
@@ -228,8 +230,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 		int countPaletteCreater = 0;
 		paletteCreators = new IPaletteEntryCreator[elems.length];
 
-		for (int i = 0; i < elems.length; i++) {
-			IConfigurationElement elem = elems[i];
+		for (IConfigurationElement elem : elems) {
 			try {
 				Object object = elem.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof IPaletteEntryCreator) {
@@ -357,7 +358,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 		final IPath location;
 
-		if (typeLibPath != null && !typeLibPath.isEmpty()) {
+		if ((null != typeLibPath) && !typeLibPath.isEmpty()) {
 			location = new Path(typeLibPath);
 		} else {
 			location = new Path(Platform.getInstallLocation().getURL().getFile() + TypeLibraryTags.TYPE_LIBRARY);
