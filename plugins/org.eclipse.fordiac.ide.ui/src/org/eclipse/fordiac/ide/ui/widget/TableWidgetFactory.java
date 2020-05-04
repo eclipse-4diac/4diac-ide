@@ -28,14 +28,18 @@ import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.part.IPageBookViewPage;
 
 public final class TableWidgetFactory {
 
@@ -98,14 +102,28 @@ public final class TableWidgetFactory {
 		throw new UnsupportedOperationException("Widget Factory should not be instantiated"); //$NON-NLS-1$
 	}
 
-	public static void enableCopyPasteCut(final IWorkbenchPart part, I4diacTableUtil parent) {
-		IHandlerService serv = part.getSite().getService(IHandlerService.class);
+	public static void enableCopyPasteCut(final Object part) {
+		IHandlerService serv;
+		ISelectionService selServ;
 		Clipboard cb = Clipboard.getDefault();
-		Table table = parent.getViewer().getTable();
+
+		if (part instanceof IWorkbenchPart) {
+			IWorkbenchSite site = ((IWorkbenchPart) part).getSite();
+			serv = site.getService(IHandlerService.class);
+			selServ = site.getWorkbenchWindow().getSelectionService();
+		} else if (part instanceof IPageBookViewPage) {
+			IWorkbenchSite site = ((IPageBookViewPage) part).getSite();
+			serv = site.getService(IHandlerService.class);
+			selServ = site.getWorkbenchWindow().getSelectionService();
+		} else {
+			return;
+		}
 
 		serv.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_COPY, new AbstractHandler() {
 			@Override
 			public Object execute(ExecutionEvent event) throws ExecutionException {
+				I4diacTableUtil parent = getParent(selServ);
+				Table table = parent.getViewer().getTable();
 				int[] indices = table.getSelectionIndices();
 				if (indices.length == 0) {
 					return Status.CANCEL_STATUS;
@@ -122,6 +140,8 @@ public final class TableWidgetFactory {
 		serv.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_PASTE, new AbstractHandler() {
 			@Override
 			public Object execute(ExecutionEvent event) throws ExecutionException {
+				I4diacTableUtil parent = getParent(selServ);
+				Table table = parent.getViewer().getTable();
 				if (cb.getContents() == null) {
 					return Status.CANCEL_STATUS;
 				}
@@ -140,6 +160,8 @@ public final class TableWidgetFactory {
 		serv.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_CUT, new AbstractHandler() {
 			@Override
 			public Object execute(ExecutionEvent event) throws ExecutionException {
+				I4diacTableUtil parent = getParent(selServ);
+				Table table = parent.getViewer().getTable();
 				int[] indices = table.getSelectionIndices();
 				if (indices.length == 0) {
 					return Status.CANCEL_STATUS;
@@ -152,5 +174,13 @@ public final class TableWidgetFactory {
 				return Status.OK_STATUS;
 			}
 		});
+	}
+
+	private static I4diacTableUtil getParent(ISelectionService selService) {
+		Object selection = ((IStructuredSelection) selService.getSelection()).getFirstElement();
+		if (selection instanceof I4diacTableUtil) {
+			return (I4diacTableUtil) selection;
+		}
+		return null;
 	}
 }

@@ -182,9 +182,9 @@ public class DataTypeEditor extends EditorPart
 	public void createPartControl(Composite parent) {
 		if ((dataType instanceof StructuredType) && (!importFailed)) {
 			editComposite = new StructViewingComposite(parent, 1, commandStack, dataType,
-					TypeLibrary.getTypeLibrary(file.getProject()).getDataTypeLibrary());
+					TypeLibrary.getTypeLibrary(file.getProject()).getDataTypeLibrary(), this);
 			editComposite.createPartControl(parent);
-			TableWidgetFactory.enableCopyPasteCut(this, editComposite);
+			TableWidgetFactory.enableCopyPasteCut(this);
 		} else if (importFailed) {
 			createErrorComposite(parent, Messages.ErrorCompositeMessage);
 			if (outsideWorkspace) {

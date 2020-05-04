@@ -14,6 +14,7 @@
  *   Alois Zoitl - added mulitline selection and code cleanup.
  *   Bianca Wiesmayr - extract Table creation, improve insertion
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
+ *   Daniel Lindhuber - added copy and paste
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -34,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
@@ -43,7 +45,10 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -57,7 +62,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class InternalVarsSection extends ECCSection {
+public class InternalVarsSection extends ECCSection implements I4diacTableUtil {
 	private static final String IV_NAME = "NAME"; //$NON-NLS-1$
 	private static final String IV_TYPE = "TYPE"; //$NON-NLS-1$
 	private static final String IV_ARRAY = "ARRAY_SIZE"; //$NON-NLS-1$
@@ -73,6 +78,7 @@ public class InternalVarsSection extends ECCSection {
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createInternalVarsControls(parent);
+		tabbedPropertySheetPage.getSite().setSelectionProvider(this);
 	}
 
 	public void createInternalVarsControls(final Composite parent) {
@@ -222,4 +228,55 @@ public class InternalVarsSection extends ECCSection {
 		}
 	}
 
+	@Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setSelection(ISelection selection) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ISelection getSelection() {
+		return new StructuredSelection(new Object[] { this });
+	}
+
+	@Override
+	public TableViewer getViewer() {
+		return internalVarsViewer;
+	}
+
+	@Override
+	public Object getEntry(int index) {
+		return getType().getInternalVars().get(index);
+	}
+
+	@Override
+	public void addEntry(Object entry, int index) {
+		if (entry instanceof VarDeclaration) {
+			VarDeclaration varEntry = (VarDeclaration) entry;
+			Command cmd = new CreateInternalVariableCommand(getType(), index, varEntry.getName(), varEntry.getType());
+			executeCommand(cmd);
+			getViewer().refresh();
+		}
+	}
+
+	@Override
+	public Object removeEntry(int index) {
+		VarDeclaration entry = (VarDeclaration) getEntry(index);
+		Command cmd = new DeleteInternalVariableCommand(getType(), entry);
+		executeCommand(cmd);
+		getViewer().refresh();
+		return entry;
+	}
 }

@@ -41,9 +41,12 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -56,6 +59,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class StructViewingComposite extends Composite implements CommandExecutor, I4diacTableUtil {
@@ -70,15 +74,17 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	private final DataTypeLibrary dataTypeLibrary;
 	private String[] dataTypes;
 	private final CommandStack cmdStack;
+	private final IWorkbenchPart part;
 
 	private final DataType dataType;
 
 	public StructViewingComposite(Composite parent, int style, CommandStack cmdStack, DataType dataType,
-			DataTypeLibrary dataTypeLibrary) {
+			DataTypeLibrary dataTypeLibrary, IWorkbenchPart part) {
 		super(parent, style);
 		this.cmdStack = cmdStack;
 		this.dataType = dataType;
 		this.dataTypeLibrary = dataTypeLibrary;
+		this.part = part;
 	}
 
 	public void createPartControl(Composite parent) {
@@ -103,6 +109,8 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				ref -> new ChangeMemberVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, true),
 				ref -> new ChangeMemberVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref,
 						false));
+
+		part.getSite().setSelectionProvider(this);
 	}
 
 	private void showLabel(Composite parent) {
@@ -294,5 +302,28 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	@Override
 	public Object getEntry(int index) {
 		return getType().getMemberVariables().get(index);
+	}
+
+	@Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ISelection getSelection() {
+		return new StructuredSelection(new Object[] { this });
+	}
+
+	@Override
+	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setSelection(ISelection selection) {
+		// TODO Auto-generated method stub
+
 	}
 }

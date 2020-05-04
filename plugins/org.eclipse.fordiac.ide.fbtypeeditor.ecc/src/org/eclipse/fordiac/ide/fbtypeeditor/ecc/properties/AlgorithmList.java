@@ -16,6 +16,7 @@
  *   	- Shifted Grid heightHint and Width Hint to WidgetFactory.java
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *   Bianca Wiesmayr - improve element insertion
+ *   Daniel Lindhuber - added copy and paste
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
+import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
@@ -40,6 +42,8 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
@@ -55,7 +59,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class AlgorithmList implements CommandExecutor {
+public class AlgorithmList implements CommandExecutor, I4diacTableUtil {
 
 	private class AlgorithmViewerCellModifier implements ICellModifier {
 		@Override
@@ -107,10 +111,6 @@ public class AlgorithmList implements CommandExecutor {
 
 	private TableViewer algorithmViewer;
 	private Composite composite;
-
-	TableViewer getAlgorithmViewer() {
-		return algorithmViewer;
-	}
 
 	private BasicFBType type;
 
@@ -210,6 +210,57 @@ public class AlgorithmList implements CommandExecutor {
 			algorithmViewer.setInput(type.getAlgorithm());
 		}
 		commandStack = commandStackBuffer;
+	}
+
+	@Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ISelection getSelection() {
+		return new StructuredSelection(new Object[] { this });
+	}
+
+	@Override
+	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setSelection(ISelection selection) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public TableViewer getViewer() {
+		return algorithmViewer;
+	}
+
+	@Override
+	public Object getEntry(int index) {
+		return type.getAlgorithm().get(index);
+	}
+
+	@Override
+	public void addEntry(Object entry, int index) {
+		if (entry instanceof Algorithm) {
+			Command cmd = new CreateAlgorithmCommand(type, index, ((Algorithm) entry).getName());
+			executeCommand(cmd);
+			getViewer().refresh();
+		}
+	}
+
+	@Override
+	public Object removeEntry(int index) {
+		Algorithm entry = (Algorithm) getEntry(index);
+		Command cmd = new DeleteAlgorithmCommand(type, entry);
+		executeCommand(cmd);
+		getViewer().refresh();
+		return entry;
 	}
 
 }
