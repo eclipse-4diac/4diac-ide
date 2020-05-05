@@ -22,8 +22,8 @@ import org.junit.Test;
 public abstract class ForteNgForLoopXtend extends ForteNgTestBase implements DatatypeConstants {
   @Test
   public void validForLoop() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, DatatypeConstants.DINT));
+    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, DatatypeConstants.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("FOR ");
     _builder.append(ForteNgTestBase.VARIABLE_NAME);
@@ -34,9 +34,9 @@ public abstract class ForteNgForLoopXtend extends ForteNgTestBase implements Dat
     _builder.append(" := 0;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_FOR;");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertNoErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertNoErrors(this.getErrors());
     Assert.assertNotNull(generatedCode);
     StringConcatenation _builder_1 = new StringConcatenation();
     _builder_1.append("// as it is done in lua: https://www.lua.org/manual/5.1/manual.html#2.4.5");
@@ -76,8 +76,8 @@ public abstract class ForteNgForLoopXtend extends ForteNgTestBase implements Dat
   
   @Test
   public void validForLoopWithBy() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, DatatypeConstants.DINT));
+    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, DatatypeConstants.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("FOR ");
     _builder.append(ForteNgTestBase.VARIABLE_NAME);
@@ -88,9 +88,9 @@ public abstract class ForteNgForLoopXtend extends ForteNgTestBase implements Dat
     _builder.append(" := 0;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_FOR;");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertNoErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertNoErrors(this.getErrors());
     Assert.assertNotNull(generatedCode);
     StringConcatenation _builder_1 = new StringConcatenation();
     _builder_1.append("// as it is done in lua: https://www.lua.org/manual/5.1/manual.html#2.4.5");

@@ -30,8 +30,7 @@ abstract class ForteNgForLoopXtend extends ForteNgTestBase implements DatatypeCo
 			«VARIABLE2_NAME» := 0;
 		END_FOR;'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
@@ -58,8 +57,7 @@ abstract class ForteNgForLoopXtend extends ForteNgTestBase implements DatatypeCo
 			«VARIABLE2_NAME» := 0;
 		END_FOR;'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);

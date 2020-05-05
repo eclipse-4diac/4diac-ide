@@ -33,9 +33,9 @@ public abstract class ForteNgArrayXtend extends ForteNgTestBase {
     _builder.append(" : ARRAY [0..31] OF DWORD;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_VAR");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertNoErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertNoErrors(this.getErrors());
     Assert.assertNotNull(generatedCode);
     StringConcatenation _builder_1 = new StringConcatenation();
     _builder_1.append("CIEC_DWORD ");
@@ -55,11 +55,11 @@ public abstract class ForteNgArrayXtend extends ForteNgTestBase {
     _builder.append(" : ARRAY [0..31] OF DWORD := 0;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_VAR");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertErrors(this.getErrors());
     Assert.assertNull(generatedCode);
-    ForteNgTestBase.assertErrorMessages(this.errors, "Local arrays can not be initialized.");
+    ForteNgTestBase.assertErrorMessages(this.getErrors(), "Local arrays can not be initialized.");
   }
   
   @Test
@@ -78,11 +78,11 @@ public abstract class ForteNgArrayXtend extends ForteNgTestBase {
     _builder.append(" : ARRAY [0..31] OF DWORD := 0;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_VAR");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertErrors(this.getErrors());
     Assert.assertNull(generatedCode);
-    ForteNgTestBase.assertErrorMessages(this.errors, "Located variables can not be initialized.");
+    ForteNgTestBase.assertErrorMessages(this.getErrors(), "Located variables can not be initialized.");
   }
   
   @Test
@@ -95,11 +95,11 @@ public abstract class ForteNgArrayXtend extends ForteNgTestBase {
     _builder.append(" : ARRAY [5..31] OF DWORD;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_VAR");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertErrors(this.getErrors());
     Assert.assertNull(generatedCode);
-    ForteNgTestBase.assertErrorMessages(this.errors, "Only arrays with a start index of 0 are supported.");
+    ForteNgTestBase.assertErrorMessages(this.getErrors(), "Only arrays with a start index of 0 are supported.");
   }
   
   @Test
@@ -112,11 +112,11 @@ public abstract class ForteNgArrayXtend extends ForteNgTestBase {
     _builder.append(" : ARRAY [0..0] OF DWORD;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_VAR");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertErrors(this.getErrors());
     Assert.assertNull(generatedCode);
-    ForteNgTestBase.assertErrorMessages(this.errors, "Only arrays with incrementing index are supported.");
+    ForteNgTestBase.assertErrorMessages(this.getErrors(), "Only arrays with incrementing index are supported.");
   }
   
   @Test
@@ -135,11 +135,11 @@ public abstract class ForteNgArrayXtend extends ForteNgTestBase {
     _builder.append(" : ARRAY [0..31] OF DWORD;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_VAR");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertErrors(this.getErrors());
     Assert.assertNull(generatedCode);
-    ForteNgTestBase.assertErrorMessages(this.errors, "Piecewise located variables cannot access more bits than are available in the destination");
+    ForteNgTestBase.assertErrorMessages(this.getErrors(), "Piecewise located variables cannot access more bits than are available in the destination");
   }
   
   @Test
@@ -158,9 +158,9 @@ public abstract class ForteNgArrayXtend extends ForteNgTestBase {
     _builder.append(" : DWORD;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_VAR");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertNoErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertNoErrors(this.getErrors());
     Assert.assertNotNull(generatedCode);
     StringConcatenation _builder_1 = new StringConcatenation();
     _builder_1.append("CIEC_DWORD ");
@@ -191,9 +191,9 @@ public abstract class ForteNgArrayXtend extends ForteNgTestBase {
     _builder.append(" : DINT;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_VAR");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertNoErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertNoErrors(this.getErrors());
     Assert.assertNotNull(generatedCode);
     StringConcatenation _builder_1 = new StringConcatenation();
     _builder_1.append("CIEC_DINT ");
@@ -224,10 +224,10 @@ public abstract class ForteNgArrayXtend extends ForteNgTestBase {
     _builder.append(" : INT;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_VAR");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertErrors(this.getErrors());
     Assert.assertNull(generatedCode);
-    ForteNgTestBase.assertErrorMessages(this.errors, "General located variables must have matching types");
+    ForteNgTestBase.assertErrorMessages(this.getErrors(), "General located variables must have matching types");
   }
 }
