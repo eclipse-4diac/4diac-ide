@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.export.forte_ng.tests
 
 import org.junit.Test
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 
@@ -148,4 +149,26 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implements Data
 		}
 		'''.toString(), generatedCode.toString())
 	}
+
+	@Test
+	def void invalidCaseStatementNoEnd() {
+		functionBlock.getInternalVars().add(createVarDeclaration(VARIABLE_NAME, DINT))
+		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		CASE «VARIABLE_NAME» OF
+			0:
+				IF «VARIABLE_NAME» < 20 THEN
+			 		«VARIABLE_NAME» := «VARIABLE_NAME» + 1;
+			 	ELSE
+			 		«VARIABLE_NAME» := «VARIABLE_NAME» - 1;
+			 	END_IF;
+			255: «VARIABLE_NAME» := 0;
+		'''))
+
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
+
+		assertErrors(errors);
+		assertErrorMessages(errors, "expecting 'END_CASE'");
+		assertNull(generatedCode);
+	}
+
 }

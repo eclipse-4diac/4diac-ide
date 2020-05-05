@@ -348,4 +348,50 @@ public abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implemen
     _builder_1.newLine();
     Assert.assertEquals(_builder_1.toString(), generatedCode.toString());
   }
+  
+  @Test
+  public void invalidCaseStatementNoEnd() {
+    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("CASE ");
+    _builder.append(ForteNgTestBase.VARIABLE_NAME);
+    _builder.append(" OF");
+    _builder.newLineIfNotEmpty();
+    _builder.append("\t");
+    _builder.append("0:");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("IF ");
+    _builder.append(ForteNgTestBase.VARIABLE_NAME, "\t\t");
+    _builder.append(" < 20 THEN");
+    _builder.newLineIfNotEmpty();
+    _builder.append("\t \t\t");
+    _builder.append(ForteNgTestBase.VARIABLE_NAME, "\t \t\t");
+    _builder.append(" := ");
+    _builder.append(ForteNgTestBase.VARIABLE_NAME, "\t \t\t");
+    _builder.append(" + 1;");
+    _builder.newLineIfNotEmpty();
+    _builder.append("\t \t");
+    _builder.append("ELSE");
+    _builder.newLine();
+    _builder.append("\t \t\t");
+    _builder.append(ForteNgTestBase.VARIABLE_NAME, "\t \t\t");
+    _builder.append(" := ");
+    _builder.append(ForteNgTestBase.VARIABLE_NAME, "\t \t\t");
+    _builder.append(" - 1;");
+    _builder.newLineIfNotEmpty();
+    _builder.append("\t \t");
+    _builder.append("END_IF;");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("255: ");
+    _builder.append(ForteNgTestBase.VARIABLE_NAME, "\t");
+    _builder.append(" := 0;");
+    _builder.newLineIfNotEmpty();
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertErrors(this.getErrors());
+    ForteNgTestBase.assertErrorMessages(this.getErrors(), "expecting \'END_CASE\'");
+    Assert.assertNull(generatedCode);
+  }
 }
