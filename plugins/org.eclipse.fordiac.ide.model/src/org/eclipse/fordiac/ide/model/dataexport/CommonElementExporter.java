@@ -57,8 +57,10 @@ abstract class CommonElementExporter {
 
 		private final Iterator<ByteBuffer> bufferIterator;
 		private ByteBuffer currentDataBuffer;
+		private final List<ByteBuffer> dataBuffers;
 
 		public ByteBufferInputStream(List<ByteBuffer> dataBuffers) {
+			this.dataBuffers = dataBuffers;
 			dataBuffers.forEach(ByteBuffer::flip);
 			bufferIterator = dataBuffers.iterator();
 			currentDataBuffer = bufferIterator.next();
@@ -98,6 +100,12 @@ abstract class CommonElementExporter {
 			return currentDataBuffer.remaining();
 		}
 
+		@Override
+		public void close() throws IOException {
+			dataBuffers.clear();
+			super.close();
+		}
+
 	}
 
 	private static class ByteBufferOutputStream extends OutputStream {
@@ -105,7 +113,7 @@ abstract class CommonElementExporter {
 		private static final int SI_PREFIX_MI = SI_PREFIX_KI * SI_PREFIX_KI;
 		private static final int SINGLE_DATA_BUFFER_CAPACITY = Activator.getDefault().getPreferenceStore()
 				.getInt(PreferenceConstants.P_ALLOCATION_SIZE) * SI_PREFIX_MI;
-		private final List<ByteBuffer> dataBuffers = new ArrayList<>(5); // give it an initial capacity of 5 to reduce
+		private List<ByteBuffer> dataBuffers = new ArrayList<>(5); // give it an initial capacity of 5 to reduce
 		// reallocation
 		private ByteBuffer currentDataBuffer;
 
@@ -113,8 +121,10 @@ abstract class CommonElementExporter {
 			addNewDataBuffer();
 		}
 
-		public List<ByteBuffer> getDataBuffers() {
-			return dataBuffers;
+		public List<ByteBuffer> transferDataBuffers() {
+			List<ByteBuffer> tmp = dataBuffers;
+			dataBuffers = null;
+			return tmp;
 		}
 
 		private void addNewDataBuffer() {
@@ -136,12 +146,6 @@ abstract class CommonElementExporter {
 				addNewDataBuffer();
 			}
 			currentDataBuffer.put(b, off, len);
-		}
-
-		@Override
-		public void close() throws IOException {
-			dataBuffers.clear();
-			super.close();
 		}
 
 	}
@@ -244,7 +248,7 @@ abstract class CommonElementExporter {
 			writer.writeCharacters(LINE_END);
 			writer.writeEndDocument();
 			writer.close();
-			try (ByteBufferInputStream inputStream = new ByteBufferInputStream(outputStream.getDataBuffers())) {
+			try (ByteBufferInputStream inputStream = new ByteBufferInputStream(outputStream.transferDataBuffers())) {
 				if (iFile.exists()) {
 					iFile.setContents(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
 				} else {
@@ -319,7 +323,7 @@ abstract class CommonElementExporter {
 	 * @param libraryelement the libraryelement
 	 * @throws XMLStreamException
 	 */
-	public void addVersionInfo(final LibraryElement libraryelement) throws XMLStreamException {
+	protected void addVersionInfo(final LibraryElement libraryelement) throws XMLStreamException {
 		if (!libraryelement.getVersionInfo().isEmpty()) {
 			for (VersionInfo info : libraryelement.getVersionInfo()) {
 				addStartElement(LibraryElementTags.VERSION_INFO_ELEMENT);
