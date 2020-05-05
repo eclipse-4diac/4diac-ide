@@ -32,8 +32,7 @@ abstract class ForteNgArrayXtend extends ForteNgTestBase {
 		  «VARIABLE_NAME» : ARRAY [0..31] OF DWORD;
 		END_VAR'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
@@ -49,8 +48,7 @@ abstract class ForteNgArrayXtend extends ForteNgTestBase {
 		  «VARIABLE_NAME» : ARRAY [0..31] OF DWORD := 0;
 		END_VAR'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertErrors(errors);
 		assertNull(generatedCode);
@@ -66,8 +64,7 @@ abstract class ForteNgArrayXtend extends ForteNgTestBase {
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : ARRAY [0..31] OF DWORD := 0;
 		END_VAR'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertErrors(errors);
 		assertNull(generatedCode);
@@ -82,8 +79,7 @@ abstract class ForteNgArrayXtend extends ForteNgTestBase {
 		  «VARIABLE_NAME» : ARRAY [5..31] OF DWORD;
 		END_VAR'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertErrors(errors);
 		assertNull(generatedCode);
@@ -98,8 +94,7 @@ abstract class ForteNgArrayXtend extends ForteNgTestBase {
 		  «VARIABLE_NAME» : ARRAY [0..0] OF DWORD;
 		END_VAR'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertErrors(errors);
 		assertNull(generatedCode);
@@ -115,8 +110,7 @@ abstract class ForteNgArrayXtend extends ForteNgTestBase {
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : ARRAY [0..31] OF DWORD;
 		END_VAR'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertErrors(errors);
 		assertNull(generatedCode);
@@ -132,8 +126,7 @@ abstract class ForteNgArrayXtend extends ForteNgTestBase {
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : DWORD;
 		END_VAR'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
@@ -151,8 +144,7 @@ abstract class ForteNgArrayXtend extends ForteNgTestBase {
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : DINT;
 		END_VAR'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
@@ -170,8 +162,7 @@ abstract class ForteNgArrayXtend extends ForteNgTestBase {
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : INT;
 		END_VAR'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertErrors(errors);
 		assertNull(generatedCode);

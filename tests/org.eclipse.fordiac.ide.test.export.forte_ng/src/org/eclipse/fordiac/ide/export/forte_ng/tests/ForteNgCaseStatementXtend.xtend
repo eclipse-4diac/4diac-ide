@@ -32,8 +32,7 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implements Data
 			255: «VARIABLE_NAME» := 0;
 		END_CASE;'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
@@ -64,8 +63,7 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implements Data
 			255: «VARIABLE_NAME» := 0;
 		END_CASE;'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
@@ -92,8 +90,7 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implements Data
 			«VARIABLE_NAME» := 255;
 		END_CASE;'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
@@ -128,8 +125,7 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implements Data
 			«VARIABLE_NAME» := 255;
 		END_CASE;'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);

@@ -45,9 +45,53 @@ public class ForteNgTestBase {
 	static final String VARIABLE2_NAME = "variable2"; //$NON-NLS-1$
 
 	private static final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
-	protected STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
-	protected BasicFBType functionBlock;
-	protected List<String> errors;
+	private final STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
+	private BasicFBType functionBlock;
+	private List<String> errors;
+
+	/**
+	 * generate code from an algorithm stored in a function block
+	 *
+	 * @param fb            reference to the function block
+	 * @param algorithmName name of the algorithm stored in the function block
+	 * @param errorList     reference to List where error messages are stored
+	 *
+	 * @return the generated code or null on error
+	 */
+	public CharSequence generateAlgorithm(BasicFBType fb, String algorithmName, List<String> errorList) {
+		return stAlgorithmFilter.generate(castAlgorithm(fb.getAlgorithmNamed(algorithmName)), errorList);
+	}
+
+	/**
+	 * generate code from an expression with variables attached to a functionblock
+	 *
+	 * @param fb         reference to the function block
+	 * @param expression expression to generate from
+	 * @param errorList  reference to List where error messages are stored
+	 *
+	 * @return the generated code or null on error
+	 */
+	public CharSequence generateExpression(BasicFBType fb, String expression, List<String> errorList) {
+		return stAlgorithmFilter.generate(expression, fb, errorList);
+	}
+
+	/**
+	 * retrieve a reference to the function block
+	 *
+	 * @return function block object
+	 */
+	public BasicFBType getFunctionBlock() {
+		return functionBlock;
+	}
+
+	/**
+	 * retrieve a reference to an error list
+	 *
+	 * @return error list object
+	 */
+	public List<String> getErrors() {
+		return errors;
+	}
 
 	@BeforeClass
 	/**
@@ -152,7 +196,6 @@ public class ForteNgTestBase {
 	 * @param errors   list of errormessages
 	 * @param messages list of messages to check for
 	 */
-
 	protected static void assertErrorMessages(List<String> errors, String... messages) {
 		for (String message : messages) {
 			Boolean contained = false;

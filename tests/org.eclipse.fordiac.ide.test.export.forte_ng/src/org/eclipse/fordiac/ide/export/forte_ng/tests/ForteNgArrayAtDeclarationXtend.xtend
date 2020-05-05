@@ -31,8 +31,7 @@ abstract class ForteNgArrayAtDeclarationXtend extends ForteNgTestBase {
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : ARRAY [«arrayStart»..«arrayStop»] OF «accessType»;
 		END_VAR'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		if (isValid == VALID_DECLARATION) {
 			assertNoErrors(errors);

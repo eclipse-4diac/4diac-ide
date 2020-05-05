@@ -25,7 +25,7 @@ abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
 	protected static final boolean INVALID_ACCESS = !VALID_ACCESS
 
 	def protected void testLocatedArrayAtAccess(String sourceType, String accessType, int arrayStart, int arrayStop, String accessor, int index, String value, boolean isValid) {
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		getFunctionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : «sourceType»;
 		  «VARIABLE2_NAME» AT «VARIABLE_NAME» : ARRAY [«arrayStart»..«arrayStop»] OF «accessType»;
@@ -33,8 +33,7 @@ abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
 
 		«VARIABLE2_NAME».«accessor»«index» := «value»;'''))
 
-		var generatedCode = stAlgorithmFilter
-				.generate(castAlgorithm(functionBlock.getAlgorithmNamed(ALGORITHM_NAME)), errors)
+		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors);
 
 		if (isValid == VALID_ACCESS) {
 			assertNoErrors(errors);

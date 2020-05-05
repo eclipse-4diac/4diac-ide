@@ -54,10 +54,10 @@ public abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
     _builder.append(" := ");
     _builder.append(value);
     _builder.append(";");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
     if ((isValid == ForteNgArrayAtAccessXtend.VALID_ACCESS)) {
-      ForteNgTestBase.assertNoErrors(this.errors);
+      ForteNgTestBase.assertNoErrors(this.getErrors());
       Assert.assertNotNull(generatedCode);
       StringConcatenation _builder_1 = new StringConcatenation();
       _builder_1.append("CIEC_");
@@ -91,9 +91,9 @@ public abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
       _builder_1.newLineIfNotEmpty();
       Assert.assertEquals(_builder_1.toString(), generatedCode.toString());
     } else {
-      ForteNgTestBase.assertErrors(this.errors);
+      ForteNgTestBase.assertErrors(this.getErrors());
       Assert.assertNull(generatedCode);
-      ForteNgTestBase.assertErrorMessages(this.errors, "Incorrect partial access: index not within limits.");
+      ForteNgTestBase.assertErrorMessages(this.getErrors(), "Incorrect partial access: index not within limits.");
     }
   }
 }

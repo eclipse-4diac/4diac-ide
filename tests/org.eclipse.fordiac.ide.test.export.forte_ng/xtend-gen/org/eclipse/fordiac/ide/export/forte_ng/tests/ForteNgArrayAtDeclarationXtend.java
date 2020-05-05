@@ -45,10 +45,10 @@ public abstract class ForteNgArrayAtDeclarationXtend extends ForteNgTestBase {
     _builder.append(";");
     _builder.newLineIfNotEmpty();
     _builder.append("END_VAR");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
     if ((isValid == ForteNgArrayAtDeclarationXtend.VALID_DECLARATION)) {
-      ForteNgTestBase.assertNoErrors(this.errors);
+      ForteNgTestBase.assertNoErrors(this.getErrors());
       Assert.assertNotNull(generatedCode);
       StringConcatenation _builder_1 = new StringConcatenation();
       _builder_1.append("CIEC_");
@@ -73,7 +73,7 @@ public abstract class ForteNgArrayAtDeclarationXtend extends ForteNgTestBase {
       _builder_1.newLineIfNotEmpty();
       Assert.assertEquals(_builder_1.toString(), generatedCode.toString());
     } else {
-      ForteNgTestBase.assertErrors(this.errors);
+      ForteNgTestBase.assertErrors(this.getErrors());
       Assert.assertNull(generatedCode);
     }
   }

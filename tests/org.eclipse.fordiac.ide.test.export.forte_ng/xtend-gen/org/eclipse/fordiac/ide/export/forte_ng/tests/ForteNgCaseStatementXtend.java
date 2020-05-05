@@ -22,7 +22,7 @@ import org.junit.Test;
 public abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implements DatatypeConstants {
   @Test
   public void validCaseStatement() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("CASE variable OF");
     _builder.newLine();
@@ -53,9 +53,9 @@ public abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implemen
     _builder.append(" := 0;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_CASE;");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertNoErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertNoErrors(this.getErrors());
     Assert.assertNotNull(generatedCode);
     StringConcatenation _builder_1 = new StringConcatenation();
     _builder_1.append("switch (");
@@ -115,7 +115,7 @@ public abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implemen
   
   @Test
   public void validCaseStatementWithList() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("CASE variable OF");
     _builder.newLine();
@@ -132,9 +132,9 @@ public abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implemen
     _builder.append(" := 0;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_CASE;");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertNoErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertNoErrors(this.getErrors());
     Assert.assertNotNull(generatedCode);
     StringConcatenation _builder_1 = new StringConcatenation();
     _builder_1.append("switch (");
@@ -170,7 +170,7 @@ public abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implemen
   
   @Test
   public void validCaseStatementWithElse() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("CASE variable OF");
     _builder.newLine();
@@ -193,9 +193,9 @@ public abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implemen
     _builder.append(" := 255;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_CASE;");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertNoErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertNoErrors(this.getErrors());
     Assert.assertNotNull(generatedCode);
     StringConcatenation _builder_1 = new StringConcatenation();
     _builder_1.append("switch (");
@@ -241,7 +241,7 @@ public abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implemen
   
   @Test
   public void validCaseStatementWithIfInside() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("CASE variable OF");
     _builder.newLine();
@@ -283,9 +283,9 @@ public abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implemen
     _builder.append(" := 255;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_CASE;");
-    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.stAlgorithmFilter.generate(this.castAlgorithm(this.functionBlock.getAlgorithmNamed(ForteNgTestBase.ALGORITHM_NAME)), this.errors);
-    ForteNgTestBase.assertNoErrors(this.errors);
+    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    ForteNgTestBase.assertNoErrors(this.getErrors());
     Assert.assertNotNull(generatedCode);
     StringConcatenation _builder_1 = new StringConcatenation();
     _builder_1.append("switch (");
