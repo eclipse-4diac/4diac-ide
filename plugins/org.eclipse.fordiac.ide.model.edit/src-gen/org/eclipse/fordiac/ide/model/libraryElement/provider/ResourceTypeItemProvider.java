@@ -150,8 +150,10 @@ public class ResourceTypeItemProvider extends CompilableTypeItemProvider {
 			case LibraryElementPackage.RESOURCE_TYPE__FB_NETWORK:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**
@@ -174,6 +176,11 @@ public class ResourceTypeItemProvider extends CompilableTypeItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.RESOURCE_TYPE__VAR_DECLARATION,
 				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.RESOURCE_TYPE__VAR_DECLARATION,
+				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
 
 		newChildDescriptors.add
 			(createChildParameter

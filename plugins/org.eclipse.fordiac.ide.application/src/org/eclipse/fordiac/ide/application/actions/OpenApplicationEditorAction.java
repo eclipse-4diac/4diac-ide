@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2013 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,11 +13,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.util.OpenListener;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -56,7 +56,7 @@ public class OpenApplicationEditorAction extends OpenListener {
 	}
 
 	@Override
-	public Class<? extends I4DIACElement> getHandledClass() {
+	public Class<? extends EObject> getHandledClass() {
 		return Application.class;
 	}
 

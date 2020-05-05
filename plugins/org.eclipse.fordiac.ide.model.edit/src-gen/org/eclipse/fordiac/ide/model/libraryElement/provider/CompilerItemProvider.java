@@ -203,8 +203,10 @@ public class CompilerItemProvider extends ItemProviderAdapter implements IEditin
 			case LibraryElementPackage.COMPILER__VERSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

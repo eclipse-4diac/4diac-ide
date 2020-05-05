@@ -107,18 +107,6 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		};
 	}
 
-	/** The i named element content adapter. */
-	private final Adapter annotationContentAdapter = new AdapterImpl() {
-
-		@Override
-		public void notifyChanged(Notification notification) {
-			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getI4DIACElement_Annotations()) {
-				refreshName();
-			}
-		}
-
-	};
-
 	protected void updateDeviceListener() {
 		Device device = findDevice();
 		if (device != referencedDevice) {
@@ -137,9 +125,6 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	public void activate() {
 		super.activate();
 		updateDeviceListener();
-		if (getModel() != null) {
-			getModel().eAdapters().add(annotationContentAdapter);
-		}
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
 	}
 
@@ -148,9 +133,6 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		super.deactivate();
 		if (referencedDevice != null) {
 			referencedDevice.eAdapters().remove(colorChangeListener);
-		}
-		if (getModel() != null) {
-			getModel().eAdapters().remove(annotationContentAdapter);
 		}
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
 	}

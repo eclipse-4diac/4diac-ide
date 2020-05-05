@@ -112,8 +112,9 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 		switch (featureID) {
 			case DataPackage.SUBRANGE_TYPE__SUBRANGE:
 				return basicSetSubrange(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -125,8 +126,9 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 		switch (featureID) {
 			case DataPackage.SUBRANGE_TYPE__SUBRANGE:
 				return getSubrange();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -139,8 +141,10 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 			case DataPackage.SUBRANGE_TYPE__SUBRANGE:
 				setSubrange((Subrange)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -153,8 +157,10 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 			case DataPackage.SUBRANGE_TYPE__SUBRANGE:
 				setSubrange((Subrange)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -166,8 +172,9 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 		switch (featureID) {
 			case DataPackage.SUBRANGE_TYPE__SUBRANGE:
 				return subrange != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // SubrangeTypeImpl

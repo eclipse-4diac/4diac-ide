@@ -109,8 +109,10 @@ public class TextAlgorithmItemProvider extends AlgorithmItemProvider {
 			case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

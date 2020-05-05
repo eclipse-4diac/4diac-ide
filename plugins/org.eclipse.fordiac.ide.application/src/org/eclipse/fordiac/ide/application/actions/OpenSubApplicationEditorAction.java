@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2011, 2013, 2015, 2016 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,10 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.util.OpenListener;
 import org.eclipse.jface.action.IAction;
@@ -35,7 +35,7 @@ public class OpenSubApplicationEditorAction extends OpenListener {
 
 	/**
 	 * Constructor of the Action.
-	 * 
+	 *
 	 * @param uiSubAppNetwork the UISubAppNetwork
 	 */
 	public OpenSubApplicationEditorAction(final SubApp subApp) {
@@ -78,7 +78,7 @@ public class OpenSubApplicationEditorAction extends OpenListener {
 	}
 
 	@Override
-	public Class<? extends I4DIACElement> getHandledClass() {
+	public Class<? extends EObject> getHandledClass() {
 		return SubApp.class;
 	}
 

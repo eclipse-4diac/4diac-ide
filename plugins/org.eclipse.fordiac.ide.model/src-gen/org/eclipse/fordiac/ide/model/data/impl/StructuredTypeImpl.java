@@ -87,8 +87,9 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 		switch (featureID) {
 			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
 				return ((InternalEList<?>)getMemberVariables()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -100,8 +101,9 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 		switch (featureID) {
 			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
 				return getMemberVariables();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -116,8 +118,10 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 				getMemberVariables().clear();
 				getMemberVariables().addAll((Collection<? extends VarDeclaration>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -130,8 +134,10 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
 				getMemberVariables().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -143,8 +149,9 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 		switch (featureID) {
 			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
 				return memberVariables != null && !memberVariables.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // StructuredTypeImpl

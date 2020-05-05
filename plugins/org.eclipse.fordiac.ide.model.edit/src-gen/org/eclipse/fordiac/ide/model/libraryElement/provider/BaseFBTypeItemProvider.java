@@ -126,8 +126,10 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**
@@ -150,6 +152,11 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
 				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
+				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
 	}
 
 }

@@ -126,8 +126,10 @@ public class CompositeFBTypeItemProvider extends FBTypeItemProvider {
 			case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

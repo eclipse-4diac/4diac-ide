@@ -22,8 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
  *
  *
  * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getAdapterMonitoringEvent()
- * @model superTypes="org.eclipse.fordiac.ide.model.monitoring.IEditPartCreator
- *        org.eclipse.fordiac.ide.model.libraryElement.Event"
+ * @model superTypes="org.eclipse.fordiac.ide.model.monitoring.IEditPartCreator org.eclipse.fordiac.ide.model.libraryElement.Event"
  * @generated
  */
 public interface AdapterMonitoringEvent extends IEditPartCreator, Event {

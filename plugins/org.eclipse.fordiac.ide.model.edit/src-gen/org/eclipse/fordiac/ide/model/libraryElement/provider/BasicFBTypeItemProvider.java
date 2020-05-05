@@ -62,12 +62,10 @@ public class BasicFBTypeItemProvider extends BaseFBTypeItemProvider {
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an
-	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
-	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -82,13 +80,11 @@ public class BasicFBTypeItemProvider extends BaseFBTypeItemProvider {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to
-		// use for
+		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
@@ -105,23 +101,23 @@ public class BasicFBTypeItemProvider extends BaseFBTypeItemProvider {
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((BasicFBType) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_BasicFBType_type") : //$NON-NLS-1$
-				getString("_UI_BasicFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((BasicFBType)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_BasicFBType_type") : //$NON-NLS-1$
+			getString("_UI_BasicFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -129,33 +125,41 @@ public class BasicFBTypeItemProvider extends BaseFBTypeItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(BasicFBType.class)) {
-		case LibraryElementPackage.BASIC_FB_TYPE__ECC:
-		case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-			return;
-		}
-		super.notifyChanged(notification);
+			case LibraryElementPackage.BASIC_FB_TYPE__ECC:
+			case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASIC_FB_TYPE__ECC,
-				LibraryElementFactory.eINSTANCE.createECC()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASIC_FB_TYPE__ECC,
+				 LibraryElementFactory.eINSTANCE.createECC()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASIC_FB_TYPE__ALGORITHM,
-				LibraryElementFactory.eINSTANCE.createOtherAlgorithm()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASIC_FB_TYPE__ALGORITHM,
+				 LibraryElementFactory.eINSTANCE.createOtherAlgorithm()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASIC_FB_TYPE__ALGORITHM,
-				LibraryElementFactory.eINSTANCE.createSTAlgorithm()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASIC_FB_TYPE__ALGORITHM,
+				 LibraryElementFactory.eINSTANCE.createSTAlgorithm()));
 	}
 
 }

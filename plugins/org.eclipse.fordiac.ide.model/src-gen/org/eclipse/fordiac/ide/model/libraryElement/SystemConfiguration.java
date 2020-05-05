@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>System
@@ -32,7 +33,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface SystemConfiguration extends I4DIACElement {
+public interface SystemConfiguration extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Devices</b></em>' containment reference
 	 * list. The list contents are of type

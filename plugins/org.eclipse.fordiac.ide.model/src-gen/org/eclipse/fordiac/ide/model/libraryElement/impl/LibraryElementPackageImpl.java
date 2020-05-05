@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -62,7 +61,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
@@ -440,12 +438,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass i4DIACElementEClass = null;
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass segmentTypeEClass = null;
 
 	/**
@@ -453,12 +445,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass adapterFBTypeEClass = null;
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass annotationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2264,24 +2250,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EClass getI4DIACElement() {
-		return i4DIACElementEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getI4DIACElement_Annotations() {
-		return (EReference)i4DIACElementEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getSegmentType() {
 		return segmentTypeEClass;
 	}
@@ -2311,33 +2279,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EReference getAdapterFBType_AdapterType() {
 		return (EReference)adapterFBTypeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getAnnotation() {
-		return annotationEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getAnnotation_Name() {
-		return (EAttribute)annotationEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getAnnotation_Servity() {
-		return (EAttribute)annotationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -3023,18 +2964,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		resourceTypeFBEClass = createEClass(RESOURCE_TYPE_FB);
 
-		i4DIACElementEClass = createEClass(I4DIAC_ELEMENT);
-		createEReference(i4DIACElementEClass, I4DIAC_ELEMENT__ANNOTATIONS);
-
 		segmentTypeEClass = createEClass(SEGMENT_TYPE);
 		createEReference(segmentTypeEClass, SEGMENT_TYPE__VAR_DECLARATION);
 
 		adapterFBTypeEClass = createEClass(ADAPTER_FB_TYPE);
 		createEReference(adapterFBTypeEClass, ADAPTER_FB_TYPE__ADAPTER_TYPE);
-
-		annotationEClass = createEClass(ANNOTATION);
-		createEAttribute(annotationEClass, ANNOTATION__NAME);
-		createEAttribute(annotationEClass, ANNOTATION__SERVITY);
 
 		adapterEventEClass = createEClass(ADAPTER_EVENT);
 		createEReference(adapterEventEClass, ADAPTER_EVENT__ADAPTER_DECLARATION);
@@ -3181,13 +3115,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		adapterConnectionEClass.getESuperTypes().add(this.getConnection());
 		serviceInterfaceEClass.getESuperTypes().add(this.getINamedElement());
 		iInterfaceElementEClass.getESuperTypes().add(this.getINamedElement());
-		systemConfigurationEClass.getESuperTypes().add(this.getI4DIACElement());
-		iNamedElementEClass.getESuperTypes().add(this.getI4DIACElement());
 		resourceTypeFBEClass.getESuperTypes().add(this.getFB());
 		segmentTypeEClass.getESuperTypes().add(this.getCompilableType());
 		adapterFBTypeEClass.getESuperTypes().add(this.getFBType());
 		adapterEventEClass.getESuperTypes().add(this.getEvent());
-		serviceEClass.getESuperTypes().add(this.getI4DIACElement());
 		typedConfigureableObjectEClass.getESuperTypes().add(this.getConfigurableObject());
 		adapterFBEClass.getESuperTypes().add(this.getFB());
 		attributeDeclarationEClass.getESuperTypes().add(this.getINamedElement());
@@ -3599,24 +3530,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(resourceTypeFBEClass, ecorePackage.getEBoolean(), "isResourceTypeFB", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(i4DIACElementEClass, I4DIACElement.class, "I4DIACElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getI4DIACElement_Annotations(), this.getAnnotation(), null, "annotations", null, 0, -1, I4DIACElement.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-
-		op = addEOperation(i4DIACElementEClass, this.getAnnotation(), "createAnnotation", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, theXMLTypePackage.getString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		op = addEOperation(i4DIACElementEClass, null, "removeAnnotation", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getAnnotation(), "annotation", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
 		initEClass(segmentTypeEClass, SegmentType.class, "SegmentType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSegmentType_VarDeclaration(), this.getVarDeclaration(), null, "varDeclaration", null, 0, -1, SegmentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(adapterFBTypeEClass, AdapterFBType.class, "AdapterFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getAdapterFBType_AdapterType(), this.getAdapterType(), null, "adapterType", null, 0, 1, AdapterFBType.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-
-		initEClass(annotationEClass, Annotation.class, "Annotation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getAnnotation_Name(), theXMLTypePackage.getString(), "name", null, 0, 1, Annotation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getAnnotation_Servity(), theXMLTypePackage.getInt(), "servity", null, 0, 1, Annotation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(adapterEventEClass, AdapterEvent.class, "AdapterEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getAdapterEvent_AdapterDeclaration(), this.getAdapterDeclaration(), null, "adapterDeclaration", null, 1, 1, AdapterEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

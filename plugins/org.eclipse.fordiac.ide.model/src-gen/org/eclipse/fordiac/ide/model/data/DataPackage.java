@@ -74,15 +74,6 @@ public interface DataPackage extends EPackage {
 	int DATA_TYPE = 2;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int DATA_TYPE__ANNOTATIONS = LibraryElementPackage.LIBRARY_ELEMENT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -142,15 +133,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 */
 	int ANY_DERIVED_TYPE = 0;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ANY_DERIVED_TYPE__ANNOTATIONS = DATA_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -219,15 +201,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 */
 	int ARRAY_TYPE = 1;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ARRAY_TYPE__ANNOTATIONS = ANY_DERIVED_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -325,15 +298,6 @@ public interface DataPackage extends EPackage {
 	int VALUE_TYPE = 9;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE_TYPE__ANNOTATIONS = DATA_TYPE__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -393,15 +357,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 */
 	int DERIVED_TYPE = 11;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int DERIVED_TYPE__ANNOTATIONS = VALUE_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -475,15 +430,6 @@ public interface DataPackage extends EPackage {
 	int DIRECTLY_DERIVED_TYPE = 3;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int DIRECTLY_DERIVED_TYPE__ANNOTATIONS = DERIVED_TYPE__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -554,15 +500,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 */
 	int ENUMERATED_TYPE = 4;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ENUMERATED_TYPE__ANNOTATIONS = VALUE_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -672,15 +609,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 */
 	int STRUCTURED_TYPE = 6;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int STRUCTURED_TYPE__ANNOTATIONS = ANY_DERIVED_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -796,15 +724,6 @@ public interface DataPackage extends EPackage {
 	int SUBRANGE_TYPE = 8;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int SUBRANGE_TYPE__ANNOTATIONS = DERIVED_TYPE__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -887,15 +806,6 @@ public interface DataPackage extends EPackage {
 	int ELEMENTARY_TYPE = 10;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ELEMENTARY_TYPE__ANNOTATIONS = VALUE_TYPE__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -954,15 +864,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 */
 	int EVENT_TYPE = 12;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT_TYPE__ANNOTATIONS = DATA_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.

@@ -1190,15 +1190,6 @@ public interface StructuredTextPackage extends EPackage
   int LOCAL_VARIABLE = 30;
 
   /**
-   * The feature id for the '<em><b>Annotations</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int LOCAL_VARIABLE__ANNOTATIONS = LibraryElementPackage.LOCAL_VARIABLE__ANNOTATIONS;
-
-  /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

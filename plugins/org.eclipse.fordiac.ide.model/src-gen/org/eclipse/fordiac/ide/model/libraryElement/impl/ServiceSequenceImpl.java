@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -42,7 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
  *
  * @generated
  */
-public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSequence {
+public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->

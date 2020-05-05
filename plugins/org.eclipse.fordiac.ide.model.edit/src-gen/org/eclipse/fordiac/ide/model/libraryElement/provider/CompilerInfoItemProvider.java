@@ -185,8 +185,10 @@ public class CompilerInfoItemProvider extends ItemProviderAdapter implements IEd
 			case LibraryElementPackage.COMPILER_INFO__COMPILER:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

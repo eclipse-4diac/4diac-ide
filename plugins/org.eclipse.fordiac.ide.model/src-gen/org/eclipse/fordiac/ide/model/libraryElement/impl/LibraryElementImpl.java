@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
@@ -47,7 +48,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  *
  * @generated
  */
-public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElement {
+public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->

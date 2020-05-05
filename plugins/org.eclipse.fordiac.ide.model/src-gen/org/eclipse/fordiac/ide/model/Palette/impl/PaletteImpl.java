@@ -347,8 +347,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 				return ((InternalEList<?>)getSegmentTypes()).basicRemove(otherEnd, msgs);
 			case PalettePackage.PALETTE__SUB_APP_TYPES:
 				return ((InternalEList<?>)getSubAppTypes()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -378,8 +379,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 			case PalettePackage.PALETTE__SUB_APP_TYPES:
 				if (coreType) return getSubAppTypes();
 				else return getSubAppTypes().map();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -410,8 +412,10 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 			case PalettePackage.PALETTE__SUB_APP_TYPES:
 				((EStructuralFeature.Setting)getSubAppTypes()).set(newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -442,8 +446,10 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 			case PalettePackage.PALETTE__SUB_APP_TYPES:
 				getSubAppTypes().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -467,8 +473,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 				return segmentTypes != null && !segmentTypes.isEmpty();
 			case PalettePackage.PALETTE__SUB_APP_TYPES:
 				return subAppTypes != null && !subAppTypes.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

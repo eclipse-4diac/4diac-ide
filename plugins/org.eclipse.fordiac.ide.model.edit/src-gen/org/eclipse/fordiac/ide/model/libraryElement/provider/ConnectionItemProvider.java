@@ -253,8 +253,10 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

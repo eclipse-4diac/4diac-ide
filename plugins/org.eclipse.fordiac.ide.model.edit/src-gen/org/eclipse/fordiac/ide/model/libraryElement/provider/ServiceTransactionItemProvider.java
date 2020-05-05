@@ -140,8 +140,10 @@ public class ServiceTransactionItemProvider extends ItemProviderAdapter implemen
 			case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

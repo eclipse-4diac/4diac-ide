@@ -23,16 +23,11 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isForce
- * <em>Force</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getForceValue
- * <em>Force Value</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getCurrentValue
- * <em>Current Value</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getSec
- * <em>Sec</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getUsec
- * <em>Usec</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isForce <em>Force</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getForceValue <em>Force Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getCurrentValue <em>Current Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getSec <em>Sec</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getUsec <em>Usec</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getMonitoringElement()
@@ -41,14 +36,14 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
  */
 public interface MonitoringElement extends MonitoringBaseElement {
 	/**
-	 * Returns the value of the '<em><b>Force</b></em>' attribute. The default value
-	 * is <code>"false"</code>. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Force</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Force</em>' attribute isn't clear, there really
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Force</em>' attribute.
 	 * @see #setForce(boolean)
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getMonitoringElement_Force()
@@ -58,10 +53,8 @@ public interface MonitoringElement extends MonitoringBaseElement {
 	boolean isForce();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isForce
-	 * <em>Force</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isForce <em>Force</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Force</em>' attribute.
 	 * @see #isForce()
 	 * @generated
@@ -127,14 +120,14 @@ public interface MonitoringElement extends MonitoringBaseElement {
 	void setCurrentValue(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Sec</b></em>' attribute. <!-- begin-user-doc
+	 * Returns the value of the '<em><b>Sec</b></em>' attribute.
+	 * <!-- begin-user-doc
 	 * -->
 	 * <p>
 	 * If the meaning of the '<em>Sec</em>' attribute isn't clear, there really
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Sec</em>' attribute.
 	 * @see #setSec(long)
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getMonitoringElement_Sec()
@@ -144,10 +137,8 @@ public interface MonitoringElement extends MonitoringBaseElement {
 	long getSec();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getSec
-	 * <em>Sec</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getSec <em>Sec</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Sec</em>' attribute.
 	 * @see #getSec()
 	 * @generated
@@ -172,10 +163,8 @@ public interface MonitoringElement extends MonitoringBaseElement {
 	long getUsec();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getUsec
-	 * <em>Usec</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getUsec <em>Usec</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Usec</em>' attribute.
 	 * @see #getUsec()
 	 * @generated
@@ -184,7 +173,6 @@ public interface MonitoringElement extends MonitoringBaseElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model valueDataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */

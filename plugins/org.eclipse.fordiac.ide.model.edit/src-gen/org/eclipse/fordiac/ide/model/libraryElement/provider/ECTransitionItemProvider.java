@@ -231,8 +231,10 @@ public class ECTransitionItemProvider extends PositionableElementItemProvider {
 			case LibraryElementPackage.EC_TRANSITION__CONDITION_EXPRESSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

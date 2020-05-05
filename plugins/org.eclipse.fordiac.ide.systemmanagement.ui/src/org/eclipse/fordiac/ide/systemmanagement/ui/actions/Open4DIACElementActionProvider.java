@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.actions;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.util.IOpenListener;
 import org.eclipse.fordiac.ide.util.OpenListenerManager;
@@ -83,7 +83,7 @@ public class Open4DIACElementActionProvider extends CommonActionProvider {
 		}
 
 		Object obj = ss.getFirstElement();
-		List<IOpenListener> listeners = OpenListenerManager.INSTANCE.getOpenListener((I4DIACElement) obj);
+		List<IOpenListener> listeners = OpenListenerManager.INSTANCE.getOpenListener((EObject) obj);
 
 		if (!listeners.isEmpty()) {
 			// Create a menu flyout.

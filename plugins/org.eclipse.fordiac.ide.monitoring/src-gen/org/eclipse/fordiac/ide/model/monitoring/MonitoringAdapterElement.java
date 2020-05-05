@@ -25,10 +25,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getElements
- * <em>Elements</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getMonitoredAdapterFB
- * <em>Monitored Adapter FB</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getElements <em>Elements</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getMonitoredAdapterFB <em>Monitored Adapter FB</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getMonitoringAdapterElement()
@@ -63,7 +61,6 @@ public interface MonitoringAdapterElement extends MonitoringBaseElement {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Monitored Adapter FB</em>' reference.
 	 * @see #setMonitoredAdapterFB(AdapterFB)
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getMonitoringAdapterElement_MonitoredAdapterFB()
@@ -73,11 +70,9 @@ public interface MonitoringAdapterElement extends MonitoringBaseElement {
 	AdapterFB getMonitoredAdapterFB();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getMonitoredAdapterFB
-	 * <em>Monitored Adapter FB</em>}' reference. <!-- begin-user-doc --> <!--
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getMonitoredAdapterFB <em>Monitored Adapter FB</em>}' reference.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @param value the new value of the '<em>Monitored Adapter FB</em>' reference.
 	 * @see #getMonitoredAdapterFB()
 	 * @generated

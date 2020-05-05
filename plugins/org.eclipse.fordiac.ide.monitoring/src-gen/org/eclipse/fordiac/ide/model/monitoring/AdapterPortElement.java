@@ -24,8 +24,7 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement#getPorts
- * <em>Ports</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement#getPorts <em>Ports</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getAdapterPortElement()

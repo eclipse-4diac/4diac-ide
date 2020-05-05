@@ -175,8 +175,9 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 		switch (featureID) {
 			case DataPackage.ARRAY_TYPE__SUBRANGES:
 				return ((InternalEList<?>)getSubranges()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -193,8 +194,9 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 			case DataPackage.ARRAY_TYPE__BASE_TYPE:
 				if (resolve) return getBaseType();
 				return basicGetBaseType();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -215,8 +217,10 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 			case DataPackage.ARRAY_TYPE__BASE_TYPE:
 				setBaseType((DataType)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -235,8 +239,10 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 			case DataPackage.ARRAY_TYPE__BASE_TYPE:
 				setBaseType((DataType)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -252,8 +258,9 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 				return INITIAL_VALUES_EDEFAULT == null ? initialValues != null : !INITIAL_VALUES_EDEFAULT.equals(initialValues);
 			case DataPackage.ARRAY_TYPE__BASE_TYPE:
 				return baseType != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

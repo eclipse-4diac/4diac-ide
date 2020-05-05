@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -42,7 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
  *
  * @generated
  */
-public class ServiceImpl extends I4DIACElementImpl implements Service {
+public class ServiceImpl extends EObjectImpl implements Service {
 	/**
 	 * The cached value of the '{@link #getRightInterface() <em>Right Interface</em>}' containment reference.
 	 * <!-- begin-user-doc --> <!--

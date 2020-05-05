@@ -129,8 +129,10 @@ public class ResourceTypeNameItemProvider extends ItemProviderAdapter implements
 			case LibraryElementPackage.RESOURCE_TYPE_NAME__NAME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

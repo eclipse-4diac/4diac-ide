@@ -171,8 +171,10 @@ public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
 			case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**
@@ -195,6 +197,11 @@ public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.IVAR_ELEMENT__VAR_DECLARATIONS,
 				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.IVAR_ELEMENT__VAR_DECLARATIONS,
+				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
 
 		newChildDescriptors.add
 			(createChildParameter

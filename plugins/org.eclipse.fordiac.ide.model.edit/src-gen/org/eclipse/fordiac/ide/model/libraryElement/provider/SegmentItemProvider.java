@@ -224,8 +224,10 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 			case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**
@@ -253,6 +255,11 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.SEGMENT__VAR_DECLARATIONS,
 				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SEGMENT__VAR_DECLARATIONS,
+				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
 	}
 
 }

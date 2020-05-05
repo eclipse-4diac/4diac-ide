@@ -249,8 +249,10 @@ public class IdentificationItemProvider extends ItemProviderAdapter implements I
 			case LibraryElementPackage.IDENTIFICATION__TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

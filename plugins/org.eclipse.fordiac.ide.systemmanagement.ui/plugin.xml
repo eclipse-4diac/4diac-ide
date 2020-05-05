@@ -523,7 +523,7 @@
             id="org.eclipse.fordiac.ide.systemmanagement.OpenActionProvider">
             <enablement>
             <or>
-               <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement"> </instanceof>               
+               <instanceof value="org.eclipse.emf.ecore.EObject"> </instanceof>               
             </or>
          </enablement>
       </actionProvider>

@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -51,7 +50,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -555,18 +553,6 @@ public final class Annotations {
 	// *** ResourceTypeFB ***//
 	public static boolean isResourceTypeFB() {
 		return true;
-	}
-
-	// *** I4DIACElement ***//
-	public static Annotation createAnnotation(I4DIACElement i4e, String name) {
-		Annotation annotation = LibraryElementFactory.eINSTANCE.createAnnotation();
-		annotation.setName(name);
-		i4e.getAnnotations().add(annotation);
-		return annotation;
-	}
-
-	public static void removeAnnotation(I4DIACElement i4e, Annotation a) {
-		i4e.getAnnotations().remove(a);
 	}
 
 	// *** TypedConfigureableObject ***//

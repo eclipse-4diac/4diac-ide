@@ -159,8 +159,10 @@ public class ECCItemProvider extends ItemProviderAdapter implements IEditingDoma
 			case LibraryElementPackage.ECC__EC_TRANSITION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

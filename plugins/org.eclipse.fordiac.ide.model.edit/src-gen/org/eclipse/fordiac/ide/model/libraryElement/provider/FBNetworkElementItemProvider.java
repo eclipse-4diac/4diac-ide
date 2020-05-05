@@ -168,8 +168,10 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

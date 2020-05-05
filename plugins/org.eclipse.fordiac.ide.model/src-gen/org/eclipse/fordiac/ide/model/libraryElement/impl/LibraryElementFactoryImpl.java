@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -185,7 +184,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.RESOURCE_TYPE_FB: return createResourceTypeFB();
 			case LibraryElementPackage.SEGMENT_TYPE: return createSegmentType();
 			case LibraryElementPackage.ADAPTER_FB_TYPE: return createAdapterFBType();
-			case LibraryElementPackage.ANNOTATION: return createAnnotation();
 			case LibraryElementPackage.ADAPTER_EVENT: return createAdapterEvent();
 			case LibraryElementPackage.SERVICE: return createService();
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT: return createTypedConfigureableObject();
@@ -749,16 +747,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public AdapterFBType createAdapterFBType() {
 		AdapterFBTypeImpl adapterFBType = new AdapterFBTypeImpl();
 		return adapterFBType;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Annotation createAnnotation() {
-		AnnotationImpl annotation = new AnnotationImpl();
-		return annotation;
 	}
 
 	/**

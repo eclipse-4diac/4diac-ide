@@ -140,8 +140,9 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 				return getLowerLimit();
 			case DataPackage.SUBRANGE__UPPER_LIMIT:
 				return getUpperLimit();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -157,8 +158,10 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 			case DataPackage.SUBRANGE__UPPER_LIMIT:
 				setUpperLimit((Integer)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -174,8 +177,10 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 			case DataPackage.SUBRANGE__UPPER_LIMIT:
 				setUpperLimit(UPPER_LIMIT_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -189,8 +194,9 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 				return lowerLimit != LOWER_LIMIT_EDEFAULT;
 			case DataPackage.SUBRANGE__UPPER_LIMIT:
 				return upperLimit != UPPER_LIMIT_EDEFAULT;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

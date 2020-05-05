@@ -537,25 +537,11 @@
       <genOperations ecoreOperation="lib.ecore#//ResourceTypeFB/isResourceTypeFB"
           body="return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB();"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="lib.ecore#//I4DIACElement">
-      <genFeatures property="None" notify="false" createChild="false" propertySortChoices="true"
-          ecoreFeature="ecore:EReference lib.ecore#//I4DIACElement/annotations"/>
-      <genOperations ecoreOperation="lib.ecore#//I4DIACElement/createAnnotation" body="return org.eclipse.fordiac.ide.model.Annotations.createAnnotation(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//I4DIACElement/createAnnotation/name"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//I4DIACElement/removeAnnotation" body="org.eclipse.fordiac.ide.model.Annotations.removeAnnotation(this, annotation);">
-        <genParameters ecoreParameter="lib.ecore#//I4DIACElement/removeAnnotation/annotation"/>
-      </genOperations>
-    </genClasses>
     <genClasses ecoreClass="lib.ecore#//SegmentType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SegmentType/varDeclaration"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterFBType">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterFBType/adapterType"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Annotation">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Annotation/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Annotation/servity"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterEvent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterEvent/adapterDeclaration"/>

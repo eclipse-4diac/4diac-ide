@@ -198,8 +198,10 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

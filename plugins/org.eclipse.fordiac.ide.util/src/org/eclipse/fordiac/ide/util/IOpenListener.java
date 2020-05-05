@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 Profactor GbmH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,20 +13,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.util;
 
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IObjectActionDelegate;
 
 /**
  * The Interface OpenListener.
- * 
+ *
  * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
  */
 public interface IOpenListener extends IObjectActionDelegate {
 	/**
 	 * Gets the open listener action.
-	 * 
+	 *
 	 * @return the open listener action
 	 */
 	Action getOpenListenerAction();
@@ -41,7 +41,7 @@ public interface IOpenListener extends IObjectActionDelegate {
 	/**
 	 * Get the class this open listner handles
 	 */
-	Class<? extends I4DIACElement> getHandledClass();
+	Class<? extends EObject> getHandledClass();
 
 	/**
 	 * Get the id of the open listener as it is registered in the plugin's extension

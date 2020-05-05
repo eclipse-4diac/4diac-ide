@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 
@@ -32,7 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
  *
  * @generated
  */
-public class ServiceInterfaceImpl extends I4DIACElementImpl implements ServiceInterface {
+public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterface {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->

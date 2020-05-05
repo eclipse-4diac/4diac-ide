@@ -132,8 +132,10 @@ public class OutputPrimitiveItemProvider extends PrimitiveItemProvider {
 			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

@@ -8,7 +8,6 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -330,7 +329,6 @@ public class StructuredTextSwitch<T> extends Switch<T>
         if (result == null) result = caseVarDeclaration(localVariable);
         if (result == null) result = caseIInterfaceElement(localVariable);
         if (result == null) result = caseINamedElement(localVariable);
-        if (result == null) result = caseI4DIACElement(localVariable);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -1024,22 +1022,6 @@ public class StructuredTextSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseAdapterVariable(AdapterVariable object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>I4DIAC Element</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>I4DIAC Element</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseI4DIACElement(I4DIACElement object)
   {
     return null;
   }

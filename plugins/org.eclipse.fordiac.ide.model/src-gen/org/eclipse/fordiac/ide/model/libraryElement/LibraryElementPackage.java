@@ -95,51 +95,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_DECLARATION = 0;
 
 	/**
-	 * The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.I4DIACElementImpl
-	 * <em>I4DIAC Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 * 
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.I4DIACElementImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getI4DIACElement()
-	 * @generated
-	 */
-	int I4DIAC_ELEMENT = 55;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int I4DIAC_ELEMENT__ANNOTATIONS = 0;
-
-	/**
-	 * The number of structural features of the '<em>I4DIAC Element</em>' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int I4DIAC_ELEMENT_FEATURE_COUNT = 1;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int INAMED_ELEMENT__ANNOTATIONS = I4DIAC_ELEMENT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INAMED_ELEMENT__NAME = I4DIAC_ELEMENT_FEATURE_COUNT + 0;
+	int INAMED_ELEMENT__NAME = 0;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
@@ -148,7 +110,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INAMED_ELEMENT__COMMENT = I4DIAC_ELEMENT_FEATURE_COUNT + 1;
+	int INAMED_ELEMENT__COMMENT = 1;
 
 	/**
 	 * The number of structural features of the '<em>INamed Element</em>' class.
@@ -156,7 +118,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INAMED_ELEMENT_FEATURE_COUNT = I4DIAC_ELEMENT_FEATURE_COUNT + 2;
+	int INAMED_ELEMENT_FEATURE_COUNT = 2;
 
 	/**
 	 * The meta object id for the
@@ -317,15 +279,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	int IINTERFACE_ELEMENT = 50;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int IINTERFACE_ELEMENT__ANNOTATIONS = INAMED_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -634,15 +587,6 @@ public interface LibraryElementPackage extends EPackage {
 	int VAR_DECLARATION = 38;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__ANNOTATIONS = IINTERFACE_ELEMENT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -737,15 +681,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int VAR_DECLARATION_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_DECLARATION__ANNOTATIONS = VAR_DECLARATION__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -862,15 +797,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_DECLARATION_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int LIBRARY_ELEMENT__ANNOTATIONS = INAMED_ELEMENT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -920,15 +846,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int LIBRARY_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_TYPE__ANNOTATIONS = DataPackage.DATA_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -992,15 +909,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_TYPE_FEATURE_COUNT = DataPackage.DATA_TYPE_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ALGORITHM__ANNOTATIONS = INAMED_ELEMENT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -1026,15 +934,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ALGORITHM_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int CONFIGURABLE_OBJECT__ANNOTATIONS = INAMED_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1069,15 +968,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONFIGURABLE_OBJECT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int APPLICATION__ANNOTATIONS = CONFIGURABLE_OBJECT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1121,15 +1011,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int APPLICATION_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int COMPILABLE_TYPE__ANNOTATIONS = LIBRARY_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1189,15 +1070,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPILABLE_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int FB_TYPE__ANNOTATIONS = COMPILABLE_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1283,16 +1155,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBaseFBType()
 	 * @generated
 	 */
-	int BASE_FB_TYPE = 71;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FB_TYPE__ANNOTATIONS = FB_TYPE__ANNOTATIONS;
+	int BASE_FB_TYPE = 69;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1378,15 +1241,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int BASE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int BASIC_FB_TYPE__ANNOTATIONS = BASE_FB_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1571,15 +1425,6 @@ public interface LibraryElementPackage extends EPackage {
 	int COMPILER_FEATURE_COUNT = 4;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int CONNECTION__ANNOTATIONS = CONFIGURABLE_OBJECT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -1685,16 +1530,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedConfigureableObject()
 	 * @generated
 	 */
-	int TYPED_CONFIGUREABLE_OBJECT = 61;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int TYPED_CONFIGUREABLE_OBJECT__ANNOTATIONS = CONFIGURABLE_OBJECT__ANNOTATIONS;
+	int TYPED_CONFIGUREABLE_OBJECT = 59;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1738,15 +1574,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int DEVICE__ANNOTATIONS = TYPED_CONFIGUREABLE_OBJECT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1852,15 +1679,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int DEVICE_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 7;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int DEVICE_TYPE__ANNOTATIONS = COMPILABLE_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2050,15 +1868,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ECC_FEATURE_COUNT = 4;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int EC_STATE__ANNOTATIONS = INAMED_ELEMENT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -2145,7 +1954,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPrimitive()
 	 * @generated
 	 */
-	int PRIMITIVE = 63;
+	int PRIMITIVE = 61;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl <em>Version Info</em>}' class.
@@ -2249,7 +2058,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegmentType()
 	 * @generated
 	 */
-	int SEGMENT_TYPE = 56;
+	int SEGMENT_TYPE = 55;
 
 	/**
 	 * The meta object id for the
@@ -2261,16 +2070,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterFBType()
 	 * @generated
 	 */
-	int ADAPTER_FB_TYPE = 57;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AnnotationImpl <em>Annotation</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AnnotationImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAnnotation()
-	 * @generated
-	 */
-	int ANNOTATION = 58;
+	int ADAPTER_FB_TYPE = 56;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl <em>Adapter Event</em>}' class.
@@ -2279,7 +2079,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterEvent()
 	 * @generated
 	 */
-	int ADAPTER_EVENT = 59;
+	int ADAPTER_EVENT = 57;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl <em>Service</em>}' class.
@@ -2288,7 +2088,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getService()
 	 * @generated
 	 */
-	int SERVICE = 60;
+	int SERVICE = 58;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl <em>Adapter FB</em>}' class.
@@ -2297,7 +2097,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterFB()
 	 * @generated
 	 */
-	int ADAPTER_FB = 62;
+	int ADAPTER_FB = 60;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl <em>Positionable Element</em>}' class.
@@ -2307,7 +2107,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPositionableElement()
 	 * @generated
 	 */
-	int POSITIONABLE_ELEMENT = 64;
+	int POSITIONABLE_ELEMENT = 62;
 
 	/**
 	 * The feature id for the '<em><b>X</b></em>' attribute.
@@ -2417,15 +2217,6 @@ public interface LibraryElementPackage extends EPackage {
 	int EC_TRANSITION_FEATURE_COUNT = POSITIONABLE_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT__ANNOTATIONS = IINTERFACE_ELEMENT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -2514,15 +2305,6 @@ public interface LibraryElementPackage extends EPackage {
 	int FB_NETWORK_ELEMENT = 16;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int FB_NETWORK_ELEMENT__ANNOTATIONS = TYPED_CONFIGUREABLE_OBJECT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -2599,15 +2381,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB_NETWORK_ELEMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int FB__ANNOTATIONS = FB_NETWORK_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2687,15 +2460,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int SUB_APP__ANNOTATIONS = FB_NETWORK_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2974,15 +2738,6 @@ public interface LibraryElementPackage extends EPackage {
 	int INTERFACE_LIST_FEATURE_COUNT = 6;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int LINK__ANNOTATIONS = CONFIGURABLE_OBJECT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -3063,15 +2818,6 @@ public interface LibraryElementPackage extends EPackage {
 	int MAPPING_FEATURE_COUNT = 2;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int TEXT_ALGORITHM__ANNOTATIONS = ALGORITHM__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -3105,15 +2851,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int TEXT_ALGORITHM_FEATURE_COUNT = ALGORITHM_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int OTHER_ALGORITHM__ANNOTATIONS = TEXT_ALGORITHM__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3222,7 +2959,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getColor()
 	 * @generated
 	 */
-	int COLOR = 65;
+	int COLOR = 63;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl <em>Colorizable Element</em>}' class.
@@ -3232,7 +2969,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getColorizableElement()
 	 * @generated
 	 */
-	int COLORIZABLE_ELEMENT = 66;
+	int COLORIZABLE_ELEMENT = 64;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar Element</em>}' class.
@@ -3241,7 +2978,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIVarElement()
 	 * @generated
 	 */
-	int IVAR_ELEMENT = 67;
+	int IVAR_ELEMENT = 65;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl <em>Attribute Declaration</em>}' class.
@@ -3251,7 +2988,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAttributeDeclaration()
 	 * @generated
 	 */
-	int ATTRIBUTE_DECLARATION = 68;
+	int ATTRIBUTE_DECLARATION = 66;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl <em>Attribute</em>}' class.
@@ -3261,15 +2998,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	int ATTRIBUTE = 26;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ATTRIBUTE__ANNOTATIONS = INAMED_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3323,15 +3051,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ATTRIBUTE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int RESOURCE__ANNOTATIONS = TYPED_CONFIGUREABLE_OBJECT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3447,15 +3166,6 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE_NAME_FEATURE_COUNT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int RESOURCE_TYPE__ANNOTATIONS = COMPILABLE_TYPE__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -3539,15 +3249,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int RESOURCE_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int SEGMENT__ANNOTATIONS = TYPED_CONFIGUREABLE_OBJECT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3647,15 +3348,6 @@ public interface LibraryElementPackage extends EPackage {
 	int SEGMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_SEQUENCE__ANNOTATIONS = INAMED_ELEMENT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -3730,15 +3422,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SERVICE_TRANSACTION_FEATURE_COUNT = 3;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_INTERFACE_FB_TYPE__ANNOTATIONS = FB_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3817,15 +3500,6 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_INTERFACE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ST_ALGORITHM__ANNOTATIONS = TEXT_ALGORITHM__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -3901,15 +3575,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB_NETWORK_FEATURE_COUNT = 4;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int COMPOSITE_FB_TYPE__ANNOTATIONS = FB_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3996,15 +3661,6 @@ public interface LibraryElementPackage extends EPackage {
 	int COMPOSITE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int SUB_APP_TYPE__ANNOTATIONS = COMPOSITE_FB_TYPE__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -4088,15 +3744,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SUB_APP_TYPE_FEATURE_COUNT = COMPOSITE_FB_TYPE_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int AUTOMATION_SYSTEM__ANNOTATIONS = LIBRARY_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4264,15 +3911,6 @@ public interface LibraryElementPackage extends EPackage {
 	int WITH_FEATURE_COUNT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int DATA_CONNECTION__ANNOTATIONS = CONNECTION__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -4368,15 +4006,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int DATA_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT_CONNECTION__ANNOTATIONS = CONNECTION__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4476,15 +4105,6 @@ public interface LibraryElementPackage extends EPackage {
 	int EVENT_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_CONNECTION__ANNOTATIONS = CONNECTION__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -4582,15 +4202,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_INTERFACE__ANNOTATIONS = INAMED_ELEMENT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -4635,21 +4246,12 @@ public interface LibraryElementPackage extends EPackage {
 	int VALUE_FEATURE_COUNT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int SYSTEM_CONFIGURATION__ANNOTATIONS = I4DIAC_ELEMENT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Devices</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SYSTEM_CONFIGURATION__DEVICES = I4DIAC_ELEMENT_FEATURE_COUNT + 0;
+	int SYSTEM_CONFIGURATION__DEVICES = 0;
 
 	/**
 	 * The feature id for the '<em><b>Segments</b></em>' containment reference list.
@@ -4657,7 +4259,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SYSTEM_CONFIGURATION__SEGMENTS = I4DIAC_ELEMENT_FEATURE_COUNT + 1;
+	int SYSTEM_CONFIGURATION__SEGMENTS = 1;
 
 	/**
 	 * The feature id for the '<em><b>Links</b></em>' containment reference list.
@@ -4665,7 +4267,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SYSTEM_CONFIGURATION__LINKS = I4DIAC_ELEMENT_FEATURE_COUNT + 2;
+	int SYSTEM_CONFIGURATION__LINKS = 2;
 
 	/**
 	 * The number of structural features of the '<em>System Configuration</em>' class.
@@ -4673,16 +4275,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SYSTEM_CONFIGURATION_FEATURE_COUNT = I4DIAC_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int RESOURCE_TYPE_FB__ANNOTATIONS = FB__ANNOTATIONS;
+	int SYSTEM_CONFIGURATION_FEATURE_COUNT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4763,15 +4356,6 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE_FB_FEATURE_COUNT = FB_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int SEGMENT_TYPE__ANNOTATIONS = COMPILABLE_TYPE__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -4838,15 +4422,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SEGMENT_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_FB_TYPE__ANNOTATIONS = FB_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4940,42 +4515,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANNOTATION__NAME = 0;
-
-	/**
-	 * The feature id for the '<em><b>Servity</b></em>' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ANNOTATION__SERVITY = 1;
-
-	/**
-	 * The number of structural features of the '<em>Annotation</em>' class. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ANNOTATION_FEATURE_COUNT = 2;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_EVENT__ANNOTATIONS = EVENT__ANNOTATIONS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
 	int ADAPTER_EVENT__NAME = EVENT__NAME;
 
 	/**
@@ -5057,21 +4596,12 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__ANNOTATIONS = I4DIAC_ELEMENT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Right Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE__RIGHT_INTERFACE = I4DIAC_ELEMENT_FEATURE_COUNT + 0;
+	int SERVICE__RIGHT_INTERFACE = 0;
 
 	/**
 	 * The feature id for the '<em><b>Left Interface</b></em>' containment reference.
@@ -5079,7 +4609,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE__LEFT_INTERFACE = I4DIAC_ELEMENT_FEATURE_COUNT + 1;
+	int SERVICE__LEFT_INTERFACE = 1;
 
 	/**
 	 * The feature id for the '<em><b>Service Sequence</b></em>' containment reference list.
@@ -5087,7 +4617,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE__SERVICE_SEQUENCE = I4DIAC_ELEMENT_FEATURE_COUNT + 2;
+	int SERVICE__SERVICE_SEQUENCE = 2;
 
 	/**
 	 * The number of structural features of the '<em>Service</em>' class. <!--
@@ -5096,16 +4626,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE_FEATURE_COUNT = I4DIAC_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_FB__ANNOTATIONS = FB__ANNOTATIONS;
+	int SERVICE_FEATURE_COUNT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5266,15 +4787,6 @@ public interface LibraryElementPackage extends EPackage {
 	int IVAR_ELEMENT_FEATURE_COUNT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ATTRIBUTE_DECLARATION__ANNOTATIONS = INAMED_ELEMENT__ANNOTATIONS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -5325,7 +4837,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedElement()
 	 * @generated
 	 */
-	int TYPED_ELEMENT = 69;
+	int TYPED_ELEMENT = 67;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -5355,16 +4867,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSimpleFBType()
 	 * @generated
 	 */
-	int SIMPLE_FB_TYPE = 70;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_FB_TYPE__ANNOTATIONS = BASE_FB_TYPE__ANNOTATIONS;
+	int SIMPLE_FB_TYPE = 68;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5466,16 +4969,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStructManipulator()
 	 * @generated
 	 */
-	int STRUCT_MANIPULATOR = 72;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int STRUCT_MANIPULATOR__ANNOTATIONS = FB__ANNOTATIONS;
+	int STRUCT_MANIPULATOR = 70;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5575,16 +5069,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDemultiplexer()
 	 * @generated
 	 */
-	int DEMULTIPLEXER = 73;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEMULTIPLEXER__ANNOTATIONS = STRUCT_MANIPULATOR__ANNOTATIONS;
+	int DEMULTIPLEXER = 71;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5684,16 +5169,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMultiplexer()
 	 * @generated
 	 */
-	int MULTIPLEXER = 74;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULTIPLEXER__ANNOTATIONS = STRUCT_MANIPULATOR__ANNOTATIONS;
+	int MULTIPLEXER = 72;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5793,16 +5269,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLocalVariable()
 	 * @generated
 	 */
-	int LOCAL_VARIABLE = 75;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__ANNOTATIONS = VAR_DECLARATION__ANNOTATIONS;
+	int LOCAL_VARIABLE = 73;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5928,7 +5395,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 76;
+	int LANGUAGE = 74;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
@@ -5938,7 +5405,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 77;
+	int IPROJECT = 75;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -5948,7 +5415,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 78;
+	int IFILE = 76;
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration <em>Adapter Declaration</em>}'.
@@ -7689,25 +7156,6 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getResourceTypeFB();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement <em>I4DIAC Element</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for class '<em>I4DIAC Element</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement
-	 * @generated
-	 */
-	EClass getI4DIACElement();
-
-	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement#getAnnotations <em>Annotations</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Annotations</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement#getAnnotations()
-	 * @see #getI4DIACElement()
-	 * @generated
-	 */
-	EReference getI4DIACElement_Annotations();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.SegmentType <em>Segment Type</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Segment Type</em>'.
@@ -7744,35 +7192,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getAdapterFBType_AdapterType();
-
-	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Annotation <em>Annotation</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Annotation</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.Annotation
-	 * @generated
-	 */
-	EClass getAnnotation();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Annotation#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.Annotation#getName()
-	 * @see #getAnnotation()
-	 * @generated
-	 */
-	EAttribute getAnnotation_Name();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Annotation#getServity <em>Servity</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Servity</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.Annotation#getServity()
-	 * @see #getAnnotation()
-	 * @generated
-	 */
-	EAttribute getAnnotation_Servity();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent <em>Adapter Event</em>}'.
@@ -9686,25 +9105,6 @@ public interface LibraryElementPackage extends EPackage {
 		EClass RESOURCE_TYPE_FB = eINSTANCE.getResourceTypeFB();
 
 		/**
-		 * The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.I4DIACElementImpl
-		 * <em>I4DIAC Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
-		 * -->
-		 * 
-		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.I4DIACElementImpl
-		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getI4DIACElement()
-		 * @generated
-		 */
-		EClass I4DIAC_ELEMENT = eINSTANCE.getI4DIACElement();
-
-		/**
-		 * The meta object literal for the '<em><b>Annotations</b></em>' reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference I4DIAC_ELEMENT__ANNOTATIONS = eINSTANCE.getI4DIACElement_Annotations();
-
-		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl <em>Segment Type</em>}' class.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl
@@ -9738,29 +9138,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ADAPTER_FB_TYPE__ADAPTER_TYPE = eINSTANCE.getAdapterFBType_AdapterType();
-
-		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AnnotationImpl <em>Annotation</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AnnotationImpl
-		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAnnotation()
-		 * @generated
-		 */
-		EClass ANNOTATION = eINSTANCE.getAnnotation();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ANNOTATION__NAME = eINSTANCE.getAnnotation_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Servity</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ANNOTATION__SERVITY = eINSTANCE.getAnnotation_Servity();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl <em>Adapter Event</em>}' class.

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2013, 2017 Profactor GbmH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.actions;
 
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.Messages;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
@@ -23,11 +23,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
-/**
- * The Class OpenSystemConfEditorAction.
- * 
- * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
- */
 public class OpenSystemConfEditorAction extends OpenListener {
 	private static final String OPEN_SYSTEM_LISTENER_ID = "org.eclipse.fordiac.ide.systemconfiguration.actions.OpenSystemConfEditorAction"; //$NON-NLS-1$
 
@@ -56,7 +51,7 @@ public class OpenSystemConfEditorAction extends OpenListener {
 	}
 
 	@Override
-	public Class<? extends I4DIACElement> getHandledClass() {
+	public Class<? extends EObject> getHandledClass() {
 		return SystemConfiguration.class;
 	}
 

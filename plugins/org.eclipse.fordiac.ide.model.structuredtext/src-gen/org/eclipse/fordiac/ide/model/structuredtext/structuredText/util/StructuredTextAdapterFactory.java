@@ -10,7 +10,6 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -274,11 +273,6 @@ public class StructuredTextAdapterFactory extends AdapterFactoryImpl
       public Adapter caseAdapterVariable(AdapterVariable object)
       {
         return createAdapterVariableAdapter();
-      }
-      @Override
-      public Adapter caseI4DIACElement(I4DIACElement object)
-      {
-        return createI4DIACElementAdapter();
       }
       @Override
       public Adapter caseINamedElement(INamedElement object)
@@ -903,21 +897,6 @@ public class StructuredTextAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createAdapterVariableAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement <em>I4DIAC Element</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement
-   * @generated
-   */
-  public Adapter createI4DIACElementAdapter()
   {
     return null;
   }

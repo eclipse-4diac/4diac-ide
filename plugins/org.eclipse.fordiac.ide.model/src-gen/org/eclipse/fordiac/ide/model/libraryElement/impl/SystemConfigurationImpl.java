@@ -19,6 +19,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -42,7 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
  *
  * @generated
  */
-public class SystemConfigurationImpl extends I4DIACElementImpl implements SystemConfiguration {
+public class SystemConfigurationImpl extends EObjectImpl implements SystemConfiguration {
 	/**
 	 * The cached value of the '{@link #getDevices() <em>Devices</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
