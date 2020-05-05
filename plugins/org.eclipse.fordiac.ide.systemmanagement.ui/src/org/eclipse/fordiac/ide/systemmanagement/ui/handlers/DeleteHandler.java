@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -12,8 +12,8 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr, Muddasir Shakil, Virendra Ashiwal, Alois Zoitl -
- *   	 migrated this code to handle the deletion of Applications, Resources 
- *       and Devices	   
+ *   	 migrated this code to handle the deletion of Applications, Resources
+ *       and Devices
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.handlers;
 
@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.DeviceDeleteCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceDeleteCommand;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.commands.DeleteApplicationCommand;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -56,9 +55,7 @@ public class DeleteHandler extends AbstractHandler {
 	// delete and the CommandStack of the Automation System, and ask the
 	// CommandStack to execute the command
 	private void executeDeleteCommands() {
-		commandMap.entrySet()
-				.forEach(entry -> SystemManager.INSTANCE.getCommandStack(entry.getKey()).execute(entry.getValue()));
-
+		commandMap.entrySet().forEach(entry -> entry.getKey().getCommandStack().execute(entry.getValue()));
 		// we have executed all commands, clear the map
 		commandMap.clear();
 	}

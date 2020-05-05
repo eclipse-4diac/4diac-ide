@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
@@ -41,7 +40,7 @@ public class DeviceSection extends AbstractInterfaceSection {
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
 		Device helper = getInputType(input);
 		if (null != helper) {
-			return SystemManager.INSTANCE.getCommandStack(helper.getAutomationSystem());
+			return helper.getAutomationSystem().getCommandStack();
 		}
 		return null;
 	}

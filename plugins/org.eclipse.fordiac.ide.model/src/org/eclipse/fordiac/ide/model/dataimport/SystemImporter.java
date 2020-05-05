@@ -62,6 +62,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.gef.commands.CommandStack;
 
 public class SystemImporter extends CommonElementImporter {
 
@@ -91,6 +92,8 @@ public class SystemImporter extends CommonElementImporter {
 		AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
 		system.setName(TypeLibrary.getTypeNameFromFile(systemFile));
 		system.setSystemFile(systemFile);
+
+		system.setCommandStack(new CommandStack());
 
 		// create PhysicalConfiguration
 		SystemConfiguration sysConf = LibraryElementFactory.eINSTANCE.createSystemConfiguration();

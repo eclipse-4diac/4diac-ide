@@ -826,6 +826,8 @@
         eType="#//SystemConfiguration" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="systemFile" eType="#//IFile"
         transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="commandStack" eType="#//CommandStack"
+        transient="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VarDeclaration" eSuperTypes="#//IInterfaceElement">
     <eOperations name="isArray" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
@@ -1204,4 +1206,5 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrayStart" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrayStop" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="CommandStack" instanceClassName="org.eclipse.gef.commands.CommandStack"/>
 </ecore:EPackage>

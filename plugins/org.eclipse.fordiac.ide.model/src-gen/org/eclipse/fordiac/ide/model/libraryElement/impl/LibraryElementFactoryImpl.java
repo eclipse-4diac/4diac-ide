@@ -89,6 +89,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.gef.commands.CommandStack;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
@@ -216,6 +217,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return createIProjectFromString(eDataType, initialValue);
 			case LibraryElementPackage.IFILE:
 				return createIFileFromString(eDataType, initialValue);
+			case LibraryElementPackage.COMMAND_STACK:
+				return createCommandStackFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -234,6 +237,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return convertIProjectToString(eDataType, instanceValue);
 			case LibraryElementPackage.IFILE:
 				return convertIFileToString(eDataType, instanceValue);
+			case LibraryElementPackage.COMMAND_STACK:
+				return convertCommandStackToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -949,6 +954,24 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	public String convertIFileToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CommandStack createCommandStackFromString(EDataType eDataType, String initialValue) {
+		return (CommandStack)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertCommandStackToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

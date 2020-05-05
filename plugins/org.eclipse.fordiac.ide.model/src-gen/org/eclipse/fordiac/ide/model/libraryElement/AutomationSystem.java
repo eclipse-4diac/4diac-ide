@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.gef.commands.CommandStack;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '
@@ -30,6 +31,7 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette <em>Palette</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration <em>System Configuration</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemFile <em>System File</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getCommandStack <em>Command Stack</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAutomationSystem()
@@ -151,6 +153,28 @@ public interface AutomationSystem extends LibraryElement {
 	 * @generated
 	 */
 	void setSystemFile(IFile value);
+
+	/**
+	 * Returns the value of the '<em><b>Command Stack</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Command Stack</em>' attribute.
+	 * @see #setCommandStack(CommandStack)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAutomationSystem_CommandStack()
+	 * @model dataType="org.eclipse.fordiac.ide.model.libraryElement.CommandStack" transient="true"
+	 * @generated
+	 */
+	CommandStack getCommandStack();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getCommandStack <em>Command Stack</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Command Stack</em>' attribute.
+	 * @see #getCommandStack()
+	 * @generated
+	 */
+	void setCommandStack(CommandStack value);
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->

@@ -3831,12 +3831,21 @@ public interface LibraryElementPackage extends EPackage {
 	int AUTOMATION_SYSTEM__SYSTEM_FILE = LIBRARY_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Command Stack</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AUTOMATION_SYSTEM__COMMAND_STACK = LIBRARY_ELEMENT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Automation System</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AUTOMATION_SYSTEM_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 5;
+	int AUTOMATION_SYSTEM_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Author</b></em>' attribute. <!--
@@ -5418,6 +5427,16 @@ public interface LibraryElementPackage extends EPackage {
 	int IFILE = 76;
 
 	/**
+	 * The meta object id for the '<em>Command Stack</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.gef.commands.CommandStack
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
+	 * @generated
+	 */
+	int COMMAND_STACK = 77;
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration <em>Adapter Declaration</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Adapter Declaration</em>'.
@@ -6730,6 +6749,17 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getAutomationSystem_SystemFile();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getCommandStack <em>Command Stack</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Command Stack</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getCommandStack()
+	 * @see #getAutomationSystem()
+	 * @generated
+	 */
+	EAttribute getAutomationSystem_CommandStack();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration <em>Var Declaration</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Var Declaration</em>'.
@@ -7654,6 +7684,17 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EDataType getIFile();
+
+	/**
+	 * Returns the meta object for data type '{@link org.eclipse.gef.commands.CommandStack <em>Command Stack</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Command Stack</em>'.
+	 * @see org.eclipse.gef.commands.CommandStack
+	 * @model instanceClass="org.eclipse.gef.commands.CommandStack"
+	 * @generated
+	 */
+	EDataType getCommandStack();
 
 	/**
 	 * Returns the factory that creates the instances of the model. <!--
@@ -8732,6 +8773,14 @@ public interface LibraryElementPackage extends EPackage {
 		EAttribute AUTOMATION_SYSTEM__SYSTEM_FILE = eINSTANCE.getAutomationSystem_SystemFile();
 
 		/**
+		 * The meta object literal for the '<em><b>Command Stack</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute AUTOMATION_SYSTEM__COMMAND_STACK = eINSTANCE.getAutomationSystem_CommandStack();
+
+		/**
 		 * The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl
 		 * <em>Var Declaration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
@@ -9525,6 +9574,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EDataType IFILE = eINSTANCE.getIFile();
+
+		/**
+		 * The meta object literal for the '<em>Command Stack</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.gef.commands.CommandStack
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
+		 * @generated
+		 */
+		EDataType COMMAND_STACK = eINSTANCE.getCommandStack();
 
 	}
 

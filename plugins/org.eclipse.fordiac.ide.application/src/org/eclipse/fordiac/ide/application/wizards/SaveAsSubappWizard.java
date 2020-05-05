@@ -44,7 +44,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -188,7 +187,7 @@ public class SaveAsSubappWizard extends Wizard {
 
 	private void replaceWithType(PaletteEntry entry) {
 		CommandUtil.closeOpenedSubApp(subApp.getSubAppNetwork());
-		SystemManager.INSTANCE.getCommandStack(getSystem()).execute(new UpdateFBTypeCommand(subApp, entry));
+		getSystem().getCommandStack().execute(new UpdateFBTypeCommand(subApp, entry));
 	}
 
 	private void performTypeSetup(SubAppType type) {

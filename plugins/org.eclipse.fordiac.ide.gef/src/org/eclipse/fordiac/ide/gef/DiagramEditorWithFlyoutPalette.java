@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.UntypedEditorInput;
@@ -278,9 +277,9 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		setEditDomain(new DefaultEditDomain(this));
 		getEditDomain().setDefaultTool(createDefaultTool());
 		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
-		// use one "System - Wide" command stack to avoid incositensies due to
+		// use one "System - Wide" command stack to avoid inconsistencies due to
 		// undo redo
-		getEditDomain().setCommandStack(SystemManager.INSTANCE.getCommandStack(getSystem()));
+		getEditDomain().setCommandStack(getSystem().getCommandStack());
 	}
 
 	@SuppressWarnings("static-method")

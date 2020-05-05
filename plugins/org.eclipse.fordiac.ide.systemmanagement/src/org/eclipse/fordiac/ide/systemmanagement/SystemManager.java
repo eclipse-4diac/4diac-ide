@@ -44,7 +44,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 
@@ -72,22 +71,6 @@ public enum SystemManager {
 
 	/** The listeners. */
 	private List<DistributedSystemListener> listeners = new ArrayList<>();
-
-	private final Map<AutomationSystem, CommandStack> systemCommandStacks = new HashMap<>();
-
-	/**
-	 * Gets the command stack.
-	 *
-	 * @param system the system
-	 *
-	 * @return the command stack
-	 */
-	public CommandStack getCommandStack(final AutomationSystem system) {
-		if (!systemCommandStacks.containsKey(system)) {
-			systemCommandStacks.put(system, new CommandStack());
-		}
-		return systemCommandStacks.get(system);
-	}
 
 	/**
 	 * Notify listeners.

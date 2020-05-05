@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.gef.commands.CommandStack;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '
@@ -45,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getPalette <em>Palette</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getSystemConfiguration <em>System Configuration</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getSystemFile <em>System File</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getCommandStack <em>Command Stack</em>}</li>
  * </ul>
  *
  * @generated
@@ -104,6 +106,26 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @ordered
 	 */
 	protected IFile systemFile = SYSTEM_FILE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCommandStack() <em>Command Stack</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCommandStack()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final CommandStack COMMAND_STACK_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCommandStack() <em>Command Stack</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCommandStack()
+	 * @generated
+	 * @ordered
+	 */
+	protected CommandStack commandStack = COMMAND_STACK_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -275,6 +297,29 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CommandStack getCommandStack() {
+		return commandStack;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCommandStack(CommandStack newCommandStack) {
+		CommandStack oldCommandStack = commandStack;
+		commandStack = newCommandStack;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK, oldCommandStack, commandStack));
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -329,6 +374,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 				return basicGetSystemConfiguration();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
 				return getSystemFile();
+			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
+				return getCommandStack();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -359,6 +406,9 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
 				setSystemFile((IFile)newValue);
 				return;
+			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
+				setCommandStack((CommandStack)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -387,6 +437,9 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
 				setSystemFile(SYSTEM_FILE_EDEFAULT);
 				return;
+			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
+				setCommandStack(COMMAND_STACK_EDEFAULT);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -410,6 +463,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 				return systemConfiguration != null;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
 				return SYSTEM_FILE_EDEFAULT == null ? systemFile != null : !SYSTEM_FILE_EDEFAULT.equals(systemFile);
+			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
+				return COMMAND_STACK_EDEFAULT == null ? commandStack != null : !COMMAND_STACK_EDEFAULT.equals(commandStack);
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -426,6 +481,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (systemFile: "); //$NON-NLS-1$
 		result.append(systemFile);
+		result.append(", commandStack: "); //$NON-NLS-1$
+		result.append(commandStack);
 		result.append(')');
 		return result.toString();
 	}

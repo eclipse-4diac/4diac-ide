@@ -171,6 +171,7 @@
     </genEnums>
     <genDataTypes ecoreDataType="lib.ecore#//IProject"/>
     <genDataTypes ecoreDataType="lib.ecore#//IFile"/>
+    <genDataTypes ecoreDataType="lib.ecore#//CommandStack"/>
     <genClasses ecoreClass="lib.ecore#//AdapterDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/paletteEntry"/>
@@ -426,6 +427,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/palette"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/systemConfiguration"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AutomationSystem/systemFile"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AutomationSystem/commandStack"/>
       <genOperations ecoreOperation="lib.ecore#//AutomationSystem/getDeviceNamed"
           body="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);">
         <genParameters ecoreParameter="lib.ecore#//AutomationSystem/getDeviceNamed/name"/>
