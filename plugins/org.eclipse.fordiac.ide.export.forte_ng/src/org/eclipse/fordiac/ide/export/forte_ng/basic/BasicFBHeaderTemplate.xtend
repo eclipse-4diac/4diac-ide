@@ -63,8 +63,6 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
 
 		«type.compilerInfo?.header»
-
-		#include "forte_array_at.h"
 	'''
 
 	def protected CharSequence generateAlgorithms() '''

@@ -193,6 +193,8 @@ public abstract class ForteFBTemplate extends ExportTemplate {
         _builder.newLine();
       }
     }
+    _builder.append("#include \"forte_array_at.h\"");
+    _builder.newLine();
     return _builder;
   }
   

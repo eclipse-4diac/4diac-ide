@@ -67,6 +67,7 @@ abstract class ForteFBTemplate extends ExportTemplate {
 		«IF vars.exists[array]»
 			#include "forte_array.h"
 		«ENDIF»
+		#include "forte_array_at.h"
 	'''
 
 	def protected CharSequence generateAdapterIncludes(Iterable<AdapterDeclaration> vars) '''
