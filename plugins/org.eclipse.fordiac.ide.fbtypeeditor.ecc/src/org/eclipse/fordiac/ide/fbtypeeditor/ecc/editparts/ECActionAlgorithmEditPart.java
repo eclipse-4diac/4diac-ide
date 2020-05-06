@@ -26,6 +26,7 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateAlgorithmCommand;
@@ -77,7 +78,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	};
 
 	/** The algorithm adapter. */
-	private final Adapter fbAdapter = new AdapterImpl() {
+	private final Adapter fbAdapter = new EContentAdapter() {
 
 		@Override
 		public void notifyChanged(Notification notification) {

@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
@@ -77,6 +78,8 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 			return FordiacImage.ICON_BASIC_FB.getImage();
 		} else if (type instanceof CompositeFBType) {
 			return FordiacImage.ICON_COMPOSITE_FB.getImage();
+		} else if (type instanceof SimpleFBType) {
+			return FordiacImage.ICON_SIMPLE_FB.getImage();
 		} else if (type instanceof ServiceInterfaceFBType) {
 			return FordiacImage.ICON_SIFB.getImage();
 		}

@@ -26,19 +26,20 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a
  * {@link org.eclipse.fordiac.ide.model.libraryElement.SegmentType} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
- * 
+ *
  * @generated
  */
 public class SegmentTypeItemProvider extends CompilableTypeItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public SegmentTypeItemProvider(AdapterFactory adapterFactory) {
@@ -48,7 +49,7 @@ public class SegmentTypeItemProvider extends CompilableTypeItemProvider {
 	/**
 	 * This returns the property descriptors for the adapted class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -66,7 +67,7 @@ public class SegmentTypeItemProvider extends CompilableTypeItemProvider {
 	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -80,7 +81,7 @@ public class SegmentTypeItemProvider extends CompilableTypeItemProvider {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -94,18 +95,18 @@ public class SegmentTypeItemProvider extends CompilableTypeItemProvider {
 
 	/**
 	 * This returns SegmentType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
+	 *
+	 * @generated not
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SegmentType")); //$NON-NLS-1$
+		return overlayImage(object, FordiacImage.ICON_SEGMENT.getImage());
 	}
 
 	/**
 	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -119,7 +120,7 @@ public class SegmentTypeItemProvider extends CompilableTypeItemProvider {
 	 * This handles model notifications by calling {@link #updateChildren} to update
 	 * any cached children and by creating a viewer notification, which it passes to
 	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -138,7 +139,7 @@ public class SegmentTypeItemProvider extends CompilableTypeItemProvider {
 	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
 	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override

@@ -65,7 +65,7 @@
       <VarDeclaration Name="INDD" Type="WSTRING" Comment="Indication Data from Plug" />
     </OutputVars>
   </InterfaceList>
-  <Service RightInterface="PLUG" LeftInterface="SOCKET" >
+  <Service LeftInterface="PLUG" RightInterface="SOCKET" >
     <ServiceSequence Name="request_confirm" >
       <ServiceTransaction >
         <InputPrimitive Interface="SOCKET" Event="REQ" Parameters="REQD" />

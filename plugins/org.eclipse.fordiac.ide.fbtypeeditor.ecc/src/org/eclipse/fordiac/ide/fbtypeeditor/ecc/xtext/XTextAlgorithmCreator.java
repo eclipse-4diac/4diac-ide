@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH, TU Wien ACIN
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.xtext;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditorCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -55,26 +54,21 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 			@Override
 			public XtextResource createResource() {
 				XtextResourceSet resourceSet = resourceSetProvider.get();
-				EcoreUtil.Copier copier = new EcoreUtil.Copier();
 				Resource fbResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
-				fbResource.getContents().add(copier.copy(EcoreUtil.getRootContainer(fbType)));
+				fbResource.getContents().add(fbType);
 				for (AdapterDeclaration adapter : fbType.getInterfaceList().getSockets()) {
-					createAdapterResource(resourceSet, copier, adapter);
+					createAdapterResource(resourceSet, adapter);
 				}
 				for (AdapterDeclaration adapter : fbType.getInterfaceList().getPlugs()) {
-					createAdapterResource(resourceSet, copier, adapter);
+					createAdapterResource(resourceSet, adapter);
 				}
-				copier.copyReferences();
 				return (XtextResource) resourceSet.createResource(computeUnusedUri(resourceSet, fileExtension));
 			}
 
-			private void createAdapterResource(XtextResourceSet resourceSet, EcoreUtil.Copier copier,
-					AdapterDeclaration adapter) {
+			private void createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
 				Resource adapterResource = resourceSet
 						.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
-				copier.copy(adapter.getType());
-				adapterResource.getContents()
-						.add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
+				adapterResource.getContents().add(adapter.getType().getAdapterFBType());
 			}
 
 			protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
@@ -96,10 +90,11 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 
 	/**
 	 * Factory method creating the Specific XTextAlgorithmEditor.
-	 * 
+	 *
 	 * Should be overridden if you need a special XTextAlogrithm which performs
 	 * additional setups for your DSL.
 	 */
+	@SuppressWarnings("static-method") // has to be none static so that sub-classes can override
 	protected XTextAlgorithmEditor createXTextAlgorithmEditor(BaseFBType fbType, EmbeddedEditor editor) {
 		return new XTextAlgorithmEditor(editor, fbType);
 	}

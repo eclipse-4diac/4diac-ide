@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -224,6 +225,8 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 			image = FordiacImage.ICON_SUB_APP.getImageDescriptor();
 		} else if (entry.getType() instanceof BasicFBType) {
 			image = FordiacImage.ICON_BASIC_FB.getImageDescriptor();
+		} else if (entry.getType() instanceof SimpleFBType) {
+			image = FordiacImage.ICON_SIMPLE_FB.getImageDescriptor();
 		} else if (entry.getType() instanceof CompositeFBType) {
 			image = FordiacImage.ICON_COMPOSITE_FB.getImageDescriptor();
 		} else {
