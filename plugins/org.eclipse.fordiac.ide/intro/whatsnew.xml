@@ -68,7 +68,12 @@
 
     A full list of all bugs addressed in this release can be found on the &lt;a href="https://projects.eclipse.org/projects/iot.4diac/releases/1.12.0/bugs"&gt;1.12.0 release page&lt;/a&gt;
              </text>  	 	 		
-       	</group>     
+       	</group>   
+       	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.12.1">   
+            <text>
+            For the first maintenance release of 4diac IDE 11 issues were fixed. 
+            </text>
+        </group>      
    	</extensionContent>
    	
    	<extensionContent id="fordiac-news" style="css/style.css" name="Whats New Extension" path="whatsnew/@">
