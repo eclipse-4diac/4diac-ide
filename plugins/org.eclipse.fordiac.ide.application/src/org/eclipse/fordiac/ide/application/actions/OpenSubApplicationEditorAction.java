@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2011, 2013, 2015, 2016 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,8 +18,10 @@ import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.OpenListener;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
@@ -35,7 +37,7 @@ public class OpenSubApplicationEditorAction extends OpenListener {
 
 	/**
 	 * Constructor of the Action.
-	 * 
+	 *
 	 * @param uiSubAppNetwork the UISubAppNetwork
 	 */
 	public OpenSubApplicationEditorAction(final SubApp subApp) {
@@ -75,6 +77,11 @@ public class OpenSubApplicationEditorAction extends OpenListener {
 	@Override
 	public String getActionText() {
 		return Messages.OpenSubApplicationEditorAction_Name;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		return FordiacImage.ICON_SUB_APP.getImageDescriptor();
 	}
 
 	@Override
