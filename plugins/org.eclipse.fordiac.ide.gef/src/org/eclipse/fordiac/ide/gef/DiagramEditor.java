@@ -230,7 +230,9 @@ public abstract class DiagramEditor extends GraphicalEditor
 		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
 		// use one "System - Wide" command stack to avoid incositensies due to
 		// undo redo
-		getEditDomain().setCommandStack(getSystem().getCommandStack());
+		if (null != getSystem()) {
+			getEditDomain().setCommandStack(getSystem().getCommandStack());
+		}
 	}
 
 	@SuppressWarnings("static-method")

@@ -279,7 +279,9 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
 		// use one "System - Wide" command stack to avoid inconsistencies due to
 		// undo redo
-		getEditDomain().setCommandStack(getSystem().getCommandStack());
+		if (null != getSystem()) {
+			getEditDomain().setCommandStack(getSystem().getCommandStack());
+		}
 	}
 
 	@SuppressWarnings("static-method")
