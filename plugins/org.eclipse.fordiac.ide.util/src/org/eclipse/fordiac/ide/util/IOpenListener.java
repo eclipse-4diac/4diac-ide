@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IObjectActionDelegate;
 
@@ -37,6 +38,11 @@ public interface IOpenListener extends IObjectActionDelegate {
 	 * Get the Text to be printed in the Actions menu
 	 */
 	String getActionText();
+
+	/**
+	 * Get the image descriptor to be shown in the open menu
+	 */
+	ImageDescriptor getImageDescriptor();
 
 	/**
 	 * Get the class this open listner handles

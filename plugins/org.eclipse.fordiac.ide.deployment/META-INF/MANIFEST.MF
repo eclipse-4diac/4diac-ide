@@ -20,7 +20,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.12.0.qualifier
+Bundle-Version: 1.12.1.qualifier
 Bundle-ClassPath: .
 Bundle-Name: %pluginName
 Bundle-Activator: org.eclipse.fordiac.ide.deployment.Activator

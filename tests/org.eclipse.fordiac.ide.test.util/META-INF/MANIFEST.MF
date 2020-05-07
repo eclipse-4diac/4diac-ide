@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Util Tests (Incubation)
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.util
-Bundle-Version: 1.12.0.qualifier
+Bundle-Version: 1.12.1.qualifier
 Fragment-Host: org.eclipse.fordiac.ide.util
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

@@ -18,8 +18,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.resourceediting.Messages;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.OpenListener;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
@@ -55,6 +57,11 @@ public class OpenResourceEditorAction extends OpenListener {
 	@Override
 	public String getActionText() {
 		return Messages.OpenResourceEditorAction_Name;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		return FordiacImage.ICON_RESOURCE.getImageDescriptor();
 	}
 
 	@Override

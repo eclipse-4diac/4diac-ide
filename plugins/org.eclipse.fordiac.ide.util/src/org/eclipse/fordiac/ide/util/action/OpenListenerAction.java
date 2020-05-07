@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2011, 2017 Profactor GmbH, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -27,6 +27,7 @@ public class OpenListenerAction extends Action {
 	public OpenListenerAction(final IOpenListener openListener) {
 		this.openListener = openListener;
 		setText(openListener.getActionText());
+		setImageDescriptor(openListener.getImageDescriptor());
 	}
 
 	@Override

@@ -18,8 +18,10 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.OpenListener;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
@@ -75,6 +77,11 @@ public class OpenSubApplicationEditorAction extends OpenListener {
 	@Override
 	public String getActionText() {
 		return Messages.OpenSubApplicationEditorAction_Name;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		return FordiacImage.ICON_SUB_APP.getImageDescriptor();
 	}
 
 	@Override

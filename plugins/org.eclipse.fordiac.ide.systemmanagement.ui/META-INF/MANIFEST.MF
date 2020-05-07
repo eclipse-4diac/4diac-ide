@@ -31,7 +31,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.systemconfiguration,
  org.eclipse.fordiac.ide.model.commands
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 1.12.0.qualifier
+Bundle-Version: 1.12.1.qualifier
 Bundle-ManifestVersion: 2
 Bundle-Activator: org.eclipse.fordiac.ide.systemmanagement.ui.Activator
 Bundle-SymbolicName: org.eclipse.fordiac.ide.systemmanagement.ui;singleton:=true
