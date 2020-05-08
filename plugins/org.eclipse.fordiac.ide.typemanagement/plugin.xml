@@ -488,4 +488,21 @@
             class="org.eclipse.fordiac.ide.typemanagement.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            class="org.eclipse.fordiac.ide.typemanagement.navigator.TypeDecorator"
+            icon="fordiacimage://ICON_FB"
+            id="org.eclipse.fordiac.ide.typemanagement.TypeDecorator"
+            label="4diac Type Decoration"
+            lightweight="true"
+            state="true">
+            <enablement>
+                <objectClass name="org.eclipse.core.resources.IFile" />
+            </enablement>
+            <description>
+               Show type comment beside the type name.
+            </description>
+      </decorator>
+   </extension>
 </plugin>
