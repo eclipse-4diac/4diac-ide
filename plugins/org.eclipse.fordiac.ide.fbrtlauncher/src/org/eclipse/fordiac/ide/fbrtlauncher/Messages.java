@@ -44,10 +44,6 @@ public class Messages extends NLS {
 
 	public static String FBRTPreferencePage_FBRTPreferencePage;
 
-	public static String PreferenceInitializer_SetPathToTheFBRT;
-
-	public static String PreferenceInitializer_SetTheUsedFBRTLibraries;
-
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

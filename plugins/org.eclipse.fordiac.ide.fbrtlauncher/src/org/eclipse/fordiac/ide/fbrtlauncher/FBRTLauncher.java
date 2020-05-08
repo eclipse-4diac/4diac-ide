@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2012, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *               2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.runtime.IRuntimeLauncher;
 import org.eclipse.fordiac.ide.runtime.LaunchParameter;
 import org.eclipse.fordiac.ide.runtime.LaunchRuntimeException;
 import org.eclipse.fordiac.ide.runtime.LaunchRuntimeUtils;
+import org.eclipse.jface.util.IPropertyChangeListener;
 
 /**
  * The Class FBRTLauncher.
@@ -138,5 +139,10 @@ public class FBRTLauncher implements IRuntimeLauncher {
 	@Override
 	public String getPathPreferenceSettingPageID() {
 		return "org.eclipse.fordiac.ide.fbrtlauncher.preferences.FBRTPreferencePage"; //$NON-NLS-1$
+	}
+
+	@Override
+	public void addPathPreferenceChangeListener(IPropertyChangeListener listener) {
+		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(listener);
 	}
 }

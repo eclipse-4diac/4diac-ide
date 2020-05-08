@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.runtime.IRuntimeLauncher;
 import org.eclipse.fordiac.ide.runtime.LaunchParameter;
 import org.eclipse.fordiac.ide.runtime.LaunchRuntimeException;
 import org.eclipse.fordiac.ide.runtime.LaunchRuntimeUtils;
+import org.eclipse.jface.util.IPropertyChangeListener;
 
 /**
  * The Class ForteLauncher.
@@ -100,5 +101,10 @@ public class ForteLauncher implements IRuntimeLauncher {
 	@Override
 	public String getPathPreferenceSettingPageID() {
 		return "org.eclipse.fordiac.ide.fortelauncher.preferences.FortePreferencePage"; //$NON-NLS-1$
+	}
+
+	@Override
+	public void addPathPreferenceChangeListener(IPropertyChangeListener listener) {
+		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(listener);
 	}
 }

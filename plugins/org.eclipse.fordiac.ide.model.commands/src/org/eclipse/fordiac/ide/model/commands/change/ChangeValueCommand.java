@@ -33,7 +33,7 @@ public class ChangeValueCommand extends Command {
 
 	public ChangeValueCommand(VarDeclaration var, String value) {
 		this.var = var;
-		newValue = value;
+		newValue = (null == value) ? "" : value; //$NON-NLS-1$ //always ensure a valid value
 	}
 
 	@Override
@@ -63,9 +63,6 @@ public class ChangeValueCommand extends Command {
 			oldValue = ""; //$NON-NLS-1$
 		} else {
 			oldValue = var.getValue().getValue();
-		}
-		if ("".equals(newValue)) { //$NON-NLS-1$
-			newValue = null;
 		}
 		var.getValue().setValue(newValue);
 		setMirroredVar(newValue);

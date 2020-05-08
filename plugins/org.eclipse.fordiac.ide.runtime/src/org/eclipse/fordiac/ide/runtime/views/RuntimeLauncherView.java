@@ -16,6 +16,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.runtime.views;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,6 +40,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
@@ -144,7 +146,7 @@ public class RuntimeLauncherView extends ViewPart {
 		Label configuredRuntimeTextLabel = new Label(configuredRuntimeComposite, 0);
 		configuredRuntimeTextLabel.setText("Currently configured runtime: ");
 		Link configuredRuntimePathLabel = new Link(configuredRuntimeComposite, SWT.NONE);
-		configuredRuntimePathLabel.setText("<a>" + launcher.getRuntimePath() + "</a>");
+		setRuntimePathLink(launcher, configuredRuntimePathLabel);
 		configuredRuntimePathLabel.addListener(SWT.Selection, ev -> {
 			PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(
 					// String defines active preference page, String[] defines all available
@@ -156,9 +158,29 @@ public class RuntimeLauncherView extends ViewPart {
 			dialog.open();
 
 			// needed to update label text and size:
-			configuredRuntimePathLabel.setText("<a>" + launcher.getRuntimePath() + "</a>");
-			configuredRuntimeComposite.layout();
 		});
+
+		launcher.addPathPreferenceChangeListener(ev -> {
+			Display.getDefault().asyncExec(() -> {
+				if (!configuredRuntimeComposite.isDisposed()) {
+					setRuntimePathLink(launcher, configuredRuntimePathLabel);
+					configuredRuntimeComposite.getParent().layout();
+				}
+			});
+		});
+	}
+
+	private static void setRuntimePathLink(IRuntimeLauncher launcher, Link configuredRuntimePathLabel) {
+		configuredRuntimePathLabel.setText("<a>" + getRuntimePath(launcher) + "</a>");
+	}
+
+	private static String getRuntimePath(IRuntimeLauncher launcher) {
+		String path = launcher.getRuntimePath();
+		if (path.length() == 0) {
+			path = MessageFormat.format("No runtime configured for {0}. Click here for setting it up.",
+					launcher.getName());
+		}
+		return path;
 	}
 
 	private static IConfigurationElement[] getRuntimeLaunchers() {
