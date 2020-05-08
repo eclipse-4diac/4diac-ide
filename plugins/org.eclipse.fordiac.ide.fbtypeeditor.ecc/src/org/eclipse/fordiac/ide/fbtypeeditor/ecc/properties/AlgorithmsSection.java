@@ -16,7 +16,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -35,8 +34,6 @@ public class AlgorithmsSection extends ECCSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createAlgorithmControls(parent);
 		tabbedPropertySheetPage.getSite().setSelectionProvider(algorithmList);
-		// copy and paste for algorithms and internal vars
-		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
 	}
 
 	public void createAlgorithmControls(final Composite parent) {
