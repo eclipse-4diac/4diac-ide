@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.PaletteFilter;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
@@ -229,6 +230,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		popupShell.setLayout(new FillLayout());
 
 		tableViewer = new TableViewer(popupShell, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		ColumnViewerToolTipSupport.enableFor(tableViewer);
 		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new StyledCellLabelProvider() {
 
@@ -257,7 +259,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 				if (obj instanceof PaletteEntry) {
 					PaletteEntry entry = (PaletteEntry) obj;
 					styledString = new StyledString(entry.getLabel());
-					styledString.append(" - " + entry.getFile().getProjectRelativePath().toString(), //$NON-NLS-1$
+					styledString.append(" - " + entry.getType().getComment(), //$NON-NLS-1$
 							StyledString.QUALIFIER_STYLER);
 				} else {
 					styledString = new StyledString(obj.toString());
@@ -267,6 +269,14 @@ public class NewInstanceCellEditor extends TextCellEditor {
 				cell.setStyleRanges(styledString.getStyleRanges());
 				cell.setImage(getImage(obj));
 				super.update(cell);
+			}
+
+			@Override
+			public String getToolTipText(Object element) {
+				if (element instanceof PaletteEntry) {
+					return ((PaletteEntry) element).getFile().getProjectRelativePath().toString();
+				}
+				return super.getToolTipText(element);
 			}
 
 		});
