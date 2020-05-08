@@ -16,6 +16,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.runtime.views;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -144,7 +145,7 @@ public class RuntimeLauncherView extends ViewPart {
 		Label configuredRuntimeTextLabel = new Label(configuredRuntimeComposite, 0);
 		configuredRuntimeTextLabel.setText("Currently configured runtime: ");
 		Link configuredRuntimePathLabel = new Link(configuredRuntimeComposite, SWT.NONE);
-		configuredRuntimePathLabel.setText("<a>" + launcher.getRuntimePath() + "</a>");
+		configuredRuntimePathLabel.setText("<a>" + getRuntimePath(launcher) + "</a>");
 		configuredRuntimePathLabel.addListener(SWT.Selection, ev -> {
 			PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(
 					// String defines active preference page, String[] defines all available
@@ -156,9 +157,18 @@ public class RuntimeLauncherView extends ViewPart {
 			dialog.open();
 
 			// needed to update label text and size:
-			configuredRuntimePathLabel.setText("<a>" + launcher.getRuntimePath() + "</a>");
+			configuredRuntimePathLabel.setText("<a>" + getRuntimePath(launcher) + "</a>");
 			configuredRuntimeComposite.layout();
 		});
+	}
+
+	private static String getRuntimePath(IRuntimeLauncher launcher) {
+		String path = launcher.getRuntimePath();
+		if (path.length() == 0) {
+			path = MessageFormat.format("No runtime configured for {0}. Click here for setting it up.",
+					launcher.getName());
+		}
+		return path;
 	}
 
 	private static IConfigurationElement[] getRuntimeLaunchers() {

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2016 Profactor GmbH, fortiss GmbH
  * 				 2020			  Andrea Zoitl
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -29,7 +29,6 @@ public class Messages extends NLS {
 	public static String ForteLauncher_LABEL_PortParam;
 	public static String FortePreferencePage_FORTEPreferencesPage;
 	public static String FortePreferencePage_FORTELocation;
-	public static String PreferenceInitializer_SetPathToTheFORTE;
 
 	static {
 		// initialize resource bundle
