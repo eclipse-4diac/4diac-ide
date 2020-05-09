@@ -299,4 +299,14 @@ public abstract class ForteNgTestBase<T extends FBType> {
 		return ForteFBTemplate.getExportPrefix() + name;
 	}
 
+	/**
+	 * syntactic sugar: create a Object[] for a test case
+	 *
+	 * @param obj... vararg to create a Object[]
+	 * @return the created Object[]
+	 */
+	protected static Object[] testCase(Object... a) {
+		return a;
+	}
+
 }
