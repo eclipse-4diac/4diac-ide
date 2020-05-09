@@ -24,11 +24,17 @@ import org.eclipse.xtext.xbase.lib.ListExtensions;
 
 @SuppressWarnings("all")
 public abstract class ForteFBTemplate extends ExportTemplate {
+  private static final CharSequence EXPORT_PREFIX = "st_";
+  
   public ForteFBTemplate(final String name, final Path prefix) {
     super(name, prefix);
   }
   
   protected abstract FBType getType();
+  
+  public static CharSequence getExportPrefix() {
+    return ForteFBTemplate.EXPORT_PREFIX;
+  }
   
   protected CharSequence generateHeader() {
     StringConcatenation _builder = new StringConcatenation();
@@ -559,7 +565,7 @@ public abstract class ForteFBTemplate extends ExportTemplate {
     {
       boolean _isEmpty = this.getType().getInterfaceList().getEventInputs().isEmpty();
       if (_isEmpty) {
-        _builder.append("nullptr, nullptr");
+        _builder.append("nullptr, nullptr, nullptr");
       } else {
         _builder.append("scm_anEventInputNames, scm_anEIWith, scm_anEIWithIndexes");
       }
@@ -573,7 +579,7 @@ public abstract class ForteFBTemplate extends ExportTemplate {
     {
       boolean _isEmpty_1 = this.getType().getInterfaceList().getEventOutputs().isEmpty();
       if (_isEmpty_1) {
-        _builder.append("nullptr, nullptr");
+        _builder.append("nullptr, nullptr, nullptr");
       } else {
         _builder.append("scm_anEventOutputNames, scm_anEOWith, scm_anEOWithIndexes");
       }
@@ -643,6 +649,7 @@ public abstract class ForteFBTemplate extends ExportTemplate {
             _builder.append("&");
           }
         }
+        _builder.append(ForteFBTemplate.EXPORT_PREFIX);
         String _name = v.getName();
         _builder.append(_name);
         _builder.append("() {");

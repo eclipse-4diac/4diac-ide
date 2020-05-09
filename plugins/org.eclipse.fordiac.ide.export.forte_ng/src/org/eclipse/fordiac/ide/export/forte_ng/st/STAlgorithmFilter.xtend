@@ -65,6 +65,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument
+import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 
 class STAlgorithmFilter {
 
@@ -72,6 +73,8 @@ class STAlgorithmFilter {
 	static final String URI_SEPERATOR = "." //$NON-NLS-1$
 	static final String FB_URI_EXTENSION = "xtextfbt" //$NON-NLS-1$
 	static final String ST_URI_EXTENSION = "st" //$NON-NLS-1$
+
+	static final CharSequence EXPORT_PREFIX = ForteFBTemplate.exportPrefix
 
 	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI(SYNTHETIC_URI_NAME + URI_SEPERATOR + ST_URI_EXTENSION))
 
@@ -153,7 +156,7 @@ class STAlgorithmFilter {
 		}
 	}
 
-	def protected CharSequence generateArrayDecl(LocalVariable variable) 
+	def protected CharSequence generateArrayDecl(LocalVariable variable)
 	'''«IF variable.located
 			»«variable.generateArrayDeclLocated»«
 		ELSE
@@ -166,12 +169,12 @@ class STAlgorithmFilter {
 			PrimaryVariable: '''
 				«IF variable.type.name.BitSize > 0 && l.^var.type.name.BitSize > 0»
 					«IF l.^var.type.name.BitSize > variable.type.name.BitSize»
-						ARRAY_AT<CIEC_«variable.type.name», CIEC_«l.^var.type.name», 0, «variable.arraySize-1»> «variable.name»(«l.^var.name»);
+						ARRAY_AT<CIEC_«variable.type.name», CIEC_«l.^var.type.name», 0, «variable.arraySize-1»> «variable.generateVarAccessLocal»(«l.^var.generateVarAccess»);
 					«ELSE»
 						#error Accessing CIEC_«l.^var.type.name» via CIEC_«variable.type.name» would result in undefined behaviour
 					«ENDIF»
 				«ELSE»
-				    #error Piecewise access is supported only for types with defined bit-representation (e.g. not CIEC_«l.^var.type.name» via CIEC_«variable.type.name») 
+				    #error Piecewise access is supported only for types with defined bit-representation (e.g. not CIEC_«l.^var.type.name» via CIEC_«variable.type.name»)
 				«ENDIF»
 			'''
 			default: '''#error unhandled located array'''
@@ -179,19 +182,19 @@ class STAlgorithmFilter {
 	}
 
 	def protected CharSequence generateArrayDeclLocal(LocalVariable variable) '''
-		CIEC_«variable.type.name» «variable.name»[«variable.arraySize»]«variable.generateLocalVariableInitializer»;
+		CIEC_«variable.type.name» «EXPORT_PREFIX»«variable.name»[«variable.arraySize»]«variable.generateLocalVariableInitializer»;
 	'''
 
 	def protected CharSequence generateVariableDeclLocated(LocalVariable variable) {
 		val l = variable.location
 		switch (l) {
-			PrimaryVariable: '''// replacing all instances of «variable.extractTypeInformation»:«variable.name» with «variable.generateVarAccess»''' //names will just be replaced during export
+			PrimaryVariable: '''// replacing all instances of «variable.extractTypeInformation»:«variable.generateVarAccessLocal» with «variable.generateVarAccess»''' //names will just be replaced during export
 			default: '''#error located variable of unhandled type'''
 		}
 	}
 
 	def protected CharSequence generateVariableDeclLocal(LocalVariable variable) '''
-		CIEC_«variable.type.name» «variable.name»«variable.generateLocalVariableInitializer»;
+		CIEC_«variable.type.name» «variable.generateVarAccessLocal»«variable.generateLocalVariableInitializer»;
 	'''
 
 	def protected CharSequence generateLocalVariables(List<VarDeclaration> variables) '''
@@ -293,9 +296,9 @@ class STAlgorithmFilter {
 	'''
 
 	def protected dispatch CharSequence generateExpression(Call expr) {
-		'''«expr.func»(«FOR arg : expr.args SEPARATOR ', '»«arg.generateExpression»«ENDFOR»)'''
+		'''«EXPORT_PREFIX»«expr.func»(«FOR arg : expr.args SEPARATOR ', '»«arg.generateExpression»«ENDFOR»)'''
 	}
-	
+
 	def protected dispatch CharSequence generateExpression(InArgument arg) {
 		arg.expr.generateExpression
 	}
@@ -308,7 +311,7 @@ class STAlgorithmFilter {
 		BinaryExpression expr) {
 			switch (expr.operator) {
 			case POWER:
-				'''EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+				'''«EXPORT_PREFIX»EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
 			default:
 				'''(«expr.left.generateExpression» «expr.operator.generateBinaryOperator» «expr.right.generateExpression»)'''
 			}
@@ -380,25 +383,25 @@ class STAlgorithmFilter {
 		ArrayVariable expr) '''«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»«index.generateExpression»«ENDFOR»'''
 
 	def protected dispatch CharSequence generateExpression(AdapterVariable expr) {
-		'''«expr.adapter.name»().«expr.^var.name»()«expr.generateBitaccess»'''
+		'''«EXPORT_PREFIX»«expr.adapter.name»().«expr.^var.generateVarAccess»()«expr.generateBitaccess»'''
 	}
 
 	def protected dispatch CharSequence generateExpression(PrimaryVariable expr)  '''«expr.^var.generateVarAccess»«expr.generateBitaccess»'''
 
-	def protected dispatch CharSequence generateVarAccess(VarDeclaration variable) '''«variable.name»()'''
+	def protected CharSequence generateVarAccessLocal(LocalVariable variable) '''«EXPORT_PREFIX»«variable.name»'''
 
-	def protected dispatch CharSequence generateVarAccess(LocalVariable variable) 	
+	def protected dispatch CharSequence generateVarAccess(VarDeclaration variable) '''«EXPORT_PREFIX»«variable.name»()'''
+
+	def protected dispatch CharSequence generateVarAccess(LocalVariable variable)
 	'''«IF variable.located
 			»«variable.generateVarAccessLocated»«
 		ELSE
 			»«variable.generateVarAccessLocal»«
 		ENDIF»'''
 
-	def protected CharSequence generateVarAccessLocal(LocalVariable variable) '''«variable.name»'''
-
 	def protected CharSequence generateVarAccessLocated(LocalVariable variable)
 		'''«IF variable.array
-				»«variable.name»«
+				»«variable.generateVarAccessLocal»«
 			ELSE
 				»«variable.location.generateExpression»«generateBitaccess(variable, variable.location.extractTypeInformation,variable.extractTypeInformation,0)»«
 			ENDIF»'''

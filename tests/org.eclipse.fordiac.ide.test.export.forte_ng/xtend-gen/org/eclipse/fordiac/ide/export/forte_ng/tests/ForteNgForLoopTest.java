@@ -14,16 +14,17 @@ package org.eclipse.fordiac.ide.export.forte_ng.tests;
 
 import org.eclipse.fordiac.ide.export.forte_ng.tests.DatatypeConstants;
 import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBase;
+import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBasicFBTypeBase;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.junit.Assert;
 import org.junit.Test;
 
 @SuppressWarnings("all")
-public abstract class ForteNgForLoopXtend extends ForteNgTestBase implements DatatypeConstants {
+public class ForteNgForLoopTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
   @Test
   public void validForLoop() {
-    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
-    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, DatatypeConstants.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, DatatypeConstants.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("FOR ");
     _builder.append(ForteNgTestBase.VARIABLE_NAME);
@@ -34,8 +35,8 @@ public abstract class ForteNgForLoopXtend extends ForteNgTestBase implements Dat
     _builder.append(" := 0;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_FOR;");
-    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.functionBlock, ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
     ForteNgTestBase.assertNoErrors(this.getErrors());
     Assert.assertNotNull(generatedCode);
     StringConcatenation _builder_1 = new StringConcatenation();
@@ -46,27 +47,27 @@ public abstract class ForteNgForLoopXtend extends ForteNgTestBase implements Dat
     _builder_1.append("auto to = 5;");
     _builder_1.newLine();
     _builder_1.append("for(");
-    _builder_1.append(ForteNgTestBase.VARIABLE_NAME);
+    _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE_NAME);
     _builder_1.append("() = 1;");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("    ");
     _builder_1.append("(by >  0 && ");
-    _builder_1.append(ForteNgTestBase.VARIABLE_NAME, "    ");
+    _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE_NAME, "    ");
     _builder_1.append("() <= to) ||");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("    ");
     _builder_1.append("(by <= 0 && ");
-    _builder_1.append(ForteNgTestBase.VARIABLE_NAME, "    ");
+    _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE_NAME, "    ");
     _builder_1.append("() >= to);");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("    ");
-    _builder_1.append(ForteNgTestBase.VARIABLE_NAME, "    ");
+    _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE_NAME, "    ");
     _builder_1.append("() = ");
-    _builder_1.append(ForteNgTestBase.VARIABLE_NAME, "    ");
+    _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE_NAME, "    ");
     _builder_1.append("() + by){");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("\t");
-    _builder_1.append(ForteNgTestBase.VARIABLE2_NAME, "\t");
+    _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE2_NAME, "\t");
     _builder_1.append("() = 0;");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("}");
@@ -76,8 +77,8 @@ public abstract class ForteNgForLoopXtend extends ForteNgTestBase implements Dat
   
   @Test
   public void validForLoopWithBy() {
-    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
-    this.getFunctionBlock().getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, DatatypeConstants.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, DatatypeConstants.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("FOR ");
     _builder.append(ForteNgTestBase.VARIABLE_NAME);
@@ -88,8 +89,8 @@ public abstract class ForteNgForLoopXtend extends ForteNgTestBase implements Dat
     _builder.append(" := 0;");
     _builder.newLineIfNotEmpty();
     _builder.append("END_FOR;");
-    this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    this.functionBlock.getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
+    CharSequence generatedCode = this.generateAlgorithm(this.functionBlock, ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
     ForteNgTestBase.assertNoErrors(this.getErrors());
     Assert.assertNotNull(generatedCode);
     StringConcatenation _builder_1 = new StringConcatenation();
@@ -100,27 +101,27 @@ public abstract class ForteNgForLoopXtend extends ForteNgTestBase implements Dat
     _builder_1.append("auto to = 5;");
     _builder_1.newLine();
     _builder_1.append("for(");
-    _builder_1.append(ForteNgTestBase.VARIABLE_NAME);
+    _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE_NAME);
     _builder_1.append("() = 1;");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("    ");
     _builder_1.append("(by >  0 && ");
-    _builder_1.append(ForteNgTestBase.VARIABLE_NAME, "    ");
+    _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE_NAME, "    ");
     _builder_1.append("() <= to) ||");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("    ");
     _builder_1.append("(by <= 0 && ");
-    _builder_1.append(ForteNgTestBase.VARIABLE_NAME, "    ");
+    _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE_NAME, "    ");
     _builder_1.append("() >= to);");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("    ");
-    _builder_1.append(ForteNgTestBase.VARIABLE_NAME, "    ");
+    _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE_NAME, "    ");
     _builder_1.append("() = ");
-    _builder_1.append(ForteNgTestBase.VARIABLE_NAME, "    ");
+    _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE_NAME, "    ");
     _builder_1.append("() + by){");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("\t");
-    _builder_1.append(ForteNgTestBase.VARIABLE2_NAME, "\t");
+    _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE2_NAME, "\t");
     _builder_1.append("() = 0;");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("}");

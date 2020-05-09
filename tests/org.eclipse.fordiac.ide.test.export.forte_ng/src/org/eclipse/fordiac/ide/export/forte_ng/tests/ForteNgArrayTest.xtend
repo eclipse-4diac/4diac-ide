@@ -13,14 +13,14 @@
 
 package org.eclipse.fordiac.ide.export.forte_ng.tests
 
-import org.junit.Test;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNotNull;
+import org.junit.Test
+import static org.junit.Assert.assertNull
+import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertEquals
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-abstract class ForteNgArrayXtend extends ForteNgTestBase {
+class ForteNgArrayTest extends ForteNgTestBasicFBTypeBase {
 
 	protected static final boolean VALID_DECLARATION = true
 	protected static final boolean INVALID_DECLARATION = !VALID_DECLARATION
@@ -37,7 +37,7 @@ abstract class ForteNgArrayXtend extends ForteNgTestBase {
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
-		CIEC_DWORD «VARIABLE_NAME»[32];
+		CIEC_DWORD «EXPORTED_VARIABLE_NAME»[32];
 		'''.toString(), generatedCode.toString())
 	}
 
@@ -131,8 +131,8 @@ abstract class ForteNgArrayXtend extends ForteNgTestBase {
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
-		CIEC_DWORD «VARIABLE_NAME»;
-		// replacing all instances of DWORD:«VARIABLE2_NAME» with «VARIABLE_NAME»
+		CIEC_DWORD «EXPORTED_VARIABLE_NAME»;
+		// replacing all instances of DWORD:«EXPORTED_VARIABLE2_NAME» with «EXPORTED_VARIABLE_NAME»
 		'''.toString(), generatedCode.toString())
 	}
 
@@ -149,8 +149,8 @@ abstract class ForteNgArrayXtend extends ForteNgTestBase {
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
-		CIEC_DINT «VARIABLE_NAME»;
-		// replacing all instances of DINT:«VARIABLE2_NAME» with «VARIABLE_NAME»
+		CIEC_DINT «EXPORTED_VARIABLE_NAME»;
+		// replacing all instances of DINT:«EXPORTED_VARIABLE2_NAME» with «EXPORTED_VARIABLE_NAME»
 		'''.toString(), generatedCode.toString())
 	}
 

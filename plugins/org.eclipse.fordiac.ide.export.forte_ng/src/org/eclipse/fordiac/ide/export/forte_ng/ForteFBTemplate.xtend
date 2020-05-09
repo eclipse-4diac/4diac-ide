@@ -11,11 +11,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 
 abstract class ForteFBTemplate extends ExportTemplate {
 
+	static final CharSequence EXPORT_PREFIX = "st_"
+
 	new(String name, Path prefix) {
 		super(name, prefix) 
 	}
 
 	def protected FBType getType()
+
+	static def CharSequence getExportPrefix() {
+		return EXPORT_PREFIX
+	}
 
 	def protected CharSequence generateHeader() '''
 		/*************************************************************************
@@ -193,8 +199,8 @@ abstract class ForteFBTemplate extends ExportTemplate {
 
 	def protected CharSequence generateFBInterfaceSpecDefinition() '''
 		const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpec = {
-		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr«ELSE»scm_anEventInputNames, scm_anEIWith, scm_anEIWithIndexes«ENDIF»,
-		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr«ELSE»scm_anEventOutputNames, scm_anEOWith, scm_anEOWithIndexes«ENDIF»,
+		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventInputNames, scm_anEIWith, scm_anEIWithIndexes«ENDIF»,
+		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventOutputNames, scm_anEOWith, scm_anEOWithIndexes«ENDIF»,
 		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scm_anDataInputNames, scm_anDataInputTypeIds«ENDIF»,
 		  «type.interfaceList.outputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scm_anDataOutputNames, scm_anDataOutputTypeIds«ENDIF»,
 		  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», «IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»scm_astAdapterInstances«ELSE»nullptr«ENDIF»
@@ -203,7 +209,7 @@ abstract class ForteFBTemplate extends ExportTemplate {
 
 	def protected CharSequence generateAccessors(List<VarDeclaration> vars, String function) '''
 		«FOR v : vars»
-			CIEC_«v.typeName» «IF v.array»*«ELSE»&«ENDIF»«v.name»() {
+			CIEC_«v.typeName» «IF v.array»*«ELSE»&«ENDIF»«EXPORT_PREFIX»«v.name»() {
 			  «IF v.array»
 			  	return static_cast<CIEC_«v.typeName»*>(static_cast<CIEC_ARRAY *>(«function»(«vars.indexOf(v)»))[0]); //the first element marks the start of the array
 			  «ELSE»

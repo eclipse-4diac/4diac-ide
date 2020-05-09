@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -94,6 +95,8 @@ public class STAlgorithmFilter {
   private static final String FB_URI_EXTENSION = "xtextfbt";
   
   private static final String ST_URI_EXTENSION = "st";
+  
+  private static final CharSequence EXPORT_PREFIX = ForteFBTemplate.getExportPrefix();
   
   private static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI(((STAlgorithmFilter.SYNTHETIC_URI_NAME + STAlgorithmFilter.URI_SEPERATOR) + STAlgorithmFilter.ST_URI_EXTENSION)));
   
@@ -301,32 +304,32 @@ public class STAlgorithmFilter {
                 int _minus = (_arraySize - 1);
                 _builder.append(_minus);
                 _builder.append("> ");
-                String _name_2 = variable.getName();
-                _builder.append(_name_2);
+                CharSequence _generateVarAccessLocal = this.generateVarAccessLocal(variable);
+                _builder.append(_generateVarAccessLocal);
                 _builder.append("(");
-                String _name_3 = ((PrimaryVariable)l).getVar().getName();
-                _builder.append(_name_3);
+                CharSequence _generateVarAccess = this.generateVarAccess(((PrimaryVariable)l).getVar());
+                _builder.append(_generateVarAccess);
                 _builder.append(");");
                 _builder.newLineIfNotEmpty();
               } else {
                 _builder.append("#error Accessing CIEC_");
-                String _name_4 = ((PrimaryVariable)l).getVar().getType().getName();
-                _builder.append(_name_4);
+                String _name_2 = ((PrimaryVariable)l).getVar().getType().getName();
+                _builder.append(_name_2);
                 _builder.append(" via CIEC_");
-                String _name_5 = variable.getType().getName();
-                _builder.append(_name_5);
+                String _name_3 = variable.getType().getName();
+                _builder.append(_name_3);
                 _builder.append(" would result in undefined behaviour");
                 _builder.newLineIfNotEmpty();
               }
             }
           } else {
             _builder.append("#error Piecewise access is supported only for types with defined bit-representation (e.g. not CIEC_");
-            String _name_6 = ((PrimaryVariable)l).getVar().getType().getName();
-            _builder.append(_name_6);
+            String _name_4 = ((PrimaryVariable)l).getVar().getType().getName();
+            _builder.append(_name_4);
             _builder.append(" via CIEC_");
-            String _name_7 = variable.getType().getName();
-            _builder.append(_name_7);
-            _builder.append(") ");
+            String _name_5 = variable.getType().getName();
+            _builder.append(_name_5);
+            _builder.append(")");
             _builder.newLineIfNotEmpty();
           }
         }
@@ -348,6 +351,7 @@ public class STAlgorithmFilter {
     String _name = variable.getType().getName();
     _builder.append(_name);
     _builder.append(" ");
+    _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
     String _name_1 = variable.getName();
     _builder.append(_name_1);
     _builder.append("[");
@@ -374,8 +378,8 @@ public class STAlgorithmFilter {
         String _extractTypeInformation = this.extractTypeInformation(variable);
         _builder.append(_extractTypeInformation);
         _builder.append(":");
-        String _name = variable.getName();
-        _builder.append(_name);
+        CharSequence _generateVarAccessLocal = this.generateVarAccessLocal(variable);
+        _builder.append(_generateVarAccessLocal);
         _builder.append(" with ");
         CharSequence _generateVarAccess = this.generateVarAccess(variable);
         _builder.append(_generateVarAccess);
@@ -397,8 +401,8 @@ public class STAlgorithmFilter {
     String _name = variable.getType().getName();
     _builder.append(_name);
     _builder.append(" ");
-    String _name_1 = variable.getName();
-    _builder.append(_name_1);
+    CharSequence _generateVarAccessLocal = this.generateVarAccessLocal(variable);
+    _builder.append(_generateVarAccessLocal);
     CharSequence _generateLocalVariableInitializer = this.generateLocalVariableInitializer(variable);
     _builder.append(_generateLocalVariableInitializer);
     _builder.append(";");
@@ -729,6 +733,7 @@ public class STAlgorithmFilter {
   
   protected CharSequence _generateExpression(final Call expr) {
     StringConcatenation _builder = new StringConcatenation();
+    _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
     String _func = expr.getFunc();
     _builder.append(_func);
     _builder.append("(");
@@ -766,6 +771,7 @@ public class STAlgorithmFilter {
       switch (_operator) {
         case POWER:
           StringConcatenation _builder = new StringConcatenation();
+          _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
           _builder.append("EXPT(");
           CharSequence _generateExpression = this.generateExpression(expr.getLeft());
           _builder.append(_generateExpression);
@@ -949,11 +955,12 @@ public class STAlgorithmFilter {
   
   protected CharSequence _generateExpression(final AdapterVariable expr) {
     StringConcatenation _builder = new StringConcatenation();
+    _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
     String _name = expr.getAdapter().getName();
     _builder.append(_name);
     _builder.append("().");
-    String _name_1 = expr.getVar().getName();
-    _builder.append(_name_1);
+    CharSequence _generateVarAccess = this.generateVarAccess(expr.getVar());
+    _builder.append(_generateVarAccess);
     _builder.append("()");
     CharSequence _generateBitaccess = this.generateBitaccess(expr);
     _builder.append(_generateBitaccess);
@@ -969,8 +976,17 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
+  protected CharSequence generateVarAccessLocal(final LocalVariable variable) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
+    String _name = variable.getName();
+    _builder.append(_name);
+    return _builder;
+  }
+  
   protected CharSequence _generateVarAccess(final VarDeclaration variable) {
     StringConcatenation _builder = new StringConcatenation();
+    _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
     String _name = variable.getName();
     _builder.append(_name);
     _builder.append("()");
@@ -992,20 +1008,13 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
-  protected CharSequence generateVarAccessLocal(final LocalVariable variable) {
-    StringConcatenation _builder = new StringConcatenation();
-    String _name = variable.getName();
-    _builder.append(_name);
-    return _builder;
-  }
-  
   protected CharSequence generateVarAccessLocated(final LocalVariable variable) {
     StringConcatenation _builder = new StringConcatenation();
     {
       boolean _isArray = variable.isArray();
       if (_isArray) {
-        String _name = variable.getName();
-        _builder.append(_name);
+        CharSequence _generateVarAccessLocal = this.generateVarAccessLocal(variable);
+        _builder.append(_generateVarAccessLocal);
       } else {
         CharSequence _generateExpression = this.generateExpression(variable.getLocation());
         _builder.append(_generateExpression);
