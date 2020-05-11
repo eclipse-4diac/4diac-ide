@@ -39,6 +39,7 @@ public class FBTypeEditorContributor extends MultiPageEditorActionBarContributor
 	private ActionRegistry registry = new ActionRegistry();
 	private List<RetargetAction> retargetActions = new ArrayList<>();
 	private List<String> globalActionKeys = new ArrayList<>();
+	private ZoomComboContributionItem zoomCombo;
 
 	public FBTypeEditorContributor() {
 		super();
@@ -55,6 +56,7 @@ public class FBTypeEditorContributor extends MultiPageEditorActionBarContributor
 	public void setActivePage(IEditorPart activeEditor) {
 		if (null != activeEditor) {
 			setGlobalActionHandler(activeEditor.getAdapter(ActionRegistry.class));
+			zoomCombo.setZoomManager(activeEditor.getAdapter(ZoomManager.class));
 		}
 	}
 
@@ -92,7 +94,8 @@ public class FBTypeEditorContributor extends MultiPageEditorActionBarContributor
 
 		toolBarManager.add(new Separator());
 		String[] zoomStrings = new String[] { ZoomManager.FIT_ALL, ZoomManager.FIT_HEIGHT, ZoomManager.FIT_WIDTH };
-		toolBarManager.add(new ZoomComboContributionItem(getPage(), zoomStrings));
+		zoomCombo = new ZoomComboContributionItem(getPage(), zoomStrings);
+		toolBarManager.add(zoomCombo);
 
 		toolBarManager.add(new Separator());
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_LEFT));
