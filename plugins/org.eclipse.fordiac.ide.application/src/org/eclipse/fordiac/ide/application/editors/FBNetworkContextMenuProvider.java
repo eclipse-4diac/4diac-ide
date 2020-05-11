@@ -108,11 +108,6 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, new Separator());
 
-		action = getRegistry().getAction(UpdateFBTypeAction.ID);
-		if ((action != null) && action.isEnabled()) {
-			menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, action);
-		}
-
 		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 
 		action = getRegistry().getAction(ActionFactory.CUT.getId());

@@ -21,8 +21,12 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
+import org.eclipse.fordiac.ide.application.properties.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -43,7 +47,7 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 		CommandStack stack = fbEditor.getCommandStack();
 
 		for (FBNetworkElement element : selectedNetworkElements) {
-			Command updateFBTypeCmd = new UpdateFBTypeCommand(element, null);
+			Command updateFBTypeCmd = getUpdateCommand(element);
 			if (updateFBTypeCmd.canExecute()) {
 				cmd.add(updateFBTypeCmd);
 			}
@@ -52,6 +56,17 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 			stack.execute(cmd);
 		}
 		return Status.OK_STATUS;
+	}
+
+	public static Command getUpdateCommand(FBNetworkElement element) {
+		if (element instanceof StructManipulator) {
+			StructManipulator mux = (StructManipulator) element;
+			DataTypeLibrary lib = mux.getType().getTypeLibrary().getDataTypeLibrary();
+			StructuredType updated = (StructuredType) lib.getType(mux.getStructType().getName());
+			return new ChangeStructCommand(mux, updated);
+		} else {
+			return new UpdateFBTypeCommand(element, null);
+		}
 	}
 
 	@Override

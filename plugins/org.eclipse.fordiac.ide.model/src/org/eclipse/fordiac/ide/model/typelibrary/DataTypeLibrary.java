@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.ElementaryType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 
 public final class DataTypeLibrary {
 
@@ -59,6 +60,9 @@ public final class DataTypeLibrary {
 			type.setName(baseType.getLiteral());
 			typeMap.put(baseType.getLiteral(), type);
 		});
+		StructuredType struct = DataFactory.eINSTANCE.createStructuredType();
+		struct.setName("ANY_STRUCT"); //$NON-NLS-1$
+		typeMap.put(struct.getName(), struct);
 	}
 
 	public Map<String, DataTypePaletteEntry> getDerivedDataTypes() {

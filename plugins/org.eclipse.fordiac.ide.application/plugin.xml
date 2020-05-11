@@ -642,6 +642,16 @@
                 </or>
              </visibleWhen>
          </command>
+         <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType">
+          <visibleWhen>
+                <and> 
+                    <with variable="activeEditor">
+                        <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+                    </with>
+                    <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                </and>
+            </visibleWhen>
+         </command>
          <command
                commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
                label="New subapplication"
