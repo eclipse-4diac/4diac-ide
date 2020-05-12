@@ -274,7 +274,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 			@Override
 			public String getToolTipText(Object element) {
 				if (element instanceof PaletteEntry) {
-					return ((PaletteEntry) element).getFile().getProjectRelativePath().toString();
+					return ((PaletteEntry) element).getFile().getProjectRelativePath().toString() + "\n\n"
+							+ ((PaletteEntry) element).getType().getComment();
 				}
 				return super.getToolTipText(element);
 			}
