@@ -232,8 +232,24 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private void handleProjectRemove(IResourceDelta delta) {
 		IProject project = delta.getResource().getProject();
+		closeAllProjectRelatedEditors(project);
 		systemManager.removeProject(project);
 		TypeLibrary.removeProject(project);
+	}
+
+	private static void closeAllProjectRelatedEditors(final IProject project) {
+		Display.getDefault().asyncExec(() -> EditorUtils.closeEditorsFiltered((IEditorPart editor) -> {
+			IEditorInput input = editor.getEditorInput();
+			if ((input instanceof FileEditorInput)
+					&& (project.equals(((FileEditorInput) input).getFile().getProject()))) {
+				return true;
+			}
+			if (editor instanceof ISystemEditor) {
+				AutomationSystem system = ((ISystemEditor) editor).getSystem();
+				return project.equals(system.getSystemFile().getProject());
+			}
+			return false;
+		}));
 	}
 
 	private static void closeAllEditorsForFile(final IFile file) {
