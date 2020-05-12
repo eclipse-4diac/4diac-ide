@@ -41,12 +41,9 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -299,31 +296,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		return entry;
 	}
 
-	@Override
 	public Object getEntry(int index) {
 		return getType().getMemberVariables().get(index);
-	}
-
-	@Override
-	public void addSelectionChangedListener(ISelectionChangedListener listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public ISelection getSelection() {
-		return new StructuredSelection(new Object[] { this });
-	}
-
-	@Override
-	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setSelection(ISelection selection) {
-		// TODO Auto-generated method stub
-
 	}
 }

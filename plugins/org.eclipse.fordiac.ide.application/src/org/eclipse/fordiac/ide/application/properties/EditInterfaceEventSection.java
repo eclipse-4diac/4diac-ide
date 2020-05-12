@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019, 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - create command now has enhanced guess
+ *   Daniel Lindhuber - added create command method with index
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -36,6 +37,14 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 		int pos = getInsertingIndex(interfaceElement, isInput);
 		return new CreateSubAppInterfaceElementCommand(last, getCreationName(interfaceElement),
 				getType().getInterface(), isInput, pos);
+	}
+
+	@Override
+	protected CreateInterfaceElementCommand newPasteCommand(IInterfaceElement interfaceElement, boolean isInput,
+			int index) {
+		DataType last = getLastUsedEventType(getType().getInterface(), isInput, interfaceElement);
+		return new CreateSubAppInterfaceElementCommand(last, getCreationName(interfaceElement),
+				getType().getInterface(), isInput, index);
 	}
 
 	@Override

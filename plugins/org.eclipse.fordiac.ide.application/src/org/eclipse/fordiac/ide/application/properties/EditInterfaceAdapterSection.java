@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * 				 2019, 2020 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,7 @@
  *   Monika Wenger - initial implementation
  *   Alois Zoitl - moved adapter search code to palette
  *   Bianca Wiesmayr - create command now has enhanced guess
+ *   Daniel Lindhuber - added create command method with index
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -39,6 +40,14 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 		int pos = getInsertingIndex(interfaceElement, isInput);
 		return new CreateSubAppInterfaceElementCommand(last, getCreationName(interfaceElement),
 				getType().getInterface(), isInput, pos);
+	}
+
+	@Override
+	protected CreateInterfaceElementCommand newPasteCommand(IInterfaceElement interfaceElement, boolean isInput,
+			int index) {
+		AdapterType last = getLastUsedAdapterType(getType().getInterface(), interfaceElement, isInput);
+		return new CreateSubAppInterfaceElementCommand(last, getCreationName(interfaceElement),
+				getType().getInterface(), isInput, index);
 	}
 
 	@Override

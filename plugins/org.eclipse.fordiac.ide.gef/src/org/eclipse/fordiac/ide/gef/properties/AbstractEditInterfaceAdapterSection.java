@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * 				 2019, 2020 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,7 @@
  *   Monika Wenger - initial implementation
  *   Alois Zoitl - moved adapter search code to palette
  *   Bianca Wiesmayr - create command now has enhanced guess
+ *   Daniel Lindhuber - added addEntry method
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -22,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.IContentProvider;
 
 public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditInterfaceSection {
@@ -68,5 +70,14 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 
 	private static EList<AdapterDeclaration> getAdapterList(InterfaceList interfaceList, boolean isInput) {
 		return isInput ? interfaceList.getSockets() : interfaceList.getPlugs();
+	}
+
+	@Override
+	public void addEntry(Object entry, int index) {
+		if (entry instanceof AdapterDeclaration) {
+			Command cmd = newPasteCommand((AdapterDeclaration) entry, getIsInputsViewer(), index);
+			executeCommand(cmd);
+			getViewer().refresh();
+		}
 	}
 }

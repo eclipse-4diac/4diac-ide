@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * 				 2019, 2020 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *   Alois Zoitl - moved adapter search code to palette
  *               - cleaned command stack handling for property section
  *   Bianca Wiesmayr - create command now has enhanced guess
+ *   Daniel Lindhuber - added create command method with index
 *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
@@ -34,6 +35,14 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 		int pos = getInsertingIndex(interfaceElement, isInput);
 		return new CreateInterfaceElementCommand(last, getCreationName(interfaceElement), getType().getInterfaceList(),
 				isInput, pos);
+	}
+
+	@Override
+	protected CreateInterfaceElementCommand newPasteCommand(IInterfaceElement interfaceElement, boolean isInput,
+			int index) {
+		AdapterType last = getLastUsedAdapterType(getType().getInterfaceList(), interfaceElement, isInput);
+		return new CreateInterfaceElementCommand(last, getCreationName(interfaceElement), getType().getInterfaceList(),
+				isInput, index);
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019, 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - create command now has enhanced guess
+ *   Daniel Lindhuber - added addEntry method
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -23,6 +24,8 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.IContentProvider;
 
 public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection {
@@ -69,6 +72,18 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	private static EList<VarDeclaration> getDataList(InterfaceList interfaceList, boolean isInput) {
 		return isInput ? interfaceList.getInputVars() : interfaceList.getOutputVars();
+	}
+
+	@Override
+	public void addEntry(Object entry, int index) {
+		// can not use instanceof since AdapterImplementation is derived from
+		// VarDeclaration and this would break the addEntry method in the adapter
+		// section
+		if (entry.getClass().equals(VarDeclarationImpl.class)) {
+			Command cmd = newPasteCommand((IInterfaceElement) entry, getIsInputsViewer(), index);
+			executeCommand(cmd);
+			getViewer().refresh();
+		}
 	}
 
 }

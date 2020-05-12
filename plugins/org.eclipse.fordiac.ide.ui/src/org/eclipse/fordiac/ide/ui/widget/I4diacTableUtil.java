@@ -13,17 +13,37 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 
 public interface I4diacTableUtil extends ISelectionProvider {
 
 	TableViewer getViewer();
 
-	Object getEntry(int index);
-
 	void addEntry(Object entry, int index);
 
 	Object removeEntry(int index);
 
+	@Override
+	public default void addSelectionChangedListener(ISelectionChangedListener listener) {
+
+	}
+
+	@Override
+	public default ISelection getSelection() {
+		return new StructuredSelection(new Object[] {});
+	}
+
+	@Override
+	public default void removeSelectionChangedListener(ISelectionChangedListener listener) {
+
+	}
+
+	@Override
+	public default void setSelection(ISelection selection) {
+
+	}
 }

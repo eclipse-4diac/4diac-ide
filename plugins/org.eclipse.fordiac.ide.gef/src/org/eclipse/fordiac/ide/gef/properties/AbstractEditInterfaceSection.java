@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017, 2018 fortiss GmbH
- * 				 2018, 2019 Johannes Kepler University Linz
+ * 				 2018, 2019, 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@
  *   Bianca Wiesmayr - extract table creation
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *               - cleaned command stack handling for property sections
+ *   Daniel Lindhuber - added copy and paste
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -44,6 +45,7 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
+import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -58,6 +60,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -68,7 +72,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class AbstractEditInterfaceSection extends AbstractSection {
+public abstract class AbstractEditInterfaceSection extends AbstractSection implements I4diacTableUtil {
 	private static final int TYPE_AND_COMMENT_COLUMN_WIDTH = 100;
 	private static final int NAME_COLUMN_WIDTH = 200;
 	private static final String NAME = "name"; //$NON-NLS-1$
@@ -77,12 +81,16 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 	private TableViewer inputsViewer;
 	private TableViewer outputsViewer;
+	public boolean isInputsViewer;
 
 	protected enum InterfaceContentProviderType {
 		EVENT, DATA, ADAPTER
 	}
 
 	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
+
+	protected abstract CreateInterfaceElementCommand newPasteCommand(IInterfaceElement selection, boolean isInput,
+			int index);
 
 	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);
 
@@ -106,6 +114,14 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		return inputsViewer;
 	}
 
+	public TableViewer getOutputsViewer() {
+		return outputsViewer;
+	}
+
+	public boolean getIsInputsViewer() {
+		return isInputsViewer;
+	}
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
@@ -117,6 +133,37 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 		inputsViewer.setContentProvider(getInputsContentProvider());
 		outputsViewer.setContentProvider(getOutputsContentProvider());
+
+		setFocusListeners();
+		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
+	}
+
+	private void setFocusListeners() {
+		getOutputsViewer().getTable().addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				isInputsViewer = false;
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+			}
+
+		});
+		getInputsViewer().getTable().addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				isInputsViewer = true;
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+			}
+
+		});
+
 	}
 
 	protected abstract IContentProvider getOutputsContentProvider();
@@ -389,5 +436,24 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 	protected String getCreationName(IInterfaceElement interfaceElement) {
 		return (null != interfaceElement) ? interfaceElement.getName() : null;
+	}
+
+	@Override
+	public TableViewer getViewer() {
+		return getIsInputsViewer() ? getInputsViewer() : getOutputsViewer();
+	}
+
+	@Override
+	public Object removeEntry(int index) {
+		IInterfaceElement entry = getEntry(index);
+		Command cmd = newDeleteCommand(entry);
+		executeCommand(cmd);
+		getViewer().refresh();
+		return entry;
+	}
+
+	private IInterfaceElement getEntry(int index) {
+		Object obj = getViewer().getElementAt(index);
+		return (IInterfaceElement) obj;
 	}
 }

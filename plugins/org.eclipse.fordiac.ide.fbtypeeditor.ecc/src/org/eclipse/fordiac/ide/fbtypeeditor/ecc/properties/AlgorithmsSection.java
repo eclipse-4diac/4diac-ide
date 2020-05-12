@@ -15,8 +15,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateAlgorithmCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteAlgorithmCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
@@ -25,7 +31,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class AlgorithmsSection extends ECCSection {
+public class AlgorithmsSection extends ECCSection implements I4diacTableUtil {
 	private final AlgorithmGroup algorithmGroup = new AlgorithmGroup();
 	private AlgorithmList algorithmList;
 
@@ -33,7 +39,7 @@ public class AlgorithmsSection extends ECCSection {
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createAlgorithmControls(parent);
-		tabbedPropertySheetPage.getSite().setSelectionProvider(algorithmList);
+		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
 	}
 
 	public void createAlgorithmControls(final Composite parent) {
@@ -73,5 +79,33 @@ public class AlgorithmsSection extends ECCSection {
 	@Override
 	public void refresh() {
 		getAlgorithmList().refresh();
+	}
+
+	@Override
+	public TableViewer getViewer() {
+		return algorithmList.getViewer();
+	}
+
+	public Object getEntry(int index) {
+		return getAlgorithmList().getType().getAlgorithm().get(index);
+	}
+
+	@Override
+	public void addEntry(Object entry, int index) {
+		if (entry instanceof Algorithm) {
+			Command cmd = new CreateAlgorithmCommand(getAlgorithmList().getType(), index,
+					((Algorithm) entry).getName());
+			getAlgorithmList().executeCommand(cmd);
+			getViewer().refresh();
+		}
+	}
+
+	@Override
+	public Object removeEntry(int index) {
+		Algorithm entry = (Algorithm) getEntry(index);
+		Command cmd = new DeleteAlgorithmCommand(getAlgorithmList().getType(), entry);
+		getAlgorithmList().executeCommand(cmd);
+		getViewer().refresh();
+		return entry;
 	}
 }

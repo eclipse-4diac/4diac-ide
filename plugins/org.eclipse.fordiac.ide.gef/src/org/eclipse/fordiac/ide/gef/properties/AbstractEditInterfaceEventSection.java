@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- *               2019 Johannes Kepler Univeristy Linz
+ *               2019, 2020 Johannes Kepler Univeristy Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,7 +11,8 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
-  *   Bianca Wiesmayr - create command now has enhanced guess
+ *   Bianca Wiesmayr - create command now has enhanced guess
+ *   Daniel Lindhuber - added addEntry method
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -24,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.IContentProvider;
 
 public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection {
@@ -59,6 +61,7 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		return EventTypeLibrary.getInstance().getType(fillTypeCombo()[0]);
 	}
 
+	@Override
 	protected int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput) {
 		if (null != interfaceElement) {
 			InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
@@ -69,5 +72,14 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 
 	private static EList<Event> getEventList(InterfaceList interfaceList, boolean isInput) {
 		return isInput ? interfaceList.getEventInputs() : interfaceList.getEventOutputs();
+	}
+
+	@Override
+	public void addEntry(Object entry, int index) {
+		if (entry instanceof Event) {
+			Command cmd = newPasteCommand((Event) entry, getIsInputsViewer(), index);
+			executeCommand(cmd);
+			getViewer().refresh();
+		}
 	}
 }
