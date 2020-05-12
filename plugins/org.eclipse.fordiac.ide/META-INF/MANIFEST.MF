@@ -6,7 +6,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.systemmanagement
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.12.1.qualifier
+Bundle-Version: 1.13.0.qualifier
 Bundle-Name: Main (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.Activator
 Bundle-ManifestVersion: 2
