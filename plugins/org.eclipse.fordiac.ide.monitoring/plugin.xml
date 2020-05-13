@@ -78,14 +78,22 @@
                commandId="org.eclipse.fordiac.ide.monitoring.MonitorSystem"
                style="toggle"
                tooltip="Enable/Disable monitoring of selected system">
-               <visibleWhen
-                  checkEnabled="false">
-               <iterate>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
+                <visibleWhen
+                      checkEnabled="false">
+                   <with
+                         variable="selection">
+                      <iterate>
+                         <adapt
+                               type="org.eclipse.core.resources.IFile">
+                            <test
+                                  forcePluginActivation="false"
+                                  property="org.eclipse.core.resources.extension"
+                                  value="sys">
+                            </test>
+                         </adapt>
+                      </iterate>
+                   </with>
+                </visibleWhen>
          </command>
       </menuContribution>
    </extension>
@@ -94,14 +102,21 @@
       <handler
             class="org.eclipse.fordiac.ide.monitoring.handlers.MonitorSystemHandler"
             commandId="org.eclipse.fordiac.ide.monitoring.MonitorSystem">
-            <visibleWhen>
-           
-               <iterate>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
+            <activeWhen>
+              <with
+                         variable="selection">
+                      <iterate>
+                         <adapt
+                               type="org.eclipse.core.resources.IFile">
+                            <test
+                                  forcePluginActivation="false"
+                                  property="org.eclipse.core.resources.extension"
+                                  value="sys">
+                            </test>
+                         </adapt>
+                      </iterate>
+                   </with></activeWhen>
+         
       </handler>
    </extension>
    <extension
@@ -176,8 +191,13 @@
              <dynamic
                    class="org.eclipse.fordiac.ide.monitoring.MonitoredSystems"
                    id="org.eclipse.fordiac.ide.monitoring.monitoredSystems">
-             </dynamic>               
+             </dynamic>
           </menu>     
+             <command
+                   commandId="org.eclipse.fordiac.ide.monitoring.MonitorSystem"
+                   label="Monitor System"
+                   style="toggle">
+             </command>               
            
          <separator
                name="org.eclipse.fordiac.ide.monitoring.monitoringBegin"
