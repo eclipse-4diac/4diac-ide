@@ -20,7 +20,6 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import org.eclipse.draw2d.FigureCanvas;
@@ -54,24 +53,23 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		static final int DEFAULT_MODE = 0;
 		static final int TOGGLE_MODE = 1;
 
-		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@SuppressWarnings("unchecked")
 		@Override
 		protected void performMarqueeSelect() {
 			// determine which edit parts are affected by the current marquee
 			// selection
-			Collection marqueeSelectedEditParts = calculateMarqueeSelectedEditParts();
+			Collection<EditPart> marqueeSelectedEditParts = calculateMarqueeSelectedEditParts();
 
 			// calculate nodes/connections that are to be selected/deselected,
 			// dependent on the current mode of the tool
-			Collection editPartsToSelect = new LinkedHashSet();
-			Collection editPartsToDeselect = new HashSet();
-			for (Iterator iterator = marqueeSelectedEditParts.iterator(); iterator.hasNext();) {
-				EditPart affectedEditPart = (EditPart) iterator.next();
+			Collection<EditPart> editPartsToSelect = new LinkedHashSet<>();
+			Collection<EditPart> editPartsToDeselect = new HashSet<>();
+			for (EditPart affectedEditPart : marqueeSelectedEditParts) {
 				if ((affectedEditPart.getSelected() == EditPart.SELECTED_NONE)
 						|| (getCurrentSelectionMode() != TOGGLE_MODE)) {
 					// only add connections and FBs
-					if ((affectedEditPart instanceof FBEditPart) || (affectedEditPart instanceof ConnectionEditPart)
-							|| (affectedEditPart instanceof SubAppForFBNetworkEditPart)) {
+					if ((affectedEditPart instanceof AbstractFBNElementEditPart)
+							|| (affectedEditPart instanceof ConnectionEditPart)) {
 						editPartsToSelect.add(affectedEditPart);
 					}
 				} else {
