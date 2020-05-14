@@ -17,9 +17,11 @@
 
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.MARGIN_HORIZONTAL;
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.MARGIN_VERTICAL;
+
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FlowLayout;
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
@@ -37,7 +39,7 @@ import org.eclipse.fordiac.ide.gef.figures.HorizontalLineFigure;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.swt.SWT;
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.*;
+import org.eclipse.swt.graphics.Color;
 
 public final class ECStateFigure extends Figure implements InteractionStyleFigure {
 
@@ -110,13 +112,23 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 				}
 				return STATE_INSET;
 			}
+
+			@Override
+			public void setBackgroundColor(Color bg) {
+				if (getBorder() instanceof StartStateBorder) {
+					((StartStateBorder) getBorder()).setColor(bg);
+				} else {
+					super.setBackgroundColor(bg);
+				}
+			}
 		};
 		nameLabel.setText(state.getName());
-		nameLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
 		nameLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
 		nameLabel.setOpaque(true);
 		if (state.isStartState()) {
-			nameLabel.setBorder(new StartStateBorder());
+			nameLabel.setBorder(new StartStateBorder(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR)));
+		} else {
+			nameLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
 		}
 		return nameLabel;
 	}
@@ -157,11 +169,15 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 
 	private static class StartStateBorder extends LineBorder {
 
-		private static final int DOUBLE_BORDER_WIDTH = 3;
-		private static final Insets DOUBLE_BORDER_INSET = new Insets(DOUBLE_BORDER_WIDTH).add(STATE_INSET);
+		private static final int DOUBLE_BORDER_WIDTH = 4;
+		private static final int START_STATE_INSET_SIZE = 2;
+		private static final Insets START_STATE_INSET = new Insets(START_STATE_INSET_SIZE);
+		private static final Insets DOUBLE_BORDER_INSET = new Insets(DOUBLE_BORDER_WIDTH).add(START_STATE_INSET);
 
-		public StartStateBorder() {
+		public StartStateBorder(Color color) {
 			super();
+			setWidth(DOUBLE_BORDER_WIDTH);
+			setColor(color);
 		}
 
 		@Override
@@ -169,17 +185,5 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 			return DOUBLE_BORDER_INSET;
 		}
 
-		@Override
-		public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
-			super.paint(figure, graphics, insets);
-
-			graphics.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
-			graphics.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
-
-			Rectangle tempRect2 = new Rectangle(tempRect);
-			tempRect2.shrink(DOUBLE_BORDER_WIDTH, DOUBLE_BORDER_WIDTH);
-			graphics.drawRectangle(tempRect2);
-
-		}
 	}
 }
