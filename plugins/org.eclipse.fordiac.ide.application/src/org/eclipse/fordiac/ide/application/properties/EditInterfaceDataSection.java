@@ -70,9 +70,8 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput,
-			boolean moveUp) {
-		return new ChangeSubAppInterfaceOrderCommand(selection, isInput, moveUp);
+	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean moveUp) {
+		return new ChangeSubAppInterfaceOrderCommand(selection, moveUp);
 	}
 
 	@Override

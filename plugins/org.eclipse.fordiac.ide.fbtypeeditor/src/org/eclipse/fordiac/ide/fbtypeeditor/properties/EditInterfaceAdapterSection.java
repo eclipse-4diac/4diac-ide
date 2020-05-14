@@ -62,9 +62,8 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	}
 
 	@Override
-	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput,
-			boolean moveUp) {
-		return new ChangeInterfaceOrderCommand(selection, isInput, moveUp);
+	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean moveUp) {
+		return new ChangeInterfaceOrderCommand(selection, moveUp);
 	}
 
 	@Override

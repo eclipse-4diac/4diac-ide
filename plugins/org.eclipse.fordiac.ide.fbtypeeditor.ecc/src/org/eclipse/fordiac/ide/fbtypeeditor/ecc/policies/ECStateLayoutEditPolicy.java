@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ActionMoveCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -87,8 +86,8 @@ public class ECStateLayoutEditPolicy extends XYLayoutEditPolicy {
 		ECState targetState = null;
 		ECAction action = null;
 		int index = -1;
-		if (getHost() instanceof ECStateEditPart) {
-			targetState = ((ECStateEditPart) getHost()).getModel();
+		if (getHost().getModel() instanceof ECState) {
+			targetState = (ECState) getHost().getModel();
 			index = targetState.getECAction().size();
 			if (!request.getEditParts().isEmpty()) {
 				if (request.getEditParts().get(0) instanceof ECActionAlgorithmEditPart) {

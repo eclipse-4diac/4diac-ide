@@ -94,8 +94,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);
 
-	protected abstract ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput,
-			boolean moveUp);
+	protected abstract ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean moveUp);
 
 	protected abstract String[] fillTypeCombo();
 
@@ -208,9 +207,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	private void configureButtonList(AddDeleteReorderListWidget buttons, TableViewer viewer, boolean inputs) {
 		buttons.bindToTableViewer(viewer, this, ref -> newCreateCommand((IInterfaceElement) ref, inputs),
-				ref -> newDeleteCommand((IInterfaceElement) ref),
-				ref -> newOrderCommand((IInterfaceElement) ref, inputs, true),
-				ref -> newOrderCommand((IInterfaceElement) ref, inputs, false));
+				ref -> newDeleteCommand((IInterfaceElement) ref), ref -> newOrderCommand((IInterfaceElement) ref, true),
+				ref -> newOrderCommand((IInterfaceElement) ref, false));
 	}
 
 	private void setCellEditors(TableViewer viewer) {

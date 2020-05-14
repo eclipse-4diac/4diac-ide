@@ -15,7 +15,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.policies;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.AbstractContainerElement;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceContainerEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -26,7 +25,7 @@ import org.eclipse.gef.editpolicies.FlowLayoutEditPolicy;
 public abstract class AbstractInterfaceContainerLayoutEditPolicy extends FlowLayoutEditPolicy {
 
 	protected AbstractContainerElement getModel() {
-		return ((InterfaceContainerEditPart) getHost()).getModel();
+		return (AbstractContainerElement) getHost().getModel();
 	}
 
 	protected FBType getFBType() {
@@ -58,7 +57,7 @@ public abstract class AbstractInterfaceContainerLayoutEditPolicy extends FlowLay
 			}
 			if (canReorder(childEl, afterEl)) {
 				int newIndex = createMoveChildCondition(after);
-				return new ChangeInterfaceOrderCommand(childEl, childEl.isIsInput(), newIndex);
+				return new ChangeInterfaceOrderCommand(childEl, newIndex);
 			}
 		}
 		return null;
