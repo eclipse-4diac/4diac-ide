@@ -131,12 +131,14 @@ class FBNetworkImporter extends CommonElementImporter {
 			}
 		}
 
-		if (fb.getType().getName().equals("STRUCT_MUX")) { //$NON-NLS-1$
-			Multiplexer mux = LibraryElementFactory.eINSTANCE.createMultiplexer();
-			fb = convertFBtoMux(fb, mux);
-		} else if (fb.getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
-			Demultiplexer demux = LibraryElementFactory.eINSTANCE.createDemultiplexer();
-			fb = convertFBtoMux(fb, demux);
+		if (null != fb.getType()) {
+			if ("STRUCT_MUX".equals(fb.getType().getName())) { //$NON-NLS-1$
+				Multiplexer mux = LibraryElementFactory.eINSTANCE.createMultiplexer();
+				fb = convertFBtoMux(fb, mux);
+			} else if ("STRUCT_DEMUX".equals(fb.getType().getName())) { //$NON-NLS-1$
+				Demultiplexer demux = LibraryElementFactory.eINSTANCE.createDemultiplexer();
+				fb = convertFBtoMux(fb, demux);
+			}
 		}
 		fbNetwork.getNetworkElements().add(fb);
 		fbNetworkElementMap.put(fb.getName(), fb);
