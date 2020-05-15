@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-class ForteNgForLoopTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
+class ForteNgForLoopTest extends ForteNgTestBasicFBTypeBase {
 
 	@Test
 	def void validForLoop() {

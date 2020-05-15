@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
+class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase {
 
 	@Test
 	def void validCaseStatement() {

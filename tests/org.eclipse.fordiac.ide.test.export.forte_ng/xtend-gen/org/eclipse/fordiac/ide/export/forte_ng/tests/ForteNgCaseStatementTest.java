@@ -12,7 +12,6 @@
  */
 package org.eclipse.fordiac.ide.export.forte_ng.tests;
 
-import org.eclipse.fordiac.ide.export.forte_ng.tests.DatatypeConstants;
 import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBase;
 import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBasicFBTypeBase;
 import org.eclipse.xtend2.lib.StringConcatenation;
@@ -20,10 +19,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 @SuppressWarnings("all")
-public class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
+public class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase {
   @Test
   public void validCaseStatement() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, ForteNgTestBase.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("CASE variable OF");
     _builder.newLine();
@@ -116,7 +115,7 @@ public class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase impleme
   
   @Test
   public void validCaseStatementWithList() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, ForteNgTestBase.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("CASE variable OF");
     _builder.newLine();
@@ -171,7 +170,7 @@ public class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase impleme
   
   @Test
   public void validCaseStatementWithElse() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, ForteNgTestBase.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("CASE variable OF");
     _builder.newLine();
@@ -242,7 +241,7 @@ public class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase impleme
   
   @Test
   public void validCaseStatementWithIfInside() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, ForteNgTestBase.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("CASE variable OF");
     _builder.newLine();
@@ -352,7 +351,7 @@ public class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase impleme
   
   @Test
   public void invalidCaseStatementNoEnd() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, ForteNgTestBase.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("CASE ");
     _builder.append(ForteNgTestBase.VARIABLE_NAME);
