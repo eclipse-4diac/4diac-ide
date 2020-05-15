@@ -1,6 +1,5 @@
 package org.eclipse.fordiac.ide.export.forte_ng.tests;
 
-import org.eclipse.fordiac.ide.export.forte_ng.tests.DatatypeConstants;
 import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBase;
 import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBasicFBTypeBase;
 import org.eclipse.xtend2.lib.StringConcatenation;
@@ -8,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 @SuppressWarnings("all")
-public class ForteNgTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
+public class ForteNgTest extends ForteNgTestBasicFBTypeBase {
   @Test
   public void emptyExpression() {
     CharSequence generatedCode = this.generateExpression(this.functionBlock, "", this.getErrors());
@@ -18,7 +17,7 @@ public class ForteNgTest extends ForteNgTestBasicFBTypeBase implements DatatypeC
   
   @Test
   public void assignmentExpression() {
-    this.functionBlock.getInterfaceList().getInputVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.BOOL));
+    this.functionBlock.getInterfaceList().getInputVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, ForteNgTestBase.BOOL));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append(ForteNgTestBase.VARIABLE_NAME);
     _builder.append(" := 1");
@@ -29,7 +28,7 @@ public class ForteNgTest extends ForteNgTestBasicFBTypeBase implements DatatypeC
   
   @Test
   public void simpleAssignmentAlgorithm() {
-    this.functionBlock.getInterfaceList().getInputVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.BOOL));
+    this.functionBlock.getInterfaceList().getInputVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, ForteNgTestBase.BOOL));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append(ForteNgTestBase.VARIABLE_NAME);
     _builder.append(" := 1;");
@@ -46,7 +45,7 @@ public class ForteNgTest extends ForteNgTestBasicFBTypeBase implements DatatypeC
   
   @Test
   public void functionSQRTExpression() {
-    this.functionBlock.getInterfaceList().getInputVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.REAL));
+    this.functionBlock.getInterfaceList().getInputVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, ForteNgTestBase.REAL));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("SQRT(");
     _builder.append(ForteNgTestBase.VARIABLE_NAME);
@@ -65,8 +64,8 @@ public class ForteNgTest extends ForteNgTestBasicFBTypeBase implements DatatypeC
   
   @Test
   public void powerExpression() {
-    this.functionBlock.getInterfaceList().getInputVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.REAL));
-    this.functionBlock.getInterfaceList().getInputVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, DatatypeConstants.REAL));
+    this.functionBlock.getInterfaceList().getInputVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, ForteNgTestBase.REAL));
+    this.functionBlock.getInterfaceList().getInputVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, ForteNgTestBase.REAL));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append(ForteNgTestBase.VARIABLE_NAME);
     _builder.append(" ** ");

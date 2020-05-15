@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
 @RunWith(Parameterized)
-class ForteNgAtArrayAccessTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
+class ForteNgAtArrayAccessTest extends ForteNgTestBasicFBTypeBase {
 
 	protected static final boolean VALID_ACCESS = true
 	protected static final boolean INVALID_ACCESS = !VALID_ACCESS

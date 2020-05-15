@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-class ForteNgBasicFBTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
+class ForteNgBasicFBTest extends ForteNgTestBasicFBTypeBase {
 
 	@Test
 	def exportValidBasicFB() {

@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.export.forte_ng.tests;
 
 import com.google.common.base.Objects;
 import java.util.List;
-import org.eclipse.fordiac.ide.export.forte_ng.tests.DatatypeConstants;
 import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBase;
 import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBasicFBTypeBase;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -24,7 +23,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 @SuppressWarnings("all")
-public class ForteNgBasicFBTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
+public class ForteNgBasicFBTest extends ForteNgTestBasicFBTypeBase {
   @Test
   public void exportValidBasicFB() {
     StringConcatenation _builder = new StringConcatenation();

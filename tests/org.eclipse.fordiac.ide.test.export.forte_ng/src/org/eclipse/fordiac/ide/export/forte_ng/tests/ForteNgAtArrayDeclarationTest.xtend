@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
 @RunWith(Parameterized)
-class ForteNgAtArrayDeclarationTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
+class ForteNgAtArrayDeclarationTest extends ForteNgTestBasicFBTypeBase {
 
 	val static VALID_DECLARATION = true
 	val static INVALID_DECLARATION = !VALID_DECLARATION

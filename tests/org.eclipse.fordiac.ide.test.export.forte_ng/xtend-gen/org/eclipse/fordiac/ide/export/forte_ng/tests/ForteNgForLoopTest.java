@@ -12,7 +12,6 @@
  */
 package org.eclipse.fordiac.ide.export.forte_ng.tests;
 
-import org.eclipse.fordiac.ide.export.forte_ng.tests.DatatypeConstants;
 import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBase;
 import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBasicFBTypeBase;
 import org.eclipse.xtend2.lib.StringConcatenation;
@@ -20,11 +19,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 @SuppressWarnings("all")
-public class ForteNgForLoopTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
+public class ForteNgForLoopTest extends ForteNgTestBasicFBTypeBase {
   @Test
   public void validForLoop() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, DatatypeConstants.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, ForteNgTestBase.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, ForteNgTestBase.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("FOR ");
     _builder.append(ForteNgTestBase.VARIABLE_NAME);
@@ -77,8 +76,8 @@ public class ForteNgForLoopTest extends ForteNgTestBasicFBTypeBase implements Da
   
   @Test
   public void validForLoopWithBy() {
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, DatatypeConstants.DINT));
-    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, DatatypeConstants.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE_NAME, ForteNgTestBase.DINT));
+    this.functionBlock.getInternalVars().add(this.createVarDeclaration(ForteNgTestBase.VARIABLE2_NAME, ForteNgTestBase.DINT));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("FOR ");
     _builder.append(ForteNgTestBase.VARIABLE_NAME);

@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.export.forte_ng.tests;
 
 import java.util.Collection;
 import java.util.Collections;
-import org.eclipse.fordiac.ide.export.forte_ng.tests.DatatypeConstants;
 import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBase;
 import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBasicFBTypeBase;
 import org.eclipse.xtend2.lib.StringConcatenation;
@@ -26,7 +25,7 @@ import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)
 @SuppressWarnings("all")
-public class ForteNgAtArrayDeclarationTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
+public class ForteNgAtArrayDeclarationTest extends ForteNgTestBasicFBTypeBase {
   private static final boolean VALID_DECLARATION = true;
   
   private static final boolean INVALID_DECLARATION = (!ForteNgAtArrayDeclarationTest.VALID_DECLARATION);
@@ -43,51 +42,51 @@ public class ForteNgAtArrayDeclarationTest extends ForteNgTestBasicFBTypeBase im
   
   @Parameterized.Parameters(name = "{index}: {0}->{1}[{2}..{3}]")
   public static Collection<Object[]> testCases() {
-    Object[] _testCase = ForteNgTestBase.testCase(DatatypeConstants.LWORD, DatatypeConstants.DWORD, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(DatatypeConstants.indexStop(DatatypeConstants.LWORD, DatatypeConstants.DWORD)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
-    Object[] _testCase_1 = ForteNgTestBase.testCase(DatatypeConstants.LWORD, DatatypeConstants.WORD, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(DatatypeConstants.indexStop(DatatypeConstants.LWORD, DatatypeConstants.WORD)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
-    Object[] _testCase_2 = ForteNgTestBase.testCase(DatatypeConstants.LWORD, DatatypeConstants.BYTE, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(DatatypeConstants.indexStop(DatatypeConstants.LWORD, DatatypeConstants.BYTE)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
-    Object[] _testCase_3 = ForteNgTestBase.testCase(DatatypeConstants.LWORD, DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(DatatypeConstants.indexStop(DatatypeConstants.LWORD, DatatypeConstants.BOOL)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
-    int _indexStop = DatatypeConstants.indexStop(DatatypeConstants.LWORD, DatatypeConstants.DWORD);
+    Object[] _testCase = ForteNgTestBase.testCase(ForteNgTestBase.LWORD, ForteNgTestBase.DWORD, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(ForteNgTestBase.indexStop(ForteNgTestBase.LWORD, ForteNgTestBase.DWORD)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
+    Object[] _testCase_1 = ForteNgTestBase.testCase(ForteNgTestBase.LWORD, ForteNgTestBase.WORD, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(ForteNgTestBase.indexStop(ForteNgTestBase.LWORD, ForteNgTestBase.WORD)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
+    Object[] _testCase_2 = ForteNgTestBase.testCase(ForteNgTestBase.LWORD, ForteNgTestBase.BYTE, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(ForteNgTestBase.indexStop(ForteNgTestBase.LWORD, ForteNgTestBase.BYTE)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
+    Object[] _testCase_3 = ForteNgTestBase.testCase(ForteNgTestBase.LWORD, ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(ForteNgTestBase.indexStop(ForteNgTestBase.LWORD, ForteNgTestBase.BOOL)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
+    int _indexStop = ForteNgTestBase.indexStop(ForteNgTestBase.LWORD, ForteNgTestBase.DWORD);
     int _plus = (_indexStop + 1);
-    Object[] _testCase_4 = ForteNgTestBase.testCase(DatatypeConstants.LWORD, DatatypeConstants.DWORD, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(_plus), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    int _indexStop_1 = DatatypeConstants.indexStop(DatatypeConstants.LWORD, DatatypeConstants.WORD);
+    Object[] _testCase_4 = ForteNgTestBase.testCase(ForteNgTestBase.LWORD, ForteNgTestBase.DWORD, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(_plus), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    int _indexStop_1 = ForteNgTestBase.indexStop(ForteNgTestBase.LWORD, ForteNgTestBase.WORD);
     int _plus_1 = (_indexStop_1 + 1);
-    Object[] _testCase_5 = ForteNgTestBase.testCase(DatatypeConstants.LWORD, DatatypeConstants.WORD, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(_plus_1), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    int _indexStop_2 = DatatypeConstants.indexStop(DatatypeConstants.LWORD, DatatypeConstants.BYTE);
+    Object[] _testCase_5 = ForteNgTestBase.testCase(ForteNgTestBase.LWORD, ForteNgTestBase.WORD, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(_plus_1), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    int _indexStop_2 = ForteNgTestBase.indexStop(ForteNgTestBase.LWORD, ForteNgTestBase.BYTE);
     int _plus_2 = (_indexStop_2 + 1);
-    Object[] _testCase_6 = ForteNgTestBase.testCase(DatatypeConstants.LWORD, DatatypeConstants.BYTE, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(_plus_2), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    int _indexStop_3 = DatatypeConstants.indexStop(DatatypeConstants.LWORD, DatatypeConstants.BOOL);
+    Object[] _testCase_6 = ForteNgTestBase.testCase(ForteNgTestBase.LWORD, ForteNgTestBase.BYTE, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(_plus_2), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    int _indexStop_3 = ForteNgTestBase.indexStop(ForteNgTestBase.LWORD, ForteNgTestBase.BOOL);
     int _plus_3 = (_indexStop_3 + 1);
-    Object[] _testCase_7 = ForteNgTestBase.testCase(DatatypeConstants.LWORD, DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(_plus_3), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    Object[] _testCase_8 = ForteNgTestBase.testCase(DatatypeConstants.DWORD, DatatypeConstants.WORD, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(DatatypeConstants.indexStop(DatatypeConstants.DWORD, DatatypeConstants.WORD)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
-    Object[] _testCase_9 = ForteNgTestBase.testCase(DatatypeConstants.DWORD, DatatypeConstants.BYTE, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(DatatypeConstants.indexStop(DatatypeConstants.DWORD, DatatypeConstants.BYTE)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
-    Object[] _testCase_10 = ForteNgTestBase.testCase(DatatypeConstants.DWORD, DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(DatatypeConstants.indexStop(DatatypeConstants.DWORD, DatatypeConstants.BOOL)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
-    int _indexStop_4 = DatatypeConstants.indexStop(DatatypeConstants.DWORD, DatatypeConstants.WORD);
+    Object[] _testCase_7 = ForteNgTestBase.testCase(ForteNgTestBase.LWORD, ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(_plus_3), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    Object[] _testCase_8 = ForteNgTestBase.testCase(ForteNgTestBase.DWORD, ForteNgTestBase.WORD, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(ForteNgTestBase.indexStop(ForteNgTestBase.DWORD, ForteNgTestBase.WORD)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
+    Object[] _testCase_9 = ForteNgTestBase.testCase(ForteNgTestBase.DWORD, ForteNgTestBase.BYTE, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(ForteNgTestBase.indexStop(ForteNgTestBase.DWORD, ForteNgTestBase.BYTE)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
+    Object[] _testCase_10 = ForteNgTestBase.testCase(ForteNgTestBase.DWORD, ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(ForteNgTestBase.indexStop(ForteNgTestBase.DWORD, ForteNgTestBase.BOOL)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
+    int _indexStop_4 = ForteNgTestBase.indexStop(ForteNgTestBase.DWORD, ForteNgTestBase.WORD);
     int _plus_4 = (_indexStop_4 + 1);
-    Object[] _testCase_11 = ForteNgTestBase.testCase(DatatypeConstants.DWORD, DatatypeConstants.WORD, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(_plus_4), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    int _indexStop_5 = DatatypeConstants.indexStop(DatatypeConstants.DWORD, DatatypeConstants.BYTE);
+    Object[] _testCase_11 = ForteNgTestBase.testCase(ForteNgTestBase.DWORD, ForteNgTestBase.WORD, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(_plus_4), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    int _indexStop_5 = ForteNgTestBase.indexStop(ForteNgTestBase.DWORD, ForteNgTestBase.BYTE);
     int _plus_5 = (_indexStop_5 + 1);
-    Object[] _testCase_12 = ForteNgTestBase.testCase(DatatypeConstants.DWORD, DatatypeConstants.BYTE, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(_plus_5), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    int _indexStop_6 = DatatypeConstants.indexStop(DatatypeConstants.DWORD, DatatypeConstants.BOOL);
+    Object[] _testCase_12 = ForteNgTestBase.testCase(ForteNgTestBase.DWORD, ForteNgTestBase.BYTE, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(_plus_5), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    int _indexStop_6 = ForteNgTestBase.indexStop(ForteNgTestBase.DWORD, ForteNgTestBase.BOOL);
     int _plus_6 = (_indexStop_6 + 1);
-    Object[] _testCase_13 = ForteNgTestBase.testCase(DatatypeConstants.DWORD, DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(_plus_6), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    Object[] _testCase_14 = ForteNgTestBase.testCase(DatatypeConstants.WORD, DatatypeConstants.BYTE, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(DatatypeConstants.indexStop(DatatypeConstants.WORD, DatatypeConstants.BYTE)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
-    Object[] _testCase_15 = ForteNgTestBase.testCase(DatatypeConstants.WORD, DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(DatatypeConstants.indexStop(DatatypeConstants.WORD, DatatypeConstants.BOOL)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
-    int _indexStop_7 = DatatypeConstants.indexStop(DatatypeConstants.WORD, DatatypeConstants.BYTE);
+    Object[] _testCase_13 = ForteNgTestBase.testCase(ForteNgTestBase.DWORD, ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(_plus_6), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    Object[] _testCase_14 = ForteNgTestBase.testCase(ForteNgTestBase.WORD, ForteNgTestBase.BYTE, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(ForteNgTestBase.indexStop(ForteNgTestBase.WORD, ForteNgTestBase.BYTE)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
+    Object[] _testCase_15 = ForteNgTestBase.testCase(ForteNgTestBase.WORD, ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(ForteNgTestBase.indexStop(ForteNgTestBase.WORD, ForteNgTestBase.BOOL)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
+    int _indexStop_7 = ForteNgTestBase.indexStop(ForteNgTestBase.WORD, ForteNgTestBase.BYTE);
     int _plus_7 = (_indexStop_7 + 1);
-    Object[] _testCase_16 = ForteNgTestBase.testCase(DatatypeConstants.WORD, DatatypeConstants.BYTE, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(_plus_7), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    int _indexStop_8 = DatatypeConstants.indexStop(DatatypeConstants.WORD, DatatypeConstants.BOOL);
+    Object[] _testCase_16 = ForteNgTestBase.testCase(ForteNgTestBase.WORD, ForteNgTestBase.BYTE, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(_plus_7), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    int _indexStop_8 = ForteNgTestBase.indexStop(ForteNgTestBase.WORD, ForteNgTestBase.BOOL);
     int _plus_8 = (_indexStop_8 + 1);
-    Object[] _testCase_17 = ForteNgTestBase.testCase(DatatypeConstants.WORD, DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(_plus_8), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    Object[] _testCase_18 = ForteNgTestBase.testCase(DatatypeConstants.BYTE, DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(DatatypeConstants.indexStop(DatatypeConstants.BYTE, DatatypeConstants.BOOL)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
-    int _indexStop_9 = DatatypeConstants.indexStop(DatatypeConstants.BYTE, DatatypeConstants.BOOL);
+    Object[] _testCase_17 = ForteNgTestBase.testCase(ForteNgTestBase.WORD, ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(_plus_8), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    Object[] _testCase_18 = ForteNgTestBase.testCase(ForteNgTestBase.BYTE, ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(ForteNgTestBase.indexStop(ForteNgTestBase.BYTE, ForteNgTestBase.BOOL)), Boolean.valueOf(ForteNgAtArrayDeclarationTest.VALID_DECLARATION));
+    int _indexStop_9 = ForteNgTestBase.indexStop(ForteNgTestBase.BYTE, ForteNgTestBase.BOOL);
     int _plus_9 = (_indexStop_9 + 1);
-    Object[] _testCase_19 = ForteNgTestBase.testCase(DatatypeConstants.BYTE, DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(_plus_9), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    Object[] _testCase_20 = ForteNgTestBase.testCase("LINT", DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(8), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    Object[] _testCase_21 = ForteNgTestBase.testCase(DatatypeConstants.DINT, DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(8), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    Object[] _testCase_22 = ForteNgTestBase.testCase("INT", DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(8), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    Object[] _testCase_23 = ForteNgTestBase.testCase("SINT", DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(8), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
-    Object[] _testCase_24 = ForteNgTestBase.testCase(DatatypeConstants.REAL, DatatypeConstants.BOOL, Integer.valueOf(DatatypeConstants.INDEX_START), Integer.valueOf(8), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    Object[] _testCase_19 = ForteNgTestBase.testCase(ForteNgTestBase.BYTE, ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(_plus_9), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    Object[] _testCase_20 = ForteNgTestBase.testCase("LINT", ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(8), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    Object[] _testCase_21 = ForteNgTestBase.testCase(ForteNgTestBase.DINT, ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(8), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    Object[] _testCase_22 = ForteNgTestBase.testCase("INT", ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(8), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    Object[] _testCase_23 = ForteNgTestBase.testCase("SINT", ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(8), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
+    Object[] _testCase_24 = ForteNgTestBase.testCase(ForteNgTestBase.REAL, ForteNgTestBase.BOOL, Integer.valueOf(ForteNgTestBase.INDEX_START), Integer.valueOf(8), Boolean.valueOf(ForteNgAtArrayDeclarationTest.INVALID_DECLARATION));
     return Collections.<Object[]>unmodifiableList(CollectionLiterals.<Object[]>newArrayList(_testCase, _testCase_1, _testCase_2, _testCase_3, _testCase_4, _testCase_5, _testCase_6, _testCase_7, _testCase_8, _testCase_9, _testCase_10, _testCase_11, _testCase_12, _testCase_13, _testCase_14, _testCase_15, _testCase_16, _testCase_17, _testCase_18, _testCase_19, _testCase_20, _testCase_21, _testCase_22, _testCase_23, _testCase_24));
   }
   

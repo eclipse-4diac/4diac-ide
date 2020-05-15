@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNull
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertEquals
 
-class ForteNgTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
+class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 
 	@Test
 	def emptyExpression() {
