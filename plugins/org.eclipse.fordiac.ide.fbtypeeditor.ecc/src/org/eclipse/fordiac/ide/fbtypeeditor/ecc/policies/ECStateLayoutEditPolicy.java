@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2012 - 2017 Profactor GmbH, fortiss GmbH
+ * 				 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - changed base class to correctly reflect the layouting,
+ *                 code clean-up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies;
 
@@ -25,12 +28,12 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
+import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 
-public class ECStateLayoutEditPolicy extends XYLayoutEditPolicy {
+public class ECStateLayoutEditPolicy extends LayoutEditPolicy {
 	@Override
 	public Command getCommand(Request request) {
 		Object type = request.getType();
@@ -82,13 +85,9 @@ public class ECStateLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	private Command getActionMoveCommand(ChangeBoundsRequest request) {
-		Command cmd = null;
-		ECState targetState = null;
-		ECAction action = null;
-		int index = -1;
 		if (getHost().getModel() instanceof ECState) {
-			targetState = (ECState) getHost().getModel();
-			index = targetState.getECAction().size();
+			ECState targetState = (ECState) getHost().getModel();
+			ECAction action = null;
 			if (!request.getEditParts().isEmpty()) {
 				if (request.getEditParts().get(0) instanceof ECActionAlgorithmEditPart) {
 					action = ((ECActionAlgorithmEditPart) request.getEditParts().get(0)).getAction();
@@ -97,8 +96,16 @@ public class ECStateLayoutEditPolicy extends XYLayoutEditPolicy {
 					action = ((ECActionOutputEventEditPart) request.getEditParts().get(0)).getAction();
 				}
 			}
-			cmd = new ActionMoveCommand(action, targetState, index);
+			return new ActionMoveCommand(action, targetState, targetState.getECAction().size());
 		}
-		return cmd;
+		return null;
 	}
+
+	@Override
+	protected Command getMoveChildrenCommand(Request request) {
+		// we currently can not directly reorder actions of states in the graphics
+		// therefore null is fine here
+		return null;
+	}
+
 }
