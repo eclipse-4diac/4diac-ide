@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 Profactor GbmH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -46,13 +46,15 @@ public class ParameterDropTargetListener extends AbstractTransferDropTargetListe
 
 	@Override
 	protected void handleDragOver() {
-		Object model = getTargetEditPart().getModel();
-		if (model instanceof IInterfaceElement) {
-			if (((IInterfaceElement) model).isIsInput() && !(model instanceof Event)) {
-				getCurrentEvent().detail = DND.DROP_COPY;
+		if (null != getTargetEditPart()) {
+			Object model = getTargetEditPart().getModel();
+			if (model instanceof IInterfaceElement) {
+				if (((IInterfaceElement) model).isIsInput() && !(model instanceof Event)) {
+					getCurrentEvent().detail = DND.DROP_COPY;
+				}
+			} else {
+				getCurrentEvent().detail = DND.DROP_NONE;
 			}
-		} else {
-			getCurrentEvent().detail = DND.DROP_NONE;
 		}
 		super.handleDragOver();
 	}
