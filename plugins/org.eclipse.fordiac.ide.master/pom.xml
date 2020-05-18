@@ -59,6 +59,7 @@
 		<module>../../features/org.eclipse.fordiac.ide.workbench.feature</module>
 		<module>../../features/org.eclipse.fordiac.ide.comgeneration.feature</module>
 		<module>../../tests/org.eclipse.fordiac.ide.test.export.forte_ng</module>
+		<module>../../tests/org.eclipse.fordiac.ide.test.model.commands</module>
 	</modules>
 
 	<properties>

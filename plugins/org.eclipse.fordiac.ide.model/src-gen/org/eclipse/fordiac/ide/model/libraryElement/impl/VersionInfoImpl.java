@@ -44,7 +44,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String AUTHOR_EDEFAULT = null;
+	protected static final String AUTHOR_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getAuthor() <em>Author</em>}' attribute.
@@ -63,7 +63,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String DATE_EDEFAULT = null;
+	protected static final String DATE_EDEFAULT = "YYYY-MM-DD";
 
 	/**
 	 * The cached value of the '{@link #getDate() <em>Date</em>}' attribute. <!--
@@ -82,7 +82,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String ORGANIZATION_EDEFAULT = null;
+	protected static final String ORGANIZATION_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getOrganization() <em>Organization</em>}' attribute.
@@ -100,7 +100,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String REMARKS_EDEFAULT = null;
+	protected static final String REMARKS_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getRemarks() <em>Remarks</em>}' attribute.
@@ -118,7 +118,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VERSION_EDEFAULT = null;
+	protected static final String VERSION_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
