@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.export.forte_ng;singleton:=true
 Bundle-Version: 1.13.0.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.export.forte_ng
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Activator: org.eclipse.fordiac.ide.export.forte_ng.Activator
 Require-Bundle: com.google.guava,
  org.eclipse.xtext.xbase.lib,

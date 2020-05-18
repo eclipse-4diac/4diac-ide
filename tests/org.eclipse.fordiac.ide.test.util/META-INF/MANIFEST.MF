@@ -5,6 +5,6 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.test.util
 Bundle-Version: 1.13.0.qualifier
 Fragment-Host: org.eclipse.fordiac.ide.util
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.util
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: Eclipse 4diac
 Require-Bundle: org.junit

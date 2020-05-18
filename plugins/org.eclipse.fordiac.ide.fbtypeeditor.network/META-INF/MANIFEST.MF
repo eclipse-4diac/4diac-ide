@@ -22,7 +22,7 @@ Bundle-Name: Composite FB Network (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.network.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.network;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.fordiac.ide.fbtypeeditor.network.editparts,
  org.eclipse.fordiac.ide.fbtypeeditor.network.viewer

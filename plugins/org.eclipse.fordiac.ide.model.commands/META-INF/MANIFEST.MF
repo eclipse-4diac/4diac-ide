@@ -5,7 +5,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.commands;singleton:=true
 Bundle-Activator: org.eclipse.fordiac.ide.model.commands.ModelCommandsPlugin
 Bundle-Version: 1.13.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.gef,
  org.eclipse.ui.workbench,

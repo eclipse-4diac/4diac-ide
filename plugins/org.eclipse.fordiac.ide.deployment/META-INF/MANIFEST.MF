@@ -27,4 +27,4 @@ Bundle-Activator: org.eclipse.fordiac.ide.deployment.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11

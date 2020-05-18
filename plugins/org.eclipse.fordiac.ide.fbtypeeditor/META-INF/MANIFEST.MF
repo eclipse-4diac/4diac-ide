@@ -31,5 +31,5 @@ Bundle-Name: Function Block Type Editor (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor
