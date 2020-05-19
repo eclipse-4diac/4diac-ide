@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
@@ -44,6 +45,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 
 public class ConnectionEditPart extends AbstractConnectionEditPart {
 	private static final String HIDDEN = "HIDDEN"; //$NON-NLS-1$
@@ -65,15 +67,13 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		}
 		if (event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)
 				&& (getModel() instanceof AdapterConnection)) {
-			getFigure()
-					.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
+			getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
 		}
 		if (PreferenceConstants.isDataConnectorProperty(event.getProperty())
 				&& (getModel() instanceof DataConnection)) {
 			getFigure().setForegroundColor(PreferenceGetter.getDataColor(getModel().getSource().getTypeName()));
 		}
-		if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON)
-				&& (getModel() instanceof DataConnection)) {
+		if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON) && (getModel() instanceof DataConnection)) {
 			getFigure().setVisible(!((Boolean) event.getNewValue()));
 		}
 		if (event.getProperty().equals(PreferenceConstants.P_HIDE_EVENT_CON)
@@ -134,13 +134,26 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		}
 
 		if (getModel() instanceof DataConnection) {
-			connection.setForegroundColor(PreferenceGetter.getDataColor(getModel().getSource().getTypeName()));
+			connection.setForegroundColor(getDataConnectioncolor());
 			connection.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON));
 
 		}
 		connection.setToolTip(new ConnectionTooltipFigure(getModel()));
 		return connection;
+	}
+
+	private Color getDataConnectioncolor() {
+		// if the connections end point fb type could not be loaded it source or
+		// destination may be null
+		IInterfaceElement refElement = getModel().getSource();
+		if (null == refElement) {
+			refElement = getModel().getDestination();
+		}
+		if (null == refElement) {
+			return PreferenceGetter.getDataColor(getModel().getSource().getTypeName());
+		}
+		return PreferenceGetter.getDefaultDataColor();
 	}
 
 	@Override

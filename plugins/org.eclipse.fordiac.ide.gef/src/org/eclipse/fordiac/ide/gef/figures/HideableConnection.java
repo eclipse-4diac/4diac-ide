@@ -26,6 +26,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public class HideableConnection extends PolylineConnection {
 
@@ -72,9 +73,9 @@ public class HideableConnection extends PolylineConnection {
 			g.drawPolyline(endLine);
 
 			Dimension dim = FigureUtilities.getTextExtents(label, g.getFont());
-			g.drawText(label, new Point(getEnd().x - dim.width - 25, getEnd().y - dim.height / 2));
+			g.drawText(label, new Point(getEnd().x - dim.width - 25, getEnd().y - (dim.height / 2)));
 			moveRect.x = getEnd().x - dim.width - 25;
-			moveRect.y = getEnd().y - dim.height / 2;
+			moveRect.y = getEnd().y - (dim.height / 2);
 			moveRect.width = 5;
 			moveRect.height = 5;
 		} else {
@@ -87,8 +88,16 @@ public class HideableConnection extends PolylineConnection {
 	}
 
 	private boolean isAdapterConnectionOrStructConnection() {
-		return (model instanceof AdapterConnection
-				|| (model instanceof DataConnection && model.getSource().getType() instanceof StructuredType));
+		if (model instanceof DataConnection) {
+			// if the connections end point fb type could not be loaded it source or
+			// destination may be null
+			IInterfaceElement refElement = model.getSource();
+			if (null == refElement) {
+				refElement = model.getDestination();
+			}
+			return ((null != refElement) && (refElement.getType() instanceof StructuredType));
+		}
+		return (model instanceof AdapterConnection);
 	}
 
 	private void drawDoublePolyline(Graphics g, PointList beveledPoints) {
@@ -112,17 +121,17 @@ public class HideableConnection extends PolylineConnection {
 
 		beveledPoints.addPoint(getPoints().getFirstPoint());
 
-		for (int i = 1; i < getPoints().size() - 1; i++) {
+		for (int i = 1; i < (getPoints().size() - 1); i++) {
 			Point before = getPoints().getPoint(i - 1);
 			Point after = getPoints().getPoint(i + 1);
 
 			int verDistance = Math.abs(before.y - after.y);
 			int horDistance = Math.abs(before.y - after.y);
 			int bevelSize = BEND_POINT_BEVEL_SIZE;
-			if (verDistance < 2 * BEND_POINT_BEVEL_SIZE) {
+			if (verDistance < (2 * BEND_POINT_BEVEL_SIZE)) {
 				bevelSize = verDistance / 2;
 			}
-			if (horDistance < 2 * BEND_POINT_BEVEL_SIZE) {
+			if (horDistance < (2 * BEND_POINT_BEVEL_SIZE)) {
 				bevelSize = horDistance / 2;
 			}
 
