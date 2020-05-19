@@ -26,13 +26,13 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
-import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 
 public class HideableConnection extends PolylineConnection {
 
 	public static final int BEND_POINT_BEVEL_SIZE = 5;
 	private static final int NORMAL_DOUBLE_LINE_WIDTH = 3;
-	private static final int NORMAL_INNER_LINE_WIDTH = 1;
+	private static final int DOUBLE_LINE_AMPLIFICATION = 2;
+
 	private boolean hidden = false;
 	private String label = ""; //$NON-NLS-1$
 	private Rectangle moveRect = new Rectangle();
@@ -92,26 +92,19 @@ public class HideableConnection extends PolylineConnection {
 	}
 
 	private void drawDoublePolyline(Graphics g, PointList beveledPoints) {
-		setOuterLineWidth();
 		g.drawPolyline(beveledPoints);
-		g.setLineWidth(NORMAL_INNER_LINE_WIDTH);
+		g.setLineWidth(getLineWidth() / NORMAL_DOUBLE_LINE_WIDTH);
 		g.setForegroundColor(getBackgroundColor());
 		g.drawPolyline(beveledPoints);
 	}
 
-	private void setOuterLineWidth() {
-		if (getLineWidth() != ConnectionPreferenceValues.SELECTED_LINE_WIDTH) {
-			if (getNormalLineWidth() <= 1) {
-				setLineWidth(NORMAL_DOUBLE_LINE_WIDTH);
-			} else {
-				setLineWidth(1 + 2 * getNormalLineWidth());
-			}
+	@Override
+	public void setLineWidth(int w) {
+		int width = w;
+		if (isAdapterConnectionOrStructConnection()) {
+			width = Math.max(w * DOUBLE_LINE_AMPLIFICATION, NORMAL_DOUBLE_LINE_WIDTH);
 		}
-	}
-
-	// suppress the dead-code warning due to NORMAL_LINE_WIDTH being a static final value in setOuterLineWidth
-	private int getNormalLineWidth() {
-		return ConnectionPreferenceValues.NORMAL_LINE_WIDTH;
+		super.setLineWidth(width);
 	}
 
 	private PointList getBeveledPoints() {
