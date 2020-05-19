@@ -27,8 +27,12 @@ import javax.xml.stream.XMLStreamReader;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -129,16 +133,24 @@ abstract class CommonElementImporter {
 	}
 
 	protected void createErrorMarker(String message) {
-		try {
-			IMarker marker = file.createMarker(IMarker.PROBLEM);
-			if (marker.exists()) {
-				marker.setAttribute(IMarker.MESSAGE, message);
-				marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
-				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+		WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) {
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
+				try {
+					IMarker marker = file.createMarker(IMarker.PROBLEM);
+					if (marker.exists()) {
+						marker.setAttribute(IMarker.MESSAGE, message);
+						marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+						marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+					}
+				} catch (CoreException e) {
+					Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
+				}
+				return Status.OK_STATUS;
 			}
-		} catch (CoreException e) {
-			Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
-		}
+		};
+		job.setRule(file.getProject());
+		job.schedule();
 	}
 
 	protected abstract LibraryElement createRootModelElement();
@@ -147,8 +159,20 @@ abstract class CommonElementImporter {
 
 	protected abstract IChildHandler getBaseChildrenHandler();
 
-	protected void deleteMarkers() throws CoreException {
-		file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+	protected void deleteMarkers() {
+		WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + file.getName()) {
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
+				try {
+					file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+				} catch (CoreException e) {
+					Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setRule(file.getProject());
+		job.schedule();
 	}
 
 	private ImporterStreams createInputStreams(InputStream fileInputStream) throws XMLStreamException {

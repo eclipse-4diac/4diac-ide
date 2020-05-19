@@ -102,13 +102,17 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		try (Scanner scanner = new Scanner(element.getContents())) {
 			if (null != scanner.findWithinHorizon("BasicFB", 0)) { //$NON-NLS-1$
 				image = FordiacImage.ICON_BASIC_FB.getImage();
-
 			} else {
 				scanner.reset();
 				if (null != scanner.findWithinHorizon("FBNetwork", 0)) { //$NON-NLS-1$
 					image = FordiacImage.ICON_COMPOSITE_FB.getImage();
 				} else {
-					image = FordiacImage.ICON_SIFB.getImage();
+					scanner.reset();
+					if (null != scanner.findWithinHorizon("SimpleFB", 0)) { //$NON-NLS-1$
+						image = FordiacImage.ICON_SIMPLE_FB.getImage();
+					} else {
+						image = FordiacImage.ICON_SIFB.getImage();
+					}
 				}
 			}
 		} catch (Exception e) {
