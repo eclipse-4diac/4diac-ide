@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.systemconfiguration
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.12.1.qualifier
+Bundle-Version: 1.12.2.qualifier
 Bundle-Name: IEC 61499 Deployment (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.deployment.iec61499.Activator
 Bundle-ManifestVersion: 2
