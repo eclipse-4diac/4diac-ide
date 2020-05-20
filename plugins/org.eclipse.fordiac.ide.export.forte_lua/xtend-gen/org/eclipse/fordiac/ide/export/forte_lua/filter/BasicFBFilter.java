@@ -84,6 +84,14 @@ public class BasicFBFilter {
     _builder.append("local function transition(fb, id)");
     _builder.newLine();
     _builder.append("  ");
+    _builder.append("local ");
+    CharSequence _luaStateVariable = LuaConstants.luaStateVariable();
+    _builder.append(_luaStateVariable, "  ");
+    _builder.append(" = ");
+    CharSequence _luaFBStateVariable = LuaConstants.luaFBStateVariable();
+    _builder.append(_luaFBStateVariable, "  ");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
     CharSequence _luaFBVariablesPrefix = LuaConstants.luaFBVariablesPrefix(variables);
     _builder.append(_luaFBVariablesPrefix, "  ");
     _builder.newLineIfNotEmpty();

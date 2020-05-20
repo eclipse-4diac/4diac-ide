@@ -18,9 +18,9 @@ package org.eclipse.fordiac.ide.gef.properties;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
@@ -82,7 +82,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		setInputInit();
 	}
 
-	private final Adapter contentAdapter = new AdapterImpl() {
+	private final Adapter contentAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			if (null != getType() && getType().eAdapters().contains(contentAdapter) && !blockRefresh) {

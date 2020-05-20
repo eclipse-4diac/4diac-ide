@@ -21,18 +21,16 @@ import java.util.List;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.figures.FBTypeFigure;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -44,7 +42,7 @@ import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
-public class FBTypeEditPart extends AbstractDirectEditableEditPart {
+public class FBTypeEditPart extends AbstractConnectableEditPart {
 
 	private ControlListener controlListener;
 	private ZoomManager zoomManager;
@@ -116,10 +114,10 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart {
 	public void setSelected(int value) {
 	}
 
-	@Override
-	public void refreshName() {
-		Display.getDefault().asyncExec(() -> getNameLabel().setText(getINamedElement().getName()));
-	}
+//	@Override
+//	public void refreshName() {
+//		Display.getDefault().asyncExec(() -> getNameLabel().setText(getINamedElement().getName()));
+//	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -217,6 +215,12 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart {
 	}
 
 	@Override
+	public void refresh() {
+		super.refresh();
+		getFigure().getTypeLabel().setText(getModel().getName());
+	}
+
+	@Override
 	protected void refreshVisuals() {
 		if (controlListener == null) {
 			controlListener = new ControlListener() {
@@ -246,13 +250,4 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart {
 		update(rect);
 	}
 
-	@Override
-	public INamedElement getINamedElement() {
-		return getModel();
-	}
-
-	@Override
-	public Label getNameLabel() {
-		return getFigure().getTypeLabel();
-	}
 }

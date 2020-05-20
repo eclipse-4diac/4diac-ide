@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2019 fortiss GmbH, Johannes Kepler University Linz (JKU)
+ * Copyright (c) 2015 - 2019 fortiss GmbH,
+ * 				 2019 - 2020 Johannes Kepler University Linz (JKU)
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,8 +11,8 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *	Bianca Wiesmayr
- *     - consistent dropdown menu edit
+ *	 Bianca Wiesmayr - consistent dropdown menu edit#
+ *   Alois Zoitl - fixed issues during deletion of actions
  ********************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -153,15 +154,21 @@ public class ActionSection extends AbstractECSection {
 			algorithmCombo.setEnabled(false);
 		}
 		setType(input);
-		algorithmGroup.initialize(getFBType(), commandStack);
-		algorithmList.initialize(getFBType(), commandStack);
+		if (null != getFBType()) {
+			// during delete phases it can be that the input (i.e., Action) is not attached
+			// to its type anymore
+			algorithmGroup.initialize(getFBType(), commandStack);
+			algorithmList.initialize(getFBType(), commandStack);
+		}
 	}
 
 	@Override
 	public void refresh() {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if (null != type) {
+		if ((null != type) && (null != getFBType())) {
+			// during delete phases it can be that the input (i.e., Action) is not attached
+			// to its type anymore. Therefore also the check if getFBType() is not null
 			setDropdown(outputEventCombo, getType().getOutput(),
 					ECCContentAndLabelProvider.getOutputEventNames(getFBType()));
 			setDropdown(algorithmCombo, getAlgorithm(), ECCContentAndLabelProvider.getAlgorithmNames(getFBType()));
