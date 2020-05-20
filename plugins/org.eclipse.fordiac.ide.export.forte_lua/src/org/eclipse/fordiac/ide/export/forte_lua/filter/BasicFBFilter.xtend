@@ -52,6 +52,7 @@ class BasicFBFilter {
 	
 	def private luaECC(ECC ecc, Iterable<VarDeclaration> variables) '''
 		local function transition(fb, id)
+		  local «luaStateVariable()» = «luaFBStateVariable()»
 		  «variables.luaFBVariablesPrefix»
 		  «ecc.luaTransitions»
 		end
