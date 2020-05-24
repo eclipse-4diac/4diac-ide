@@ -113,7 +113,7 @@ public class AdapterFBImplTemplate extends ForteFBTemplate {
     _builder.append(_size_3, "  ");
     _builder.append(", ");
     {
-      boolean _isEmpty_3 = this.type.getInterfaceList().getInputVars().isEmpty();
+      boolean _isEmpty_3 = this.type.getInterfaceList().getOutputVars().isEmpty();
       if (_isEmpty_3) {
         _builder.append("nullptr, nullptr");
       } else {
@@ -170,7 +170,7 @@ public class AdapterFBImplTemplate extends ForteFBTemplate {
     _builder.append(_size_8, "  ");
     _builder.append(", ");
     {
-      boolean _isEmpty_6 = this.type.getInterfaceList().getInputVars().isEmpty();
+      boolean _isEmpty_6 = this.type.getInterfaceList().getOutputVars().isEmpty();
       if (_isEmpty_6) {
         _builder.append("nullptr, nullptr");
       } else {
