@@ -733,7 +733,6 @@ public class STAlgorithmFilter {
   
   protected CharSequence _generateExpression(final Call expr) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
     String _func = expr.getFunc();
     _builder.append(_func);
     _builder.append("(");
@@ -771,7 +770,6 @@ public class STAlgorithmFilter {
       switch (_operator) {
         case POWER:
           StringConcatenation _builder = new StringConcatenation();
-          _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
           _builder.append("EXPT(");
           CharSequence _generateExpression = this.generateExpression(expr.getLeft());
           _builder.append(_generateExpression);

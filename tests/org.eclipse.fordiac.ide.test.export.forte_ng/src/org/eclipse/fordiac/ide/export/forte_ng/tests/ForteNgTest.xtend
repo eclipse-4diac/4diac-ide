@@ -47,7 +47,7 @@ class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 
 		assertNoErrors(errors) // Expression can not be an assignment
 		assertNotNull(generatedCode)
-		assertEquals('''«addExportPrefix("SQRT")»(«EXPORTED_VARIABLE_NAME»())'''.toString(), generatedCode.toString()) //$NON-NLS-1$
+		assertEquals('''SQRT(«EXPORTED_VARIABLE_NAME»())'''.toString(), generatedCode.toString()) //$NON-NLS-1$
 	}
 
 	@Test
@@ -59,7 +59,7 @@ class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 
 		assertNoErrors(errors); // Expression can not be an assignment
 		assertNotNull(generatedCode);
-		assertEquals('''«addExportPrefix("EXPT")»(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
+		assertEquals('''EXPT(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
 				generatedCode.toString())
 	}
 

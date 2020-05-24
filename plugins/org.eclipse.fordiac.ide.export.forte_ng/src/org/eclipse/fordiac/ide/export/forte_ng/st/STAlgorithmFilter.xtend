@@ -296,7 +296,7 @@ class STAlgorithmFilter {
 	'''
 
 	def protected dispatch CharSequence generateExpression(Call expr) {
-		'''«EXPORT_PREFIX»«expr.func»(«FOR arg : expr.args SEPARATOR ', '»«arg.generateExpression»«ENDFOR»)'''
+		'''«expr.func»(«FOR arg : expr.args SEPARATOR ', '»«arg.generateExpression»«ENDFOR»)'''
 	}
 
 	def protected dispatch CharSequence generateExpression(InArgument arg) {
@@ -311,7 +311,7 @@ class STAlgorithmFilter {
 		BinaryExpression expr) {
 			switch (expr.operator) {
 			case POWER:
-				'''«EXPORT_PREFIX»EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+				'''EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
 			default:
 				'''(«expr.left.generateExpression» «expr.operator.generateBinaryOperator» «expr.right.generateExpression»)'''
 			}
