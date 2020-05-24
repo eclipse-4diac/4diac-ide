@@ -605,7 +605,7 @@ public abstract class ForteFBTemplate extends ExportTemplate {
     _builder.append(_size_3, "  ");
     _builder.append(", ");
     {
-      boolean _isEmpty_3 = this.getType().getInterfaceList().getInputVars().isEmpty();
+      boolean _isEmpty_3 = this.getType().getInterfaceList().getOutputVars().isEmpty();
       if (_isEmpty_3) {
         _builder.append("nullptr, nullptr");
       } else {
