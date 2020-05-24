@@ -206,11 +206,15 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
     String _typeName = event.getAdapterDeclaration().getTypeName();
     _builder.append(_typeName);
     _builder.append("::scm_nEvent");
-    String _name_1 = event.getName();
-    _builder.append(_name_1);
+    String _adapterEventName = this.getAdapterEventName(event);
+    _builder.append(_adapterEventName);
     _builder.append("ID);");
     _builder.newLineIfNotEmpty();
     return _builder;
+  }
+  
+  private String getAdapterEventName(final AdapterEvent event) {
+    return event.getName().split("\\.")[1];
   }
   
   protected CharSequence generateECC() {
@@ -254,10 +258,10 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
               if (((transition.getConditionEvent() != null) && (!StringExtensions.isNullOrEmpty(transition.getConditionExpression())))) {
                 _builder.append("      ");
                 _builder.append("  ");
-                _builder.append("if((scm_nEvent");
-                String _name_1 = transition.getConditionEvent().getName();
-                _builder.append(_name_1, "        ");
-                _builder.append("ID == pa_nEIID) && (");
+                _builder.append("if((");
+                CharSequence _generateTransitionEvent = this.generateTransitionEvent(transition.getConditionEvent());
+                _builder.append(_generateTransitionEvent, "        ");
+                _builder.append(" == pa_nEIID) && (");
                 CharSequence _generate = this.stAlgorithmFilter.generate(transition.getConditionExpression(), this.type, this.getErrors());
                 _builder.append(_generate, "        ");
                 _builder.append("))");
@@ -268,10 +272,10 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
                 if (_tripleNotEquals) {
                   _builder.append("      ");
                   _builder.append("  ");
-                  _builder.append("if(scm_nEvent");
-                  String _name_2 = transition.getConditionEvent().getName();
-                  _builder.append(_name_2, "        ");
-                  _builder.append("ID == pa_nEIID)");
+                  _builder.append("if(");
+                  CharSequence _generateTransitionEvent_1 = this.generateTransitionEvent(transition.getConditionEvent());
+                  _builder.append(_generateTransitionEvent_1, "        ");
+                  _builder.append(" == pa_nEIID)");
                   _builder.newLineIfNotEmpty();
                 } else {
                   boolean _isNullOrEmpty = StringExtensions.isNullOrEmpty(transition.getConditionExpression());
@@ -297,8 +301,8 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
             _builder.append("  ");
             _builder.append("  ");
             _builder.append("enterState");
-            String _name_3 = transition.getDestination().getName();
-            _builder.append(_name_3, "          ");
+            String _name_1 = transition.getDestination().getName();
+            _builder.append(_name_1, "          ");
             _builder.append("();");
             _builder.newLineIfNotEmpty();
           }
@@ -352,6 +356,26 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
     return _builder;
   }
   
+  protected CharSequence _generateTransitionEvent(final Event event) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("scm_nEvent");
+    String _name = event.getName();
+    _builder.append(_name);
+    _builder.append("ID");
+    return _builder;
+  }
+  
+  protected CharSequence _generateTransitionEvent(final AdapterEvent event) {
+    StringConcatenation _builder = new StringConcatenation();
+    String _name = event.getAdapterDeclaration().getName();
+    _builder.append(_name);
+    _builder.append("().");
+    String _adapterEventName = this.getAdapterEventName(event);
+    _builder.append(_adapterEventName);
+    _builder.append("()");
+    return _builder;
+  }
+  
   protected CharSequence generateAlgorithm(final Algorithm alg) {
     if (alg instanceof STAlgorithm) {
       return _generateAlgorithm((STAlgorithm)alg);
@@ -368,6 +392,17 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
       return _generateSendEvent((AdapterEvent)event);
     } else if (event != null) {
       return _generateSendEvent(event);
+    } else {
+      throw new IllegalArgumentException("Unhandled parameter types: " +
+        Arrays.<Object>asList(event).toString());
+    }
+  }
+  
+  protected CharSequence generateTransitionEvent(final Event event) {
+    if (event instanceof AdapterEvent) {
+      return _generateTransitionEvent((AdapterEvent)event);
+    } else if (event != null) {
+      return _generateTransitionEvent(event);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
         Arrays.<Object>asList(event).toString());

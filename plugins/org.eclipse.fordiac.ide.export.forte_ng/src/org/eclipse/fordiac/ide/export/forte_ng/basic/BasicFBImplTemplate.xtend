@@ -88,8 +88,12 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 	'''
 
 	def protected dispatch CharSequence generateSendEvent(AdapterEvent event) '''
-		sendAdapterEvent(scm_n«event.adapterDeclaration.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«event.name»ID);
+		sendAdapterEvent(scm_n«event.adapterDeclaration.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«getAdapterEventName(event)»ID);
 	'''
+	
+	def private String getAdapterEventName(AdapterEvent event){
+	     event.name.split("\\.").get(1);
+	}
 	
 	def protected CharSequence generateECC() '''
 		void «FBClassName»::executeEvent(int pa_nEIID){
@@ -101,9 +105,9 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 		      	case scm_nState«state.name»:
 		      	  «FOR transition : state.outTransitions SEPARATOR "\nelse"»
 		      	  	«IF transition.conditionEvent !== null && !transition.conditionExpression.nullOrEmpty»
-		      	  		if((scm_nEvent«transition.conditionEvent.name»ID == pa_nEIID) && («transition.conditionExpression.generate(type, errors)»))
+		      	  		if((«generateTransitionEvent(transition.conditionEvent)» == pa_nEIID) && («transition.conditionExpression.generate(type, errors)»))
 		      	  	«ELSEIF transition.conditionEvent !== null»
-		      	  		if(scm_nEvent«transition.conditionEvent.name»ID == pa_nEIID)
+		      	  		if(«generateTransitionEvent(transition.conditionEvent)» == pa_nEIID)
 		      	  	«ELSEIF !transition.conditionExpression.nullOrEmpty»
 		      	  		if(«transition.conditionExpression.generate(type, errors)»)
 		      	  	«ELSE»
@@ -124,4 +128,11 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 		  } while(bTransitionCleared);
 		}
 	'''
+	
+	def protected dispatch CharSequence generateTransitionEvent(Event event) '''
+	    scm_nEvent«event.name»ID'''
+
+    def protected dispatch CharSequence generateTransitionEvent(AdapterEvent event) '''
+        «event.adapterDeclaration.name»().«getAdapterEventName(event)»()'''
+	
 }
