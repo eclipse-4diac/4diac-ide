@@ -217,6 +217,10 @@
                label="%contributions.menus.debug.clearForce"
                tooltip="%contributions.menus.debug.clearForceToolTop">
          </command>
+          <separator
+               name="org.eclipse.fordiac.ide.monitoring.monitoringAdditions"
+               visible="true">
+         </separator>
          </menu>
       </menuContribution>         
       <menuContribution

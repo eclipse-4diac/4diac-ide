@@ -11,7 +11,7 @@
  *   Gerhard Ebenhofer, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.ui.perspectives;
+package org.eclipse.fordiac.ide.runtime.perspectives;
 
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
@@ -21,7 +21,7 @@ import org.eclipse.ui.console.IConsoleConstants;
 /**
  * The Class DeploymentPerspective.
  */
-public class DeploymentPerspective implements IPerspectiveFactory {
+public class DeviceSimulatorPerspective implements IPerspectiveFactory {
 
 	/** The factory. */
 	private IPageLayout factory;
@@ -29,7 +29,7 @@ public class DeploymentPerspective implements IPerspectiveFactory {
 	/**
 	 * Instantiates a new deployment perspective.
 	 */
-	public DeploymentPerspective() {
+	public DeviceSimulatorPerspective() {
 		// empty constructor
 	}
 
@@ -48,21 +48,17 @@ public class DeploymentPerspective implements IPerspectiveFactory {
 	 * Adds the views.
 	 */
 	private void addViews() {
-		IFolderLayout topRight = factory.createFolder("topRight", //$NON-NLS-1$
-				IPageLayout.RIGHT, 0.5f, factory.getEditorArea());
-		topRight.addView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
-
-		IFolderLayout bottomRight = factory.createFolder("bottomRight", //$NON-NLS-1$
-				IPageLayout.BOTTOM, 0.65f, "topRight"); //$NON-NLS-1$
-		bottomRight.addView(IConsoleConstants.ID_CONSOLE_VIEW);
-
-		IFolderLayout topLeft = factory.createFolder("topLeft", //$NON-NLS-1$
-				IPageLayout.LEFT, 0.5f, factory.getEditorArea());
-		topLeft.addView("org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView");//$NON-NLS-1$
+		IFolderLayout top = factory.createFolder("top", //$NON-NLS-1$
+				IPageLayout.TOP, 1f, factory.getEditorArea());
+		top.addView("org.eclipse.fordiac.ide.runtime.views.RuntimeLauncherView"); //$NON-NLS-1$
 
 		IFolderLayout bottomLeft = factory.createFolder("bottomLeft", //$NON-NLS-1$
-				IPageLayout.BOTTOM, 0.75f, "topLeft"); //$NON-NLS-1$
-		bottomLeft.addView("org.eclipse.fordiac.ide.runtime.views.RuntimeLauncherView"); //$NON-NLS-1$
+				IPageLayout.BOTTOM, 0.50f, "top"); //$NON-NLS-1$
+		bottomLeft.addView("org.eclipse.fordiac.ide.runtime.views.RuntimesView"); //$NON-NLS-1$
+
+		IFolderLayout bottomRight = factory.createFolder("bottomRight", //$NON-NLS-1$
+				IPageLayout.RIGHT, 0.35f, "bottomLeft"); //$NON-NLS-1$
+		bottomRight.addView(IConsoleConstants.ID_CONSOLE_VIEW);
 	}
 
 	/**
@@ -76,18 +72,12 @@ public class DeploymentPerspective implements IPerspectiveFactory {
 	 * Adds the perspective shortcuts.
 	 */
 	private void addPerspectiveShortcuts() {
-		factory.addPerspectiveShortcut("org.eclipse.fordiac.ide.SystemPerspective"); //$NON-NLS-1$
-		factory.addPerspectiveShortcut("org.eclipse.fordiac.ide.deployment.ui.perspectives.DeploymentPerspective"); //$NON-NLS-1$
 	}
 
 	/**
 	 * Adds the new wizard shortcuts.
 	 */
 	private void addNewWizardShortcuts() {
-		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard"); //$NON-NLS-1$
-		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"); //$NON-NLS-1$
-		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"); //$NON-NLS-1$
-		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard"); //$NON-NLS-1$
 	}
 
 	/**

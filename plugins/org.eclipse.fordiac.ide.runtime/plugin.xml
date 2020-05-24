@@ -9,8 +9,43 @@
             class="org.eclipse.fordiac.ide.runtime.views.RuntimeLauncherView"
             icon="fordiacimage://ICON_RUNTIME_LAUNCHER"
             id="org.eclipse.fordiac.ide.runtime.views.RuntimeLauncherView"
-            name="Runtime Launcher">
+            name="Launch Simulated Devices">
+      </view>
+      <view
+            category="org.eclipse.fordiac.ide.view.category"
+            class="org.eclipse.fordiac.ide.runtime.views.RuntimesView"
+            icon="fordiacimage://ICON_RUNTIME_LAUNCHER"
+            id="org.eclipse.fordiac.ide.runtime.views.RuntimesView"
+            name="Started Simulated Devices">
       </view>
    </extension>
-
+   <extension point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.eclipse.fordiac.ide.runtime.perspectives.DeviceSimulatorPerspective"
+            icon="fordiacimage://ICON_DEPLOYMENT_PERSPECTIVE"
+            id="org.eclipse.fordiac.ide.runtime.perspectives.DeviceSimulatorPerspective"
+            name="Simulated Devices Manager">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">     
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.runtime.handlers.ShowDeviceSimulationManager"
+            id="org.eclipse.fordiac.ide.runtime.ShowDeviceSimulationManager"
+            name="Open Simulated Devices Manager">
+      </command>
+    </extension>
+    <extension
+         point="org.eclipse.ui.menus">
+        <menuContribution
+                locationURI="menu:org.eclipse.4diac.ide.monitoring.menus.debug?after=org.eclipse.fordiac.ide.monitoring.monitoringAdditions">
+            <command
+               commandId="org.eclipse.fordiac.ide.runtime.ShowDeviceSimulationManager"
+               icon="fordiacimage://ICON_DEPLOYMENT_PERSPECTIVE"
+               label="Open Simulated Devices Manager"
+               tooltip="Manager for running simulated devices and observing their output">
+            </command>
+        </menuContribution>
+    </extension>               
 </plugin>

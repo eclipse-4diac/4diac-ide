@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.monitoring;
 import java.util.ArrayList;
 import java.util.Set;
 
-import org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IContributionItem;
@@ -109,12 +108,6 @@ public class MonitoredSystems extends CompoundContributionItem {
 			treeView.getCommonViewer().refresh();
 		}
 
-		view = page.findView("org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView"); //$NON-NLS-1$
-
-		if ((null != view) && (view instanceof DownloadSelectionTreeView)) {
-			DownloadSelectionTreeView treeView = (DownloadSelectionTreeView) view;
-			treeView.getViewer().refresh();
-		}
 	}
 
 }

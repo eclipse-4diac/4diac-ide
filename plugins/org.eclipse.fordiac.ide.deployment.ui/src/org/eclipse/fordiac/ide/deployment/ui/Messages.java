@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2014, 2015 Profactor GbmH, fortiss GmbH
  * 				 2020                   Andrea Zoitl
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -60,18 +60,6 @@ public class Messages extends NLS {
 
 	public static String DownloadSelectionTree_Properties;
 
-	/** The Download selection tree view_ collaps e_ all. */
-	public static String DownloadSelectionTreeView_COLLAPSE_ALL;
-
-	/** The Download selection tree view_ expan d_ all. */
-	public static String DownloadSelectionTreeView_EXPAND_ALL;
-
-	/** The Download selection tree view_ labe l_ popup menu. */
-	public static String DownloadSelectionTreeView_LABEL_PopupMenu;
-
-	/** The Download selection tree view_ refresh. */
-	public static String DownloadSelectionTreeView_Refresh;
-
 	/** The Error annotation_ download error. */
 	public static String ErrorAnnotation_DownloadError;
 
@@ -104,9 +92,6 @@ public class Messages extends NLS {
 	public static String LogListener_ReturnedError;
 
 	public static String LogListener_ErrorAnnotation;
-
-	/** The Mode_ download button label. */
-	public static String Mode_DownloadButtonLabel;
 
 	/** The Output_ clear action label. */
 	public static String Output_ClearActionLabel;
