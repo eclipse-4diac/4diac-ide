@@ -61,9 +61,20 @@ public class SimpleFBHeaderTemplate extends ForteFBTemplate {
     _builder.append(_generateFBInterfaceSpecDeclaration, "  ");
     _builder.newLineIfNotEmpty();
     _builder.newLine();
-    _builder.append("  ");
+    {
+      boolean _isEmpty = this.type.getInternalVars().isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        _builder.append("        ");
+        CharSequence _generateInternalVarDelcaration = this.generateInternalVarDelcaration(this.type);
+        _builder.append(_generateInternalVarDelcaration, "        ");
+        _builder.newLineIfNotEmpty();
+        _builder.newLine();
+      }
+    }
+    _builder.append("          ");
     CharSequence _generateAccessors = this.generateAccessors(this.type.getInterfaceList().getInputVars(), "getDI");
-    _builder.append(_generateAccessors, "  ");
+    _builder.append(_generateAccessors, "          ");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
     CharSequence _generateAccessors_1 = this.generateAccessors(this.type.getInterfaceList().getOutputVars(), "getDO");
@@ -113,9 +124,9 @@ public class SimpleFBHeaderTemplate extends ForteFBTemplate {
     _builder.append("       ");
     _builder.append("CSimpleFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
     {
-      boolean _isEmpty = this.type.getInternalVars().isEmpty();
-      boolean _not = (!_isEmpty);
-      if (_not) {
+      boolean _isEmpty_1 = this.type.getInternalVars().isEmpty();
+      boolean _not_1 = (!_isEmpty_1);
+      if (_not_1) {
         _builder.append("&scm_stInternalVars");
       } else {
         _builder.append("nullptr");

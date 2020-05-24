@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.export.ExportTemplate;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -630,6 +631,55 @@ public abstract class ForteFBTemplate extends ExportTemplate {
     _builder.newLineIfNotEmpty();
     _builder.append("};");
     _builder.newLine();
+    return _builder;
+  }
+  
+  protected CharSequence generateInternalVarDelcaration(final BaseFBType baseFBType) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      boolean _isEmpty = baseFBType.getInternalVars().isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        _builder.append("static const CStringDictionary::TStringId scm_anInternalsNames[];");
+        _builder.newLine();
+        _builder.append("static const CStringDictionary::TStringId scm_anInternalsTypeIds[];");
+        _builder.newLine();
+        _builder.append("static const SInternalVarsInformation scm_stInternalVars;");
+        _builder.newLine();
+      }
+    }
+    return _builder;
+  }
+  
+  protected CharSequence generateInternalVarDefinition(final BaseFBType baseFBType) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      boolean _isEmpty = baseFBType.getInternalVars().isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        _builder.append("const CStringDictionary::TStringId ");
+        CharSequence _fBClassName = this.getFBClassName();
+        _builder.append(_fBClassName);
+        _builder.append("::scm_anInternalsNames[] = {");
+        CharSequence _fORTENameList = this.getFORTENameList(baseFBType.getInternalVars());
+        _builder.append(_fORTENameList);
+        _builder.append("};");
+        _builder.newLineIfNotEmpty();
+        _builder.append("const CStringDictionary::TStringId ");
+        CharSequence _fBClassName_1 = this.getFBClassName();
+        _builder.append(_fBClassName_1);
+        _builder.append("::scm_anInternalsTypeIds[] = {");
+        CharSequence _fORTETypeList = this.getFORTETypeList(baseFBType.getInternalVars());
+        _builder.append(_fORTETypeList);
+        _builder.append("};");
+        _builder.newLineIfNotEmpty();
+        _builder.append("const SInternalVarsInformation FORTE_E_STOPWATCH::scm_stInternalVars = {");
+        int _size = baseFBType.getInternalVars().size();
+        _builder.append(_size);
+        _builder.append(", scm_anInternalsNames, scm_anInternalsTypeIds};");
+        _builder.newLineIfNotEmpty();
+      }
+    }
     return _builder;
   }
   

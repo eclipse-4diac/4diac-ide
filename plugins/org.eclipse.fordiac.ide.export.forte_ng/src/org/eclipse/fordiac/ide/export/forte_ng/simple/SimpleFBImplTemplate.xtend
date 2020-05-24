@@ -20,17 +20,21 @@ class SimpleFBImplTemplate extends ForteFBTemplate {
 
 	override generate() '''
 		«generateHeader»
-		
+
 		«generateImplIncludes»
-		
+
 		«generateFBDefinition»
-		
+
 		«generateFBInterfaceDefinition»
-		
+
 		«generateFBInterfaceSpecDefinition»
-		
+
+        «IF !type.internalVars.isEmpty»
+          «generateInternalVarDefinition(type)»
+
+        «ENDIF»
 		«generateAlgorithms»
-		
+
 	'''
 
 	def protected CharSequence generateAlgorithms() '''

@@ -16,38 +16,42 @@ class SimpleFBHeaderTemplate extends ForteFBTemplate {
 
 	override generate() '''
 		«generateHeader»
-		
+
 		«generateIncludeGuardStart»
-		
+
 		«generateHeaderIncludes»
-		
+
 		class «FBClassName»: public CSimpleFB {
 		  «generateFBDeclaration»
-		
+
 		private:
 		  «generateFBInterfaceDeclaration»
-		
+
 		  «generateFBInterfaceSpecDeclaration»
-		
-		  «type.interfaceList.inputVars.generateAccessors("getDI")»
+
+        «IF !type.internalVars.isEmpty»
+          «generateInternalVarDelcaration(type)»
+
+        «ENDIF»
+          «type.interfaceList.inputVars.generateAccessors("getDI")»
 		  «type.interfaceList.outputVars.generateAccessors("getDO")»
 		  «type.internalVars.generateAccessors("getVarInternal")»
 		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
-		
+
 		  «generateAlgorithms»
-		
+
 		  FORTE_FB_DATA_ARRAY(«type.interfaceList.eventOutputs.size», «type.interfaceList.inputVars.size», «type.interfaceList.outputVars.size», «type.interfaceList.sockets.size + type.interfaceList.plugs.size»);
-		
+
 		public:
 		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : 
 		       CSimpleFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData) {
 		  };
-		
+
 		  virtual ~«FBClassName»() = default;
 		};
-		
+
 		«generateIncludeGuardEnd»
-		
+
 	'''
 
 	override protected CharSequence generateHeaderIncludes() '''

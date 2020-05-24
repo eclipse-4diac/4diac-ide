@@ -57,6 +57,16 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
     _builder.append(_generateFBInterfaceSpecDefinition);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
+    {
+      boolean _isEmpty = this.type.getInternalVars().isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        CharSequence _generateInternalVarDefinition = this.generateInternalVarDefinition(this.type);
+        _builder.append(_generateInternalVarDefinition);
+        _builder.newLineIfNotEmpty();
+        _builder.newLine();
+      }
+    }
     CharSequence _generateAlgorithms = this.generateAlgorithms();
     _builder.append(_generateAlgorithms);
     _builder.newLineIfNotEmpty();

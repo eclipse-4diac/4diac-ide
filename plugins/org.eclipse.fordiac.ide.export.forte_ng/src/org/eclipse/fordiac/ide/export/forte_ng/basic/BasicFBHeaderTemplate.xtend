@@ -32,6 +32,10 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 
 		  «generateFBInterfaceSpecDeclaration»
 
+		«IF !type.internalVars.isEmpty»
+		  «generateInternalVarDelcaration(type)»
+
+        «ENDIF»
 		  «type.interfaceList.inputVars.generateAccessors("getDI")»
 		  «type.interfaceList.outputVars.generateAccessors("getDO")»
 		  «type.internalVars.generateAccessors("getVarInternal")»
