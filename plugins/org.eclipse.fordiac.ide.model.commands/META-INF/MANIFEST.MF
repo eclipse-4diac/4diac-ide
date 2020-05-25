@@ -14,6 +14,7 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.jface
 Export-Package: org.eclipse.fordiac.ide.model.commands.change,
  org.eclipse.fordiac.ide.model.commands.create,
- org.eclipse.fordiac.ide.model.commands.delete
+ org.eclipse.fordiac.ide.model.commands.delete,
+ org.eclipse.fordiac.ide.model.commands.insert
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.commands

@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.IContentProvider;
 
 public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection {
@@ -75,11 +75,9 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 	}
 
 	@Override
-	public void addEntry(Object entry, int index) {
+	public void addEntry(Object entry, int index, CompoundCommand cmd) {
 		if (entry instanceof Event) {
-			Command cmd = newPasteCommand((Event) entry, getIsInputsViewer(), index);
-			executeCommand(cmd);
-			getViewer().refresh();
+			cmd.add(newInsertCommand((Event) entry, getIsInputsViewer(), index));
 		}
 	}
 }

@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.IContentProvider;
 
 public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditInterfaceSection {
@@ -73,11 +73,9 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	}
 
 	@Override
-	public void addEntry(Object entry, int index) {
+	public void addEntry(Object entry, int index, CompoundCommand cmd) {
 		if (entry instanceof AdapterDeclaration) {
-			Command cmd = newPasteCommand((AdapterDeclaration) entry, getIsInputsViewer(), index);
-			executeCommand(cmd);
-			getViewer().refresh();
+			cmd.add(newInsertCommand((AdapterDeclaration) entry, getIsInputsViewer(), index));
 		}
 	}
 }

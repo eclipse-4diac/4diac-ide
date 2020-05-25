@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.IContentProvider;
 
 public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection {
@@ -75,14 +75,12 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	}
 
 	@Override
-	public void addEntry(Object entry, int index) {
+	public void addEntry(Object entry, int index, CompoundCommand cmd) {
 		// can not use instanceof since AdapterImplementation is derived from
 		// VarDeclaration and this would break the addEntry method in the adapter
 		// section
 		if (entry.getClass().equals(VarDeclarationImpl.class)) {
-			Command cmd = newPasteCommand((IInterfaceElement) entry, getIsInputsViewer(), index);
-			executeCommand(cmd);
-			getViewer().refresh();
+			cmd.add(newInsertCommand((IInterfaceElement) entry, getIsInputsViewer(), index));
 		}
 	}
 

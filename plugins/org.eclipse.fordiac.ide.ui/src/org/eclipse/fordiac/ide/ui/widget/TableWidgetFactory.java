@@ -27,6 +27,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
@@ -166,7 +167,6 @@ public final class TableWidgetFactory {
 				if (view == null) {
 					return Status.CANCEL_STATUS;
 				}
-				System.out.println(view);
 				Object[] selection = ((StructuredSelection) view.getViewer().getSelection()).toArray();
 				cb.setContents(selection);
 				return Status.OK_STATUS;
@@ -177,7 +177,6 @@ public final class TableWidgetFactory {
 			@Override
 			public Object execute(ExecutionEvent event) throws ExecutionException {
 				I4diacTableUtil view = isTabbed ? getTab(part) : getView(site.getSelectionProvider());
-				System.out.println(view);
 				if (view == null) {
 					return Status.CANCEL_STATUS;
 				}
@@ -186,19 +185,38 @@ public final class TableWidgetFactory {
 				try {
 					entries = (Object[]) cb.getContents();
 				} catch (Exception e) {
-					// TODO log exception
 					return Status.CANCEL_STATUS;
 				}
 				if (cb.getContents() == null) {
 					return Status.CANCEL_STATUS;
 				}
-				int index = table.getSelectionIndex() + 1;
-				if (index < 0) {
-					index = table.getItemCount();
+				int[] pasteIndices = table.getSelectionIndices();
+				int index;
+				if (pasteIndices.length == 0) {
+					if (table.getItemCount() > 0) {
+						// no entry is selected -> insert at the bottom of the table
+						index = table.getItemCount();
+					} else {
+						// no entries in the table
+						index = 0;
+					}
+				} else {
+					// use the last entry for multi selections
+					index = pasteIndices[pasteIndices.length - 1] + 1;
 				}
-				for (Object entry : entries) {
-					view.addEntry(entry, index++);
+				CompoundCommand cmpCommand = new CompoundCommand();
+				int[] selectionIndices = new int[entries.length];
+				for (int i = 0; i < entries.length; i++) {
+					selectionIndices[i] = index;
+					view.addEntry(entries[i], index++, cmpCommand);
 				}
+				view.executeCompoundCommand(cmpCommand);
+				table.forceFocus();
+				// the selection has to be set again via the table viewer for the widgets to
+				// recognize it
+				table.setSelection(selectionIndices);
+				TableViewer tableViewer = view.getViewer();
+				tableViewer.setSelection(tableViewer.getSelection());
 				return Status.OK_STATUS;
 			}
 		});
@@ -216,9 +234,11 @@ public final class TableWidgetFactory {
 					return Status.CANCEL_STATUS;
 				}
 				Object[] entries = new Object[indices.length];
+				CompoundCommand cmpCommand = new CompoundCommand();
 				for (int i = 0; i < indices.length; i++) {
-					entries[i] = view.removeEntry(indices[i] - i);
+					entries[i] = view.removeEntry(indices[i], cmpCommand);
 				}
+				view.executeCompoundCommand(cmpCommand);
 				cb.setContents(entries);
 				return Status.OK_STATUS;
 			}

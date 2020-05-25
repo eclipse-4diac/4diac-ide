@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -23,9 +24,11 @@ public interface I4diacTableUtil extends ISelectionProvider {
 
 	TableViewer getViewer();
 
-	void addEntry(Object entry, int index);
+	void addEntry(Object entry, int index, CompoundCommand cmd);
 
-	Object removeEntry(int index);
+	Object removeEntry(int index, CompoundCommand cmd);
+
+	void executeCompoundCommand(CompoundCommand cmd);
 
 	@Override
 	public default void addSelectionChangedListener(ISelectionChangedListener listener) {
@@ -46,4 +49,5 @@ public interface I4diacTableUtil extends ISelectionProvider {
 	public default void setSelection(ISelection selection) {
 
 	}
+
 }

@@ -15,12 +15,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteAlgorithmCommand;
+import org.eclipse.fordiac.ide.model.commands.insert.InsertAlgorithmCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -91,21 +91,22 @@ public class AlgorithmsSection extends ECCSection implements I4diacTableUtil {
 	}
 
 	@Override
-	public void addEntry(Object entry, int index) {
+	public void addEntry(Object entry, int index, CompoundCommand cmd) {
 		if (entry instanceof Algorithm) {
-			Command cmd = new CreateAlgorithmCommand(getAlgorithmList().getType(), index,
-					((Algorithm) entry).getName());
-			getAlgorithmList().executeCommand(cmd);
-			getViewer().refresh();
+			cmd.add(new InsertAlgorithmCommand(getAlgorithmList().getType(), (Algorithm) entry, index));
 		}
 	}
 
 	@Override
-	public Object removeEntry(int index) {
+	public Object removeEntry(int index, CompoundCommand cmd) {
 		Algorithm entry = (Algorithm) getEntry(index);
-		Command cmd = new DeleteAlgorithmCommand(getAlgorithmList().getType(), entry);
+		cmd.add(new DeleteAlgorithmCommand(getAlgorithmList().getType(), entry));
+		return entry;
+	}
+
+	@Override
+	public void executeCompoundCommand(CompoundCommand cmd) {
 		getAlgorithmList().executeCommand(cmd);
 		getViewer().refresh();
-		return entry;
 	}
 }

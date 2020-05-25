@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
+import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -40,6 +41,7 @@ import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -193,7 +195,7 @@ public class InternalVarsSection extends ECCSection implements I4diacTableUtil {
 			case IV_ARRAY:
 				return Integer.toString(var.getArraySize());
 			default:
-				return var.getValue().getValue();
+				return var.getValue() == null ? "" : var.getValue().getValue();
 			}
 		}
 
@@ -235,21 +237,23 @@ public class InternalVarsSection extends ECCSection implements I4diacTableUtil {
 	}
 
 	@Override
-	public void addEntry(Object entry, int index) {
+	public void addEntry(Object entry, int index, CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			VarDeclaration varEntry = (VarDeclaration) entry;
-			Command cmd = new CreateInternalVariableCommand(getType(), index, varEntry.getName(), varEntry.getType());
-			executeCommand(cmd);
-			getViewer().refresh();
+			cmd.add(new InsertVariableCommand(getType().getInternalVars(), varEntry, index));
 		}
 	}
 
 	@Override
-	public Object removeEntry(int index) {
+	public Object removeEntry(int index, CompoundCommand cmd) {
 		VarDeclaration entry = (VarDeclaration) getEntry(index);
-		Command cmd = new DeleteInternalVariableCommand(getType(), entry);
+		cmd.add(new DeleteInternalVariableCommand(getType(), entry));
+		return entry;
+	}
+
+	@Override
+	public void executeCompoundCommand(CompoundCommand cmd) {
 		executeCommand(cmd);
 		getViewer().refresh();
-		return entry;
 	}
 }

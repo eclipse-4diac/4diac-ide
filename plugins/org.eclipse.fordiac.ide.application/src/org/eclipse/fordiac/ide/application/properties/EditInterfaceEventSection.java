@@ -12,7 +12,7 @@
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - create command now has enhanced guess
- *   Daniel Lindhuber - added create command method with index
+ *   Daniel Lindhuber - added insert command method
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -25,6 +25,8 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceEventSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.insert.InsertSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -40,11 +42,11 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 	}
 
 	@Override
-	protected CreateInterfaceElementCommand newPasteCommand(IInterfaceElement interfaceElement, boolean isInput,
+	protected InsertInterfaceElementCommand newInsertCommand(IInterfaceElement interfaceElement, boolean isInput,
 			int index) {
 		DataType last = getLastUsedEventType(getType().getInterface(), isInput, interfaceElement);
-		return new CreateSubAppInterfaceElementCommand(last, getCreationName(interfaceElement),
-				getType().getInterface(), isInput, index);
+		return new InsertSubAppInterfaceElementCommand(interfaceElement, last, getType().getInterface(), isInput,
+				index);
 	}
 
 	@Override

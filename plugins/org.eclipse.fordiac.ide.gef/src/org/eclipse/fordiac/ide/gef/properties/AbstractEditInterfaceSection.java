@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -49,6 +50,7 @@ import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -89,7 +91,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
-	protected abstract CreateInterfaceElementCommand newPasteCommand(IInterfaceElement selection, boolean isInput,
+	protected abstract InsertInterfaceElementCommand newInsertCommand(IInterfaceElement selection, boolean isInput,
 			int index);
 
 	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);
@@ -442,12 +444,16 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	}
 
 	@Override
-	public Object removeEntry(int index) {
+	public Object removeEntry(int index, CompoundCommand cmd) {
 		IInterfaceElement entry = getEntry(index);
-		Command cmd = newDeleteCommand(entry);
+		cmd.add(newDeleteCommand(entry));
+		return entry;
+	}
+
+	@Override
+	public void executeCompoundCommand(CompoundCommand cmd) {
 		executeCommand(cmd);
 		getViewer().refresh();
-		return entry;
 	}
 
 	private IInterfaceElement getEntry(int index) {

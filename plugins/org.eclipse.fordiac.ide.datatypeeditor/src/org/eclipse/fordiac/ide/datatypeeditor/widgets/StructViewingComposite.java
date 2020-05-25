@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
+import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -279,20 +281,22 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	@Override
-	public void addEntry(Object entry, int index) {
+	public void addEntry(Object entry, int index, CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			VarDeclaration varEntry = (VarDeclaration) entry;
-			Command cmd = new CreateMemberVariableCommand(getType(), index, varEntry.getName(), varEntry.getType(),
-					dataTypeLibrary);
-			executeCommand(cmd);
+			cmd.add(new InsertVariableCommand(((StructuredType) dataType).getMemberVariables(), varEntry, index));
 		}
 	}
 
 	@Override
-	public Object removeEntry(int index) {
-		VarDeclaration entry = (VarDeclaration) getEntry(index);
-		Command cmd = new DeleteMemberVariableCommand(getType(), entry);
+	public void executeCompoundCommand(CompoundCommand cmd) {
 		executeCommand(cmd);
+	}
+
+	@Override
+	public Object removeEntry(int index, CompoundCommand cmd) {
+		VarDeclaration entry = (VarDeclaration) getEntry(index);
+		cmd.add(new DeleteMemberVariableCommand(getType(), entry));
 		return entry;
 	}
 

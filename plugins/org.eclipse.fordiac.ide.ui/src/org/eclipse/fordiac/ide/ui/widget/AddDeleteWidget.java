@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Alois Zoitl - initial implementation
  * Bianca Wiesmayr - enhanced add functionality
+ * Daniel Lindhuber - added separate delete listener
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
@@ -89,7 +90,7 @@ public class AddDeleteWidget {
 
 		Listener createListener = getAddListener(viewer, executor, addCommand);
 
-		Listener deleteListener = getSelectionListener(viewer, executor, deleteCommand);
+		Listener deleteListener = getDeleteListener(viewer, executor, deleteCommand);
 
 		bindToTableViewer(viewer, createListener, deleteListener);
 	}
@@ -129,6 +130,32 @@ public class AddDeleteWidget {
 						.forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
 				executor.executeCommand(cmd);
 				viewer.refresh();
+			}
+		};
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Listener getDeleteListener(TableViewer viewer, CommandExecutor executor,
+			CommandProvider commandProvider) {
+		return ev -> {
+			if (!viewer.getStructuredSelection().isEmpty()) {
+				int pos = viewer.getTable().getSelectionIndices()[0];
+				CompoundCommand cmd = new CompoundCommand();
+				viewer.getStructuredSelection().toList().stream()
+						.forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
+				executor.executeCommand(cmd);
+				viewer.refresh();
+				int itemCnt = viewer.getTable().getItemCount();
+				if (pos <= itemCnt) {
+					if (pos == itemCnt) {
+						pos--;
+					}
+					viewer.getTable().forceFocus();
+					// the selection has to be set again via the table viewer for the widgets to
+					// recognize it
+					viewer.getTable().setSelection(pos);
+					viewer.setSelection(viewer.getSelection());
+				}
 			}
 		};
 	}
