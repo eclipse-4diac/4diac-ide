@@ -1,8 +1,26 @@
+/**
+ * Copyright (c) 2019 fortiss GmbH
+ *               2020 Johannes Kepler University Linz
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Alois Zoitl  - fixed adapter and fb number generation in connection lists
+ */
 package org.eclipse.fordiac.ide.export.forte_ng.composite;
 
+import com.google.common.collect.Iterables;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -22,9 +40,16 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
   @Accessors(AccessorType.PROTECTED_GETTER)
   private CompositeFBType type;
   
+  private ArrayList<FBNetworkElement> fbs = new ArrayList<FBNetworkElement>();
+  
   public CompositeFBImplTemplate(final CompositeFBType type, final String name, final Path prefix) {
     super(name, prefix);
     this.type = type;
+    final Function1<FBNetworkElement, Boolean> _function = (FBNetworkElement it) -> {
+      FBType _type = it.getType();
+      return Boolean.valueOf((!(_type instanceof AdapterFBType)));
+    };
+    Iterables.<FBNetworkElement>addAll(this.fbs, IterableExtensions.<FBNetworkElement>filter(type.getFBNetwork().getNetworkElements(), _function));
   }
   
   @Override
@@ -73,13 +98,8 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
         {
-          final Function1<FBNetworkElement, Boolean> _function_1 = (FBNetworkElement it) -> {
-            FBType _type = it.getType();
-            return Boolean.valueOf((!(_type instanceof AdapterFBType)));
-          };
-          Iterable<FBNetworkElement> _filter = IterableExtensions.<FBNetworkElement>filter(this.type.getFBNetwork().getNetworkElements(), _function_1);
           boolean _hasElements = false;
-          for(final FBNetworkElement elem : _filter) {
+          for(final FBNetworkElement elem : this.fbs) {
             if (!_hasElements) {
               _hasElements = true;
             } else {
@@ -174,20 +194,13 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
     _builder.append("::scm_stFBNData = {");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    final Function1<FBNetworkElement, Boolean> _function_2 = (FBNetworkElement it) -> {
-      FBType _type = it.getType();
-      return Boolean.valueOf((!(_type instanceof AdapterFBType)));
-    };
-    int _size = IterableExtensions.size(IterableExtensions.<FBNetworkElement>filter(this.type.getFBNetwork().getNetworkElements(), _function_2));
+    int _size = this.fbs.size();
     _builder.append(_size, "  ");
     _builder.append(", ");
     {
-      final Function1<FBNetworkElement, Boolean> _function_3 = (FBNetworkElement it) -> {
-        FBType _type = it.getType();
-        return Boolean.valueOf((!(_type instanceof AdapterFBType)));
-      };
-      boolean _exists_1 = IterableExtensions.<FBNetworkElement>exists(this.type.getFBNetwork().getNetworkElements(), _function_3);
-      if (_exists_1) {
+      boolean _isEmpty_2 = this.fbs.isEmpty();
+      boolean _not_2 = (!_isEmpty_2);
+      if (_not_2) {
         _builder.append("scm_astInternalFBs");
       } else {
         _builder.append("nullptr");
@@ -200,9 +213,9 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
     _builder.append(_size_1, "  ");
     _builder.append(", ");
     {
-      boolean _isEmpty_2 = this.type.getFBNetwork().getEventConnections().isEmpty();
-      boolean _not_2 = (!_isEmpty_2);
-      if (_not_2) {
+      boolean _isEmpty_3 = this.type.getFBNetwork().getEventConnections().isEmpty();
+      boolean _not_3 = (!_isEmpty_3);
+      if (_not_3) {
         _builder.append("scm_astEventConnections");
       } else {
         _builder.append("nullptr");
@@ -218,9 +231,9 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
     _builder.append(_size_2, "  ");
     _builder.append(", ");
     {
-      boolean _isEmpty_3 = this.type.getFBNetwork().getDataConnections().isEmpty();
-      boolean _not_3 = (!_isEmpty_3);
-      if (_not_3) {
+      boolean _isEmpty_4 = this.type.getFBNetwork().getDataConnections().isEmpty();
+      boolean _not_4 = (!_isEmpty_4);
+      if (_not_4) {
         _builder.append("scm_astDataConnections");
       } else {
         _builder.append("nullptr");
@@ -251,14 +264,8 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
       CharSequence _fORTEString_1 = this.getFORTEString(iface.getName());
       _builder.append(_fORTEString_1);
       _builder.append("), ");
-      {
-        FBType _type = elem.getType();
-        if ((_type instanceof AdapterFBType)) {
-          _builder.append("CCompositeFB::scm_nAdapterMarker | ");
-        }
-      }
-      int _indexOf = this.type.getFBNetwork().getNetworkElements().indexOf(elem);
-      _builder.append(_indexOf);
+      CharSequence _fbId = this.fbId(elem);
+      _builder.append(_fbId);
       _xifexpression = _builder.toString();
     } else {
       StringConcatenation _builder_1 = new StringConcatenation();
@@ -269,6 +276,46 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
       _xifexpression = _builder_1.toString();
     }
     return _xifexpression;
+  }
+  
+  protected CharSequence _fbId(final FBNetworkElement elem) {
+    StringConcatenation _builder = new StringConcatenation();
+    int _indexOf = this.fbs.indexOf(elem);
+    _builder.append(_indexOf);
+    return _builder;
+  }
+  
+  protected CharSequence _fbId(final AdapterFB elem) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("CCompositeFB::scm_nAdapterMarker | ");
+    {
+      boolean _isPlug = elem.isPlug();
+      if (_isPlug) {
+        int _plugIndex = this.getPlugIndex(elem);
+        _builder.append(_plugIndex);
+      } else {
+        int _indexOf = this.type.getInterfaceList().getSockets().indexOf(elem.getAdapterDecl());
+        _builder.append(_indexOf);
+      }
+    }
+    return _builder;
+  }
+  
+  protected int getPlugIndex(final AdapterFB elem) {
+    int _size = this.type.getInterfaceList().getSockets().size();
+    int _indexOf = this.type.getInterfaceList().getPlugs().indexOf(elem.getAdapterDecl());
+    return (_size + _indexOf);
+  }
+  
+  protected CharSequence fbId(final FBNetworkElement elem) {
+    if (elem instanceof AdapterFB) {
+      return _fbId((AdapterFB)elem);
+    } else if (elem != null) {
+      return _fbId(elem);
+    } else {
+      throw new IllegalArgumentException("Unhandled parameter types: " +
+        Arrays.<Object>asList(elem).toString());
+    }
   }
   
   @Pure
