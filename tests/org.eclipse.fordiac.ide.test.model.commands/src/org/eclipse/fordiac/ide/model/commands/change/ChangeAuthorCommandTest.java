@@ -1,113 +1,156 @@
-/********************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
- * 
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License 2.0 which is available at
- * http://www.eclipse.org/legal/epl-2.0.
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Contributors:
- *  Bianca Wiesmayr - initial implementation
- ********************************************************************************/
-
 package org.eclipse.fordiac.ide.model.commands.change;
+
+import static org.junit.Assume.assumeNotNull;
+import static org.junit.Assume.assumeTrue;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
-import org.eclipse.gef.commands.Command;
-import org.junit.Test;
-// see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
+import org.junit.runners.Parameterized.Parameters;
 
-import static org.junit.Assert.*;
+//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-public class ChangeAuthorCommandTest {
-	private static VersionInfo vInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
-	private static final String DEFAULT_NAME = vInfo.getAuthor();
-	private static final String DEFAULT_DATE = vInfo.getDate();
-	private static final String DEFAULT_ORG = vInfo.getOrganization();
-	private static final String DEFAULT_REMARKS = vInfo.getRemarks();
-	private static final String DEFAULT_VERSION = vInfo.getVersion();
-	private Command cmd;
+public class ChangeAuthorCommandTest extends CommandTestBase<ChangeAuthorCommandTest.State> {
 
-	@Test
-	public void constructorTest() {
-		String newAuthor = "new author";//$NON-NLS-1$
-		cmd = new ChangeAuthorCommand(vInfo, newAuthor);
-		assertNotNull(cmd);
+	// create a state description that fits our purpose
+	public static class State implements CommandTestBase.StateBase {
+		private VersionInfo vInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
+
+		private ChangeAuthorCommand cmd;
+
+		public VersionInfo getVersionInfo() {
+			return vInfo;
+		}
+
+		public ChangeAuthorCommand getCommand() {
+			return cmd;
+		}
+
+		public void setCommand(ChangeAuthorCommand cmd) {
+			this.cmd = cmd;
+		}
 	}
 
-	@Test
-	public void setAuthor() {
-		vInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
-		String newAuthor = "new author";//$NON-NLS-1$
-		cmd = new ChangeAuthorCommand(vInfo, newAuthor);
+	private static final String NEW_AUTHOR = "new author"; //$NON-NLS-1$
 
-		assertTrue(cmd.canExecute());
-		cmd.execute();
-		assertEquals(vInfo.getAuthor(), newAuthor);
-		verifyDefaultValues();
-
-		assertTrue(cmd.canUndo());
-		cmd.undo();
-		assertEquals(vInfo.getAuthor(), DEFAULT_NAME);
-		verifyDefaultValues();
-
-		assertTrue(cmd.canRedo());
-		cmd.redo();
-		assertEquals(vInfo.getAuthor(), newAuthor);
-		verifyDefaultValues();
+	private static boolean verifyState(State state, State oldState) {
+		return state.getVersionInfo().getAuthor().equals(NEW_AUTHOR)
+				&& state.getVersionInfo().getDate().equals(oldState.getVersionInfo().getDate())
+				&& state.getVersionInfo().getOrganization().equals(oldState.getVersionInfo().getOrganization())
+				&& state.getVersionInfo().getRemarks().equals(oldState.getVersionInfo().getRemarks())
+				&& state.getVersionInfo().getVersion().equals(oldState.getVersionInfo().getVersion());
 	}
 
-	private static void verifyDefaultValues() {
-		assertEquals(vInfo.getDate(), DEFAULT_DATE);
-		assertEquals(vInfo.getOrganization(), DEFAULT_ORG);
-		assertEquals(vInfo.getRemarks(), DEFAULT_REMARKS);
-		assertEquals(vInfo.getVersion(), DEFAULT_VERSION);
+	private static boolean verifyStateNull(State state, State oldState) {
+		return state.getVersionInfo().getAuthor().equals("") //$NON-NLS-1$
+				&& state.getVersionInfo().getDate().equals(oldState.getVersionInfo().getDate())
+				&& state.getVersionInfo().getOrganization().equals(oldState.getVersionInfo().getOrganization())
+				&& state.getVersionInfo().getRemarks().equals(oldState.getVersionInfo().getRemarks())
+				&& state.getVersionInfo().getVersion().equals(oldState.getVersionInfo().getVersion());
 	}
 
-	private static final String date = "1984-08-04"; //$NON-NLS-1$
-	private static final String name = "first name surname"; //$NON-NLS-1$
-	private static final String org = "4diac"; //$NON-NLS-1$
-	private static final String remark = "remark something";//$NON-NLS-1$
-	private static final String version = "13.0";//$NON-NLS-1$
-
-	@Test
-	public void changeAuthor() {
-		vInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
-		setupSampleVersionInfo();
-
-		String newName = "first name married name";//$NON-NLS-1$
-		cmd = new ChangeAuthorCommand(vInfo, newName);
-
-		assertTrue(cmd.canExecute());
-		cmd.execute();
-		assertEquals(vInfo.getAuthor(), newName);
-		verifySetValues();
-
-		assertTrue(cmd.canUndo());
-		cmd.undo();
-		assertEquals(vInfo.getAuthor(), name);
-		verifySetValues();
-
-		assertTrue(cmd.canRedo());
-		cmd.redo();
-		assertEquals(vInfo.getAuthor(), newName);
-		verifySetValues();
+	private static void createCommand(Object stateObj) {
+		State state = (State) stateObj;
+		state.setCommand(new ChangeAuthorCommand(state.getVersionInfo(), NEW_AUTHOR));//
+		assumeNotNull(state.getCommand());
 	}
 
-	private static void setupSampleVersionInfo() {
-		vInfo.setAuthor(name);
-		vInfo.setDate(date);
-		vInfo.setOrganization(org);
-		vInfo.setRemarks(remark);
-		vInfo.setVersion(version);
+	private static State executeCommand(State state) {
+		assumeTrue(state.cmd.canExecute());
+		state.cmd.execute();
+		return state;
 	}
 
-	private static void verifySetValues() {
-		assertEquals(vInfo.getDate(), date);
-		assertEquals(vInfo.getOrganization(), org);
-		assertEquals(vInfo.getRemarks(), remark);
-		assertEquals(vInfo.getVersion(), version);
+	private static State undoCommand(Object stateObj) {
+		State state = (State) stateObj;
+		assumeTrue(state.cmd.canUndo());
+		state.cmd.undo();
+		return (state);
 	}
+
+	private static State redoCommand(Object stateObj) {
+		State state = (State) stateObj;
+		assumeTrue(state.cmd.canRedo());
+		state.cmd.redo();
+		return (state);
+	}
+
+	private static State executeCommandToNull(State state) {
+		state.setCommand(new ChangeAuthorCommand(state.getVersionInfo(), null));
+		assumeTrue(state.getCommand().canExecute());
+		state.getCommand().execute();
+		return state;
+	}
+
+	// parameter creation function, also contains description of how the textual
+	// description will be used
+	@Parameters(name = "{index}: {0}")
+	public static Collection<Object[]> data() {
+		VersionInfo vInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
+
+		final String DEFAULT_NAME = vInfo.getAuthor();
+		final String DEFAULT_DATE = vInfo.getDate();
+		final String DEFAULT_ORG = vInfo.getOrganization();
+		final String DEFAULT_REMARKS = vInfo.getRemarks();
+		final String DEFAULT_VERSION = vInfo.getVersion();
+
+		final String SET_NAME = "first name surname"; //$NON-NLS-1$
+		final String SET_DATE = "1984-08-04"; //$NON-NLS-1$
+		final String SET_ORG = "4diac"; //$NON-NLS-1$
+		final String SET_REMARKS = "remark something"; //$NON-NLS-1$
+		final String SET_VERSION = "13.0"; //$NON-NLS-1$
+
+		List<Object[]> commands = new ArrayList<>();
+
+		List<Object> executionDescriptions = ExecutionDescription.commandList( //
+				new ExecutionDescription<State>("Change Author", //
+						ChangeAuthorCommandTest::executeCommand, //
+						ChangeAuthorCommandTest::verifyState //
+				), //
+				new ExecutionDescription<State>("Change Author to null", //
+						ChangeAuthorCommandTest::executeCommandToNull, //
+						ChangeAuthorCommandTest::verifyStateNull //
+				) //
+		);
+
+		commands.addAll(describeCommand("Start from default values", //
+				State::new, //
+				(State state, State oldState) -> state.getVersionInfo().getAuthor().equals(DEFAULT_NAME)
+						&& state.getVersionInfo().getDate().equals(DEFAULT_DATE)
+						&& state.getVersionInfo().getOrganization().equals(DEFAULT_ORG)
+						&& state.getVersionInfo().getRemarks().equals(DEFAULT_REMARKS)
+						&& state.getVersionInfo().getVersion().equals(DEFAULT_VERSION), //
+				ChangeAuthorCommandTest::createCommand, //
+				executionDescriptions, //
+				ChangeAuthorCommandTest::undoCommand, //
+				ChangeAuthorCommandTest::redoCommand //
+		));
+
+		commands.addAll(describeCommand("Start from set values", //
+				() -> {
+					State state = new State();
+					state.getVersionInfo().setAuthor(SET_NAME);
+					state.getVersionInfo().setDate(SET_DATE);
+					state.getVersionInfo().setOrganization(SET_ORG);
+					state.getVersionInfo().setRemarks(SET_REMARKS);
+					state.getVersionInfo().setVersion(SET_VERSION);
+					return state;
+				}, //
+				(State state, State oldState) -> state.getVersionInfo().getAuthor().equals(SET_NAME)
+						&& state.getVersionInfo().getDate().equals(SET_DATE)
+						&& state.getVersionInfo().getOrganization().equals(SET_ORG)
+						&& state.getVersionInfo().getRemarks().equals(SET_REMARKS)
+						&& state.getVersionInfo().getVersion().equals(SET_VERSION), //
+				ChangeAuthorCommandTest::createCommand, //
+				executionDescriptions, //
+				ChangeAuthorCommandTest::undoCommand, //
+				ChangeAuthorCommandTest::redoCommand //
+		));
+
+		return commands;
+	}
+
 }
