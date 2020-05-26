@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtend2.lib.StringConcatenation;
@@ -46,6 +47,8 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
   private CompositeFBType type;
   
   private ArrayList<FBNetworkElement> fbs = new ArrayList<FBNetworkElement>();
+  
+  private int numCompFBParams = 0;
   
   private int eConnNumber = 0;
   
@@ -130,9 +133,13 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
         _builder.newLineIfNotEmpty();
         _builder.append("};");
         _builder.newLine();
-        _builder.newLine();
       }
     }
+    _builder.newLine();
+    CharSequence _exportFBParams = this.exportFBParams(this.type.getFBNetwork().getNetworkElements());
+    _builder.append(_exportFBParams);
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
     {
       boolean _isEmpty = this.type.getFBNetwork().getEventConnections().isEmpty();
       boolean _not = (!_isEmpty);
@@ -153,9 +160,17 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
         _builder.newLine();
       }
     }
+    CharSequence _generateFBNDataStruct = this.generateFBNDataStruct();
+    _builder.append(_generateFBNDataStruct);
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  protected CharSequence generateFBNDataStruct() {
+    StringConcatenation _builder = new StringConcatenation();
     _builder.append("const SCFB_FBNData ");
-    CharSequence _fBClassName_1 = this.getFBClassName();
-    _builder.append(_fBClassName_1);
+    CharSequence _fBClassName = this.getFBClassName();
+    _builder.append(_fBClassName);
     _builder.append("::scm_stFBNData = {");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
@@ -163,9 +178,9 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
     _builder.append(_size, "  ");
     _builder.append(", ");
     {
-      boolean _isEmpty_2 = this.fbs.isEmpty();
-      boolean _not_2 = (!_isEmpty_2);
-      if (_not_2) {
+      boolean _isEmpty = this.fbs.isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
         _builder.append("scm_astInternalFBs");
       } else {
         _builder.append("nullptr");
@@ -222,8 +237,16 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
     _builder.append(",");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    _builder.append("0, nullptr");
-    _builder.newLine();
+    _builder.append(this.numCompFBParams, "  ");
+    _builder.append(", ");
+    {
+      if ((0 != this.numCompFBParams)) {
+        _builder.append("scm_astParamters");
+      } else {
+        _builder.append("nullptr");
+      }
+    }
+    _builder.newLineIfNotEmpty();
     _builder.append("};");
     _builder.newLine();
     _builder.newLine();
@@ -442,6 +465,54 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
       _eContainer_1=_eContainer.eContainer();
     }
     return (_eContainer_1 instanceof CompositeFBType);
+  }
+  
+  protected CharSequence exportFBParams(final EList<FBNetworkElement> fbs) {
+    CharSequence _xblockexpression = null;
+    {
+      StringBuilder retVal = new StringBuilder();
+      for (final FBNetworkElement fb : fbs) {
+        final Function1<VarDeclaration, Boolean> _function = (VarDeclaration it) -> {
+          return Boolean.valueOf(((it.getValue() != null) && (!it.getValue().getValue().isEmpty())));
+        };
+        Iterable<VarDeclaration> _filter = IterableExtensions.<VarDeclaration>filter(fb.getInterface().getInputVars(), _function);
+        for (final VarDeclaration v : _filter) {
+          {
+            StringConcatenation _builder = new StringConcatenation();
+            _builder.append("  ");
+            _builder.append("{");
+            CharSequence _fbId = this.fbId(fb);
+            _builder.append(_fbId, "  ");
+            _builder.append(", g_nStringId");
+            String _name = v.getName();
+            _builder.append(_name, "  ");
+            _builder.append(", \"");
+            String _value = v.getValue().getValue();
+            _builder.append(_value, "  ");
+            _builder.append("\"},");
+            _builder.newLineIfNotEmpty();
+            retVal.append(_builder);
+            this.numCompFBParams++;
+          }
+        }
+      }
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("const SCFB_FBParameter ");
+      CharSequence _fBClassName = this.getFBClassName();
+      _builder.append(_fBClassName);
+      _builder.append("::scm_astParamters[] = {");
+      _builder.newLineIfNotEmpty();
+      {
+        if ((0 != this.numCompFBParams)) {
+          String _string = retVal.toString();
+          _builder.append(_string);
+        }
+      }
+      _builder.newLineIfNotEmpty();
+      _builder.append("};");
+      _xblockexpression = _builder;
+    }
+    return _xblockexpression;
   }
   
   protected CharSequence fbId(final FBNetworkElement elem) {

@@ -16,25 +16,26 @@ package org.eclipse.fordiac.ide.export.forte_ng.composite
 
 import java.nio.file.Path
 import java.util.ArrayList
+import java.util.HashSet
+import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
-import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.fordiac.ide.model.libraryElement.EventConnection
-import org.eclipse.emf.common.util.EList
-import java.util.HashSet
 import org.eclipse.fordiac.ide.model.libraryElement.Connection
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.xtend.lib.annotations.Accessors
 
 class CompositeFBImplTemplate extends ForteFBTemplate {
 
 	@Accessors(PROTECTED_GETTER) CompositeFBType type
 
 	var fbs = new ArrayList<FBNetworkElement>
-	
+	var numCompFBParams = 0;
 	var eConnNumber = 0
 	var fannedOutEventConns = 0
 	var dataConnNumber = 0
@@ -63,11 +64,13 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 
 	def protected generateFBNetwork() '''
 		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterFBType)]»
-			const SCFB_FBInstanceData «FBClassName»::scm_astInternalFBs[] = {
-			  «FOR elem : fbs SEPARATOR ",\n"»{«elem.name.FORTEString», «elem.type.name.FORTEString»}«ENDFOR»
-			};
-
+		const SCFB_FBInstanceData «FBClassName»::scm_astInternalFBs[] = {
+		  «FOR elem : fbs SEPARATOR ",\n"»{«elem.name.FORTEString», «elem.type.name.FORTEString»}«ENDFOR»
+		};
 		«ENDIF»
+
+		«type.FBNetwork.networkElements.exportFBParams»
+
 		«IF !type.FBNetwork.eventConnections.empty»
 		    «type.FBNetwork.eventConnections.exportEventConns»
 
@@ -76,16 +79,22 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 			«type.FBNetwork.dataConnections.exportDataConns»
 
 		«ENDIF»
+		«generateFBNDataStruct()»
+		'''
+	
+	protected def generateFBNDataStruct()
+		'''
 		const SCFB_FBNData «FBClassName»::scm_stFBNData = {
 		  «fbs.size», «IF !fbs.isEmpty»scm_astInternalFBs«ELSE»nullptr«ENDIF»,
 		  «eConnNumber», «IF 0 != eConnNumber»scm_astEventConnections«ELSE»nullptr«ENDIF»,
 		  «fannedOutEventConns», «IF 0 != fannedOutEventConns»scm_astFannedOutEventConnections«ELSE»nullptr«ENDIF»,
 		  «dataConnNumber», «IF 0 != dataConnNumber»scm_astDataConnections«ELSE»nullptr«ENDIF»,
 		  «fannedOutDataConns», «IF 0 != fannedOutDataConns»scm_astFannedOutDataConnections«ELSE»nullptr«ENDIF»,
-		  0, nullptr
+		  «numCompFBParams», «IF 0 != numCompFBParams»scm_astParamters«ELSE»nullptr«ENDIF»
 		};
-
-	'''
+		
+		'''
+	
 
 	def protected generateConnectionPortID(IInterfaceElement iface, FBNetworkElement elem) {
 		return if(type.FBNetwork.networkElements.contains(elem))
@@ -199,5 +208,22 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
     def private hasCFBInterfaceDestination(Connection conn){
         conn?.getDestination()?.eContainer()?.eContainer() instanceof CompositeFBType
     }
+
+	def protected exportFBParams(EList<FBNetworkElement> fbs) {
+		var retVal = new StringBuilder()
+
+		for (FBNetworkElement fb : fbs) {
+			for (VarDeclaration v : fb.getInterface.getInputVars.filter[it.value !== null && !it.value.value.isEmpty]) {
+				retVal.append('''  {«fb.fbId», g_nStringId«v.name», "«v.value.value»"},
+				''')
+				numCompFBParams++
+			}
+		}
+
+		'''
+		const SCFB_FBParameter «FBClassName»::scm_astParamters[] = {
+		«IF 0 != numCompFBParams»«retVal.toString»«ENDIF»
+		};'''
+	}
 
 }

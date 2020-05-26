@@ -58,6 +58,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate {
 		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterFBType)]»
 			static const SCFB_FBInstanceData scm_astInternalFBs[];
 		«ENDIF»
+		static const SCFB_FBParameter scm_astParamters[];
 		«IF !type.FBNetwork.eventConnections.empty»
 			static const SCFB_FBConnectionData scm_astEventConnections[];
 			static const SCFB_FBFannedOutConnectionData scm_astFannedOutEventConnections[];

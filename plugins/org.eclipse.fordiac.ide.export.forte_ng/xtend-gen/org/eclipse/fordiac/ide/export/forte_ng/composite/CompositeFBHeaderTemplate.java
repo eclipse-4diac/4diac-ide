@@ -152,6 +152,8 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
         _builder.newLine();
       }
     }
+    _builder.append("static const SCFB_FBParameter scm_astParamters[];");
+    _builder.newLine();
     {
       boolean _isEmpty = this.type.getFBNetwork().getEventConnections().isEmpty();
       boolean _not = (!_isEmpty);
