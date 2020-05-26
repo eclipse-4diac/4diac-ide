@@ -158,6 +158,8 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
       if (_not) {
         _builder.append("static const SCFB_FBConnectionData scm_astEventConnections[];");
         _builder.newLine();
+        _builder.append("static const SCFB_FBFannedOutConnectionData scm_astFannedOutEventConnections[];");
+        _builder.newLine();
       }
     }
     {
@@ -165,6 +167,8 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
       boolean _not_1 = (!_isEmpty_1);
       if (_not_1) {
         _builder.append("static const SCFB_FBConnectionData scm_astDataConnections[];");
+        _builder.newLine();
+        _builder.append("static const SCFB_FBFannedOutConnectionData scm_astFannedOutDataConnections[];");
         _builder.newLine();
       }
     }
