@@ -31,7 +31,7 @@ public class ChangeInterfaceOrderCommand extends Command {
 
 	private ChangeInterfaceOrderCommand(IInterfaceElement selection) {
 		this.selection = selection;
-		if (null != selection && selection.eContainer() instanceof InterfaceList) {
+		if ((null != selection) && (selection.eContainer() instanceof InterfaceList)) {
 			setInterfaces((InterfaceList) selection.eContainer());
 			oldIndex = this.interfaces.indexOf(selection);
 		}
@@ -80,7 +80,7 @@ public class ChangeInterfaceOrderCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return null != selection && interfaces.size() > 1 && interfaces.size() > newIndex;
+		return (null != selection) && (interfaces.size() > 1) && (interfaces.size() > newIndex);
 	}
 
 	@Override

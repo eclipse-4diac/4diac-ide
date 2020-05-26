@@ -16,7 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -60,7 +59,7 @@ public class CreateAlgorithmCommand extends AbstractCreationCommand {
 			oldAlgorithm = action.getAlgorithm();
 		}
 		newAlgorithm = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-		newAlgorithm.setComment(Messages.CreateAlgorithmCommand_NewAlgorithm);
+		newAlgorithm.setComment(""); //$NON-NLS-1$
 		newAlgorithm.setText(""); // especially the xtext editor requires at least an empty //$NON-NLS-1$
 									// algorithm text
 		redo();
