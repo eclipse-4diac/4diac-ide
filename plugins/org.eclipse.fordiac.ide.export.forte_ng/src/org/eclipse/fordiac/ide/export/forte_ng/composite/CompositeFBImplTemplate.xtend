@@ -23,12 +23,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection
+import org.eclipse.emf.common.util.EList
+import java.util.HashSet
+import org.eclipse.fordiac.ide.model.libraryElement.Connection
 
 class CompositeFBImplTemplate extends ForteFBTemplate {
 
 	@Accessors(PROTECTED_GETTER) CompositeFBType type
 
 	var fbs = new ArrayList<FBNetworkElement>
+	
+	var eConnNumber = 0
+	var fannedOutEventConns = 0;
 
 	new(CompositeFBType type, String name, Path prefix) {
 		super(name, prefix)
@@ -59,9 +66,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 
 		«ENDIF»
 		«IF !type.FBNetwork.eventConnections.empty»
-			const SCFB_FBConnectionData «FBClassName»::scm_astEventConnections[] = {
-			  «FOR conn : type.FBNetwork.eventConnections SEPARATOR ",\n"»{«conn.source.generateConnectionPortID(conn.sourceElement)», «conn.destination.generateConnectionPortID(conn.destinationElement)»}«ENDFOR»
-			};
+		    «exportCFBEventConns(type.FBNetwork.eventConnections)»
 
 		«ENDIF»
 		«IF !type.FBNetwork.dataConnections.empty»
@@ -72,8 +77,8 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 		«ENDIF»
 		const SCFB_FBNData «FBClassName»::scm_stFBNData = {
 		  «fbs.size», «IF !fbs.isEmpty»scm_astInternalFBs«ELSE»nullptr«ENDIF»,
-		  «type.FBNetwork.eventConnections.size», «IF !type.FBNetwork.eventConnections.empty»scm_astEventConnections«ELSE»nullptr«ENDIF»,
-		  0, nullptr,
+		  «eConnNumber», «IF 0 != eConnNumber»scm_astEventConnections«ELSE»nullptr«ENDIF»,
+		  «fannedOutEventConns», «IF 0 != fannedOutEventConns»scm_astFannedOutEventConnections«ELSE»nullptr«ENDIF»,
 		  «type.FBNetwork.dataConnections.size», «IF !type.FBNetwork.dataConnections.empty»scm_astDataConnections«ELSE»nullptr«ENDIF»,
 		  0, nullptr,
 		  0, nullptr
@@ -82,7 +87,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 
 	def protected generateConnectionPortID(IInterfaceElement iface, FBNetworkElement elem) {
 		return if(type.FBNetwork.networkElements.contains(elem))
-			'''GENERATE_CONNECTION_PORT_ID_2_ARG(«elem.name.FORTEString», «iface.name.FORTEString»), «fbId(elem)»'''
+			'''GENERATE_CONNECTION_PORT_ID_2_ARG(«elem.name.FORTEString», «iface.name.FORTEString»), «elem.fbId»'''
 		else
 			'''GENERATE_CONNECTION_PORT_ID_1_ARG(«iface.name.FORTEString»), -1'''
 	}
@@ -93,8 +98,52 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 	def protected dispatch fbId(AdapterFB elem)
 	   '''CCompositeFB::scm_nAdapterMarker | «IF elem.isPlug»«getPlugIndex(elem)»«ELSE»«type.interfaceList.sockets.indexOf(elem.adapterDecl)»«ENDIF»'''
 
-    protected def getPlugIndex(AdapterFB elem) {
+    def protected getPlugIndex(AdapterFB elem) {
         type.interfaceList.sockets.size + type.interfaceList.plugs.indexOf(elem.adapterDecl)
     }
+    
+    def protected exportCFBEventConns(EList<EventConnection> eConns) {
+        var retVal = new StringBuilder()
+        var conSet = new HashSet()
+        var fannedOutConns = new StringBuilder()
+        
+        retVal.append("const SCFB_FBConnectionData " + FBClassName + "::scm_astEventConnections[] = {\n")
+
+        for (Connection eConn : eConns) {
+            if (!conSet.contains(eConn)) {
+                conSet.add(eConn)
+
+                retVal.append(eConn.getConnListEntry)
+
+                if (!eConn.source.getOutputConnections().empty) {
+                    // we have fan out
+                    for (Connection fannedConn : eConn.source.getOutputConnections().filter[!(it == eConn)]) {
+                        conSet.add(fannedConn)
+                        fannedOutConns.append(fannedConn.genFannedOutConnString(eConnNumber))
+                        fannedOutEventConns++
+                    }
+                }
+                eConnNumber++;
+            }
+        }
+
+        retVal.append("};\n")
+
+        retVal.append("\nconst SCFB_FBFannedOutConnectionData " + FBClassName + "::scm_astFannedOutEventConnections[] = {\n") 
+        if (0 != fannedOutEventConns) {
+            retVal.append(fannedOutConns)
+        }
+        retVal.append("};\n"); //$NON-NLS-1$
+    }
+
+    def protected getConnListEntry(Connection con)
+    '''  {«con.source.generateConnectionPortID(con.sourceElement)», «con.destination.generateConnectionPortID(con.destinationElement)»},
+    '''
+
+    def protected genFannedOutConnString(Connection con, int connNum) {
+        '''  {«connNum», «con.destination.generateConnectionPortID(con.destinationElement)»},
+        '''
+    }
+    
 
 }

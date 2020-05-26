@@ -14,15 +14,18 @@
  */
 package org.eclipse.fordiac.ide.export.forte_ng.composite;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -41,6 +44,10 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
   private CompositeFBType type;
   
   private ArrayList<FBNetworkElement> fbs = new ArrayList<FBNetworkElement>();
+  
+  private int eConnNumber = 0;
+  
+  private int fannedOutEventConns = 0;
   
   public CompositeFBImplTemplate(final CompositeFBType type, final String name, final Path prefix) {
     super(name, prefix);
@@ -124,16 +131,26 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
       boolean _isEmpty = this.type.getFBNetwork().getEventConnections().isEmpty();
       boolean _not = (!_isEmpty);
       if (_not) {
+        StringBuilder _exportCFBEventConns = this.exportCFBEventConns(this.type.getFBNetwork().getEventConnections());
+        _builder.append(_exportCFBEventConns);
+        _builder.newLineIfNotEmpty();
+        _builder.newLine();
+      }
+    }
+    {
+      boolean _isEmpty_1 = this.type.getFBNetwork().getDataConnections().isEmpty();
+      boolean _not_1 = (!_isEmpty_1);
+      if (_not_1) {
         _builder.append("const SCFB_FBConnectionData ");
         CharSequence _fBClassName_1 = this.getFBClassName();
         _builder.append(_fBClassName_1);
-        _builder.append("::scm_astEventConnections[] = {");
+        _builder.append("::scm_astDataConnections[] = {");
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
         {
-          EList<EventConnection> _eventConnections = this.type.getFBNetwork().getEventConnections();
+          EList<DataConnection> _dataConnections = this.type.getFBNetwork().getDataConnections();
           boolean _hasElements_1 = false;
-          for(final EventConnection conn : _eventConnections) {
+          for(final DataConnection conn : _dataConnections) {
             if (!_hasElements_1) {
               _hasElements_1 = true;
             } else {
@@ -154,43 +171,9 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
         _builder.newLine();
       }
     }
-    {
-      boolean _isEmpty_1 = this.type.getFBNetwork().getDataConnections().isEmpty();
-      boolean _not_1 = (!_isEmpty_1);
-      if (_not_1) {
-        _builder.append("const SCFB_FBConnectionData ");
-        CharSequence _fBClassName_2 = this.getFBClassName();
-        _builder.append(_fBClassName_2);
-        _builder.append("::scm_astDataConnections[] = {");
-        _builder.newLineIfNotEmpty();
-        _builder.append("  ");
-        {
-          EList<DataConnection> _dataConnections = this.type.getFBNetwork().getDataConnections();
-          boolean _hasElements_2 = false;
-          for(final DataConnection conn_1 : _dataConnections) {
-            if (!_hasElements_2) {
-              _hasElements_2 = true;
-            } else {
-              _builder.appendImmediate(",\n", "  ");
-            }
-            _builder.append("{");
-            String _generateConnectionPortID_2 = this.generateConnectionPortID(conn_1.getSource(), conn_1.getSourceElement());
-            _builder.append(_generateConnectionPortID_2, "  ");
-            _builder.append(", ");
-            String _generateConnectionPortID_3 = this.generateConnectionPortID(conn_1.getDestination(), conn_1.getDestinationElement());
-            _builder.append(_generateConnectionPortID_3, "  ");
-            _builder.append("}");
-          }
-        }
-        _builder.newLineIfNotEmpty();
-        _builder.append("};");
-        _builder.newLine();
-        _builder.newLine();
-      }
-    }
     _builder.append("const SCFB_FBNData ");
-    CharSequence _fBClassName_3 = this.getFBClassName();
-    _builder.append(_fBClassName_3);
+    CharSequence _fBClassName_2 = this.getFBClassName();
+    _builder.append(_fBClassName_2);
     _builder.append("::scm_stFBNData = {");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
@@ -209,13 +192,10 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
     _builder.append(",");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    int _size_1 = this.type.getFBNetwork().getEventConnections().size();
-    _builder.append(_size_1, "  ");
+    _builder.append(this.eConnNumber, "  ");
     _builder.append(", ");
     {
-      boolean _isEmpty_3 = this.type.getFBNetwork().getEventConnections().isEmpty();
-      boolean _not_3 = (!_isEmpty_3);
-      if (_not_3) {
+      if ((0 != this.eConnNumber)) {
         _builder.append("scm_astEventConnections");
       } else {
         _builder.append("nullptr");
@@ -224,16 +204,25 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
     _builder.append(",");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    _builder.append("0, nullptr,");
-    _builder.newLine();
-    _builder.append("  ");
-    int _size_2 = this.type.getFBNetwork().getDataConnections().size();
-    _builder.append(_size_2, "  ");
+    _builder.append(this.fannedOutEventConns, "  ");
     _builder.append(", ");
     {
-      boolean _isEmpty_4 = this.type.getFBNetwork().getDataConnections().isEmpty();
-      boolean _not_4 = (!_isEmpty_4);
-      if (_not_4) {
+      if ((0 != this.fannedOutEventConns)) {
+        _builder.append("scm_astFannedOutEventConnections");
+      } else {
+        _builder.append("nullptr");
+      }
+    }
+    _builder.append(",");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    int _size_1 = this.type.getFBNetwork().getDataConnections().size();
+    _builder.append(_size_1, "  ");
+    _builder.append(", ");
+    {
+      boolean _isEmpty_3 = this.type.getFBNetwork().getDataConnections().isEmpty();
+      boolean _not_3 = (!_isEmpty_3);
+      if (_not_3) {
         _builder.append("scm_astDataConnections");
       } else {
         _builder.append("nullptr");
@@ -305,6 +294,81 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
     int _size = this.type.getInterfaceList().getSockets().size();
     int _indexOf = this.type.getInterfaceList().getPlugs().indexOf(elem.getAdapterDecl());
     return (_size + _indexOf);
+  }
+  
+  protected StringBuilder exportCFBEventConns(final EList<EventConnection> eConns) {
+    StringBuilder _xblockexpression = null;
+    {
+      StringBuilder retVal = new StringBuilder();
+      HashSet<Connection> conSet = new HashSet<Connection>();
+      StringBuilder fannedOutConns = new StringBuilder();
+      CharSequence _fBClassName = this.getFBClassName();
+      String _plus = ("const SCFB_FBConnectionData " + _fBClassName);
+      String _plus_1 = (_plus + "::scm_astEventConnections[] = {\n");
+      retVal.append(_plus_1);
+      for (final Connection eConn : eConns) {
+        boolean _contains = conSet.contains(eConn);
+        boolean _not = (!_contains);
+        if (_not) {
+          conSet.add(eConn);
+          retVal.append(this.getConnListEntry(eConn));
+          boolean _isEmpty = eConn.getSource().getOutputConnections().isEmpty();
+          boolean _not_1 = (!_isEmpty);
+          if (_not_1) {
+            final Function1<Connection, Boolean> _function = (Connection it) -> {
+              boolean _equals = Objects.equal(it, eConn);
+              return Boolean.valueOf((!_equals));
+            };
+            Iterable<Connection> _filter = IterableExtensions.<Connection>filter(eConn.getSource().getOutputConnections(), _function);
+            for (final Connection fannedConn : _filter) {
+              {
+                conSet.add(fannedConn);
+                fannedOutConns.append(this.genFannedOutConnString(fannedConn, this.eConnNumber));
+                this.fannedOutEventConns++;
+              }
+            }
+          }
+          this.eConnNumber++;
+        }
+      }
+      retVal.append("};\n");
+      CharSequence _fBClassName_1 = this.getFBClassName();
+      String _plus_2 = ("\nconst SCFB_FBFannedOutConnectionData " + _fBClassName_1);
+      String _plus_3 = (_plus_2 + "::scm_astFannedOutEventConnections[] = {\n");
+      retVal.append(_plus_3);
+      if ((0 != this.fannedOutEventConns)) {
+        retVal.append(fannedOutConns);
+      }
+      _xblockexpression = retVal.append("};\n");
+    }
+    return _xblockexpression;
+  }
+  
+  protected CharSequence getConnListEntry(final Connection con) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("  ");
+    _builder.append("{");
+    String _generateConnectionPortID = this.generateConnectionPortID(con.getSource(), con.getSourceElement());
+    _builder.append(_generateConnectionPortID, "  ");
+    _builder.append(", ");
+    String _generateConnectionPortID_1 = this.generateConnectionPortID(con.getDestination(), con.getDestinationElement());
+    _builder.append(_generateConnectionPortID_1, "  ");
+    _builder.append("},");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  protected CharSequence genFannedOutConnString(final Connection con, final int connNum) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("  ");
+    _builder.append("{");
+    _builder.append(connNum, "  ");
+    _builder.append(", ");
+    String _generateConnectionPortID = this.generateConnectionPortID(con.getDestination(), con.getDestinationElement());
+    _builder.append(_generateConnectionPortID, "  ");
+    _builder.append("},");
+    _builder.newLineIfNotEmpty();
+    return _builder;
   }
   
   protected CharSequence fbId(final FBNetworkElement elem) {
