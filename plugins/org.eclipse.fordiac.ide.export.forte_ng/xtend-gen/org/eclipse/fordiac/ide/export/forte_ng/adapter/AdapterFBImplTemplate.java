@@ -58,8 +58,7 @@ public class AdapterFBImplTemplate extends ForteFBTemplate {
     return _builder;
   }
   
-  @Override
-  protected CharSequence generateFBInterfaceSpecDefinition() {
+  public CharSequence generateFBInterfaceSpecSocket() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("const SFBInterfaceSpec ");
     CharSequence _fBClassName = this.getFBClassName();
@@ -131,19 +130,23 @@ public class AdapterFBImplTemplate extends ForteFBTemplate {
     _builder.newLineIfNotEmpty();
     _builder.append("};");
     _builder.newLine();
-    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence generateFBInterfaceSpecPlug() {
+    StringConcatenation _builder = new StringConcatenation();
     _builder.append("const SFBInterfaceSpec ");
-    CharSequence _fBClassName_1 = this.getFBClassName();
-    _builder.append(_fBClassName_1);
+    CharSequence _fBClassName = this.getFBClassName();
+    _builder.append(_fBClassName);
     _builder.append("::scm_stFBInterfaceSpecPlug = {");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    int _size_6 = this.type.getInterfaceList().getEventOutputs().size();
-    _builder.append(_size_6, "  ");
+    int _size = this.type.getInterfaceList().getEventOutputs().size();
+    _builder.append(_size, "  ");
     _builder.append(", ");
     {
-      boolean _isEmpty_4 = this.type.getInterfaceList().getEventOutputs().isEmpty();
-      if (_isEmpty_4) {
+      boolean _isEmpty = this.type.getInterfaceList().getEventOutputs().isEmpty();
+      if (_isEmpty) {
         _builder.append("nullptr, nullptr");
       } else {
         _builder.append("scm_anEventOutputNames, scm_anEOWith, scm_anEOWithIndexes");
@@ -152,12 +155,12 @@ public class AdapterFBImplTemplate extends ForteFBTemplate {
     _builder.append(",");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    int _size_7 = this.type.getInterfaceList().getEventInputs().size();
-    _builder.append(_size_7, "  ");
+    int _size_1 = this.type.getInterfaceList().getEventInputs().size();
+    _builder.append(_size_1, "  ");
     _builder.append(", ");
     {
-      boolean _isEmpty_5 = this.type.getInterfaceList().getEventInputs().isEmpty();
-      if (_isEmpty_5) {
+      boolean _isEmpty_1 = this.type.getInterfaceList().getEventInputs().isEmpty();
+      if (_isEmpty_1) {
         _builder.append("nullptr, nullptr");
       } else {
         _builder.append("scm_anEventInputNames, scm_anEIWith, scm_anEIWithIndexes");
@@ -166,12 +169,12 @@ public class AdapterFBImplTemplate extends ForteFBTemplate {
     _builder.append(",");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    int _size_8 = this.type.getInterfaceList().getOutputVars().size();
-    _builder.append(_size_8, "  ");
+    int _size_2 = this.type.getInterfaceList().getOutputVars().size();
+    _builder.append(_size_2, "  ");
     _builder.append(", ");
     {
-      boolean _isEmpty_6 = this.type.getInterfaceList().getOutputVars().isEmpty();
-      if (_isEmpty_6) {
+      boolean _isEmpty_2 = this.type.getInterfaceList().getOutputVars().isEmpty();
+      if (_isEmpty_2) {
         _builder.append("nullptr, nullptr");
       } else {
         _builder.append("scm_anDataOutputNames, scm_anDataOutputTypeIds");
@@ -180,12 +183,12 @@ public class AdapterFBImplTemplate extends ForteFBTemplate {
     _builder.append(",");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    int _size_9 = this.type.getInterfaceList().getInputVars().size();
-    _builder.append(_size_9, "  ");
+    int _size_3 = this.type.getInterfaceList().getInputVars().size();
+    _builder.append(_size_3, "  ");
     _builder.append(", ");
     {
-      boolean _isEmpty_7 = this.type.getInterfaceList().getInputVars().isEmpty();
-      if (_isEmpty_7) {
+      boolean _isEmpty_3 = this.type.getInterfaceList().getInputVars().isEmpty();
+      if (_isEmpty_3) {
         _builder.append("nullptr, nullptr");
       } else {
         _builder.append("scm_anDataInputNames, scm_anDataInputTypeIds");
@@ -194,14 +197,27 @@ public class AdapterFBImplTemplate extends ForteFBTemplate {
     _builder.append(",");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    int _size_10 = this.type.getInterfaceList().getPlugs().size();
-    int _size_11 = this.type.getInterfaceList().getSockets().size();
-    int _plus_1 = (_size_10 + _size_11);
-    _builder.append(_plus_1, "  ");
+    int _size_4 = this.type.getInterfaceList().getPlugs().size();
+    int _size_5 = this.type.getInterfaceList().getSockets().size();
+    int _plus = (_size_4 + _size_5);
+    _builder.append(_plus, "  ");
     _builder.append(", nullptr");
     _builder.newLineIfNotEmpty();
     _builder.append("};");
     _builder.newLine();
+    return _builder;
+  }
+  
+  @Override
+  protected CharSequence generateFBInterfaceSpecDefinition() {
+    StringConcatenation _builder = new StringConcatenation();
+    CharSequence _generateFBInterfaceSpecSocket = this.generateFBInterfaceSpecSocket();
+    _builder.append(_generateFBInterfaceSpecSocket);
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    CharSequence _generateFBInterfaceSpecPlug = this.generateFBInterfaceSpecPlug();
+    _builder.append(_generateFBInterfaceSpecPlug);
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   

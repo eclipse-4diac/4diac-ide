@@ -13,7 +13,6 @@
  */
 package org.eclipse.fordiac.ide.export.forte_lua.filter;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants;
-import org.eclipse.fordiac.ide.export.forte_lua.filter.LuaUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
@@ -93,7 +91,7 @@ public class STAlgorithmFilter {
   private static final IResourceServiceProvider SERVICE_PRIVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(STAlgorithmFilter.SYNTHETIC_ST_URI);
   
   @Accessors(AccessorType.PUBLIC_GETTER)
-  private List<String> errors = new ArrayList<String>();
+  private ArrayList<String> errors = new ArrayList<String>();
   
   public String lua(final STAlgorithm alg) {
     try {
@@ -162,7 +160,8 @@ public class STAlgorithmFilter {
       LazyStringInputStream _lazyStringInputStream = new LazyStringInputStream(expression);
       ParserRule _expressionRule = parser.getGrammarAccess().getExpressionRule();
       Pair<String, ParserRule> _mappedTo = Pair.<String, ParserRule>of(StructuredTextResource.OPTION_PARSER_RULE, _expressionRule);
-      resource.load(_lazyStringInputStream, Collections.<String, ParserRule>unmodifiableMap(CollectionLiterals.<String, ParserRule>newHashMap(_mappedTo)));
+      resource.load(_lazyStringInputStream, 
+        Collections.<String, ParserRule>unmodifiableMap(CollectionLiterals.<String, ParserRule>newHashMap(_mappedTo)));
       final IParseResult parseResult = resource.getParseResult();
       boolean _hasSyntaxErrors = parseResult.hasSyntaxErrors();
       if (_hasSyntaxErrors) {
@@ -211,8 +210,8 @@ public class STAlgorithmFilter {
     boolean _matched = false;
     if (variable instanceof LocalVariable) {
       Constant _initialValue = ((LocalVariable)variable).getInitialValue();
-      boolean _notEquals = (!Objects.equal(_initialValue, null));
-      if (_notEquals) {
+      boolean _tripleNotEquals = (_initialValue != null);
+      if (_tripleNotEquals) {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
         _builder.append(" ");
@@ -271,7 +270,7 @@ public class STAlgorithmFilter {
     _builder.append(" then");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    Object _luaStatementList = this.luaStatementList(stmt.getStatments());
+    CharSequence _luaStatementList = this.luaStatementList(stmt.getStatments());
     _builder.append(_luaStatementList, "  ");
     _builder.newLineIfNotEmpty();
     {
@@ -283,19 +282,19 @@ public class STAlgorithmFilter {
         _builder.append(" then");
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
-        Object _luaStatementList_1 = this.luaStatementList(elseif.getStatements());
+        CharSequence _luaStatementList_1 = this.luaStatementList(elseif.getStatements());
         _builder.append(_luaStatementList_1, "  ");
         _builder.newLineIfNotEmpty();
       }
     }
     {
       ElseClause _else = stmt.getElse();
-      boolean _notEquals = (!Objects.equal(_else, null));
-      if (_notEquals) {
+      boolean _tripleNotEquals = (_else != null);
+      if (_tripleNotEquals) {
         _builder.append("else");
         _builder.newLine();
         _builder.append("  ");
-        Object _luaStatementList_2 = this.luaStatementList(stmt.getElse().getStatements());
+        CharSequence _luaStatementList_2 = this.luaStatementList(stmt.getElse().getStatements());
         _builder.append(_luaStatementList_2, "  ");
         _builder.newLineIfNotEmpty();
       }
@@ -326,14 +325,14 @@ public class STAlgorithmFilter {
     _builder.newLineIfNotEmpty();
     {
       ElseClause _else = stmt.getElse();
-      boolean _notEquals = (!Objects.equal(_else, null));
-      if (_notEquals) {
+      boolean _tripleNotEquals = (_else != null);
+      if (_tripleNotEquals) {
         _builder.append("  ");
         _builder.append("else");
         _builder.newLine();
         _builder.append("  ");
         _builder.append("  ");
-        Object _luaStatementList = this.luaStatementList(stmt.getElse().getStatements());
+        CharSequence _luaStatementList = this.luaStatementList(stmt.getElse().getStatements());
         _builder.append(_luaStatementList, "    ");
         _builder.newLineIfNotEmpty();
       }
@@ -369,7 +368,7 @@ public class STAlgorithmFilter {
     _builder.append(" then");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    Object _luaStatementList = this.luaStatementList(clause.getStatements());
+    CharSequence _luaStatementList = this.luaStatementList(clause.getStatements());
     _builder.append(_luaStatementList, "  ");
     return _builder;
   }
@@ -405,7 +404,7 @@ public class STAlgorithmFilter {
     _builder.append(" do");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    Object _luaStatementList = this.luaStatementList(stmt.getStatements());
+    CharSequence _luaStatementList = this.luaStatementList(stmt.getStatements());
     _builder.append(_luaStatementList, "  ");
     _builder.newLineIfNotEmpty();
     _builder.append("end");
@@ -420,7 +419,7 @@ public class STAlgorithmFilter {
     _builder.append(" do");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    Object _luaStatementList = this.luaStatementList(stmt.getStatements());
+    CharSequence _luaStatementList = this.luaStatementList(stmt.getStatements());
     _builder.append(_luaStatementList, "  ");
     _builder.newLineIfNotEmpty();
     _builder.append("end");
@@ -432,7 +431,7 @@ public class STAlgorithmFilter {
     _builder.append("repeat");
     _builder.newLine();
     _builder.append("  ");
-    Object _luaStatementList = this.luaStatementList(stmt.getStatements());
+    CharSequence _luaStatementList = this.luaStatementList(stmt.getStatements());
     _builder.append(_luaStatementList, "  ");
     _builder.newLineIfNotEmpty();
     _builder.append("until ");
@@ -450,13 +449,13 @@ public class STAlgorithmFilter {
   private CharSequence _luaExpression(final BinaryExpression expr) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("(");
-    Object _luaExpression = this.luaExpression(expr.getLeft());
+    CharSequence _luaExpression = this.luaExpression(expr.getLeft());
     _builder.append(_luaExpression);
     _builder.append(" ");
     String _luaBinaryOperator = this.luaBinaryOperator(expr.getOperator());
     _builder.append(_luaBinaryOperator);
     _builder.append(" ");
-    Object _luaExpression_1 = this.luaExpression(expr.getRight());
+    CharSequence _luaExpression_1 = this.luaExpression(expr.getRight());
     _builder.append(_luaExpression_1);
     _builder.append(")");
     return _builder;
@@ -524,7 +523,7 @@ public class STAlgorithmFilter {
     String _luaUnaryOperator = this.luaUnaryOperator(expr.getOperator());
     _builder.append(_luaUnaryOperator);
     _builder.append(" ");
-    Object _luaExpression = this.luaExpression(expr.getExpression());
+    CharSequence _luaExpression = this.luaExpression(expr.getExpression());
     _builder.append(_luaExpression);
     _builder.append(")");
     return _builder;
@@ -551,24 +550,36 @@ public class STAlgorithmFilter {
   }
   
   private CharSequence _luaExpression(final BoolLiteral expr) {
-    return Boolean.toString(expr.isValue());
+    StringConcatenation _builder = new StringConcatenation();
+    String _string = Boolean.valueOf(expr.isValue()).toString();
+    _builder.append(_string);
+    return _builder;
   }
   
   private CharSequence _luaExpression(final IntLiteral expr) {
-    return Long.toString(expr.getValue());
+    StringConcatenation _builder = new StringConcatenation();
+    String _string = Long.valueOf(expr.getValue()).toString();
+    _builder.append(_string);
+    return _builder;
   }
   
   private CharSequence _luaExpression(final RealLiteral expr) {
-    return Double.toString(expr.getValue());
+    StringConcatenation _builder = new StringConcatenation();
+    String _string = Double.valueOf(expr.getValue()).toString();
+    _builder.append(_string);
+    return _builder;
   }
   
   private CharSequence _luaExpression(final StringLiteral expr) {
-    return LuaUtils.luaString(expr.getValue());
+    StringConcatenation _builder = new StringConcatenation();
+    String _string = expr.getValue().toString();
+    _builder.append(_string);
+    return _builder;
   }
   
   private CharSequence _luaExpression(final ArrayVariable expr) {
     StringConcatenation _builder = new StringConcatenation();
-    Object _luaExpression = this.luaExpression(expr.getArray());
+    CharSequence _luaExpression = this.luaExpression(expr.getArray());
     _builder.append(_luaExpression);
     {
       EList<Expression> _index = expr.getIndex();
@@ -581,7 +592,7 @@ public class STAlgorithmFilter {
           _builder.appendImmediate("][", "");
         }
         _builder.append("(");
-        Object _luaExpression_1 = this.luaExpression(index);
+        CharSequence _luaExpression_1 = this.luaExpression(index);
         _builder.append(_luaExpression_1);
         _builder.append(") + 1");
       }
@@ -600,7 +611,10 @@ public class STAlgorithmFilter {
   }
   
   private CharSequence _luaExpression(final PrimaryVariable expr) {
-    return LuaConstants.luaVariable(expr.getVar());
+    StringConcatenation _builder = new StringConcatenation();
+    CharSequence _luaVariable = LuaConstants.luaVariable(expr.getVar());
+    _builder.append(_luaVariable);
+    return _builder;
   }
   
   private CharSequence luaStatement(final Statement stmt) {
@@ -660,7 +674,7 @@ public class STAlgorithmFilter {
   }
   
   @Pure
-  public List<String> getErrors() {
+  public ArrayList<String> getErrors() {
     return this.errors;
   }
 }

@@ -29,7 +29,7 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate {
 		
 	'''
 	
-	def protected CharSequence generateExecuteEvent() '''
+	def protected generateExecuteEvent() '''
 		void «FBClassName»::executeEvent(int pa_nEIID) {
 		  switch(pa_nEIID) {
 		    «FOR event : type.interfaceList.eventInputs»

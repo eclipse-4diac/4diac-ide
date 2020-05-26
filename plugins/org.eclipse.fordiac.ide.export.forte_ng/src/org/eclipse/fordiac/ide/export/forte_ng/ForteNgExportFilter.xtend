@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBImplTemplate
 class ForteNgExportFilter extends TemplateExportFilter {
 
 	override protected getTemplates(LibraryElement type) {
-		return switch (type) {
+		switch (type) {
 			BasicFBType:
 				#{
 					new BasicFBHeaderTemplate(type, '''«type.name».h''', Paths.get("")),

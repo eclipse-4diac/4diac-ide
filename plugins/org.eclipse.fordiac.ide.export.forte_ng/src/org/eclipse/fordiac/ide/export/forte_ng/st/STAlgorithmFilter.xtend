@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright (c) 2019 fortiss GmbH
  *               2020 Johannes Kepler University Linz
- *
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Ernst Blecha - add multibit partial access
@@ -69,14 +69,14 @@ import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 
 class STAlgorithmFilter {
 
-	static final String SYNTHETIC_URI_NAME = "__synthetic" //$NON-NLS-1$
-	static final String URI_SEPERATOR = "." //$NON-NLS-1$
-	static final String FB_URI_EXTENSION = "xtextfbt" //$NON-NLS-1$
-	static final String ST_URI_EXTENSION = "st" //$NON-NLS-1$
-
+	static final String SYNTHETIC_URI_NAME = "__synthetic" // $NON-NLS-1$
+	static final String URI_SEPERATOR = "." // $NON-NLS-1$
+	static final String FB_URI_EXTENSION = "xtextfbt" // $NON-NLS-1$
+	static final String ST_URI_EXTENSION = "st" // $NON-NLS-1$
 	static final CharSequence EXPORT_PREFIX = ForteFBTemplate.exportPrefix
 
-	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI(SYNTHETIC_URI_NAME + URI_SEPERATOR + ST_URI_EXTENSION))
+	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.
+		getResourceServiceProvider(URI.createURI(SYNTHETIC_URI_NAME + URI_SEPERATOR + ST_URI_EXTENSION))
 
 	def createFBResource(XtextResourceSet resourceSet, BaseFBType fbType) {
 		// create resource for function block and add copy
@@ -96,8 +96,8 @@ class STAlgorithmFilter {
 	}
 
 	def protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
-		for (i: 0..<Integer.MAX_VALUE) {
-			val syntheticUri = URI.createURI(SYNTHETIC_URI_NAME + i + URI_SEPERATOR + fileExtension) //$NON-NLS-1$
+		for (i : 0 ..< Integer.MAX_VALUE) {
+			val syntheticUri = URI.createURI(SYNTHETIC_URI_NAME + i + URI_SEPERATOR + fileExtension) // $NON-NLS-1$
 			if (resourceSet.getResource(syntheticUri, false) === null) {
 				return syntheticUri
 			}
@@ -105,7 +105,7 @@ class STAlgorithmFilter {
 		throw new IllegalStateException()
 	}
 
-	def CharSequence generate(STAlgorithm alg, List<String> errors) {
+	def generate(STAlgorithm alg, List<String> errors) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		createFBResource(resourceSet, alg.rootContainer as BaseFBType)
 		// create resource for algorithm
@@ -119,16 +119,17 @@ class STAlgorithmFilter {
 			return null
 		}
 		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
-		return stalg.generateStructuredTextAlgorithm
+		stalg.generateStructuredTextAlgorithm
 	}
 
-	def CharSequence generate(String expression, BasicFBType fb, List<String> errors) {
+	def generate(String expression, BasicFBType fb, List<String> errors) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		createFBResource(resourceSet, fb.copy as BaseFBType)
- 		// create resource for algorithm
+		// create resource for algorithm
 		val resource = resourceSet.createResource(resourceSet.computeUnusedUri(ST_URI_EXTENSION)) as XtextResource
 		val parser = resource.parser as StructuredTextParser
-		resource.load(new LazyStringInputStream(expression), #{StructuredTextResource.OPTION_PARSER_RULE -> parser.grammarAccess.expressionRule})
+		resource.load(new LazyStringInputStream(expression),
+			#{StructuredTextResource.OPTION_PARSER_RULE -> parser.grammarAccess.expressionRule})
 		val parseResult = resource.parseResult
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
@@ -137,35 +138,32 @@ class STAlgorithmFilter {
 			return null
 		}
 		val expr = parseResult.rootASTElement as Expression
-		return expr.generateExpression
+		expr.generateExpression
 	}
 
-	def protected CharSequence generateStructuredTextAlgorithm(StructuredTextAlgorithm alg) '''
+	def protected generateStructuredTextAlgorithm(StructuredTextAlgorithm alg) '''
 		«alg.localVariables.generateLocalVariables»
 		«alg.statements.generateStatementList»
 	'''
 
-	def private int BitSize(String str) {
-		switch (str) {
-			case str.equals("LWORD"): 64
-			case str.equals("DWORD"): 32
-			case str.equals("WORD"):  16
-			case str.equals("BYTE"):   8
-			case str.equals("BOOL"):   1
-			default:                   0
+	def private BitSize(CharSequence str) {
+		switch str {
+			case "LWORD": 64
+			case "DWORD": 32
+			case "WORD": 16
+			case "BYTE": 8
+			case "BOOL": 1
+			default: 0
 		}
 	}
 
-	def protected CharSequence generateArrayDecl(LocalVariable variable)
-	'''«IF variable.located
-			»«variable.generateArrayDeclLocated»«
-		ELSE
-			»«variable.generateArrayDeclLocal»«
-		ENDIF»'''
+	def protected generateArrayDecl(LocalVariable variable) '''«IF variable.located»
+			«variable.generateArrayDeclLocated»«ELSE»«variable.generateArrayDeclLocal»«ENDIF»
+	'''
 
-	def protected CharSequence generateArrayDeclLocated(LocalVariable variable) {
+	def protected generateArrayDeclLocated(LocalVariable variable) {
 		val l = variable.location
-		switch (l) {
+		switch l {
 			PrimaryVariable: '''
 				«IF variable.type.name.BitSize > 0 && l.^var.type.name.BitSize > 0»
 					«IF l.^var.type.name.BitSize > variable.type.name.BitSize»
@@ -174,30 +172,30 @@ class STAlgorithmFilter {
 						#error Accessing CIEC_«l.^var.type.name» via CIEC_«variable.type.name» would result in undefined behaviour
 					«ENDIF»
 				«ELSE»
-				    #error Piecewise access is supported only for types with defined bit-representation (e.g. not CIEC_«l.^var.type.name» via CIEC_«variable.type.name»)
+					#error Piecewise access is supported only for types with defined bit-representation (e.g. not CIEC_«l.^var.type.name» via CIEC_«variable.type.name»)
 				«ENDIF»
 			'''
 			default: '''#error unhandled located array'''
 		}
 	}
 
-	def protected CharSequence generateArrayDeclLocal(LocalVariable variable) '''
+	def protected generateArrayDeclLocal(LocalVariable variable) '''
 		CIEC_«variable.type.name» «EXPORT_PREFIX»«variable.name»[«variable.arraySize»]«variable.generateLocalVariableInitializer»;
 	'''
 
-	def protected CharSequence generateVariableDeclLocated(LocalVariable variable) {
+	def protected generateVariableDeclLocated(LocalVariable variable) {
 		val l = variable.location
-		switch (l) {
-			PrimaryVariable: '''// replacing all instances of «variable.extractTypeInformation»:«variable.generateVarAccessLocal» with «variable.generateVarAccess»''' //names will just be replaced during export
+		switch l {
+			PrimaryVariable: '''// replacing all instances of «variable.extractTypeInformation»:«variable.generateVarAccessLocal» with «variable.generateVarAccess»''' // names will just be replaced during export
 			default: '''#error located variable of unhandled type'''
 		}
 	}
 
-	def protected CharSequence generateVariableDeclLocal(LocalVariable variable) '''
+	def protected generateVariableDeclLocal(LocalVariable variable) '''
 		CIEC_«variable.type.name» «variable.generateVarAccessLocal»«variable.generateLocalVariableInitializer»;
 	'''
 
-	def protected CharSequence generateLocalVariables(List<VarDeclaration> variables) '''
+	def protected generateLocalVariables(List<VarDeclaration> variables) '''
 		«FOR variable : variables»
 			«switch (variable) {
 				LocalVariable case !variable.located && !variable.array             : variable.generateVariableDeclLocal
@@ -208,7 +206,7 @@ class STAlgorithmFilter {
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateLocalVariableInitializer(VarDeclaration variable) {
+	def protected generateLocalVariableInitializer(VarDeclaration variable) {
 		switch (variable) {
 			LocalVariable case variable.initialValue !== null: ''' = «variable.initialValue.generateExpression»'''
 			default:
@@ -222,19 +220,20 @@ class STAlgorithmFilter {
 		«ENDFOR»
 	'''
 
-	def protected dispatch CharSequence generateStatement(Statement stmt) {
+	def protected dispatch generateStatement(Statement stmt) {
 		throw new UnsupportedOperationException(stmt.eClass + " not supported");
 	}
 
-	def protected dispatch CharSequence generateStatement(AssignmentStatement stmt) '''«stmt.variable.generateExpression» = «stmt.expression.generateExpression»;'''
+	def protected dispatch generateStatement(
+		AssignmentStatement stmt) '''«stmt.variable.generateExpression» = «stmt.expression.generateExpression»;'''
 
-	def protected dispatch CharSequence generateStatement(Call stmt) {
+	def protected dispatch generateStatement(Call stmt) {
 		return stmt.generateExpression
 	}
 
-	def protected dispatch CharSequence generateStatement(ReturnStatement stmt) '''return;'''
+	def protected dispatch generateStatement(ReturnStatement stmt) '''return;'''
 
-	def protected dispatch CharSequence generateStatement(IfStatement stmt) '''
+	def protected dispatch generateStatement(IfStatement stmt) '''
 		if(«stmt.expression.generateExpression») {
 			«stmt.statments.generateStatementList»
 		}
@@ -250,30 +249,30 @@ class STAlgorithmFilter {
 		«ENDIF»
 	'''
 
-	def protected dispatch CharSequence generateStatement(CaseStatement stmt) '''
-	switch («stmt.expression.generateExpression») {
-		«FOR clause : stmt.^case»«clause.generateCaseClause»«ENDFOR»
-		«IF stmt.^else !== null»
-		default:
-			«stmt.^else.statements.generateStatementList»
-			break;
-		«ENDIF»
-	}
+	def protected dispatch generateStatement(CaseStatement stmt) '''
+		switch («stmt.expression.generateExpression») {
+			«FOR clause : stmt.^case»«clause.generateCaseClause»«ENDFOR»
+			«IF stmt.^else !== null»
+				default:
+					«stmt.^else.statements.generateStatementList»
+					break;
+			«ENDIF»
+		}
 	'''
 
-	def protected CharSequence generateCaseClause(CaseClause clause) '''
+	def protected generateCaseClause(CaseClause clause) '''
 		case «FOR value : clause.^case SEPARATOR ' case '»«value.generateExpression»:«ENDFOR»
 			«clause.statements.generateStatementList»
 			break;
 	'''
 
-	def protected dispatch CharSequence generateStatement(ExitStatement stmt) '''break;'''
+	def protected dispatch generateStatement(ExitStatement stmt) '''break;'''
 
-	def protected dispatch CharSequence generateStatement(ContinueStatement stmt) '''continue;'''
+	def protected dispatch generateStatement(ContinueStatement stmt) '''continue;'''
 
-	def protected dispatch CharSequence generateStatement(ForStatement stmt) '''
+	def protected dispatch generateStatement(ForStatement stmt) '''
 		// as it is done in lua: https://www.lua.org/manual/5.1/manual.html#2.4.5
-		auto by = «IF stmt.by !== null »«stmt.by.generateExpression»« ELSE »1« ENDIF»;
+		auto by = «IF stmt.by !== null »«stmt.by.generateExpression»«ELSE»1«ENDIF»;
 		auto to = «stmt.to.generateExpression»;
 		for(«stmt.variable.generateExpression» = «stmt.from.generateExpression»;
 		    (by >  0 && «stmt.variable.generateExpression» <= to) ||
@@ -283,17 +282,46 @@ class STAlgorithmFilter {
 		}
 	'''
 
-	def protected dispatch CharSequence generateStatement(WhileStatement stmt) '''
+	def protected dispatch generateStatement(WhileStatement stmt) '''
 		while(«stmt.expression.generateExpression») {
 		  «stmt.statements.generateStatementList»
 		}
 	'''
 
-	def protected dispatch CharSequence generateStatement(RepeatStatement stmt) '''
+	def protected dispatch generateStatement(RepeatStatement stmt) '''
 		do {
 		  «stmt.statements.generateStatementList»
 		} while(!((«stmt.expression.generateExpression»)));
 	'''
+
+	def protected generateBinaryOperator(BinaryOperator op) {
+		switch (op) {
+			case OR: '''||'''
+			case XOR: '''^'''
+			case AND: '''&&'''
+			case EQ: '''=='''
+			case NE: '''!='''
+			case LT: '''<'''
+			case LE: '''<='''
+			case GT: '''>'''
+			case GE: '''>='''
+			case ADD: '''+'''
+			case SUB: '''-'''
+			case MUL: '''*'''
+			case DIV: '''/'''
+			case MOD: '''%'''
+			default:
+				throw new UnsupportedOperationException('''The operator «op» is not supported''')
+		}
+	}
+
+	def protected generateUnaryOperator(UnaryOperator op) {
+		switch (op) {
+			case MINUS: '''-'''
+			case PLUS: '''+'''
+			case NOT: '''!'''
+		}
+	}
 
 	def protected dispatch CharSequence generateExpression(Call expr) {
 		'''«expr.func»(«FOR arg : expr.args SEPARATOR ', '»«arg.generateExpression»«ENDFOR»)'''
@@ -303,79 +331,21 @@ class STAlgorithmFilter {
 		arg.expr.generateExpression
 	}
 
-	def protected dispatch CharSequence generateExpression(Expression expr) {
-		throw new UnsupportedOperationException(expr.eClass + " not supported");
+	def protected dispatch CharSequence generateExpression(BinaryExpression expr) {
+		switch (expr.operator) {
+			case POWER: '''EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			default: '''(«expr.left.generateExpression» «expr.operator.generateBinaryOperator» «expr.right.generateExpression»)'''
+		}
 	}
 
 	def protected dispatch CharSequence generateExpression(
-		BinaryExpression expr) {
-			switch (expr.operator) {
-			case POWER:
-				'''EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
-			default:
-				'''(«expr.left.generateExpression» «expr.operator.generateBinaryOperator» «expr.right.generateExpression»)'''
-			}
-		}
+		UnaryExpression expr) '''(«expr.operator.generateUnaryOperator» «expr.expression.generateExpression»)'''
 
-	def protected CharSequence generateBinaryOperator(BinaryOperator op) {
-		switch (op) {
-			case OR:
-				"||"
-			case XOR:
-				"^"
-			case AND:
-				"&&"
-			case EQ:
-				"=="
-			case NE:
-				"!="
-			case LT:
-				"<"
-			case LE:
-				"<="
-			case GT:
-				">"
-			case GE:
-				">="
-			case ADD:
-				"+"
-			case SUB:
-				"-"
-			case MUL:
-				"*"
-			case DIV:
-				"/"
-			case MOD:
-				"%"
-			default:
-				throw new UnsupportedOperationException('''The operator «op» is not supported''')
-		}
-	}
+	def protected dispatch CharSequence generateExpression(BoolLiteral expr) '''«expr.value.toString»'''
 
-	def protected dispatch CharSequence generateExpression(UnaryExpression expr) '''(«expr.operator.generateUnaryOperator» «expr.expression.generateExpression»)'''
+	def protected dispatch CharSequence generateExpression(IntLiteral expr) '''«expr.value.toString»'''
 
-	def protected CharSequence generateUnaryOperator(UnaryOperator op) {
-		switch (op) {
-			case MINUS:
-				"-"
-			case PLUS:
-				"+"
-			case NOT:
-				"!"
-		}
-	}
-
-	def protected dispatch CharSequence generateExpression(BoolLiteral expr) {
-		Boolean.toString(expr.value)
-	}
-
-	def protected dispatch CharSequence generateExpression(IntLiteral expr) {
-		Long.toString(expr.value)
-	}
-
-	def protected dispatch CharSequence generateExpression(RealLiteral expr) {
-		Double.toString(expr.value)
-	}
+	def protected dispatch CharSequence generateExpression(RealLiteral expr) '''«expr.value.toString»'''
 
 	def protected dispatch CharSequence generateExpression(StringLiteral expr) '''"«expr.value.convertToJavaString»"'''
 
@@ -386,75 +356,74 @@ class STAlgorithmFilter {
 		'''«EXPORT_PREFIX»«expr.adapter.name»().«expr.^var.generateVarAccess»()«expr.generateBitaccess»'''
 	}
 
-	def protected dispatch CharSequence generateExpression(PrimaryVariable expr)  '''«expr.^var.generateVarAccess»«expr.generateBitaccess»'''
+	def protected dispatch CharSequence generateExpression(
+		PrimaryVariable expr) '''«expr.^var.generateVarAccess»«expr.generateBitaccess»'''
 
-	def protected CharSequence generateVarAccessLocal(LocalVariable variable) '''«EXPORT_PREFIX»«variable.name»'''
+	def protected generateVarAccessLocal(LocalVariable variable) '''«EXPORT_PREFIX»«variable.name»'''
 
-	def protected dispatch CharSequence generateVarAccess(VarDeclaration variable) '''«EXPORT_PREFIX»«variable.name»()'''
+	def protected dispatch generateVarAccess(VarDeclaration variable) '''«EXPORT_PREFIX»«variable.name»()'''
 
-	def protected dispatch CharSequence generateVarAccess(LocalVariable variable)
-	'''«IF variable.located
-			»«variable.generateVarAccessLocated»«
-		ELSE
-			»«variable.generateVarAccessLocal»«
-		ENDIF»'''
+	def protected dispatch generateVarAccess(LocalVariable variable) '''«IF variable.located
+			»«variable.generateVarAccessLocated»«ELSE»«variable.generateVarAccessLocal»«ENDIF»'''
 
-	def protected CharSequence generateVarAccessLocated(LocalVariable variable)
-		'''«IF variable.array
-				»«variable.generateVarAccessLocal»«
-			ELSE
-				»«variable.location.generateExpression»«generateBitaccess(variable, variable.location.extractTypeInformation,variable.extractTypeInformation,0)»«
-			ENDIF»'''
+	def protected generateVarAccessLocated(LocalVariable variable) '''«IF variable.array
+				»«variable.generateVarAccessLocal»«ELSE»«variable.location.generateExpression»«generateBitaccess(variable, variable.location.extractTypeInformation,variable.extractTypeInformation,0)»«ENDIF»'''
 
-	def protected CharSequence generateBitaccess(AdapterVariable variable) {
+	def protected generateBitaccess(AdapterVariable variable) {
 		if (null !== variable.part) {
-			generateBitaccess(variable.^var, variable.^var.type.name, variable.extractTypeInformation, variable.part.index)
+			generateBitaccess(variable.^var, variable.^var.type.name, variable.extractTypeInformation,
+				variable.part.index)
 		}
 	}
 
-	def protected CharSequence generateBitaccess(PrimaryVariable variable) {
+	def protected generateBitaccess(PrimaryVariable variable) {
 		if (null !== variable.part) {
-			generateBitaccess(variable.^var, variable.^var.type.name, variable.extractTypeInformation, variable.part.index)
+			generateBitaccess(variable.^var, variable.^var.type.name, variable.extractTypeInformation,
+				variable.part.index)
 		}
 	}
 
-	def protected CharSequence generateBitaccess(VarDeclaration variable, String DataType, String AccessorType, int Index) {
-		if (BitSize(AccessorType) > 0 && variable.array && variable.arraySize * BitSize(DataType) > BitSize(AccessorType)) {
+	def protected generateBitaccess(VarDeclaration variable, CharSequence DataType, CharSequence AccessorType,
+		int Index) {
+		if (BitSize(AccessorType) > 0 && variable.array &&
+			variable.arraySize * BitSize(DataType) > BitSize(AccessorType)) {
 			'''.partial<CIEC_«AccessorType»,«Long.toString(Index)»>()'''
 		} else if (BitSize(DataType) == BitSize(AccessorType)) {
 			''''''
 		} else {
-			''''''//This should never happen - we cannot access more bits than are available in the source type
+			'''''' // This should never happen - we cannot access more bits than are available in the source type
 		}
 	}
 
-	def private dispatch String extractTypeInformation(PartialAccess part, String DataType) {
+	def private extractTypeInformationWithPartialAccess(PartialAccess part, CharSequence DataType) {
 		if (null !== part) {
-			if (part.bitaccess)        "BOOL"
-			else if (part.byteaccess)  "BYTE"
-			else if (part.wordaccess)  "WORD"
-			else if (part.dwordaccess) "DWORD"
-			else                       ""
-		} else                         DataType
+			if (part.bitaccess)
+				"BOOL"
+			else if (part.byteaccess)
+				"BYTE"
+			else if (part.wordaccess)
+				"WORD"
+			else if (part.dwordaccess)
+				"DWORD"
+			else
+				""
+		} else
+			DataType
 	}
 
-	def private dispatch String extractTypeInformation(PrimaryVariable variable, String DataType) {
+	def private extractTypeInformation(PrimaryVariable variable, CharSequence DataType) {
 		if (null !== variable.part) {
-			extractTypeInformation(variable.part, DataType)
+			extractTypeInformationWithPartialAccess(variable.part, DataType)
 		} else {
 			DataType
 		}
 	}
 
-	def protected dispatch String extractTypeInformation(PrimaryVariable variable) {
+	def protected dispatch CharSequence extractTypeInformation(PrimaryVariable variable) {
 		variable.extractTypeInformation(variable.^var.extractTypeInformation)
 	}
 
-	def protected dispatch String extractTypeInformation(LocalVariable variable) {
-		variable.type.name
-	}
-
-	def protected dispatch String extractTypeInformation(VarDeclaration variable) {
+	def protected dispatch extractTypeInformation(VarDeclaration variable) {
 		variable.type.name
 	}
 

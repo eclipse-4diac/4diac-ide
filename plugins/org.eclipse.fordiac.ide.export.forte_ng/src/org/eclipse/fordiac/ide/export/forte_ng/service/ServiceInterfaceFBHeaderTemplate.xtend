@@ -47,7 +47,7 @@ class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
 		
 	'''
 
-	override protected CharSequence generateHeaderIncludes() '''
+	override protected generateHeaderIncludes() '''
 		#include "funcblock.h"
 		«super.generateHeaderIncludes»
 	'''

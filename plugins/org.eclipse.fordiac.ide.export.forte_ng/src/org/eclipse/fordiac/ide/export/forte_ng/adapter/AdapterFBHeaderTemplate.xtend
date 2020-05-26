@@ -53,23 +53,23 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate {
 		
 	'''
 
-	override protected CharSequence generateHeaderIncludes() '''
+	override protected generateHeaderIncludes() '''
 		#include "adapter.h"
 		#include "typelib.h"
 		«super.generateHeaderIncludes»
 	'''
 
-	override protected CharSequence generateFBDeclaration() '''
+	override protected generateFBDeclaration() '''
 		DECLARE_ADAPTER_TYPE(«FBClassName»)
 	'''
 
-	override protected CharSequence generateFBInterfaceSpecDeclaration() '''
+	override protected generateFBInterfaceSpecDeclaration() '''
 		static const SFBInterfaceSpec scm_stFBInterfaceSpecSocket;
 		
 		static const SFBInterfaceSpec scm_stFBInterfaceSpecPlug;
 	'''
 
-	def protected CharSequence generateAccessors(List<VarDeclaration> vars, String socketFunction, String plugFunction) '''
+	def protected generateAccessors(List<VarDeclaration> vars, String socketFunction, String plugFunction) '''
 		«FOR v : vars»
 			CIEC_«v.typeName» «IF v.array»*«ELSE»&«ENDIF»«v.name»() {
 			  «IF v.array»
@@ -82,7 +82,7 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate {
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateEventAccessors(List<Event> events) '''
+	def protected generateEventAccessors(List<Event> events) '''
 		«FOR event : events»
 			int «event.name»() {
 			  return m_nParentAdapterListEventID + scm_nEvent«event.name»ID;

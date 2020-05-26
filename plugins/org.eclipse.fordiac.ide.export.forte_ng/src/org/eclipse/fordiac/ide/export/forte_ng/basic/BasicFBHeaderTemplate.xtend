@@ -61,7 +61,7 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 
 	'''
 
-	override protected CharSequence generateHeaderIncludes() '''
+	override protected generateHeaderIncludes() '''
 		#include "basicfb.h"
 		«(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).generateTypeIncludes»
 		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
@@ -69,22 +69,22 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 		«type.compilerInfo?.header»
 	'''
 
-	def protected CharSequence generateAlgorithms() '''
+	def protected generateAlgorithms() '''
 		«FOR alg : type.algorithm»
 			«alg.generateAlgorithm»
 		«ENDFOR»
 	'''
 
-	def protected dispatch CharSequence generateAlgorithm(Algorithm alg) {
+	def protected dispatch generateAlgorithm(Algorithm alg) {
 		errors.add('''Cannot export algorithm «alg.class»''')
 		return ""
 	}
 
-	def protected dispatch CharSequence generateAlgorithm(STAlgorithm alg) '''
+	def protected dispatch generateAlgorithm(STAlgorithm alg) '''
 		void alg_«alg.name»(void);
 	'''
 
-	def protected CharSequence generateStates() '''
+	def protected generateStates() '''
 		«FOR state : type.ECC.ECState»
 			static const TForteInt16 scm_nState«state.name» = «type.ECC.ECState.indexOf(state)»;
 		«ENDFOR»
