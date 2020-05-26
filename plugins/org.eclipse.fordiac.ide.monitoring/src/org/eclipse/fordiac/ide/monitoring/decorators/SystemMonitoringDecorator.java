@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2015, 2016 fortiss GmbH
- * 
+ * Copyright (c) 2013, 2015, 2016 ,2020 fortiss GmbH, Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,11 +10,15 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Muddasir Shakil
+ *     - Fixed getting Automation System 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.decorators;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
@@ -48,11 +52,12 @@ public class SystemMonitoringDecorator implements ILabelDecorator {
 
 	@Override
 	public Image decorateImage(Image image, Object element) {
-		Image retval;
-
-		if ((element instanceof AutomationSystem)
-				&& (MonitoringManager.getInstance().monitoringForSystemEnabled((AutomationSystem) element))) {
-			retval = getOverlayImage(image);
+		Image retval = null;
+		if (element instanceof IFile && SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase(((IFile)element).getFileExtension())) {
+			AutomationSystem system = SystemManager.INSTANCE.getSystem((IFile)element);
+			if (MonitoringManager.getInstance().isSystemMonitored(system)) {
+				retval = getOverlayImage(image);
+			}
 		} else {
 			retval = image;
 		}
