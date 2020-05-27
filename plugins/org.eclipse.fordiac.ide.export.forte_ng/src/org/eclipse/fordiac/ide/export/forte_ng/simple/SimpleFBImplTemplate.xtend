@@ -37,16 +37,16 @@ class SimpleFBImplTemplate extends ForteFBTemplate {
 
 	'''
 
-	def protected CharSequence generateAlgorithms() '''
+	def protected generateAlgorithms() '''
 		«type.algorithm.generateAlgorithm»
 	'''
 
-	def protected dispatch CharSequence generateAlgorithm(Algorithm alg) {
+	def protected dispatch generateAlgorithm(Algorithm alg) {
 		errors.add('''Cannot export algorithm «alg.class»''')
 		return ""
 	}
 
-	def protected dispatch CharSequence generateAlgorithm(STAlgorithm alg) '''
+	def protected dispatch generateAlgorithm(STAlgorithm alg) '''
 		void «FBClassName»::alg_«alg.name»(void) {
 		  «alg.generate(errors)»
 		}

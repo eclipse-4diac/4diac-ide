@@ -20,11 +20,11 @@ abstract class ForteFBTemplate extends ExportTemplate {
 
 	def protected FBType getType()
 
-	static def CharSequence getExportPrefix() {
+	static def getExportPrefix() {
 		return EXPORT_PREFIX
 	}
 
-	def protected CharSequence generateHeader() '''
+	def protected generateHeader() '''
 		/*************************************************************************
 		 *** FORTE Library Element
 		 ***
@@ -39,23 +39,23 @@ abstract class ForteFBTemplate extends ExportTemplate {
 		 *************************************************************************/
 	'''
 
-	def protected CharSequence generateIncludeGuardStart() '''
+	def protected generateIncludeGuardStart() '''
 		#ifndef _«type.name.toUpperCase»_H_
 		#define _«type.name.toUpperCase»_H_
 	'''
 
-	def protected CharSequence generateIncludeGuardEnd() '''
+	def protected generateIncludeGuardEnd() '''
 		#endif // _«type.name.toUpperCase»_H_
 	'''
 
-	def protected CharSequence generateHeaderIncludes() '''
+	def protected generateHeaderIncludes() '''
 		«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateTypeIncludes»
 		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
 		
 		«type.compilerInfo?.header»
 	'''
 
-	def protected CharSequence generateImplIncludes() '''
+	def protected generateImplIncludes() '''
 		#include "«type.name».h"
 		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
 		#include "«type.name»_gen.cpp"
@@ -64,7 +64,7 @@ abstract class ForteFBTemplate extends ExportTemplate {
 		«type.compilerInfo?.header»
 	'''
 
-	def protected CharSequence generateTypeIncludes(Iterable<VarDeclaration> vars) '''
+	def protected generateTypeIncludes(Iterable<VarDeclaration> vars) '''
 		«FOR include : vars.map[it.typeName].sort.toSet»
 			#include "forte_«include.toLowerCase».h"
 			«IF include.startsWith("ANY")»
@@ -77,21 +77,21 @@ abstract class ForteFBTemplate extends ExportTemplate {
 		#include "forte_array_at.h"
 	'''
 
-	def protected CharSequence generateAdapterIncludes(Iterable<AdapterDeclaration> vars) '''
+	def protected generateAdapterIncludes(Iterable<AdapterDeclaration> vars) '''
 		«FOR include : vars.map[it.typeName].sort.toSet»
 			#include "«include».h"
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateFBDeclaration() '''
+	def protected generateFBDeclaration() '''
 		DECLARE_FIRMWARE_FB(«FBClassName»)
 	'''
 
-	def protected CharSequence generateFBDefinition() '''
+	def protected generateFBDefinition() '''
 		DEFINE_FIRMWARE_FB(«FBClassName», «type.name.FORTEString»)
 	'''
 
-	def protected CharSequence generateFBInterfaceDeclaration() '''
+	def protected generateFBInterfaceDeclaration() '''
 		«IF !type.interfaceList.inputVars.empty»
 			static const CStringDictionary::TStringId scm_anDataInputNames[];
 			static const CStringDictionary::TStringId scm_anDataInputTypeIds[];
@@ -134,7 +134,7 @@ abstract class ForteFBTemplate extends ExportTemplate {
 		«ENDIF»
 	'''
 
-	def protected CharSequence generateFBInterfaceDefinition() {
+	def protected generateFBInterfaceDefinition() {
 		val inputWith = newArrayList
 		val inputWithIndexes = newArrayList
 		type.interfaceList.eventInputs.forEach[event | {
@@ -161,7 +161,7 @@ abstract class ForteFBTemplate extends ExportTemplate {
 				outputWith.add(255)
 			}
 		}]
-		return '''
+		'''
 			«IF !type.interfaceList.inputVars.empty»
 				const CStringDictionary::TStringId «FBClassName»::scm_anDataInputNames[] = {«type.interfaceList.inputVars.FORTENameList»};
 
@@ -194,11 +194,11 @@ abstract class ForteFBTemplate extends ExportTemplate {
 		'''
 	}
 
-	def protected CharSequence generateFBInterfaceSpecDeclaration() '''
+	def protected generateFBInterfaceSpecDeclaration() '''
 		static const SFBInterfaceSpec scm_stFBInterfaceSpec;
 	'''
 
-	def protected CharSequence generateFBInterfaceSpecDefinition() '''
+	def protected generateFBInterfaceSpecDefinition() '''
 		const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpec = {
 		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventInputNames, scm_anEIWith, scm_anEIWithIndexes«ENDIF»,
 		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventOutputNames, scm_anEOWith, scm_anEOWithIndexes«ENDIF»,
@@ -208,7 +208,7 @@ abstract class ForteFBTemplate extends ExportTemplate {
 		};
 	'''
 
-	def protected CharSequence generateInternalVarDelcaration(BaseFBType baseFBType) '''
+	def protected generateInternalVarDelcaration(BaseFBType baseFBType) '''
 	   «IF !baseFBType.internalVars.isEmpty»
 	     static const CStringDictionary::TStringId scm_anInternalsNames[];
 	     static const CStringDictionary::TStringId scm_anInternalsTypeIds[];
@@ -216,7 +216,7 @@ abstract class ForteFBTemplate extends ExportTemplate {
 	   «ENDIF»
 	'''
 
-	def protected CharSequence generateInternalVarDefinition(BaseFBType baseFBType) '''
+	def protected generateInternalVarDefinition(BaseFBType baseFBType) '''
        «IF !baseFBType.internalVars.isEmpty»
          const CStringDictionary::TStringId «FBClassName»::scm_anInternalsNames[] = {«baseFBType.internalVars.FORTENameList»};
          const CStringDictionary::TStringId «FBClassName»::scm_anInternalsTypeIds[] = {«baseFBType.internalVars.FORTETypeList»};
@@ -224,7 +224,7 @@ abstract class ForteFBTemplate extends ExportTemplate {
        «ENDIF»
     '''
 
-	def protected CharSequence generateAccessors(List<VarDeclaration> vars, String function) '''
+	def protected generateAccessors(List<VarDeclaration> vars, String function) '''
 		«FOR v : vars»
 			CIEC_«v.typeName» «IF v.array»*«ELSE»&«ENDIF»«EXPORT_PREFIX»«v.name»() {
 			  «IF v.array»
@@ -237,7 +237,7 @@ abstract class ForteFBTemplate extends ExportTemplate {
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateAccessors(List<AdapterDeclaration> adapters) '''
+	def protected generateAccessors(List<AdapterDeclaration> adapters) '''
 		«FOR adapter : adapters»
 			FORTE_«adapter.typeName»& «adapter.name»() {
 			  return (*static_cast<FORTE_«adapter.typeName»*>(m_apoAdapters[«adapters.indexOf(adapter)»]));
@@ -246,15 +246,15 @@ abstract class ForteFBTemplate extends ExportTemplate {
 		«ENDFOR»
 	'''
 
-	def protected CharSequence getFORTENameList(List<? extends INamedElement> elements) {
+	def protected getFORTENameList(List<? extends INamedElement> elements) {
 		return elements.map[name.FORTEString].join(", ")
 	}
 
-	def protected CharSequence getFORTETypeList(List<? extends VarDeclaration> elements) {
+	def protected getFORTETypeList(List<? extends VarDeclaration> elements) {
 		return elements.map['''«IF it.array»«"ARRAY".FORTEString», «it.arraySize», «ENDIF»«it.type.name.FORTEString»'''].join(", ")
 	}
 
-	def protected CharSequence getFBClassName() '''FORTE_«type.name»'''
+	def protected getFBClassName() '''FORTE_«type.name»'''
 
-	def protected CharSequence getFORTEString(String s) '''g_nStringId«s»'''
+	def protected getFORTEString(String s) '''g_nStringId«s»'''
 }

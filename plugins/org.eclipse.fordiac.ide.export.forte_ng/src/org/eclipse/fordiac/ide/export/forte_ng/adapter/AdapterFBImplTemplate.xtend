@@ -27,25 +27,36 @@ class AdapterFBImplTemplate extends ForteFBTemplate {
 		
 	'''
 
-	override protected CharSequence generateFBDefinition() '''
+	override protected generateFBDefinition() '''
 		DEFINE_ADAPTER_TYPE(«FBClassName», «type.name.FORTEString»)
 	'''
+	
+	def generateFBInterfaceSpecSocket()
+	'''
+	const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpecSocket = {
+	  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr«ELSE»scm_anEventInputNames, scm_anEIWith, scm_anEIWithIndexes«ENDIF»,
+	  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr«ELSE»scm_anEventOutputNames, scm_anEOWith, scm_anEOWithIndexes«ENDIF»,
+	  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scm_anDataInputNames, scm_anDataInputTypeIds«ENDIF»,
+	  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scm_anDataOutputNames, scm_anDataOutputTypeIds«ENDIF»,
+	  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», nullptr
+	};
+	'''
+	
+	def generateFBInterfaceSpecPlug()
+	'''
+	const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpecPlug = {
+	  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr«ELSE»scm_anEventOutputNames, scm_anEOWith, scm_anEOWithIndexes«ENDIF»,
+	  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr«ELSE»scm_anEventInputNames, scm_anEIWith, scm_anEIWithIndexes«ENDIF»,
+	  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scm_anDataOutputNames, scm_anDataOutputTypeIds«ENDIF»,
+	  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scm_anDataInputNames, scm_anDataInputTypeIds«ENDIF»,
+	  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», nullptr
+	};
+	'''
 
-	override protected CharSequence generateFBInterfaceSpecDefinition() '''
-		const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpecSocket = {
-		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr«ELSE»scm_anEventInputNames, scm_anEIWith, scm_anEIWithIndexes«ENDIF»,
-		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr«ELSE»scm_anEventOutputNames, scm_anEOWith, scm_anEOWithIndexes«ENDIF»,
-		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scm_anDataInputNames, scm_anDataInputTypeIds«ENDIF»,
-		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scm_anDataOutputNames, scm_anDataOutputTypeIds«ENDIF»,
-		  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», nullptr
-		};
-		
-		const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpecPlug = {
-		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr«ELSE»scm_anEventOutputNames, scm_anEOWith, scm_anEOWithIndexes«ENDIF»,
-		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr«ELSE»scm_anEventInputNames, scm_anEIWith, scm_anEIWithIndexes«ENDIF»,
-		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scm_anDataOutputNames, scm_anDataOutputTypeIds«ENDIF»,
-		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scm_anDataInputNames, scm_anDataInputTypeIds«ENDIF»,
-		  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», nullptr
-		};
+	override protected generateFBInterfaceSpecDefinition()
+	'''
+	«generateFBInterfaceSpecSocket»
+
+	«generateFBInterfaceSpecPlug»
 	'''
 }

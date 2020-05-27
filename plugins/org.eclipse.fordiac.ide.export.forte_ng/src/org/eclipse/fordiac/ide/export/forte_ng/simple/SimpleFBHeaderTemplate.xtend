@@ -54,7 +54,7 @@ class SimpleFBHeaderTemplate extends ForteFBTemplate {
 
 	'''
 
-	override protected CharSequence generateHeaderIncludes() '''
+	override protected generateHeaderIncludes() '''
 		#include "simplefb.h"
 		«(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).generateTypeIncludes»
 		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
@@ -62,7 +62,7 @@ class SimpleFBHeaderTemplate extends ForteFBTemplate {
 		«type.compilerInfo?.header»
 	'''
 
-	def protected CharSequence generateAlgorithms() '''
+	def protected generateAlgorithms() '''
 		void alg_REQ(void);
 	'''
 }

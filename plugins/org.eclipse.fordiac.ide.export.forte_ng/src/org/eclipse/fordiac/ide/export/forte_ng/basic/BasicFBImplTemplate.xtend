@@ -44,32 +44,32 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 
 	'''
 
-	def protected CharSequence generateAlgorithms() '''
+	def protected generateAlgorithms() '''
 		«FOR alg : type.algorithm»
 			«alg.generateAlgorithm»
 			
 		«ENDFOR»
 	'''
 
-	def protected dispatch CharSequence generateAlgorithm(Algorithm alg) {
+	def protected dispatch generateAlgorithm(Algorithm alg) {
 		errors.add('''Cannot export algorithm «alg.class»''')
 		return ""
 	}
 
-	def protected dispatch CharSequence generateAlgorithm(STAlgorithm alg) '''
+	def protected dispatch generateAlgorithm(STAlgorithm alg) '''
 		void «FBClassName»::alg_«alg.name»(void) {
 		  «alg.generate(errors)»
 		}
 	'''
 
-	def protected CharSequence generateStates() '''
+	def protected generateStates() '''
 		«FOR state : type.ECC.ECState»
 			«state.generateState»
 			
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateState(ECState state) '''
+	def protected generateState(ECState state) '''
 		void «FBClassName»::enterState«state.name»(void) {
 		  m_nECCState = scm_nState«state.name»;
 		  «FOR action : state.ECAction»
@@ -83,19 +83,19 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 		}
 	'''
 
-	def protected dispatch CharSequence generateSendEvent(Event event) '''
+	def protected dispatch generateSendEvent(Event event) '''
 		sendOutputEvent(scm_nEvent«event.name»ID);
 	'''
+	
+	def protected getAdapterEventName(AdapterEvent event) {
+		event.name.split("\\.").get(1);
+	}
 
-	def protected dispatch CharSequence generateSendEvent(AdapterEvent event) '''
-		sendAdapterEvent(scm_n«event.adapterDeclaration.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«getAdapterEventName(event)»ID);
+	def protected dispatch generateSendEvent(AdapterEvent event) '''
+		sendAdapterEvent(scm_n«event.adapterDeclaration.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«event.adapterEventName»ID);
 	'''
 	
-	def private String getAdapterEventName(AdapterEvent event){
-	     event.name.split("\\.").get(1);
-	}
-	
-	def protected CharSequence generateECC() '''
+	def protected generateECC() '''
 		void «FBClassName»::executeEvent(int pa_nEIID){
 		  bool bTransitionCleared;
 		  do {
@@ -129,10 +129,10 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 		}
 	'''
 	
-	def protected dispatch CharSequence generateTransitionEvent(Event event) '''
+	def protected dispatch generateTransitionEvent(Event event) '''
 	    scm_nEvent«event.name»ID'''
 
-    def protected dispatch CharSequence generateTransitionEvent(AdapterEvent event) '''
-        «event.adapterDeclaration.name»().«getAdapterEventName(event)»()'''
+    def protected dispatch generateTransitionEvent(AdapterEvent event) '''
+        «event.adapterDeclaration.name»().«event.adapterEventName»()'''
 	
 }

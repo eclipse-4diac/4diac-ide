@@ -197,6 +197,10 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
     return _builder;
   }
   
+  protected String getAdapterEventName(final AdapterEvent event) {
+    return event.getName().split("\\.")[1];
+  }
+  
   protected CharSequence _generateSendEvent(final AdapterEvent event) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("sendAdapterEvent(scm_n");
@@ -211,10 +215,6 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
     _builder.append("ID);");
     _builder.newLineIfNotEmpty();
     return _builder;
-  }
-  
-  private String getAdapterEventName(final AdapterEvent event) {
-    return event.getName().split("\\.")[1];
   }
   
   protected CharSequence generateECC() {
