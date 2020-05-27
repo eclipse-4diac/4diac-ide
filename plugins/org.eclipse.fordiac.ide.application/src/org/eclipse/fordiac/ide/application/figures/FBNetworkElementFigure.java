@@ -22,6 +22,7 @@ package org.eclipse.fordiac.ide.application.figures;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.MouseMotionListener;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
 import org.eclipse.fordiac.ide.gef.figures.FBShape;
@@ -48,7 +49,7 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 
 		@Override
 		public void mousePressed(MouseEvent me) {
-			if (0 != (me.getState() & SWT.CONTROL) && editPart.isOnlyThisOrNothingSelected()) {
+			if ((0 != (me.getState() & SWT.CONTROL)) && editPart.isOnlyThisOrNothingSelected()) {
 				openTypeInEditor(editPart.getModel());
 			}
 		}
@@ -108,7 +109,7 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 
 			@Override
 			public void mouseEntered(MouseEvent me) {
-				if (0 != (me.getState() & SWT.CONTROL) && editPart.isOnlyThisOrNothingSelected()) {
+				if ((0 != (me.getState() & SWT.CONTROL)) && editPart.isOnlyThisOrNothingSelected()) {
 					getTypeLabel().setDrawUnderline(true);
 				}
 			}
@@ -126,7 +127,7 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 
 			@Override
 			public void mouseMoved(MouseEvent me) {
-				if (0 != (me.getState() & SWT.CONTROL) && editPart.isOnlyThisOrNothingSelected()) {
+				if ((0 != (me.getState() & SWT.CONTROL)) && editPart.isOnlyThisOrNothingSelected()) {
 					if (!getTypeLabel().isDrawUnderline()) {
 						getTypeLabel().setDrawUnderline(true);
 					}
@@ -162,6 +163,11 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 	@Override
 	public int getTransparency() {
 		return getAlpha();
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		return super.getBounds();
 	}
 
 }

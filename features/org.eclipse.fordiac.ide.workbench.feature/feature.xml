@@ -171,6 +171,14 @@ United States, other countries, or both.\n
          id="org.eclipse.emf.mwe2.language.sdk"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.elk.algorithms.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.elk.feature"
+         version="0.0.0"/>
+
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.ui"/>
@@ -238,6 +246,13 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.application"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.elk"
          download-size="0"
          install-size="0"
          version="0.0.0"

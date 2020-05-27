@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2012, 2015 - 2017  Profactor GmbH, TU Wien ACIN
- *   			 2018 Johannes Kepler University
- * 
+ *   			 2018, 2020 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,8 +11,9 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - reworked connection routing and store routing results 
- *   			   correctly in model  
+ *   Alois Zoitl - reworked connection routing and store routing results
+ *   			   correctly in model
+ *   Daniel Lindhuber - changed routing to take params from the model (if available)
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.router;
 
@@ -67,15 +68,22 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 	private static void setHideableConnectionBendPoints(HideableConnection conn, final Point sourceP, final Point destP,
 			PointList points) {
 		if (null != conn.getModel()) {
-			valdidateConnectionRoutingParams(conn.getModel(), sourceP, destP);
+			valdidateModelRoutingParams(conn.getModel(), sourceP, destP);
 			createBendPointList(sourceP, destP, conn.getModel(), points);
+		}
+	}
+
+	private static void valdidateModelRoutingParams(org.eclipse.fordiac.ide.model.libraryElement.Connection model,
+			Point sourceP, Point destP) {
+		if ((sourceP.y != destP.y) && (model.getDx1() == 0)) {
+			valdidateConnectionRoutingParams(model, sourceP, destP);
 		}
 	}
 
 	private static void valdidateConnectionRoutingParams(org.eclipse.fordiac.ide.model.libraryElement.Connection conn,
 			final Point sourceP, final Point destP) {
 		if (0 == conn.getDx1()) {
-			if (sourceP.y != destP.y || requires5SegementConnection(sourceP, destP)) {
+			if ((sourceP.y != destP.y) || requires5SegementConnection(sourceP, destP)) {
 				// this is a new connection which is not a straight line or we need to
 				// regenerate it
 				if (requires5SegementConnection(sourceP, destP)) { // we need a 5 segment line
@@ -84,14 +92,14 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 					generateInitial3SegmentParams(conn, sourceP, destP);
 				}
 			}
-		} else if (sourceP.y == destP.y && !requires5SegementConnection(sourceP, destP)) {
+		} else if ((sourceP.y == destP.y) && !requires5SegementConnection(sourceP, destP)) {
 			// we now have a straight line
 			conn.setDx1(0);
 		} else if (0 == conn.getDx2()) {
 			// we have three point connection
 			if (requires5SegementConnection(sourceP, destP)) {
 				generateInitial5SegmentParams(conn, sourceP, destP);
-			} else if (sourceP.x + conn.getDx1() > destP.x - MIN_CONNECTION_FB_DISTANCE) {
+			} else if ((sourceP.x + conn.getDx1()) > (destP.x - MIN_CONNECTION_FB_DISTANCE)) {
 				conn.setDx1(destP.x - sourceP.x - MIN_CONNECTION_FB_DISTANCE);
 			}
 		} else {
@@ -122,14 +130,14 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 	}
 
 	private static boolean requires5SegementConnection(final Point sourceP, final Point destP) {
-		return sourceP.x >= (destP.x - 2 * MIN_CONNECTION_FB_DISTANCE);
+		return sourceP.x >= (destP.x - (2 * MIN_CONNECTION_FB_DISTANCE));
 	}
 
 	private static void createBendPointList(final Point sourceP, final Point destP,
 			org.eclipse.fordiac.ide.model.libraryElement.Connection modelConn, PointList points) {
 		if (0 != modelConn.getDx1()) {
-			points.addPoint(new Point(sourceP.x + modelConn.getDx1(), sourceP.y));
-			if (0 == modelConn.getDx2()) {
+			points.addPoint(sourceP.x + modelConn.getDx1(), sourceP.y);
+			if (0 == modelConn.getDy()) {
 				// we have a three segment connection
 				points.addPoint(new Point(sourceP.x + modelConn.getDx1(), destP.y));
 			} else {
