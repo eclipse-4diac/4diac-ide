@@ -71,7 +71,12 @@
        	</group>   
        	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.12.1">   
             <text>
-            For the first maintenance release of 4diac IDE 11 issues were fixed. 
+            For the first maintenance release of 4diac IDE 1.12 11 issues were fixed. 
+            </text>
+        </group>      
+       	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.12.1">   
+            <text>
+            For the second maintenance release of 4diac IDE 1.12 8 issues were fixed. 
             </text>
         </group>      
    	</extensionContent>
