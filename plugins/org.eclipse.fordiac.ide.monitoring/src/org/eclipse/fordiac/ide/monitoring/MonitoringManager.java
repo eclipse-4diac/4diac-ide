@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2018 Profactor GmbH, AIT, TU Wien ACIN, fortiss GmbH,
  * 							 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Matthias Plasch, Filip Andren, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - Harmonized deployment and monitoring  
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
@@ -47,7 +48,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 	/**
 	 * Gets the single instance of MonitoringManager.
-	 * 
+	 *
 	 * @return single instance of MonitoringManager
 	 */
 	public static MonitoringManager getInstance() {
@@ -56,9 +57,9 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 	/**
 	 * Gets the monitoring element.
-	 * 
+	 *
 	 * @param port the port
-	 * 
+	 *
 	 * @return the monitoring element
 	 */
 	public MonitoringBaseElement getMonitoringElement(IInterfaceElement port) {
@@ -76,7 +77,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 	/**
 	 * Adds monitoring elements.
-	 * 
+	 *
 	 * @param elemeent the monitoring element
 	 */
 	public void addMonitoringElement(MonitoringBaseElement element) {
@@ -94,7 +95,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 	/**
 	 * Removes the monitoring element.
-	 * 
+	 *
 	 * @param element the monitoring element
 	 */
 	public void removeMonitoringElement(MonitoringBaseElement element) {
@@ -110,9 +111,9 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 	/**
 	 * Contains port.
-	 * 
+	 *
 	 * @param port the port
-	 * 
+	 *
 	 * @return true, if successful
 	 */
 	public boolean containsPort(IInterfaceElement interfaceElement) {
@@ -133,7 +134,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 	/**
 	 * Enable system.
-	 * 
+	 *
 	 * @param system the system
 	 */
 	@Override
@@ -149,40 +150,39 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 	/**
 	 * Disable system.
-	 * 
+	 *
 	 * @param system the system
 	 */
 	@Override
 	public void disableSystem(AutomationSystem system) {
-		getSystemMonitoringData(system).disableSystem();
+		SystemMonitoringData data = systemMonitoringData.remove(system);
+		if (null != data) {
+			data.disableSystem();
+		}
 	}
 
 	@Override
 	public void disableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
 			throws InvocationTargetException, InterruptedException {
-		getSystemMonitoringData(system).disableSystemSynch(monitor);
+		SystemMonitoringData data = systemMonitoringData.remove(system);
+		if (null != data) {
+			data.disableSystem();
+			data.disableSystemSynch(monitor);
+		}
 	}
 
 	@Override
 	public boolean isSystemMonitored(AutomationSystem system) {
-		return getSystemMonitoringData(system).isMonitoringForSystemEnabled();
+		return systemMonitoringData.containsKey(system);
 	}
 
-	/**
-	 * Contains system.
-	 * 
-	 * @param system the system
-	 * 
-	 * @return true, if successful
-	 */
-	public boolean monitoringForSystemEnabled(AutomationSystem system) {
-		SystemMonitoringData data = getSystemMonitoringData(system);
-		return data.isMonitoringForSystemEnabled();
+	public Set<AutomationSystem> getMonitoredSystems() {
+		return systemMonitoringData.keySet();
 	}
 
 	/**
 	 * Trigger event.
-	 * 
+	 *
 	 * @param port the port
 	 */
 	public void triggerEvent(IInterfaceElement interfaceElement) {
@@ -271,17 +271,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	}
 
 	public SystemMonitoringData getSystemMonitoringData(AutomationSystem system) {
-		SystemMonitoringData retVal = systemMonitoringData.get(system);
-		if (null == retVal) {
-			retVal = createSystemMonitoringData(system);
-		}
-		return retVal;
-	}
-
-	private SystemMonitoringData createSystemMonitoringData(AutomationSystem system) {
-		SystemMonitoringData newData = new SystemMonitoringData(system);
-		systemMonitoringData.put(system, newData);
-		return newData;
+		return systemMonitoringData.computeIfAbsent(system, SystemMonitoringData::new);
 	}
 
 	private static void showDeviceNotFounderroMsg(MonitoringElement element) {

@@ -175,7 +175,7 @@
                    style="toggle">
              </command>          
           <menu
-               label="%contributions.menus.debug.monitorSystem.label"
+               label="%contributions.menus.debug.monitoredSystem.label"
                id="org.eclipse.4diac.ide.monitoring.menus.debug.monitorsystem">
              <dynamic
                    class="org.eclipse.fordiac.ide.monitoring.MonitoredSystems"

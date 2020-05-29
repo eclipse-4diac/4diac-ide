@@ -10,8 +10,8 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Muddasir Shakil 
- *     - Fixed getting Automation System 
+ *   Muddasir Shakil
+ *     - Fixed getting Automation System
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
@@ -42,7 +42,7 @@ public class MonitorSystemStateProvider extends State {
 							&& isSystemFileSelected(((TreeSelection) selection).getFirstElement())) {
 						AutomationSystem system = SystemManager.INSTANCE
 								.getSystem((IFile) ((TreeSelection) selection).getFirstElement());
-						return Boolean.valueOf(MonitoringManager.getInstance().monitoringForSystemEnabled(system));
+						return Boolean.valueOf(MonitoringManager.getInstance().isSystemMonitored(system));
 					}
 				}
 			}
