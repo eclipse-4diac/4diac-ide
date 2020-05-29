@@ -43,15 +43,15 @@ public abstract class TemplateExportFilter extends ExportFilter {
 
 	// Prepare the button labels
 	private static final String MERGE_LABEL_STRING = "Merge";
+	private static final String OVERWRITE_LABEL_STRING = "Overwrite";
 	private static final String[] BUTTON_LABELS = new String[] { //
-			JFaceResources.getString(IDialogLabelKeys.YES_LABEL_KEY), //
+			OVERWRITE_LABEL_STRING, //
 			MERGE_LABEL_STRING, //
 			JFaceResources.getString(IDialogLabelKeys.CANCEL_LABEL_KEY)//
 	};
 
 	// extract the button ids from the label-array (avoid magic numbers)
-	private static final int BUTTON_OVERWRITE = Arrays.asList(BUTTON_LABELS)
-			.indexOf(JFaceResources.getString(IDialogLabelKeys.YES_LABEL_KEY));
+	private static final int BUTTON_OVERWRITE = Arrays.asList(BUTTON_LABELS).indexOf(OVERWRITE_LABEL_STRING);
 	private static final int BUTTON_MERGE = Arrays.asList(BUTTON_LABELS).indexOf(MERGE_LABEL_STRING);
 
 	public TemplateExportFilter() {
@@ -71,24 +71,8 @@ public abstract class TemplateExportFilter extends ExportFilter {
 	public void export(IFile typeFile, String destination, boolean forceOverwrite, LibraryElement type)
 			throws ExportException {
 		try {
-			final Path destinationPath = Paths.get(destination);
-			final Set<? extends IExportTemplate> templates = this.getTemplates(type);
 
-			DelayedFiles files = new DelayedFiles();
-
-			for (final IExportTemplate template : templates) {
-				final CharSequence content = template.generate();
-				getErrors().addAll(reformat(type, template.getErrors()));
-				getWarnings().addAll(reformat(type, template.getWarnings()));
-				getInfos().addAll(reformat(type, template.getInfos()));
-				if (template.getErrors().isEmpty()) {
-					final Path templatePath = destinationPath.resolve(template.getPath());
-					files.write(templatePath, content);
-				} else {
-					files.clear();
-					break;
-				}
-			}
+			DelayedFiles files = generateFileContent(destination, type);
 
 			// set a default value for the result of the MessageDialog that does not
 			// conflict with the current state
@@ -118,30 +102,8 @@ public abstract class TemplateExportFilter extends ExportFilter {
 				Iterable<StoredFiles> writtenFiles = files.write(overwrite);
 
 				// check differences of the files using the compare editor
-				boolean diffs = false;
 				if (!overwrite) {
-					ICompareEditorOpener opener = CompareEditorOpenerUtil.getOpener();
-					if (null == opener) {
-						throw new ExportException("Unable to create merge editor. Files have been written to disk.");
-					}
-					for (StoredFiles sf : writtenFiles) {
-						if ((null != sf.getNewFile()) && (null != sf.getOldFile())) {
-							opener.setName(sf.getNewFile().getName());
-							opener.setTitle(sf.getNewFile().getName());
-							opener.setNewFile(sf.getNewFile());
-							opener.setOriginalFile(sf.getOldFile());
-							if (opener.hasDifferences()) {
-								opener.openCompareEditor();
-								diffs = true;
-							}
-						}
-					}
-				}
-
-				if (!diffs && filesExisted && !forceOverwrite) {
-					// there were no differences - inform the user
-					MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No Differences",
-							"There where no differences between the orignal file and the newly generated one!");
+					openMergeEditor(writtenFiles);
 				}
 			}
 		} catch (final Exception t) {
@@ -149,6 +111,53 @@ public abstract class TemplateExportFilter extends ExportFilter {
 					Messages.TemplateExportFilter_ErrorDuringTemplateGeneration, t));
 			this.getErrors().add(t.getMessage() != null ? t.getMessage()
 					: Messages.TemplateExportFilter_ErrorDuringTemplateGeneration);
+		}
+	}
+
+	private DelayedFiles generateFileContent(String destination, LibraryElement type) throws ExportException {
+		DelayedFiles files = new DelayedFiles();
+
+		final Path destinationPath = Paths.get(destination);
+		final Set<? extends IExportTemplate> templates = this.getTemplates(type);
+		for (final IExportTemplate template : templates) {
+			final CharSequence content = template.generate();
+			getErrors().addAll(reformat(type, template.getErrors()));
+			getWarnings().addAll(reformat(type, template.getWarnings()));
+			getInfos().addAll(reformat(type, template.getInfos()));
+			if (template.getErrors().isEmpty()) {
+				final Path templatePath = destinationPath.resolve(template.getPath());
+				files.write(templatePath, content);
+			} else {
+				files.clear();
+				break;
+			}
+		}
+		return files;
+	}
+
+	private static void openMergeEditor(Iterable<StoredFiles> writtenFiles) throws ExportException {
+		boolean diffs = false;
+		ICompareEditorOpener opener = CompareEditorOpenerUtil.getOpener();
+		if (null == opener) {
+			throw new ExportException("Unable to create merge editor. Files have been written to disk.");
+		}
+		for (StoredFiles sf : writtenFiles) {
+			if ((null != sf.getNewFile()) && (null != sf.getOldFile())) {
+				opener.setName(sf.getNewFile().getName());
+				opener.setTitle(sf.getNewFile().getName());
+				opener.setNewFile(sf.getNewFile());
+				opener.setOriginalFile(sf.getOldFile());
+				if (opener.hasDifferences()) {
+					opener.openCompareEditor();
+					diffs = true;
+				}
+			}
+		}
+
+		if (!diffs) {
+			// there were no differences - inform the user
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No Differences",
+					"There where no differences between the orignal file and the newly generated one!");
 		}
 	}
 
