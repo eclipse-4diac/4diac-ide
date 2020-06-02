@@ -7,7 +7,7 @@
             class="org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter"
             description="FORTE Export New Generation for FORTE 1.x"
             name="FORTE 1.x NG"
-            sortIndex="15">
+            sortIndex="10">
       </ExportFilter>
    </extension>
 
