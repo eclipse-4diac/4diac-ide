@@ -284,6 +284,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 		tableViewer.addSelectionChangedListener(event -> {
 			if (!blockTableSelection) {
+				selectedEntry = (PaletteEntry) tableViewer.getStructuredSelection().getFirstElement();
 				fireApplyEditorValue();
 			}
 		});
