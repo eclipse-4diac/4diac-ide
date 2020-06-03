@@ -121,7 +121,9 @@ $ mkdir build &amp;&amp; cd "build"</div>
 		  <li>CALL_METHOD</li>
 		  <li>SUBSCRIBE</li>
 		  <li>CREATE_OBJECT</li>
-		  <li>DELETE_OBJECT</li> 
+		  <li>DELETE_OBJECT</li>
+		  <li>CREATE_VARIABLE</li>
+		  <li>DELETE_VARIABLE</li> 
 		</ul>
 	</li>
 
@@ -248,6 +250,18 @@ $ mkdir build &amp;&amp; cd "build"</div>
 		<td>PUBLISH_0</td>
 		<td>Number of Pairs should be 1. Browsepath MUST be provided. NodeId is optional</td>
 	</tr>
+	 <tr>
+	 	<td>Local</td>
+		<td>CREATE_VARIABLE</td>
+		<td>PUBLISH_0</td>
+		<td>Number of Pairs should be 3. The first one is for the variable type (Browsename and/or NodeId must be provided. If both are provided they should match). The second one is for data value type of the created variable (Browsename and/or NodeId must be provided. If both are provided they should match). The third one is the path of instance to create (Browsepath MUST be provided. NodeId is optional)</td>
+	</tr>
+	<tr>
+		<td>Local</td>
+		<td>DELETE_VARIABLE</td>
+		<td>PUBLISH_0</td>
+		<td>Number of Pairs should be 1. Browsepath MUST be provided. NodeId is optional</td>
+	</tr>
 	<tr>	
 		<td>Remote</td>
 		<td>READ</td>
@@ -289,6 +303,18 @@ $ mkdir build &amp;&amp; cd "build"</div>
 		<td>DELETE_OBJECT</td>
 		<td>X</td>
 		<td>Not allowed to delete objects remotely</td>
+	</tr>
+	<tr>
+		<td>Remote</td>
+		<td>CREATE_VARIABLE</td>
+		<td>X</td>
+		<td>Not allowed to create variables remotely</td>
+	</tr>
+	<tr>
+		<td>Remote</td>
+		<td>DELETE_OBJECT</td>
+		<td>X</td>
+		<td>Not allowed to delete variables remotely</td>
 	</tr>
 </table>
 
