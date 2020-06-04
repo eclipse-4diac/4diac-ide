@@ -294,33 +294,6 @@ public class StructuredTextSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case StructuredTextPackage.DURATION_LITERAL:
-      {
-        DurationLiteral durationLiteral = (DurationLiteral)theEObject;
-        T result = caseDurationLiteral(durationLiteral);
-        if (result == null) result = caseTimeLiteral(durationLiteral);
-        if (result == null) result = caseConstant(durationLiteral);
-        if (result == null) result = caseExpression(durationLiteral);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case StructuredTextPackage.DURATION_VALUE:
-      {
-        DurationValue durationValue = (DurationValue)theEObject;
-        T result = caseDurationValue(durationValue);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case StructuredTextPackage.DATE_LITERAL:
-      {
-        DateLiteral dateLiteral = (DateLiteral)theEObject;
-        T result = caseDateLiteral(dateLiteral);
-        if (result == null) result = caseTimeLiteral(dateLiteral);
-        if (result == null) result = caseConstant(dateLiteral);
-        if (result == null) result = caseExpression(dateLiteral);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case StructuredTextPackage.LOCAL_VARIABLE:
       {
         LocalVariable localVariable = (LocalVariable)theEObject;
@@ -830,54 +803,6 @@ public class StructuredTextSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTimeLiteral(TimeLiteral object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Duration Literal</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Duration Literal</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseDurationLiteral(DurationLiteral object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Duration Value</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Duration Value</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseDurationValue(DurationValue object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Date Literal</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Date Literal</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseDateLiteral(DateLiteral object)
   {
     return null;
   }

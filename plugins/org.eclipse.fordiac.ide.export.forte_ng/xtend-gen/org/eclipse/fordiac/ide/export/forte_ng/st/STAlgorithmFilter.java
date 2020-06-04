@@ -63,10 +63,12 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Statement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StatementList;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StringLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.validation.DatetimeLiteral;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.ParserRule;
 import org.eclipse.xtext.parser.IParseResult;
@@ -929,6 +931,14 @@ public class STAlgorithmFilter {
     return _switchResult;
   }
   
+  protected CharSequence _generateExpression(final TimeLiteral expr) {
+    StringConcatenation _builder = new StringConcatenation();
+    String _literal = expr.getLiteral();
+    DatetimeLiteral _datetimeLiteral = new DatetimeLiteral(_literal);
+    _builder.append(_datetimeLiteral);
+    return _builder;
+  }
+  
   protected CharSequence _generateExpression(final UnaryExpression expr) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("(");
@@ -1220,6 +1230,8 @@ public class STAlgorithmFilter {
       return _generateExpression((PrimaryVariable)expr);
     } else if (expr instanceof StringLiteral) {
       return _generateExpression((StringLiteral)expr);
+    } else if (expr instanceof TimeLiteral) {
+      return _generateExpression((TimeLiteral)expr);
     } else if (expr instanceof BinaryExpression) {
       return _generateExpression((BinaryExpression)expr);
     } else if (expr instanceof Call) {

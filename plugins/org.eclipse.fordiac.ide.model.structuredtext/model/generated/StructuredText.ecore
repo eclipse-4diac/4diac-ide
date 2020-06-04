@@ -132,10 +132,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="PrimaryVariable" eSuperTypes="#//Variable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="var" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Constant" eSuperTypes="#//Expression">
+  <eClassifiers xsi:type="ecore:EClass" name="Constant" eSuperTypes="#//Expression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NumericLiteral" eSuperTypes="#//Constant">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//Type"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="NumericLiteral" eSuperTypes="#//Constant"/>
   <eClassifiers xsi:type="ecore:EClass" name="IntLiteral" eSuperTypes="#//NumericLiteral">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
@@ -143,33 +143,16 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BoolLiteral" eSuperTypes="#//Constant">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//Type"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StringLiteral" eSuperTypes="#//Constant">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//Type"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TimeLiteral" eSuperTypes="#//Constant"/>
-  <eClassifiers xsi:type="ecore:EClass" name="DurationLiteral" eSuperTypes="#//TimeLiteral">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negative" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
-        eType="#//DurationValue" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DurationValue">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" eType="#//Duration_Unit"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="Duration_Unit">
-    <eLiterals name="DAYS" literal="d"/>
-    <eLiterals name="HOURS" value="1" literal="h"/>
-    <eLiterals name="MINUTES" value="2" literal="m"/>
-    <eLiterals name="SECONDS" value="3" literal="s"/>
-    <eLiterals name="MILLIS" value="4" literal="ms"/>
-    <eLiterals name="MICROS" value="5" literal="us"/>
-    <eLiterals name="NANOS" value="6" literal="ns"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DateLiteral" eSuperTypes="#//TimeLiteral">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TimeLiteral" eSuperTypes="#//Constant">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="literal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Type">
     <eLiterals name="DINT" literal="DINT"/>
@@ -186,27 +169,11 @@
     <eLiterals name="WSTRING" value="11" literal="WSTRING"/>
     <eLiterals name="CHAR" value="12" literal="CHAR"/>
     <eLiterals name="WCHAR" value="13" literal="WCHAR"/>
-    <eLiterals name="TIME" value="14" literal="TIME"/>
-    <eLiterals name="LTIME" value="15" literal="LTIME"/>
-    <eLiterals name="T" value="16" literal="T"/>
-    <eLiterals name="LT" value="17" literal="LT"/>
-    <eLiterals name="TIME_OF_DAY" value="18" literal="TIME_OF_DAY"/>
-    <eLiterals name="LTIME_OF_DAY" value="19" literal="LTIME_OF_DAY"/>
-    <eLiterals name="TOD" value="20" literal="TOD"/>
-    <eLiterals name="LTOD" value="21" literal="LTOD"/>
-    <eLiterals name="DATE" value="22" literal="DATE"/>
-    <eLiterals name="LDATE" value="23" literal="LDATE"/>
-    <eLiterals name="D" value="24" literal="D"/>
-    <eLiterals name="LD" value="25" literal="LD"/>
-    <eLiterals name="DATE_AND_TIME" value="26" literal="DATE_AND_TIME"/>
-    <eLiterals name="LDATE_AND_TIME" value="27" literal="LDATE_AND_TIME"/>
-    <eLiterals name="DT" value="28" literal="DT"/>
-    <eLiterals name="LDT" value="29" literal="LDT"/>
-    <eLiterals name="BOOL" value="30" literal="BOOL"/>
-    <eLiterals name="BYTE" value="31" literal="BYTE"/>
-    <eLiterals name="WORD" value="32" literal="WORD"/>
-    <eLiterals name="DWORD" value="33" literal="DWORD"/>
-    <eLiterals name="LWORD" value="34" literal="LWORD"/>
+    <eLiterals name="BOOL" value="14" literal="BOOL"/>
+    <eLiterals name="BYTE" value="15" literal="BYTE"/>
+    <eLiterals name="WORD" value="16" literal="WORD"/>
+    <eLiterals name="DWORD" value="17" literal="DWORD"/>
+    <eLiterals name="LWORD" value="18" literal="LWORD"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LocalVariable" eSuperTypes="platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//LocalVariable">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>

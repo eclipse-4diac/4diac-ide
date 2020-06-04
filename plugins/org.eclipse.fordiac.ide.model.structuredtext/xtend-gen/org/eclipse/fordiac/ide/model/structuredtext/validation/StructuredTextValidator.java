@@ -22,8 +22,10 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
 import org.eclipse.fordiac.ide.model.structuredtext.validation.AbstractStructuredTextValidator;
+import org.eclipse.fordiac.ide.model.structuredtext.validation.DatetimeLiteral;
 import org.eclipse.xtext.validation.Check;
 
 /**
@@ -235,6 +237,17 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
       if ((((this.BitSize(v) == 0) && (this.BitSize(v.getLocation()) == 0)) && (!Objects.equal(this.extractTypeInformation(v.getLocation(), this.extractTypeInformation(v.getLocation())), this.extractTypeInformation(v))))) {
         this.error("General located variables must have matching types", StructuredTextPackage.Literals.LOCAL_VARIABLE__LOCATED);
       }
+    }
+  }
+  
+  @Check
+  public void validateTimeLiteral(final TimeLiteral expr) {
+    String _literal = expr.getLiteral();
+    final DatetimeLiteral literal = new DatetimeLiteral(_literal);
+    boolean _isValid = literal.isValid();
+    boolean _not = (!_isValid);
+    if (_not) {
+      this.error("Invalid Literal", StructuredTextPackage.Literals.TIME_LITERAL__LITERAL);
     }
   }
   

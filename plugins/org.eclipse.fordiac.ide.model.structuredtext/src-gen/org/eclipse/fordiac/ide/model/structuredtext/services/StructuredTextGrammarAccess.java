@@ -2026,396 +2026,34 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	public class Time_LiteralElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Time_Literal");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final RuleCall cDurationParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
-		private final RuleCall cTime_Of_DayParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
-		private final RuleCall cDateParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
-		private final RuleCall cDate_And_TimeParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
+		private final Assignment cLiteralAssignment = (Assignment)rule.eContents().get(1);
+		private final Alternatives cLiteralAlternatives_0 = (Alternatives)cLiteralAssignment.eContents().get(0);
+		private final RuleCall cLiteralTIMETerminalRuleCall_0_0 = (RuleCall)cLiteralAlternatives_0.eContents().get(0);
+		private final RuleCall cLiteralDATETerminalRuleCall_0_1 = (RuleCall)cLiteralAlternatives_0.eContents().get(1);
+		private final RuleCall cLiteralTIMEOFDAYTerminalRuleCall_0_2 = (RuleCall)cLiteralAlternatives_0.eContents().get(2);
+		private final RuleCall cLiteralDATETIMETerminalRuleCall_0_3 = (RuleCall)cLiteralAlternatives_0.eContents().get(3);
 		
 		//Time_Literal TimeLiteral:
-		//	Duration | Time_Of_Day | Date | Date_And_Time;
+		//	literal=(TIME | DATE | TIMEOFDAY | DATETIME);
 		@Override public ParserRule getRule() { return rule; }
 		
-		//Duration | Time_Of_Day | Date | Date_And_Time
-		public Alternatives getAlternatives() { return cAlternatives; }
+		//literal=(TIME | DATE | TIMEOFDAY | DATETIME)
+		public Assignment getLiteralAssignment() { return cLiteralAssignment; }
 		
-		//Duration
-		public RuleCall getDurationParserRuleCall_0() { return cDurationParserRuleCall_0; }
+		//(TIME | DATE | TIMEOFDAY | DATETIME)
+		public Alternatives getLiteralAlternatives_0() { return cLiteralAlternatives_0; }
 		
-		//Time_Of_Day
-		public RuleCall getTime_Of_DayParserRuleCall_1() { return cTime_Of_DayParserRuleCall_1; }
+		//TIME
+		public RuleCall getLiteralTIMETerminalRuleCall_0_0() { return cLiteralTIMETerminalRuleCall_0_0; }
 		
-		//Date
-		public RuleCall getDateParserRuleCall_2() { return cDateParserRuleCall_2; }
+		//DATE
+		public RuleCall getLiteralDATETerminalRuleCall_0_1() { return cLiteralDATETerminalRuleCall_0_1; }
 		
-		//Date_And_Time
-		public RuleCall getDate_And_TimeParserRuleCall_3() { return cDate_And_TimeParserRuleCall_3; }
-	}
-	public class DurationElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Duration");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cTypeAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cTypeTime_Type_NameEnumRuleCall_0_0 = (RuleCall)cTypeAssignment_0.eContents().get(0);
-		private final Keyword cNumberSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
-		private final Keyword cPlusSignKeyword_2_0 = (Keyword)cAlternatives_2.eContents().get(0);
-		private final Assignment cNegativeAssignment_2_1 = (Assignment)cAlternatives_2.eContents().get(1);
-		private final Keyword cNegativeHyphenMinusKeyword_2_1_0 = (Keyword)cNegativeAssignment_2_1.eContents().get(0);
-		private final Assignment cValueAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cValueDuration_ValueParserRuleCall_3_0 = (RuleCall)cValueAssignment_3.eContents().get(0);
-		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
-		private final Keyword c_Keyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
-		private final Assignment cValueAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
-		private final RuleCall cValueDuration_ValueParserRuleCall_4_1_0 = (RuleCall)cValueAssignment_4_1.eContents().get(0);
+		//TIMEOFDAY
+		public RuleCall getLiteralTIMEOFDAYTerminalRuleCall_0_2() { return cLiteralTIMEOFDAYTerminalRuleCall_0_2; }
 		
-		//Duration DurationLiteral:
-		//	type=Time_Type_Name '#' ('+' | negative?='-')?
-		//	value+=Duration_Value ('_' value+=Duration_Value)*;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//type=Time_Type_Name '#' ('+' | negative?='-')? value+=Duration_Value ('_' value+=Duration_Value)*
-		public Group getGroup() { return cGroup; }
-		
-		//type=Time_Type_Name
-		public Assignment getTypeAssignment_0() { return cTypeAssignment_0; }
-		
-		//Time_Type_Name
-		public RuleCall getTypeTime_Type_NameEnumRuleCall_0_0() { return cTypeTime_Type_NameEnumRuleCall_0_0; }
-		
-		//'#'
-		public Keyword getNumberSignKeyword_1() { return cNumberSignKeyword_1; }
-		
-		//('+' | negative?='-')?
-		public Alternatives getAlternatives_2() { return cAlternatives_2; }
-		
-		//'+'
-		public Keyword getPlusSignKeyword_2_0() { return cPlusSignKeyword_2_0; }
-		
-		//negative?='-'
-		public Assignment getNegativeAssignment_2_1() { return cNegativeAssignment_2_1; }
-		
-		//'-'
-		public Keyword getNegativeHyphenMinusKeyword_2_1_0() { return cNegativeHyphenMinusKeyword_2_1_0; }
-		
-		//value+=Duration_Value
-		public Assignment getValueAssignment_3() { return cValueAssignment_3; }
-		
-		//Duration_Value
-		public RuleCall getValueDuration_ValueParserRuleCall_3_0() { return cValueDuration_ValueParserRuleCall_3_0; }
-		
-		//('_' value+=Duration_Value)*
-		public Group getGroup_4() { return cGroup_4; }
-		
-		//'_'
-		public Keyword get_Keyword_4_0() { return c_Keyword_4_0; }
-		
-		//value+=Duration_Value
-		public Assignment getValueAssignment_4_1() { return cValueAssignment_4_1; }
-		
-		//Duration_Value
-		public RuleCall getValueDuration_ValueParserRuleCall_4_1_0() { return cValueDuration_ValueParserRuleCall_4_1_0; }
-	}
-	public class Duration_ValueElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Duration_Value");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cValueAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cValueFix_PointParserRuleCall_0_0 = (RuleCall)cValueAssignment_0.eContents().get(0);
-		private final Assignment cUnitAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cUnitDuration_UnitEnumRuleCall_1_0 = (RuleCall)cUnitAssignment_1.eContents().get(0);
-		
-		//Duration_Value DurationValue:
-		//	value=Fix_Point
-		//	unit=Duration_Unit;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//value=Fix_Point unit=Duration_Unit
-		public Group getGroup() { return cGroup; }
-		
-		//value=Fix_Point
-		public Assignment getValueAssignment_0() { return cValueAssignment_0; }
-		
-		//Fix_Point
-		public RuleCall getValueFix_PointParserRuleCall_0_0() { return cValueFix_PointParserRuleCall_0_0; }
-		
-		//unit=Duration_Unit
-		public Assignment getUnitAssignment_1() { return cUnitAssignment_1; }
-		
-		//Duration_Unit
-		public RuleCall getUnitDuration_UnitEnumRuleCall_1_0() { return cUnitDuration_UnitEnumRuleCall_1_0; }
-	}
-	public class Fix_PointElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Fix_Point");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final RuleCall cUNSIGNED_INTTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
-		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
-		private final Keyword cFullStopKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
-		private final RuleCall cUNSIGNED_INTTerminalRuleCall_1_1 = (RuleCall)cGroup_1.eContents().get(1);
-		
-		//Fix_Point:
-		//	UNSIGNED_INT ('.' UNSIGNED_INT)?;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//UNSIGNED_INT ('.' UNSIGNED_INT)?
-		public Group getGroup() { return cGroup; }
-		
-		//UNSIGNED_INT
-		public RuleCall getUNSIGNED_INTTerminalRuleCall_0() { return cUNSIGNED_INTTerminalRuleCall_0; }
-		
-		//('.' UNSIGNED_INT)?
-		public Group getGroup_1() { return cGroup_1; }
-		
-		//'.'
-		public Keyword getFullStopKeyword_1_0() { return cFullStopKeyword_1_0; }
-		
-		//UNSIGNED_INT
-		public RuleCall getUNSIGNED_INTTerminalRuleCall_1_1() { return cUNSIGNED_INTTerminalRuleCall_1_1; }
-	}
-	public class Time_Of_DayElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Time_Of_Day");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cTypeAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cTypeTod_Type_NameEnumRuleCall_0_0 = (RuleCall)cTypeAssignment_0.eContents().get(0);
-		private final Keyword cNumberSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cValueDaytimeParserRuleCall_2_0 = (RuleCall)cValueAssignment_2.eContents().get(0);
-		
-		//Time_Of_Day DateLiteral:
-		//	type=Tod_Type_Name '#'
-		//	value=Daytime;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//type=Tod_Type_Name '#' value=Daytime
-		public Group getGroup() { return cGroup; }
-		
-		//type=Tod_Type_Name
-		public Assignment getTypeAssignment_0() { return cTypeAssignment_0; }
-		
-		//Tod_Type_Name
-		public RuleCall getTypeTod_Type_NameEnumRuleCall_0_0() { return cTypeTod_Type_NameEnumRuleCall_0_0; }
-		
-		//'#'
-		public Keyword getNumberSignKeyword_1() { return cNumberSignKeyword_1; }
-		
-		//value=Daytime
-		public Assignment getValueAssignment_2() { return cValueAssignment_2; }
-		
-		//Daytime
-		public RuleCall getValueDaytimeParserRuleCall_2_0() { return cValueDaytimeParserRuleCall_2_0; }
-	}
-	public class DaytimeElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Daytime");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final RuleCall cDay_HourParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
-		private final Keyword cColonKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final RuleCall cDay_MinuteParserRuleCall_2 = (RuleCall)cGroup.eContents().get(2);
-		private final Keyword cColonKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final RuleCall cDay_SecondParserRuleCall_4 = (RuleCall)cGroup.eContents().get(4);
-		
-		//Daytime ecore::EDate:
-		//	Day_Hour ':' Day_Minute ':' Day_Second;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//Day_Hour ':' Day_Minute ':' Day_Second
-		public Group getGroup() { return cGroup; }
-		
-		//Day_Hour
-		public RuleCall getDay_HourParserRuleCall_0() { return cDay_HourParserRuleCall_0; }
-		
-		//':'
-		public Keyword getColonKeyword_1() { return cColonKeyword_1; }
-		
-		//Day_Minute
-		public RuleCall getDay_MinuteParserRuleCall_2() { return cDay_MinuteParserRuleCall_2; }
-		
-		//':'
-		public Keyword getColonKeyword_3() { return cColonKeyword_3; }
-		
-		//Day_Second
-		public RuleCall getDay_SecondParserRuleCall_4() { return cDay_SecondParserRuleCall_4; }
-	}
-	public class Day_HourElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Day_Hour");
-		private final RuleCall cUNSIGNED_INTTerminalRuleCall = (RuleCall)rule.eContents().get(1);
-		
-		//Day_Hour:
-		//	UNSIGNED_INT;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//UNSIGNED_INT
-		public RuleCall getUNSIGNED_INTTerminalRuleCall() { return cUNSIGNED_INTTerminalRuleCall; }
-	}
-	public class Day_MinuteElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Day_Minute");
-		private final RuleCall cUNSIGNED_INTTerminalRuleCall = (RuleCall)rule.eContents().get(1);
-		
-		//Day_Minute:
-		//	UNSIGNED_INT;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//UNSIGNED_INT
-		public RuleCall getUNSIGNED_INTTerminalRuleCall() { return cUNSIGNED_INTTerminalRuleCall; }
-	}
-	public class Day_SecondElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Day_Second");
-		private final RuleCall cFix_PointParserRuleCall = (RuleCall)rule.eContents().get(1);
-		
-		//Day_Second:
-		//	Fix_Point;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//Fix_Point
-		public RuleCall getFix_PointParserRuleCall() { return cFix_PointParserRuleCall; }
-	}
-	public class DateElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Date");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cTypeAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cTypeDate_Type_NameEnumRuleCall_0_0 = (RuleCall)cTypeAssignment_0.eContents().get(0);
-		private final Keyword cNumberSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cValueDate_LiteralParserRuleCall_2_0 = (RuleCall)cValueAssignment_2.eContents().get(0);
-		
-		//Date DateLiteral:
-		//	type=Date_Type_Name '#'
-		//	value=Date_Literal;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//type=Date_Type_Name '#' value=Date_Literal
-		public Group getGroup() { return cGroup; }
-		
-		//type=Date_Type_Name
-		public Assignment getTypeAssignment_0() { return cTypeAssignment_0; }
-		
-		//Date_Type_Name
-		public RuleCall getTypeDate_Type_NameEnumRuleCall_0_0() { return cTypeDate_Type_NameEnumRuleCall_0_0; }
-		
-		//'#'
-		public Keyword getNumberSignKeyword_1() { return cNumberSignKeyword_1; }
-		
-		//value=Date_Literal
-		public Assignment getValueAssignment_2() { return cValueAssignment_2; }
-		
-		//Date_Literal
-		public RuleCall getValueDate_LiteralParserRuleCall_2_0() { return cValueDate_LiteralParserRuleCall_2_0; }
-	}
-	public class Date_LiteralElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Date_Literal");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final RuleCall cYearParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
-		private final Keyword cHyphenMinusKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final RuleCall cMonthParserRuleCall_2 = (RuleCall)cGroup.eContents().get(2);
-		private final Keyword cHyphenMinusKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final RuleCall cDayParserRuleCall_4 = (RuleCall)cGroup.eContents().get(4);
-		
-		//Date_Literal ecore::EDate:
-		//	Year '-' Month '-' Day;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//Year '-' Month '-' Day
-		public Group getGroup() { return cGroup; }
-		
-		//Year
-		public RuleCall getYearParserRuleCall_0() { return cYearParserRuleCall_0; }
-		
-		//'-'
-		public Keyword getHyphenMinusKeyword_1() { return cHyphenMinusKeyword_1; }
-		
-		//Month
-		public RuleCall getMonthParserRuleCall_2() { return cMonthParserRuleCall_2; }
-		
-		//'-'
-		public Keyword getHyphenMinusKeyword_3() { return cHyphenMinusKeyword_3; }
-		
-		//Day
-		public RuleCall getDayParserRuleCall_4() { return cDayParserRuleCall_4; }
-	}
-	public class YearElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Year");
-		private final RuleCall cUNSIGNED_INTTerminalRuleCall = (RuleCall)rule.eContents().get(1);
-		
-		//Year:
-		//	UNSIGNED_INT;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//UNSIGNED_INT
-		public RuleCall getUNSIGNED_INTTerminalRuleCall() { return cUNSIGNED_INTTerminalRuleCall; }
-	}
-	public class MonthElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Month");
-		private final RuleCall cUNSIGNED_INTTerminalRuleCall = (RuleCall)rule.eContents().get(1);
-		
-		//Month:
-		//	UNSIGNED_INT;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//UNSIGNED_INT
-		public RuleCall getUNSIGNED_INTTerminalRuleCall() { return cUNSIGNED_INTTerminalRuleCall; }
-	}
-	public class DayElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Day");
-		private final RuleCall cUNSIGNED_INTTerminalRuleCall = (RuleCall)rule.eContents().get(1);
-		
-		//Day:
-		//	UNSIGNED_INT;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//UNSIGNED_INT
-		public RuleCall getUNSIGNED_INTTerminalRuleCall() { return cUNSIGNED_INTTerminalRuleCall; }
-	}
-	public class Date_And_TimeElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Date_And_Time");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cTypeAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cTypeDT_Type_NameEnumRuleCall_0_0 = (RuleCall)cTypeAssignment_0.eContents().get(0);
-		private final Keyword cNumberSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cValueDate_And_Time_ValueParserRuleCall_2_0 = (RuleCall)cValueAssignment_2.eContents().get(0);
-		
-		//Date_And_Time DateLiteral:
-		//	type=DT_Type_Name '#'
-		//	value=Date_And_Time_Value;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//type=DT_Type_Name '#' value=Date_And_Time_Value
-		public Group getGroup() { return cGroup; }
-		
-		//type=DT_Type_Name
-		public Assignment getTypeAssignment_0() { return cTypeAssignment_0; }
-		
-		//DT_Type_Name
-		public RuleCall getTypeDT_Type_NameEnumRuleCall_0_0() { return cTypeDT_Type_NameEnumRuleCall_0_0; }
-		
-		//'#'
-		public Keyword getNumberSignKeyword_1() { return cNumberSignKeyword_1; }
-		
-		//value=Date_And_Time_Value
-		public Assignment getValueAssignment_2() { return cValueAssignment_2; }
-		
-		//Date_And_Time_Value
-		public RuleCall getValueDate_And_Time_ValueParserRuleCall_2_0() { return cValueDate_And_Time_ValueParserRuleCall_2_0; }
-	}
-	public class Date_And_Time_ValueElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Date_And_Time_Value");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final RuleCall cDate_LiteralParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
-		private final Keyword cHyphenMinusKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final RuleCall cDaytimeParserRuleCall_2 = (RuleCall)cGroup.eContents().get(2);
-		
-		//Date_And_Time_Value ecore::EDate:
-		//	Date_Literal '-' Daytime;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//Date_Literal '-' Daytime
-		public Group getGroup() { return cGroup; }
-		
-		//Date_Literal
-		public RuleCall getDate_LiteralParserRuleCall_0() { return cDate_LiteralParserRuleCall_0; }
-		
-		//'-'
-		public Keyword getHyphenMinusKeyword_1() { return cHyphenMinusKeyword_1; }
-		
-		//Daytime
-		public RuleCall getDaytimeParserRuleCall_2() { return cDaytimeParserRuleCall_2; }
+		//DATETIME
+		public RuleCall getLiteralDATETIMETerminalRuleCall_0_3() { return cLiteralDATETIMETerminalRuleCall_0_3; }
 	}
 	public class Type_NameElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Type_Name");
@@ -2804,73 +2442,6 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		//"NOT"
 		public Keyword getNOTNOTKeyword_2_0() { return cNOTNOTKeyword_2_0; }
 	}
-	public class Duration_UnitElements extends AbstractEnumRuleElementFinder {
-		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Duration_Unit");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final EnumLiteralDeclaration cDAYSEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
-		private final Keyword cDAYSDKeyword_0_0 = (Keyword)cDAYSEnumLiteralDeclaration_0.eContents().get(0);
-		private final EnumLiteralDeclaration cHOURSEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
-		private final Keyword cHOURSHKeyword_1_0 = (Keyword)cHOURSEnumLiteralDeclaration_1.eContents().get(0);
-		private final EnumLiteralDeclaration cMINUTESEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
-		private final Keyword cMINUTESMKeyword_2_0 = (Keyword)cMINUTESEnumLiteralDeclaration_2.eContents().get(0);
-		private final EnumLiteralDeclaration cSECONDSEnumLiteralDeclaration_3 = (EnumLiteralDeclaration)cAlternatives.eContents().get(3);
-		private final Keyword cSECONDSSKeyword_3_0 = (Keyword)cSECONDSEnumLiteralDeclaration_3.eContents().get(0);
-		private final EnumLiteralDeclaration cMILLISEnumLiteralDeclaration_4 = (EnumLiteralDeclaration)cAlternatives.eContents().get(4);
-		private final Keyword cMILLISMsKeyword_4_0 = (Keyword)cMILLISEnumLiteralDeclaration_4.eContents().get(0);
-		private final EnumLiteralDeclaration cMICROSEnumLiteralDeclaration_5 = (EnumLiteralDeclaration)cAlternatives.eContents().get(5);
-		private final Keyword cMICROSUsKeyword_5_0 = (Keyword)cMICROSEnumLiteralDeclaration_5.eContents().get(0);
-		private final EnumLiteralDeclaration cNANOSEnumLiteralDeclaration_6 = (EnumLiteralDeclaration)cAlternatives.eContents().get(6);
-		private final Keyword cNANOSNsKeyword_6_0 = (Keyword)cNANOSEnumLiteralDeclaration_6.eContents().get(0);
-		
-		//enum Duration_Unit:
-		//	DAYS='d' | HOURS='h' | MINUTES='m' | SECONDS='s' | MILLIS='ms' | MICROS='us' | NANOS='ns';
-		public EnumRule getRule() { return rule; }
-		
-		//DAYS='d' | HOURS='h' | MINUTES='m' | SECONDS='s' | MILLIS='ms' | MICROS='us' | NANOS='ns'
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
-		//DAYS='d'
-		public EnumLiteralDeclaration getDAYSEnumLiteralDeclaration_0() { return cDAYSEnumLiteralDeclaration_0; }
-		
-		//'d'
-		public Keyword getDAYSDKeyword_0_0() { return cDAYSDKeyword_0_0; }
-		
-		//HOURS='h'
-		public EnumLiteralDeclaration getHOURSEnumLiteralDeclaration_1() { return cHOURSEnumLiteralDeclaration_1; }
-		
-		//'h'
-		public Keyword getHOURSHKeyword_1_0() { return cHOURSHKeyword_1_0; }
-		
-		//MINUTES='m'
-		public EnumLiteralDeclaration getMINUTESEnumLiteralDeclaration_2() { return cMINUTESEnumLiteralDeclaration_2; }
-		
-		//'m'
-		public Keyword getMINUTESMKeyword_2_0() { return cMINUTESMKeyword_2_0; }
-		
-		//SECONDS='s'
-		public EnumLiteralDeclaration getSECONDSEnumLiteralDeclaration_3() { return cSECONDSEnumLiteralDeclaration_3; }
-		
-		//'s'
-		public Keyword getSECONDSSKeyword_3_0() { return cSECONDSSKeyword_3_0; }
-		
-		//MILLIS='ms'
-		public EnumLiteralDeclaration getMILLISEnumLiteralDeclaration_4() { return cMILLISEnumLiteralDeclaration_4; }
-		
-		//'ms'
-		public Keyword getMILLISMsKeyword_4_0() { return cMILLISMsKeyword_4_0; }
-		
-		//MICROS='us'
-		public EnumLiteralDeclaration getMICROSEnumLiteralDeclaration_5() { return cMICROSEnumLiteralDeclaration_5; }
-		
-		//'us'
-		public Keyword getMICROSUsKeyword_5_0() { return cMICROSUsKeyword_5_0; }
-		
-		//NANOS='ns'
-		public EnumLiteralDeclaration getNANOSEnumLiteralDeclaration_6() { return cNANOSEnumLiteralDeclaration_6; }
-		
-		//'ns'
-		public Keyword getNANOSNsKeyword_6_0() { return cNANOSNsKeyword_6_0; }
-	}
 	public class Int_Type_NameElements extends AbstractEnumRuleElementFinder {
 		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Int_Type_Name");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
@@ -3019,182 +2590,6 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		//"WCHAR"
 		public Keyword getWCHARWCHARKeyword_3_0() { return cWCHARWCHARKeyword_3_0; }
 	}
-	public class Time_Type_NameElements extends AbstractEnumRuleElementFinder {
-		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Time_Type_Name");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final EnumLiteralDeclaration cTIMEEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
-		private final Keyword cTIMETIMEKeyword_0_0 = (Keyword)cTIMEEnumLiteralDeclaration_0.eContents().get(0);
-		private final EnumLiteralDeclaration cLTIMEEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
-		private final Keyword cLTIMELTIMEKeyword_1_0 = (Keyword)cLTIMEEnumLiteralDeclaration_1.eContents().get(0);
-		private final EnumLiteralDeclaration cTEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
-		private final Keyword cTTKeyword_2_0 = (Keyword)cTEnumLiteralDeclaration_2.eContents().get(0);
-		private final EnumLiteralDeclaration cLTEnumLiteralDeclaration_3 = (EnumLiteralDeclaration)cAlternatives.eContents().get(3);
-		private final Keyword cLTLTKeyword_3_0 = (Keyword)cLTEnumLiteralDeclaration_3.eContents().get(0);
-		
-		//enum Time_Type_Name returns Type:
-		//	TIME | LTIME | T | LT // also allow short type names
-		//;
-		public EnumRule getRule() { return rule; }
-		
-		//TIME | LTIME | T | LT
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
-		//TIME
-		public EnumLiteralDeclaration getTIMEEnumLiteralDeclaration_0() { return cTIMEEnumLiteralDeclaration_0; }
-		
-		//"TIME"
-		public Keyword getTIMETIMEKeyword_0_0() { return cTIMETIMEKeyword_0_0; }
-		
-		//LTIME
-		public EnumLiteralDeclaration getLTIMEEnumLiteralDeclaration_1() { return cLTIMEEnumLiteralDeclaration_1; }
-		
-		//"LTIME"
-		public Keyword getLTIMELTIMEKeyword_1_0() { return cLTIMELTIMEKeyword_1_0; }
-		
-		//T
-		public EnumLiteralDeclaration getTEnumLiteralDeclaration_2() { return cTEnumLiteralDeclaration_2; }
-		
-		//"T"
-		public Keyword getTTKeyword_2_0() { return cTTKeyword_2_0; }
-		
-		//LT
-		public EnumLiteralDeclaration getLTEnumLiteralDeclaration_3() { return cLTEnumLiteralDeclaration_3; }
-		
-		//"LT"
-		public Keyword getLTLTKeyword_3_0() { return cLTLTKeyword_3_0; }
-	}
-	public class Tod_Type_NameElements extends AbstractEnumRuleElementFinder {
-		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Tod_Type_Name");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final EnumLiteralDeclaration cTIME_OF_DAYEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
-		private final Keyword cTIME_OF_DAYTIME_OF_DAYKeyword_0_0 = (Keyword)cTIME_OF_DAYEnumLiteralDeclaration_0.eContents().get(0);
-		private final EnumLiteralDeclaration cLTIME_OF_DAYEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
-		private final Keyword cLTIME_OF_DAYLTIME_OF_DAYKeyword_1_0 = (Keyword)cLTIME_OF_DAYEnumLiteralDeclaration_1.eContents().get(0);
-		private final EnumLiteralDeclaration cTODEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
-		private final Keyword cTODTODKeyword_2_0 = (Keyword)cTODEnumLiteralDeclaration_2.eContents().get(0);
-		private final EnumLiteralDeclaration cLTODEnumLiteralDeclaration_3 = (EnumLiteralDeclaration)cAlternatives.eContents().get(3);
-		private final Keyword cLTODLTODKeyword_3_0 = (Keyword)cLTODEnumLiteralDeclaration_3.eContents().get(0);
-		
-		//enum Tod_Type_Name returns Type:
-		//	TIME_OF_DAY | LTIME_OF_DAY | TOD | LTOD // also allow 'LTIME_OF_DAY'
-		//;
-		public EnumRule getRule() { return rule; }
-		
-		//TIME_OF_DAY | LTIME_OF_DAY | TOD | LTOD
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
-		//TIME_OF_DAY
-		public EnumLiteralDeclaration getTIME_OF_DAYEnumLiteralDeclaration_0() { return cTIME_OF_DAYEnumLiteralDeclaration_0; }
-		
-		//"TIME_OF_DAY"
-		public Keyword getTIME_OF_DAYTIME_OF_DAYKeyword_0_0() { return cTIME_OF_DAYTIME_OF_DAYKeyword_0_0; }
-		
-		//LTIME_OF_DAY
-		public EnumLiteralDeclaration getLTIME_OF_DAYEnumLiteralDeclaration_1() { return cLTIME_OF_DAYEnumLiteralDeclaration_1; }
-		
-		//"LTIME_OF_DAY"
-		public Keyword getLTIME_OF_DAYLTIME_OF_DAYKeyword_1_0() { return cLTIME_OF_DAYLTIME_OF_DAYKeyword_1_0; }
-		
-		//TOD
-		public EnumLiteralDeclaration getTODEnumLiteralDeclaration_2() { return cTODEnumLiteralDeclaration_2; }
-		
-		//"TOD"
-		public Keyword getTODTODKeyword_2_0() { return cTODTODKeyword_2_0; }
-		
-		//LTOD
-		public EnumLiteralDeclaration getLTODEnumLiteralDeclaration_3() { return cLTODEnumLiteralDeclaration_3; }
-		
-		//"LTOD"
-		public Keyword getLTODLTODKeyword_3_0() { return cLTODLTODKeyword_3_0; }
-	}
-	public class Date_Type_NameElements extends AbstractEnumRuleElementFinder {
-		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Date_Type_Name");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final EnumLiteralDeclaration cDATEEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
-		private final Keyword cDATEDATEKeyword_0_0 = (Keyword)cDATEEnumLiteralDeclaration_0.eContents().get(0);
-		private final EnumLiteralDeclaration cLDATEEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
-		private final Keyword cLDATELDATEKeyword_1_0 = (Keyword)cLDATEEnumLiteralDeclaration_1.eContents().get(0);
-		private final EnumLiteralDeclaration cDEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
-		private final Keyword cDDKeyword_2_0 = (Keyword)cDEnumLiteralDeclaration_2.eContents().get(0);
-		private final EnumLiteralDeclaration cLDEnumLiteralDeclaration_3 = (EnumLiteralDeclaration)cAlternatives.eContents().get(3);
-		private final Keyword cLDLDKeyword_3_0 = (Keyword)cLDEnumLiteralDeclaration_3.eContents().get(0);
-		
-		//enum Date_Type_Name returns Type:
-		//	DATE | LDATE | D | LD // also allow short type names
-		//;
-		public EnumRule getRule() { return rule; }
-		
-		//DATE | LDATE | D | LD
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
-		//DATE
-		public EnumLiteralDeclaration getDATEEnumLiteralDeclaration_0() { return cDATEEnumLiteralDeclaration_0; }
-		
-		//"DATE"
-		public Keyword getDATEDATEKeyword_0_0() { return cDATEDATEKeyword_0_0; }
-		
-		//LDATE
-		public EnumLiteralDeclaration getLDATEEnumLiteralDeclaration_1() { return cLDATEEnumLiteralDeclaration_1; }
-		
-		//"LDATE"
-		public Keyword getLDATELDATEKeyword_1_0() { return cLDATELDATEKeyword_1_0; }
-		
-		//D
-		public EnumLiteralDeclaration getDEnumLiteralDeclaration_2() { return cDEnumLiteralDeclaration_2; }
-		
-		//"D"
-		public Keyword getDDKeyword_2_0() { return cDDKeyword_2_0; }
-		
-		//LD
-		public EnumLiteralDeclaration getLDEnumLiteralDeclaration_3() { return cLDEnumLiteralDeclaration_3; }
-		
-		//"LD"
-		public Keyword getLDLDKeyword_3_0() { return cLDLDKeyword_3_0; }
-	}
-	public class DT_Type_NameElements extends AbstractEnumRuleElementFinder {
-		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.DT_Type_Name");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final EnumLiteralDeclaration cDATE_AND_TIMEEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
-		private final Keyword cDATE_AND_TIMEDATE_AND_TIMEKeyword_0_0 = (Keyword)cDATE_AND_TIMEEnumLiteralDeclaration_0.eContents().get(0);
-		private final EnumLiteralDeclaration cLDATE_AND_TIMEEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
-		private final Keyword cLDATE_AND_TIMELDATE_AND_TIMEKeyword_1_0 = (Keyword)cLDATE_AND_TIMEEnumLiteralDeclaration_1.eContents().get(0);
-		private final EnumLiteralDeclaration cDTEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
-		private final Keyword cDTDTKeyword_2_0 = (Keyword)cDTEnumLiteralDeclaration_2.eContents().get(0);
-		private final EnumLiteralDeclaration cLDTEnumLiteralDeclaration_3 = (EnumLiteralDeclaration)cAlternatives.eContents().get(3);
-		private final Keyword cLDTLDTKeyword_3_0 = (Keyword)cLDTEnumLiteralDeclaration_3.eContents().get(0);
-		
-		//enum DT_Type_Name returns Type:
-		//	DATE_AND_TIME | LDATE_AND_TIME | DT | LDT // also allow 'LDATE_AND_TIME'
-		//;
-		public EnumRule getRule() { return rule; }
-		
-		//DATE_AND_TIME | LDATE_AND_TIME | DT | LDT
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
-		//DATE_AND_TIME
-		public EnumLiteralDeclaration getDATE_AND_TIMEEnumLiteralDeclaration_0() { return cDATE_AND_TIMEEnumLiteralDeclaration_0; }
-		
-		//"DATE_AND_TIME"
-		public Keyword getDATE_AND_TIMEDATE_AND_TIMEKeyword_0_0() { return cDATE_AND_TIMEDATE_AND_TIMEKeyword_0_0; }
-		
-		//LDATE_AND_TIME
-		public EnumLiteralDeclaration getLDATE_AND_TIMEEnumLiteralDeclaration_1() { return cLDATE_AND_TIMEEnumLiteralDeclaration_1; }
-		
-		//"LDATE_AND_TIME"
-		public Keyword getLDATE_AND_TIMELDATE_AND_TIMEKeyword_1_0() { return cLDATE_AND_TIMELDATE_AND_TIMEKeyword_1_0; }
-		
-		//DT
-		public EnumLiteralDeclaration getDTEnumLiteralDeclaration_2() { return cDTEnumLiteralDeclaration_2; }
-		
-		//"DT"
-		public Keyword getDTDTKeyword_2_0() { return cDTDTKeyword_2_0; }
-		
-		//LDT
-		public EnumLiteralDeclaration getLDTEnumLiteralDeclaration_3() { return cLDTEnumLiteralDeclaration_3; }
-		
-		//"LDT"
-		public Keyword getLDTLDTKeyword_3_0() { return cLDTLDTKeyword_3_0; }
-	}
 	public class Bool_Type_NameElements extends AbstractEnumRuleElementFinder {
 		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Bool_Type_Name");
 		private final EnumLiteralDeclaration cBOOLEnumLiteralDeclaration = (EnumLiteralDeclaration)rule.eContents().get(1);
@@ -3314,30 +2709,10 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 	private final Bool_ValueElements pBool_Value;
 	private final Char_LiteralElements pChar_Literal;
 	private final Time_LiteralElements pTime_Literal;
-	private final DurationElements pDuration;
-	private final Duration_ValueElements pDuration_Value;
-	private final Duration_UnitElements eDuration_Unit;
-	private final Fix_PointElements pFix_Point;
-	private final Time_Of_DayElements pTime_Of_Day;
-	private final DaytimeElements pDaytime;
-	private final Day_HourElements pDay_Hour;
-	private final Day_MinuteElements pDay_Minute;
-	private final Day_SecondElements pDay_Second;
-	private final DateElements pDate;
-	private final Date_LiteralElements pDate_Literal;
-	private final YearElements pYear;
-	private final MonthElements pMonth;
-	private final DayElements pDay;
-	private final Date_And_TimeElements pDate_And_Time;
-	private final Date_And_Time_ValueElements pDate_And_Time_Value;
 	private final Type_NameElements pType_Name;
 	private final Int_Type_NameElements eInt_Type_Name;
 	private final Real_Type_NameElements eReal_Type_Name;
 	private final String_Type_NameElements eString_Type_Name;
-	private final Time_Type_NameElements eTime_Type_Name;
-	private final Tod_Type_NameElements eTod_Type_Name;
-	private final Date_Type_NameElements eDate_Type_Name;
-	private final DT_Type_NameElements eDT_Type_Name;
 	private final Bool_Type_NameElements eBool_Type_Name;
 	private final Any_Bit_Type_NameElements eAny_Bit_Type_Name;
 	private final TerminalRule tLETTER;
@@ -3345,6 +2720,10 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 	private final TerminalRule tBIT;
 	private final TerminalRule tOCTAL_DIGIT;
 	private final TerminalRule tHEX_DIGIT;
+	private final TerminalRule tTIMEOFDAY;
+	private final TerminalRule tTIME;
+	private final TerminalRule tDATETIME;
+	private final TerminalRule tDATE;
 	private final TerminalRule tID;
 	private final TerminalRule tBINARY_INT;
 	private final TerminalRule tOCTAL_INT;
@@ -3425,30 +2804,10 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		this.pBool_Value = new Bool_ValueElements();
 		this.pChar_Literal = new Char_LiteralElements();
 		this.pTime_Literal = new Time_LiteralElements();
-		this.pDuration = new DurationElements();
-		this.pDuration_Value = new Duration_ValueElements();
-		this.eDuration_Unit = new Duration_UnitElements();
-		this.pFix_Point = new Fix_PointElements();
-		this.pTime_Of_Day = new Time_Of_DayElements();
-		this.pDaytime = new DaytimeElements();
-		this.pDay_Hour = new Day_HourElements();
-		this.pDay_Minute = new Day_MinuteElements();
-		this.pDay_Second = new Day_SecondElements();
-		this.pDate = new DateElements();
-		this.pDate_Literal = new Date_LiteralElements();
-		this.pYear = new YearElements();
-		this.pMonth = new MonthElements();
-		this.pDay = new DayElements();
-		this.pDate_And_Time = new Date_And_TimeElements();
-		this.pDate_And_Time_Value = new Date_And_Time_ValueElements();
 		this.pType_Name = new Type_NameElements();
 		this.eInt_Type_Name = new Int_Type_NameElements();
 		this.eReal_Type_Name = new Real_Type_NameElements();
 		this.eString_Type_Name = new String_Type_NameElements();
-		this.eTime_Type_Name = new Time_Type_NameElements();
-		this.eTod_Type_Name = new Tod_Type_NameElements();
-		this.eDate_Type_Name = new Date_Type_NameElements();
-		this.eDT_Type_Name = new DT_Type_NameElements();
 		this.eBool_Type_Name = new Bool_Type_NameElements();
 		this.eAny_Bit_Type_Name = new Any_Bit_Type_NameElements();
 		this.tLETTER = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.LETTER");
@@ -3456,6 +2815,10 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		this.tBIT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.BIT");
 		this.tOCTAL_DIGIT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.OCTAL_DIGIT");
 		this.tHEX_DIGIT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.HEX_DIGIT");
+		this.tTIMEOFDAY = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.TIMEOFDAY");
+		this.tTIME = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.TIME");
+		this.tDATETIME = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.DATETIME");
+		this.tDATE = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.DATE");
 		this.tID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.ID");
 		this.tBINARY_INT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.BINARY_INT");
 		this.tOCTAL_INT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.OCTAL_INT");
@@ -4124,178 +3487,13 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//Time_Literal TimeLiteral:
-	//	Duration | Time_Of_Day | Date | Date_And_Time;
+	//	literal=(TIME | DATE | TIMEOFDAY | DATETIME);
 	public Time_LiteralElements getTime_LiteralAccess() {
 		return pTime_Literal;
 	}
 	
 	public ParserRule getTime_LiteralRule() {
 		return getTime_LiteralAccess().getRule();
-	}
-	
-	//Duration DurationLiteral:
-	//	type=Time_Type_Name '#' ('+' | negative?='-')?
-	//	value+=Duration_Value ('_' value+=Duration_Value)*;
-	public DurationElements getDurationAccess() {
-		return pDuration;
-	}
-	
-	public ParserRule getDurationRule() {
-		return getDurationAccess().getRule();
-	}
-	
-	//Duration_Value DurationValue:
-	//	value=Fix_Point
-	//	unit=Duration_Unit;
-	public Duration_ValueElements getDuration_ValueAccess() {
-		return pDuration_Value;
-	}
-	
-	public ParserRule getDuration_ValueRule() {
-		return getDuration_ValueAccess().getRule();
-	}
-	
-	//enum Duration_Unit:
-	//	DAYS='d' | HOURS='h' | MINUTES='m' | SECONDS='s' | MILLIS='ms' | MICROS='us' | NANOS='ns';
-	public Duration_UnitElements getDuration_UnitAccess() {
-		return eDuration_Unit;
-	}
-	
-	public EnumRule getDuration_UnitRule() {
-		return getDuration_UnitAccess().getRule();
-	}
-	
-	//Fix_Point:
-	//	UNSIGNED_INT ('.' UNSIGNED_INT)?;
-	public Fix_PointElements getFix_PointAccess() {
-		return pFix_Point;
-	}
-	
-	public ParserRule getFix_PointRule() {
-		return getFix_PointAccess().getRule();
-	}
-	
-	//Time_Of_Day DateLiteral:
-	//	type=Tod_Type_Name '#'
-	//	value=Daytime;
-	public Time_Of_DayElements getTime_Of_DayAccess() {
-		return pTime_Of_Day;
-	}
-	
-	public ParserRule getTime_Of_DayRule() {
-		return getTime_Of_DayAccess().getRule();
-	}
-	
-	//Daytime ecore::EDate:
-	//	Day_Hour ':' Day_Minute ':' Day_Second;
-	public DaytimeElements getDaytimeAccess() {
-		return pDaytime;
-	}
-	
-	public ParserRule getDaytimeRule() {
-		return getDaytimeAccess().getRule();
-	}
-	
-	//Day_Hour:
-	//	UNSIGNED_INT;
-	public Day_HourElements getDay_HourAccess() {
-		return pDay_Hour;
-	}
-	
-	public ParserRule getDay_HourRule() {
-		return getDay_HourAccess().getRule();
-	}
-	
-	//Day_Minute:
-	//	UNSIGNED_INT;
-	public Day_MinuteElements getDay_MinuteAccess() {
-		return pDay_Minute;
-	}
-	
-	public ParserRule getDay_MinuteRule() {
-		return getDay_MinuteAccess().getRule();
-	}
-	
-	//Day_Second:
-	//	Fix_Point;
-	public Day_SecondElements getDay_SecondAccess() {
-		return pDay_Second;
-	}
-	
-	public ParserRule getDay_SecondRule() {
-		return getDay_SecondAccess().getRule();
-	}
-	
-	//Date DateLiteral:
-	//	type=Date_Type_Name '#'
-	//	value=Date_Literal;
-	public DateElements getDateAccess() {
-		return pDate;
-	}
-	
-	public ParserRule getDateRule() {
-		return getDateAccess().getRule();
-	}
-	
-	//Date_Literal ecore::EDate:
-	//	Year '-' Month '-' Day;
-	public Date_LiteralElements getDate_LiteralAccess() {
-		return pDate_Literal;
-	}
-	
-	public ParserRule getDate_LiteralRule() {
-		return getDate_LiteralAccess().getRule();
-	}
-	
-	//Year:
-	//	UNSIGNED_INT;
-	public YearElements getYearAccess() {
-		return pYear;
-	}
-	
-	public ParserRule getYearRule() {
-		return getYearAccess().getRule();
-	}
-	
-	//Month:
-	//	UNSIGNED_INT;
-	public MonthElements getMonthAccess() {
-		return pMonth;
-	}
-	
-	public ParserRule getMonthRule() {
-		return getMonthAccess().getRule();
-	}
-	
-	//Day:
-	//	UNSIGNED_INT;
-	public DayElements getDayAccess() {
-		return pDay;
-	}
-	
-	public ParserRule getDayRule() {
-		return getDayAccess().getRule();
-	}
-	
-	//Date_And_Time DateLiteral:
-	//	type=DT_Type_Name '#'
-	//	value=Date_And_Time_Value;
-	public Date_And_TimeElements getDate_And_TimeAccess() {
-		return pDate_And_Time;
-	}
-	
-	public ParserRule getDate_And_TimeRule() {
-		return getDate_And_TimeAccess().getRule();
-	}
-	
-	//Date_And_Time_Value ecore::EDate:
-	//	Date_Literal '-' Daytime;
-	public Date_And_Time_ValueElements getDate_And_Time_ValueAccess() {
-		return pDate_And_Time_Value;
-	}
-	
-	public ParserRule getDate_And_Time_ValueRule() {
-		return getDate_And_Time_ValueAccess().getRule();
 	}
 	
 	///************************************************************************
@@ -4352,50 +3550,6 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		return getString_Type_NameAccess().getRule();
 	}
 	
-	//enum Time_Type_Name returns Type:
-	//	TIME | LTIME | T | LT // also allow short type names
-	//;
-	public Time_Type_NameElements getTime_Type_NameAccess() {
-		return eTime_Type_Name;
-	}
-	
-	public EnumRule getTime_Type_NameRule() {
-		return getTime_Type_NameAccess().getRule();
-	}
-	
-	//enum Tod_Type_Name returns Type:
-	//	TIME_OF_DAY | LTIME_OF_DAY | TOD | LTOD // also allow 'LTIME_OF_DAY'
-	//;
-	public Tod_Type_NameElements getTod_Type_NameAccess() {
-		return eTod_Type_Name;
-	}
-	
-	public EnumRule getTod_Type_NameRule() {
-		return getTod_Type_NameAccess().getRule();
-	}
-	
-	//enum Date_Type_Name returns Type:
-	//	DATE | LDATE | D | LD // also allow short type names
-	//;
-	public Date_Type_NameElements getDate_Type_NameAccess() {
-		return eDate_Type_Name;
-	}
-	
-	public EnumRule getDate_Type_NameRule() {
-		return getDate_Type_NameAccess().getRule();
-	}
-	
-	//enum DT_Type_Name returns Type:
-	//	DATE_AND_TIME | LDATE_AND_TIME | DT | LDT // also allow 'LDATE_AND_TIME'
-	//;
-	public DT_Type_NameElements getDT_Type_NameAccess() {
-		return eDT_Type_Name;
-	}
-	
-	public EnumRule getDT_Type_NameRule() {
-		return getDT_Type_NameAccess().getRule();
-	}
-	
 	//enum Bool_Type_Name returns Type:
 	//	BOOL;
 	public Bool_Type_NameElements getBool_Type_NameAccess() {
@@ -4444,6 +3598,42 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 	//	'0'..'9' | 'a'..'f' | 'A'..'F';
 	public TerminalRule getHEX_DIGITRule() {
 		return tHEX_DIGIT;
+	}
+	
+	//terminal TIMEOFDAY:
+	//	('L' | 'l')? ('T' | 't') (('I' | 'i') ('M' | 'm') ('E' | 'e') '_')? ('O' | 'o') (('F' | 'f') '_')? ('D' | 'd') (('A' |
+	//	'a') ('Y' | 'y'))?
+	//	'#'
+	//	UNSIGNED_INT ':' UNSIGNED_INT ':' UNSIGNED_INT ('.' UNSIGNED_INT)?;
+	public TerminalRule getTIMEOFDAYRule() {
+		return tTIMEOFDAY;
+	}
+	
+	//terminal TIME:
+	//	('L' | 'l')? ('T' | 't') (('I' | 'i') ('M' | 'm') ('E' | 'e'))?
+	//	'#' ('+' | '-')? (UNSIGNED_INT ('.' UNSIGNED_INT)? (('D' | 'd') | ('H' | 'h') | ('M' | 'm') | ('S' | 's') | ('M' |
+	//	'm') ('S' | 's') | ('U' | 'u') ('S' | 's') | ('N' | 'n') ('S' | 's'))) ('_'? UNSIGNED_INT ('.' UNSIGNED_INT)? (('D' |
+	//	'd') | ('H' | 'h') | ('M' | 'm') | ('S' | 's') | ('M' | 'm') ('S' | 's') | ('U' | 'u') ('S' | 's') | ('N' | 'n') ('S'
+	//	| 's')))*;
+	public TerminalRule getTIMERule() {
+		return tTIME;
+	}
+	
+	//terminal DATETIME:
+	//	('L' | 'l')? ('D' | 'd') (('A' | 'a') ('T' | 't') ('E' | 'e')
+	//	'_' ('A' | 'a') ('N' | 'n') ('D' | 'd') '_')? ('T' | 't') (('I' | 'i') ('M' | 'm') ('E' | 'e'))?
+	//	'#'
+	//	UNSIGNED_INT '-' UNSIGNED_INT '-' UNSIGNED_INT '-' UNSIGNED_INT ':' UNSIGNED_INT ':' UNSIGNED_INT ('.' UNSIGNED_INT)?;
+	public TerminalRule getDATETIMERule() {
+		return tDATETIME;
+	}
+	
+	//terminal DATE:
+	//	('L' | 'l')? ('D' | 'd') (('A' | 'a') ('T' | 't') ('E' | 'e'))?
+	//	'#'
+	//	UNSIGNED_INT '-' UNSIGNED_INT '-' UNSIGNED_INT ('.' UNSIGNED_INT)?;
+	public TerminalRule getDATERule() {
+		return tDATE;
 	}
 	
 	//terminal ID:

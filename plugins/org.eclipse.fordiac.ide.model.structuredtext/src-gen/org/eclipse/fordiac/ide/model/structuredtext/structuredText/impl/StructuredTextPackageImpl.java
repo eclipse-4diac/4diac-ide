@@ -29,10 +29,6 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseClause;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Constant;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ContinueStatement;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.DateLiteral;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationLiteral;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationValue;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Duration_Unit;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseClause;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseIfClause;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ExitStatement;
@@ -265,27 +261,6 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass durationLiteralEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass durationValueEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass dateLiteralEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   private EClass localVariableEClass = null;
 
   /**
@@ -357,13 +332,6 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   private EEnum unaryOperatorEEnum = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EEnum duration_UnitEEnum = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1106,9 +1074,9 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
-  public EAttribute getConstant_Type()
+  public EClass getNumericLiteral()
   {
-    return (EAttribute)constantEClass.getEStructuralFeatures().get(0);
+    return numericLiteralEClass;
   }
 
   /**
@@ -1117,9 +1085,9 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
-  public EClass getNumericLiteral()
+  public EAttribute getNumericLiteral_Type()
   {
-    return numericLiteralEClass;
+    return (EAttribute)numericLiteralEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1183,9 +1151,20 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
-  public EAttribute getBoolLiteral_Value()
+  public EAttribute getBoolLiteral_Type()
   {
     return (EAttribute)boolLiteralEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getBoolLiteral_Value()
+  {
+    return (EAttribute)boolLiteralEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1205,7 +1184,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
-  public EAttribute getStringLiteral_Length()
+  public EAttribute getStringLiteral_Type()
   {
     return (EAttribute)stringLiteralEClass.getEStructuralFeatures().get(0);
   }
@@ -1216,9 +1195,20 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
-  public EAttribute getStringLiteral_Value()
+  public EAttribute getStringLiteral_Length()
   {
     return (EAttribute)stringLiteralEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getStringLiteral_Value()
+  {
+    return (EAttribute)stringLiteralEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1238,86 +1228,9 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
-  public EClass getDurationLiteral()
+  public EAttribute getTimeLiteral_Literal()
   {
-    return durationLiteralEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getDurationLiteral_Negative()
-  {
-    return (EAttribute)durationLiteralEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getDurationLiteral_Value()
-  {
-    return (EReference)durationLiteralEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EClass getDurationValue()
-  {
-    return durationValueEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getDurationValue_Value()
-  {
-    return (EAttribute)durationValueEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getDurationValue_Unit()
-  {
-    return (EAttribute)durationValueEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EClass getDateLiteral()
-  {
-    return dateLiteralEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getDateLiteral_Value()
-  {
-    return (EAttribute)dateLiteralEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)timeLiteralEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1612,17 +1525,6 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
-  public EEnum getDuration_Unit()
-  {
-    return duration_UnitEEnum;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EEnum getType()
   {
     return typeEEnum;
@@ -1739,9 +1641,9 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     createEReference(primaryVariableEClass, PRIMARY_VARIABLE__VAR);
 
     constantEClass = createEClass(CONSTANT);
-    createEAttribute(constantEClass, CONSTANT__TYPE);
 
     numericLiteralEClass = createEClass(NUMERIC_LITERAL);
+    createEAttribute(numericLiteralEClass, NUMERIC_LITERAL__TYPE);
 
     intLiteralEClass = createEClass(INT_LITERAL);
     createEAttribute(intLiteralEClass, INT_LITERAL__VALUE);
@@ -1750,24 +1652,16 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     createEAttribute(realLiteralEClass, REAL_LITERAL__VALUE);
 
     boolLiteralEClass = createEClass(BOOL_LITERAL);
+    createEAttribute(boolLiteralEClass, BOOL_LITERAL__TYPE);
     createEAttribute(boolLiteralEClass, BOOL_LITERAL__VALUE);
 
     stringLiteralEClass = createEClass(STRING_LITERAL);
+    createEAttribute(stringLiteralEClass, STRING_LITERAL__TYPE);
     createEAttribute(stringLiteralEClass, STRING_LITERAL__LENGTH);
     createEAttribute(stringLiteralEClass, STRING_LITERAL__VALUE);
 
     timeLiteralEClass = createEClass(TIME_LITERAL);
-
-    durationLiteralEClass = createEClass(DURATION_LITERAL);
-    createEAttribute(durationLiteralEClass, DURATION_LITERAL__NEGATIVE);
-    createEReference(durationLiteralEClass, DURATION_LITERAL__VALUE);
-
-    durationValueEClass = createEClass(DURATION_VALUE);
-    createEAttribute(durationValueEClass, DURATION_VALUE__VALUE);
-    createEAttribute(durationValueEClass, DURATION_VALUE__UNIT);
-
-    dateLiteralEClass = createEClass(DATE_LITERAL);
-    createEAttribute(dateLiteralEClass, DATE_LITERAL__VALUE);
+    createEAttribute(timeLiteralEClass, TIME_LITERAL__LITERAL);
 
     localVariableEClass = createEClass(LOCAL_VARIABLE);
     createEAttribute(localVariableEClass, LOCAL_VARIABLE__CONSTANT);
@@ -1805,7 +1699,6 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     // Create enums
     binaryOperatorEEnum = createEEnum(BINARY_OPERATOR);
     unaryOperatorEEnum = createEEnum(UNARY_OPERATOR);
-    duration_UnitEEnum = createEEnum(DURATION_UNIT);
     typeEEnum = createEEnum(TYPE);
   }
 
@@ -1860,8 +1753,6 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     boolLiteralEClass.getESuperTypes().add(this.getConstant());
     stringLiteralEClass.getESuperTypes().add(this.getConstant());
     timeLiteralEClass.getESuperTypes().add(this.getConstant());
-    durationLiteralEClass.getESuperTypes().add(this.getTimeLiteral());
-    dateLiteralEClass.getESuperTypes().add(this.getTimeLiteral());
     localVariableEClass.getESuperTypes().add(theLibraryElementPackage.getLocalVariable());
     superStatementEClass.getESuperTypes().add(this.getStatement());
     returnStatementEClass.getESuperTypes().add(this.getStatement());
@@ -1953,9 +1844,9 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     initEReference(getPrimaryVariable_Var(), theLibraryElementPackage.getVarDeclaration(), null, "var", null, 0, 1, PrimaryVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(constantEClass, Constant.class, "Constant", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getConstant_Type(), this.getType(), "type", null, 0, 1, Constant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(numericLiteralEClass, NumericLiteral.class, "NumericLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getNumericLiteral_Type(), this.getType(), "type", null, 0, 1, NumericLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(intLiteralEClass, IntLiteral.class, "IntLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getIntLiteral_Value(), ecorePackage.getELong(), "value", null, 0, 1, IntLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1964,24 +1855,16 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     initEAttribute(getRealLiteral_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, RealLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(boolLiteralEClass, BoolLiteral.class, "BoolLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getBoolLiteral_Type(), this.getType(), "type", null, 0, 1, BoolLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getBoolLiteral_Value(), ecorePackage.getEBoolean(), "value", null, 0, 1, BoolLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(stringLiteralEClass, StringLiteral.class, "StringLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getStringLiteral_Type(), this.getType(), "type", null, 0, 1, StringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getStringLiteral_Length(), ecorePackage.getELong(), "length", null, 0, 1, StringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getStringLiteral_Value(), ecorePackage.getEString(), "value", null, 0, 1, StringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(timeLiteralEClass, TimeLiteral.class, "TimeLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-    initEClass(durationLiteralEClass, DurationLiteral.class, "DurationLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getDurationLiteral_Negative(), ecorePackage.getEBoolean(), "negative", null, 0, 1, DurationLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getDurationLiteral_Value(), this.getDurationValue(), null, "value", null, 0, -1, DurationLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(durationValueEClass, DurationValue.class, "DurationValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getDurationValue_Value(), ecorePackage.getEString(), "value", null, 0, 1, DurationValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getDurationValue_Unit(), this.getDuration_Unit(), "unit", null, 0, 1, DurationValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(dateLiteralEClass, DateLiteral.class, "DateLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getDateLiteral_Value(), ecorePackage.getEDate(), "value", null, 0, 1, DateLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTimeLiteral_Literal(), ecorePackage.getEString(), "literal", null, 0, 1, TimeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(localVariableEClass, LocalVariable.class, "LocalVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getLocalVariable_Constant(), ecorePackage.getEBoolean(), "constant", null, 0, 1, LocalVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2039,15 +1922,6 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.PLUS);
     addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.NOT);
 
-    initEEnum(duration_UnitEEnum, Duration_Unit.class, "Duration_Unit");
-    addEEnumLiteral(duration_UnitEEnum, Duration_Unit.DAYS);
-    addEEnumLiteral(duration_UnitEEnum, Duration_Unit.HOURS);
-    addEEnumLiteral(duration_UnitEEnum, Duration_Unit.MINUTES);
-    addEEnumLiteral(duration_UnitEEnum, Duration_Unit.SECONDS);
-    addEEnumLiteral(duration_UnitEEnum, Duration_Unit.MILLIS);
-    addEEnumLiteral(duration_UnitEEnum, Duration_Unit.MICROS);
-    addEEnumLiteral(duration_UnitEEnum, Duration_Unit.NANOS);
-
     initEEnum(typeEEnum, Type.class, "Type");
     addEEnumLiteral(typeEEnum, Type.DINT);
     addEEnumLiteral(typeEEnum, Type.INT);
@@ -2063,22 +1937,6 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     addEEnumLiteral(typeEEnum, Type.WSTRING);
     addEEnumLiteral(typeEEnum, Type.CHAR);
     addEEnumLiteral(typeEEnum, Type.WCHAR);
-    addEEnumLiteral(typeEEnum, Type.TIME);
-    addEEnumLiteral(typeEEnum, Type.LTIME);
-    addEEnumLiteral(typeEEnum, Type.T);
-    addEEnumLiteral(typeEEnum, Type.LT);
-    addEEnumLiteral(typeEEnum, Type.TIME_OF_DAY);
-    addEEnumLiteral(typeEEnum, Type.LTIME_OF_DAY);
-    addEEnumLiteral(typeEEnum, Type.TOD);
-    addEEnumLiteral(typeEEnum, Type.LTOD);
-    addEEnumLiteral(typeEEnum, Type.DATE);
-    addEEnumLiteral(typeEEnum, Type.LDATE);
-    addEEnumLiteral(typeEEnum, Type.D);
-    addEEnumLiteral(typeEEnum, Type.LD);
-    addEEnumLiteral(typeEEnum, Type.DATE_AND_TIME);
-    addEEnumLiteral(typeEEnum, Type.LDATE_AND_TIME);
-    addEEnumLiteral(typeEEnum, Type.DT);
-    addEEnumLiteral(typeEEnum, Type.LDT);
     addEEnumLiteral(typeEEnum, Type.BOOL);
     addEEnumLiteral(typeEEnum, Type.BYTE);
     addEEnumLiteral(typeEEnum, Type.WORD);

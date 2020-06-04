@@ -121,8 +121,6 @@ FOR : ('F'|'f')('O'|'o')('R'|'r');
 
 INT : ('I'|'i')('N'|'n')('T'|'t');
 
-LDT : ('L'|'l')('D'|'d')('T'|'t');
-
 MOD : ('M'|'m')('O'|'o')('D'|'d');
 
 NOT : ('N'|'n')('O'|'o')('T'|'t');
@@ -157,8 +155,6 @@ DT : ('D'|'d')('T'|'t');
 
 IF : ('I'|'i')('F'|'f');
 
-LD : ('L'|'l')('D'|'d');
-
 LT : ('L'|'l')('T'|'t');
 
 OF : ('O'|'o')('F'|'f');
@@ -166,12 +162,6 @@ OF : ('O'|'o')('F'|'f');
 OR : ('O'|'o')('R'|'r');
 
 TO : ('T'|'t')('O'|'o');
-
-Ms : ('M'|'m')('S'|'s');
-
-Ns : ('N'|'n')('S'|'s');
-
-Us : ('U'|'u')('S'|'s');
 
 NumberSign : '#';
 
@@ -211,16 +201,6 @@ LeftSquareBracket : '[';
 
 RightSquareBracket : ']';
 
-KW__ : '_';
-
-D_1 : ('D'|'d');
-
-H : ('H'|'h');
-
-M : ('M'|'m');
-
-S : ('S'|'s');
-
 fragment RULE_LETTER : ('a'..'z'|'A'..'Z'|'_');
 
 fragment RULE_DIGIT : '0'..'9';
@@ -230,6 +210,14 @@ fragment RULE_BIT : '0'..'1';
 fragment RULE_OCTAL_DIGIT : '0'..'7';
 
 fragment RULE_HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F');
+
+RULE_TIMEOFDAY : ('L'|'l')? ('T'|'t') (('I'|'i') ('M'|'m') ('E'|'e') '_')? ('O'|'o') (('F'|'f') '_')? ('D'|'d') (('A'|'a') ('Y'|'y'))? '#' RULE_UNSIGNED_INT ':' RULE_UNSIGNED_INT ':' RULE_UNSIGNED_INT ('.' RULE_UNSIGNED_INT)?;
+
+RULE_TIME : ('L'|'l')? ('T'|'t') (('I'|'i') ('M'|'m') ('E'|'e'))? '#' ('+'|'-')? RULE_UNSIGNED_INT ('.' RULE_UNSIGNED_INT)? (('D'|'d')|('H'|'h')|('M'|'m')|('S'|'s')|('M'|'m') ('S'|'s')|('U'|'u') ('S'|'s')|('N'|'n') ('S'|'s')) ('_'? RULE_UNSIGNED_INT ('.' RULE_UNSIGNED_INT)? (('D'|'d')|('H'|'h')|('M'|'m')|('S'|'s')|('M'|'m') ('S'|'s')|('U'|'u') ('S'|'s')|('N'|'n') ('S'|'s')))*;
+
+RULE_DATETIME : ('L'|'l')? ('D'|'d') (('A'|'a') ('T'|'t') ('E'|'e') '_' ('A'|'a') ('N'|'n') ('D'|'d') '_')? ('T'|'t') (('I'|'i') ('M'|'m') ('E'|'e'))? '#' RULE_UNSIGNED_INT '-' RULE_UNSIGNED_INT '-' RULE_UNSIGNED_INT '-' RULE_UNSIGNED_INT ':' RULE_UNSIGNED_INT ':' RULE_UNSIGNED_INT ('.' RULE_UNSIGNED_INT)?;
+
+RULE_DATE : ('L'|'l')? ('D'|'d') (('A'|'a') ('T'|'t') ('E'|'e'))? '#' RULE_UNSIGNED_INT '-' RULE_UNSIGNED_INT '-' RULE_UNSIGNED_INT ('.' RULE_UNSIGNED_INT)?;
 
 RULE_ID : RULE_LETTER (RULE_LETTER|RULE_DIGIT)*;
 

@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StringLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Type;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,6 +21,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StringLiteralImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StringLiteralImpl#getLength <em>Length</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StringLiteralImpl#getValue <em>Value</em>}</li>
  * </ul>
@@ -28,6 +30,26 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
  */
 public class StringLiteralImpl extends ConstantImpl implements StringLiteral
 {
+  /**
+   * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getType()
+   * @generated
+   * @ordered
+   */
+  protected static final Type TYPE_EDEFAULT = Type.DINT;
+
+  /**
+   * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getType()
+   * @generated
+   * @ordered
+   */
+  protected Type type = TYPE_EDEFAULT;
+
   /**
    * The default value of the '{@link #getLength() <em>Length</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -95,6 +117,31 @@ public class StringLiteralImpl extends ConstantImpl implements StringLiteral
    * @generated
    */
   @Override
+  public Type getType()
+  {
+    return type;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setType(Type newType)
+  {
+    Type oldType = type;
+    type = newType == null ? TYPE_EDEFAULT : newType;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.STRING_LITERAL__TYPE, oldType, type));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public long getLength()
   {
     return length;
@@ -149,6 +196,8 @@ public class StringLiteralImpl extends ConstantImpl implements StringLiteral
   {
     switch (featureID)
     {
+      case StructuredTextPackage.STRING_LITERAL__TYPE:
+        return getType();
       case StructuredTextPackage.STRING_LITERAL__LENGTH:
         return getLength();
       case StructuredTextPackage.STRING_LITERAL__VALUE:
@@ -167,6 +216,9 @@ public class StringLiteralImpl extends ConstantImpl implements StringLiteral
   {
     switch (featureID)
     {
+      case StructuredTextPackage.STRING_LITERAL__TYPE:
+        setType((Type)newValue);
+        return;
       case StructuredTextPackage.STRING_LITERAL__LENGTH:
         setLength((Long)newValue);
         return;
@@ -187,6 +239,9 @@ public class StringLiteralImpl extends ConstantImpl implements StringLiteral
   {
     switch (featureID)
     {
+      case StructuredTextPackage.STRING_LITERAL__TYPE:
+        setType(TYPE_EDEFAULT);
+        return;
       case StructuredTextPackage.STRING_LITERAL__LENGTH:
         setLength(LENGTH_EDEFAULT);
         return;
@@ -207,6 +262,8 @@ public class StringLiteralImpl extends ConstantImpl implements StringLiteral
   {
     switch (featureID)
     {
+      case StructuredTextPackage.STRING_LITERAL__TYPE:
+        return type != TYPE_EDEFAULT;
       case StructuredTextPackage.STRING_LITERAL__LENGTH:
         return length != LENGTH_EDEFAULT;
       case StructuredTextPackage.STRING_LITERAL__VALUE:
@@ -226,7 +283,9 @@ public class StringLiteralImpl extends ConstantImpl implements StringLiteral
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (length: ");
+    result.append(" (type: ");
+    result.append(type);
+    result.append(", length: ");
     result.append(length);
     result.append(", value: ");
     result.append(value);

@@ -267,33 +267,6 @@ public interface StructuredTextFactory extends EFactory
   TimeLiteral createTimeLiteral();
 
   /**
-   * Returns a new object of class '<em>Duration Literal</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Duration Literal</em>'.
-   * @generated
-   */
-  DurationLiteral createDurationLiteral();
-
-  /**
-   * Returns a new object of class '<em>Duration Value</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Duration Value</em>'.
-   * @generated
-   */
-  DurationValue createDurationValue();
-
-  /**
-   * Returns a new object of class '<em>Date Literal</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Date Literal</em>'.
-   * @generated
-   */
-  DateLiteral createDateLiteral();
-
-  /**
    * Returns a new object of class '<em>Local Variable</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

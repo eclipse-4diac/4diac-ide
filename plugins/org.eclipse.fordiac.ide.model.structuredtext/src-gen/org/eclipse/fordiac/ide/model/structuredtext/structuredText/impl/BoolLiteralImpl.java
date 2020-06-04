@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.BoolLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Type;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,6 +21,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.BoolLiteralImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.BoolLiteralImpl#isValue <em>Value</em>}</li>
  * </ul>
  *
@@ -27,6 +29,26 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
  */
 public class BoolLiteralImpl extends ConstantImpl implements BoolLiteral
 {
+  /**
+   * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getType()
+   * @generated
+   * @ordered
+   */
+  protected static final Type TYPE_EDEFAULT = Type.DINT;
+
+  /**
+   * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getType()
+   * @generated
+   * @ordered
+   */
+  protected Type type = TYPE_EDEFAULT;
+
   /**
    * The default value of the '{@link #isValue() <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -74,6 +96,31 @@ public class BoolLiteralImpl extends ConstantImpl implements BoolLiteral
    * @generated
    */
   @Override
+  public Type getType()
+  {
+    return type;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setType(Type newType)
+  {
+    Type oldType = type;
+    type = newType == null ? TYPE_EDEFAULT : newType;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.BOOL_LITERAL__TYPE, oldType, type));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public boolean isValue()
   {
     return value;
@@ -103,6 +150,8 @@ public class BoolLiteralImpl extends ConstantImpl implements BoolLiteral
   {
     switch (featureID)
     {
+      case StructuredTextPackage.BOOL_LITERAL__TYPE:
+        return getType();
       case StructuredTextPackage.BOOL_LITERAL__VALUE:
         return isValue();
     }
@@ -119,6 +168,9 @@ public class BoolLiteralImpl extends ConstantImpl implements BoolLiteral
   {
     switch (featureID)
     {
+      case StructuredTextPackage.BOOL_LITERAL__TYPE:
+        setType((Type)newValue);
+        return;
       case StructuredTextPackage.BOOL_LITERAL__VALUE:
         setValue((Boolean)newValue);
         return;
@@ -136,6 +188,9 @@ public class BoolLiteralImpl extends ConstantImpl implements BoolLiteral
   {
     switch (featureID)
     {
+      case StructuredTextPackage.BOOL_LITERAL__TYPE:
+        setType(TYPE_EDEFAULT);
+        return;
       case StructuredTextPackage.BOOL_LITERAL__VALUE:
         setValue(VALUE_EDEFAULT);
         return;
@@ -153,6 +208,8 @@ public class BoolLiteralImpl extends ConstantImpl implements BoolLiteral
   {
     switch (featureID)
     {
+      case StructuredTextPackage.BOOL_LITERAL__TYPE:
+        return type != TYPE_EDEFAULT;
       case StructuredTextPackage.BOOL_LITERAL__VALUE:
         return value != VALUE_EDEFAULT;
     }
@@ -170,7 +227,9 @@ public class BoolLiteralImpl extends ConstantImpl implements BoolLiteral
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (value: ");
+    result.append(" (type: ");
+    result.append(type);
+    result.append(", value: ");
     result.append(value);
     result.append(')');
     return result.toString();

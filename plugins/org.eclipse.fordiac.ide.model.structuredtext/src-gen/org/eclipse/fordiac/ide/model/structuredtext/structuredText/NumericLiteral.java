@@ -9,6 +9,12 @@ package org.eclipse.fordiac.ide.model.structuredtext.structuredText;
  * A representation of the model object '<em><b>Numeric Literal</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * </p>
+ * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.NumericLiteral#getType <em>Type</em>}</li>
+ * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getNumericLiteral()
  * @model
@@ -16,4 +22,29 @@ package org.eclipse.fordiac.ide.model.structuredtext.structuredText;
  */
 public interface NumericLiteral extends Constant
 {
+  /**
+   * Returns the value of the '<em><b>Type</b></em>' attribute.
+   * The literals are from the enumeration {@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Type}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Type</em>' attribute.
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.Type
+   * @see #setType(Type)
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getNumericLiteral_Type()
+   * @model
+   * @generated
+   */
+  Type getType();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.NumericLiteral#getType <em>Type</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Type</em>' attribute.
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.Type
+   * @see #getType()
+   * @generated
+   */
+  void setType(Type value);
+
 } // NumericLiteral

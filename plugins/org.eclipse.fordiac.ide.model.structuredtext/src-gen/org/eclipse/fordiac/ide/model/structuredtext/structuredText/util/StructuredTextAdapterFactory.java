@@ -215,21 +215,6 @@ public class StructuredTextAdapterFactory extends AdapterFactoryImpl
         return createTimeLiteralAdapter();
       }
       @Override
-      public Adapter caseDurationLiteral(DurationLiteral object)
-      {
-        return createDurationLiteralAdapter();
-      }
-      @Override
-      public Adapter caseDurationValue(DurationValue object)
-      {
-        return createDurationValueAdapter();
-      }
-      @Override
-      public Adapter caseDateLiteral(DateLiteral object)
-      {
-        return createDateLiteralAdapter();
-      }
-      @Override
       public Adapter caseLocalVariable(LocalVariable object)
       {
         return createLocalVariableAdapter();
@@ -717,51 +702,6 @@ public class StructuredTextAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTimeLiteralAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationLiteral <em>Duration Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationLiteral
-   * @generated
-   */
-  public Adapter createDurationLiteralAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationValue <em>Duration Value</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationValue
-   * @generated
-   */
-  public Adapter createDurationValueAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DateLiteral <em>Date Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.DateLiteral
-   * @generated
-   */
-  public Adapter createDateLiteralAdapter()
   {
     return null;
   }

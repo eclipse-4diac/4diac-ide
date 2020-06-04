@@ -93,9 +93,6 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
       case StructuredTextPackage.BOOL_LITERAL: return createBoolLiteral();
       case StructuredTextPackage.STRING_LITERAL: return createStringLiteral();
       case StructuredTextPackage.TIME_LITERAL: return createTimeLiteral();
-      case StructuredTextPackage.DURATION_LITERAL: return createDurationLiteral();
-      case StructuredTextPackage.DURATION_VALUE: return createDurationValue();
-      case StructuredTextPackage.DATE_LITERAL: return createDateLiteral();
       case StructuredTextPackage.LOCAL_VARIABLE: return createLocalVariable();
       case StructuredTextPackage.SUPER_STATEMENT: return createSuperStatement();
       case StructuredTextPackage.RETURN_STATEMENT: return createReturnStatement();
@@ -124,8 +121,6 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
         return createBinaryOperatorFromString(eDataType, initialValue);
       case StructuredTextPackage.UNARY_OPERATOR:
         return createUnaryOperatorFromString(eDataType, initialValue);
-      case StructuredTextPackage.DURATION_UNIT:
-        return createDuration_UnitFromString(eDataType, initialValue);
       case StructuredTextPackage.TYPE:
         return createTypeFromString(eDataType, initialValue);
       default:
@@ -147,8 +142,6 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
         return convertBinaryOperatorToString(eDataType, instanceValue);
       case StructuredTextPackage.UNARY_OPERATOR:
         return convertUnaryOperatorToString(eDataType, instanceValue);
-      case StructuredTextPackage.DURATION_UNIT:
-        return convertDuration_UnitToString(eDataType, instanceValue);
       case StructuredTextPackage.TYPE:
         return convertTypeToString(eDataType, instanceValue);
       default:
@@ -486,42 +479,6 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * @generated
    */
   @Override
-  public DurationLiteral createDurationLiteral()
-  {
-    DurationLiteralImpl durationLiteral = new DurationLiteralImpl();
-    return durationLiteral;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public DurationValue createDurationValue()
-  {
-    DurationValueImpl durationValue = new DurationValueImpl();
-    return durationValue;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public DateLiteral createDateLiteral()
-  {
-    DateLiteralImpl dateLiteral = new DateLiteralImpl();
-    return dateLiteral;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public LocalVariable createLocalVariable()
   {
     LocalVariableImpl localVariable = new LocalVariableImpl();
@@ -664,28 +621,6 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * @generated
    */
   public String convertUnaryOperatorToString(EDataType eDataType, Object instanceValue)
-  {
-    return instanceValue == null ? null : instanceValue.toString();
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Duration_Unit createDuration_UnitFromString(EDataType eDataType, String initialValue)
-  {
-    Duration_Unit result = Duration_Unit.get(initialValue);
-    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-    return result;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String convertDuration_UnitToString(EDataType eDataType, Object instanceValue)
   {
     return instanceValue == null ? null : instanceValue.toString();
   }

@@ -829,22 +829,13 @@ public interface StructuredTextPackage extends EPackage
   int CONSTANT = 20;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int CONSTANT__TYPE = EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
    * The number of structural features of the '<em>Constant</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONSTANT_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
+  int CONSTANT_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.NumericLiteralImpl <em>Numeric Literal</em>}' class.
@@ -863,7 +854,7 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    * @ordered
    */
-  int NUMERIC_LITERAL__TYPE = CONSTANT__TYPE;
+  int NUMERIC_LITERAL__TYPE = CONSTANT_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>Numeric Literal</em>' class.
@@ -872,7 +863,7 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    * @ordered
    */
-  int NUMERIC_LITERAL_FEATURE_COUNT = CONSTANT_FEATURE_COUNT + 0;
+  int NUMERIC_LITERAL_FEATURE_COUNT = CONSTANT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.IntLiteralImpl <em>Int Literal</em>}' class.
@@ -965,7 +956,7 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    * @ordered
    */
-  int BOOL_LITERAL__TYPE = CONSTANT__TYPE;
+  int BOOL_LITERAL__TYPE = CONSTANT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -974,7 +965,7 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    * @ordered
    */
-  int BOOL_LITERAL__VALUE = CONSTANT_FEATURE_COUNT + 0;
+  int BOOL_LITERAL__VALUE = CONSTANT_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>Bool Literal</em>' class.
@@ -983,7 +974,7 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    * @ordered
    */
-  int BOOL_LITERAL_FEATURE_COUNT = CONSTANT_FEATURE_COUNT + 1;
+  int BOOL_LITERAL_FEATURE_COUNT = CONSTANT_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StringLiteralImpl <em>String Literal</em>}' class.
@@ -1002,7 +993,7 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STRING_LITERAL__TYPE = CONSTANT__TYPE;
+  int STRING_LITERAL__TYPE = CONSTANT_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Length</b></em>' attribute.
@@ -1011,7 +1002,7 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STRING_LITERAL__LENGTH = CONSTANT_FEATURE_COUNT + 0;
+  int STRING_LITERAL__LENGTH = CONSTANT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1020,7 +1011,7 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STRING_LITERAL__VALUE = CONSTANT_FEATURE_COUNT + 1;
+  int STRING_LITERAL__VALUE = CONSTANT_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>String Literal</em>' class.
@@ -1029,7 +1020,7 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STRING_LITERAL_FEATURE_COUNT = CONSTANT_FEATURE_COUNT + 2;
+  int STRING_LITERAL_FEATURE_COUNT = CONSTANT_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.TimeLiteralImpl <em>Time Literal</em>}' class.
@@ -1042,13 +1033,13 @@ public interface StructuredTextPackage extends EPackage
   int TIME_LITERAL = 26;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' attribute.
+   * The feature id for the '<em><b>Literal</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TIME_LITERAL__TYPE = CONSTANT__TYPE;
+  int TIME_LITERAL__LITERAL = CONSTANT_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>Time Literal</em>' class.
@@ -1057,127 +1048,7 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TIME_LITERAL_FEATURE_COUNT = CONSTANT_FEATURE_COUNT + 0;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.DurationLiteralImpl <em>Duration Literal</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.DurationLiteralImpl
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getDurationLiteral()
-   * @generated
-   */
-  int DURATION_LITERAL = 27;
-
-  /**
-   * The feature id for the '<em><b>Type</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DURATION_LITERAL__TYPE = TIME_LITERAL__TYPE;
-
-  /**
-   * The feature id for the '<em><b>Negative</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DURATION_LITERAL__NEGATIVE = TIME_LITERAL_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Value</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DURATION_LITERAL__VALUE = TIME_LITERAL_FEATURE_COUNT + 1;
-
-  /**
-   * The number of structural features of the '<em>Duration Literal</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DURATION_LITERAL_FEATURE_COUNT = TIME_LITERAL_FEATURE_COUNT + 2;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.DurationValueImpl <em>Duration Value</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.DurationValueImpl
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getDurationValue()
-   * @generated
-   */
-  int DURATION_VALUE = 28;
-
-  /**
-   * The feature id for the '<em><b>Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DURATION_VALUE__VALUE = 0;
-
-  /**
-   * The feature id for the '<em><b>Unit</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DURATION_VALUE__UNIT = 1;
-
-  /**
-   * The number of structural features of the '<em>Duration Value</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DURATION_VALUE_FEATURE_COUNT = 2;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.DateLiteralImpl <em>Date Literal</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.DateLiteralImpl
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getDateLiteral()
-   * @generated
-   */
-  int DATE_LITERAL = 29;
-
-  /**
-   * The feature id for the '<em><b>Type</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DATE_LITERAL__TYPE = TIME_LITERAL__TYPE;
-
-  /**
-   * The feature id for the '<em><b>Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DATE_LITERAL__VALUE = TIME_LITERAL_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>Date Literal</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DATE_LITERAL_FEATURE_COUNT = TIME_LITERAL_FEATURE_COUNT + 1;
+  int TIME_LITERAL_FEATURE_COUNT = CONSTANT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.LocalVariableImpl <em>Local Variable</em>}' class.
@@ -1187,7 +1058,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getLocalVariable()
    * @generated
    */
-  int LOCAL_VARIABLE = 30;
+  int LOCAL_VARIABLE = 27;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1368,7 +1239,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getSuperStatement()
    * @generated
    */
-  int SUPER_STATEMENT = 31;
+  int SUPER_STATEMENT = 28;
 
   /**
    * The number of structural features of the '<em>Super Statement</em>' class.
@@ -1387,7 +1258,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getReturnStatement()
    * @generated
    */
-  int RETURN_STATEMENT = 32;
+  int RETURN_STATEMENT = 29;
 
   /**
    * The number of structural features of the '<em>Return Statement</em>' class.
@@ -1406,7 +1277,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getExitStatement()
    * @generated
    */
-  int EXIT_STATEMENT = 33;
+  int EXIT_STATEMENT = 30;
 
   /**
    * The number of structural features of the '<em>Exit Statement</em>' class.
@@ -1425,7 +1296,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getContinueStatement()
    * @generated
    */
-  int CONTINUE_STATEMENT = 34;
+  int CONTINUE_STATEMENT = 31;
 
   /**
    * The number of structural features of the '<em>Continue Statement</em>' class.
@@ -1444,7 +1315,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getBinaryExpression()
    * @generated
    */
-  int BINARY_EXPRESSION = 35;
+  int BINARY_EXPRESSION = 32;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1490,7 +1361,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getUnaryExpression()
    * @generated
    */
-  int UNARY_EXPRESSION = 36;
+  int UNARY_EXPRESSION = 33;
 
   /**
    * The feature id for the '<em><b>Operator</b></em>' attribute.
@@ -1527,7 +1398,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getArrayVariable()
    * @generated
    */
-  int ARRAY_VARIABLE = 37;
+  int ARRAY_VARIABLE = 34;
 
   /**
    * The feature id for the '<em><b>Part</b></em>' containment reference.
@@ -1573,7 +1444,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getAdapterVariable()
    * @generated
    */
-  int ADAPTER_VARIABLE = 38;
+  int ADAPTER_VARIABLE = 35;
 
   /**
    * The feature id for the '<em><b>Part</b></em>' containment reference.
@@ -1619,7 +1490,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getBinaryOperator()
    * @generated
    */
-  int BINARY_OPERATOR = 39;
+  int BINARY_OPERATOR = 36;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator <em>Unary Operator</em>}' enum.
@@ -1629,17 +1500,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getUnaryOperator()
    * @generated
    */
-  int UNARY_OPERATOR = 40;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Duration_Unit <em>Duration Unit</em>}' enum.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.Duration_Unit
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getDuration_Unit()
-   * @generated
-   */
-  int DURATION_UNIT = 41;
+  int UNARY_OPERATOR = 37;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Type <em>Type</em>}' enum.
@@ -1649,7 +1510,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getType()
    * @generated
    */
-  int TYPE = 42;
+  int TYPE = 38;
 
 
   /**
@@ -2292,17 +2153,6 @@ public interface StructuredTextPackage extends EPackage
   EClass getConstant();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Constant#getType <em>Type</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Type</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.Constant#getType()
-   * @see #getConstant()
-   * @generated
-   */
-  EAttribute getConstant_Type();
-
-  /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.NumericLiteral <em>Numeric Literal</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2311,6 +2161,17 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    */
   EClass getNumericLiteral();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.NumericLiteral#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Type</em>'.
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.NumericLiteral#getType()
+   * @see #getNumericLiteral()
+   * @generated
+   */
+  EAttribute getNumericLiteral_Type();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.IntLiteral <em>Int Literal</em>}'.
@@ -2365,6 +2226,17 @@ public interface StructuredTextPackage extends EPackage
   EClass getBoolLiteral();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.BoolLiteral#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Type</em>'.
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.BoolLiteral#getType()
+   * @see #getBoolLiteral()
+   * @generated
+   */
+  EAttribute getBoolLiteral_Type();
+
+  /**
    * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.BoolLiteral#isValue <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2384,6 +2256,17 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    */
   EClass getStringLiteral();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.StringLiteral#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Type</em>'.
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StringLiteral#getType()
+   * @see #getStringLiteral()
+   * @generated
+   */
+  EAttribute getStringLiteral_Type();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.StringLiteral#getLength <em>Length</em>}'.
@@ -2418,89 +2301,15 @@ public interface StructuredTextPackage extends EPackage
   EClass getTimeLiteral();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationLiteral <em>Duration Literal</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral#getLiteral <em>Literal</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Duration Literal</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationLiteral
+   * @return the meta object for the attribute '<em>Literal</em>'.
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral#getLiteral()
+   * @see #getTimeLiteral()
    * @generated
    */
-  EClass getDurationLiteral();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationLiteral#isNegative <em>Negative</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Negative</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationLiteral#isNegative()
-   * @see #getDurationLiteral()
-   * @generated
-   */
-  EAttribute getDurationLiteral_Negative();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationLiteral#getValue <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Value</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationLiteral#getValue()
-   * @see #getDurationLiteral()
-   * @generated
-   */
-  EReference getDurationLiteral_Value();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationValue <em>Duration Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Duration Value</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationValue
-   * @generated
-   */
-  EClass getDurationValue();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationValue#getValue <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Value</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationValue#getValue()
-   * @see #getDurationValue()
-   * @generated
-   */
-  EAttribute getDurationValue_Value();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationValue#getUnit <em>Unit</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Unit</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.DurationValue#getUnit()
-   * @see #getDurationValue()
-   * @generated
-   */
-  EAttribute getDurationValue_Unit();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DateLiteral <em>Date Literal</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Date Literal</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.DateLiteral
-   * @generated
-   */
-  EClass getDateLiteral();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DateLiteral#getValue <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Value</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.DateLiteral#getValue()
-   * @see #getDateLiteral()
-   * @generated
-   */
-  EAttribute getDateLiteral_Value();
+  EAttribute getTimeLiteral_Literal();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable <em>Local Variable</em>}'.
@@ -2776,16 +2585,6 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    */
   EEnum getUnaryOperator();
-
-  /**
-   * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Duration_Unit <em>Duration Unit</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for enum '<em>Duration Unit</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.Duration_Unit
-   * @generated
-   */
-  EEnum getDuration_Unit();
 
   /**
    * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Type <em>Type</em>}'.
@@ -3343,14 +3142,6 @@ public interface StructuredTextPackage extends EPackage
     EClass CONSTANT = eINSTANCE.getConstant();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute CONSTANT__TYPE = eINSTANCE.getConstant_Type();
-
-    /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.NumericLiteralImpl <em>Numeric Literal</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3359,6 +3150,14 @@ public interface StructuredTextPackage extends EPackage
      * @generated
      */
     EClass NUMERIC_LITERAL = eINSTANCE.getNumericLiteral();
+
+    /**
+     * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute NUMERIC_LITERAL__TYPE = eINSTANCE.getNumericLiteral_Type();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.IntLiteralImpl <em>Int Literal</em>}' class.
@@ -3407,6 +3206,14 @@ public interface StructuredTextPackage extends EPackage
     EClass BOOL_LITERAL = eINSTANCE.getBoolLiteral();
 
     /**
+     * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute BOOL_LITERAL__TYPE = eINSTANCE.getBoolLiteral_Type();
+
+    /**
      * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3423,6 +3230,14 @@ public interface StructuredTextPackage extends EPackage
      * @generated
      */
     EClass STRING_LITERAL = eINSTANCE.getStringLiteral();
+
+    /**
+     * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute STRING_LITERAL__TYPE = eINSTANCE.getStringLiteral_Type();
 
     /**
      * The meta object literal for the '<em><b>Length</b></em>' attribute feature.
@@ -3451,74 +3266,12 @@ public interface StructuredTextPackage extends EPackage
     EClass TIME_LITERAL = eINSTANCE.getTimeLiteral();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.DurationLiteralImpl <em>Duration Literal</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.DurationLiteralImpl
-     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getDurationLiteral()
-     * @generated
-     */
-    EClass DURATION_LITERAL = eINSTANCE.getDurationLiteral();
-
-    /**
-     * The meta object literal for the '<em><b>Negative</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Literal</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute DURATION_LITERAL__NEGATIVE = eINSTANCE.getDurationLiteral_Negative();
-
-    /**
-     * The meta object literal for the '<em><b>Value</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference DURATION_LITERAL__VALUE = eINSTANCE.getDurationLiteral_Value();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.DurationValueImpl <em>Duration Value</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.DurationValueImpl
-     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getDurationValue()
-     * @generated
-     */
-    EClass DURATION_VALUE = eINSTANCE.getDurationValue();
-
-    /**
-     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DURATION_VALUE__VALUE = eINSTANCE.getDurationValue_Value();
-
-    /**
-     * The meta object literal for the '<em><b>Unit</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DURATION_VALUE__UNIT = eINSTANCE.getDurationValue_Unit();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.DateLiteralImpl <em>Date Literal</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.DateLiteralImpl
-     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getDateLiteral()
-     * @generated
-     */
-    EClass DATE_LITERAL = eINSTANCE.getDateLiteral();
-
-    /**
-     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DATE_LITERAL__VALUE = eINSTANCE.getDateLiteral_Value();
+    EAttribute TIME_LITERAL__LITERAL = eINSTANCE.getTimeLiteral_Literal();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.LocalVariableImpl <em>Local Variable</em>}' class.
@@ -3749,16 +3502,6 @@ public interface StructuredTextPackage extends EPackage
      * @generated
      */
     EEnum UNARY_OPERATOR = eINSTANCE.getUnaryOperator();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Duration_Unit <em>Duration Unit</em>}' enum.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.Duration_Unit
-     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getDuration_Unit()
-     * @generated
-     */
-    EEnum DURATION_UNIT = eINSTANCE.getDuration_Unit();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Type <em>Type</em>}' enum.

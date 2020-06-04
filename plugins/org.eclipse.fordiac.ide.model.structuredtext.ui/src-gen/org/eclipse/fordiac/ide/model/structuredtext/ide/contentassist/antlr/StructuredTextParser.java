@@ -49,8 +49,7 @@ public class StructuredTextParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSigned_IntAccess().getAlternatives_0(), "rule__Signed_Int__Alternatives_0");
 			builder.put(grammarAccess.getBool_ValueAccess().getAlternatives(), "rule__Bool_Value__Alternatives");
 			builder.put(grammarAccess.getChar_LiteralAccess().getValueAlternatives_1_0(), "rule__Char_Literal__ValueAlternatives_1_0");
-			builder.put(grammarAccess.getTime_LiteralAccess().getAlternatives(), "rule__Time_Literal__Alternatives");
-			builder.put(grammarAccess.getDurationAccess().getAlternatives_2(), "rule__Duration__Alternatives_2");
+			builder.put(grammarAccess.getTime_LiteralAccess().getLiteralAlternatives_0(), "rule__Time_Literal__LiteralAlternatives_0");
 			builder.put(grammarAccess.getType_NameAccess().getAlternatives(), "rule__Type_Name__Alternatives");
 			builder.put(grammarAccess.getAnd_OperatorAccess().getAlternatives(), "rule__And_Operator__Alternatives");
 			builder.put(grammarAccess.getCompare_OperatorAccess().getAlternatives(), "rule__Compare_Operator__Alternatives");
@@ -58,14 +57,9 @@ public class StructuredTextParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getAdd_OperatorAccess().getAlternatives(), "rule__Add_Operator__Alternatives");
 			builder.put(grammarAccess.getTerm_OperatorAccess().getAlternatives(), "rule__Term_Operator__Alternatives");
 			builder.put(grammarAccess.getUnary_OperatorAccess().getAlternatives(), "rule__Unary_Operator__Alternatives");
-			builder.put(grammarAccess.getDuration_UnitAccess().getAlternatives(), "rule__Duration_Unit__Alternatives");
 			builder.put(grammarAccess.getInt_Type_NameAccess().getAlternatives(), "rule__Int_Type_Name__Alternatives");
 			builder.put(grammarAccess.getReal_Type_NameAccess().getAlternatives(), "rule__Real_Type_Name__Alternatives");
 			builder.put(grammarAccess.getString_Type_NameAccess().getAlternatives(), "rule__String_Type_Name__Alternatives");
-			builder.put(grammarAccess.getTime_Type_NameAccess().getAlternatives(), "rule__Time_Type_Name__Alternatives");
-			builder.put(grammarAccess.getTod_Type_NameAccess().getAlternatives(), "rule__Tod_Type_Name__Alternatives");
-			builder.put(grammarAccess.getDate_Type_NameAccess().getAlternatives(), "rule__Date_Type_Name__Alternatives");
-			builder.put(grammarAccess.getDT_Type_NameAccess().getAlternatives(), "rule__DT_Type_Name__Alternatives");
 			builder.put(grammarAccess.getAny_Bit_Type_NameAccess().getAlternatives(), "rule__Any_Bit_Type_Name__Alternatives");
 			builder.put(grammarAccess.getStructuredTextAlgorithmAccess().getGroup(), "rule__StructuredTextAlgorithm__Group__0");
 			builder.put(grammarAccess.getStructuredTextAlgorithmAccess().getGroup_1(), "rule__StructuredTextAlgorithm__Group_1__0");
@@ -136,17 +130,6 @@ public class StructuredTextParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getBool_LiteralAccess().getGroup_0(), "rule__Bool_Literal__Group_0__0");
 			builder.put(grammarAccess.getChar_LiteralAccess().getGroup(), "rule__Char_Literal__Group__0");
 			builder.put(grammarAccess.getChar_LiteralAccess().getGroup_0(), "rule__Char_Literal__Group_0__0");
-			builder.put(grammarAccess.getDurationAccess().getGroup(), "rule__Duration__Group__0");
-			builder.put(grammarAccess.getDurationAccess().getGroup_4(), "rule__Duration__Group_4__0");
-			builder.put(grammarAccess.getDuration_ValueAccess().getGroup(), "rule__Duration_Value__Group__0");
-			builder.put(grammarAccess.getFix_PointAccess().getGroup(), "rule__Fix_Point__Group__0");
-			builder.put(grammarAccess.getFix_PointAccess().getGroup_1(), "rule__Fix_Point__Group_1__0");
-			builder.put(grammarAccess.getTime_Of_DayAccess().getGroup(), "rule__Time_Of_Day__Group__0");
-			builder.put(grammarAccess.getDaytimeAccess().getGroup(), "rule__Daytime__Group__0");
-			builder.put(grammarAccess.getDateAccess().getGroup(), "rule__Date__Group__0");
-			builder.put(grammarAccess.getDate_LiteralAccess().getGroup(), "rule__Date_Literal__Group__0");
-			builder.put(grammarAccess.getDate_And_TimeAccess().getGroup(), "rule__Date_And_Time__Group__0");
-			builder.put(grammarAccess.getDate_And_Time_ValueAccess().getGroup(), "rule__Date_And_Time_Value__Group__0");
 			builder.put(grammarAccess.getStructuredTextAlgorithmAccess().getLocalVariablesAssignment_1_1_0(), "rule__StructuredTextAlgorithm__LocalVariablesAssignment_1_1_0");
 			builder.put(grammarAccess.getStructuredTextAlgorithmAccess().getStatementsAssignment_2(), "rule__StructuredTextAlgorithm__StatementsAssignment_2");
 			builder.put(grammarAccess.getVar_Decl_LocalAccess().getConstantAssignment_1(), "rule__Var_Decl_Local__ConstantAssignment_1");
@@ -235,18 +218,7 @@ public class StructuredTextParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getChar_LiteralAccess().getTypeAssignment_0_0(), "rule__Char_Literal__TypeAssignment_0_0");
 			builder.put(grammarAccess.getChar_LiteralAccess().getLengthAssignment_0_1(), "rule__Char_Literal__LengthAssignment_0_1");
 			builder.put(grammarAccess.getChar_LiteralAccess().getValueAssignment_1(), "rule__Char_Literal__ValueAssignment_1");
-			builder.put(grammarAccess.getDurationAccess().getTypeAssignment_0(), "rule__Duration__TypeAssignment_0");
-			builder.put(grammarAccess.getDurationAccess().getNegativeAssignment_2_1(), "rule__Duration__NegativeAssignment_2_1");
-			builder.put(grammarAccess.getDurationAccess().getValueAssignment_3(), "rule__Duration__ValueAssignment_3");
-			builder.put(grammarAccess.getDurationAccess().getValueAssignment_4_1(), "rule__Duration__ValueAssignment_4_1");
-			builder.put(grammarAccess.getDuration_ValueAccess().getValueAssignment_0(), "rule__Duration_Value__ValueAssignment_0");
-			builder.put(grammarAccess.getDuration_ValueAccess().getUnitAssignment_1(), "rule__Duration_Value__UnitAssignment_1");
-			builder.put(grammarAccess.getTime_Of_DayAccess().getTypeAssignment_0(), "rule__Time_Of_Day__TypeAssignment_0");
-			builder.put(grammarAccess.getTime_Of_DayAccess().getValueAssignment_2(), "rule__Time_Of_Day__ValueAssignment_2");
-			builder.put(grammarAccess.getDateAccess().getTypeAssignment_0(), "rule__Date__TypeAssignment_0");
-			builder.put(grammarAccess.getDateAccess().getValueAssignment_2(), "rule__Date__ValueAssignment_2");
-			builder.put(grammarAccess.getDate_And_TimeAccess().getTypeAssignment_0(), "rule__Date_And_Time__TypeAssignment_0");
-			builder.put(grammarAccess.getDate_And_TimeAccess().getValueAssignment_2(), "rule__Date_And_Time__ValueAssignment_2");
+			builder.put(grammarAccess.getTime_LiteralAccess().getLiteralAssignment(), "rule__Time_Literal__LiteralAssignment");
 		}
 	}
 	

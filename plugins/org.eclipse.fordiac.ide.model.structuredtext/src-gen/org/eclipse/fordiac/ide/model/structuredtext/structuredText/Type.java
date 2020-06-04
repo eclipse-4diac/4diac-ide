@@ -161,166 +161,6 @@ public enum Type implements Enumerator
   WCHAR(13, "WCHAR", "WCHAR"),
 
   /**
-   * The '<em><b>TIME</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #TIME_VALUE
-   * @generated
-   * @ordered
-   */
-  TIME(14, "TIME", "TIME"),
-
-  /**
-   * The '<em><b>LTIME</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LTIME_VALUE
-   * @generated
-   * @ordered
-   */
-  LTIME(15, "LTIME", "LTIME"),
-
-  /**
-   * The '<em><b>T</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #T_VALUE
-   * @generated
-   * @ordered
-   */
-  T(16, "T", "T"),
-
-  /**
-   * The '<em><b>LT</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LT_VALUE
-   * @generated
-   * @ordered
-   */
-  LT(17, "LT", "LT"),
-
-  /**
-   * The '<em><b>TIME OF DAY</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #TIME_OF_DAY_VALUE
-   * @generated
-   * @ordered
-   */
-  TIME_OF_DAY(18, "TIME_OF_DAY", "TIME_OF_DAY"),
-
-  /**
-   * The '<em><b>LTIME OF DAY</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LTIME_OF_DAY_VALUE
-   * @generated
-   * @ordered
-   */
-  LTIME_OF_DAY(19, "LTIME_OF_DAY", "LTIME_OF_DAY"),
-
-  /**
-   * The '<em><b>TOD</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #TOD_VALUE
-   * @generated
-   * @ordered
-   */
-  TOD(20, "TOD", "TOD"),
-
-  /**
-   * The '<em><b>LTOD</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LTOD_VALUE
-   * @generated
-   * @ordered
-   */
-  LTOD(21, "LTOD", "LTOD"),
-
-  /**
-   * The '<em><b>DATE</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #DATE_VALUE
-   * @generated
-   * @ordered
-   */
-  DATE(22, "DATE", "DATE"),
-
-  /**
-   * The '<em><b>LDATE</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LDATE_VALUE
-   * @generated
-   * @ordered
-   */
-  LDATE(23, "LDATE", "LDATE"),
-
-  /**
-   * The '<em><b>D</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #D_VALUE
-   * @generated
-   * @ordered
-   */
-  D(24, "D", "D"),
-
-  /**
-   * The '<em><b>LD</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LD_VALUE
-   * @generated
-   * @ordered
-   */
-  LD(25, "LD", "LD"),
-
-  /**
-   * The '<em><b>DATE AND TIME</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #DATE_AND_TIME_VALUE
-   * @generated
-   * @ordered
-   */
-  DATE_AND_TIME(26, "DATE_AND_TIME", "DATE_AND_TIME"),
-
-  /**
-   * The '<em><b>LDATE AND TIME</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LDATE_AND_TIME_VALUE
-   * @generated
-   * @ordered
-   */
-  LDATE_AND_TIME(27, "LDATE_AND_TIME", "LDATE_AND_TIME"),
-
-  /**
-   * The '<em><b>DT</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #DT_VALUE
-   * @generated
-   * @ordered
-   */
-  DT(28, "DT", "DT"),
-
-  /**
-   * The '<em><b>LDT</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LDT_VALUE
-   * @generated
-   * @ordered
-   */
-  LDT(29, "LDT", "LDT"),
-
-  /**
    * The '<em><b>BOOL</b></em>' literal object.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -328,7 +168,7 @@ public enum Type implements Enumerator
    * @generated
    * @ordered
    */
-  BOOL(30, "BOOL", "BOOL"),
+  BOOL(14, "BOOL", "BOOL"),
 
   /**
    * The '<em><b>BYTE</b></em>' literal object.
@@ -338,7 +178,7 @@ public enum Type implements Enumerator
    * @generated
    * @ordered
    */
-  BYTE(31, "BYTE", "BYTE"),
+  BYTE(15, "BYTE", "BYTE"),
 
   /**
    * The '<em><b>WORD</b></em>' literal object.
@@ -348,7 +188,7 @@ public enum Type implements Enumerator
    * @generated
    * @ordered
    */
-  WORD(32, "WORD", "WORD"),
+  WORD(16, "WORD", "WORD"),
 
   /**
    * The '<em><b>DWORD</b></em>' literal object.
@@ -358,7 +198,7 @@ public enum Type implements Enumerator
    * @generated
    * @ordered
    */
-  DWORD(33, "DWORD", "DWORD"),
+  DWORD(17, "DWORD", "DWORD"),
 
   /**
    * The '<em><b>LWORD</b></em>' literal object.
@@ -368,7 +208,7 @@ public enum Type implements Enumerator
    * @generated
    * @ordered
    */
-  LWORD(34, "LWORD", "LWORD");
+  LWORD(18, "LWORD", "LWORD");
 
   /**
    * The '<em><b>DINT</b></em>' literal value.
@@ -525,182 +365,6 @@ public enum Type implements Enumerator
   public static final int WCHAR_VALUE = 13;
 
   /**
-   * The '<em><b>TIME</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #TIME
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int TIME_VALUE = 14;
-
-  /**
-   * The '<em><b>LTIME</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LTIME
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int LTIME_VALUE = 15;
-
-  /**
-   * The '<em><b>T</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #T
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int T_VALUE = 16;
-
-  /**
-   * The '<em><b>LT</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LT
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int LT_VALUE = 17;
-
-  /**
-   * The '<em><b>TIME OF DAY</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #TIME_OF_DAY
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int TIME_OF_DAY_VALUE = 18;
-
-  /**
-   * The '<em><b>LTIME OF DAY</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LTIME_OF_DAY
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int LTIME_OF_DAY_VALUE = 19;
-
-  /**
-   * The '<em><b>TOD</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #TOD
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int TOD_VALUE = 20;
-
-  /**
-   * The '<em><b>LTOD</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LTOD
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int LTOD_VALUE = 21;
-
-  /**
-   * The '<em><b>DATE</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #DATE
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int DATE_VALUE = 22;
-
-  /**
-   * The '<em><b>LDATE</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LDATE
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int LDATE_VALUE = 23;
-
-  /**
-   * The '<em><b>D</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #D
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int D_VALUE = 24;
-
-  /**
-   * The '<em><b>LD</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LD
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int LD_VALUE = 25;
-
-  /**
-   * The '<em><b>DATE AND TIME</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #DATE_AND_TIME
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int DATE_AND_TIME_VALUE = 26;
-
-  /**
-   * The '<em><b>LDATE AND TIME</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LDATE_AND_TIME
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int LDATE_AND_TIME_VALUE = 27;
-
-  /**
-   * The '<em><b>DT</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #DT
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int DT_VALUE = 28;
-
-  /**
-   * The '<em><b>LDT</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #LDT
-   * @model
-   * @generated
-   * @ordered
-   */
-  public static final int LDT_VALUE = 29;
-
-  /**
    * The '<em><b>BOOL</b></em>' literal value.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -709,7 +373,7 @@ public enum Type implements Enumerator
    * @generated
    * @ordered
    */
-  public static final int BOOL_VALUE = 30;
+  public static final int BOOL_VALUE = 14;
 
   /**
    * The '<em><b>BYTE</b></em>' literal value.
@@ -720,7 +384,7 @@ public enum Type implements Enumerator
    * @generated
    * @ordered
    */
-  public static final int BYTE_VALUE = 31;
+  public static final int BYTE_VALUE = 15;
 
   /**
    * The '<em><b>WORD</b></em>' literal value.
@@ -731,7 +395,7 @@ public enum Type implements Enumerator
    * @generated
    * @ordered
    */
-  public static final int WORD_VALUE = 32;
+  public static final int WORD_VALUE = 16;
 
   /**
    * The '<em><b>DWORD</b></em>' literal value.
@@ -742,7 +406,7 @@ public enum Type implements Enumerator
    * @generated
    * @ordered
    */
-  public static final int DWORD_VALUE = 33;
+  public static final int DWORD_VALUE = 17;
 
   /**
    * The '<em><b>LWORD</b></em>' literal value.
@@ -753,7 +417,7 @@ public enum Type implements Enumerator
    * @generated
    * @ordered
    */
-  public static final int LWORD_VALUE = 34;
+  public static final int LWORD_VALUE = 18;
 
   /**
    * An array of all the '<em><b>Type</b></em>' enumerators.
@@ -778,22 +442,6 @@ public enum Type implements Enumerator
       WSTRING,
       CHAR,
       WCHAR,
-      TIME,
-      LTIME,
-      T,
-      LT,
-      TIME_OF_DAY,
-      LTIME_OF_DAY,
-      TOD,
-      LTOD,
-      DATE,
-      LDATE,
-      D,
-      LD,
-      DATE_AND_TIME,
-      LDATE_AND_TIME,
-      DT,
-      LDT,
       BOOL,
       BYTE,
       WORD,
@@ -877,22 +525,6 @@ public enum Type implements Enumerator
       case WSTRING_VALUE: return WSTRING;
       case CHAR_VALUE: return CHAR;
       case WCHAR_VALUE: return WCHAR;
-      case TIME_VALUE: return TIME;
-      case LTIME_VALUE: return LTIME;
-      case T_VALUE: return T;
-      case LT_VALUE: return LT;
-      case TIME_OF_DAY_VALUE: return TIME_OF_DAY;
-      case LTIME_OF_DAY_VALUE: return LTIME_OF_DAY;
-      case TOD_VALUE: return TOD;
-      case LTOD_VALUE: return LTOD;
-      case DATE_VALUE: return DATE;
-      case LDATE_VALUE: return LDATE;
-      case D_VALUE: return D;
-      case LD_VALUE: return LD;
-      case DATE_AND_TIME_VALUE: return DATE_AND_TIME;
-      case LDATE_AND_TIME_VALUE: return LDATE_AND_TIME;
-      case DT_VALUE: return DT;
-      case LDT_VALUE: return LDT;
       case BOOL_VALUE: return BOOL;
       case BYTE_VALUE: return BYTE;
       case WORD_VALUE: return WORD;
