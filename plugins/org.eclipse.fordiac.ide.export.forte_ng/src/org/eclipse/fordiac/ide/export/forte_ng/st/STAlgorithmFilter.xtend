@@ -66,6 +66,8 @@ import org.eclipse.xtext.resource.XtextResourceSet
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral
+import org.eclipse.fordiac.ide.model.structuredtext.validation.DatetimeLiteral
 
 class STAlgorithmFilter {
 
@@ -336,6 +338,10 @@ class STAlgorithmFilter {
 			case POWER: '''EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
 			default: '''(«expr.left.generateExpression» «expr.operator.generateBinaryOperator» «expr.right.generateExpression»)'''
 		}
+	}
+
+	def protected dispatch generateExpression(TimeLiteral expr){
+		'''«new DatetimeLiteral(expr.literal)»'''
 	}
 
 	def protected dispatch CharSequence generateExpression(
