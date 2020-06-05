@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -57,7 +58,6 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 	private Adapter subAppInterfaceAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
 			switch (notification.getEventType()) {
 			case Notification.ADD:
 			case Notification.ADD_MANY:
@@ -96,9 +96,14 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	@Override
 	protected List<?> getModelChildren() {
-		ArrayList<Object> children = new ArrayList<>();
-		children.addAll(getSubApp().getInterface().getAllInterfaceElements());
-		children.addAll(super.getModelChildren());
+		ArrayList<Object> children = new ArrayList<>(super.getModelChildren());
+		InterfaceList il = getSubApp().getInterface();
+		children.addAll(il.getEventOutputs());
+		children.addAll(il.getOutputVars());
+		children.addAll(il.getPlugs());
+		children.addAll(il.getEventInputs());
+		children.addAll(il.getInputVars());
+		children.addAll(il.getSockets());
 		return children;
 	}
 

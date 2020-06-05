@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.network.editparts;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -127,8 +128,8 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	 */
 	@Override
 	protected List<?> getModelChildren() {
-		ArrayList<Object> children = new ArrayList<>();
 		if (getModel() != null) {
+			ArrayList<Object> children = new ArrayList<>(super.getModelChildren());
 			CompositeFBType fbType = getFbType();
 			children.addAll(fbType.getInterfaceList().getEventInputs());
 			children.addAll(fbType.getInterfaceList().getEventOutputs());
@@ -138,9 +139,9 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 				children.addAll(fbType.getInterfaceList().getPlugs());
 				children.addAll(fbType.getInterfaceList().getSockets());
 			}
-			children.addAll(super.getModelChildren());
+			return children;
 		}
-		return children;
+		return Collections.EMPTY_LIST;
 	}
 
 	/**

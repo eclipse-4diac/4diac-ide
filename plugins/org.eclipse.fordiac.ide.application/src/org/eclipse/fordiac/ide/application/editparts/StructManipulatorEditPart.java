@@ -38,7 +38,6 @@ public class StructManipulatorEditPart extends AbstractFBNElementEditPart {
 	private Adapter multiplexInterfaceAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
 			switch (notification.getEventType()) {
 			case Notification.ADD:
 			case Notification.ADD_MANY:
