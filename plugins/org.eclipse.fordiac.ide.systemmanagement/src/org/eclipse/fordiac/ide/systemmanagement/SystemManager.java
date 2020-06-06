@@ -227,22 +227,6 @@ public enum SystemManager {
 		systemExporter.saveSystem(system.getSystemFile());
 	}
 
-	/**
-	 * Gets the system for name.
-	 *
-	 * @param string the string
-	 *
-	 * @return the system for name
-	 */
-	public AutomationSystem getSystemForName(final String string) {
-//		for (AutomationSystem system : systems) {
-//			if (system.getName().equals(string)) {
-//				return system;
-//			}
-//		}
-		return null;
-	}
-
 	public List<AutomationSystem> getSystems() {
 		return Collections.emptyList();
 	}
