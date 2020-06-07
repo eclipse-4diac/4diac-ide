@@ -487,8 +487,8 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
             String _name = v.getName();
             _builder.append(_name, "  ");
             _builder.append(", \"");
-            String _value = v.getValue().getValue();
-            _builder.append(_value, "  ");
+            String _paramValue = this.getParamValue(v);
+            _builder.append(_paramValue, "  ");
             _builder.append("\"},");
             _builder.newLineIfNotEmpty();
             retVal.append(_builder);
@@ -513,6 +513,10 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
       _xblockexpression = _builder;
     }
     return _xblockexpression;
+  }
+  
+  private String getParamValue(final VarDeclaration v) {
+    return v.getValue().getValue().replace("\"", "\\\"");
   }
   
   protected CharSequence fbId(final FBNetworkElement elem) {

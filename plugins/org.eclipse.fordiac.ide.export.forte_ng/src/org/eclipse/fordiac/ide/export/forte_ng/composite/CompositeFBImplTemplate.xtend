@@ -214,7 +214,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 
 		for (FBNetworkElement fb : fbs) {
 			for (VarDeclaration v : fb.getInterface.getInputVars.filter[it.value !== null && !it.value.value.isEmpty]) {
-				retVal.append('''  {«fb.fbId», g_nStringId«v.name», "«v.value.value»"},
+				retVal.append('''  {«fb.fbId», g_nStringId«v.name», "«getParamValue(v)»"},
 				''')
 				numCompFBParams++
 			}
@@ -224,6 +224,10 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 		const SCFB_FBParameter «FBClassName»::scm_astParamters[] = {
 		«IF 0 != numCompFBParams»«retVal.toString»«ENDIF»
 		};'''
+	}
+	
+	def private getParamValue(VarDeclaration v) {
+		v.value.value.replace("\"", "\\\"");
 	}
 
 }
