@@ -78,8 +78,8 @@ class FBNetworkExporter extends CommonElementExporter {
 					createUntypedSubAppcontents((SubApp) fbnElement);
 				}
 
-				addParamsConfig(fbnElement.getInterface().getInputVars());
 				addAttributes(fbnElement.getAttributes());
+				addParamsConfig(fbnElement.getInterface().getInputVars());
 				addEndElement();
 			}
 		}

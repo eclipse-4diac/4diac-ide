@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 public class DemultiplexerImpl extends StructManipulatorImpl implements Demultiplexer {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected DemultiplexerImpl() {
@@ -44,6 +45,7 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -56,7 +58,14 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 		// create member variables of struct as data output ports
 		getInterface().getOutputVars().clear();
 		Collection<VarDeclaration> list = EcoreUtil.copyAll(newStructType.getMemberVariables());
-		list.forEach(varDecl -> varDecl.setIsInput(false));
+		list.forEach(varDecl -> {
+			varDecl.setIsInput(false);
+			if (null != varDecl.getValue()) {
+				// if we have a value set it empty to get rid of default values from the struct
+				// type
+				varDecl.getValue().setValue(""); //$NON-NLS-1$
+			}
+		});
 		Event ev = getInterface().getEventOutputs().get(0);
 
 		// create with constructs
@@ -69,7 +78,6 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 		// add data output ports to the interface
 		getInterface().getOutputVars().addAll(list);
 		getInterface().getInputVars().get(0).setType(newStructType); // there should be only one output
-		setAttribute("StructuredType", "STRING", getStructType().getName(), COMMENT_EDEFAULT); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 } // DemultiplexerImpl

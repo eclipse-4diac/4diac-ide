@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -16,10 +16,8 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -32,15 +30,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl#getStructType <em>Struct Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl#getStructType
+ * <em>Struct Type</em>}</li>
  * </ul>
  *
  * @generated
  */
 public abstract class StructManipulatorImpl extends FBImpl implements StructManipulator {
 	/**
-	 * The cached value of the '{@link #getStructType() <em>Struct Type</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getStructType() <em>Struct Type</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getStructType()
 	 * @generated
 	 * @ordered
@@ -49,6 +49,7 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected StructManipulatorImpl() {
@@ -57,6 +58,7 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -66,16 +68,18 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public StructuredType getStructType() {
 		if (structType != null && structType.eIsProxy()) {
-			InternalEObject oldStructType = (InternalEObject)structType;
-			structType = (StructuredType)eResolveProxy(oldStructType);
+			InternalEObject oldStructType = (InternalEObject) structType;
+			structType = (StructuredType) eResolveProxy(oldStructType);
 			if (structType != oldStructType) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE, oldStructType, structType));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE, oldStructType, structType));
 			}
 		}
 		return structType;
@@ -83,6 +87,7 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public StructuredType basicGetStructType() {
@@ -91,81 +96,103 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public void setStructTypeGen(StructuredType newStructType) {
 		StructuredType oldStructType = structType;
 		structType = newStructType;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE, oldStructType, structType));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE,
+					oldStructType, structType));
 	}
 
 	@Override
 	public void setStructType(StructuredType newStructType) {
-		setStructTypeGen(newStructType);
-		setMemberVariablesAsPorts(newStructType);
+		if ((null == getStructType()) || (!getStructType().equals(newStructType))) {
+			setStructTypeGen(newStructType);
+			setMemberVariablesAsPorts(newStructType);
+			setAttribute("StructuredType", "STRING", getStructType().getName(), COMMENT_EDEFAULT); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+	}
+
+	@Override
+	public void setAttribute(String attributeName, String type, String value, String comment) {
+		super.setAttribute(attributeName, type, value, comment);
+		if ("StructuredType".equals(attributeName)) { //$NON-NLS-1$
+			StructuredType newStructType = (StructuredType) getTypeLibrary().getDataTypeLibrary().getType(value);
+			if ((null == getStructType()) || (!getStructType().equals(newStructType))) {
+				setStructTypeGen(newStructType);
+				setMemberVariablesAsPorts(newStructType);
+			}
+		}
 	}
 
 	protected abstract void setMemberVariablesAsPorts(StructuredType newStructType);
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
-				if (resolve) return getStructType();
-				return basicGetStructType();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
+			if (resolve)
+				return getStructType();
+			return basicGetStructType();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
-				setStructType((StructuredType)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
+			setStructType((StructuredType) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
-				setStructType((StructuredType)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
+			setStructType((StructuredType) null);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
-				return structType != null;
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
+			return structType != null;
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 

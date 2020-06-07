@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -112,6 +111,13 @@ class FBNetworkImporter extends CommonElementImporter {
 		if (null != entry) {
 			fb.setPaletteEntry(entry);
 			fb.setInterface(fb.getType().getInterfaceList().copy());
+			if ("STRUCT_MUX".equals(fb.getType().getName())) { //$NON-NLS-1$
+				Multiplexer mux = LibraryElementFactory.eINSTANCE.createMultiplexer();
+				fb = convertFBtoMux(fb, mux);
+			} else if ("STRUCT_DEMUX".equals(fb.getType().getName())) { //$NON-NLS-1$
+				Demultiplexer demux = LibraryElementFactory.eINSTANCE.createDemultiplexer();
+				fb = convertFBtoMux(fb, demux);
+			}
 		} else {
 //TODO model refactoring - think about where and if such markers should be created maybe move to validator
 //				createFBTypeProblemMarker(IMarker.SEVERITY_ERROR, Messages.FBTImporter_REQUIRED_FB_TYPE_EXCEPTION + typeFbElement.getNodeValue() + " not available");
@@ -131,15 +137,6 @@ class FBNetworkImporter extends CommonElementImporter {
 			}
 		}
 
-		if (null != fb.getType()) {
-			if ("STRUCT_MUX".equals(fb.getType().getName())) { //$NON-NLS-1$
-				Multiplexer mux = LibraryElementFactory.eINSTANCE.createMultiplexer();
-				fb = convertFBtoMux(fb, mux);
-			} else if ("STRUCT_DEMUX".equals(fb.getType().getName())) { //$NON-NLS-1$
-				Demultiplexer demux = LibraryElementFactory.eINSTANCE.createDemultiplexer();
-				fb = convertFBtoMux(fb, demux);
-			}
-		}
 		fbNetwork.getNetworkElements().add(fb);
 		fbNetworkElementMap.put(fb.getName(), fb);
 	}
@@ -151,8 +148,6 @@ class FBNetworkImporter extends CommonElementImporter {
 		mux.setY(fb.getY());
 		mux.setPaletteEntry(fb.getPaletteEntry());
 		mux.setInterface(fb.getInterface());
-		String structName = fb.getAttributeValue("StructuredType"); //$NON-NLS-1$
-		mux.setStructType((StructuredType) getDataTypeLibrary().getType(structName));
 		return mux;
 	}
 

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -33,6 +34,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.util.ElementSelector;
 import org.eclipse.gef.commands.Command;
@@ -176,7 +179,28 @@ public class PasteCommand extends Command {
 
 		copiedElement.setMapping(null);
 
+		if (copiedElement instanceof StructManipulator) {
+			// structmanipulators may destroy the param values during copy
+			checkDataValues(element, copiedElement);
+		}
+
 		return copiedElement;
+	}
+
+	private static void checkDataValues(FBNetworkElement src, FBNetworkElement copy) {
+		EList<VarDeclaration> srcList = src.getInterface().getInputVars();
+		EList<VarDeclaration> copyList = copy.getInterface().getInputVars();
+
+		for (int i = 0; i < srcList.size(); i++) {
+			VarDeclaration srcVar = srcList.get(i);
+			VarDeclaration copyVar = copyList.get(i);
+			if (null == copyVar.getValue()) {
+				copyVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			}
+			if (null != srcVar.getValue()) {
+				copyVar.getValue().setValue(srcVar.getValue().getValue());
+			}
+		}
 	}
 
 	private void copyConnections() {
