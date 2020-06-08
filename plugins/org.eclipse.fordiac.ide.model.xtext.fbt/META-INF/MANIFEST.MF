@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.xtext.util,
  org.eclipse.xtend.lib,
  org.eclipse.xtext
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.fordiac.ide.model.xtext.fbt,
  org.eclipse.fordiac.ide.model.xtext.fbt.parser.antlr.internal,
  org.eclipse.fordiac.ide.model.xtext.fbt.parser.antlr,

@@ -4,7 +4,7 @@ Bundle-Name: Metrics
 Bundle-SymbolicName: org.eclipse.fordiac.ide.metrics;singleton:=true
 Bundle-Version: 1.13.0.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.metrics.Activator
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.fordiac.ide.ui,

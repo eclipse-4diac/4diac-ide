@@ -18,5 +18,5 @@ Bundle-Name: Resource Editing (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.resourceediting.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.resourceediting;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.resourceediting
