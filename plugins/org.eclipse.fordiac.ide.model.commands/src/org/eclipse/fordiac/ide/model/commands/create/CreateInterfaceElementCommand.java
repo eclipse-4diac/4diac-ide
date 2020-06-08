@@ -40,11 +40,7 @@ public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 	private String name;
 
 	public CreateInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput, int index) {
-		this.isInput = isInput;
-		this.dataType = dataType;
-		this.index = index;
-		this.interfaceList = interfaceList;
-		this.name = dataType.getName();
+		this(dataType, getNameProposal(dataType, isInput), interfaceList, isInput, index);
 	}
 
 	public CreateInterfaceElementCommand(DataType dataType, String name, InterfaceList interfaceList, boolean isInput,
@@ -53,7 +49,20 @@ public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 		this.dataType = dataType;
 		this.index = index;
 		this.interfaceList = interfaceList;
-		this.name = (null != name) ? name : dataType.getName();
+		this.name = (null != name) ? name : getNameProposal(dataType, isInput);
+	}
+
+	private static String getNameProposal(DataType dataType, boolean isInput) {
+		if (dataType instanceof EventType) {
+			return isInput ? "EI1" 	: "EO1"; //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		if (dataType instanceof AdapterType) {
+			return isInput ? "SOCKET1" : "PLUG1"; //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		if (dataType instanceof DataType) {
+			return isInput ? "DI1"	: "DO1"; //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		return ""; //$NON-NLS-1$
 	}
 
 	protected boolean isInput() {

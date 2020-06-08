@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
@@ -125,13 +127,19 @@ public class AddDeleteWidget {
 			CommandProvider commandProvider) {
 		return ev -> {
 			if (!viewer.getStructuredSelection().isEmpty()) {
-				CompoundCommand cmd = new CompoundCommand();
-				viewer.getStructuredSelection().toList().stream()
-						.forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
-				executor.executeCommand(cmd);
-				viewer.refresh();
+				executeCompoundCommandForList(viewer, viewer.getStructuredSelection().toList(), executor,
+						commandProvider);
 			}
 		};
+	}
+
+	@SuppressWarnings("unchecked")
+	protected static void executeCompoundCommandForList(TableViewer viewer, List<Object> selection,
+			CommandExecutor executor, CommandProvider commandProvider) {
+		CompoundCommand cmd = new CompoundCommand();
+		selection.stream().forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
+		executor.executeCommand(cmd);
+		viewer.refresh();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -140,11 +148,8 @@ public class AddDeleteWidget {
 		return ev -> {
 			if (!viewer.getStructuredSelection().isEmpty()) {
 				int pos = viewer.getTable().getSelectionIndices()[0];
-				CompoundCommand cmd = new CompoundCommand();
-				viewer.getStructuredSelection().toList().stream()
-						.forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
-				executor.executeCommand(cmd);
-				viewer.refresh();
+				executeCompoundCommandForList(viewer, viewer.getStructuredSelection().toList(), executor,
+						commandProvider);
 				int itemCnt = viewer.getTable().getItemCount();
 				if (pos <= itemCnt) {
 					if (pos == itemCnt) {

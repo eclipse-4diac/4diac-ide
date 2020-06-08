@@ -47,7 +47,7 @@ public class CreateMemberVariableCommand extends CreateVariableCommand {
 
 	@Override
 	public String getDefaultVarName() {
-		return "MEMBERVAR1"; //$NON-NLS-1$
+		return "VAR1"; //$NON-NLS-1$
 	}
 
 }
