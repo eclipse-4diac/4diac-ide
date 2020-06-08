@@ -14,11 +14,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
+import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
@@ -81,11 +83,21 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 				Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
 					refresh();
+				} else if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
+					updateConnectorBorderColor();
 				}
 				super.notifyChanged(notification);
+			}
+
+			private void updateConnectorBorderColor() {
+				Border border = getFigure().getBorder();
+				if (border instanceof ConnectorBorder) {
+					((ConnectorBorder) border).updateColor();
+					getFigure().repaint();
+				}
+
 			}
 		};
 	}

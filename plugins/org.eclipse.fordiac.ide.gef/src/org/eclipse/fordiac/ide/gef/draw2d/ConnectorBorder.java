@@ -49,7 +49,7 @@ public class ConnectorBorder extends AbstractBorder {
 		} else if (isAdapter()) {
 			connectorColor = PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
 		} else {
-			connectorColor = PreferenceGetter.getDataColor(editPartModelOject.getTypeName());
+			connectorColor = PreferenceGetter.getDataColor(editPartModelOject.getType().getName());
 		}
 	}
 
