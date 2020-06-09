@@ -64,7 +64,18 @@ class ForteNgDateTimeExpressionTest extends ForteNgTestBasicFBTypeBase {
 				testCase( "LDATE_AND_TIME#1984-06-25-15:36:55.360_227_400", //$NON-NLS-1$
 						"CIEC_DATE_AND_TIME(\"LDT#1984-06-25-15:36:55.360227400\")", VALID_VALUE ), //$NON-NLS-1$
 				testCase( "LDT#1984-06-25-15:36:55.360_227_400", "CIEC_DATE_AND_TIME(\"LDT#1984-06-25-15:36:55.360227400\")", //$NON-NLS-1$ //$NON-NLS-2$
-						VALID_VALUE )
+						VALID_VALUE ), //
+
+				testCase( "LDT#1984-06-25-15:36:55.360_227_400_123", "", //$NON-NLS-1$ //$NON-NLS-2$
+						INVALID_VALUE ), //
+				testCase( "D#1996-13-12", "", INVALID_VALUE ), //$NON-NLS-1$ //$NON-NLS-2$
+				testCase( "TOD#24:06:5", "", INVALID_VALUE ), //$NON-NLS-1$ //$NON-NLS-2$
+				testCase( "DT#1989-06-31-13:56:14.77", "", INVALID_VALUE ), //$NON-NLS-1$ //$NON-NLS-2$
+
+				testCase( "TIME#61m", "CIEC_TIME(\"T#61m\")", VALID_VALUE ), //$NON-NLS-1$ //$NON-NLS-2$
+				testCase( "TIME#1h61m", "", INVALID_VALUE ), //$NON-NLS-1$ //$NON-NLS-2$
+				testCase( "TIME#61d", "CIEC_TIME(\"T#61d\")", VALID_VALUE ), //$NON-NLS-1$ //$NON-NLS-2$
+				testCase( "TIME#1d24h", "", INVALID_VALUE ) //$NON-NLS-1$ //$NON-NLS-2$
 				]
 	}
 
