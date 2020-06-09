@@ -7,6 +7,7 @@ import org.junit.runner.RunWith
 import static org.junit.Assert.assertNull
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertEquals
+import org.junit.runners.Parameterized.Parameter
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -27,15 +28,23 @@ class ForteNgAtArrayAccessTest extends ForteNgTestBasicFBTypeBase {
 
 	static final String VALUE_42 = "42" //$NON-NLS-1$
 
-	String sourceType
-	String accessType
-	String accessor
-	int arrayStart
-	int arrayStop
-	int index
-	String value
-	boolean isValid
-	
+	@Parameter(0)
+	public String sourceType
+	@Parameter(1)
+	public String accessType
+	@Parameter(2)
+	public String accessor
+	@Parameter(3)
+	public int arrayStart
+	@Parameter(4)
+	public int arrayStop
+	@Parameter(5)
+	public int index
+	@Parameter(6)
+	public String value
+	@Parameter(7)
+	public boolean isValid
+
 	@Parameterized.Parameters(name = "{index}: {0}.{2}{5}={6}")
 	def static Collection<Object[]> testCases()  {
 		return #[
@@ -97,18 +106,6 @@ class ForteNgAtArrayAccessTest extends ForteNgTestBasicFBTypeBase {
 						VALUE_42, INVALID_ACCESS ) //
 			]
 		}
-
-	new(String sourceType, String accessType, String accessor, int arrayStart, int arrayStop, int index, String value, boolean isValid) {
-		super()
-		this.sourceType = sourceType
-		this.accessType = accessType
-		this.accessor = accessor
-		this.arrayStart = arrayStart
-		this.arrayStop = arrayStop
-		this.index = index
-		this.value = value
-		this.isValid = isValid
-	}
 
 	@Test
 	def locatedArrayAtAccess() {

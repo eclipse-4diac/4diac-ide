@@ -7,6 +7,7 @@ import org.junit.runner.RunWith
 import static org.junit.Assert.assertNull
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertEquals
+import org.junit.runners.Parameterized.Parameter
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -16,9 +17,12 @@ class ForteNgDateTimeExpressionTest extends ForteNgTestBasicFBTypeBase {
 	static final boolean VALID_VALUE = true
 	static final boolean INVALID_VALUE = !VALID_VALUE
 
-	String expression
-	String expectation
-	boolean isValid
+	@Parameter(0)
+	public String expression
+	@Parameter(1)
+	public String expectation
+	@Parameter(2)
+	public boolean isValid
 
 	@Parameterized.Parameters(name = "{index}: {0}->{1}")
 	def static Collection<Object[]> testCases()  {
@@ -93,9 +97,4 @@ class ForteNgDateTimeExpressionTest extends ForteNgTestBasicFBTypeBase {
 		}
 	}
 
-	new(String expression, String expectation, Boolean isValid) {
-		this.expression = expression
-		this.expectation = expectation
-		this.isValid = isValid
-	}
 }

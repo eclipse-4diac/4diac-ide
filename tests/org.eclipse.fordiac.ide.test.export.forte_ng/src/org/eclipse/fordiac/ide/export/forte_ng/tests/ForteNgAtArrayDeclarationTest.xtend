@@ -20,6 +20,7 @@ import org.junit.runner.RunWith
 import static org.junit.Assert.assertNull
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertEquals
+import org.junit.runners.Parameterized.Parameter
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -29,12 +30,17 @@ class ForteNgAtArrayDeclarationTest extends ForteNgTestBasicFBTypeBase {
 	val static VALID_DECLARATION = true
 	val static INVALID_DECLARATION = !VALID_DECLARATION
 
-	String sourceType
-	String accessType
-	int arrayStart
-	int arrayStop
-	boolean isValid
-	
+	@Parameter(0)
+	public String sourceType
+	@Parameter(1)
+	public String accessType
+	@Parameter(2)
+	public int arrayStart
+	@Parameter(3)
+	public int arrayStop
+	@Parameter(4)
+	public boolean isValid
+
 	@Parameterized.Parameters(name = "{index}: {0}->{1}[{2}..{3}]")
 	def static Collection<Object[]> testCases()  {
 		return #[
@@ -65,15 +71,6 @@ class ForteNgAtArrayDeclarationTest extends ForteNgTestBasicFBTypeBase {
 				testCase( REAL, BOOL, INDEX_START, 8, INVALID_DECLARATION )
 			]
 		}
-
-	new(String sourceType, String accessType, int arrayStart, int arrayStop, boolean isValid) {
-		super()
-		this.sourceType = sourceType
-		this.accessType = accessType
-		this.arrayStart = arrayStart
-		this.arrayStop = arrayStop
-		this.isValid = isValid
-	}
 
 	@Test
 	def LocatedArrayDeclaration() {
