@@ -71,12 +71,12 @@ public class ChangeStructCommand extends Command {
 		} else if (oldMux instanceof Demultiplexer) {
 			newMux = LibraryElementFactory.eINSTANCE.createDemultiplexer();
 		}
+		newMux.setPaletteEntry(entry);
 		newMux.setInterface(EcoreUtil.copy(oldMux.getType().getInterfaceList()));
 		newMux.setName(oldMux.getName());
 		newMux.setX(oldMux.getX());
 		newMux.setY(oldMux.getY());
 		newMux.setStructType(newStruct);
-		newMux.setPaletteEntry(entry);
 		createValues();
 		replaceFBs(oldMux, newMux);
 	}
