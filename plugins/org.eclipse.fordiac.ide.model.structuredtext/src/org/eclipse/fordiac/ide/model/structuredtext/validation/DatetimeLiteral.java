@@ -1,9 +1,7 @@
 package org.eclipse.fordiac.ide.model.structuredtext.validation;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
+import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 public class DatetimeLiteral {
@@ -208,13 +206,7 @@ public class DatetimeLiteral {
 			return;
 		}
 
-		Matcher m = unsignedIntPattern.matcher(data);
-		List<String> matchList = new ArrayList<>();
-		while (m.find()) {
-			matchList.add(m.group());
-		}
-		String[] matches = new String[matchList.size()];
-		matches = matchList.toArray(matches);
+		String[] matches = unsignedIntPattern.matcher(data).results().map(MatchResult::group).toArray(String[]::new);
 
 		if ((matches.length != LENGTH_WITHOUT_NANOSECOND) && (matches.length != LENGTH_WITH_NANOSECOND)) {
 			type = Type.INVALID;
@@ -276,13 +268,7 @@ public class DatetimeLiteral {
 			return;
 		}
 
-		Matcher m = unsignedIntPattern.matcher(data);
-		List<String> matchList = new ArrayList<>();
-		while (m.find()) {
-			matchList.add(m.group());
-		}
-		String[] matches = new String[matchList.size()];
-		matches = matchList.toArray(matches);
+		String[] matches = unsignedIntPattern.matcher(data).results().map(MatchResult::group).toArray(String[]::new);
 
 		if ((matches.length != LENGTH_WITHOUT_NANOSECONDS) && (matches.length != LENGTH_WITH_NANOSECONDS)) {
 			type = Type.INVALID;
@@ -333,38 +319,13 @@ public class DatetimeLiteral {
 			isNegative = true;
 		}
 
-		Matcher m = fixpointWithUnitPattern.matcher(data);
-		List<String> matchList = new ArrayList<>();
-		while (m.find()) {
-			matchList.add(m.group());
-		}
-		String[] matches = new String[matchList.size()];
-		matches = matchList.toArray(matches);
+		String[] matches = fixpointWithUnitPattern.matcher(data).results().map(MatchResult::group)
+				.toArray(String[]::new);
 
 		for (String match : matches) {
-			m = unsignedIntPattern.matcher(match);
-			matchList = new ArrayList<>();
-			while (m.find()) {
-				matchList.add(m.group());
-			}
-			String[] value = new String[matchList.size()];
-			value = matchList.toArray(value);
-
-			m = decimalPattern.matcher(match);
-			matchList = new ArrayList<>();
-			while (m.find()) {
-				matchList.add(m.group());
-			}
-			String[] decimal = new String[matchList.size()];
-			decimal = matchList.toArray(decimal);
-
-			m = unitPattern.matcher(match);
-			matchList = new ArrayList<>();
-			while (m.find()) {
-				matchList.add(m.group());
-			}
-			String[] unit = new String[matchList.size()];
-			unit = matchList.toArray(unit);
+			String[] value = unsignedIntPattern.matcher(match).results().map(MatchResult::group).toArray(String[]::new);
+			String[] decimal = decimalPattern.matcher(match).results().map(MatchResult::group).toArray(String[]::new);
+			String[] unit = unitPattern.matcher(match).results().map(MatchResult::group).toArray(String[]::new);
 
 			if (decimal.length > 1) {
 				type = Type.INVALID;
@@ -582,13 +543,7 @@ public class DatetimeLiteral {
 			return;
 		}
 
-		Matcher m = unsignedIntPattern.matcher(data);
-		List<String> matchList = new ArrayList<>();
-		while (m.find()) {
-			matchList.add(m.group());
-		}
-		String[] matches = new String[matchList.size()];
-		matches = matchList.toArray(matches);
+		String[] matches = unsignedIntPattern.matcher(data).results().map(MatchResult::group).toArray(String[]::new);
 
 		if (matches.length != LENGTH) {
 			type = Type.INVALID;
