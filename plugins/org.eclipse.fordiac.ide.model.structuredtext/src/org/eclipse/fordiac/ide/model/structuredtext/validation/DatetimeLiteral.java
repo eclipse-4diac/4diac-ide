@@ -12,8 +12,6 @@ public class DatetimeLiteral {
 		INVALID, T, LT, D, LD, TOD, LTOD, DT, LDT
 	}
 
-	private String literal = "";
-
 	private String data;
 
 	private Type type = Type.INVALID;
@@ -30,54 +28,96 @@ public class DatetimeLiteral {
 	private Long microsecond = null;
 	private Long nanosecond = null;
 
-	static final long kilo = 1000;
-	static final long nsPerUs = kilo;
-	static final long usPerMs = kilo;
-	static final long msPerS = kilo;
-	static final long sPerM = 60; // This may be wrong when using UTC, the last minute of the day can have 59, 60
+	static final long KILO = 1000;
+	static final long NS_PER_US = KILO;
+	static final long US_PER_MS = KILO;
+	static final long MS_PER_S = KILO;
+	static final long S_PER_M = 60; // This may be wrong when using UTC, the last minute of the day can have 59, 60
 	// or 61 seconds
-	static final long mPerH = 60;
-	static final long hPerD = 24;
+	static final long M_PER_H = 60;
+	static final long H_PER_D = 24;
+
+	static final long MAX_KILO = 999;
+	static final long MAX_S = S_PER_M - 1;
+	static final long MAX_M = M_PER_H - 1;
+	static final long MAX_H = H_PER_D - 1;
+
+	static final String UNDERSCORE = "_"; //$NON-NLS-1$
+	static final String EMPTY = ""; //$NON-NLS-1$
+
+	static final long BASE_TEN = 10;
+	static final long MAX_COUNT_DIGITS_NS = 9; // This limit is due to the defined resolution: nanoseconds //
+												// (100000000 nanoseconds are 1 second); allow maximum 9 digits
+												// otherwise digits would be dropped and precision would not match
+	static final long MAX_COUNT_DIGITS = 19; // This limit is due to the defined maximum bitsize of time&date types: 64
+												// bits limit you to 19 digits in base ten
+
+	static final String LITERAL_SEPERATOR = "#"; //$NON-NLS-1$
+
+	static final String MINUS = "-"; //$NON-NLS-1$
+	static final String UNIT_D = "d"; //$NON-NLS-1$
+	static final String UNIT_H = "h"; //$NON-NLS-1$
+	static final String UNIT_M = "m"; //$NON-NLS-1$
+	static final String UNIT_S = "s"; //$NON-NLS-1$
+	static final String UNIT_MS = "ms"; //$NON-NLS-1$
+	static final String UNIT_US = "us"; //$NON-NLS-1$
+	static final String UNIT_NS = "ns"; //$NON-NLS-1$
+
+	static final String DATE_SEPERATOR = "-"; //$NON-NLS-1$
+
+	static final String TIMEOFDAY_SEPERATOR = ":"; //$NON-NLS-1$
+	static final String TIMEOFDAY_SEPERATOR_DECIMALS = "."; //$NON-NLS-1$
+
+	static final String TWO_DIGIT_NUMBER = "%02d"; //$NON-NLS-1$
 
 	// prepare the "cheap" regex'es for splitting the string apart
-	static final String UNSIGNED_INT_REGEX = "[0-9](_?[0-9])*";
-	static final String DECIMAL_REGEX = "\\." + UNSIGNED_INT_REGEX;
-	static final String FIXPOINT_REGEX = UNSIGNED_INT_REGEX + "(" + DECIMAL_REGEX + ")?";
-	static final String UNIT_REGEX = "(ns|us|ms|s|m|h|d)";
+	static final String DIGIT_SEPERATOR = "(_)?"; //$NON-NLS-1$
+	static final String UNSIGNED_INT_REGEX = "[0-9](" + DIGIT_SEPERATOR + "[0-9])*"; //$NON-NLS-1$
+	static final String DECIMAL_REGEX = "\\." + UNSIGNED_INT_REGEX; //$NON-NLS-1$
+	static final String FIXPOINT_REGEX = UNSIGNED_INT_REGEX + "(" + DECIMAL_REGEX + ")?"; //$NON-NLS-1$ //$NON-NLS-2$
+	static final String UNIT_REGEX = "(ns|us|ms|s|m|h|d)"; //$NON-NLS-1$
 	static final String FIXPOINT_WITH_UNIT_REGEX = FIXPOINT_REGEX + UNIT_REGEX;
 
 	// Validate that all symbols are in the right place with the full regex
 	// translated from EBNF (expensive!)
-	static final String NANOSECONDS_REGEX = "(" + FIXPOINT_REGEX + "ns" + ")";
-	static final String MICROSECONDS_REGEX = "((" + FIXPOINT_REGEX + "us" + ")|(" + UNSIGNED_INT_REGEX + "us(_)?)?"
-			+ NANOSECONDS_REGEX + ")";
-	static final String MILLISECONDS_REGEX = "((" + FIXPOINT_REGEX + "ms" + ")|(" + UNSIGNED_INT_REGEX + "ms(_)?)?"
-			+ MICROSECONDS_REGEX + ")";
-	static final String SECONDS_REGEX = "((" + FIXPOINT_REGEX + "s" + ")|(" + UNSIGNED_INT_REGEX + "s(_)?)?"
-			+ MILLISECONDS_REGEX + ")";
-	static final String MINUTES_REGEX = "((" + FIXPOINT_REGEX + "m" + ")|(" + UNSIGNED_INT_REGEX + "m(_)?)?"
-			+ SECONDS_REGEX + ")";
-	static final String HOURS_REGEX = "((" + FIXPOINT_REGEX + "h" + ")|(" + UNSIGNED_INT_REGEX + "h(_)?)?"
-			+ MINUTES_REGEX + ")";
-	static final String DAYS_REGEX = "((" + FIXPOINT_REGEX + "d" + ")|(" + UNSIGNED_INT_REGEX + "d(_)?)?" + HOURS_REGEX
-			+ ")";
+	static final String NANOSECONDS_REGEX = "(" + FIXPOINT_REGEX + UNIT_NS + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+	static final String MICROSECONDS_REGEX = "((" + FIXPOINT_REGEX + UNIT_US + ")|(" + UNSIGNED_INT_REGEX + UNIT_US //$NON-NLS-1$ //$NON-NLS-2$
+			+ DIGIT_SEPERATOR + ")?" + NANOSECONDS_REGEX + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+	static final String MILLISECONDS_REGEX = "((" + FIXPOINT_REGEX + UNIT_MS + ")|(" + UNSIGNED_INT_REGEX + UNIT_MS //$NON-NLS-1$ //$NON-NLS-2$
+			+ DIGIT_SEPERATOR + ")?" + MICROSECONDS_REGEX + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+	static final String SECONDS_REGEX = "((" + FIXPOINT_REGEX + UNIT_S + ")|(" + UNSIGNED_INT_REGEX + UNIT_S //$NON-NLS-1$ //$NON-NLS-2$
+			+ DIGIT_SEPERATOR + ")?" + MILLISECONDS_REGEX + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+	static final String MINUTES_REGEX = "((" + FIXPOINT_REGEX + UNIT_M + ")|(" + UNSIGNED_INT_REGEX + UNIT_M //$NON-NLS-1$ //$NON-NLS-2$
+			+ DIGIT_SEPERATOR + ")?" + SECONDS_REGEX + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+	static final String HOURS_REGEX = "((" + FIXPOINT_REGEX + UNIT_H + ")|(" + UNSIGNED_INT_REGEX + UNIT_H //$NON-NLS-1$ //$NON-NLS-2$
+			+ DIGIT_SEPERATOR + ")?" + MINUTES_REGEX + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+	static final String DAYS_REGEX = "((" + FIXPOINT_REGEX + UNIT_D + ")|(" + UNSIGNED_INT_REGEX + UNIT_D //$NON-NLS-1$ //$NON-NLS-2$
+			+ DIGIT_SEPERATOR + ")?" + HOURS_REGEX + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 
-	static final String INTERVAL_REGEX = "((" + DAYS_REGEX + ")|(" + HOURS_REGEX + ")|(" + MINUTES_REGEX + ")|("
-			+ SECONDS_REGEX + ")|(" + MILLISECONDS_REGEX + ")|(" + MICROSECONDS_REGEX + ")|(" + NANOSECONDS_REGEX
-			+ "))";
+	static final String INTERVAL_REGEX = "((" + DAYS_REGEX + ")|(" + HOURS_REGEX + ")|(" + MINUTES_REGEX + ")|(" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			+ SECONDS_REGEX + ")|(" + MILLISECONDS_REGEX + ")|(" + MICROSECONDS_REGEX + ")|(" + NANOSECONDS_REGEX //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			+ "))"; //$NON-NLS-1$
 
-	static final String DURATION_VALUE_REGEX = "(\\+|-)?" + INTERVAL_REGEX;
+	static final String DURATION_VALUE_REGEX = "(\\+|-)?" + INTERVAL_REGEX; //$NON-NLS-1$
 
-	static final String DATE_VALUE_REGEX = UNSIGNED_INT_REGEX + "-" + UNSIGNED_INT_REGEX + "-" + UNSIGNED_INT_REGEX;
+	static final String DATE_VALUE_REGEX = UNSIGNED_INT_REGEX + DATE_SEPERATOR + UNSIGNED_INT_REGEX + DATE_SEPERATOR
+			+ UNSIGNED_INT_REGEX;
 
-	static final String TIMEOFDAY_VALUE_REGEX = UNSIGNED_INT_REGEX + ":" + UNSIGNED_INT_REGEX + ":" + FIXPOINT_REGEX;
+	static final String TIMEOFDAY_VALUE_REGEX = UNSIGNED_INT_REGEX + TIMEOFDAY_SEPERATOR + UNSIGNED_INT_REGEX
+			+ TIMEOFDAY_SEPERATOR + FIXPOINT_REGEX;
 
-	static final String DATETIME_VALUE_REGEX = DATE_VALUE_REGEX + "-" + TIMEOFDAY_VALUE_REGEX;
+	static final String DATETIME_VALUE_REGEX = DATE_VALUE_REGEX + DATE_SEPERATOR + TIMEOFDAY_VALUE_REGEX;
 
-	static final Pattern durationValuePattern = Pattern.compile("^" + DURATION_VALUE_REGEX + "$");
-	static final Pattern dateValuePattern = Pattern.compile("^" + DATE_VALUE_REGEX + "$");
-	static final Pattern timeofdayValuePattern = Pattern.compile("^" + TIMEOFDAY_VALUE_REGEX + "$");
-	static final Pattern datetimeValuePattern = Pattern.compile("^" + DATETIME_VALUE_REGEX + "$");
+	static final String BEGINNING_OF_STRING = "^"; //$NON-NLS-1$
+	static final String END_OF_STRING = "$"; //$NON-NLS-1$
+
+	static final Pattern durationValuePattern = Pattern
+			.compile(BEGINNING_OF_STRING + DURATION_VALUE_REGEX + END_OF_STRING);
+	static final Pattern dateValuePattern = Pattern.compile(BEGINNING_OF_STRING + DATE_VALUE_REGEX + END_OF_STRING);
+	static final Pattern timeofdayValuePattern = Pattern
+			.compile(BEGINNING_OF_STRING + TIMEOFDAY_VALUE_REGEX + END_OF_STRING);
+	static final Pattern datetimeValuePattern = Pattern
+			.compile(BEGINNING_OF_STRING + DATETIME_VALUE_REGEX + END_OF_STRING);
 
 	static final Pattern fixpointWithUnitPattern = Pattern.compile(FIXPOINT_WITH_UNIT_REGEX);
 	static final Pattern unsignedIntPattern = Pattern.compile(UNSIGNED_INT_REGEX);
@@ -85,29 +125,11 @@ public class DatetimeLiteral {
 	static final Pattern unitPattern = Pattern.compile(UNIT_REGEX);
 
 	public DatetimeLiteral(String string) {
-		literal = string;
+		final String literal = string;
 
-		final String uppercase = literal.toUpperCase();
+		determineType(literal);
 
-		if (uppercase.startsWith("TOD#") || uppercase.startsWith("TIME_OF_DAY#")) {
-			type = Type.TOD;
-		} else if (uppercase.startsWith("LTOD#") || uppercase.startsWith("LTIME_OF_DAY#")) {
-			type = Type.LTOD;
-		} else if (uppercase.startsWith("DT#") || uppercase.startsWith("DATE_AND_TIME#")) {
-			type = Type.DT;
-		} else if (uppercase.startsWith("LDT#") || uppercase.startsWith("LDATE_AND_TIME#")) {
-			type = Type.LDT;
-		} else if (uppercase.startsWith("T#") || uppercase.startsWith("TIME#")) {
-			type = Type.T;
-		} else if (uppercase.startsWith("LT#") || uppercase.startsWith("LTIME#")) {
-			type = Type.LT;
-		} else if (uppercase.startsWith("D#") || uppercase.startsWith("DATE#")) {
-			type = Type.D;
-		} else if (uppercase.startsWith("LD#") || uppercase.startsWith("LDATE#")) {
-			type = Type.LD;
-		}
-
-		final String[] dataSplit = literal.toLowerCase().split("#");
+		final String[] dataSplit = literal.toLowerCase().split(LITERAL_SEPERATOR);
 		if (dataSplit.length != 2) {
 			type = Type.INVALID;
 			return;
@@ -138,11 +160,49 @@ public class DatetimeLiteral {
 
 	}
 
+	private void determineType(final String literal) {
+		final String uppercase = literal.toUpperCase();
+
+		if (uppercase.startsWith("TOD" + LITERAL_SEPERATOR) //$NON-NLS-1$
+				|| uppercase.startsWith("TIME_OF_DAY" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+			type = Type.TOD;
+		} else if (uppercase.startsWith("LTOD" + LITERAL_SEPERATOR) //$NON-NLS-1$
+				|| uppercase.startsWith("LTIME_OF_DAY" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+			type = Type.LTOD;
+		} else if (uppercase.startsWith("DT" + LITERAL_SEPERATOR) //$NON-NLS-1$
+				|| uppercase.startsWith("DATE_AND_TIME" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+			type = Type.DT;
+		} else if (uppercase.startsWith("LDT" + LITERAL_SEPERATOR) //$NON-NLS-1$
+				|| uppercase.startsWith("LDATE_AND_TIME" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+			type = Type.LDT;
+		} else if (uppercase.startsWith("T" + LITERAL_SEPERATOR) // //$NON-NLS-1$
+				|| uppercase.startsWith("TIME" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+			type = Type.T;
+		} else if (uppercase.startsWith("LT" + LITERAL_SEPERATOR) //$NON-NLS-1$
+				|| uppercase.startsWith("LTIME" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+			type = Type.LT;
+		} else if (uppercase.startsWith("D" + LITERAL_SEPERATOR) // //$NON-NLS-1$
+				|| uppercase.startsWith("DATE" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+			type = Type.D;
+		} else if (uppercase.startsWith("LD" + LITERAL_SEPERATOR) //$NON-NLS-1$
+				|| uppercase.startsWith("LDATE" + LITERAL_SEPERATOR)) { //$NON-NLS-1$
+			type = Type.LD;
+		}
+	}
+
 	public boolean isValid() {
 		return type != Type.INVALID;
 	}
 
 	private void parseTOD() {
+		final int INDEX_HOUR = 0;
+		final int INDEX_MINUTE = 1;
+		final int INDEX_SECOND = 2;
+		final int INDEX_NANOSECOND = 3;
+
+		final int LENGTH_WITHOUT_NANOSECOND = INDEX_SECOND + 1;
+		final int LENGTH_WITH_NANOSECOND = INDEX_NANOSECOND + 1;
+
 		if (!timeofdayValuePattern.matcher(data).matches()) {
 			type = Type.INVALID;
 			return;
@@ -156,27 +216,27 @@ public class DatetimeLiteral {
 		String[] matches = new String[matchList.size()];
 		matches = matchList.toArray(matches);
 
-		if ((matches.length != 3) && (matches.length != 4)) {
+		if ((matches.length != LENGTH_WITHOUT_NANOSECOND) && (matches.length != LENGTH_WITH_NANOSECOND)) {
 			type = Type.INVALID;
 			return;
 		}
 
-		hour = Long.parseLong(matches[0].replace("_", ""));
-		minute = Long.parseLong(matches[1].replace("_", ""));
-		second = Long.parseLong(matches[2].replace("_", ""));
+		hour = Long.parseLong(matches[INDEX_HOUR].replace(UNDERSCORE, EMPTY));
+		minute = Long.parseLong(matches[INDEX_MINUTE].replace(UNDERSCORE, EMPTY));
+		second = Long.parseLong(matches[INDEX_SECOND].replace(UNDERSCORE, EMPTY));
 
-		if (matches.length == 4) {
-			String decimals = matches[3].replace("_", "");
+		if (matches.length == LENGTH_WITH_NANOSECOND) {
+			String decimals = matches[INDEX_NANOSECOND].replace(UNDERSCORE, EMPTY);
 			int places = decimals.length();
 
-			if (places > 9) { // This limit is due to the defined resolution: nanoseconds
+			if (places > MAX_COUNT_DIGITS_NS) {
 				type = Type.INVALID;
 				return;
 			}
 
-			int divider = (int) Math.pow(10, places);
+			int divider = (int) Math.pow(BASE_TEN, places);
 
-			nanosecond = (Long.parseLong(decimals) * msPerS * usPerMs * nsPerUs) / divider;
+			nanosecond = (Long.parseLong(decimals) * MS_PER_S * US_PER_MS * NS_PER_US) / divider;
 		}
 
 		validateTOD();
@@ -184,22 +244,33 @@ public class DatetimeLiteral {
 	}
 
 	private void validateTOD() {
-		if ((hour < 0) || (hour > 23)) {
+		if ((hour < 0) || (hour > MAX_H)) {
 			type = Type.INVALID;
 			return;
 		}
 
-		if ((minute < 0) || (minute > 59)) {
+		if ((minute < 0) || (minute > MAX_M)) {
 			type = Type.INVALID;
 			return;
 		}
 
-		if ((second < 0) || (second > 59)) {
+		if ((second < 0) || (second > MAX_S)) {
 			type = Type.INVALID;
 		}
 	}
 
 	private void parseDT() {
+		final int INDEX_YEAR = 0;
+		final int INDEX_MONTH = 1;
+		final int INDEX_DAY = 2;
+		final int INDEX_HOUR = 3;
+		final int INDEX_MINUTE = 4;
+		final int INDEX_SECOND = 5;
+		final int INDEX_NANOSECOND = 6;
+
+		final int LENGTH_WITHOUT_NANOSECONDS = INDEX_SECOND + 1;
+		final int LENGTH_WITH_NANOSECONDS = INDEX_NANOSECOND + 1;
+
 		if (!datetimeValuePattern.matcher(data).matches()) {
 			type = Type.INVALID;
 			return;
@@ -213,35 +284,35 @@ public class DatetimeLiteral {
 		String[] matches = new String[matchList.size()];
 		matches = matchList.toArray(matches);
 
-		if ((matches.length != 6) && (matches.length != 7)) {
+		if ((matches.length != LENGTH_WITHOUT_NANOSECONDS) && (matches.length != LENGTH_WITH_NANOSECONDS)) {
 			type = Type.INVALID;
 			return;
 		}
 
-		year = Long.parseLong(matches[0].replace("_", ""));
-		month = Long.parseLong(matches[1].replace("_", ""));
-		day = Long.parseLong(matches[2].replace("_", ""));
+		year = Long.parseLong(matches[INDEX_YEAR].replace(UNDERSCORE, EMPTY));
+		month = Long.parseLong(matches[INDEX_MONTH].replace(UNDERSCORE, EMPTY));
+		day = Long.parseLong(matches[INDEX_DAY].replace(UNDERSCORE, EMPTY));
 		validateD();
 		if (type == Type.INVALID) {
 			return;
 		}
 
-		hour = Long.parseLong(matches[3].replace("_", ""));
-		minute = Long.parseLong(matches[4].replace("_", ""));
-		second = Long.parseLong(matches[5].replace("_", ""));
+		hour = Long.parseLong(matches[INDEX_HOUR].replace(UNDERSCORE, EMPTY));
+		minute = Long.parseLong(matches[INDEX_MINUTE].replace(UNDERSCORE, EMPTY));
+		second = Long.parseLong(matches[INDEX_SECOND].replace(UNDERSCORE, EMPTY));
 
-		if (matches.length == 7) {
-			String decimals = matches[6].replace("_", "");
+		if (matches.length == LENGTH_WITH_NANOSECONDS) {
+			String decimals = matches[INDEX_NANOSECOND].replace(UNDERSCORE, EMPTY);
 			int places = decimals.length();
 
-			if (places > 9) { // This limit is due to the defined resolution: nanoseconds
+			if (places > MAX_COUNT_DIGITS_NS) {
 				type = Type.INVALID;
 				return;
 			}
 
-			int divider = (int) Math.pow(10, places);
+			int divider = (int) Math.pow(BASE_TEN, places);
 
-			nanosecond = (Long.parseLong(decimals) * msPerS * usPerMs * nsPerUs) / divider;
+			nanosecond = (Long.parseLong(decimals) * MS_PER_S * US_PER_MS * NS_PER_US) / divider;
 		}
 
 		validateTOD();
@@ -258,7 +329,7 @@ public class DatetimeLiteral {
 		// and that the string is basically valid
 		// we now need to find the values and check if they match the allowed ranges
 
-		if (data.startsWith("-")) {
+		if (data.startsWith(MINUS)) {
 			isNegative = true;
 		}
 
@@ -300,64 +371,64 @@ public class DatetimeLiteral {
 				return;
 			}
 
-			long intValue = Long.parseLong(value[0].replace("_", ""));
-			String decimals = decimal.length == 1 ? decimal[0].substring(1).replace("_", "") : "0";
+			long intValue = Long.parseLong(value[0].replace(UNDERSCORE, EMPTY));
+			String decimals = decimal.length == 1 ? decimal[0].substring(1).replace(UNDERSCORE, EMPTY) : "0"; //$NON-NLS-1$
 			long intDecimal = Long.parseLong(decimals);
 			int places = decimals.length();
 
-			if (places > 12) { // This limit is arbitrary
+			if (places > MAX_COUNT_DIGITS) {
 				type = Type.INVALID;
 				return;
 			}
 
-			long divider = (int) Math.pow(10, places);
+			long divider = (int) Math.pow(BASE_TEN, places);
 
 			switch (unit[0]) {
-			case "d":
+			case UNIT_D:
 				day = intValue;
-				fillFromNs((intDecimal * hPerD * mPerH * sPerM * msPerS * usPerMs * nsPerUs) / divider);
+				fillFromNs((intDecimal * H_PER_D * M_PER_H * S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US) / divider);
 				break;
-			case "h":
+			case UNIT_H:
 				if (null != hour) {
 					type = Type.INVALID;
 					return;
 				}
 				hour = intValue;
-				fillFromNs((intDecimal * mPerH * sPerM * msPerS * usPerMs * nsPerUs) / divider);
+				fillFromNs((intDecimal * M_PER_H * S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US) / divider);
 				break;
-			case "m":
+			case UNIT_M:
 				if (null != minute) {
 					type = Type.INVALID;
 					return;
 				}
 				minute = intValue;
-				fillFromNs((intDecimal * sPerM * msPerS * usPerMs * nsPerUs) / divider);
+				fillFromNs((intDecimal * S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US) / divider);
 				break;
-			case "s":
+			case UNIT_S:
 				if (null != second) {
 					type = Type.INVALID;
 					return;
 				}
 				second = intValue;
-				fillFromNs((intDecimal * msPerS * usPerMs * nsPerUs) / divider);
+				fillFromNs((intDecimal * MS_PER_S * US_PER_MS * NS_PER_US) / divider);
 				break;
-			case "ms":
+			case UNIT_MS:
 				if (null != millisecond) {
 					type = Type.INVALID;
 					return;
 				}
 				millisecond = intValue;
-				fillFromNs((intDecimal * usPerMs * nsPerUs) / divider);
+				fillFromNs((intDecimal * US_PER_MS * NS_PER_US) / divider);
 				break;
-			case "us":
+			case UNIT_US:
 				if (null != microsecond) {
 					type = Type.INVALID;
 					return;
 				}
 				microsecond = intValue;
-				fillFromNs((intDecimal * nsPerUs) / divider);
+				fillFromNs((intDecimal * NS_PER_US) / divider);
 				break;
-			case "ns":
+			case UNIT_NS:
 				nanosecond = intValue;
 				if (intDecimal != 0) {
 					type = Type.INVALID;
@@ -375,32 +446,32 @@ public class DatetimeLiteral {
 		(null != nanosecond) && //
 				((null != microsecond) || (null != millisecond) || (null != second) || (null != minute)
 						|| (null != hour) || (null != day)) //
-				&& (nanosecond > 999)) || //
+				&& (nanosecond > MAX_KILO)) || //
 				(//
 				(null != microsecond) && //
 						((null != millisecond) || (null != second) || (null != minute) || (null != hour)
 								|| (null != day)) //
-						&& (microsecond > 999))
+						&& (microsecond > MAX_KILO))
 				|| //
 				(//
 				(null != millisecond) && //
 						((null != second) || (null != minute) || (null != hour) || (null != day)) //
-						&& (millisecond > 999))
+						&& (millisecond > MAX_KILO))
 				|| //
 				(//
 				(null != second) && //
 						((null != minute) || (null != hour) || (null != day)) //
-						&& (second > 59))
+						&& (second > MAX_S))
 				|| //
 				(//
 				(null != minute) && //
 						((null != hour) || (null != day)) //
-						&& (minute > 59))
+						&& (minute > MAX_M))
 				|| //
 				(//
 				(null != hour) && //
 						((null != day)) //
-						&& (hour > 23))//
+						&& (hour > MAX_H))//
 		) {
 			type = Type.INVALID;
 		}
@@ -409,7 +480,7 @@ public class DatetimeLiteral {
 
 	private void fillFromNs(long nanoseconds) {
 		long nanosecondTemp = nanoseconds;
-		long temp = nanosecondTemp / (mPerH * sPerM * msPerS * usPerMs * nsPerUs);
+		long temp = nanosecondTemp / (M_PER_H * S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US);
 		if (temp != 0) {
 			if (null != hour) {
 				type = Type.INVALID;
@@ -417,8 +488,8 @@ public class DatetimeLiteral {
 			}
 			hour = temp;
 		}
-		nanosecondTemp = nanosecondTemp % (mPerH * sPerM * msPerS * usPerMs * nsPerUs);
-		temp = nanosecondTemp / (sPerM * msPerS * usPerMs * nsPerUs);
+		nanosecondTemp = nanosecondTemp % (M_PER_H * S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US);
+		temp = nanosecondTemp / (S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US);
 		if (temp != 0) {
 			if (null != minute) {
 				type = Type.INVALID;
@@ -426,8 +497,8 @@ public class DatetimeLiteral {
 			}
 			minute = temp;
 		}
-		nanosecondTemp = nanosecondTemp % (sPerM * msPerS * usPerMs * nsPerUs);
-		temp = nanosecondTemp / (msPerS * usPerMs * nsPerUs);
+		nanosecondTemp = nanosecondTemp % (S_PER_M * MS_PER_S * US_PER_MS * NS_PER_US);
+		temp = nanosecondTemp / (MS_PER_S * US_PER_MS * NS_PER_US);
 		if (temp != 0) {
 			if (null != second) {
 				type = Type.INVALID;
@@ -435,8 +506,8 @@ public class DatetimeLiteral {
 			}
 			second = temp;
 		}
-		nanosecondTemp = nanosecondTemp % (msPerS * usPerMs * nsPerUs);
-		temp = nanosecondTemp / (usPerMs * nsPerUs);
+		nanosecondTemp = nanosecondTemp % (MS_PER_S * US_PER_MS * NS_PER_US);
+		temp = nanosecondTemp / (US_PER_MS * NS_PER_US);
 		if (temp != 0) {
 			if (null != millisecond) {
 				type = Type.INVALID;
@@ -444,8 +515,8 @@ public class DatetimeLiteral {
 			}
 			millisecond = temp;
 		}
-		nanosecondTemp = nanosecondTemp % (usPerMs * nsPerUs);
-		temp = nanosecondTemp / (nsPerUs);
+		nanosecondTemp = nanosecondTemp % (US_PER_MS * NS_PER_US);
+		temp = nanosecondTemp / (NS_PER_US);
 		if (temp != 0) {
 			if (null != microsecond) {
 				type = Type.INVALID;
@@ -453,7 +524,7 @@ public class DatetimeLiteral {
 			}
 			microsecond = temp;
 		}
-		temp = nanosecondTemp % (nsPerUs);
+		temp = nanosecondTemp % (NS_PER_US);
 		if (temp != 0) {
 			if (null != nanosecond) {
 				type = Type.INVALID;
@@ -466,40 +537,46 @@ public class DatetimeLiteral {
 	private String toInterval() {
 		StringBuilder s = new StringBuilder();
 		if (isNegative) {
-			s.append("-");
+			s.append(MINUS);
 		}
 		if ((null != day) && (day != 0)) {
 			s.append(day);
-			s.append("d");
+			s.append(UNIT_D);
 		}
 		if ((null != hour) && (hour != 0)) {
 			s.append(hour);
-			s.append("h");
+			s.append(UNIT_H);
 		}
 		if ((null != minute) && (minute != 0)) {
 			s.append(minute);
-			s.append("m");
+			s.append(UNIT_M);
 		}
 		if ((null != second) && (second != 0)) {
 			s.append(second);
-			s.append("s");
+			s.append(UNIT_S);
 		}
 		if ((null != millisecond) && (millisecond != 0)) {
 			s.append(millisecond);
-			s.append("ms");
+			s.append(UNIT_MS);
 		}
 		if ((null != microsecond) && (microsecond != 0)) {
 			s.append(microsecond);
-			s.append("us");
+			s.append(UNIT_US);
 		}
 		if ((null != nanosecond) && (nanosecond != 0)) {
 			s.append(nanosecond);
-			s.append("ns");
+			s.append(UNIT_NS);
 		}
 		return s.toString();
 	}
 
 	private void parseD() {
+		final int INDEX_YEAR = 0;
+		final int INDEX_MONTH = 1;
+		final int INDEX_DAY = 2;
+
+		final int LENGTH = INDEX_DAY + 1;
+
 		if (!dateValuePattern.matcher(data).matches()) {
 			type = Type.INVALID;
 			return;
@@ -513,20 +590,32 @@ public class DatetimeLiteral {
 		String[] matches = new String[matchList.size()];
 		matches = matchList.toArray(matches);
 
-		if (matches.length != 3) {
+		if (matches.length != LENGTH) {
 			type = Type.INVALID;
 			return;
 		}
 
-		year = Long.parseLong(matches[0].replace("_", ""));
-		month = Long.parseLong(matches[1].replace("_", ""));
-		day = Long.parseLong(matches[2].replace("_", ""));
+		year = Long.parseLong(matches[INDEX_YEAR].replace(UNDERSCORE, EMPTY));
+		month = Long.parseLong(matches[INDEX_MONTH].replace(UNDERSCORE, EMPTY));
+		day = Long.parseLong(matches[INDEX_DAY].replace(UNDERSCORE, EMPTY));
 
 		validateD();
 
 	}
 
 	private void validateD() {
+		// This is valid under the assumption of gregorian calender
+
+		final long DAYS_FEB_LEAPYEAR = 29;
+		final long DAYS_FEB_NON_LEAPYEAR = 28;
+
+		final long DAYS_LONG_MONTH = 31;
+		final long DAYS_SHORT_MONTH = 30;
+
+		final long QUATERNARY = 4;
+		final long CENTURY = 100;
+		final long QUATERNARYCENTURY = 400;
+
 		if (day < 1) {
 			type = Type.INVALID;
 			return;
@@ -534,8 +623,9 @@ public class DatetimeLiteral {
 
 		switch (month.intValue()) {
 		case 2:
-			boolean isLeapYear = ((((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0));
-			if (day > (isLeapYear ? 29 : 28)) {
+			boolean isLeapYear = ((((year % QUATERNARY) == 0) && ((year % CENTURY) != 0))
+					|| ((year % QUATERNARYCENTURY) == 0));
+			if (day > (isLeapYear ? DAYS_FEB_LEAPYEAR : DAYS_FEB_NON_LEAPYEAR)) {
 				type = Type.INVALID;
 			}
 			break;
@@ -546,7 +636,7 @@ public class DatetimeLiteral {
 		case 8:
 		case 10:
 		case 12:
-			if (day > 31) {
+			if (day > DAYS_LONG_MONTH) {
 				type = Type.INVALID;
 			}
 			break;
@@ -554,7 +644,7 @@ public class DatetimeLiteral {
 		case 6:
 		case 9:
 		case 11:
-			if (day > 30) {
+			if (day > DAYS_SHORT_MONTH) {
 				type = Type.INVALID;
 			}
 			break;
@@ -566,22 +656,22 @@ public class DatetimeLiteral {
 	private String toDate() {
 		StringBuilder s = new StringBuilder();
 		s.append(year);
-		s.append("-");
-		s.append(String.format("%02d", month));
-		s.append("-");
-		s.append(String.format("%02d", day));
+		s.append(DATE_SEPERATOR);
+		s.append(String.format(TWO_DIGIT_NUMBER, month));
+		s.append(DATE_SEPERATOR);
+		s.append(String.format(TWO_DIGIT_NUMBER, day));
 		return s.toString();
 	}
 
 	private String toTimeOfDay() {
 		StringBuilder s = new StringBuilder();
-		s.append(String.format("%02d", hour));
-		s.append(":");
-		s.append(String.format("%02d", minute));
-		s.append(":");
-		s.append(String.format("%02d", second));
+		s.append(String.format(TWO_DIGIT_NUMBER, hour));
+		s.append(TIMEOFDAY_SEPERATOR);
+		s.append(String.format(TWO_DIGIT_NUMBER, minute));
+		s.append(TIMEOFDAY_SEPERATOR);
+		s.append(String.format(TWO_DIGIT_NUMBER, second));
 		if ((null != nanosecond) && (nanosecond != 0)) {
-			s.append(".");
+			s.append(TIMEOFDAY_SEPERATOR_DECIMALS);
 			s.append(nanosecond);
 		}
 		return s.toString();
@@ -591,23 +681,23 @@ public class DatetimeLiteral {
 	public String toString() {
 		switch (type) {
 		case T:
-			return MessageFormat.format("CIEC_TIME(\"T#{0}\")", toInterval());
+			return MessageFormat.format("CIEC_TIME(\"T#{0}\")", toInterval()); //$NON-NLS-1$
 		case LT:
-			return MessageFormat.format("CIEC_TIME(\"LT#{0}\")", toInterval());
+			return MessageFormat.format("CIEC_TIME(\"LT#{0}\")", toInterval()); //$NON-NLS-1$
 		case D:
-			return MessageFormat.format("CIEC_DATE(\"D#{0}\")", toDate());
+			return MessageFormat.format("CIEC_DATE(\"D#{0}\")", toDate()); //$NON-NLS-1$
 		case LD:
-			return MessageFormat.format("CIEC_DATE(\"LD#{0}\")", toDate());
+			return MessageFormat.format("CIEC_DATE(\"LD#{0}\")", toDate()); //$NON-NLS-1$
 		case TOD:
-			return MessageFormat.format("CIEC_TIME_OF_DAY(\"TOD#{0}\")", toTimeOfDay());
+			return MessageFormat.format("CIEC_TIME_OF_DAY(\"TOD#{0}\")", toTimeOfDay()); //$NON-NLS-1$
 		case LTOD:
-			return MessageFormat.format("CIEC_TIME_OF_DAY(\"LTOD#{0}\")", toTimeOfDay());
+			return MessageFormat.format("CIEC_TIME_OF_DAY(\"LTOD#{0}\")", toTimeOfDay()); //$NON-NLS-1$
 		case DT:
-			return MessageFormat.format("CIEC_DATE_AND_TIME(\"DT#{0}-{1}\")", toDate(), toTimeOfDay());
+			return MessageFormat.format("CIEC_DATE_AND_TIME(\"DT#{0}-{1}\")", toDate(), toTimeOfDay()); //$NON-NLS-1$
 		case LDT:
-			return MessageFormat.format("CIEC_DATE_AND_TIME(\"LDT#{0}-{1}\")", toDate(), toTimeOfDay());
+			return MessageFormat.format("CIEC_DATE_AND_TIME(\"LDT#{0}-{1}\")", toDate(), toTimeOfDay()); //$NON-NLS-1$
 		default:
-			return "INVALID()";
+			return "INVALID()"; //$NON-NLS-1$
 		}
 	}
 
