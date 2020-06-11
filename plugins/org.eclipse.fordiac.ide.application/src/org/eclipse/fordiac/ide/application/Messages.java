@@ -77,6 +77,10 @@ public class Messages extends NLS {
 	/** The Map sub app to command_ staus message_ already mapped. */
 	public static String MapSubAppToCommand_STAUSMessage_AlreadyMapped;
 
+	public static String MapToContributionItem_No_Device;
+
+	public static String MapToContributionItem_No_FB_Or_SubApp_Selected;
+
 	public static String NewInstanceCellEditor_SearchForType;
 
 	/** The New sub application action_ new subapplication text. */
