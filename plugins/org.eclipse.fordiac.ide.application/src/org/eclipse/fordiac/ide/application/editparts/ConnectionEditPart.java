@@ -71,7 +71,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		}
 		if (PreferenceConstants.isDataConnectorProperty(event.getProperty())
 				&& (getModel() instanceof DataConnection)) {
-			getFigure().setForegroundColor(PreferenceGetter.getDataColor(getModel().getSource().getTypeName()));
+			getFigure().setForegroundColor(getDataConnectioncolor());
 		}
 		if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON) && (getModel() instanceof DataConnection)) {
 			getFigure().setVisible(!((Boolean) event.getNewValue()));
@@ -150,8 +150,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		if (null == refElement) {
 			refElement = getModel().getDestination();
 		}
-		if (null == refElement) {
-			return PreferenceGetter.getDataColor(getModel().getSource().getTypeName());
+		if (null != refElement) {
+			return PreferenceGetter.getDataColor(refElement.getType().getName());
 		}
 		return PreferenceGetter.getDefaultDataColor();
 	}
