@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Virendra Ashiwal, Bianca Wiesmayr
  *     - added tooltip functionality at state
+ *     - added refresh tooltip at state
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -171,6 +172,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		Rectangle rect = new Rectangle(getModel().getX(), getModel().getY(), -1, -1);
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rect);
 		getFigure().setHasAction(!getModel().getECAction().isEmpty());
+		refreshStateTooltip();
 		super.refreshVisuals();
 	}
 

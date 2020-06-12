@@ -10,42 +10,16 @@
  * Contributors:
  *   Virendra Ashiwal
  *     - initial implementation
+ *     - extracted common code from ECStateToolTipFigure to ECCToolTip
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
-import org.eclipse.draw2d.Border;
-import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.text.FlowPage;
-import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 
-public class ECStateToolTipFigure extends FlowPage {
-
-	private static final Border TOOLTIP_BORDER = new MarginBorder(2, 2, 2, 2);
-
-	private ECState state;
-
-	private TextFlow tooltipContent = new TextFlow();
-
-	public ECStateToolTipFigure() {
-		setBorder(TOOLTIP_BORDER);
-
-		add(tooltipContent);
-	}
+public class ECStateToolTipFigure extends ECCToolTip {
 
 	public void setECState(ECState state) {
-		this.state = state;
-		updateLabels();
-	}
-
-	private void updateLabels() {
-		if ((null != state.getComment()) && !state.getComment().isEmpty()) {
-			tooltipContent.setText(state.getComment());
-		} else {
-			tooltipContent.setText("[not set]");
-		}
-		revalidate();
-		repaint();
+		setLabel(state.getComment());
 	}
 
 }
