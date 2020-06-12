@@ -39,7 +39,7 @@
       <linux icon="/icons/fordiac.xpm"/>
       <macosx icon="/icons/fordiac.icns"/>
       <win useIco="true">
-         <ico path="/icons/fordiac.ico"/>
+         <ico path="icons/fordiac.ico"/>
          <bmp/>
       </win>
    </launcher>
