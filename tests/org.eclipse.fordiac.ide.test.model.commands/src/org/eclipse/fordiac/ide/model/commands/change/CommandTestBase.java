@@ -57,14 +57,6 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	}
 
 	/**
-	 * functional interface for preparing infrastructure for commands
-	 *
-	 */
-	protected interface CommandCreator<T> {
-		void createCommand(T state);
-	}
-
-	/**
 	 * functional interface for executing a state transition
 	 *
 	 */
@@ -223,12 +215,10 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	@Parameter(2)
 	public StateVerifier<T> initialVerifier;
 	@Parameter(3)
-	public CommandCreator<T> creator;
-	@Parameter(4)
 	public Iterable<ExecutionDescription<T>> commands;
-	@Parameter(5)
+	@Parameter(4)
 	public CommandExecutor<T> undo;
-	@Parameter(6)
+	@Parameter(5)
 	public CommandExecutor<T> redo;
 
 	/**
@@ -255,8 +245,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 * @return
 	 */
 	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, CommandCreator<?> creator, List<Object> commands, CommandExecutor<?> undo,
-			CommandExecutor<?> redo) {
+			StateVerifier<?> initialVerifier, List<Object> commands, CommandExecutor<?> undo, CommandExecutor<?> redo) {
 		List<Object[]> descriptions = new ArrayList<>();
 
 		final String MESSAGE_MASTER = "{0} : {1}";
@@ -272,13 +261,10 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		descriptions.add(convert(
 				MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
 						MESSAGE_VERIFY_INITIAL_STATE),
-				initializer, initialVerifier, creator, Collections.emptyList(), undo, redo));
+				initializer, initialVerifier, Collections.emptyList(), undo, redo));
 
-		descriptions
-				.add(convert(
-						MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
-								MESSAGE_EXECUTE_ALL_COMMANDS),
-						initializer, initialVerifier, creator, commands, undo, redo));
+		descriptions.add(convert(MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER,
+				description, MESSAGE_EXECUTE_ALL_COMMANDS), initializer, initialVerifier, commands, undo, redo));
 
 		int index = 0;
 		ArrayList<Object> commandsUntil = new ArrayList<>();
@@ -294,7 +280,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			descriptions.add(convert(
 					MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
 							MessageFormat.format(MESSAGE_EXECUTE_UNTIL_COMMAND_I, index, command.description)),
-					initializer, initialVerifier, creator, commandsWithUndoRedo.clone(), undo, redo));
+					initializer, initialVerifier, commandsWithUndoRedo.clone(), undo, redo));
 			commandsWithUndoRedo.add(ExecutionDescription.undo());
 			commandsWithUndoRedoAll.add(ExecutionDescription.undo());
 			descriptions
@@ -302,19 +288,19 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 							MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
 									MessageFormat.format(MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO, index,
 											command.description)),
-							initializer, initialVerifier, creator, commandsWithUndoRedo.clone(), undo, redo));
+							initializer, initialVerifier, commandsWithUndoRedo.clone(), undo, redo));
 			commandsWithUndoRedo.add(ExecutionDescription.redo());
 			commandsWithUndoRedoAll.add(ExecutionDescription.redo());
 			descriptions.add(convert(
 					MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
 							MessageFormat.format(MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO, index,
 									command.description)),
-					initializer, initialVerifier, creator, commandsWithUndoRedo.clone(), undo, redo));
+					initializer, initialVerifier, commandsWithUndoRedo.clone(), undo, redo));
 		}
 		descriptions.add(convert(
 				MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
 						MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO_ALL),
-				initializer, initialVerifier, creator, commandsWithUndoRedoAll, undo, redo));
+				initializer, initialVerifier, commandsWithUndoRedoAll, undo, redo));
 		return descriptions;
 
 	}
@@ -341,9 +327,6 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		} else {
 			assertTrue(isInitialStateVerified);
 		}
-
-		// prepare command infrastructure
-		creator.createCommand(current.getState());
 
 		// step through all the commands/undo/redo
 		while (iterator.hasNext()) {
