@@ -79,7 +79,9 @@ class ForteNgDateTimeExpressionTest extends ForteNgTestBasicFBTypeBase {
 				testCase( "TIME#61m", "CIEC_TIME(\"T#61m\")", VALID_VALUE ), //$NON-NLS-1$ //$NON-NLS-2$
 				testCase( "TIME#1h61m", "", INVALID_VALUE ), //$NON-NLS-1$ //$NON-NLS-2$
 				testCase( "TIME#61d", "CIEC_TIME(\"T#61d\")", VALID_VALUE ), //$NON-NLS-1$ //$NON-NLS-2$
-				testCase( "TIME#1d24h", "", INVALID_VALUE ) //$NON-NLS-1$ //$NON-NLS-2$
+				testCase( "TIME#1d24h", "", INVALID_VALUE ), //$NON-NLS-1$ //$NON-NLS-2$
+				testCase( "T#1m52", "", INVALID_VALUE ), //$NON-NLS-1$ //$NON-NLS-2$
+				testCase( "DWORD#1m52", "", INVALID_VALUE ) //$NON-NLS-1$ //$NON-NLS-2$
 				]
 	}
 
