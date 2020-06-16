@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2015, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2020                         Andrea Zoitl
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -36,7 +36,6 @@ public class Messages extends NLS {
 	public static String ECCActions_AddAction;
 	public static String ECCActions_AddState;
 	public static String ECCActions_InitialState;
-	public static String ECCContentAndLabelProvider_EmptyField;
 	public static String ECCEditor_LABEL_ECCEditorTabName;
 	public static String ECCPaletteFactory_LABEL_Action;
 	public static String ECCPaletteFactory_LABEL_ECCGroup;
