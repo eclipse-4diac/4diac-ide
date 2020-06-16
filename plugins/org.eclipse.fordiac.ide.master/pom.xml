@@ -63,10 +63,11 @@
 	</modules>
 
 	<properties>
-		<tycho.version>1.6.0</tycho.version>
+		<tycho.version>1.7.0</tycho.version>
 		<tycho-repo.url>http://download.eclipse.org/releases/2020-03</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
+		<org.eclipse.justj.jre.repository>http://download.eclipse.org/justj/sandbox/jres/14/updates/nightly/latest</org.eclipse.justj.jre.repository>
 	</properties>
 
 	<repositories>
@@ -75,7 +76,11 @@
 			<url>${tycho-repo.url}</url>
 			<layout>p2</layout>
 		</repository>
-
+		<repository>
+			<id>jre-updates</id>
+			<url>${org.eclipse.justj.jre.repository}</url>
+			<layout>p2</layout>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
@@ -118,6 +123,8 @@
 						</artifact>
 					</target>
 					
+					<resolveWithExecutionEnvironmentConstraints>false</resolveWithExecutionEnvironmentConstraints>
+					
 					<dependency-resolution>	
 						<extraRequirements>
 							<requirement>
@@ -131,6 +138,9 @@
 								<versionRange>4.15.0</versionRange>
 							</requirement>
 						</extraRequirements>
+						<profileProperties>
+							<org.eclipse.justj.buildtime>true</org.eclipse.justj.buildtime>
+						</profileProperties>
 					</dependency-resolution>
  
 					<environments>
