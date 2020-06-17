@@ -7,59 +7,9 @@
 	<packaging>pom</packaging>
 	<name>Eclipse 4diac IDE Parent Project</name>
 	<modules>
-		<module>../org.eclipse.fordiac.ide</module>
-		<module>../org.eclipse.fordiac.ide.application</module>
-		<module>../org.eclipse.fordiac.ide.deployment</module>
-		<module>../org.eclipse.fordiac.ide.deployment.iec61499</module>
-		<module>../org.eclipse.fordiac.ide.deployment.ui</module>
-		<module>../org.eclipse.fordiac.ide.datatypeeditor</module>
-		<module>../org.eclipse.fordiac.ide.export</module>
-		<module>../org.eclipse.fordiac.ide.export.compare</module>
-		<module>../org.eclipse.fordiac.ide.export.forte_1.0.x</module>
-		<module>../org.eclipse.fordiac.ide.export.forte_lua</module>
-		<module>../org.eclipse.fordiac.ide.export.forte_ng</module>
-		<module>../org.eclipse.fordiac.ide.export.ui</module>
-		<module>../org.eclipse.fordiac.ide.fbrtlauncher</module>
-		<module>../org.eclipse.fordiac.ide.fbtypeeditor.fbtester</module>
-		<module>../org.eclipse.fordiac.ide.fbtypeeditor</module>
-		<module>../org.eclipse.fordiac.ide.fbtypeeditor.ecc</module>
-		<module>../org.eclipse.fordiac.ide.fbtypeeditor.network</module>
-		<module>../org.eclipse.fordiac.ide.fbtypeeditor.servicesequence</module>
-		<module>../org.eclipse.fordiac.ide.fbtypeeditor.simplefb</module>
-		<module>../org.eclipse.fordiac.ide.typemanagement</module>
-		<module>../org.eclipse.fordiac.ide.fortelauncher</module>
-		<module>../org.eclipse.fordiac.ide.fmu</module>
-		<module>../org.eclipse.fordiac.ide.gef</module>
-		<module>../org.eclipse.fordiac.ide.images</module>
-		<module>../org.eclipse.fordiac.ide.metrics</module>
-		<module>../org.eclipse.fordiac.ide.model</module>
-		<module>../org.eclipse.fordiac.ide.model.edit</module>
-		<module>../org.eclipse.fordiac.ide.model.structuredtext</module>
-		<module>../org.eclipse.fordiac.ide.model.structuredtext.ui</module>
-		<module>../org.eclipse.fordiac.ide.model.xtext.fbt</module>
-		<module>../org.eclipse.fordiac.ide.model.xtext.fbt.ui</module>
-		<module>../org.eclipse.fordiac.ide.onlineedit</module>
-		<module>../org.eclipse.fordiac.ide.product</module>
-		<module>../org.eclipse.fordiac.ide.resourceediting</module>
-		<module>../org.eclipse.fordiac.ide.runtime</module>
-		<module>../org.eclipse.fordiac.ide.subapptypeeditor</module>
-		<module>../org.eclipse.fordiac.ide.systemconfiguration</module>
-		<module>../org.eclipse.fordiac.ide.ui</module>
-		<module>../org.eclipse.fordiac.ide.util</module>
-		<module>../../tests/org.eclipse.fordiac.ide.test.util</module>
-		<module>../org.eclipse.fordiac.ide.monitoring</module>
-		<module>../org.eclipse.fordiac.ide.systemmanagement</module>
-		<module>../org.eclipse.fordiac.ide.systemmanagement.ui</module>
-		<module>../org.eclipse.fordiac.ide.comgeneration</module>
-		<module>../org.eclipse.fordiac.ide.model.commands</module>
-		<module>../../features/org.eclipse.fordiac.ide.deployment.feature</module>
-		<module>../../features/org.eclipse.fordiac.ide.export.feature</module>
-		<module>../../features/org.eclipse.fordiac.ide.runtime.feature</module>
-		<module>../../features/org.eclipse.fordiac.ide.typeeditor.feature</module>
-		<module>../../features/org.eclipse.fordiac.ide.workbench.feature</module>
-		<module>../../features/org.eclipse.fordiac.ide.comgeneration.feature</module>
-		<module>../../tests/org.eclipse.fordiac.ide.test.export.forte_ng</module>
-		<module>../../tests/org.eclipse.fordiac.ide.test.model.commands</module>
+		<module>plugins</module>
+    	<module>tests</module>
+    	<module>features</module>
 	</modules>
 
 	<properties>
