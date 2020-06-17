@@ -15,6 +15,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -157,7 +160,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		if (isSystemFile(file)) {
 			// in case of a copied system file we just need to fix the name in the root XML
 			// node
-			renameSystemFile(file);
+			renameSystemFileCopy(file);
 		} else {
 			TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
 			if (!typeLib.containsType(file)) {
@@ -167,6 +170,35 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				}
 			}
 		}
+	}
+
+	static final Pattern systemNamePattern = Pattern
+			.compile("\\<System\\p{javaWhitespace}+(Comment=\".*\"\\p{javaWhitespace}+)?Name=\"([^\"]*)"); //$NON-NLS-1$
+
+	private void renameSystemFileCopy(IFile file) {
+		WorkspaceJob job = new WorkspaceJob("Check copied system file: " + file.getName()) {
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
+				boolean wrongName = false;
+				String newTypeName = TypeLibrary.getTypeNameFromFile(file);
+				try (Scanner scanner = new Scanner(file.getContents())) {
+					String name = scanner.findWithinHorizon(systemNamePattern, 0);
+					wrongName = (null != name) && (!name.endsWith("\"" + newTypeName));
+				} catch (Exception e) {
+					Activator.getDefault().logError(e.getMessage(), e);
+				}
+				if (wrongName) {
+					AutomationSystem system = systemManager.getSystem(file);
+					if ((null != system) && (!newTypeName.equals(system.getName()))) {
+						system.setName(TypeLibrary.getTypeNameFromFile(file));
+						SystemManager.saveSystem(system);
+					}
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setRule(file.getProject());
+		job.schedule();
 	}
 
 	private void handleFileMove(IResourceDelta delta) {
@@ -193,8 +225,13 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) {
 				AutomationSystem system = systemManager.getSystem(file);
-				system.setName(TypeLibrary.getTypeNameFromFile(file));
-				SystemManager.saveSystem(system);
+				if (null != system) {
+					String newTypeName = TypeLibrary.getTypeNameFromFile(file);
+					if (!newTypeName.equals(system.getName())) {
+						system.setName(TypeLibrary.getTypeNameFromFile(file));
+						SystemManager.saveSystem(system);
+					}
+				}
 				return Status.OK_STATUS;
 			}
 		};

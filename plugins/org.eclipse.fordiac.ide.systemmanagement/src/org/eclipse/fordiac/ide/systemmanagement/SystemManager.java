@@ -126,7 +126,7 @@ public enum SystemManager {
 		return project;
 	}
 
-	public AutomationSystem createNewSystem(IContainer location, String name) {
+	public synchronized AutomationSystem createNewSystem(IContainer location, String name) {
 		IFile systemFile = location.getFile(new Path(name + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT));
 		Map<IFile, AutomationSystem> projectSystems = getProjectSystems(location.getProject());
 		AutomationSystem system = projectSystems.computeIfAbsent(systemFile, SystemImporter::createAutomationSystem);
@@ -134,7 +134,7 @@ public enum SystemManager {
 		return system;
 	}
 
-	void removeProject(IProject project) {
+	public synchronized void removeProject(IProject project) {
 		allSystemsInWS.remove(project);
 		notifyListeners();
 	}
@@ -148,11 +148,11 @@ public enum SystemManager {
 		removeSystem(system.getSystemFile());
 	}
 
-	public void removeSystem(final IFile systemFile) {
+	public synchronized void removeSystem(final IFile systemFile) {
 		Map<IFile, AutomationSystem> projectSystems = getProjectSystems(systemFile.getProject());
 		AutomationSystem refSystem = projectSystems.remove(systemFile);
 		if (null != refSystem) {
-			closeAllSystemEditors(projectSystems.remove(systemFile));
+			closeAllSystemEditors(refSystem);
 			notifyListeners();
 		}
 	}
@@ -231,7 +231,7 @@ public enum SystemManager {
 		return Collections.emptyList();
 	}
 
-	public AutomationSystem getSystem(IFile systemFile) {
+	public synchronized AutomationSystem getSystem(IFile systemFile) {
 		Map<IFile, AutomationSystem> projectSystems = getProjectSystems(systemFile.getProject());
 		return projectSystems.computeIfAbsent(systemFile, sysFile -> {
 			long startTime = System.currentTimeMillis();
@@ -243,7 +243,7 @@ public enum SystemManager {
 		});
 	}
 
-	public Map<IFile, AutomationSystem> getProjectSystems(IProject project) {
+	public synchronized Map<IFile, AutomationSystem> getProjectSystems(IProject project) {
 		return allSystemsInWS.computeIfAbsent(project, p -> new HashMap<>());
 	}
 
