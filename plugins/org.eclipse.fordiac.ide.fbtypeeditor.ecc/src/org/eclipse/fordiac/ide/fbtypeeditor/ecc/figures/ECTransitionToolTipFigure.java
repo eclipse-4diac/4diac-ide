@@ -10,42 +10,17 @@
  * Contributors:
  *   Bianca Wiesmayr, Ernst Blecha
  *     - initial implementation
+ *   Virendra Ashiwal
+ *   	- extracted common code from ECTransitionToolTipFigure to ECCToolTip
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
-import org.eclipse.draw2d.Border;
-import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.text.FlowPage;
-import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 
-public class ECTransitionToolTipFigure extends FlowPage {
-
-	private static final Border TOOLTIP_BORDER = new MarginBorder(2, 2, 2, 2);
-
-	private ECTransition transition;
-
-	private TextFlow tooltipContent = new TextFlow();
-
-	public ECTransitionToolTipFigure() {
-		setBorder(TOOLTIP_BORDER);
-
-		add(tooltipContent);
-	}
+public class ECTransitionToolTipFigure extends ECCToolTip {
 
 	public void setECTransition(ECTransition transition) {
-		this.transition = transition;
-		updateLabels();
-	}
-
-	private void updateLabels() {
-		if ((null != transition.getComment()) && !transition.getComment().isEmpty()) {
-			tooltipContent.setText(transition.getComment());
-		} else {
-			tooltipContent.setText("[not set]");
-		}
-		revalidate();
-		repaint();
+		setLabel(transition.getComment());
 	}
 
 }
