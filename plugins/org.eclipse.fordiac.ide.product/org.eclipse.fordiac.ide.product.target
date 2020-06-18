@@ -3,18 +3,18 @@
 <target name="4diac-ide Target" sequenceNumber="21">
 	<locations>
     	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-        	<repository location="http://download.eclipse.org/releases/2020-03"/>
-        	<unit id="org.eclipse.egit.feature.group" version="5.7.0.202003110725-r"/>
-        	<unit id="org.eclipse.emf.sdk.feature.group" version="2.21.0.v20200205-0529"/>
-        	<unit id="org.eclipse.equinox.executable.feature.group" version="3.8.700.v20200207-2156"/>
-        	<unit id="org.eclipse.gef.sdk.feature.group" version="3.11.0.201606061308"/>
-        	<unit id="org.eclipse.xtext.sdk.feature.group" version="2.21.0.v20200302-1509"/>
+        	<repository location="http://download.eclipse.org/eclipse/updates/4.16"/>
+        	<unit id="org.eclipse.jdt.feature.group" version="3.18.400.v20200604-0540"/>
+        	<unit id="org.eclipse.pde.feature.group" version="3.14.400.v20200604-0540"/>
+        	<unit id="org.eclipse.platform.sdk" version="4.16.0.I20200604-0540"/>
     	</location>
-    	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-        	<repository location="http://download.eclipse.org/eclipse/updates/4.15"/>
-        	<unit id="org.eclipse.jdt.feature.group" version="3.18.300.v20200305-0155"/>
-        	<unit id="org.eclipse.pde.feature.group" version="3.14.300.v20200305-0155"/>
-        	<unit id="org.eclipse.platform.sdk" version="4.15.0.I20200305-0155"/>
-    	</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="http://download.eclipse.org/releases/2020-06"/>
+			<unit id="org.eclipse.egit.feature.group" version="5.8.0.202006091008-r"/>
+			<unit id="org.eclipse.emf.sdk.feature.group" version="2.22.0.v20200519-1135"/>
+			<unit id="org.eclipse.equinox.executable.feature.group" version="3.8.800.v20200514-1529"/>
+			<unit id="org.eclipse.gef.sdk.feature.group" version="3.11.0.201606061308"/>
+			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.22.0.v20200602-1533"/>
+		</location>
 	</locations>
 </target>
