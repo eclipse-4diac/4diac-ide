@@ -11,6 +11,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Alois Zoitl  - added support for structured types
+ *   Ernst Blecha - added support for exporting CMakeLists.txt
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
@@ -36,6 +37,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
+import org.eclipse.fordiac.ide.export.forte_ng.cmake.CMakeListsTemplate
+import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker
 
 class ForteNgExportFilter extends TemplateExportFilter {
 
@@ -70,6 +73,10 @@ class ForteNgExportFilter extends TemplateExportFilter {
 				#{
 					new StructuredTypeHeaderTemplate(type, '''«StructBaseTemplate.structuredTypeFileName(type)».h''', Paths.get("")),
 					new StructuredTypeImplTemplate(type, '''«StructBaseTemplate.structuredTypeFileName(type)».cpp''', Paths.get(""))
+				}
+			CMakeListsMarker:
+				#{
+					new CMakeListsTemplate('''CMakeLists.txt''', Paths.get(""))
 				}
 			default: {
 				errors.add('''Unknown library element type «type.class.name»''')

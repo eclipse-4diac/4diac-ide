@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <!--
  Copyright (c) 2010 - 2019 TU Wien ACIN, fortiss GmbH
- 			   2019 Johannes Kepler University Linz
- 			   2019 Andrea Zoitl
+               2019 Johannes Kepler University Linz
+               2019 Andrea Zoitl
+               2020 Primetals Technologies Austria GmbH
   
  This program and the accompanying materials are made available under the
  terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +18,8 @@
      - adapting, restructuring and extending the installation tutorial
    Andrea Zoitl
      - improved readability, updated Help ToC
+   Ernst Blecha
+     - add information on automatic creation of CMakeLists.txt
 -->
 
 <html lang="en">
@@ -34,7 +37,7 @@
 
 <h2 id="4DIAC-IDE">4diac&nbsp;IDE</h2>
 <p>The installation of 4diac&nbsp;IDE is independent of the operating system. 
-In order to run 4diac&nbsp;IDE, you require at least <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank">Java 8</a>.</p>
+In order to run 4diac&nbsp;IDE, you require at least <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank">Java 11</a>.</p>
 
 <p>To install 4diac&nbsp;IDE, simply download the latest version for your operating system under <a href="https://www.eclipse.org/4diac/en_dow.php" target="_blank">downloads</a>. 
 Unzip it to any desired folder and start the 4diac&nbsp;IDE. 
@@ -229,7 +232,7 @@ Therefore, the essential parts as well as the Makefiles which are important for 
 <p>Let's see how to add your own Function Blocks to 4diac&nbsp;FORTE.
 When you create and export your own types, you need to add them to your compilation. 
 The export is described in the <a href="../../html/4diacIDE/createOwnTypes.html#exportTypes">tutorial step 4</a>.
-As an example, we show how to add the three FBs BasicTest, CompositeTest, and ServiceTest from this tutorial.
+As an example, we show how to add the four FBs BasicTest, CompositeTest, and ServiceTest, SimpleTest from this tutorial.
 The name of the module will be EXAMPLE_TEST. 
 Follow the instructions:</p>
 <ol>
@@ -240,24 +243,29 @@ Follow the instructions:</p>
 	<li>Put all six files into EXAMPLE_TEST (a .cpp and .h file for each FB).</li>
 	<li>Create a file called <span class="fileLocation">CMakeLists.txt</span> (this exact name is mandatory).
 	<div><img src="../../html/installation/img/modulesFiles.png" alt="File Structure to add modules"></div></li>
-	<li>Inside write:
-	<div class="code">forte_add_module(EXAMPLE_TEST "Example test module")
+	<li>The content of this file can be created in different ways. <ul>
+	<li><p>By using the <span class="specificText">Export CMakeLists.txt</span> option in 4diac. This will use the directory name to create the module name. The CMake variable in this example would be called <span class="specificText">FORTE_MODULE_EXTERNAL_EXAMPLE_TEST</span></p>
+	<p>The comment will be set to the list of files enabled by that variable.</p></li>
+	<li>By manually inserting the following code into the file <span class="fileLocation">CMakeLists.txt</span> 
+	<div class="code">forte_add_module(EXTERNAL_EXAMPLE_TEST "Example test module")
 
 forte_add_sourcefile_hcpp(BasicTest)
 forte_add_sourcefile_hcpp(CompositeTest)
-forte_add_sourcefile_hcpp(ServiceTest)</div>
-
+forte_add_sourcefile_hcpp(ServiceTest)
+forte_add_sourcefile_hcpp(SimpleTest)</div>
 	and save. 
-	The first parameter of <span class="specificText">forte_add_module</span> is the name of the module; 
-	the second is a comment. 
-	The <span class="specificText">forte_add_sourcefile_hcpp</span> command tells CMake which .cpp and .h files to compile. 
-	You can use <span class="specificText">forte_add_subdirectory</span> to include subdirectories with own <span class="fileLocation">CMakeLists.txt</span> files.</li>
+	<p>The first parameter of <span class="code">forte_add_module</span> is the name of the module; 
+	the second is a comment.</p>
+	<p>The <span class="code">forte_add_sourcefile_hcpp</span> command tells CMake which .cpp and .h files to compile.</p> 
+	<p>You can use <span class="code">forte_add_subdirectory</span> to include subdirectories with own <span class="fileLocation">CMakeLists.txt</span> files.</p>
+	</li>
+	</ul></li>
 	<li>In CMake, please verify that the source code folder is still FORTE_FOLDER_ROOT.
 	It is <span class="specificText">not</span> changed to ext_modules.
 	Press Configure.
 	There's a variable called <span class="specificText">FORTE_EXTERNAL_MODULES_DIRECTORY</span>. 
 	Set this to the <span class="folderLocation">ext_modules</span> folder.</li>
-	<li>When pressing Configure again, a variable called <span class="specificText">FORTE_MODULE_EXAMPLE_TEST</span> will appear. 
+	<li>When pressing Configure again, a variable called <span class="specificText">FORTE_MODULE_EXTERNAL_EXAMPLE_TEST</span> will appear. 
 	Checking the box will include the module in compilation.
 	<div><img src="../../html/installation/img/modulesCMake.png" alt="CMake configuration for external modules"></div></li>
 	<li>After setting all desired variables, do the same as before: Generate and then <a href="#FORTEcompile">compile</a>.</li>

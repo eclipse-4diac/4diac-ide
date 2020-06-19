@@ -57,14 +57,31 @@ public abstract class TemplateExportFilter extends ExportFilter {
 	public TemplateExportFilter() {
 	}
 
+	private static final String PREFIX_ERRORMESSAGE_WITH_TYPENAME = "{0}: {1}";
+
 	private static List<String> reformat(LibraryElement type, List<String> messages) {
-		return messages.stream().map(v -> (null != type) ? (type.getName() + ": " + v) : v) //$NON-NLS-1$
+		return messages.stream().map(
+				v -> (null != type) ? (MessageFormat.format(PREFIX_ERRORMESSAGE_WITH_TYPENAME, type.getName(), v)) : v)
 				.collect(Collectors.toList());
 	}
 
 	@Override
 	public final void export(IFile typeFile, String destination, boolean forceOverwrite) throws ExportException {
 		this.export(typeFile, destination, forceOverwrite, null);
+	}
+
+	private String stringsToTextualList(List<String> list) {
+		String textualList = "";
+		if (list.size() == 1) {
+			textualList = MessageFormat.format("{0}", list.get(0));
+		} else if (list.size() == 2) {
+			textualList = MessageFormat.format("{0} and {1}", list.get(0), list.get(1));
+		} else if (list.size() == 3) {
+			textualList = MessageFormat.format("{0}, {1} and {2}", list.get(0), list.get(1), list.get(2));
+		} else if (list.size() > 3) {
+			textualList = MessageFormat.format("{0}, {1}, {2}, ...", list.get(0), list.get(1), list.get(2));
+		}
+		return textualList;
 	}
 
 	@Override
@@ -84,9 +101,8 @@ public abstract class TemplateExportFilter extends ExportFilter {
 			if (!forceOverwrite && filesExisted) {
 				// create a message dialog to ask about merging if forceOverwrite is not set
 				String msg = MessageFormat.format(
-						"Overwrite {0} and {1}?\nMerge will create a backup of the original file and open an editor to merge the files manually!",
-						type.getName() + ".cpp", type.getName() + ".h"); //$NON-NLS-1$ //$NON-NLS-2$
-
+						"Overwrite {0}?\nMerge will create a backup of the original file and open an editor to merge the files manually!",
+						stringsToTextualList(files.getFilenames()));
 				MessageDialog msgDiag = new MessageDialog(Display.getDefault().getActiveShell(), "File Exists", null,
 						msg, MessageDialog.QUESTION_WITH_CANCEL, BUTTON_LABELS, 0);
 
