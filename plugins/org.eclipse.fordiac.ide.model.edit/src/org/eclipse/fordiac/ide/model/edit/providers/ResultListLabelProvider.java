@@ -53,7 +53,7 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 
 	public static Image getTypeImage(LibraryElement type) {
 		if (type instanceof SubAppType) {
-			return FordiacImage.ICON_SUB_APP.getImage();
+			return FordiacImage.ICON_SUB_APP_TYPE.getImage();
 		} else if (type instanceof BasicFBType) {
 			return FordiacImage.ICON_BASIC_FB.getImage();
 		} else if (type instanceof SimpleFBType) {
