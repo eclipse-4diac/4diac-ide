@@ -63,9 +63,11 @@ public class FordiacLogListener implements ILogListener {
 	@Override
 	public void logging(IStatus status, String plugin) {
 
-		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException())) {
+		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException())
+				&& (status.getPlugin().contains("org.eclise.fordiac.ide"))) { //$NON-NLS-1$
 			// inform the user that an error has happened
-			// we currently only treat errors with exception as notworthy
+			// we currently only treat errors with exception and from a 4diac IDE plug-in as
+			// noteworthy
 			showErrorDialog(createStatusWithStackTrace(status));
 		}
 	}
