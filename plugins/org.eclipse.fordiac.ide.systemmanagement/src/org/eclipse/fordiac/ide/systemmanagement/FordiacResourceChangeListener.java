@@ -18,6 +18,8 @@ package org.eclipse.fordiac.ide.systemmanagement;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import javax.xml.stream.XMLStreamException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -31,8 +33,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -257,9 +262,22 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					// TODO report on error
 					(!newTypeName.equals(type.getName()))) {
 						type.setName(newTypeName);
-						AbstractBlockTypeExporter.saveType(entry);
+						saveType(entry);
 					}
 					return Status.OK_STATUS;
+				}
+
+				private void saveType(final PaletteEntry entry) {
+					if (entry instanceof DataTypePaletteEntry) {
+						DataTypeExporter exporter = new DataTypeExporter((AnyDerivedType) entry.getType());
+						try {
+							exporter.saveType(entry.getFile());
+						} catch (XMLStreamException e) {
+							Activator.getDefault().logError(e.getMessage(), e);
+						}
+					} else {
+						AbstractBlockTypeExporter.saveType(entry);
+					}
 				}
 			};
 			job.setRule(newFile.getProject());
