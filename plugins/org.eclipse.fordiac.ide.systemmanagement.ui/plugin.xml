@@ -56,7 +56,19 @@
             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"
             name="%SystemExplorer.name">
       </view>
-   </extension>   
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="%SystemEditor.name"
+            extensions="sys"
+            contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
+            default="true"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.SystemEditor"
+            icon="fordiacimage://ICON_SYSTEM_PERSPECTIVE"
+            id="org.eclipse.fordiac.ide.editors.SystemEditor">
+      </editor>
+   </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler 

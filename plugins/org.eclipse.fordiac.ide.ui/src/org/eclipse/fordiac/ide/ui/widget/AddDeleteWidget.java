@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -31,13 +32,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class AddDeleteWidget {
 	private Button createButton;
 	private Button deleteButton;
 
-	public void createControls(Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
+	public void createControls(Composite parent, FormToolkit widgetFactory) {
 		Composite container = createContainer(parent);
 
 		createAddButton(widgetFactory, container);
@@ -48,13 +49,13 @@ public class AddDeleteWidget {
 		setButtonEnablement(false);
 	}
 
-	protected void createDeleteButton(TabbedPropertySheetWidgetFactory widgetFactory, Composite container) {
+	protected void createDeleteButton(FormToolkit widgetFactory, Composite container) {
 		deleteButton = widgetFactory.createButton(container, "", SWT.PUSH); //$NON-NLS-1$
 		deleteButton.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
 		deleteButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 	}
 
-	protected void createAddButton(TabbedPropertySheetWidgetFactory widgetFactory, Composite container) {
+	protected void createAddButton(FormToolkit widgetFactory, Composite container) {
 		createButton = widgetFactory.createButton(container, "", SWT.PUSH); //$NON-NLS-1$
 		createButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createButton.setToolTipText("Create element");

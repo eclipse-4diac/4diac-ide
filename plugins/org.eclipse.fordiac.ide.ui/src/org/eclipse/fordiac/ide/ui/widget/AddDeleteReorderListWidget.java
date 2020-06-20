@@ -22,14 +22,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class AddDeleteReorderListWidget extends AddDeleteWidget {
 	private Button upButton;
 	private Button downButton;
 
 	@Override
-	public void createControls(Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
+	public void createControls(Composite parent, FormToolkit widgetFactory) {
 		Composite container = createContainer(parent);
 
 		createAddButton(widgetFactory, container);
