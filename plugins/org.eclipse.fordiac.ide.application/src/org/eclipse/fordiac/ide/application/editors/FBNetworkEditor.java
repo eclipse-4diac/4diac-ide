@@ -223,8 +223,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		EditPart editPart = (EditPart) getGraphicalViewer().getEditPartRegistry().get(element);
 		if (null != editPart) {
 			getGraphicalViewer().flush();
-			getGraphicalViewer().select(editPart);
-			getGraphicalViewer().reveal(editPart);
+			getGraphicalViewer().selectAndRevealEditPart(editPart);
 		}
 	}
 

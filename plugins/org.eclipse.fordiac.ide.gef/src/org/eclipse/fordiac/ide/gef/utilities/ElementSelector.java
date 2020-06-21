@@ -11,13 +11,14 @@
  *   Filip Adren, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util;
+package org.eclipse.fordiac.ide.gef.utilities;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -38,7 +39,11 @@ public final class ElementSelector {
 			List<EditPart> editParts = getSelectableEditParts(viewer, viewObjects);
 			if (!editParts.isEmpty()) {
 				viewer.setSelection(new StructuredSelection(editParts));
-				viewer.reveal(editParts.get(0));
+				if (viewer instanceof AdvancedScrollingGraphicalViewer) {
+					((AdvancedScrollingGraphicalViewer) viewer).revealEditPart(editParts.get(0));
+				} else {
+					viewer.reveal(editParts.get(0));
+				}
 			}
 		}
 

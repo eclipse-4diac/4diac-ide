@@ -96,8 +96,7 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 	public void selectElement(TypedConfigureableObject refElement) {
 		Object obj = getViewer().getEditPartRegistry().get(refElement);
 		if (obj instanceof EditPart) {
-			getViewer().select((EditPart) obj);
-			getViewer().reveal((EditPart) obj);
+			getViewer().selectAndRevealEditPart((EditPart) obj);
 		}
 	}
 

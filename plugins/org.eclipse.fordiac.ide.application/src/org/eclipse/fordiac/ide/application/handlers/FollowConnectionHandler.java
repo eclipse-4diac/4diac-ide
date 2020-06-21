@@ -23,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
+import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
@@ -118,8 +119,12 @@ public class FollowConnectionHandler extends AbstractHandler {
 	private static void selectElement(Object element, GraphicalViewer viewer) {
 		EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
 		if (null != editPart) {
-			viewer.select(editPart);
-			viewer.reveal(editPart);
+			if (viewer instanceof AdvancedScrollingGraphicalViewer) {
+				((AdvancedScrollingGraphicalViewer) viewer).selectAndRevealEditPart(editPart);
+			} else {
+				viewer.select(editPart);
+				viewer.reveal(editPart);
+			}
 		}
 	}
 

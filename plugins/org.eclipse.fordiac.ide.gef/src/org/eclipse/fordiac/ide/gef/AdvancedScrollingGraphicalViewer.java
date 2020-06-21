@@ -40,11 +40,31 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 	 */
 	@Override
 	public void reveal(EditPart part) {
+		// in order that the viewport is not moved on simple mouse selections do nothing
+		// here
+	}
+
+	/**
+	 * Explicitly move view port such that the editpart is moved fully visible
+	 *
+	 * @param part the editpart to be selected and revealed
+	 */
+	public void revealEditPart(EditPart part) {
 		// do not correct viewport for connections
-		// FIXME -> make it setable in e.g. preferences
 		if (!(part instanceof ConnectionEditPart)) {
 			super.reveal(part);
 		}
+	}
+
+	/**
+	 * Select and explicitly move view port such that the editpart is moved fully
+	 * visible
+	 *
+	 * @param part the editpart to be revealed
+	 */
+	public void selectAndRevealEditPart(EditPart part) {
+		select(part);
+		revealEditPart(part);
 	}
 
 	/**

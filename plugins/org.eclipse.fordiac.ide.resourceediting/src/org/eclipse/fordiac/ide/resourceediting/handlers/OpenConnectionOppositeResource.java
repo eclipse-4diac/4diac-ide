@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 
- * This program and the accompanying materials are made available under the 
+ *
+ * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  *
@@ -17,6 +17,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -25,10 +26,8 @@ import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.resourceediting.editparts.VirtualInOutputEditPart;
 import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -56,7 +55,7 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 
 		if (obj instanceof List) {
 			List<?> list = (List<?>) obj;
-			if (list.size() > 0) {
+			if (!list.isEmpty()) {
 				obj = list.get(0);
 			}
 		}
@@ -67,7 +66,7 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 		}
 	}
 
-	private IInterfaceElement getOppositeInterfaceelement(VirtualInOutputEditPart vIOEditPart) {
+	private static IInterfaceElement getOppositeInterfaceelement(VirtualInOutputEditPart vIOEditPart) {
 		IInterfaceElement ie = vIOEditPart.getModel().getReferencedInterfaceElement();
 		IInterfaceElement fbOppostiteIE = ie.getFBNetworkElement().getOpposite().getInterfaceElement(ie.getName());
 		if (null != fbOppostiteIE) {
@@ -81,28 +80,27 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 		return null;
 	}
 
-	private IInterfaceElement getConnectionOpposite(IInterfaceElement fbOppostiteIE) {
+	private static IInterfaceElement getConnectionOpposite(IInterfaceElement fbOppostiteIE) {
 		EList<Connection> connections = (fbOppostiteIE.isIsInput()) ? fbOppostiteIE.getInputConnections()
 				: fbOppostiteIE.getOutputConnections();
-		if (connections.size() >= 1) {
+		if (!connections.isEmpty()) {
 			return (fbOppostiteIE.isIsInput()) ? connections.get(0).getSource() : connections.get(0).getDestination();
 		}
 		return null;
 	}
 
-	private void openResource(IInterfaceElement oppositeMappedIE) {
+	private static void openResource(IInterfaceElement oppositeMappedIE) {
 		Resource res = oppositeMappedIE.getFBNetworkElement().getResource();
 
 		if (null != res) {
 			IEditorPart editor = OpenListenerManager.openEditor(res);
 			if (editor instanceof ResourceDiagramEditor) {
-				GraphicalViewer viewer = ((ResourceDiagramEditor) editor).getViewer();
+				AdvancedScrollingGraphicalViewer viewer = ((ResourceDiagramEditor) editor).getViewer();
 				if (viewer != null) {
 					Map<?, ?> map = viewer.getEditPartRegistry();
 					Object ieToSelect = map.get(oppositeMappedIE);
 					if (ieToSelect instanceof EditPart) {
-						viewer.setSelection(new StructuredSelection(ieToSelect));
-						viewer.reveal((EditPart) ieToSelect);
+						viewer.selectAndRevealEditPart((EditPart) ieToSelect);
 					}
 				}
 			}

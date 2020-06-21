@@ -456,7 +456,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	 *
 	 * @return the GraphicalViewer
 	 */
-	public GraphicalViewer getViewer() {
+	public AdvancedScrollingGraphicalViewer getViewer() {
 		return getGraphicalViewer();
 	}
 
