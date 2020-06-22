@@ -1,0 +1,28 @@
+/*******************************************************************************
+ * Copyright (c) 2020 Sandor Bacsi
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Sandor Bacsi - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+import 'platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore'
+
+package libraryElement
+
+-- A self-cycle exists when there is a transition from an EC state back to itself. Self-cycles must be gated by events.
+-- conditionEvent.oclIsUndefined() means 1 condition event
+-- Problem: The process that is executing the ECC may enter an infinite loop.
+context ECTransition
+inv SelfCycleMustBeGatedByEvent: self.source = self.destination implies (not self.conditionEvent.oclIsUndefined())
+
+-- Transitions with lower priority than the 1 transition condition will never be taken regardless they are with pure data-driven conditions or event conditions.
+-- Problem: Dead transitions.
+context ECTransition
+inv TransitionLowerThanOne: not self.conditionEvent.oclIsUndefined() implies (self.source.outTransitions->forAll(trans | trans.conditionEvent.oclIsUndefined() implies (trans.getPriority() > self.getPriority())))
+
+endpackage
