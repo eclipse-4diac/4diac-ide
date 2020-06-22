@@ -20,7 +20,6 @@
       <separator name="layouting stuff" visible="true"/>
       <command
             commandId="org.eclipse.fordiac.ide.elk.layout"
-            icon=""
             label="Layout the diagrams"
             style="push">
                </command>
