@@ -57,7 +57,10 @@ public class Activator extends AbstractUIPlugin {
 
 		super.start(context);
 		setPluginInstance(this);
-		addLogListener();
+
+		if (isDebugging()) {
+			addLogListener();
+		}
 		disableJFaceErrorMessages();
 		// As the ide plugin is the very first plugin loaded get here the system manager
 		// instance to initialize the toollib and resource change listener.
