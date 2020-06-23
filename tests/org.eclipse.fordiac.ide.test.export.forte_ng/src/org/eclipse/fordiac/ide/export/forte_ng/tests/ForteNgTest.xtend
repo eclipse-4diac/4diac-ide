@@ -115,4 +115,56 @@ class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 '''.toString(), generatedCode.toString())
 	}
 
+	@Test
+	def addExpression() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
+
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» + «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
+
+		assertNoErrors(errors); // Expression can not be an assignment
+		assertNotNull(generatedCode);
+		assertEquals('''ADD(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
+				generatedCode.toString())
+	}
+	
+	@Test
+	def subExpression() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
+
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» - «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
+
+		assertNoErrors(errors); // Expression can not be an assignment
+		assertNotNull(generatedCode);
+		assertEquals('''SUB(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
+				generatedCode.toString())
+	}
+	
+	@Test
+	def divExpression() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
+
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» / «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
+
+		assertNoErrors(errors); // Expression can not be an assignment
+		assertNotNull(generatedCode);
+		assertEquals('''DIV(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
+				generatedCode.toString())
+	}
+	
+	@Test
+	def mulExpression() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
+
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
+
+		assertNoErrors(errors); // Expression can not be an assignment
+		assertNotNull(generatedCode);
+		assertEquals('''MUL(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
+				generatedCode.toString())
+	}
+	
 }

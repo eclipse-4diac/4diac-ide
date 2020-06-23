@@ -40,13 +40,13 @@ class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase {
 		assertEquals('''
 		switch («EXPORTED_VARIABLE_NAME»()) {
 			case 0:
-				«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() + 1);
+				«EXPORTED_VARIABLE_NAME»() = ADD(«EXPORTED_VARIABLE_NAME»(), 1);
 				break;
 			case 1:
-				«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() + 1);
+				«EXPORTED_VARIABLE_NAME»() = ADD(«EXPORTED_VARIABLE_NAME»(), 1);
 				break;
 			case 2:
-				«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() + 1);
+				«EXPORTED_VARIABLE_NAME»() = ADD(«EXPORTED_VARIABLE_NAME»(), 1);
 				break;
 			case 255:
 				«EXPORTED_VARIABLE_NAME»() = 0;
@@ -71,7 +71,7 @@ class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase {
 		assertEquals('''
 		switch («EXPORTED_VARIABLE_NAME»()) {
 			case 0: case 1: case 2:
-				«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() + 1);
+				«EXPORTED_VARIABLE_NAME»() = ADD(«EXPORTED_VARIABLE_NAME»(), 1);
 				break;
 			case 255:
 				«EXPORTED_VARIABLE_NAME»() = 0;
@@ -98,7 +98,7 @@ class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase {
 		assertEquals('''
 		switch («EXPORTED_VARIABLE_NAME»()) {
 			case 0:
-				«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() + 1);
+				«EXPORTED_VARIABLE_NAME»() = ADD(«EXPORTED_VARIABLE_NAME»(), 1);
 				break;
 			case 255:
 				«EXPORTED_VARIABLE_NAME»() = 0;
@@ -134,10 +134,10 @@ class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase {
 		switch («EXPORTED_VARIABLE_NAME»()) {
 			case 0:
 				if((«EXPORTED_VARIABLE_NAME»() < 20)) {
-					«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() + 1);
+					«EXPORTED_VARIABLE_NAME»() = ADD(«EXPORTED_VARIABLE_NAME»(), 1);
 				}
 				else {
-					«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() - 1);
+					«EXPORTED_VARIABLE_NAME»() = SUB(«EXPORTED_VARIABLE_NAME»(), 1);
 				}
 				break;
 			case 255:

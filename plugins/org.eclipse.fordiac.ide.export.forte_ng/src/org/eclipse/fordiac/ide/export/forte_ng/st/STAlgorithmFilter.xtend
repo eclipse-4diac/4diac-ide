@@ -307,10 +307,6 @@ class STAlgorithmFilter {
 			case LE: '''<='''
 			case GT: '''>'''
 			case GE: '''>='''
-			case ADD: '''+'''
-			case SUB: '''-'''
-			case MUL: '''*'''
-			case DIV: '''/'''
 			case MOD: '''%'''
 			default:
 				throw new UnsupportedOperationException('''The operator «op» is not supported''')
@@ -336,6 +332,10 @@ class STAlgorithmFilter {
 	def protected dispatch CharSequence generateExpression(BinaryExpression expr) {
 		switch (expr.operator) {
 			case POWER: '''EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			case ADD: '''ADD(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			case SUB: '''SUB(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			case DIV: '''DIV(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			case MUL: '''MUL(«expr.left.generateExpression», «expr.right.generateExpression»)'''
 			default: '''(«expr.left.generateExpression» «expr.operator.generateBinaryOperator» «expr.right.generateExpression»)'''
 		}
 	}

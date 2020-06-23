@@ -789,44 +789,24 @@ public class STAlgorithmFilter {
           _builder_8.append(">=");
           _switchResult = _builder_8;
           break;
-        case ADD:
+        case MOD:
           StringConcatenation _builder_9 = new StringConcatenation();
-          _builder_9.append("+");
+          _builder_9.append("%");
           _switchResult = _builder_9;
           break;
-        case SUB:
-          StringConcatenation _builder_10 = new StringConcatenation();
-          _builder_10.append("-");
-          _switchResult = _builder_10;
-          break;
-        case MUL:
-          StringConcatenation _builder_11 = new StringConcatenation();
-          _builder_11.append("*");
-          _switchResult = _builder_11;
-          break;
-        case DIV:
-          StringConcatenation _builder_12 = new StringConcatenation();
-          _builder_12.append("/");
-          _switchResult = _builder_12;
-          break;
-        case MOD:
-          StringConcatenation _builder_13 = new StringConcatenation();
-          _builder_13.append("%");
-          _switchResult = _builder_13;
-          break;
         default:
-          StringConcatenation _builder_14 = new StringConcatenation();
-          _builder_14.append("The operator ");
-          _builder_14.append(op);
-          _builder_14.append(" is not supported");
-          throw new UnsupportedOperationException(_builder_14.toString());
+          StringConcatenation _builder_10 = new StringConcatenation();
+          _builder_10.append("The operator ");
+          _builder_10.append(op);
+          _builder_10.append(" is not supported");
+          throw new UnsupportedOperationException(_builder_10.toString());
       }
     } else {
-      StringConcatenation _builder_14 = new StringConcatenation();
-      _builder_14.append("The operator ");
-      _builder_14.append(op);
-      _builder_14.append(" is not supported");
-      throw new UnsupportedOperationException(_builder_14.toString());
+      StringConcatenation _builder_10 = new StringConcatenation();
+      _builder_10.append("The operator ");
+      _builder_10.append(op);
+      _builder_10.append(" is not supported");
+      throw new UnsupportedOperationException(_builder_10.toString());
     }
     return _switchResult;
   }
@@ -899,34 +879,78 @@ public class STAlgorithmFilter {
           _builder.append(")");
           _switchResult = _builder;
           break;
-        default:
+        case ADD:
           StringConcatenation _builder_1 = new StringConcatenation();
-          _builder_1.append("(");
+          _builder_1.append("ADD(");
           CharSequence _generateExpression_2 = this.generateExpression(expr.getLeft());
           _builder_1.append(_generateExpression_2);
-          _builder_1.append(" ");
-          CharSequence _generateBinaryOperator = this.generateBinaryOperator(expr.getOperator());
-          _builder_1.append(_generateBinaryOperator);
-          _builder_1.append(" ");
+          _builder_1.append(", ");
           CharSequence _generateExpression_3 = this.generateExpression(expr.getRight());
           _builder_1.append(_generateExpression_3);
           _builder_1.append(")");
           _switchResult = _builder_1;
           break;
+        case SUB:
+          StringConcatenation _builder_2 = new StringConcatenation();
+          _builder_2.append("SUB(");
+          CharSequence _generateExpression_4 = this.generateExpression(expr.getLeft());
+          _builder_2.append(_generateExpression_4);
+          _builder_2.append(", ");
+          CharSequence _generateExpression_5 = this.generateExpression(expr.getRight());
+          _builder_2.append(_generateExpression_5);
+          _builder_2.append(")");
+          _switchResult = _builder_2;
+          break;
+        case DIV:
+          StringConcatenation _builder_3 = new StringConcatenation();
+          _builder_3.append("DIV(");
+          CharSequence _generateExpression_6 = this.generateExpression(expr.getLeft());
+          _builder_3.append(_generateExpression_6);
+          _builder_3.append(", ");
+          CharSequence _generateExpression_7 = this.generateExpression(expr.getRight());
+          _builder_3.append(_generateExpression_7);
+          _builder_3.append(")");
+          _switchResult = _builder_3;
+          break;
+        case MUL:
+          StringConcatenation _builder_4 = new StringConcatenation();
+          _builder_4.append("MUL(");
+          CharSequence _generateExpression_8 = this.generateExpression(expr.getLeft());
+          _builder_4.append(_generateExpression_8);
+          _builder_4.append(", ");
+          CharSequence _generateExpression_9 = this.generateExpression(expr.getRight());
+          _builder_4.append(_generateExpression_9);
+          _builder_4.append(")");
+          _switchResult = _builder_4;
+          break;
+        default:
+          StringConcatenation _builder_5 = new StringConcatenation();
+          _builder_5.append("(");
+          CharSequence _generateExpression_10 = this.generateExpression(expr.getLeft());
+          _builder_5.append(_generateExpression_10);
+          _builder_5.append(" ");
+          CharSequence _generateBinaryOperator = this.generateBinaryOperator(expr.getOperator());
+          _builder_5.append(_generateBinaryOperator);
+          _builder_5.append(" ");
+          CharSequence _generateExpression_11 = this.generateExpression(expr.getRight());
+          _builder_5.append(_generateExpression_11);
+          _builder_5.append(")");
+          _switchResult = _builder_5;
+          break;
       }
     } else {
-      StringConcatenation _builder_1 = new StringConcatenation();
-      _builder_1.append("(");
-      CharSequence _generateExpression_2 = this.generateExpression(expr.getLeft());
-      _builder_1.append(_generateExpression_2);
-      _builder_1.append(" ");
+      StringConcatenation _builder_5 = new StringConcatenation();
+      _builder_5.append("(");
+      CharSequence _generateExpression_10 = this.generateExpression(expr.getLeft());
+      _builder_5.append(_generateExpression_10);
+      _builder_5.append(" ");
       CharSequence _generateBinaryOperator = this.generateBinaryOperator(expr.getOperator());
-      _builder_1.append(_generateBinaryOperator);
-      _builder_1.append(" ");
-      CharSequence _generateExpression_3 = this.generateExpression(expr.getRight());
-      _builder_1.append(_generateExpression_3);
-      _builder_1.append(")");
-      _switchResult = _builder_1;
+      _builder_5.append(_generateBinaryOperator);
+      _builder_5.append(" ");
+      CharSequence _generateExpression_11 = this.generateExpression(expr.getRight());
+      _builder_5.append(_generateExpression_11);
+      _builder_5.append(")");
+      _switchResult = _builder_5;
     }
     return _switchResult;
   }
