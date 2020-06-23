@@ -113,6 +113,10 @@ public class ChangeStructCommand extends Command {
 		replaceFBs(oldMux, newMux);
 		connCreateCmds.redo();
 	}
+	
+	public StructManipulator getNewMux() {
+		return newMux;
+	}
 
 	private void handleApplicationConnections() {
 		for (Connection conn : getAllConnections(oldMux)) {

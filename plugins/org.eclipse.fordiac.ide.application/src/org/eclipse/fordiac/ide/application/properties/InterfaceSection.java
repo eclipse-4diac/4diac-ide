@@ -33,82 +33,15 @@ import org.eclipse.swt.widgets.Composite;
 
 public class InterfaceSection extends AbstractInterfaceSection {
 
-	protected CCombo muxStructSelector;
-	protected CLabel muxLabel;
-
 	@Override
 	protected FBNetworkElement getInputType(Object input) {
-		if (input instanceof StructManipulatorEditPart) {
-			return ((StructManipulatorEditPart) input).getModel();
-		} else if (input instanceof AbstractFBNElementEditPart) {
+		if (input instanceof AbstractFBNElementEditPart) {
 			return ((AbstractFBNElementEditPart) input).getModel();
 		} else if (input instanceof FBNetworkElement) {
 			return (FBNetworkElement) input;
 		}
 		return null;
 	}
-
-	@Override
-	protected void createFBInfoGroup(Composite parent) {
-		super.createFBInfoGroup(parent);
-		createStructInfo(nameText.getParent());
-	}
-
-	private void createStructInfo(Composite composite) {
-		muxLabel = getWidgetFactory().createCLabel(composite, "Structured Type:");
-		muxLabel.setVisible(false);
-		muxStructSelector = getWidgetFactory().createCCombo(composite);
-		muxStructSelector.setVisible(false);
-	}
-
-	@Override
-	public void refresh() {
-		super.refresh();
-		if ((getType() instanceof StructManipulator) && (((StructManipulator) getType()).getFbNetwork() != null)) {
-			muxLabel.setVisible(true);
-			muxStructSelector.setVisible(true);
-			String structName = ((StructManipulator) getType()).getStructType().getName();
-			muxStructSelector.removeAll();
-			for (DataType dtp : getDatatypeLibrary().getDataTypesSorted()) {
-				if (dtp instanceof StructuredType) {
-					muxStructSelector.add(dtp.getName());
-					if (dtp.getName().contentEquals(structName)) {
-						muxStructSelector.select(muxStructSelector.getItemCount() - 1);
-					}
-				}
-			}
-			muxStructSelector.addSelectionListener(new SelectionListener() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					int index = muxStructSelector.getSelectionIndex();
-					String structName = muxStructSelector.getItem(index);
-					if (!structName.contentEquals(((StructManipulator) getType()).getStructType().getName())
-							&& (null != getDatatypeLibrary())) {
-						Command cmd = new ChangeStructCommand((StructManipulator) getType(),
-								(StructuredType) getDatatypeLibrary().getType(structName));
-						commandStack.execute(cmd);
-					}
-				}
-
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-				}
-			});
-
-		} else {
-			muxStructSelector.setVisible(false);
-			muxLabel.setVisible(false);
-		}
-	}
-
-	private DataTypeLibrary getDatatypeLibrary() {
-		try {
-			return ((StructManipulator) getType()).getFbNetwork().getAutomationSystem().getPalette().getTypeLibrary()
-					.getDataTypeLibrary();
-		} catch (NullPointerException e) {
-			return null;
-		}
-	}
+	
 
 }
