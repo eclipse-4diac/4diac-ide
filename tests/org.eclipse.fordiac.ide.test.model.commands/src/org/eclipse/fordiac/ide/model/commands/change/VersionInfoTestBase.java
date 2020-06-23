@@ -59,7 +59,7 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 				VersionInfoTestBase::redoCommand);
 	}
 
-	protected static boolean verifyDefaultInitialValues(State state, State oldState) {
+	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
 		VersionInfo vInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
 
 		final String DEFAULT_NAME = vInfo.getAuthor();
@@ -68,11 +68,11 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 		final String DEFAULT_REMARKS = vInfo.getRemarks();
 		final String DEFAULT_VERSION = vInfo.getVersion();
 
-		return state.getVersionInfo().getAuthor().equals(DEFAULT_NAME)
-				&& state.getVersionInfo().getDate().equals(DEFAULT_DATE)
-				&& state.getVersionInfo().getOrganization().equals(DEFAULT_ORG)
-				&& state.getVersionInfo().getRemarks().equals(DEFAULT_REMARKS)
-				&& state.getVersionInfo().getVersion().equals(DEFAULT_VERSION);
+		t.test(state.getVersionInfo().getAuthor().equals(DEFAULT_NAME));
+		t.test(state.getVersionInfo().getDate().equals(DEFAULT_DATE));
+		t.test(state.getVersionInfo().getOrganization().equals(DEFAULT_ORG));
+		t.test(state.getVersionInfo().getRemarks().equals(DEFAULT_REMARKS));
+		t.test(state.getVersionInfo().getVersion().equals(DEFAULT_VERSION));
 	}
 
 	protected static State setInitialValues() {
@@ -85,11 +85,12 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 		return state;
 	}
 
-	protected static boolean verifySetInitialValues(State state, State oldState) {
-		return state.getVersionInfo().getAuthor().equals(SET_NAME) && state.getVersionInfo().getDate().equals(SET_DATE)
-				&& state.getVersionInfo().getOrganization().equals(SET_ORG)
-				&& state.getVersionInfo().getRemarks().equals(SET_REMARKS)
-				&& state.getVersionInfo().getVersion().equals(SET_VERSION);
+	protected static void verifySetInitialValues(State state, State oldState, TestFunction t) {
+		t.test(state.getVersionInfo().getAuthor().equals(SET_NAME));
+		t.test(state.getVersionInfo().getDate().equals(SET_DATE));
+		t.test(state.getVersionInfo().getOrganization().equals(SET_ORG));
+		t.test(state.getVersionInfo().getRemarks().equals(SET_REMARKS));
+		t.test(state.getVersionInfo().getVersion().equals(SET_VERSION));
 	}
 
 	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
@@ -97,13 +98,13 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 
 		commands.addAll(describeCommand("Start from default values", //
 				State::new, //
-				(State state, State oldState) -> verifyDefaultInitialValues(state, oldState), //
+				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				executionDescriptions //
 		));
 
 		commands.addAll(describeCommand("Start from set values", //
 				() -> setInitialValues(), //
-				(State state, State oldState) -> verifySetInitialValues(state, oldState), //
+				(State state, State oldState, TestFunction t) -> verifySetInitialValues(state, oldState, t), //
 				executionDescriptions //
 		));
 		return commands;

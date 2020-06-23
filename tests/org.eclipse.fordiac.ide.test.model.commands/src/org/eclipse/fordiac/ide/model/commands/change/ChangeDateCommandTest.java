@@ -36,12 +36,12 @@ public class ChangeDateCommandTest extends VersionInfoTestBase {
 		return state;
 	}
 
-	private static boolean verifyState(State state, State oldState) {
-		return state.getVersionInfo().getDate().equals(NEW_DATE)
-				&& state.getVersionInfo().getOrganization().equals(oldState.getVersionInfo().getOrganization())
-				&& state.getVersionInfo().getRemarks().equals(oldState.getVersionInfo().getRemarks())
-				&& state.getVersionInfo().getAuthor().equals(oldState.getVersionInfo().getAuthor())
-				&& state.getVersionInfo().getVersion().equals(oldState.getVersionInfo().getVersion());
+	private static void verifyState(State state, State oldState, TestFunction t) {
+		t.test(state.getVersionInfo().getDate().equals(NEW_DATE));
+		t.test(state.getVersionInfo().getOrganization().equals(oldState.getVersionInfo().getOrganization()));
+		t.test(state.getVersionInfo().getRemarks().equals(oldState.getVersionInfo().getRemarks()));
+		t.test(state.getVersionInfo().getAuthor().equals(oldState.getVersionInfo().getAuthor()));
+		t.test(state.getVersionInfo().getVersion().equals(oldState.getVersionInfo().getVersion()));
 	}
 
 	private static State executeCommandToNull(State state) {
@@ -52,12 +52,12 @@ public class ChangeDateCommandTest extends VersionInfoTestBase {
 		return state;
 	}
 
-	private static boolean verifyStateNull(State state, State oldState) {
-		return state.getVersionInfo().getDate().equals(EMPTY)
-				&& state.getVersionInfo().getOrganization().equals(oldState.getVersionInfo().getOrganization())
-				&& state.getVersionInfo().getRemarks().equals(oldState.getVersionInfo().getRemarks())
-				&& state.getVersionInfo().getAuthor().equals(oldState.getVersionInfo().getAuthor())
-				&& state.getVersionInfo().getVersion().equals(oldState.getVersionInfo().getVersion());
+	private static void verifyStateNull(State state, State oldState, TestFunction t) {
+		t.test(state.getVersionInfo().getDate().equals(EMPTY));
+		t.test(state.getVersionInfo().getOrganization().equals(oldState.getVersionInfo().getOrganization()));
+		t.test(state.getVersionInfo().getRemarks().equals(oldState.getVersionInfo().getRemarks()));
+		t.test(state.getVersionInfo().getAuthor().equals(oldState.getVersionInfo().getAuthor()));
+		t.test(state.getVersionInfo().getVersion().equals(oldState.getVersionInfo().getVersion()));
 	}
 
 	// parameter creation function, also contains description of how the textual

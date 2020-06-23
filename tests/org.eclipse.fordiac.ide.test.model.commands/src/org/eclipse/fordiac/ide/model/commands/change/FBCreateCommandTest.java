@@ -34,35 +34,30 @@ public class FBCreateCommandTest extends FbNetworkTestBase {
 		return state;
 	}
 
-	private static boolean verifyState(State state, State oldState) {
-		return !state.getFbNetwork().isSubApplicationNetwork() && !state.getFbNetwork().getNetworkElements().isEmpty()
-				&& (null != state.getFbNetwork().getNetworkElements().get(0).getInterface())
-				&& (null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs())
-				&& (null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs())
-				&& (null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars())
-				&& (null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars())
-				&& (null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getPlugs())
-				&& (null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getSockets())
-				&& (null == state.getFbNetwork().getNetworkElements().get(0).getOpposite())
-				&& (null != state.getFbNetwork().getNetworkElements().get(0).getName())
-				&& (null != state.getFbNetwork().getNetworkElements().get(0).eContainer())
-				&& state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs()
-						.equals(state.getFunctionblock().getFBType().getInterfaceList().getEventInputs())
-				&& //
-				state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs()
-						.equals(state.getFunctionblock().getFBType().getInterfaceList().getEventInputs())
-				&& //
-				state.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars()
-						.equals(state.getFunctionblock().getFBType().getInterfaceList().getInputVars())
-				&& //
-				state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars()
-						.equals(state.getFunctionblock().getFBType().getInterfaceList().getOutputVars())
-				&& //
-				state.getFbNetwork().getNetworkElements().get(0).getInterface().getPlugs()
-						.equals(state.getFunctionblock().getFBType().getInterfaceList().getPlugs())
-				&& //
-				state.getFbNetwork().getNetworkElements().get(0).getInterface().getSockets()
-						.equals(state.getFunctionblock().getFBType().getInterfaceList().getSockets());
+	private static void verifyState(State state, State oldState, TestFunction t) {
+		t.test(!state.getFbNetwork().isSubApplicationNetwork() && !state.getFbNetwork().getNetworkElements().isEmpty());
+		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface());
+		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs());
+		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs());
+		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars());
+		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars());
+		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getPlugs());
+		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getSockets());
+		t.test(null == state.getFbNetwork().getNetworkElements().get(0).getOpposite());
+		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getName());
+		t.test(null != state.getFbNetwork().getNetworkElements().get(0).eContainer());
+		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs()
+				.equals(state.getFunctionblock().getFBType().getInterfaceList().getEventInputs()));
+		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs()
+				.equals(state.getFunctionblock().getFBType().getInterfaceList().getEventInputs()));
+		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars()
+				.equals(state.getFunctionblock().getFBType().getInterfaceList().getInputVars()));
+		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars()
+				.equals(state.getFunctionblock().getFBType().getInterfaceList().getOutputVars()));
+		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getPlugs()
+				.equals(state.getFunctionblock().getFBType().getInterfaceList().getPlugs()));
+		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getSockets()
+				.equals(state.getFunctionblock().getFBType().getInterfaceList().getSockets()));
 	}
 
 	// parameter creation function, also contains description of how the textual

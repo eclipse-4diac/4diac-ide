@@ -92,11 +92,11 @@ public abstract class FbNetworkTestBase extends CommandTestBase<FbNetworkTestBas
 				FbNetworkTestBase::redoCommand);
 	}
 
-	protected static boolean verifyDefaultInitialValues(State state, State oldState) {
-		return !state.getFbNetwork().isCFBTypeNetwork() && //
-				!state.getFbNetwork().isResourceNetwork() && //
-				!state.getFbNetwork().isSubApplicationNetwork() && //
-				state.getFbNetwork().getNetworkElements().isEmpty();
+	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
+		t.test(!state.getFbNetwork().isCFBTypeNetwork());
+		t.test(!state.getFbNetwork().isResourceNetwork());
+		t.test(!state.getFbNetwork().isSubApplicationNetwork());
+		t.test(state.getFbNetwork().getNetworkElements().isEmpty());
 	}
 
 	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
@@ -104,7 +104,7 @@ public abstract class FbNetworkTestBase extends CommandTestBase<FbNetworkTestBas
 
 		commands.addAll(describeCommand("Start from default values", //
 				State::new, //
-				(State state, State oldState) -> verifyDefaultInitialValues(state, oldState), //
+				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				executionDescriptions //
 		));
 

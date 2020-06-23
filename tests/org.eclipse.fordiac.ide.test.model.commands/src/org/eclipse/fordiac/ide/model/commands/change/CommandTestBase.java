@@ -13,9 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeTrue;
-
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +21,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -65,12 +64,20 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	}
 
 	/**
+	 * functional interface for calling either assertTrue or assumeTrue
+	 *
+	 */
+	protected interface TestFunction {
+		void test(boolean condition);
+	}
+
+	/**
 	 * functional interface for verifying a state based on changes against the state
 	 * before that step (oldState)
 	 *
 	 */
 	protected interface StateVerifier<T> {
-		boolean verifyState(T state, T oldState);
+		void verifyState(T state, T oldState, TestFunction test);
 	}
 
 	enum ExecutionType {
@@ -319,25 +326,34 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	public void testCommand() {
 		// prepare initial state and verify
 		StateNode<T> current = new StateNode<>(initializer.initializeState(), initialVerifier, null);
-		boolean isInitialStateVerified = initialVerifier.verifyState(current.getState(),
-				current.getBefore().getState());
 
 		// if there are more steps to be executed the initial verification is not
 		// asserted but only assumed
 		// execution of the test will therefore not fail on those commands due to
 		// initial assumptions being wrong
 		Iterator<ExecutionDescription<T>> iterator = commands.iterator();
+		TestFunction t;
 		if (iterator.hasNext()) {
-			assumeTrue(isInitialStateVerified);
+			t = Assume::assumeTrue;
 		} else {
-			assertTrue(isInitialStateVerified);
+			t = Assert::assertTrue;
 		}
+
+		initialVerifier.verifyState(current.getState(), current.getBefore().getState(), t);
 
 		// step through all the commands/undo/redo
 		while (iterator.hasNext()) {
 			ExecutionDescription<T> command = iterator.next();
 			StateNode<T> state = null;
-			boolean isVerified = false;
+
+			// if there are more commands to be executed use assume instead of assert
+			// same reason as for initial state verifier
+			if (iterator.hasNext()) {
+				t = Assume::assumeTrue;
+			} else {
+				t = Assert::assertTrue;
+			}
+
 			switch (command.type) {
 			case COMMAND:
 				// execute command if available and verify
@@ -347,7 +363,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 					current.setAfter(state);
 					current = state;
 				}
-				isVerified = command.verifier.verifyState(current.getState(), current.getBefore().getState());
+				command.verifier.verifyState(current.getState(), current.getBefore().getState(), t);
 				break;
 			case UNDO:
 				// execute undo and fix undo list
@@ -355,7 +371,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 						current.getBefore());
 				state.setAfter(current);
 				current = state;
-				isVerified = current.getVerifier().verifyState(current.getState(), current.getBefore().getState());
+				current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), t);
 				break;
 			case REDO:
 				// execute redo and fix undo list
@@ -363,15 +379,8 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 						current);
 				current.setAfter(state);
 				current = state;
-				isVerified = current.getVerifier().verifyState(current.getState(), current.getBefore().getState());
+				current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), t);
 				break;
-			}
-			// if there are more commands to be executed use assume instead of assert
-			// same reason as for initial state verifier
-			if (iterator.hasNext()) {
-				assumeTrue(isVerified);
-			} else {
-				assertTrue(isVerified);
 			}
 		}
 	}
