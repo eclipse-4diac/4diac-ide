@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.XtextResource;
@@ -83,5 +84,13 @@ public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvide
       _xblockexpression = new SimpleScope(_scopedElementsFor, true);
     }
     return _xblockexpression;
+  }
+  
+  public IScope scope_VarDeclaration(final Variable context, final EReference ref) {
+    final DataType type = ((DataType) context);
+    if ((type == null)) {
+      return IScope.NULLSCOPE;
+    }
+    return null;
   }
 }

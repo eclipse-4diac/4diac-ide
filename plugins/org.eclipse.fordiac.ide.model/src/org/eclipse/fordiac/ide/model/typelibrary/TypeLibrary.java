@@ -84,7 +84,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	public PaletteEntry getPaletteEntry(IFile typeFile) {
 		if (isDataTypeFile(typeFile)) {
-			dataTypeLib.getDerivedDataTypes().get(TypeLibrary.getTypeNameFromFile(typeFile));
+			return dataTypeLib.getDerivedDataTypes().get(TypeLibrary.getTypeNameFromFile(typeFile));
 		} else {
 			EMap<String, ? extends PaletteEntry> typeEntryList = getTypeList(typeFile);
 			if (null != typeEntryList) {

@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate;
+import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -99,7 +99,7 @@ public class STAlgorithmFilter {
   
   private static final String ST_URI_EXTENSION = "st";
   
-  private static final CharSequence EXPORT_PREFIX = ForteFBTemplate.getExportPrefix();
+  private static final CharSequence EXPORT_PREFIX = ForteLibraryElementTemplate.EXPORT_PREFIX;
   
   private static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI(((STAlgorithmFilter.SYNTHETIC_URI_NAME + STAlgorithmFilter.URI_SEPERATOR) + STAlgorithmFilter.ST_URI_EXTENSION)));
   

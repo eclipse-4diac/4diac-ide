@@ -18,6 +18,9 @@ package org.eclipse.fordiac.ide.export.forte_ng.st
 import java.util.List
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -37,8 +40,10 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ExitStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IntLiteral
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RealLiteral
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RepeatStatement
@@ -47,27 +52,21 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Statement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StatementList
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StringLiteral
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess
+import org.eclipse.fordiac.ide.model.structuredtext.validation.DatetimeLiteral
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
+import org.eclipse.xtext.resource.XtextResourceSet
+import org.eclipse.xtext.util.CancelIndicator
 import org.eclipse.xtext.util.LazyStringInputStream
+import org.eclipse.xtext.validation.CheckMode
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
-
-import org.eclipse.xtext.validation.CheckMode
-import org.eclipse.xtext.util.CancelIndicator
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
-import org.eclipse.xtext.resource.XtextResourceSet
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument
-import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral
-import org.eclipse.fordiac.ide.model.structuredtext.validation.DatetimeLiteral
 
 class STAlgorithmFilter {
 
@@ -75,7 +74,7 @@ class STAlgorithmFilter {
 	static final String URI_SEPERATOR = "." // $NON-NLS-1$
 	static final String FB_URI_EXTENSION = "xtextfbt" // $NON-NLS-1$
 	static final String ST_URI_EXTENSION = "st" // $NON-NLS-1$
-	static final CharSequence EXPORT_PREFIX = ForteFBTemplate.exportPrefix
+	static final CharSequence EXPORT_PREFIX = ForteLibraryElementTemplate.EXPORT_PREFIX
 
 	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.
 		getResourceServiceProvider(URI.createURI(SYNTHETIC_URI_NAME + URI_SEPERATOR + ST_URI_EXTENSION))

@@ -30,6 +30,8 @@ import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable
 
 /**
  * This class contains custom scoping description.
@@ -58,6 +60,13 @@ class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvider {
 		candidates.addAll(type.interfaceList.outputVars)
 		// create scope explicitly since Scopes.scopedElementsFor passes ignoreCase as false
 		new SimpleScope(Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), true)
+	}
+	
+	def scope_VarDeclaration(Variable context, EReference ref){
+		val type = context as DataType
+		if(type === null) {
+			return IScope.NULLSCOPE
+		}
 	}
 
 }

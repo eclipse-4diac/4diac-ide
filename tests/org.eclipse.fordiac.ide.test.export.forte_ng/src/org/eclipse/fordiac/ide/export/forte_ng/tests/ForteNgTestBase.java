@@ -24,7 +24,7 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportTemplate;
-import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate;
+import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter;
 import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -311,7 +311,7 @@ public abstract class ForteNgTestBase<T extends FBType> {
 	 * @return name with prefix added
 	 */
 	protected static String addExportPrefix(String name) {
-		return ForteFBTemplate.getExportPrefix() + name;
+		return ForteLibraryElementTemplate.EXPORT_PREFIX + name;
 	}
 
 	/**
