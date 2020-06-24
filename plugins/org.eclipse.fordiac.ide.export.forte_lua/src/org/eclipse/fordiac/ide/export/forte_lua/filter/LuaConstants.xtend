@@ -1,17 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2015 fortiss GmbH
+ * Copyright (c) 2015, 2020 fortiss GmbH
  * 				 2019 Jan Holzweber
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
  * 
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
  *   Jan Holzweber  - fixed adapter socket variable bug
+ *   Kirill Dorofeev - extended support for adapters DI/DOs used in BFB
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_lua.filter
 
@@ -31,9 +32,9 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaUtils.*
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.emf.common.util.EList
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
+import java.util.Map
 
 class LuaConstants {
 
@@ -44,6 +45,8 @@ class LuaConstants {
 	static final int FB_DI_FLAG = 33554432; // 2^25
 	static final int FB_DO_FLAG = 67108864; // 2^26
 	static final int FB_AD_FLAG = 134217728; // 2^27
+	static final int FB_ADI_FLAG = 167772160; // 2^27 | 2^25
+	static final int FB_ADO_FLAG = 201326592; // 2^27 | 2^26
 	static final int FB_IN_FLAG = 268435456; // 2^28
 
 	def static luaTypeName(FBType type) '''FORTE_«type.name»'''
@@ -125,10 +128,10 @@ class LuaConstants {
 			local «decl.luaAdapterInputEventName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(adapterID << 16).bitwiseOr(aifl.eventInputs.indexOf(decl))»
 		«ENDFOR»
 		«FOR decl : aifl.outputVars»
-			local «decl.luaFBAdapterOutputVarName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(FB_DO_FLAG).bitwiseOr(adapterID << 16).bitwiseOr(aifl.outputVars.indexOf(decl))»
+			local «decl.luaFBAdapterOutputVarName(adapter.name)» = «FB_ADI_FLAG.bitwiseOr(adapterID << 16).bitwiseOr(aifl.outputVars.indexOf(decl))»
 		«ENDFOR»
 		«FOR decl : aifl.inputVars»
-			local «decl.luaFBAdapterInputVarName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(FB_DI_FLAG).bitwiseOr(adapterID << 16).bitwiseOr(aifl.inputVars.indexOf(decl))»
+			local «decl.luaFBAdapterInputVarName(adapter.name)» = «FB_ADO_FLAG.bitwiseOr(adapterID << 16).bitwiseOr(aifl.inputVars.indexOf(decl))»
 		«ENDFOR»    
 	'''
 
@@ -171,6 +174,16 @@ class LuaConstants {
 	def static luaFBVariablesPrefix(Iterable<VarDeclaration> variables) '''
 		«FOR variable : variables»
 			local «variable.luaVariable» = «variable.luaFBVariable»
+		«ENDFOR»
+	'''
+
+	def static luaFBAdapterInECCVariablesPrefix(Map<VarDeclaration, String> adapterVariables, boolean isPlug) '''
+		«FOR variable : adapterVariables.entrySet()»
+			«IF isPlug»
+				local «variable.getKey().name.luaAdapterVariable(variable.getValue())» = fb[«variable.getKey().isInput ? variable.getKey().luaFBAdapterInputVarName(variable.getValue()) : variable.getKey().luaFBAdapterOutputVarName(variable.getValue())»]
+			«ELSE»
+				local «variable.getKey().name.luaAdapterVariable(variable.getValue())» = fb[«variable.getKey().isInput ? variable.getKey().luaFBAdapterOutputVarName(variable.getValue()) : variable.getKey().luaFBAdapterInputVarName(variable.getValue())»]
+			«ENDIF»
 		«ENDFOR»
 	'''
 
