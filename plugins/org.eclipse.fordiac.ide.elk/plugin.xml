@@ -6,11 +6,19 @@
         id="org.eclipse.fordiac.ide.elk.layout"
         name="Layout with ELK">
     </command>
+    <command
+        id="org.eclipse.fordiac.ide.elk.resetInterfaces"
+        name="Reset the layouted interfaces">
+    </command>
 </extension>
 <extension point="org.eclipse.ui.handlers">
     <handler
         class="org.eclipse.fordiac.ide.elk.handlers.LayoutHandler"
         commandId="org.eclipse.fordiac.ide.elk.layout">
+    </handler>
+    <handler
+        class="org.eclipse.fordiac.ide.elk.handlers.ResetInterfacesHandler"
+        commandId="org.eclipse.fordiac.ide.elk.resetInterfaces">
     </handler>
 </extension>
 <extension point="org.eclipse.ui.menus">
@@ -21,6 +29,16 @@
       <command
             commandId="org.eclipse.fordiac.ide.elk.layout"
             label="Layout the diagrams"
+            style="push">
+               </command>
+	</menuContribution> 
+	<menuContribution
+         allPopups="false"
+         locationURI="popup:org.eclipse.ui.popup.any?after=additions">  
+      <separator name="layouting stuff" visible="true"/>
+      <command
+            commandId="org.eclipse.fordiac.ide.elk.resetInterfaces"
+            label="Reset Interfaces"
             style="push">
                </command>
 	</menuContribution> 

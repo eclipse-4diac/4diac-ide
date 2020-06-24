@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, AIT, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Filip Andren, Alois Zoitl, Monika Wenger
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed untyped subapp interface updates and according code cleanup
+ *   Daniel Lindhuber - altered methods to work with the elk layouter
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -129,30 +130,36 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 		}
 	}
 
-	private void addChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
+	public void addChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
 		IFigure child = childEditPart.getFigure();
 		if (childEditPart.getModel().isIsInput()) { // use model isInput! because EditPart.isInput treats inputs as
 													// outputs for visual appearance
 			if (childEditPart.isEvent()) {
-				getLeftEventInterfaceContainer().add(child,
-						getSubApp().getInterface().getEventInputs().indexOf(childEditPart.getModel()));
+				int index = getSubApp().getInterface().getEventInputs().indexOf(childEditPart.getModel());
+				int containerSize = getLeftEventInterfaceContainer().getChildren().size();
+				getLeftEventInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
 			} else if (childEditPart.isAdapter()) {
-				getLeftAdapterInterfaceContainer().add(child,
-						getSubApp().getInterface().getSockets().indexOf(childEditPart.getModel()));
+				int index = getSubApp().getInterface().getSockets().indexOf(childEditPart.getModel());
+				int containerSize = getLeftAdapterInterfaceContainer().getChildren().size();
+				getLeftAdapterInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
 			} else {
-				getLeftVarInterfaceContainer().add(child,
-						getSubApp().getInterface().getInputVars().indexOf(childEditPart.getModel()));
+				int index = getSubApp().getInterface().getInputVars().indexOf(childEditPart.getModel());
+				int containerSize = getLeftVarInterfaceContainer().getChildren().size();
+				getLeftVarInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
 			}
 		} else {
 			if (childEditPart.isEvent()) {
-				getRightEventInterfaceContainer().add(child,
-						getSubApp().getInterface().getEventOutputs().indexOf(childEditPart.getModel()));
+				int index = getSubApp().getInterface().getEventOutputs().indexOf(childEditPart.getModel());
+				int containerSize = getRightEventInterfaceContainer().getChildren().size();
+				getRightEventInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
 			} else if (childEditPart.isAdapter()) {
-				getRightAdapterInterfaceContainer().add(child,
-						getSubApp().getInterface().getPlugs().indexOf(childEditPart.getModel()));
+				int index = getSubApp().getInterface().getPlugs().indexOf(childEditPart.getModel());
+				int containerSize = getRightAdapterInterfaceContainer().getChildren().size();
+				getRightAdapterInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
 			} else {
-				getRightVarInterfaceContainer().add(child,
-						getSubApp().getInterface().getOutputVars().indexOf(childEditPart.getModel()));
+				int index = getSubApp().getInterface().getOutputVars().indexOf(childEditPart.getModel());
+				int containerSize = getRightVarInterfaceContainer().getChildren().size();
+				getRightVarInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
 			}
 		}
 	}
@@ -175,23 +182,47 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 		}
 	}
 
-	private void removeChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
+	public void removeChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
 		IFigure child = childEditPart.getFigure();
 		if (childEditPart.getModel().isIsInput()) {
 			if (childEditPart.isEvent()) {
-				getLeftEventInterfaceContainer().remove(child);
+				try {
+					getLeftEventInterfaceContainer().remove(child);
+				} catch (IllegalArgumentException e) {
+					getCastedFigure().remove(child);
+				}
 			} else if (childEditPart.isAdapter()) {
-				getLeftAdapterInterfaceContainer().remove(child);
+				try {
+					getLeftAdapterInterfaceContainer().remove(child);
+				} catch (IllegalArgumentException e) {
+					getCastedFigure().remove(child);
+				}
 			} else {
-				getLeftVarInterfaceContainer().remove(child);
+				try {
+					getLeftVarInterfaceContainer().remove(child);
+				} catch (IllegalArgumentException e) {
+					getCastedFigure().remove(child);
+				}
 			}
 		} else {
 			if (childEditPart.isEvent()) {
-				getRightEventInterfaceContainer().remove(child);
+				try {
+					getRightEventInterfaceContainer().remove(child);
+				} catch (IllegalArgumentException e) {
+					getCastedFigure().remove(child);
+				}
 			} else if (childEditPart.isAdapter()) {
-				getRightAdapterInterfaceContainer().remove(child);
+				try {
+					getRightAdapterInterfaceContainer().remove(child);
+				} catch (IllegalArgumentException e) {
+					getCastedFigure().remove(child);
+				}
 			} else {
-				getRightVarInterfaceContainer().remove(child);
+				try {
+					getRightVarInterfaceContainer().remove(child);
+				} catch (IllegalArgumentException e) {
+					getCastedFigure().remove(child);
+				}
 			}
 		}
 	}
@@ -203,4 +234,10 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 		// elements and creation of new model elements
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBNetworkXYLayoutEditPolicy());
 	}
+
+	public void enableElkLayouting(SubAppInternalInterfaceEditPart part) {
+		removeChildVisual(part);
+		getCastedFigure().add(part.getFigure());
+	}
+
 }
