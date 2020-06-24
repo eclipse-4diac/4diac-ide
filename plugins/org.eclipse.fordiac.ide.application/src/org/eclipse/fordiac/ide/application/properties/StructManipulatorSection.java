@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
@@ -26,11 +25,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -41,8 +39,8 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.MenuDetectEvent;
-import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -50,8 +48,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IWorkbench;
@@ -61,6 +61,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.views.properties.tabbed.ISection;
+import org.eclipse.ui.views.properties.tabbed.TabContents;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class StructManipulatorSection extends AbstractSection {
@@ -87,7 +89,7 @@ public class StructManipulatorSection extends AbstractSection {
 	}
 
 	private void disableOpenEditorForAnyType(String newStructName) {
-			openEditorButton.setEnabled(!"ANY_STRUCT".contentEquals(newStructName)); //$NON-NLS-1$
+		openEditorButton.setEnabled(!"ANY_STRUCT".contentEquals(newStructName)); //$NON-NLS-1$
 	}
 
 	private void createStructSelector(Composite composite) {
@@ -137,26 +139,7 @@ public class StructManipulatorSection extends AbstractSection {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				IWorkbench workbench = PlatformUI.getWorkbench();
-				if (workbench != null) {
-					IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-					if (activeWorkbenchWindow != null) {
-						openStructEditor(activeWorkbenchWindow);
-					}
-				}
-			}
-
-			private void openStructEditor(IWorkbenchWindow activeWorkbenchWindow) {
-				IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-
-				IFile file = getType().getStructType().getPaletteEntry().getFile();
-				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-						.getDefaultEditor(file.getName());
-				try {
-					activePage.openEditor(new FileEditorInput(file), desc.getId());
-				} catch (PartInitException e1) {
-					e1.printStackTrace();
-				}
+				openStructEditor(getType().getStructType().getPaletteEntry().getFile());
 			}
 
 			@Override
@@ -165,6 +148,23 @@ public class StructManipulatorSection extends AbstractSection {
 		});
 	}
 
+	private static void openStructEditor(IFile file) {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+		if (workbench != null) {
+			IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+			if (activeWorkbenchWindow != null) {
+
+				IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+				try {
+					activePage.openEditor(new FileEditorInput(file), desc.getId());
+				} catch (PartInitException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
@@ -176,7 +176,6 @@ public class StructManipulatorSection extends AbstractSection {
 		createMemberVariableViewer(memberVarGroup);
 		memberVarGroup.setLayout(new GridLayout(1, true));
 		memberVarGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
 	}
 
 	private void createMemberVariableViewer(Composite parent) {
@@ -184,11 +183,57 @@ public class StructManipulatorSection extends AbstractSection {
 		configureTreeLayout(memberVarViewer);
 		memberVarViewer.setContentProvider(new TreeContentProvider());
 		memberVarViewer.setLabelProvider(new TreeLabelProvider());
-        GridLayoutFactory.fillDefaults().generateLayout(parent);
+		GridLayoutFactory.fillDefaults().generateLayout(parent);
+
+		createContextMenu(memberVarViewer.getControl());
 	}
+
+	private void createContextMenu(Control ctrl) {
+		Menu openEditorMenu = new Menu(memberVarViewer.getTree());
+		MenuItem openItem = new MenuItem(openEditorMenu, SWT.NONE);
+		openItem.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				StructuredType sel = getSelectedStructuredType();
+				if (sel != null) {					
+					openStructEditor(sel.getPaletteEntry().getFile());
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+		openItem.setText(JFaceResources.getString("Open Editor")); //$NON-NLS-1$
 	
+		openEditorMenu.addMenuListener(new MenuListener() {
+			@Override
+			public void menuShown(MenuEvent e) {
+				openItem.setEnabled(getSelectedStructuredType() != null && 
+						!getSelectedStructuredType().getName().contentEquals("ANY_STRUCT")); //$NON-NLS-1$
+			}
+
+			@Override
+			public void menuHidden(MenuEvent e) {
+			}
+		});
+		ctrl.setMenu(openEditorMenu);
+	}
+
+	private StructuredType getSelectedStructuredType() {
+		TreeItem[] selected = memberVarViewer.getTree().getSelection();
+		if (selected[0].getData() instanceof VarDeclaration) {
+			VarDeclaration varDecl = (VarDeclaration) selected[0].getData();
+			if (varDecl.getType() instanceof StructuredType) {
+				return (StructuredType) varDecl.getType();
+			}
+		}
+		return null;
+	}
+
 	private static void configureTreeLayout(TreeViewer viewer) {
-		TreeViewerColumn col1 = new TreeViewerColumn(viewer, SWT.LEFT);		
+		TreeViewerColumn col1 = new TreeViewerColumn(viewer, SWT.LEFT);
 		TreeViewerColumn col2 = new TreeViewerColumn(viewer, SWT.LEFT);
 		TreeViewerColumn col3 = new TreeViewerColumn(viewer, SWT.LEFT);
 
@@ -199,7 +244,7 @@ public class StructManipulatorSection extends AbstractSection {
 		col1.getColumn().setWidth(200);
 		col2.getColumn().setWidth(100);
 		col3.getColumn().setWidth(800);
-}
+	}
 
 	@Override
 	public void refresh() {
