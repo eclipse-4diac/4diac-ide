@@ -15,6 +15,7 @@
 			<unit id="org.eclipse.equinox.executable.feature.group" version="3.8.800.v20200514-1529"/>
 			<unit id="org.eclipse.gef.sdk.feature.group" version="3.11.0.201606061308"/>
 			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.22.0.v20200602-1533"/>
+			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.12.0.v20200608-1555"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://build.eclipse.org/modeling/elk/updates/0.6.1/"/>
