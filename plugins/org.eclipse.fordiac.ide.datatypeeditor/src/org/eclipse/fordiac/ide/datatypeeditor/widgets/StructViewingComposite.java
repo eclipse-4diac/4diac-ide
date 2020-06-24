@@ -94,7 +94,10 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 		List<DataType> dataTypeList = dataTypeLibrary.getDataTypesSorted();
 
-		dataTypes = dataTypeList.stream().filter(Objects::nonNull).map(DataType::getName).toArray(String[]::new);
+		dataTypes = dataTypeList.stream().filter(Objects::nonNull)
+				.filter(dtp -> !dataType.getName().contentEquals(dtp.getName())) // prevent infinite loop
+				.map(DataType::getName)
+				.toArray(String[]::new);
 
 		AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(parent, widgetFactory);
