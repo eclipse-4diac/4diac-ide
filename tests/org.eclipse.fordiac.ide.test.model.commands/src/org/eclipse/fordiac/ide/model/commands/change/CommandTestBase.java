@@ -263,8 +263,10 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 						MESSAGE_VERIFY_INITIAL_STATE),
 				initializer, initialVerifier, Collections.emptyList(), undo, redo));
 
-		descriptions.add(convert(MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER,
-				description, MESSAGE_EXECUTE_ALL_COMMANDS), initializer, initialVerifier, commands, undo, redo));
+		if (commands.size() > 1) {
+			descriptions.add(convert(MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER,
+					description, MESSAGE_EXECUTE_ALL_COMMANDS), initializer, initialVerifier, commands, undo, redo));
+		}
 
 		int index = 0;
 		ArrayList<Object> commandsUntil = new ArrayList<>();
@@ -297,10 +299,13 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 									command.description)),
 					initializer, initialVerifier, commandsWithUndoRedo.clone(), undo, redo));
 		}
-		descriptions.add(convert(
-				MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
-						MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO_ALL),
-				initializer, initialVerifier, commandsWithUndoRedoAll, undo, redo));
+
+		if (commands.size() > 1) {
+			descriptions.add(convert(
+					MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
+							MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO_ALL),
+					initializer, initialVerifier, commandsWithUndoRedoAll, undo, redo));
+		}
 		return descriptions;
 
 	}

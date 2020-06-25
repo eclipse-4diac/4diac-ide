@@ -7,4 +7,4 @@ Fragment-Host: org.eclipse.fordiac.ide.model.commands
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.model.commands
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: Eclipse 4diac
-Require-Bundle: org.junit
+Require-Bundle: org.junit, org.eclipse.core.resources
