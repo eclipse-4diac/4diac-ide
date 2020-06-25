@@ -22,10 +22,8 @@ import java.util.Set;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.draw2d.AbstractPointListShape;
 import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.elk.alg.layered.options.CrossingMinimizationStrategy;
@@ -92,11 +90,8 @@ public class LayoutHandler extends AbstractHandler {
 			RecursiveGraphLayoutEngine engine = new RecursiveGraphLayoutEngine();
 			engine.layout(layoutGraph, new NullElkProgressMonitor());
 
-			// create command to enable undo and saving
-			Command cmd = new LayoutCommand(fbNetworkElements, connections);
-
-			// update the layout and model
-			updateLayout(layoutGraph);
+			// create command to enable undo/redo and saving
+			Command cmd = new LayoutCommand(layoutGraph, connEditParts, nodeMapping);
 
 			((AbstractGraphicalEditPart) viewer.getRootEditPart()).getFigure().invalidateTree();
 			((AbstractGraphicalEditPart) viewer.getRootEditPart()).getFigure().revalidate();
@@ -117,66 +112,12 @@ public class LayoutHandler extends AbstractHandler {
 						new ElkPadding(
 								(inputCnt > outputCnt) ? inputCnt * SUBAPP_LABEL_NUMBER_PADDING_MULTIPLIER
 										: outputCnt * SUBAPP_LABEL_NUMBER_PADDING_MULTIPLIER,
-								0, 0, maxIOLabelSize + 30));
+								200, 0, maxIOLabelSize + 30));
 		layoutGraph.setProperty(CoreOptions.SPACING_NODE_NODE, (double) 40);
 
 		// empty parent graph for SubApps
 		ElkNode parent = ElkGraphUtil.createGraph();
 		layoutGraph.setParent(parent);
-	}
-
-	private void updateFBPositions(ElkNode graph) {
-		graph.getChildren().forEach(node -> {
-			AbstractFBNElementEditPart part = nodeMapping.get(node);
-			if (null != part) {
-				part.getModel().setX((int) node.getX());
-				part.getModel().setY((int) node.getY());
-			}
-		});
-	}
-
-	private void updateLayout(ElkNode graph) {
-		graph.getContainedEdges().forEach(edge -> {
-			ConnectionEditPart part = connEditParts.get(edge);
-			PointList pointList = ((AbstractPointListShape) part.getFigure()).getPoints();
-
-			ElkPort startPort = ((ElkPort) edge.getSources().get(0));
-			ElkPort endPort = ((ElkPort) edge.getTargets().get(0));
-
-			pointList.removeAllPoints();
-			pointList.addPoint((int) (startPort.getX() + startPort.getParent().getX()),
-					(int) (startPort.getY() + startPort.getParent().getY()));
-			edge.getSections().forEach(edgeSection -> {
-				edgeSection.getBendPoints()
-						.forEach(point -> pointList.addPoint((int) point.getX(), (int) point.getY()));
-			});
-			pointList.addPoint((int) (endPort.getX() + endPort.getParent().getX()),
-					(int) (endPort.getY() + endPort.getParent().getY()));
-			((AbstractPointListShape) part.getFigure()).setPoints(pointList);
-
-			updateModel(part.getModel(), pointList);
-		});
-		updateFBPositions(graph);
-	}
-
-	private void updateModel(org.eclipse.fordiac.ide.model.libraryElement.Connection connModel, PointList pointList) {
-		if (pointList.size() > 2) {
-			// 3 segments
-			connModel.setDx1((int) (pointList.getPoint(1).preciseX() - pointList.getFirstPoint().preciseX()));
-			connModel.setDx2(
-					(int) (pointList.getLastPoint().preciseX() - pointList.getPoint(pointList.size() - 2).preciseX()));
-			if (pointList.size() > 4) {
-				// 5 segments
-				connModel.setDy((int) (pointList.getPoint(2).preciseY() - pointList.getFirstPoint().preciseY()));
-			} else {
-				connModel.setDy(0);
-			}
-		} else {
-			// straight connection
-			connModel.setDx1(0);
-			connModel.setDx2(0);
-			connModel.setDy(0);
-		}
 	}
 
 	private void clear() {
@@ -274,13 +215,23 @@ public class LayoutHandler extends AbstractHandler {
 				? nodes.get(interfaceElement.getFBNetworkElement())
 				: graph;
 		// for untyped subapp interfaces
+		boolean isSubApp = false;
 		if (node == null) {
 			node = graph;
+			isSubApp = true;
 		}
 		ElkPort port = ElkGraphUtil.createPort(node);
 		ElkGraphUtil.createLabel(interfaceElement.getName(), port);
-		port.setLocation(point.preciseX() - node.getX(), point.preciseY() - node.getY());
-		port.setDimensions(0, 0);
+		// dont set the location for the interface ports so that they will be properly
+		// handled by elk
+		if (!isSubApp) {
+			port.setLocation(point.preciseX() - node.getX(), point.preciseY() - node.getY());
+		} else if (interfaceElement.isIsInput()) {
+			// set the input interface inset according to the graph padding
+			port.setLocation(maxIOLabelSize, -1);
+		}
+		// set port dimensions to avoid interface collisions
+		port.setDimensions(7, 7);
 		return port;
 	}
 
