@@ -39,6 +39,8 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -99,6 +101,20 @@ public class StructManipulatorSection extends AbstractSection {
 
 		muxLabel = getWidgetFactory().createCLabel(structComp, Messages.StructManipulatorSection_STRUCTURED_TYPE);
 		muxStructSelector = getWidgetFactory().createCCombo(structComp);
+		
+		muxStructSelector.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				fillTypeCombo();
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		muxStructSelector.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -249,15 +265,19 @@ public class StructManipulatorSection extends AbstractSection {
 	@Override
 	public void refresh() {
 		if (null != getType() && null != getType().getFbNetwork()) {
-			memberVarViewer.setInput(getType());
-			String structName = ((StructManipulator) getType()).getStructType().getName();
-			muxStructSelector.removeAll();
-			for (DataType dtp : getDatatypeLibrary().getDataTypesSorted()) {
-				if (dtp instanceof StructuredType) {
-					muxStructSelector.add(dtp.getName());
-					if (dtp.getName().contentEquals(structName)) {
-						muxStructSelector.select(muxStructSelector.getItemCount() - 1);
-					}
+			fillTypeCombo();
+		}
+	}
+
+	private void fillTypeCombo() {
+		memberVarViewer.setInput(getType());
+		String structName = ((StructManipulator) getType()).getStructType().getName();
+		muxStructSelector.removeAll();
+		for (DataType dtp : getDatatypeLibrary().getDataTypesSorted()) {
+			if (dtp instanceof StructuredType) {
+				muxStructSelector.add(dtp.getName());
+				if (dtp.getName().contentEquals(structName)) {
+					muxStructSelector.select(muxStructSelector.getItemCount() - 1);
 				}
 			}
 		}
