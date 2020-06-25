@@ -50,6 +50,9 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -92,12 +95,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		showLabel(parent);
 
-		List<DataType> dataTypeList = dataTypeLibrary.getDataTypesSorted();
-
-		dataTypes = dataTypeList.stream().filter(Objects::nonNull)
-				.filter(dtp -> !dataType.getName().contentEquals(dtp.getName())) // prevent infinite loop
-				.map(DataType::getName)
-				.toArray(String[]::new);
+		fillDataTypeArray();
 
 		AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(parent, widgetFactory);
@@ -113,6 +111,15 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 						false));
 
 		part.getSite().setSelectionProvider(this);
+	}
+
+	private void fillDataTypeArray() {
+		List<DataType> dataTypeList = dataTypeLibrary.getDataTypesSorted();
+
+		dataTypes = dataTypeList.stream().filter(Objects::nonNull)
+				.filter(dtp -> !dataType.getName().contentEquals(dtp.getName())) // prevent infinite loop
+				.map(DataType::getName)
+				.toArray(String[]::new);
 	}
 
 	private void showLabel(Composite parent) {
@@ -166,6 +173,22 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	private CellEditor[] createCellEditors(final Table table) {
 		typeDropDown = ComboBoxWidgetFactory.createComboBoxCellEditor(table, dataTypes, SWT.READ_ONLY);
+		CCombo combobox = (CCombo) typeDropDown.getControl();
+		combobox.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				fillDataTypeArray();
+				typeDropDown.setItems(dataTypes);
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		return new CellEditor[] { new TextCellEditor(table), typeDropDown, new TextCellEditor(table),
 				new TextCellEditor(table), new TextCellEditor(table) };
 	}
