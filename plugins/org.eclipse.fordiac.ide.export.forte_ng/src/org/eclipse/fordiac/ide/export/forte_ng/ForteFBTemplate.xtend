@@ -101,7 +101,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 				static const int scm_n«adapter.name»AdpNum = «type.interfaceList.sockets.size + type.interfaceList.plugs.indexOf(adapter)»;
 			«ENDFOR»
 
-			const SAdapterInstanceDef scm_astAdapterInstances[];
+			static const SAdapterInstanceDef scm_astAdapterInstances[];
 		«ENDIF»
 	'''
 
@@ -191,7 +191,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
        «IF !baseFBType.internalVars.isEmpty»
          const CStringDictionary::TStringId «FBClassName»::scm_anInternalsNames[] = {«baseFBType.internalVars.FORTENameList»};
          const CStringDictionary::TStringId «FBClassName»::scm_anInternalsTypeIds[] = {«baseFBType.internalVars.FORTETypeList»};
-         const SInternalVarsInformation FORTE_E_STOPWATCH::scm_stInternalVars = {«baseFBType.internalVars.size», scm_anInternalsNames, scm_anInternalsTypeIds};
+         const SInternalVarsInformation «FBClassName»::scm_stInternalVars = {«baseFBType.internalVars.size», scm_anInternalsNames, scm_anInternalsTypeIds};
        «ENDIF»
     '''
 

@@ -242,7 +242,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           }
         }
         _builder.newLine();
-        _builder.append("const SAdapterInstanceDef scm_astAdapterInstances[];");
+        _builder.append("static const SAdapterInstanceDef scm_astAdapterInstances[];");
         _builder.newLine();
       }
     }
@@ -565,7 +565,10 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
         _builder.append(_fORTETypeList);
         _builder.append("};");
         _builder.newLineIfNotEmpty();
-        _builder.append("const SInternalVarsInformation FORTE_E_STOPWATCH::scm_stInternalVars = {");
+        _builder.append("const SInternalVarsInformation ");
+        CharSequence _fBClassName_2 = this.getFBClassName();
+        _builder.append(_fBClassName_2);
+        _builder.append("::scm_stInternalVars = {");
         int _size = baseFBType.getInternalVars().size();
         _builder.append(_size);
         _builder.append(", scm_anInternalsNames, scm_anInternalsTypeIds};");
