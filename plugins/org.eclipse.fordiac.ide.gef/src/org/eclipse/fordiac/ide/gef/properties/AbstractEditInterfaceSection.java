@@ -15,13 +15,14 @@
  *   Bianca Wiesmayr - extract table creation
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *               - cleaned command stack handling for property sections
- *   Daniel Lindhuber - added copy and paste
+ *   Daniel Lindhuber - added copy/paste and the context menu 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementComma
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -64,14 +66,28 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection extends AbstractSection implements I4diacTableUtil {
@@ -137,6 +153,9 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 		setFocusListeners();
 		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
+
+		createContextMenu(getInputsViewer());
+		createContextMenu(getOutputsViewer());
 	}
 
 	private void setFocusListeners() {
@@ -459,5 +478,73 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	private IInterfaceElement getEntry(int index) {
 		Object obj = getViewer().getElementAt(index);
 		return (IInterfaceElement) obj;
+	}
+
+	private void createContextMenu(TableViewer viewer) {
+		Control ctrl = viewer.getControl();
+		Menu openEditorMenu = new Menu(viewer.getTable());
+		MenuItem openItem = new MenuItem(openEditorMenu, SWT.NONE);
+		openItem.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				StructuredType sel = getSelectedStructuredType(viewer);
+				if (sel != null) {
+					openStructEditor(sel.getPaletteEntry().getFile());
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+		openItem.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
+
+		openEditorMenu.addMenuListener(new MenuListener() {
+			@Override
+			public void menuShown(MenuEvent e) {
+				if (!(viewer.getTable().getSelection()[0].getData() instanceof Event)
+						&& !(viewer.getTable().getSelection()[0].getData() instanceof AdapterDeclaration)) {
+					openItem.setEnabled(getSelectedStructuredType(viewer) != null
+							&& !getSelectedStructuredType(viewer).getName().contentEquals("ANY_STRUCT")); //$NON-NLS-1$
+				} else {
+					openEditorMenu.setVisible(false);
+				}
+			}
+
+			@Override
+			public void menuHidden(MenuEvent e) {
+			}
+
+		});
+		ctrl.setMenu(openEditorMenu);
+	}
+	
+	private StructuredType getSelectedStructuredType(TableViewer viewer) {
+		TableItem[] selected = viewer.getTable().getSelection();
+		if (selected[0].getData() instanceof VarDeclaration) {
+			VarDeclaration varDecl = (VarDeclaration) selected[0].getData();
+			if (varDecl.getType() instanceof StructuredType) {
+				return (StructuredType) varDecl.getType();
+			}
+		}
+		return null;
+	}
+	
+	private static void openStructEditor(IFile file) {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+		if (workbench != null) {
+			IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+			if (activeWorkbenchWindow != null) {
+
+				IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+				try {
+					activePage.openEditor(new FileEditorInput(file), desc.getId());
+				} catch (PartInitException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
 	}
 }

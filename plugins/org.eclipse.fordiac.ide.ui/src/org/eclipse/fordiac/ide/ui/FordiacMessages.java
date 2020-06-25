@@ -27,6 +27,8 @@ import org.eclipse.osgi.util.NLS;
 public class FordiacMessages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.ui.messages"; //$NON-NLS-1$
 
+	public static String OPEN_TYPE_EDITOR_MESSAGE;
+
 	public static String Algorithm;
 	public static String Algorithms;
 	public static String ApplicationDomain;
