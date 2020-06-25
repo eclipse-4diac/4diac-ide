@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2016, 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,8 +15,7 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import java.util.Iterator;
 
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -39,7 +38,7 @@ public class MapAction extends SelectionAction {
 
 	/**
 	 * The Constructor.
-	 * 
+	 *
 	 * @param part     the part
 	 * @param resource the resource
 	 */
@@ -51,7 +50,7 @@ public class MapAction extends SelectionAction {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.action.Action#run()
 	 */
 	@Override
@@ -59,7 +58,7 @@ public class MapAction extends SelectionAction {
 		update();
 		for (Iterator<?> iterator = getSelectedObjects().iterator(); iterator.hasNext();) {
 			EditPart ep = (EditPart) iterator.next();
-			if (ep instanceof FBEditPart || ep instanceof SubAppForFBNetworkEditPart) {
+			if (ep instanceof AbstractFBNElementEditPart) {
 				MapToCommand cmd = new MapToCommand((FBNetworkElement) ep.getModel(), resource);
 				if (cmd.canExecute()) {
 					mapCommand.add(cmd);
@@ -80,7 +79,7 @@ public class MapAction extends SelectionAction {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#calculateEnabled()
 	 */
 	@Override

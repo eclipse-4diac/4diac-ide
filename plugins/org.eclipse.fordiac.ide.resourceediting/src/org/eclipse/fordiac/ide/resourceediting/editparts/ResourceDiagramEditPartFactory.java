@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.resourceediting.editparts;
 
 import org.eclipse.fordiac.ide.application.editparts.ElementEditPartFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -37,9 +36,6 @@ public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 
 		if (modelElement instanceof FBNetwork) {
 			return new FBNetworkContainerEditPart();
-		}
-		if (modelElement instanceof FB) {
-			return new ResFBEditPart();
 		}
 		if (modelElement instanceof IInterfaceElement) {
 			IInterfaceElement element = (IInterfaceElement) modelElement;

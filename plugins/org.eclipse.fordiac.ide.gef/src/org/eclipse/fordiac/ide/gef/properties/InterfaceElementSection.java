@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -140,6 +141,10 @@ public class InterfaceElementSection extends AbstractSection {
 
 		if (getType().getFBNetworkElement().getFbNetwork().eContainer() instanceof FBType) {
 			return ((FBType) getType().getFBNetworkElement().getFbNetwork().eContainer()).getTypeLibrary();
+		}
+
+		if (getType().getFBNetworkElement().getFbNetwork().eContainer() instanceof Resource) {
+			return ((Resource) getType().getFBNetworkElement().getFbNetwork().eContainer()).getTypeLibrary();
 		}
 
 		return getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette()
