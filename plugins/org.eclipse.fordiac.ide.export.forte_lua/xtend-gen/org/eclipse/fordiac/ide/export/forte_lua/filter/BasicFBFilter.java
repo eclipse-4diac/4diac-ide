@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015 fortiss GmbH
+ * Copyright (c) 2015, 2020 fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *   Kirill Dorofeev - extended support for adapters used in BFB
  */
 package org.eclipse.fordiac.ide.export.forte_lua.filter;
 
@@ -17,12 +18,16 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants;
 import org.eclipse.fordiac.ide.export.forte_lua.filter.STAlgorithmFilter;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -62,7 +67,7 @@ public class BasicFBFilter {
     _builder.append(_luaStates);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
-    CharSequence _luaECC = this.luaECC(type.getECC(), this.getVariables(type));
+    CharSequence _luaECC = this.luaECC(type.getECC(), this.getVariables(type), this.getAdapterSocketsVariables(type), this.getAdapterPlugsVariables(type));
     _builder.append(_luaECC);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
@@ -79,7 +84,7 @@ public class BasicFBFilter {
     return _builder;
   }
   
-  private CharSequence luaECC(final ECC ecc, final Iterable<VarDeclaration> variables) {
+  private CharSequence luaECC(final ECC ecc, final Iterable<VarDeclaration> variables, final Map<AdapterDeclaration, String> adapterSocketsVariables, final Map<AdapterDeclaration, String> adapterPlugsVariables) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("local function transition(fb, id)");
     _builder.newLine();
@@ -95,6 +100,52 @@ public class BasicFBFilter {
     CharSequence _luaFBVariablesPrefix = LuaConstants.luaFBVariablesPrefix(variables);
     _builder.append(_luaFBVariablesPrefix, "  ");
     _builder.newLineIfNotEmpty();
+    {
+      Set<AdapterDeclaration> _keySet = adapterSocketsVariables.keySet();
+      for(final AdapterDeclaration adapter : _keySet) {
+        {
+          EList<VarDeclaration> _inputVars = adapter.getType().getAdapterFBType().getInterfaceList().getInputVars();
+          for(final VarDeclaration input : _inputVars) {
+            _builder.append("  ");
+            CharSequence _luaFBAdapterInECCVariablesPrefix = LuaConstants.luaFBAdapterInECCVariablesPrefix(input, adapter.getName(), false);
+            _builder.append(_luaFBAdapterInECCVariablesPrefix, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+        {
+          EList<VarDeclaration> _outputVars = adapter.getType().getAdapterFBType().getInterfaceList().getOutputVars();
+          for(final VarDeclaration output : _outputVars) {
+            _builder.append("  ");
+            CharSequence _luaFBAdapterInECCVariablesPrefix_1 = LuaConstants.luaFBAdapterInECCVariablesPrefix(output, adapter.getName(), false);
+            _builder.append(_luaFBAdapterInECCVariablesPrefix_1, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
+    {
+      Set<AdapterDeclaration> _keySet_1 = adapterPlugsVariables.keySet();
+      for(final AdapterDeclaration adapter_1 : _keySet_1) {
+        {
+          EList<VarDeclaration> _inputVars_1 = adapter_1.getType().getAdapterFBType().getInterfaceList().getInputVars();
+          for(final VarDeclaration input_1 : _inputVars_1) {
+            _builder.append("  ");
+            CharSequence _luaFBAdapterInECCVariablesPrefix_2 = LuaConstants.luaFBAdapterInECCVariablesPrefix(input_1, adapter_1.getName(), true);
+            _builder.append(_luaFBAdapterInECCVariablesPrefix_2, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+        {
+          EList<VarDeclaration> _outputVars_1 = adapter_1.getType().getAdapterFBType().getInterfaceList().getOutputVars();
+          for(final VarDeclaration output_1 : _outputVars_1) {
+            _builder.append("  ");
+            CharSequence _luaFBAdapterInECCVariablesPrefix_3 = LuaConstants.luaFBAdapterInECCVariablesPrefix(output_1, adapter_1.getName(), true);
+            _builder.append(_luaFBAdapterInECCVariablesPrefix_3, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
     _builder.append("  ");
     CharSequence _luaTransitions = this.luaTransitions(ecc);
     _builder.append(_luaTransitions, "  ");
@@ -129,6 +180,24 @@ public class BasicFBFilter {
     return Iterables.<VarDeclaration>concat(_plus, _internalVars);
   }
   
+  private Map<AdapterDeclaration, String> getAdapterSocketsVariables(final BasicFBType type) {
+    Map<AdapterDeclaration, String> ret = new HashMap<AdapterDeclaration, String>();
+    EList<AdapterDeclaration> _sockets = type.getInterfaceList().getSockets();
+    for (final AdapterDeclaration adapterDecl : _sockets) {
+      ret.put(adapterDecl, adapterDecl.getName());
+    }
+    return ret;
+  }
+  
+  private Map<AdapterDeclaration, String> getAdapterPlugsVariables(final BasicFBType type) {
+    Map<AdapterDeclaration, String> ret = new HashMap<AdapterDeclaration, String>();
+    EList<AdapterDeclaration> _plugs = type.getInterfaceList().getPlugs();
+    for (final AdapterDeclaration adapterDecl : _plugs) {
+      ret.put(adapterDecl, adapterDecl.getName());
+    }
+    return ret;
+  }
+  
   private CharSequence luaTransitions(final ECC ecc) {
     StringConcatenation _builder = new StringConcatenation();
     {
@@ -148,9 +217,8 @@ public class BasicFBFilter {
         _builder.append(_luaStateVariable);
         _builder.append(" then");
         _builder.newLineIfNotEmpty();
-        _builder.append("  ");
         CharSequence _luaTransition = this.luaTransition(state);
-        _builder.append(_luaTransition, "  ");
+        _builder.append(_luaTransition);
       }
       if (_hasElements) {
         _builder.append("\nelse return false\nend");
