@@ -78,7 +78,7 @@ abstract class ForteLibraryElementTemplate extends ExportTemplate {
 		«FOR v : vars»
 			CIEC_«v.typeName» «IF v.array»*«ELSE»&«ENDIF»«exportPrefix»«v.name»() {
 			  «IF v.array»
-			  	return static_cast<CIEC_«v.typeName»*>(static_cast<CIEC_ARRAY *>(«function»(«vars.indexOf(v)»))[0]); //the first element marks the start of the array
+			  	return static_cast<CIEC_«v.typeName»*>((*static_cast<CIEC_ARRAY *>(«function»(«vars.indexOf(v)»)))[0]); //the first element marks the start of the array
 			  «ELSE»
 			  	return *static_cast<CIEC_«v.typeName»*>(«function»(«vars.indexOf(v)»));
 			  «ENDIF»

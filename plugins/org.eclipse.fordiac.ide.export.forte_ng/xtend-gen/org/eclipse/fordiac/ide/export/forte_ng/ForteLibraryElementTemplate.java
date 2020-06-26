@@ -189,12 +189,12 @@ public abstract class ForteLibraryElementTemplate extends ExportTemplate {
             _builder.append("return static_cast<CIEC_");
             String _typeName_1 = v.getTypeName();
             _builder.append(_typeName_1, "  ");
-            _builder.append("*>(static_cast<CIEC_ARRAY *>(");
+            _builder.append("*>((*static_cast<CIEC_ARRAY *>(");
             _builder.append(function, "  ");
             _builder.append("(");
             int _indexOf = vars.indexOf(v);
             _builder.append(_indexOf, "  ");
-            _builder.append("))[0]); //the first element marks the start of the array");
+            _builder.append(")))[0]); //the first element marks the start of the array");
             _builder.newLineIfNotEmpty();
           } else {
             _builder.append("  ");
