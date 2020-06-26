@@ -177,14 +177,12 @@ class LuaConstants {
 		«ENDFOR»
 	'''
 
-	def static luaFBAdapterInECCVariablesPrefix(Map<VarDeclaration, String> adapterVariables, boolean isPlug) '''
-		«FOR variable : adapterVariables.entrySet()»
+	def static luaFBAdapterInECCVariablesPrefix(VarDeclaration adapterVariable, String adapterName, boolean isPlug) '''
 			«IF isPlug»
-				local «variable.getKey().name.luaAdapterVariable(variable.getValue())» = fb[«variable.getKey().isInput ? variable.getKey().luaFBAdapterInputVarName(variable.getValue()) : variable.getKey().luaFBAdapterOutputVarName(variable.getValue())»]
+				local «adapterVariable.name.luaAdapterVariable(adapterName)» = fb[«adapterVariable.isInput ? adapterVariable.luaFBAdapterInputVarName(adapterName) : adapterVariable.luaFBAdapterOutputVarName(adapterName)»]
 			«ELSE»
-				local «variable.getKey().name.luaAdapterVariable(variable.getValue())» = fb[«variable.getKey().isInput ? variable.getKey().luaFBAdapterOutputVarName(variable.getValue()) : variable.getKey().luaFBAdapterInputVarName(variable.getValue())»]
+				local «adapterVariable.name.luaAdapterVariable(adapterName)» = fb[«adapterVariable.isInput ? adapterVariable.luaFBAdapterOutputVarName(adapterName) : adapterVariable.luaFBAdapterInputVarName(adapterName)»]
 			«ENDIF»
-		«ENDFOR»
 	'''
 
 	def static luaFBAdapterVariablesPrefix(Iterable<AdapterVariable> variables) '''

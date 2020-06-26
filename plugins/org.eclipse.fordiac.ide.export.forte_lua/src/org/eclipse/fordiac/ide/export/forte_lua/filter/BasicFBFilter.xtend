@@ -30,6 +30,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants.*
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 
 class BasicFBFilter {
 
@@ -53,13 +54,28 @@ class BasicFBFilter {
 		return {ECC = executeEvent, interfaceSpec = interfaceSpec, internalVarsInformation = internalVarsInformation}
 	'''
 
-	def private luaECC(ECC ecc, Iterable<VarDeclaration> variables, Map<VarDeclaration, String> adapterSocketsVariables,
-		Map<VarDeclaration, String> adapterPlugsVariables) '''
+	def private luaECC(ECC ecc, Iterable<VarDeclaration> variables,
+		Map<AdapterDeclaration, String> adapterSocketsVariables,
+		Map<AdapterDeclaration, String> adapterPlugsVariables) '''
 		local function transition(fb, id)
 		  local «luaStateVariable()» = «luaFBStateVariable()»
 		  «variables.luaFBVariablesPrefix»
-		  «adapterSocketsVariables.luaFBAdapterInECCVariablesPrefix(false)»
-		  «adapterPlugsVariables.luaFBAdapterInECCVariablesPrefix(true)»
+		  «FOR adapter : adapterSocketsVariables.keySet»
+		  	«FOR input: adapter.type.adapterFBType.interfaceList.inputVars» 
+		  		«input.luaFBAdapterInECCVariablesPrefix(adapter.name, false)»
+		  	«ENDFOR»
+		  	«FOR output: adapter.type.adapterFBType.interfaceList.outputVars» 
+		  		«output.luaFBAdapterInECCVariablesPrefix(adapter.name, false)»
+		  	«ENDFOR»
+		  «ENDFOR»
+		  «FOR adapter : adapterPlugsVariables.keySet»
+		  	«FOR input: adapter.type.adapterFBType.interfaceList.inputVars» 
+		  		«input.luaFBAdapterInECCVariablesPrefix(adapter.name, true)»
+		  	«ENDFOR»
+		  	«FOR output: adapter.type.adapterFBType.interfaceList.outputVars» 
+		  		«output.luaFBAdapterInECCVariablesPrefix(adapter.name, true)»
+		  	«ENDFOR»
+		  «ENDFOR»
 		  «ecc.luaTransitions»
 		end
 		
@@ -75,24 +91,18 @@ class BasicFBFilter {
 		type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars
 	}
 
-	def private Map<VarDeclaration, String> getAdapterSocketsVariables(BasicFBType type) {
-		var Map<VarDeclaration, String> ret = new HashMap<VarDeclaration, String>;
+	def private Map<AdapterDeclaration, String> getAdapterSocketsVariables(BasicFBType type) {
+		var Map<AdapterDeclaration, String> ret = new HashMap<AdapterDeclaration, String>;
 		for (adapterDecl : type.interfaceList.sockets) {
-			for (input : adapterDecl.type.adapterFBType.interfaceList.inputVars)
-				ret.put(input, adapterDecl.name)
-			for (output : adapterDecl.type.adapterFBType.interfaceList.outputVars)
-				ret.put(output, adapterDecl.name)
+			ret.put(adapterDecl, adapterDecl.name)
 		}
 		return ret
 	}
 
-	def private Map<VarDeclaration, String> getAdapterPlugsVariables(BasicFBType type) {
-		var Map<VarDeclaration, String> ret = new HashMap<VarDeclaration, String>;
+	def private Map<AdapterDeclaration, String> getAdapterPlugsVariables(BasicFBType type) {
+		var Map<AdapterDeclaration, String> ret = new HashMap<AdapterDeclaration, String>;
 		for (adapterDecl : type.interfaceList.plugs) {
-			for (input : adapterDecl.type.adapterFBType.interfaceList.inputVars)
-				ret.put(input, adapterDecl.name)
-			for (output : adapterDecl.type.adapterFBType.interfaceList.outputVars)
-				ret.put(output, adapterDecl.name)
+			ret.put(adapterDecl, adapterDecl.name)
 		}
 		return ret
 	}

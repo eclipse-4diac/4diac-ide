@@ -18,8 +18,6 @@ package org.eclipse.fordiac.ide.export.forte_lua.filter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -487,44 +485,39 @@ public class LuaConstants {
     return _builder;
   }
   
-  public static CharSequence luaFBAdapterInECCVariablesPrefix(final Map<VarDeclaration, String> adapterVariables, final boolean isPlug) {
+  public static CharSequence luaFBAdapterInECCVariablesPrefix(final VarDeclaration adapterVariable, final String adapterName, final boolean isPlug) {
     StringConcatenation _builder = new StringConcatenation();
     {
-      Set<Map.Entry<VarDeclaration, String>> _entrySet = adapterVariables.entrySet();
-      for(final Map.Entry<VarDeclaration, String> variable : _entrySet) {
-        {
-          if (isPlug) {
-            _builder.append("local ");
-            CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(variable.getKey().getName(), variable.getValue());
-            _builder.append(_luaAdapterVariable);
-            _builder.append(" = fb[");
-            CharSequence _xifexpression = null;
-            boolean _isIsInput = variable.getKey().isIsInput();
-            if (_isIsInput) {
-              _xifexpression = LuaConstants.luaFBAdapterInputVarName(variable.getKey(), variable.getValue());
-            } else {
-              _xifexpression = LuaConstants.luaFBAdapterOutputVarName(variable.getKey(), variable.getValue());
-            }
-            _builder.append(_xifexpression);
-            _builder.append("]");
-            _builder.newLineIfNotEmpty();
-          } else {
-            _builder.append("local ");
-            CharSequence _luaAdapterVariable_1 = LuaConstants.luaAdapterVariable(variable.getKey().getName(), variable.getValue());
-            _builder.append(_luaAdapterVariable_1);
-            _builder.append(" = fb[");
-            CharSequence _xifexpression_1 = null;
-            boolean _isIsInput_1 = variable.getKey().isIsInput();
-            if (_isIsInput_1) {
-              _xifexpression_1 = LuaConstants.luaFBAdapterOutputVarName(variable.getKey(), variable.getValue());
-            } else {
-              _xifexpression_1 = LuaConstants.luaFBAdapterInputVarName(variable.getKey(), variable.getValue());
-            }
-            _builder.append(_xifexpression_1);
-            _builder.append("]");
-            _builder.newLineIfNotEmpty();
-          }
+      if (isPlug) {
+        _builder.append("local ");
+        CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(adapterVariable.getName(), adapterName);
+        _builder.append(_luaAdapterVariable);
+        _builder.append(" = fb[");
+        CharSequence _xifexpression = null;
+        boolean _isIsInput = adapterVariable.isIsInput();
+        if (_isIsInput) {
+          _xifexpression = LuaConstants.luaFBAdapterInputVarName(adapterVariable, adapterName);
+        } else {
+          _xifexpression = LuaConstants.luaFBAdapterOutputVarName(adapterVariable, adapterName);
         }
+        _builder.append(_xifexpression);
+        _builder.append("]");
+        _builder.newLineIfNotEmpty();
+      } else {
+        _builder.append("local ");
+        CharSequence _luaAdapterVariable_1 = LuaConstants.luaAdapterVariable(adapterVariable.getName(), adapterName);
+        _builder.append(_luaAdapterVariable_1);
+        _builder.append(" = fb[");
+        CharSequence _xifexpression_1 = null;
+        boolean _isIsInput_1 = adapterVariable.isIsInput();
+        if (_isIsInput_1) {
+          _xifexpression_1 = LuaConstants.luaFBAdapterOutputVarName(adapterVariable, adapterName);
+        } else {
+          _xifexpression_1 = LuaConstants.luaFBAdapterInputVarName(adapterVariable, adapterName);
+        }
+        _builder.append(_xifexpression_1);
+        _builder.append("]");
+        _builder.newLineIfNotEmpty();
       }
     }
     return _builder;

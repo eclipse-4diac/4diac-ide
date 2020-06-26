@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -83,7 +84,7 @@ public class BasicFBFilter {
     return _builder;
   }
   
-  private CharSequence luaECC(final ECC ecc, final Iterable<VarDeclaration> variables, final Map<VarDeclaration, String> adapterSocketsVariables, final Map<VarDeclaration, String> adapterPlugsVariables) {
+  private CharSequence luaECC(final ECC ecc, final Iterable<VarDeclaration> variables, final Map<AdapterDeclaration, String> adapterSocketsVariables, final Map<AdapterDeclaration, String> adapterPlugsVariables) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("local function transition(fb, id)");
     _builder.newLine();
@@ -99,14 +100,52 @@ public class BasicFBFilter {
     CharSequence _luaFBVariablesPrefix = LuaConstants.luaFBVariablesPrefix(variables);
     _builder.append(_luaFBVariablesPrefix, "  ");
     _builder.newLineIfNotEmpty();
-    _builder.append("  ");
-    CharSequence _luaFBAdapterInECCVariablesPrefix = LuaConstants.luaFBAdapterInECCVariablesPrefix(adapterSocketsVariables, false);
-    _builder.append(_luaFBAdapterInECCVariablesPrefix, "  ");
-    _builder.newLineIfNotEmpty();
-    _builder.append("  ");
-    CharSequence _luaFBAdapterInECCVariablesPrefix_1 = LuaConstants.luaFBAdapterInECCVariablesPrefix(adapterPlugsVariables, true);
-    _builder.append(_luaFBAdapterInECCVariablesPrefix_1, "  ");
-    _builder.newLineIfNotEmpty();
+    {
+      Set<AdapterDeclaration> _keySet = adapterSocketsVariables.keySet();
+      for(final AdapterDeclaration adapter : _keySet) {
+        {
+          EList<VarDeclaration> _inputVars = adapter.getType().getAdapterFBType().getInterfaceList().getInputVars();
+          for(final VarDeclaration input : _inputVars) {
+            _builder.append("  ");
+            CharSequence _luaFBAdapterInECCVariablesPrefix = LuaConstants.luaFBAdapterInECCVariablesPrefix(input, adapter.getName(), false);
+            _builder.append(_luaFBAdapterInECCVariablesPrefix, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+        {
+          EList<VarDeclaration> _outputVars = adapter.getType().getAdapterFBType().getInterfaceList().getOutputVars();
+          for(final VarDeclaration output : _outputVars) {
+            _builder.append("  ");
+            CharSequence _luaFBAdapterInECCVariablesPrefix_1 = LuaConstants.luaFBAdapterInECCVariablesPrefix(output, adapter.getName(), false);
+            _builder.append(_luaFBAdapterInECCVariablesPrefix_1, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
+    {
+      Set<AdapterDeclaration> _keySet_1 = adapterPlugsVariables.keySet();
+      for(final AdapterDeclaration adapter_1 : _keySet_1) {
+        {
+          EList<VarDeclaration> _inputVars_1 = adapter_1.getType().getAdapterFBType().getInterfaceList().getInputVars();
+          for(final VarDeclaration input_1 : _inputVars_1) {
+            _builder.append("  ");
+            CharSequence _luaFBAdapterInECCVariablesPrefix_2 = LuaConstants.luaFBAdapterInECCVariablesPrefix(input_1, adapter_1.getName(), true);
+            _builder.append(_luaFBAdapterInECCVariablesPrefix_2, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+        {
+          EList<VarDeclaration> _outputVars_1 = adapter_1.getType().getAdapterFBType().getInterfaceList().getOutputVars();
+          for(final VarDeclaration output_1 : _outputVars_1) {
+            _builder.append("  ");
+            CharSequence _luaFBAdapterInECCVariablesPrefix_3 = LuaConstants.luaFBAdapterInECCVariablesPrefix(output_1, adapter_1.getName(), true);
+            _builder.append(_luaFBAdapterInECCVariablesPrefix_3, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
     _builder.append("  ");
     CharSequence _luaTransitions = this.luaTransitions(ecc);
     _builder.append(_luaTransitions, "  ");
@@ -141,38 +180,20 @@ public class BasicFBFilter {
     return Iterables.<VarDeclaration>concat(_plus, _internalVars);
   }
   
-  private Map<VarDeclaration, String> getAdapterSocketsVariables(final BasicFBType type) {
-    Map<VarDeclaration, String> ret = new HashMap<VarDeclaration, String>();
+  private Map<AdapterDeclaration, String> getAdapterSocketsVariables(final BasicFBType type) {
+    Map<AdapterDeclaration, String> ret = new HashMap<AdapterDeclaration, String>();
     EList<AdapterDeclaration> _sockets = type.getInterfaceList().getSockets();
     for (final AdapterDeclaration adapterDecl : _sockets) {
-      {
-        EList<VarDeclaration> _inputVars = adapterDecl.getType().getAdapterFBType().getInterfaceList().getInputVars();
-        for (final VarDeclaration input : _inputVars) {
-          ret.put(input, adapterDecl.getName());
-        }
-        EList<VarDeclaration> _outputVars = adapterDecl.getType().getAdapterFBType().getInterfaceList().getOutputVars();
-        for (final VarDeclaration output : _outputVars) {
-          ret.put(output, adapterDecl.getName());
-        }
-      }
+      ret.put(adapterDecl, adapterDecl.getName());
     }
     return ret;
   }
   
-  private Map<VarDeclaration, String> getAdapterPlugsVariables(final BasicFBType type) {
-    Map<VarDeclaration, String> ret = new HashMap<VarDeclaration, String>();
+  private Map<AdapterDeclaration, String> getAdapterPlugsVariables(final BasicFBType type) {
+    Map<AdapterDeclaration, String> ret = new HashMap<AdapterDeclaration, String>();
     EList<AdapterDeclaration> _plugs = type.getInterfaceList().getPlugs();
     for (final AdapterDeclaration adapterDecl : _plugs) {
-      {
-        EList<VarDeclaration> _inputVars = adapterDecl.getType().getAdapterFBType().getInterfaceList().getInputVars();
-        for (final VarDeclaration input : _inputVars) {
-          ret.put(input, adapterDecl.getName());
-        }
-        EList<VarDeclaration> _outputVars = adapterDecl.getType().getAdapterFBType().getInterfaceList().getOutputVars();
-        for (final VarDeclaration output : _outputVars) {
-          ret.put(output, adapterDecl.getName());
-        }
-      }
+      ret.put(adapterDecl, adapterDecl.getName());
     }
     return ret;
   }
