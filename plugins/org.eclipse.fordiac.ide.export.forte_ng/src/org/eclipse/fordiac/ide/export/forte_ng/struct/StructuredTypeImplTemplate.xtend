@@ -33,8 +33,8 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		    CIEC_STRUCT(«type.name.FORTEString», «type.memberVariables.size», scmElementTypes, scmElementNames, e_APPLICATION + e_CONSTRUCTED + 1) {
 		}
 		
-		const CStringDictionary::TStringId «structClassName»::scmElementTypes[] = {«type.memberVariables.FORTENameList»};
-		const CStringDictionary::TStringId «structClassName»::scmElementNames[] = {«type.memberVariables.FORTETypeList»};
+		const CStringDictionary::TStringId «structClassName»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
+		const CStringDictionary::TStringId «structClassName»::scmElementTypes[] = {«type.memberVariables.FORTETypeList»};
 
 	'''
 

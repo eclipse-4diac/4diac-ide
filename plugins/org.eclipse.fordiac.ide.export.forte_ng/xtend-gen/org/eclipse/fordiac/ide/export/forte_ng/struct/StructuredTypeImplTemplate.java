@@ -65,7 +65,7 @@ public class StructuredTypeImplTemplate extends StructBaseTemplate {
     _builder.append("const CStringDictionary::TStringId ");
     CharSequence _structClassName_2 = this.getStructClassName();
     _builder.append(_structClassName_2);
-    _builder.append("::scmElementTypes[] = {");
+    _builder.append("::scmElementNames[] = {");
     String _fORTENameList = this.getFORTENameList(this.getType().getMemberVariables());
     _builder.append(_fORTENameList);
     _builder.append("};");
@@ -73,7 +73,7 @@ public class StructuredTypeImplTemplate extends StructBaseTemplate {
     _builder.append("const CStringDictionary::TStringId ");
     CharSequence _structClassName_3 = this.getStructClassName();
     _builder.append(_structClassName_3);
-    _builder.append("::scmElementNames[] = {");
+    _builder.append("::scmElementTypes[] = {");
     String _fORTETypeList = this.getFORTETypeList(this.getType().getMemberVariables());
     _builder.append(_fORTETypeList);
     _builder.append("};");
