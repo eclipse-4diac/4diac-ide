@@ -120,7 +120,7 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 	public void setAttribute(String attributeName, String type, String value, String comment) {
 		super.setAttribute(attributeName, type, value, comment);
 		if ("StructuredType".equals(attributeName)) { //$NON-NLS-1$
-			StructuredType newStructType = (StructuredType) getTypeLibrary().getDataTypeLibrary().getType(value);
+			StructuredType newStructType = getTypeLibrary().getDataTypeLibrary().getStructuredType(value);
 			if ((null == getStructType()) || (!getStructType().equals(newStructType))) {
 				setStructTypeGen(newStructType);
 				setMemberVariablesAsPorts(newStructType);
@@ -130,7 +130,7 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 
 	protected abstract void setMemberVariablesAsPorts(StructuredType newStructType);
 
-	/**
+	/* 
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated

@@ -83,5 +83,4 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 			cmd.add(newInsertCommand((IInterfaceElement) entry, getIsInputsViewer(), index));
 		}
 	}
-
 }

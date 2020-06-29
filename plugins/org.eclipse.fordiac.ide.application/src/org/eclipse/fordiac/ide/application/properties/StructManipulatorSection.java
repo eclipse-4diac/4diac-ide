@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -63,8 +62,6 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.views.properties.tabbed.ISection;
-import org.eclipse.ui.views.properties.tabbed.TabContents;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class StructManipulatorSection extends AbstractSection {
@@ -101,7 +98,7 @@ public class StructManipulatorSection extends AbstractSection {
 
 		muxLabel = getWidgetFactory().createCLabel(structComp, Messages.StructManipulatorSection_STRUCTURED_TYPE);
 		muxStructSelector = getWidgetFactory().createCCombo(structComp);
-		
+
 		muxStructSelector.addFocusListener(new FocusListener() {
 
 			@Override
@@ -111,8 +108,6 @@ public class StructManipulatorSection extends AbstractSection {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		muxStructSelector.addSelectionListener(new SelectionListener() {
@@ -124,10 +119,12 @@ public class StructManipulatorSection extends AbstractSection {
 					disableOpenEditorForAnyType(newStructName);
 					boolean newStructSelected = !newStructName.contentEquals(getType().getStructType().getName());
 					if (newStructSelected && null != getDatatypeLibrary()) {
-						StructuredType newStruct = (StructuredType) getDatatypeLibrary().getType(newStructName);
+						StructuredType newStruct = (StructuredType) getDatatypeLibrary()
+								.getStructuredType(newStructName);
 						ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
 						commandStack.execute(cmd);
 						selectNewStructManipulatorFB(cmd);
+						refresh();
 					}
 				}
 			}
@@ -180,7 +177,7 @@ public class StructManipulatorSection extends AbstractSection {
 			}
 		}
 	}
-	
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
@@ -211,7 +208,7 @@ public class StructManipulatorSection extends AbstractSection {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				StructuredType sel = getSelectedStructuredType();
-				if (sel != null) {					
+				if (sel != null) {
 					openStructEditor(sel.getPaletteEntry().getFile());
 				}
 			}
@@ -221,13 +218,13 @@ public class StructManipulatorSection extends AbstractSection {
 				widgetSelected(e);
 			}
 		});
-		openItem.setText(JFaceResources.getString("Open Editor")); //$NON-NLS-1$
-	
+		openItem.setText("Open Type in Editor");
+
 		openEditorMenu.addMenuListener(new MenuListener() {
 			@Override
 			public void menuShown(MenuEvent e) {
-				openItem.setEnabled(getSelectedStructuredType() != null && 
-						!getSelectedStructuredType().getName().contentEquals("ANY_STRUCT")); //$NON-NLS-1$
+				openItem.setEnabled(getSelectedStructuredType() != null
+						&& !getSelectedStructuredType().getName().contentEquals("ANY_STRUCT")); //$NON-NLS-1$
 			}
 
 			@Override

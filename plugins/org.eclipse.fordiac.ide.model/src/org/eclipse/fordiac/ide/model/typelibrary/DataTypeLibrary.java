@@ -126,4 +126,13 @@ public final class DataTypeLibrary {
 		return null;
 	}
 
+	public StructuredType getStructuredType(String name) {
+		DataType derivedType = getDerivedType(name);
+		if (derivedType instanceof StructuredType) {
+			return (StructuredType) derivedType;
+		}
+		return (StructuredType) typeMap.get("ANY_STRUCT"); //$NON-NLS-1$
+
+	}
+
 }
