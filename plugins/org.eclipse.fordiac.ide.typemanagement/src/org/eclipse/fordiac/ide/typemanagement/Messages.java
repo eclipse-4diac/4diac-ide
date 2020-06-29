@@ -35,6 +35,11 @@ public class Messages extends NLS {
 	public static String NewFBTypeWizardPage_OpenTypeForEditingWhenDone;
 	public static String RenameType_InvalidIdentifierErrorMessage;
 	public static String RenameType_Name;
+	public static String OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE;
+	public static String OpenTypeHandler_NO_FILES_IN_WORKSPACE;
+	public static String OpenTypeHandler_NO_FILES_SELECTED;
+	public static String OpenTypeHandler_OPEN_TYPE_ERROR_TITLE;
+	public static String OpenTypeHandler_OPEN_TYPE_TITLE;
 
 	static {
 		// initialize resource bundle

@@ -17,25 +17,19 @@ import java.util.List;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.PaletteFilter;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.StyledCellLabelProvider;
-import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
@@ -232,55 +226,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		tableViewer = new TableViewer(popupShell, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		ColumnViewerToolTipSupport.enableFor(tableViewer);
 		tableViewer.setContentProvider(new ArrayContentProvider());
-		tableViewer.setLabelProvider(new StyledCellLabelProvider() {
-
-			public Image getImage(Object element) {
-				if (element instanceof PaletteEntry) {
-					PaletteEntry entry = (PaletteEntry) element;
-					if (entry.getType() instanceof SubAppType) {
-						return FordiacImage.ICON_SUB_APP.getImage();
-					} else if (entry.getType() instanceof BasicFBType) {
-						return FordiacImage.ICON_BASIC_FB.getImage();
-					} else if (entry.getType() instanceof SimpleFBType) {
-						return FordiacImage.ICON_SIMPLE_FB.getImage();
-					} else if (entry.getType() instanceof CompositeFBType) {
-						return FordiacImage.ICON_COMPOSITE_FB.getImage();
-					} else {
-						return FordiacImage.ICON_SIFB.getImage();
-					}
-				}
-				return null;
-			}
-
-			@Override
-			public void update(ViewerCell cell) {
-				Object obj = cell.getElement();
-				StyledString styledString = null;
-				if (obj instanceof PaletteEntry) {
-					PaletteEntry entry = (PaletteEntry) obj;
-					styledString = new StyledString(entry.getLabel());
-					styledString.append(" - " + entry.getType().getComment(), //$NON-NLS-1$
-							StyledString.QUALIFIER_STYLER);
-				} else {
-					styledString = new StyledString(obj.toString());
-				}
-
-				cell.setText(styledString.toString());
-				cell.setStyleRanges(styledString.getStyleRanges());
-				cell.setImage(getImage(obj));
-				super.update(cell);
-			}
-
-			@Override
-			public String getToolTipText(Object element) {
-				if (element instanceof PaletteEntry) {
-					return ((PaletteEntry) element).getFile().getProjectRelativePath().toString() + "\n\n"
-							+ ((PaletteEntry) element).getType().getComment();
-				}
-				return super.getToolTipText(element);
-			}
-
-		});
+		tableViewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new ResultListLabelProvider()));
 
 		new TableColumn(tableViewer.getTable(), SWT.NONE);
 		TableLayout layout = new TableLayout();
