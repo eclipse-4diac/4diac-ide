@@ -21,6 +21,8 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
+import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
@@ -34,12 +36,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public class ChangeStructCommand extends Command {
+	// Helper data class for storing connection data of resource connection as the
+	// connections are lost during the unmapping process
+	private static class ConnData {
+		private IInterfaceElement source;
+		private IInterfaceElement dest;
+
+		public ConnData(IInterfaceElement source, IInterfaceElement dest) {
+			this.source = source;
+			this.dest = dest;
+		}
+	}
 
 	private StructuredType newStruct;
 	private StructManipulator newMux;
@@ -49,6 +63,10 @@ public class ChangeStructCommand extends Command {
 
 	private CompoundCommand deleteConnCmds = new CompoundCommand();
 	private CompoundCommand connCreateCmds = new CompoundCommand();
+	private CompoundCommand resourceConnCreateCmds = new CompoundCommand();
+
+	private MapToCommand mapCmd = null;
+	private UnmapCommand unmapCmd = null;
 
 	public ChangeStructCommand(StructManipulator mux, StructuredType struct) {
 		this.oldMux = mux;
@@ -59,10 +77,120 @@ public class ChangeStructCommand extends Command {
 
 	@Override
 	public void execute() {
+		Resource resource = null;
+		List<ConnData> resourceConns = null;
+
+		if (oldMux.isMapped()) {
+			if (network.equals(oldMux.getResource().getFBNetwork())) {
+				// this struct manipulator is in the resource
+				oldMux = (StructManipulator) oldMux.getOpposite();
+				network = oldMux.getFbNetwork();
+			}
+			resource = oldMux.getResource();
+			resourceConns = getResourceConns();
+			unmapCmd = new UnmapCommand(oldMux);
+			unmapCmd.execute();
+		}
 		createNewMux();
 		// Find connections which should be reconnected
 		handleApplicationConnections();
 
+		// Map FB
+		if (resource != null) {
+			mapCmd = new MapToCommand(newMux, resource);
+			if (mapCmd.canExecute()) {
+				mapCmd.execute();
+				recreateResourceConns(resourceConns);
+			}
+		}
+	}
+
+	@Override
+	public void undo() {
+		if (mapCmd != null) {
+			resourceConnCreateCmds.undo();
+			mapCmd.undo();
+		}
+		connCreateCmds.undo();
+		replaceFBs(newMux, oldMux);
+		deleteConnCmds.undo();
+
+		if (unmapCmd != null) {
+			unmapCmd.undo();
+		}
+	}
+
+	@Override
+	public void redo() {
+		if (unmapCmd != null) {
+			unmapCmd.redo();
+		}
+		deleteConnCmds.redo();
+		replaceFBs(oldMux, newMux);
+		connCreateCmds.redo();
+
+		if (mapCmd != null) {
+			mapCmd.redo();
+			resourceConnCreateCmds.redo();
+		}
+	}
+
+	private List<ConnData> getResourceConns() {
+		List<ConnData> retVal = new ArrayList<>();
+		FBNetworkElement resElement = oldMux.getOpposite();
+		for (Connection conn : getAllConnections(resElement)) {
+			IInterfaceElement source = conn.getSource();
+			IInterfaceElement dest = conn.getDestination();
+			if (!source.getFBNetworkElement().isMapped() || !dest.getFBNetworkElement().isMapped()) {
+				// one of both ends is a resourceFB therefore the connection needs to be
+				// restored
+				retVal.add(new ConnData(conn.getSource(), conn.getDestination()));
+			} else if (((source.getFBNetworkElement() == resElement)
+					&& (dest.getFBNetworkElement().getOpposite().getFbNetwork() != oldMux.getFbNetwork()))
+					|| ((dest.getFBNetworkElement() == resElement)
+							&& (source.getFBNetworkElement().getOpposite().getFbNetwork() != oldMux.getFbNetwork()))) {
+				// one of both ends is a FB coming from a different fb network and therefore
+				// this is also a resource specific connection
+				retVal.add(new ConnData(conn.getSource(), conn.getDestination()));
+			}
+
+		}
+		return retVal;
+	}
+
+	private void recreateResourceConns(List<ConnData> resourceConns) {
+		FBNetworkElement orgMappedElement = unmapCmd.getMappedFBNetworkElement();
+		FBNetworkElement copiedMappedElement = newMux.getOpposite();
+		for (ConnData connData : resourceConns) {
+			IInterfaceElement source = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement,
+					connData.source);
+			IInterfaceElement dest = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement, connData.dest);
+			if ((source != null) && (dest != null)) {
+				// if source or dest is null it means that an interface element is not available
+				// any more
+				AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, copiedMappedElement.getFbNetwork());
+				if (null != dccc) {
+					dccc.setSource(source);
+					dccc.setDestination(dest);
+					if (dccc.canExecute()) {
+						dccc.execute();
+						resourceConnCreateCmds.add(dccc);
+					}
+				}
+			}
+		}
+	}
+
+	private static List<Connection> getAllConnections(FBNetworkElement element) {
+		List<Connection> retVal = new ArrayList<>();
+		for (IInterfaceElement ifEle : element.getInterface().getAllInterfaceElements()) {
+			if (ifEle.isIsInput()) {
+				retVal.addAll(ifEle.getInputConnections());
+			} else {
+				retVal.addAll(ifEle.getOutputConnections());
+			}
+		}
+		return retVal;
 	}
 
 	private void createNewMux() {
@@ -100,20 +228,6 @@ public class ChangeStructCommand extends Command {
 		network.getNetworkElements().add(newElement);
 	}
 
-	@Override
-	public void undo() {
-		connCreateCmds.undo();
-		replaceFBs(newMux, oldMux);
-		deleteConnCmds.undo();
-	}
-
-	@Override
-	public void redo() {
-		deleteConnCmds.redo();
-		replaceFBs(oldMux, newMux);
-		connCreateCmds.redo();
-	}
-	
 	public StructManipulator getNewMux() {
 		return newMux;
 	}
