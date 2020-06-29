@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventLabelProvider;
@@ -27,6 +28,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -41,15 +43,25 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class DataInterfaceElementSection extends AdapterInterfaceElementSection {
@@ -57,6 +69,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	private Text initValueText;
 	private TableViewer withEventsViewer;
 	private Group eventComposite;
+	private Button openEditorButton;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -79,6 +92,40 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 			removeContentAdapter();
 			executeCommand(new ChangeInitialValueCommand((VarDeclaration) type, initValueText.getText()));
 			addContentAdapter();
+		});
+	}
+
+	@Override
+	protected void createTypeAndCommentSection(Composite parent) {
+		super.createTypeAndCommentSection(parent);
+		openEditorButton = new Button(typeCombo.getParent(), SWT.PUSH);
+		openEditorButton.setText("Open Type in Editor");
+		openEditorButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				IWorkbench workbench = PlatformUI.getWorkbench();
+				if (workbench != null) {
+					IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+					if (activeWorkbenchWindow != null) {
+						openStructEditor(activeWorkbenchWindow);
+					}
+				}
+			}
+
+			private void openStructEditor(IWorkbenchWindow activeWorkbenchWindow) {
+				IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+				IFile file = getType().getType().getPaletteEntry().getFile();
+				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+				try {
+					activePage.openEditor(new FileEditorInput(file), desc.getId());
+				} catch (PartInitException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
 		});
 	}
 
@@ -148,6 +195,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
+			openEditorButton.setEnabled(getType().getType() instanceof StructuredType);
 			arraySizeText.setText(0 >= getType().getArraySize() ? "" : (Integer.toString((getType()).getArraySize()))); //$NON-NLS-1$
 			initValueText.setText(null == getType().getValue() ? "" : getType().getValue().getValue()); //$NON-NLS-1$
 			if (getType().eContainer().eContainer() instanceof FBType) {
