@@ -79,7 +79,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		createTypeAndCommentSection(getLeftComposite());
 	}
 
-	private void createTypeAndCommentSection(Composite parent) {
+	protected void createTypeAndCommentSection(Composite parent) {
 		parent.setLayout(new GridLayout(2, false));
 		parent.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(parent, FordiacMessages.Name + ":"); //$NON-NLS-1$
@@ -104,13 +104,17 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 			}
 		});
 		getWidgetFactory().createCLabel(parent, FordiacMessages.Type + ":"); //$NON-NLS-1$
-		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), parent);
+		Composite typeComp = getWidgetFactory().createComposite(parent);
+		typeComp.setLayout(new GridLayout(2, false));
+		typeComp.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), typeComp);
 		GridData languageComboGridData = new GridData(SWT.FILL, 0, true, false);
 		typeCombo.setLayoutData(languageComboGridData);
 		typeCombo.addListener(SWT.Selection, event -> {
 			DataType newType = getTypeForSelection(typeCombo.getText());
 			if (null != newType) {
 				executeCommand(new ChangeTypeCommand((VarDeclaration) type, newType));
+				refresh();
 			}
 		});
 	}
