@@ -20,10 +20,10 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
+import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.resourceediting.editparts.ResFBEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
@@ -55,9 +55,9 @@ public class ShowFBInApp extends AbstractHandler {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof IStructuredSelection) {
 			Object first = ((IStructuredSelection) selection).getFirstElement();
-			if (first instanceof ResFBEditPart) {
-				FB fb = ((ResFBEditPart) first).getModel();
-				FB appFB = (FB) fb.getOpposite();
+			if (first instanceof AbstractFBNElementEditPart) {
+				FBNetworkElement fb = ((AbstractFBNElementEditPart) first).getModel();
+				FBNetworkElement appFB = fb.getOpposite();
 				Application app = getApplication(appFB);
 				if (app != null && appFB != null) {
 					IEditorPart editor = OpenListenerManager.openEditor(app);
@@ -82,7 +82,7 @@ public class ShowFBInApp extends AbstractHandler {
 	 * @param fbView
 	 * @return the application of the fbView if available
 	 */
-	private static Application getApplication(FB fb) {
+	private static Application getApplication(FBNetworkElement fb) {
 		if (fb != null) {
 			return fb.getFbNetwork().getApplication();
 		}
@@ -100,9 +100,9 @@ public class ShowFBInApp extends AbstractHandler {
 				obj = list.get(0);
 			}
 		}
-		if (obj instanceof ResFBEditPart) {
-			FB fb = ((ResFBEditPart) obj).getModel();
-			FB appFB = (FB) fb.getOpposite();
+		if (obj instanceof AbstractFBNElementEditPart) {
+			FBNetworkElement fb = ((AbstractFBNElementEditPart) obj).getModel();
+			FBNetworkElement appFB = fb.getOpposite();
 			Application app = getApplication(appFB);
 			setBaseEnabled((app != null && appFB != null));
 		} else {
