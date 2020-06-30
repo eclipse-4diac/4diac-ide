@@ -69,10 +69,6 @@ public class LayoutHandler extends AbstractHandler {
 	private static final PrecisionPoint START_POINT = new PrecisionPoint();
 	private static final PrecisionPoint END_POINT = new PrecisionPoint();
 
-	private static final int SUBAPP_LABEL_NUMBER_PADDING_MULTIPLIER = 22;
-
-	private int inputCnt;
-	private int outputCnt;
 	private int maxIOLabelSize;
 
 	@Override
@@ -102,17 +98,12 @@ public class LayoutHandler extends AbstractHandler {
 	}
 
 	private void setGraphProperties(ElkNode layoutGraph) {
-		layoutGraph.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.layered");
+		layoutGraph.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.layered"); //$NON-NLS-1$
 		layoutGraph.setProperty(CoreOptions.EDGE_ROUTING, EdgeRouting.ORTHOGONAL);
 		layoutGraph.setProperty(CoreOptions.DIRECTION, Direction.RIGHT);
 
 		// set padding according to the number of in and outputs (for subapps)
-		layoutGraph
-				.setProperty(CoreOptions.PADDING,
-						new ElkPadding(
-								(inputCnt > outputCnt) ? inputCnt * SUBAPP_LABEL_NUMBER_PADDING_MULTIPLIER
-										: outputCnt * SUBAPP_LABEL_NUMBER_PADDING_MULTIPLIER,
-								200, 0, maxIOLabelSize + 30));
+		layoutGraph.setProperty(CoreOptions.PADDING, new ElkPadding(30, maxIOLabelSize + 30, 0, maxIOLabelSize + 30));
 		layoutGraph.setProperty(CoreOptions.SPACING_NODE_NODE, (double) 40);
 
 		// empty parent graph for SubApps
@@ -128,8 +119,6 @@ public class LayoutHandler extends AbstractHandler {
 		connEditParts.clear();
 		nodeMapping.clear();
 		values.clear();
-		inputCnt = 0;
-		outputCnt = 0;
 		// set a min for the padding
 		maxIOLabelSize = 60;
 	}
@@ -261,19 +250,11 @@ public class LayoutHandler extends AbstractHandler {
 
 	private void calculateSubAppPadding(SubAppInternalInterfaceEditPart part) {
 		/*
-		 * inputCnt & outputCnt contain the total number of inputs or outputs for a
-		 * subapp and are therefore used to calculate the padding-top
-		 *
 		 * maxIOLabelSize contains the width of the biggest input label and is used to
 		 * calculate the padding-left
 		 */
-		if (part.isInput()) {
-			outputCnt++;
-		} else {
-			if (part.getFigure().getBounds().width > maxIOLabelSize) {
-				maxIOLabelSize = part.getFigure().getBounds().width;
-			}
-			inputCnt++;
+		if (part.getFigure().getBounds().width > maxIOLabelSize) {
+			maxIOLabelSize = part.getFigure().getBounds().width;
 		}
 	}
 

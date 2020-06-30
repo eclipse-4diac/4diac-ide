@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.osgi.framework.BundleContext;
 
 public class Activator extends Abstract4DIACUIPlugin {
-	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.elk"; // $NON-NLS-1
+	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.elk"; //$NON-NLS-1$
 	// The shared instance.
 	private static Activator plugin;
 
@@ -39,7 +39,6 @@ public class Activator extends Abstract4DIACUIPlugin {
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		// here reserve resources if needed for the plugin, "plugin constructor"
-		System.out.println("loading elk plugin");
 		super.start(context);
 		setPlugin(this);
 	}
@@ -60,7 +59,6 @@ public class Activator extends Abstract4DIACUIPlugin {
 		// here, free resources if not needed anymore, "plugin destructor"
 		super.stop(context);
 		setPlugin(null);
-		System.out.println("stopping elk plugin");
 	}
 
 	/**
