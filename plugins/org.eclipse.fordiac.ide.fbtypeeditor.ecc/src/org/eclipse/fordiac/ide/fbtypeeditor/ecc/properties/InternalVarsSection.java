@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
@@ -78,6 +79,7 @@ public class InternalVarsSection extends ECCSection implements I4diacTableUtil {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createInternalVarsControls(parent);
 		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
+		OpenStructMenu.addTo(internalVarsViewer);
 	}
 
 	public void createInternalVarsControls(final Composite parent) {

@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
@@ -31,7 +30,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -55,29 +54,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.MenuEvent;
-import org.eclipse.swt.events.MenuListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class StructViewingComposite extends Composite implements CommandExecutor, I4diacTableUtil {
@@ -203,9 +188,9 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			@Override
 			public void focusLost(FocusEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 		});
 		return new CellEditor[] { new TextCellEditor(table), typeDropDown, new TextCellEditor(table),
 				new TextCellEditor(table), new TextCellEditor(table) };
@@ -348,65 +333,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		return getType().getMemberVariables().get(index);
 	}
 
-	private void createContextMenu(TableViewer viewer) {
-		Control ctrl = viewer.getControl();
-		Menu openEditorMenu = new Menu(viewer.getTable());
-		MenuItem openItem = new MenuItem(openEditorMenu, SWT.NONE);
-		openItem.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				StructuredType sel = getSelectedStructuredType(viewer);
-				if (sel != null) {
-					openStructEditor(sel.getPaletteEntry().getFile());
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
-		});
-		openItem.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
-
-		openEditorMenu.addMenuListener(new MenuListener() {
-			@Override
-			public void menuShown(MenuEvent e) {
-				openItem.setEnabled(getSelectedStructuredType(viewer) != null
-						&& !getSelectedStructuredType(viewer).getName().contentEquals("ANY_STRUCT")); //$NON-NLS-1$
-			}
-
-			@Override
-			public void menuHidden(MenuEvent e) {
-			}
-		});
-		ctrl.setMenu(openEditorMenu);
-	}
-
-	private StructuredType getSelectedStructuredType(TableViewer viewer) {
-		TableItem[] selected = viewer.getTable().getSelection();
-		if (selected[0].getData() instanceof VarDeclaration) {
-			VarDeclaration varDecl = (VarDeclaration) selected[0].getData();
-			if (varDecl.getType() instanceof StructuredType) {
-				return (StructuredType) varDecl.getType();
-			}
-		}
-		return null;
-	}
-
-	private static void openStructEditor(IFile file) {
-		IWorkbench workbench = PlatformUI.getWorkbench();
-		if (workbench != null) {
-			IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-			if (activeWorkbenchWindow != null) {
-
-				IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
-				try {
-					activePage.openEditor(new FileEditorInput(file), desc.getId());
-				} catch (PartInitException e1) {
-					e1.printStackTrace();
-				}
-			}
-		}
+	private static void createContextMenu(TableViewer viewer) {
+		OpenStructMenu.addTo(viewer);
 	}
 }

@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
@@ -25,6 +24,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -54,14 +55,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class StructManipulatorSection extends AbstractSection {
@@ -118,8 +113,8 @@ public class StructManipulatorSection extends AbstractSection {
 					String newStructName = muxStructSelector.getItem(index);
 					disableOpenEditorForAnyType(newStructName);
 					boolean newStructSelected = !newStructName.contentEquals(getType().getStructType().getName());
-					if (newStructSelected && null != getDatatypeLibrary()) {
-						StructuredType newStruct = (StructuredType) getDatatypeLibrary()
+					if (newStructSelected && (null != getDatatypeLibrary())) {
+						StructuredType newStruct = getDatatypeLibrary()
 								.getStructuredType(newStructName);
 						ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
 						commandStack.execute(cmd);
@@ -152,30 +147,13 @@ public class StructManipulatorSection extends AbstractSection {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				openStructEditor(getType().getStructType().getPaletteEntry().getFile());
+				OpenStructMenu.openStructEditor(getType().getStructType().getPaletteEntry().getFile());
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-	}
-
-	private static void openStructEditor(IFile file) {
-		IWorkbench workbench = PlatformUI.getWorkbench();
-		if (workbench != null) {
-			IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-			if (activeWorkbenchWindow != null) {
-
-				IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
-				try {
-					activePage.openEditor(new FileEditorInput(file), desc.getId());
-				} catch (PartInitException e1) {
-					e1.printStackTrace();
-				}
-			}
-		}
 	}
 
 	@Override
@@ -209,7 +187,7 @@ public class StructManipulatorSection extends AbstractSection {
 			public void widgetSelected(SelectionEvent e) {
 				StructuredType sel = getSelectedStructuredType();
 				if (sel != null) {
-					openStructEditor(sel.getPaletteEntry().getFile());
+					OpenStructMenu.openStructEditor(sel.getPaletteEntry().getFile());
 				}
 			}
 
@@ -218,12 +196,12 @@ public class StructManipulatorSection extends AbstractSection {
 				widgetSelected(e);
 			}
 		});
-		openItem.setText("Open Type in Editor");
+		openItem.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
 
 		openEditorMenu.addMenuListener(new MenuListener() {
 			@Override
 			public void menuShown(MenuEvent e) {
-				openItem.setEnabled(getSelectedStructuredType() != null
+				openItem.setEnabled((getSelectedStructuredType() != null)
 						&& !getSelectedStructuredType().getName().contentEquals("ANY_STRUCT")); //$NON-NLS-1$
 			}
 
@@ -261,14 +239,14 @@ public class StructManipulatorSection extends AbstractSection {
 
 	@Override
 	public void refresh() {
-		if (null != getType() && null != getType().getFbNetwork()) {
+		if ((null != getType()) && (null != getType().getFbNetwork())) {
 			fillTypeCombo();
 		}
 	}
 
 	private void fillTypeCombo() {
 		memberVarViewer.setInput(getType());
-		String structName = ((StructManipulator) getType()).getStructType().getName();
+		String structName = getType().getStructType().getName();
 		muxStructSelector.removeAll();
 		for (DataType dtp : getDatatypeLibrary().getDataTypesSorted()) {
 			if (dtp instanceof StructuredType) {

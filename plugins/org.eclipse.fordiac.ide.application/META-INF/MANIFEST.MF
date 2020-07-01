@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.model.commands,
- org.eclipse.fordiac.ide.model.edit
+ org.eclipse.fordiac.ide.model.edit,
+ org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.13.0.qualifier
