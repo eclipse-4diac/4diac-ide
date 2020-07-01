@@ -21,7 +21,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.internal.CreateVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
@@ -37,11 +36,11 @@ public class CreateInternalVariableCommand extends CreateVariableCommand {
 	 * @param dataType the data type
 	 * @param fbType   the fb type
 	 */
-	public CreateInternalVariableCommand(final BasicFBType fbType) {
+	public CreateInternalVariableCommand(final BaseFBType fbType) {
 		super(fbType, fbType.getInternalVars().size() - 1, null, null);
 	}
 
-	public CreateInternalVariableCommand(final BasicFBType fbType, int index, String name, DataType dataType) {
+	public CreateInternalVariableCommand(final BaseFBType fbType, int index, String name, DataType dataType) {
 		super(fbType, index, name, dataType);
 	}
 
