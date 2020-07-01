@@ -11,7 +11,7 @@
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.commands.change;
+package org.eclipse.fordiac.ide.model.commands.create;
 
 import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
@@ -19,12 +19,12 @@ import static org.junit.Assume.assumeTrue;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.junit.runners.Parameterized.Parameters;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-public class FBCreateCommandTest extends FbNetworkTestBase {
+public class FBCreateCommandTest extends FBNetworkTestBase {
 
 	private static State executeCommand(State state) {
 		state.setCommand(new FBCreateCommand(state.getFunctionblock(), state.getFbNetwork(), 0, 0));

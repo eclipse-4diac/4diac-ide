@@ -1,4 +1,4 @@
-package org.eclipse.fordiac.ide.model.commands.change;
+package org.eclipse.fordiac.ide.model.commands.testinfra;
 
 import static org.junit.Assume.assumeTrue;
 
@@ -14,7 +14,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
 
-public abstract class FbNetworkTestBase extends CommandTestBase<FbNetworkTestBase.State> {
+public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBase.State> {
 
 	// create a state description that fits our purpose
 	public static class State implements CommandTestBase.StateBase {
@@ -88,8 +88,8 @@ public abstract class FbNetworkTestBase extends CommandTestBase<FbNetworkTestBas
 
 	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<Object> commands) {
-		return describeCommand(description, initializer, initialVerifier, commands, FbNetworkTestBase::undoCommand,
-				FbNetworkTestBase::redoCommand);
+		return describeCommand(description, initializer, initialVerifier, commands, FBNetworkTestBase::undoCommand,
+				FBNetworkTestBase::redoCommand);
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {

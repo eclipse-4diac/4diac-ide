@@ -1,4 +1,4 @@
-package org.eclipse.fordiac.ide.model.commands.change;
+package org.eclipse.fordiac.ide.model.commands.testinfra;
 
 import static org.junit.Assume.assumeTrue;
 

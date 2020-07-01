@@ -19,6 +19,7 @@ import static org.junit.Assume.assumeTrue;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.commands.testinfra.VersionInfoTestBase;
 import org.junit.runners.Parameterized.Parameters;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests

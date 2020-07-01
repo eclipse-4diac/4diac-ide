@@ -11,7 +11,7 @@
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.commands.change;
+package org.eclipse.fordiac.ide.model.commands.testinfra;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
