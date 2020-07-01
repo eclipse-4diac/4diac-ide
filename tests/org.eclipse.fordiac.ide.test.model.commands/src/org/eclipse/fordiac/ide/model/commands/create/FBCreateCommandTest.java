@@ -26,7 +26,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 public class FBCreateCommandTest extends FBNetworkTestBase {
 
-	private static State executeCommand(State state) {
+	public static State executeCommand(State state) {
 		state.setCommand(new FBCreateCommand(state.getFunctionblock(), state.getFbNetwork(), 0, 0));
 		assumeNotNull(state.getCommand());
 		assumeTrue(state.getCommand().canExecute());
@@ -34,7 +34,7 @@ public class FBCreateCommandTest extends FBNetworkTestBase {
 		return state;
 	}
 
-	private static void verifyState(State state, State oldState, TestFunction t) {
+	public static void verifyState(State state, State oldState, TestFunction t) {
 		t.test(!state.getFbNetwork().isSubApplicationNetwork() && !state.getFbNetwork().getNetworkElements().isEmpty());
 		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface());
 		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs());

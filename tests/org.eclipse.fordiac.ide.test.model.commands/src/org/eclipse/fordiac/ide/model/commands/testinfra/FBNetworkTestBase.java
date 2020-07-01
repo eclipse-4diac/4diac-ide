@@ -11,22 +11,25 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
 
 public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBase.State> {
 
+	private static final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
+
 	// create a state description that fits our purpose
 	public static class State implements CommandTestBase.StateBase {
-		private FBNetwork net = LibraryElementFactory.eINSTANCE.createFBNetwork();
-		private FBTypePaletteEntry palette = preparePaletteWithTypeLib();
-		private FBTypePaletteEntry functionblock = createFB();
+		private final FBNetwork net = LibraryElementFactory.eINSTANCE.createFBNetwork();
+		private final FBTypePaletteEntry palette = preparePaletteWithTypeLib();
+		private final FBTypePaletteEntry functionblock = createFB();
 
 		private Command cmd;
 
 		private FBTypePaletteEntry preparePaletteWithTypeLib() {
-			FBTypePaletteEntry pallEntry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
-			TypeLibrary typelib = TypeLibrary.getTypeLibrary(null);
+			final FBTypePaletteEntry pallEntry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
+			final TypeLibrary typelib = TypeLibrary.getTypeLibrary(null);
 			pallEntry.setPalette(typelib.getBlockTypeLib());
 			return pallEntry;
 		}
@@ -34,9 +37,9 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 		private static final String FUNCTIONBLOCK_NAME = "functionblock"; //$NON-NLS-1$
 
 		private FBTypePaletteEntry createFB() {
-			FBTypePaletteEntry pe = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
+			final FBTypePaletteEntry pe = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
 
-			BasicFBType functionBlock = LibraryElementFactory.eINSTANCE.createBasicFBType();
+			final BasicFBType functionBlock = LibraryElementFactory.eINSTANCE.createBasicFBType();
 
 			functionBlock.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 			functionBlock.setName(FUNCTIONBLOCK_NAME);
@@ -73,14 +76,14 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 	}
 
 	protected static State undoCommand(Object stateObj) {
-		State state = (State) stateObj;
+		final State state = (State) stateObj;
 		assumeTrue(state.getCommand().canUndo());
 		state.getCommand().undo();
 		return (state);
 	}
 
 	protected static State redoCommand(Object stateObj) {
-		State state = (State) stateObj;
+		final State state = (State) stateObj;
 		assumeTrue(state.getCommand().canRedo());
 		state.getCommand().redo();
 		return (state);
@@ -100,7 +103,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 	}
 
 	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
-		List<Object[]> commands = new ArrayList<>();
+		final List<Object[]> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", //
 				State::new, //
@@ -109,6 +112,10 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 		));
 
 		return commands;
+	}
+
+	public static DataTypeLibrary getDatatypelib() {
+		return dataTypeLib;
 	}
 
 }

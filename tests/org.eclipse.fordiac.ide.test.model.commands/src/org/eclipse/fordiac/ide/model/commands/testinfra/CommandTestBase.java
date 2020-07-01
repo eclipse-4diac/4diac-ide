@@ -161,7 +161,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	protected class StateNode<U extends StateBase> {
 		private final U state;
 		private final StateVerifier<U> verifier;
-		private StateNode<U> before;
+		private final StateNode<U> before;
 		private StateNode<U> after = null;
 
 		/**
@@ -253,17 +253,17 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 */
 	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<Object> commands, CommandExecutor<?> undo, CommandExecutor<?> redo) {
-		List<Object[]> descriptions = new ArrayList<>();
+		final List<Object[]> descriptions = new ArrayList<>();
 
-		final String MESSAGE_MASTER = "{0} : {1}";
-		final String MESSAGE_NO_MASTER = "{1}";
+		final String MESSAGE_MASTER = "{0} : {1}"; //$NON-NLS-1$
+		final String MESSAGE_NO_MASTER = "{1}"; //$NON-NLS-1$
 
-		final String MESSAGE_VERIFY_INITIAL_STATE = "Verify initial State";
-		final String MESSAGE_EXECUTE_ALL_COMMANDS = "Execute all Commands";
-		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I = "Execute until Command {0}: {1}";
-		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO = "Execute until Command {0}: {1}, run Undo";
-		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO = "Execute until Command {0}: {1}, run Undo, run Redo";
-		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO_ALL = "Execute all Commands interspersed with Undo and Redo";
+		final String MESSAGE_VERIFY_INITIAL_STATE = "Verify initial State"; //$NON-NLS-1$
+		final String MESSAGE_EXECUTE_ALL_COMMANDS = "Execute all Commands"; //$NON-NLS-1$
+		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I = "Execute until Command {0}: {1}"; //$NON-NLS-1$
+		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO = "Execute until Command {0}: {1}, run Undo"; //$NON-NLS-1$
+		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO = "Execute until Command {0}: {1}, run Undo, run Redo"; //$NON-NLS-1$
+		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO_ALL = "Execute all Commands interspersed with Undo and Redo"; //$NON-NLS-1$
 
 		descriptions.add(convert(
 				MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
@@ -276,11 +276,11 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		}
 
 		int index = 0;
-		ArrayList<Object> commandsUntil = new ArrayList<>();
+		final ArrayList<Object> commandsUntil = new ArrayList<>();
 		ArrayList<Object> commandsWithUndoRedo;
-		ArrayList<Object> commandsWithUndoRedoAll = new ArrayList<>();
-		for (Object commandObject : commands) {
-			ExecutionDescription<?> command = (ExecutionDescription<?>) commandObject;
+		final ArrayList<Object> commandsWithUndoRedoAll = new ArrayList<>();
+		for (final Object commandObject : commands) {
+			final ExecutionDescription<?> command = (ExecutionDescription<?>) commandObject;
 			index++;
 			commandsUntil.add(command);
 			commandsWithUndoRedoAll.add(command);
@@ -331,7 +331,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		// asserted but only assumed
 		// execution of the test will therefore not fail on those commands due to
 		// initial assumptions being wrong
-		Iterator<ExecutionDescription<T>> iterator = commands.iterator();
+		final Iterator<ExecutionDescription<T>> iterator = commands.iterator();
 		TestFunction t;
 		if (iterator.hasNext()) {
 			t = Assume::assumeTrue;
@@ -343,7 +343,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 
 		// step through all the commands/undo/redo
 		while (iterator.hasNext()) {
-			ExecutionDescription<T> command = iterator.next();
+			final ExecutionDescription<T> command = iterator.next();
 			StateNode<T> state = null;
 
 			// if there are more commands to be executed use assume instead of assert
