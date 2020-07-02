@@ -462,7 +462,9 @@ public final class Annotations {
 			attribute.setName(attributeName);
 			attribute.setValue(value);
 			attribute.setType(BaseType1.getByName(type));
-			attribute.setComment(comment);
+			if (null != comment) {
+				attribute.setComment(comment);
+			}
 			object.getAttributes().add(attribute);
 		} else {
 			attribute.setValue(value);

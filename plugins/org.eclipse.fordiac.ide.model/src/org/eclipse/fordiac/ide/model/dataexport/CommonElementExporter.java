@@ -233,7 +233,9 @@ abstract class CommonElementExporter {
 		getWriter().writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
 		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, type);
 		getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
-		getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
+		if ((null != comment) && (!comment.isBlank())) {
+			getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
+		}
 	}
 
 	protected void createNamedElementEntry(final INamedElement namedElement, final String elemName)
