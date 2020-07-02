@@ -122,6 +122,12 @@
                indented="false"
                label="Attributes">
          </propertyTab>
+         <propertyTab
+               category="Interface"
+               id="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab"
+               indented="false"
+               label="Struct Element">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -145,6 +151,14 @@
          	tab="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab">
          	<input
          		type="org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.application.properties.StructInterfaceElementSection"
+               id="org.eclipse.fordiac.ide.application.properties.StructInterfaceElementSection"
+               tab="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab">
+            <input
+                  type="org.eclipse.fordiac.ide.application.editparts.StructInterfaceEditPart">
             </input>
          </propertySection>
          <propertySection

@@ -99,7 +99,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	protected void createTypeAndCommentSection(Composite parent) {
 		super.createTypeAndCommentSection(parent);
 		openEditorButton = new Button(typeCombo.getParent(), SWT.PUSH);
-		openEditorButton.setText("Open Type in Editor");
+		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
 		openEditorButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -203,8 +203,8 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 				withEventsViewer.setInput(getType());
 				Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
 				getType().getWiths().stream().map(with -> withEventsViewer.testFindItem(with.eContainer()))
-						.filter(item -> (item instanceof TableItem))
-						.forEach(item -> ((TableItem) item).setChecked(true));
+				.filter(item -> (item instanceof TableItem))
+				.forEach(item -> ((TableItem) item).setChecked(true));
 			} else {
 				eventComposite.setVisible(false);
 			}

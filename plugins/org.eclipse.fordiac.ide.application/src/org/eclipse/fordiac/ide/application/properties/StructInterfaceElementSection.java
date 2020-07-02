@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2017 fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz	
- * 
+ * 				 2019 - 2020 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,8 +11,8 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - fixed issues in type changes for subapp interface elements 
- *   Bianca Wiesmayr - adapted section for struct pins  
+ *   Alois Zoitl - fixed issues in type changes for subapp interface elements
+ *   Bianca Wiesmayr - adapted section for struct pins
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
@@ -79,13 +80,13 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 	}
 
 	private StructuredType getStructuredType() {
-		return (StructuredType) getStructManipulator().getStructType();
+		return getStructManipulator().getStructType();
 	}
 
 	private void createStructSpecificElements() {
 		Composite comp = typeCombo.getParent();
 		openEditorButton = new Button(comp, SWT.PUSH);
-		openEditorButton.setText("Open Type in Editor");
+		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
 		openEditorButton.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -123,9 +124,9 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 				if (null != getStructManipulator()) {
 					int index = typeCombo.getSelectionIndex();
 					String newStructName = typeCombo.getItem(index);
-					disableButtonForAnyType();// newStructName);
+					disableButtonForAnyType();
 					boolean newStructSelected = !newStructName.contentEquals(getStructuredType().getName());
-					if (newStructSelected && null != getStructManipulator().getTypeLibrary().getDataTypeLibrary()) {
+					if (newStructSelected && (null != getStructManipulator().getTypeLibrary().getDataTypeLibrary())) {
 						StructuredType newStruct = getStructManipulator().getTypeLibrary().getDataTypeLibrary()
 								.getStructuredType(newStructName);
 						ChangeStructCommand cmd = new ChangeStructCommand(getStructManipulator(), newStruct);
@@ -239,8 +240,8 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 		public Object[] getElements(final Object inputElement) {
 			if (inputElement instanceof IInterfaceElement) {
 				element = ((IInterfaceElement) inputElement);
-				if (element.isIsInput() && null != element.getFBNetworkElement()
-						|| (!element.isIsInput() && null == element.getFBNetworkElement())) {
+				if ((element.isIsInput() && (null != element.getFBNetworkElement()))
+						|| (!element.isIsInput() && (null == element.getFBNetworkElement()))) {
 					return element.getInputConnections().toArray();
 				} else {
 					return element.getOutputConnections().toArray();
@@ -256,13 +257,13 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 				if (element.isIsInput()) {
 					objects[0] = null != ((Connection) parentElement).getSourceElement()
 							? ((Connection) parentElement).getSourceElement()
-							: element;
-					objects[1] = ((Connection) parentElement).getSource();
+									: element;
+							objects[1] = ((Connection) parentElement).getSource();
 				} else {
 					objects[0] = null != ((Connection) parentElement).getDestinationElement()
 							? ((Connection) parentElement).getDestinationElement()
-							: element;
-					objects[1] = ((Connection) parentElement).getDestination();
+									: element;
+							objects[1] = ((Connection) parentElement).getDestination();
 				}
 				return objects;
 			}
@@ -280,7 +281,7 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 		@Override
 		public boolean hasChildren(Object element) {
 			if (element instanceof Connection) {
-				return null != ((Connection) element).getSource() && null != ((Connection) element).getDestination();
+				return (null != ((Connection) element).getSource()) && (null != ((Connection) element).getDestination());
 			}
 			return false;
 		}

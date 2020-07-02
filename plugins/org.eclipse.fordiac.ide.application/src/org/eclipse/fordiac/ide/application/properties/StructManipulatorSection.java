@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -142,7 +143,7 @@ public class StructManipulatorSection extends AbstractSection {
 		});
 
 		openEditorButton = new Button(structComp, SWT.PUSH);
-		openEditorButton.setText(Messages.StructManipulatorSection_OPEN_IN_EDITOR_BUTTON);
+		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
 		openEditorButton.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -163,7 +164,8 @@ public class StructManipulatorSection extends AbstractSection {
 		parent.setLayout(new GridLayout(1, true));
 		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		createStructSelector(parent);
-		Group memberVarGroup = getWidgetFactory().createGroup(parent, "Contained Variables");
+		Group memberVarGroup = getWidgetFactory().createGroup(parent,
+				Messages.StructManipulatorSection_Contained_variables);
 		createMemberVariableViewer(memberVarGroup);
 		memberVarGroup.setLayout(new GridLayout(1, true));
 		memberVarGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));

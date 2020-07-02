@@ -129,6 +129,16 @@ public class Messages extends NLS {
 
 	public static String SaveAsSubApplicationTypeAction_WizardOverrideMessage;
 
+	public static String StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT;
+
+	public static String StructManipulatorSection_MEMBERVAR_COLUMN_NAME;
+
+	public static String StructManipulatorSection_MEMBERVAR_COLUMN_TYPE;
+
+	public static String StructManipulatorSection_STRUCTURED_TYPE;
+
+	public static String StructManipulatorSection_Contained_variables;
+
 	/** The UIFB network context menu provider_ labe l_ hardware mapping. */
 	public static String UIFBNetworkContextMenuProvider_LABEL_HardwareMapping;
 
