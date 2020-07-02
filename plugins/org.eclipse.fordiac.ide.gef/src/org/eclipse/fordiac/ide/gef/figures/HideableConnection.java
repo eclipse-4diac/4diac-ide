@@ -27,6 +27,8 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.util.ColorHelper;
+import org.eclipse.swt.graphics.Color;
 
 public class HideableConnection extends PolylineConnection {
 
@@ -38,6 +40,7 @@ public class HideableConnection extends PolylineConnection {
 	private String label = ""; //$NON-NLS-1$
 	private Rectangle moveRect = new Rectangle();
 	private org.eclipse.fordiac.ide.model.libraryElement.Connection model;
+	private Color lighterColor;
 
 	public void setModel(org.eclipse.fordiac.ide.model.libraryElement.Connection newModel) {
 		model = newModel;
@@ -61,6 +64,14 @@ public class HideableConnection extends PolylineConnection {
 
 	public void setHidden(boolean hidden) {
 		this.hidden = hidden;
+	}
+
+	@Override
+	public void setForegroundColor(Color fg) {
+		super.setForegroundColor(fg);
+		if (isAdapterConnectionOrStructConnection()) {
+			lighterColor = ColorHelper.lighter(fg);
+		}
 	}
 
 	@Override
@@ -103,9 +114,12 @@ public class HideableConnection extends PolylineConnection {
 	private void drawDoublePolyline(Graphics g, PointList beveledPoints) {
 		g.drawPolyline(beveledPoints);
 		g.setLineWidth(getLineWidth() / NORMAL_DOUBLE_LINE_WIDTH);
-		g.setForegroundColor(getBackgroundColor());
-		g.drawPolyline(beveledPoints);
+		if (g.getAbsoluteScale() >= 1) {
+			g.setForegroundColor(lighterColor);
+			g.drawPolyline(beveledPoints);
+		}
 	}
+
 
 	@Override
 	public void setLineWidth(int w) {
