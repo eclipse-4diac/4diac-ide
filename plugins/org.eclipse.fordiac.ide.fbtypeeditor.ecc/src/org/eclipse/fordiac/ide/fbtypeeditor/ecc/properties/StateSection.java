@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets.ActionEditingComposite;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets.TransitionEditingComposite;
+import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -37,7 +38,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class StateSection extends AbstractECSection {
+public class StateSection extends AbstractSection {
 	private Text stateNameText;
 	private Text stateCommentText;
 	private ActionEditingComposite actionGroup;

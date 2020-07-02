@@ -53,11 +53,6 @@ public class Messages extends NLS {
 	public static String FordiacECCPreferencePage_LABEL_ECCStateColor;
 	public static String FordiacECCPreferencePage_LABEL_ECCTransitionColor;
 	public static String FordiacECCPreferencePage_LABEL_PreferencePageDescription;
-	public static String InternalVarsSection_ConfigureTableLayout_ArraySize;
-	public static String InternalVarsSection_ConfigureTableLayout_Comment;
-	public static String InternalVarsSection_ConfigureTableLayout_InitialValue;
-	public static String InternalVarsSection_ConfigureTableLayout_Name;
-	public static String InternalVarsSection_ConfigureTableLayout_Type;
 	public static String ReconnectTransitionCommand_ReconnectTransition;
 	public static String StateCreationFactory_LABEL_NewECState;
 	public static String StateSection_Comment;

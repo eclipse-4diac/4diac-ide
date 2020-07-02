@@ -10,14 +10,16 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Daniel Lindhuber
- *     - added copy and paste
+ *   Daniel Lindhuber - added copy and paste
+ *   Bianca Wiesmayr - flattened hierarchy
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteAlgorithmCommand;
+import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertAlgorithmCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -31,12 +33,23 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class AlgorithmsSection extends ECCSection implements I4diacTableUtil {
+public class AlgorithmsSection extends AbstractSection implements I4diacTableUtil {
 	private final AlgorithmGroup algorithmGroup = new AlgorithmGroup();
 	private AlgorithmList algorithmList;
 
 	@Override
+	protected BasicFBType getType() {
+		return (BasicFBType) type;
+	}
+
+	@Override
+	protected Object getInputType(Object input) {
+		return ECCSection.getECCInputType(input);
+	}
+
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
+		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		createAlgorithmControls(parent);
 		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
@@ -109,4 +122,6 @@ public class AlgorithmsSection extends ECCSection implements I4diacTableUtil {
 		getAlgorithmList().executeCommand(cmd);
 		getViewer().refresh();
 	}
+
+
 }

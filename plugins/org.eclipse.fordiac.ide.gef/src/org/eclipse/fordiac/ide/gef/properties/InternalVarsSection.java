@@ -15,14 +15,15 @@
  *   Bianca Wiesmayr - extract Table creation, improve insertion
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *   Daniel Lindhuber - added copy and paste
+ *   Bianca Wiesmayr - extracted super class for simple and basic FB, added context menu
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
+package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.InternalVarsLabelProvider;
+import org.eclipse.fordiac.ide.gef.Messages;
+import org.eclipse.fordiac.ide.gef.provider.InternalVarsLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableComma
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
@@ -62,7 +64,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class InternalVarsSection extends ECCSection implements I4diacTableUtil {
+public abstract class InternalVarsSection extends AbstractSection implements I4diacTableUtil {
 	private static final String IV_NAME = "NAME"; //$NON-NLS-1$
 	private static final String IV_TYPE = "TYPE"; //$NON-NLS-1$
 	private static final String IV_ARRAY = "ARRAY_SIZE"; //$NON-NLS-1$
@@ -75,7 +77,13 @@ public class InternalVarsSection extends ECCSection implements I4diacTableUtil {
 	private String[] dataTypes;
 
 	@Override
+	protected BaseFBType getType() {
+		return (BaseFBType) type;
+	}
+
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
+		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		createInternalVarsControls(parent);
 		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
@@ -197,7 +205,7 @@ public class InternalVarsSection extends ECCSection implements I4diacTableUtil {
 			case IV_ARRAY:
 				return Integer.toString(var.getArraySize());
 			default:
-				return var.getValue() == null ? "" : var.getValue().getValue();
+				return var.getValue() == null ? "" : var.getValue().getValue(); //$NON-NLS-1$
 			}
 		}
 

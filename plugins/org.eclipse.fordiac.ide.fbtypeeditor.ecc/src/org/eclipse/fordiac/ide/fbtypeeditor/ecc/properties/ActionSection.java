@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithm;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEvent;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEditPart;
+import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -51,7 +52,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  * the ECC
  *
  */
-public class ActionSection extends AbstractECSection {
+public class ActionSection extends AbstractSection {
 	private Composite actionComposite;
 	private CCombo algorithmCombo;
 	private CCombo outputEventCombo;

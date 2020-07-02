@@ -84,7 +84,7 @@ public class AlgorithmList implements CommandExecutor {
 			if (A_NAME.equals(property)) {
 				cmd = new ChangeNameCommand(data, value.toString());
 			} else if (A_LANGUAGE.equals(property)) {
-				cmd = new ChangeAlgorithmTypeCommand(type, data, AbstractECSection.getLanguages().get((int) value));
+				cmd = new ChangeAlgorithmTypeCommand(type, data, ECCSection.getLanguages().get((int) value));
 			} else {
 				cmd = new ChangeCommentCommand(data, value.toString());
 			}
@@ -196,7 +196,7 @@ public class AlgorithmList implements CommandExecutor {
 		((Text) algorithmNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
 		return new CellEditor[] { algorithmNameEditor,
 				ComboBoxWidgetFactory.createComboBoxCellEditor(table,
-						AbstractECSection.getLanguages().toArray(new String[0]), SWT.READ_ONLY),
+						ECCSection.getLanguages().toArray(new String[0]), SWT.READ_ONLY),
 				new TextCellEditor(table) };
 	}
 
