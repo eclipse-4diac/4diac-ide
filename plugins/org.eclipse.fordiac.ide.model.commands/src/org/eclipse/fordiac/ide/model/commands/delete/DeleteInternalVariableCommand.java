@@ -18,7 +18,7 @@ package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.internal.DeleteVariableCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
@@ -31,13 +31,13 @@ public class DeleteInternalVariableCommand extends DeleteVariableCommand {
 	 * @param type the BasicFBType from which the internal var is deleted
 	 * @param var  the var that should be deleted
 	 */
-	public DeleteInternalVariableCommand(final BasicFBType type, final VarDeclaration var) {
+	public DeleteInternalVariableCommand(final BaseFBType type, final VarDeclaration var) {
 		super(type, var);
 	}
 
 	@Override
 	protected EList<VarDeclaration> getVariableList() {
-		return ((BasicFBType) getType()).getInternalVars();
+		return ((BaseFBType) getType()).getInternalVars();
 	}
 
 }

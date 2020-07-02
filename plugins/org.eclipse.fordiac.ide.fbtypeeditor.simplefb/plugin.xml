@@ -9,4 +9,40 @@
             type="simple">
       </editor>
    </extension>
+     <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs
+            contributorId="property.contributor.fb">
+             <propertyTab
+               category="simple-fb"
+               id="property.tab.simple.ivars"
+               label="Internal Vars">
+         </propertyTab>
+      </propertyTabs>
+      
+   </extension>
+  <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections
+            contributorId="property.contributor.fb">
+         <propertySection
+               class="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties.InternalVarsSectionSimple"
+               filter="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties.SimpleFBFilter"
+               id="property.propertysection.ivars"
+               tab="property.tab.simple.ivars">
+            <input
+                  type="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB">
+            </input>
+         </propertySection>
+         </propertySections>
+         
+   </extension>
+  <extension
+        point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+     <propertyContributor
+           contributorId="property.contributor.fb">
+        <propertyCategory
+              category="simple-fb"></propertyCategory>
+     </propertyContributor>
+  </extension>
 </plugin>

@@ -26,6 +26,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.ecc;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.ecc,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands,
+ org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.xtext

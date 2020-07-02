@@ -31,6 +31,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
@@ -69,7 +70,7 @@ public final class NameRepository {
 					"DATE", "LDATE", //$NON-NLS-1$ //$NON-NLS-2$
 					"DATE_AND_TIME", "LDATE_AND_TIME", //$NON-NLS-1$ //$NON-NLS-2$
 					"BOOL" //$NON-NLS-1$
-			)));
+					)));
 
 	private NameRepository() {
 		// empty private constructor
@@ -163,11 +164,11 @@ public final class NameRepository {
 					interfaceList = (InterfaceList) ((IInterfaceElement) refElement).eContainer();
 				} else {
 					// this is an internal variable
-					interfaceList = ((BasicFBType) ((IInterfaceElement) refElement).eContainer()).getInterfaceList();
+					interfaceList = ((BaseFBType) ((IInterfaceElement) refElement).eContainer()).getInterfaceList();
 				}
 				elements.addAll(interfaceList.getAllInterfaceElements());
-				if (interfaceList.eContainer() instanceof BasicFBType) {
-					elements.addAll(((BasicFBType) interfaceList.eContainer()).getInternalVars());
+				if (interfaceList.eContainer() instanceof BaseFBType) { // has internal variables
+					elements.addAll(((BaseFBType) interfaceList.eContainer()).getInternalVars());
 				}
 				elementsList = elements;
 			}
