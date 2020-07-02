@@ -37,7 +37,7 @@ public class CreateInternalVariableCommand extends CreateVariableCommand {
 	 * @param fbType   the fb type
 	 */
 	public CreateInternalVariableCommand(final BaseFBType fbType) {
-		super(fbType, fbType.getInternalVars().size() - 1, null, null);
+		super(fbType, fbType.getInternalVars().size(), null, null);
 	}
 
 	public CreateInternalVariableCommand(final BaseFBType fbType, int index, String name, DataType dataType) {

@@ -35,7 +35,8 @@ public class FBCreateCommandTest extends FBNetworkTestBase {
 	}
 
 	public static void verifyState(State state, State oldState, TestFunction t) {
-		t.test(!state.getFbNetwork().isSubApplicationNetwork() && !state.getFbNetwork().getNetworkElements().isEmpty());
+		t.test(!state.getFbNetwork().isSubApplicationNetwork());
+		t.test(!state.getFbNetwork().getNetworkElements().isEmpty());
 		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface());
 		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs());
 		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs());
@@ -65,7 +66,7 @@ public class FBCreateCommandTest extends FBNetworkTestBase {
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Add Functionblock", //
+				new ExecutionDescription<State>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						FBCreateCommandTest::verifyState //
 				) //
