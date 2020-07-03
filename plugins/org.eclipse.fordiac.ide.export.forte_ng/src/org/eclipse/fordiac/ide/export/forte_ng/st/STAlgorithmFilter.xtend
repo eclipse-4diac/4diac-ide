@@ -68,6 +68,7 @@ import org.eclipse.xtext.validation.CheckMode
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
+import org.eclipse.fordiac.ide.model.FordiacKeywords
 
 class STAlgorithmFilter {
 
@@ -150,11 +151,11 @@ class STAlgorithmFilter {
 
 	def private BitSize(CharSequence str) {
 		switch str {
-			case "LWORD": 64
-			case "DWORD": 32
-			case "WORD": 16
-			case "BYTE": 8
-			case "BOOL": 1
+			case FordiacKeywords.LWORD: 64
+			case FordiacKeywords.DWORD: 32
+			case FordiacKeywords.WORD: 16
+			case FordiacKeywords.BYTE: 8
+			case FordiacKeywords.BOOL: 1
 			default: 0
 		}
 	}
@@ -410,13 +411,13 @@ class STAlgorithmFilter {
 	def private extractTypeInformationWithPartialAccess(PartialAccess part, CharSequence DataType) {
 		if (null !== part) {
 			if (part.bitaccess)
-				"BOOL"
+				FordiacKeywords.BOOL
 			else if (part.byteaccess)
-				"BYTE"
+				FordiacKeywords.BYTE
 			else if (part.wordaccess)
-				"WORD"
+				FordiacKeywords.WORD
 			else if (part.dwordaccess)
-				"DWORD"
+				FordiacKeywords.DWORD
 			else
 				""
 		} else

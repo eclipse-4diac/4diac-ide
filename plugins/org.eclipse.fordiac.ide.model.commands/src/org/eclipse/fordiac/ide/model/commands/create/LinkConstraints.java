@@ -16,6 +16,38 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.ANY;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.ANY_ADAPTER;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.ANY_BIT;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.ANY_DATE;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.ANY_ELEMENTARY;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.ANY_INT;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.ANY_MAGNITUDE;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.ANY_NUM;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.ANY_REAL;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.ANY_STRING;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.BOOL;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.BYTE;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.DATE;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.DATE_AND_TIME;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.DINT;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.DWORD;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.INT;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.LINT;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.LREAL;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.LWORD;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.REAL;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.SINT;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.STRING;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.TIME;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.TIME_OF_DAY;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.UDINT;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.UINT;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.ULINT;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.USINT;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.WORD;
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.WSTRING;
+
 import java.text.MessageFormat;
 
 import org.eclipse.emf.ecore.EObject;
@@ -39,16 +71,6 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
  */
 public final class LinkConstraints {
 
-	private static final String ANY_ADAPTER = "ANY_ADAPTER"; //$NON-NLS-1$
-	private static final String ANY_DATE = "ANY_DATE"; //$NON-NLS-1$
-	private static final String ANY_STRING = "ANY_STRING"; //$NON-NLS-1$
-	private static final String ANY_BIT = "ANY_BIT"; //$NON-NLS-1$
-	private static final String ANY_REAL = "ANY_REAL"; //$NON-NLS-1$
-	private static final String ANY_INT = "ANY_INT"; //$NON-NLS-1$
-	private static final String ANY_NUM = "ANY_NUM"; //$NON-NLS-1$
-	private static final String ANY_MAGNITUDE = "ANY_MAGNITUDE"; //$NON-NLS-1$
-	private static final String ANY_ELEMENTARY = "ANY_ELEMENTARY"; //$NON-NLS-1$
-	private static final String ANY = "ANY"; //$NON-NLS-1$
 	/**
 	 * Property ID for the enable CASTS preferences
 	 *
@@ -482,13 +504,13 @@ public final class LinkConstraints {
 			}
 
 			if ((source.getType().getName().equalsIgnoreCase(ANY_STRING))
-					&& (target.getType().getName().equalsIgnoreCase("STRING") //$NON-NLS-1$
-							|| target.getType().getName().equalsIgnoreCase("WSTRING"))) { //$NON-NLS-1$
+					&& (target.getType().getName().equalsIgnoreCase(STRING)
+							|| target.getType().getName().equalsIgnoreCase(WSTRING))) {
 				return true;
 			}
 			if ((target.getType().getName().equalsIgnoreCase(ANY_STRING))
-					&& (source.getType().getName().equalsIgnoreCase("STRING") //$NON-NLS-1$
-							|| source.getType().getName().equalsIgnoreCase("WSTRING"))) { //$NON-NLS-1$
+					&& (source.getType().getName().equalsIgnoreCase(STRING)
+							|| source.getType().getName().equalsIgnoreCase(WSTRING))) {
 				return true;
 			}
 			if (source.getType().getName().equalsIgnoreCase(ANY_STRING)
@@ -497,15 +519,15 @@ public final class LinkConstraints {
 			}
 
 			if ((source.getType().getName().equalsIgnoreCase(ANY_DATE))
-					&& (target.getType().getName().equalsIgnoreCase("DATE") //$NON-NLS-1$
-							|| target.getType().getName().equalsIgnoreCase("DATE_AND_TIME") || target //$NON-NLS-1$
-									.getType().getName().equalsIgnoreCase("TIME_OF_DAY"))) { //$NON-NLS-1$
+					&& (target.getType().getName().equalsIgnoreCase(DATE)
+							|| target.getType().getName().equalsIgnoreCase(DATE_AND_TIME)
+							|| target.getType().getName().equalsIgnoreCase(TIME_OF_DAY))) {
 				return true;
 			}
 			if ((target.getType().getName().equalsIgnoreCase(ANY_DATE))
-					&& (source.getType().getName().equalsIgnoreCase("DATE") //$NON-NLS-1$
-							|| source.getType().getName().equalsIgnoreCase("DATE_AND_TIME") || source //$NON-NLS-1$
-									.getType().getName().equalsIgnoreCase("TIME_OF_DAY"))) { //$NON-NLS-1$
+					&& (source.getType().getName().equalsIgnoreCase(DATE)
+							|| source.getType().getName().equalsIgnoreCase(DATE_AND_TIME)
+							|| source.getType().getName().equalsIgnoreCase(TIME_OF_DAY))) {
 				return true;
 			}
 			if (source.getType().getName().equalsIgnoreCase(ANY_DATE)
@@ -526,14 +548,12 @@ public final class LinkConstraints {
 	}
 
 	private static boolean anyBitCompatibility(String name) {
-		return (name.equalsIgnoreCase("WORD") || name.equalsIgnoreCase("LWORD") //$NON-NLS-1$//$NON-NLS-2$
-				|| name.equalsIgnoreCase("DWORD") //$NON-NLS-1$
-				|| name.equalsIgnoreCase("BYTE") || name //$NON-NLS-1$
-						.equalsIgnoreCase("BOOL")); //$NON-NLS-1$
+		return (name.equalsIgnoreCase(WORD) || name.equalsIgnoreCase(LWORD) || name.equalsIgnoreCase(DWORD)
+				|| name.equalsIgnoreCase(BYTE) || name.equalsIgnoreCase(BOOL));
 	}
 
 	private static boolean anyMagnitudeCompatibility(String name) {
-		return (anyNumCompatibility(name) || name.equalsIgnoreCase("TIME")); //$NON-NLS-1$
+		return (anyNumCompatibility(name) || name.equalsIgnoreCase(TIME));
 	}
 
 	private static boolean anyNumCompatibility(String name) {
@@ -541,14 +561,13 @@ public final class LinkConstraints {
 	}
 
 	private static boolean anyRealCompatibility(String name) {
-		return (name.equalsIgnoreCase("REAL") || name.equalsIgnoreCase("LREAL")); //$NON-NLS-1$ //$NON-NLS-2$
+		return (name.equalsIgnoreCase(REAL) || name.equalsIgnoreCase(LREAL));
 	}
 
 	private static boolean anyIntCompatiblity(String name) {
-		return (name.equalsIgnoreCase("INT") || name.equalsIgnoreCase("UINT") //$NON-NLS-1$ //$NON-NLS-2$
-				|| name.equalsIgnoreCase("SINT") || name.equalsIgnoreCase("LINT") //$NON-NLS-1$ //$NON-NLS-2$
-				|| name.equalsIgnoreCase("DINT") || name.equalsIgnoreCase("USINT")//$NON-NLS-1$ //$NON-NLS-2$
-				|| name.equalsIgnoreCase("UDINT") || name.equalsIgnoreCase("ULINT"));//$NON-NLS-1$ //$NON-NLS-2$
+		return (name.equalsIgnoreCase(INT) || name.equalsIgnoreCase(UINT) || name.equalsIgnoreCase(SINT)
+				|| name.equalsIgnoreCase(LINT) || name.equalsIgnoreCase(DINT) || name.equalsIgnoreCase(USINT)
+				|| name.equalsIgnoreCase(UDINT) || name.equalsIgnoreCase(ULINT));
 	}
 
 	private static boolean adapaterTypeCompatibilityCheck(final AdapterDeclaration source,

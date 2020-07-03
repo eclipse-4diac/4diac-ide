@@ -7,6 +7,7 @@ import org.junit.runner.RunWith
 import static org.junit.Assert.assertNull
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertEquals
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.*
 import org.junit.runners.Parameterized.Parameter
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests

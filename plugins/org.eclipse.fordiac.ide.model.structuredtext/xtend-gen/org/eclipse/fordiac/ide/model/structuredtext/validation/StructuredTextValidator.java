@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.structuredtext.validation;
 import com.google.common.base.Objects;
 import java.util.Arrays;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable;
@@ -70,34 +71,34 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
   private int _BitSize(final String str) {
     int _switchResult = (int) 0;
     boolean _matched = false;
-    boolean _equals = str.equals("LWORD");
+    boolean _equals = str.equals(FordiacKeywords.LWORD);
     if (_equals) {
       _matched=true;
       _switchResult = 64;
     }
     if (!_matched) {
-      boolean _equals_1 = str.equals("DWORD");
+      boolean _equals_1 = str.equals(FordiacKeywords.DWORD);
       if (_equals_1) {
         _matched=true;
         _switchResult = 32;
       }
     }
     if (!_matched) {
-      boolean _equals_2 = str.equals("WORD");
+      boolean _equals_2 = str.equals(FordiacKeywords.WORD);
       if (_equals_2) {
         _matched=true;
         _switchResult = 16;
       }
     }
     if (!_matched) {
-      boolean _equals_3 = str.equals("BYTE");
+      boolean _equals_3 = str.equals(FordiacKeywords.BYTE);
       if (_equals_3) {
         _matched=true;
         _switchResult = 8;
       }
     }
     if (!_matched) {
-      boolean _equals_4 = str.equals("BOOL");
+      boolean _equals_4 = str.equals(FordiacKeywords.BOOL);
       if (_equals_4) {
         _matched=true;
         _switchResult = 1;
@@ -115,22 +116,22 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
       String _xifexpression_1 = null;
       boolean _isBitaccess = part.isBitaccess();
       if (_isBitaccess) {
-        _xifexpression_1 = "BOOL";
+        _xifexpression_1 = FordiacKeywords.BOOL;
       } else {
         String _xifexpression_2 = null;
         boolean _isByteaccess = part.isByteaccess();
         if (_isByteaccess) {
-          _xifexpression_2 = "BYTE";
+          _xifexpression_2 = FordiacKeywords.BYTE;
         } else {
           String _xifexpression_3 = null;
           boolean _isWordaccess = part.isWordaccess();
           if (_isWordaccess) {
-            _xifexpression_3 = "WORD";
+            _xifexpression_3 = FordiacKeywords.WORD;
           } else {
             String _xifexpression_4 = null;
             boolean _isDwordaccess = part.isDwordaccess();
             if (_isDwordaccess) {
-              _xifexpression_4 = "DWORD";
+              _xifexpression_4 = FordiacKeywords.DWORD;
             } else {
               _xifexpression_4 = "";
             }

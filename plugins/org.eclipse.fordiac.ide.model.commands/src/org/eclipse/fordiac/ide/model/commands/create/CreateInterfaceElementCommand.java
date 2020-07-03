@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
@@ -54,13 +55,13 @@ public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 
 	private static String getNameProposal(DataType dataType, boolean isInput) {
 		if (dataType instanceof EventType) {
-			return isInput ? "EI1" 	: "EO1"; //$NON-NLS-1$ //$NON-NLS-2$
+			return isInput ? FordiacKeywords.EVENT_INPUT : FordiacKeywords.EVENT_OUTPUT;
 		}
 		if (dataType instanceof AdapterType) {
-			return isInput ? "SOCKET1" : "PLUG1"; //$NON-NLS-1$ //$NON-NLS-2$
+			return isInput ? FordiacKeywords.ADAPTER_SOCKET : FordiacKeywords.ADAPTER_PLUG;
 		}
 		if (dataType instanceof DataType) {
-			return isInput ? "DI1"	: "DO1"; //$NON-NLS-1$ //$NON-NLS-2$
+			return isInput ? FordiacKeywords.DATA_INPUT : FordiacKeywords.DATA_OUTPUT;
 		}
 		return ""; //$NON-NLS-1$
 	}

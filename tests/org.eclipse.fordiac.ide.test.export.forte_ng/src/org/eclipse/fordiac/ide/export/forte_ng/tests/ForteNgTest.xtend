@@ -4,6 +4,7 @@ import org.junit.Test
 import static org.junit.Assert.assertNull
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertEquals
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.*
 
 class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 

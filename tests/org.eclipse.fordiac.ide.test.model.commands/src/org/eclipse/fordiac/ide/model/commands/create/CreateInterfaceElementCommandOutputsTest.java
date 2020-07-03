@@ -19,6 +19,7 @@ import static org.junit.Assume.assumeTrue;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateInterfaceElementCommandTestBase;
 import org.junit.runners.Parameterized.Parameters;
 
@@ -27,7 +28,7 @@ import org.junit.runners.Parameterized.Parameters;
 public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceElementCommandTestBase {
 
 	private static State executeCommandOutputWithoutName(State state) {
-		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType("BOOL"),
+		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.BOOL),
 				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ false, /* index */ 0));
 		assumeNotNull(state.getCommand());
 		assumeTrue(state.getCommand().canExecute());
@@ -42,13 +43,14 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars().size() == 1);
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs().isEmpty());
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs().isEmpty());
-		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getInterfaceElement("DO1"));
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInterfaceElement("DO1").getTypeName()
-				.equals("BOOL"));
+		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface()
+				.getInterfaceElement(FordiacKeywords.DATA_OUTPUT));
+		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface()
+				.getInterfaceElement(FordiacKeywords.DATA_OUTPUT).getTypeName().equals(FordiacKeywords.BOOL));
 	}
 
 	private static State executeCommandOutputWithName(State state) {
-		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType("WORD"), "MyOutput",
+		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.WORD), "MyOutput",
 				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ false, /* index */ 1));
 		assumeNotNull(state.getCommand());
 		assumeTrue(state.getCommand().canExecute());
@@ -65,11 +67,11 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs().isEmpty());
 		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getInterfaceElement("MyOutput"));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInterfaceElement("MyOutput")
-				.getTypeName().equals("WORD"));
+				.getTypeName().equals(FordiacKeywords.WORD));
 	}
 
 	private static State executeCommandOutputWithNameNull(State state) {
-		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType("BYTE"), null,
+		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.BYTE), null,
 				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ false, /* index */ 1));
 		assumeNotNull(state.getCommand());
 		assumeTrue(state.getCommand().canExecute());
@@ -86,7 +88,7 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs().isEmpty());
 		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getInterfaceElement("DO2"));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInterfaceElement("DO2").getTypeName()
-				.equals("BYTE"));
+				.equals(FordiacKeywords.BYTE));
 	}
 
 	// parameter creation function, also contains description of how the textual

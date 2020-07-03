@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral
+import org.eclipse.fordiac.ide.model.FordiacKeywords
 
 /**
  * This class contains custom validation rules.
@@ -55,21 +56,21 @@ class StructuredTextValidator extends AbstractStructuredTextValidator {
 	
 	def private dispatch int BitSize(String str) {
 		switch (str) {
-			case str.equals("LWORD"): 64
-			case str.equals("DWORD"): 32
-			case str.equals("WORD"):  16
-			case str.equals("BYTE"):   8
-			case str.equals("BOOL"):   1
+			case str.equals(FordiacKeywords.LWORD): 64
+			case str.equals(FordiacKeywords.DWORD): 32
+			case str.equals(FordiacKeywords.WORD):  16
+			case str.equals(FordiacKeywords.BYTE):   8
+			case str.equals(FordiacKeywords.BOOL):   1
 			default:                   0
 		}
 	}
 
 	def private dispatch String extractTypeInformation(PartialAccess part, String DataType) {
 		if (null !== part) {
-			if (part.bitaccess)        "BOOL"
-			else if (part.byteaccess)  "BYTE"
-			else if (part.wordaccess)  "WORD"
-			else if (part.dwordaccess) "DWORD"
+			if (part.bitaccess)        FordiacKeywords.BOOL
+			else if (part.byteaccess)  FordiacKeywords.BYTE
+			else if (part.wordaccess)  FordiacKeywords.WORD
+			else if (part.dwordaccess) FordiacKeywords.DWORD
 			else                       ""
 		} else                         DataType
 	}

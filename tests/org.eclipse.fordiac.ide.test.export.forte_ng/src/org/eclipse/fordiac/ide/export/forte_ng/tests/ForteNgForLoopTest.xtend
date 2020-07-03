@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.export.forte_ng.tests
 import org.junit.Test
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertEquals
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.*
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 

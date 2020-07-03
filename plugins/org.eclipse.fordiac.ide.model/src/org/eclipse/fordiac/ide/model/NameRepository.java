@@ -16,10 +16,9 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.RESERVED_KEYWORDS;
+
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,28 +48,6 @@ public final class NameRepository {
 
 	private static final Pattern END_IN_NUMBER_PATTERN = Pattern.compile("^.*\\d$"); //$NON-NLS-1$
 	private static final Pattern GET_LAST_NUMBER_PATTERN = Pattern.compile("\\d+$"); //$NON-NLS-1$
-
-	private static final Set<String> RESERVED_KEYWORDS = Collections
-			.unmodifiableSet(new HashSet<>(Arrays.asList("VAR", "END_VAR", "CONSTANT", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					"SUPER", "RETURN", //$NON-NLS-1$ //$NON-NLS-2$
-					"IF", "THEN", "END_IF", "ELSIF", "ELSE", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-					"CASE", "OF", "END_CASE", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					"EXIT", "CONTINUE", //$NON-NLS-1$ //$NON-NLS-2$
-					"FOR", "TO", "BY", "DO", "END_FOR", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-					"WHILE", "END_WHILE", //$NON-NLS-1$ //$NON-NLS-2$
-					"REPEAT", "UNTIL", "END_REPEAT", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					"OR", "XOR", "AND", "MOD", "NOT", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-					"E", "D", "H", "M", "S", "MS", "US", "NS", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-					"DINT", "INT", "SINT", "LINT", "UINT", "USINT", "UDINT", "ULINT", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-					"REAL", "LREAL", //$NON-NLS-1$ //$NON-NLS-2$
-					"STRING", "WSTRING", //$NON-NLS-1$ //$NON-NLS-2$
-					"CHAR", "WCHAR", //$NON-NLS-1$ //$NON-NLS-2$
-					"TIME", "LTIME", //$NON-NLS-1$ //$NON-NLS-2$
-					"TIME_OF_DAY", "LTIME_OF_DAY", "TOD", "LTOD", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					"DATE", "LDATE", //$NON-NLS-1$ //$NON-NLS-2$
-					"DATE_AND_TIME", "LDATE_AND_TIME", //$NON-NLS-1$ //$NON-NLS-2$
-					"BOOL" //$NON-NLS-1$
-					)));
 
 	private NameRepository() {
 		// empty private constructor
@@ -120,7 +97,7 @@ public final class NameRepository {
 					MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, nameProposal));
 			return false;
 		}
-		if ((element instanceof IInterfaceElement) && RESERVED_KEYWORDS.contains(nameProposal)) {
+		if (element instanceof IInterfaceElement && RESERVED_KEYWORDS.contains(nameProposal)) {
 			Abstract4DIACUIPlugin.statusLineErrorMessage(
 					MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, nameProposal));
 			return false;
@@ -128,7 +105,7 @@ public final class NameRepository {
 
 		if (getRefNames(element).contains(nameProposal)) {
 			Abstract4DIACUIPlugin.statusLineErrorMessage(
-					(MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal)));
+					MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal));
 			return false;
 		}
 
