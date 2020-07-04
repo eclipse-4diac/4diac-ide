@@ -21,9 +21,11 @@ import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -78,15 +80,18 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		return part;
 	}
 
-	private EditPart createInterfaceEditPart(final Object modelElement) {
+	private static EditPart createInterfaceEditPart(final Object modelElement) {
 		EditPart part;
 		IInterfaceElement element = (IInterfaceElement) modelElement;
-		if (element.getFBNetworkElement() instanceof StructManipulator &&
-				element.getType() instanceof StructuredType) {
-			return new StructInterfaceEditPart();
+		if (element.getFBNetworkElement() instanceof StructManipulator && element.getType() instanceof StructuredType) {
+			if ((element.getFBNetworkElement() instanceof Multiplexer) && (!element.isIsInput())) {
+				return new StructInterfaceEditPart();
+			}
+			if ((element.getFBNetworkElement() instanceof Demultiplexer) && (element.isIsInput())) {
+				return new StructInterfaceEditPart();
+			}
 		}
-		if ((element.getFBNetworkElement() instanceof SubApp)
-				&& (null == element.getFBNetworkElement().getType())) {
+		if ((element.getFBNetworkElement() instanceof SubApp) && (null == element.getFBNetworkElement().getType())) {
 			part = new UntypedSubAppInterfaceElementEditPart();
 		} else {
 			part = new InterfaceEditPartForFBNetwork();
