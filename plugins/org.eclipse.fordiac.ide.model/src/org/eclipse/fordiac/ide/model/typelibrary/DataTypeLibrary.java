@@ -118,6 +118,18 @@ public final class DataTypeLibrary {
 		return type;
 	}
 
+	public List<StructuredType> getStructuredTypes() {
+		return getDerivedDataTypes().entrySet().stream()
+				.filter(entry -> (entry.getValue().getType() instanceof StructuredType))
+				.map(entry -> ((StructuredType) entry.getValue().getType())).collect(Collectors.toList());
+	}
+
+	public List<StructuredType> getStructuredTypesSorted() {
+		List<StructuredType> structTypes = getStructuredTypes();
+		Collections.sort(structTypes, NamedElementComparator.INSTANCE);
+		return structTypes;
+	}
+
 	private DataType getDerivedType(String name) {
 		DataTypePaletteEntry entry = derivedTypeMap.get(name);
 		if (null != entry) {

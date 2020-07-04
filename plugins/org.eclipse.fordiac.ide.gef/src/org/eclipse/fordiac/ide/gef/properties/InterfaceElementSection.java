@@ -85,12 +85,13 @@ public class InterfaceElementSection extends AbstractSection {
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();
 		});
-		
+
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Type + ":"); //$NON-NLS-1$
 		Composite typeComp = getWidgetFactory().createComposite(composite);
 		typeComp.setLayout(new GridLayout(2, false));
 		typeComp.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), typeComp);
+		typeCombo.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		typeCombo.addListener(SWT.Selection, event -> {
 			Command cmd = null;
 			if (getType() instanceof AdapterDeclaration) {
@@ -126,11 +127,7 @@ public class InterfaceElementSection extends AbstractSection {
 		}
 
 		if (typeCombo.getItems().length > 0) {
-			int i = typeCombo.getItems().length - 1;
-			while (!text.equals(typeCombo.getItems()[i]) && (i > 0)) {
-				--i;
-			}
-			typeCombo.select(i);
+			typeCombo.setText(text);
 		}
 	}
 

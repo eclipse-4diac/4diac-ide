@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.gef.policies;
 
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
@@ -23,10 +25,9 @@ public class ValueEditPartChangeEditPolicy extends DirectEditPolicy {
 
 	@Override
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
-		ValueEditPart valueEditPart = getValueEditPart();
-		if (null != valueEditPart) {
-			return new ChangeValueCommand(valueEditPart.getModel().getVarDeclaration(),
-					(String) request.getCellEditor().getValue());
+		VarDeclaration var = getVarDecl();
+		if (null != var) {
+			return new ChangeValueCommand(var, (String) request.getCellEditor().getValue());
 		}
 		return null;
 	}
@@ -51,4 +52,16 @@ public class ValueEditPartChangeEditPolicy extends DirectEditPolicy {
 		}
 		return retval;
 	}
+
+	private VarDeclaration getVarDecl() {
+		Object model = getHost().getModel();
+		if (model instanceof VarDeclaration) {
+			return (VarDeclaration) model;
+		}
+		if (model instanceof Value) {
+			return ((Value) model).getVarDeclaration();
+		}
+		return null;
+	}
+
 }

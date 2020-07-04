@@ -217,12 +217,11 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 		if (null != structManipulator) {
 			String structName = structManipulator.getStructType().getName();
 			typeCombo.removeAll();
-			for (DataType dtp : structManipulator.getTypeLibrary().getDataTypeLibrary().getDataTypesSorted()) {
-				if (dtp instanceof StructuredType) {
-					typeCombo.add(dtp.getName());
-					if (dtp.getName().contentEquals(structName)) {
-						typeCombo.select(typeCombo.getItemCount() - 1);
-					}
+			for (StructuredType dtp : structManipulator.getTypeLibrary().getDataTypeLibrary()
+					.getStructuredTypesSorted()) {
+				typeCombo.add(dtp.getName());
+				if (dtp.getName().contentEquals(structName)) {
+					typeCombo.select(typeCombo.getItemCount() - 1);
 				}
 			}
 		}
@@ -257,13 +256,13 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 				if (element.isIsInput()) {
 					objects[0] = null != ((Connection) parentElement).getSourceElement()
 							? ((Connection) parentElement).getSourceElement()
-									: element;
-							objects[1] = ((Connection) parentElement).getSource();
+							: element;
+					objects[1] = ((Connection) parentElement).getSource();
 				} else {
 					objects[0] = null != ((Connection) parentElement).getDestinationElement()
 							? ((Connection) parentElement).getDestinationElement()
-									: element;
-							objects[1] = ((Connection) parentElement).getDestination();
+							: element;
+					objects[1] = ((Connection) parentElement).getDestination();
 				}
 				return objects;
 			}
@@ -281,7 +280,8 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 		@Override
 		public boolean hasChildren(Object element) {
 			if (element instanceof Connection) {
-				return (null != ((Connection) element).getSource()) && (null != ((Connection) element).getDestination());
+				return (null != ((Connection) element).getSource())
+						&& (null != ((Connection) element).getDestination());
 			}
 			return false;
 		}

@@ -17,7 +17,6 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -115,8 +114,7 @@ public class StructManipulatorSection extends AbstractSection {
 					disableOpenEditorForAnyType(newStructName);
 					boolean newStructSelected = !newStructName.contentEquals(getType().getStructType().getName());
 					if (newStructSelected && (null != getDatatypeLibrary())) {
-						StructuredType newStruct = getDatatypeLibrary()
-								.getStructuredType(newStructName);
+						StructuredType newStruct = getDatatypeLibrary().getStructuredType(newStructName);
 						ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
 						commandStack.execute(cmd);
 						selectNewStructManipulatorFB(cmd);
@@ -144,17 +142,8 @@ public class StructManipulatorSection extends AbstractSection {
 
 		openEditorButton = new Button(structComp, SWT.PUSH);
 		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
-		openEditorButton.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				OpenStructMenu.openStructEditor(getType().getStructType().getPaletteEntry().getFile());
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
+		openEditorButton.addListener(SWT.Selection,
+				e -> OpenStructMenu.openStructEditor(getType().getStructType().getPaletteEntry().getFile()));
 	}
 
 	@Override
@@ -250,12 +239,10 @@ public class StructManipulatorSection extends AbstractSection {
 		memberVarViewer.setInput(getType());
 		String structName = getType().getStructType().getName();
 		muxStructSelector.removeAll();
-		for (DataType dtp : getDatatypeLibrary().getDataTypesSorted()) {
-			if (dtp instanceof StructuredType) {
-				muxStructSelector.add(dtp.getName());
-				if (dtp.getName().contentEquals(structName)) {
-					muxStructSelector.select(muxStructSelector.getItemCount() - 1);
-				}
+		for (StructuredType dtp : getDatatypeLibrary().getStructuredTypesSorted()) {
+			muxStructSelector.add(dtp.getName());
+			if (dtp.getName().contentEquals(structName)) {
+				muxStructSelector.select(muxStructSelector.getItemCount() - 1);
 			}
 		}
 	}
