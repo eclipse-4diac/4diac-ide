@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
@@ -358,7 +359,7 @@ class STAlgorithmFilter {
 		ArrayVariable expr) '''«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»«index.generateExpression»«ENDFOR»'''
 
 	def protected dispatch CharSequence generateExpression(AdapterVariable expr) {
-		'''«EXPORT_PREFIX»«expr.adapter.name»().«expr.^var.generateVarAccess»()«expr.generateBitaccess»'''
+		'''«EXPORT_PREFIX»«expr.adapter.name»().«expr.^var.generateVarAccess»«expr.generateBitaccess»'''
 	}
 
 	def protected dispatch CharSequence generateExpression(
@@ -366,7 +367,13 @@ class STAlgorithmFilter {
 
 	def protected generateVarAccessLocal(LocalVariable variable) '''«EXPORT_PREFIX»«variable.name»'''
 
-	def protected dispatch generateVarAccess(VarDeclaration variable) '''«EXPORT_PREFIX»«variable.name»()'''
+	def protected dispatch generateVarAccess(VarDeclaration variable) {
+		if(variable.eContainer.eContainer instanceof AdapterFBType){
+			'''«variable.name»()'''
+		} else {
+			'''«EXPORT_PREFIX»«variable.name»()'''
+		}
+	}
 
 	def protected dispatch generateVarAccess(LocalVariable variable) '''«IF variable.located
 			»«variable.generateVarAccessLocated»«ELSE»«variable.generateVarAccessLocal»«ENDIF»'''

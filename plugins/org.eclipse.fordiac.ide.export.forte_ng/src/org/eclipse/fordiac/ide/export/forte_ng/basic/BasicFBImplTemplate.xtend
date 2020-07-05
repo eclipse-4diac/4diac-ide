@@ -133,6 +133,6 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 	    scm_nEvent«event.name»ID'''
 
     def protected dispatch generateTransitionEvent(AdapterEvent event) '''
-        «event.adapterDeclaration.name»().«event.adapterEventName»()'''
+        «EXPORT_PREFIX»«event.adapterDeclaration.name»().«event.adapterEventName»()'''
 	
 }

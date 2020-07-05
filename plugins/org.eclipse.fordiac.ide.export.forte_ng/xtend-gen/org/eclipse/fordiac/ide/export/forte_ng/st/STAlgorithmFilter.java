@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
@@ -1037,7 +1038,6 @@ public class STAlgorithmFilter {
     _builder.append("().");
     CharSequence _generateVarAccess = this.generateVarAccess(expr.getVar());
     _builder.append(_generateVarAccess);
-    _builder.append("()");
     CharSequence _generateBitaccess = this.generateBitaccess(expr);
     _builder.append(_generateBitaccess);
     return _builder;
@@ -1061,12 +1061,23 @@ public class STAlgorithmFilter {
   }
   
   protected CharSequence _generateVarAccess(final VarDeclaration variable) {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
-    String _name = variable.getName();
-    _builder.append(_name);
-    _builder.append("()");
-    return _builder;
+    CharSequence _xifexpression = null;
+    EObject _eContainer = variable.eContainer().eContainer();
+    if ((_eContainer instanceof AdapterFBType)) {
+      StringConcatenation _builder = new StringConcatenation();
+      String _name = variable.getName();
+      _builder.append(_name);
+      _builder.append("()");
+      _xifexpression = _builder;
+    } else {
+      StringConcatenation _builder_1 = new StringConcatenation();
+      _builder_1.append(STAlgorithmFilter.EXPORT_PREFIX);
+      String _name_1 = variable.getName();
+      _builder_1.append(_name_1);
+      _builder_1.append("()");
+      _xifexpression = _builder_1;
+    }
+    return _xifexpression;
   }
   
   protected CharSequence _generateVarAccess(final LocalVariable variable) {

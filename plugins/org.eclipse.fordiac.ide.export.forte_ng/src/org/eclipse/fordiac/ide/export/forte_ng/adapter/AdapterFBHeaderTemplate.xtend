@@ -69,6 +69,13 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate {
 		static const SFBInterfaceSpec scm_stFBInterfaceSpecPlug;
 	'''
 
+	override protected generateEventConstants(List<Event> events) '''
+	public:
+		«super.generateEventConstants(events)»
+	
+	private:
+	'''
+
 	def protected generateAccessors(List<VarDeclaration> vars, String socketFunction, String plugFunction) '''
 		«FOR v : vars»
 			CIEC_«v.typeName» «IF v.array»*«ELSE»&«ENDIF»«v.name»() {
