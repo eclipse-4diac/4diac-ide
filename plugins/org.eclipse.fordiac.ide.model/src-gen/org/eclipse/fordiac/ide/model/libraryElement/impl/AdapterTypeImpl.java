@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -14,8 +14,10 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.impl.DataTypeImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -107,6 +109,14 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	@Override
 	public AdapterFBType getSocketType() {
 		return org.eclipse.fordiac.ide.model.Annotations.getSocketType(this);
+	}
+
+	@Override
+	public NotificationChain basicSetPaletteEntry(PaletteEntry newPaletteEntry, NotificationChain msgs) {
+		if (null != adapterFBType) {
+			adapterFBType.setPaletteEntry(newPaletteEntry);
+		}
+		return super.basicSetPaletteEntry(newPaletteEntry, msgs);
 	}
 
 	/**
