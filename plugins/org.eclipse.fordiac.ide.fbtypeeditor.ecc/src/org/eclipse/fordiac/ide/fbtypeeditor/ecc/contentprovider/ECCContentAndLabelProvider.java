@@ -50,9 +50,10 @@ public final class ECCContentAndLabelProvider {
 		List<Event> events = new ArrayList<>();
 		if (null != type) {
 			events.addAll(type.getInterfaceList().getEventOutputs());
-			type.getInterfaceList().getSockets().forEach(socket -> events
-					.addAll(createAdapterEventList(socket.getType().getInterfaceList().getEventInputs(), socket)));
-			type.getInterfaceList().getPlugs().forEach(plug -> events
+			type.getInterfaceList().getSockets().stream().filter(socket -> (null != socket.getType()))
+					.forEach(socket -> events.addAll(
+							createAdapterEventList(socket.getType().getInterfaceList().getEventInputs(), socket)));
+			type.getInterfaceList().getPlugs().stream().filter(plug -> (null != plug.getType())).forEach(plug -> events
 					.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventOutputs(), plug)));
 			Collections.sort(events, NamedElementComparator.INSTANCE);
 		}
@@ -70,10 +71,12 @@ public final class ECCContentAndLabelProvider {
 		List<Event> transitionConditions = new ArrayList<>();
 		if (null != type) {
 			transitionConditions.addAll(type.getInterfaceList().getEventInputs());
-			type.getInterfaceList().getSockets().forEach(socket -> transitionConditions
-					.addAll(createAdapterEventList(socket.getType().getInterfaceList().getEventOutputs(), socket)));
-			type.getInterfaceList().getPlugs().forEach(plug -> transitionConditions
-					.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventInputs(), plug)));
+			type.getInterfaceList().getSockets().stream().filter(socket -> (null != socket.getType()))
+					.forEach(socket -> transitionConditions.addAll(
+							createAdapterEventList(socket.getType().getInterfaceList().getEventOutputs(), socket)));
+			type.getInterfaceList().getPlugs().stream().filter(plug -> (null != plug.getType()))
+					.forEach(plug -> transitionConditions
+							.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventInputs(), plug)));
 			Collections.sort(transitionConditions, NamedElementComparator.INSTANCE);
 		}
 		return transitionConditions;

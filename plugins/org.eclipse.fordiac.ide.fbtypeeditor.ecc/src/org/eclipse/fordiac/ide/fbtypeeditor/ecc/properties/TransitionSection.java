@@ -208,11 +208,13 @@ public class TransitionSection extends AbstractSection {
 
 			private void createAdapterResource(XtextResourceSet resourceSet, EcoreUtil.Copier copier,
 					AdapterDeclaration adapter) {
-				Resource adapterResource = resourceSet
-						.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
-				copier.copy(adapter.getType());
-				adapterResource.getContents()
-				.add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
+				if ((null != adapter.getType()) && (null != adapter.getType().getAdapterFBType())) {
+					Resource adapterResource = resourceSet
+							.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
+					copier.copy(adapter.getType());
+					adapterResource.getContents()
+							.add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
+				}
 			}
 
 			protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
@@ -251,7 +253,7 @@ public class TransitionSection extends AbstractSection {
 			} else {
 				eventCombo.select(getType().getConditionEvent() != null
 						? eventCombo.indexOf(getType().getConditionEvent().getName())
-								: (eventCombo.getItemCount() - 1));
+						: (eventCombo.getItemCount() - 1));
 			}
 			setExpressionTextboxEnablement();
 		}
@@ -280,6 +282,6 @@ public class TransitionSection extends AbstractSection {
 	public void fillEventConditionDropdown() {
 		eventCombo.removeAll();
 		ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType()).stream()
-		.forEach(name -> eventCombo.add(name));
+				.forEach(name -> eventCombo.add(name));
 	}
 }

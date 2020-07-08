@@ -66,9 +66,11 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 			}
 
 			private void createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
-				Resource adapterResource = resourceSet
-						.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
-				adapterResource.getContents().add(adapter.getType().getAdapterFBType());
+				if (null != adapter.getType() && null != adapter.getType().getAdapterFBType()) {
+					Resource adapterResource = resourceSet
+							.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
+					adapterResource.getContents().add(adapter.getType().getAdapterFBType());
+				}
 			}
 
 			protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
