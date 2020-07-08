@@ -534,7 +534,7 @@ public class LuaConstants {
         {
           boolean _not = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
             return it.getVar();
-          })).contains(av.getVar()) && ListExtensions.<AdapterVariable, AdapterDeclaration>map(sublist, ((Function1<AdapterVariable, AdapterDeclaration>) (AdapterVariable it) -> {
+          })).contains(av.getVar()) && ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
             return it.getAdapter();
           })).contains(av.getAdapter())));
           if (_not) {
@@ -590,7 +590,7 @@ public class LuaConstants {
         {
           boolean _not = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
             return it.getVar();
-          })).contains(av.getVar()) && ListExtensions.<AdapterVariable, AdapterDeclaration>map(sublist, ((Function1<AdapterVariable, AdapterDeclaration>) (AdapterVariable it) -> {
+          })).contains(av.getVar()) && ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
             return it.getAdapter();
           })).contains(av.getAdapter())));
           if (_not) {

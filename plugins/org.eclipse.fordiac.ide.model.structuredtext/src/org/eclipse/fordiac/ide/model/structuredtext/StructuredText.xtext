@@ -212,7 +212,7 @@ Variable_Subscript returns Variable:
 ;
 
 Variable_Adapter returns Variable:
-	{AdapterVariable} adapter=[libraryElement::AdapterDeclaration|Adapter_Name] '.' var=[libraryElement::VarDeclaration|Variable_Name]
+	{AdapterVariable} adapter=[libraryElement::VarDeclaration|Adapter_Name] '.' var=[libraryElement::VarDeclaration|Variable_Name]
 ;
 
 Multibit_Part_Access returns PartialAccess:

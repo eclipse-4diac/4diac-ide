@@ -15,6 +15,8 @@
 package org.eclipse.fordiac.ide.model.structuredtext.scoping;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -22,7 +24,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -68,22 +70,40 @@ public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvide
   public IScope scope_AdapterVariable_var(final AdapterVariable context, final EReference ref) {
     SimpleScope _xblockexpression = null;
     {
-      AdapterDeclaration _adapter = context.getAdapter();
-      AdapterType _type = null;
+      VarDeclaration _adapter = context.getAdapter();
+      DataType _type = null;
       if (_adapter!=null) {
         _type=_adapter.getType();
       }
-      final AdapterType type = ((AdapterType) _type);
+      final DataType type = _type;
       if ((type == null)) {
         return IScope.NULLSCOPE;
       }
-      final ArrayList<VarDeclaration> candidates = new ArrayList<VarDeclaration>();
-      candidates.addAll(type.getInterfaceList().getInputVars());
-      candidates.addAll(type.getInterfaceList().getOutputVars());
+      final List<VarDeclaration> candidates = this.getScopeCandidates(type);
+      boolean _isEmpty = candidates.isEmpty();
+      if (_isEmpty) {
+        return IScope.NULLSCOPE;
+      }
       Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
       _xblockexpression = new SimpleScope(_scopedElementsFor, true);
     }
     return _xblockexpression;
+  }
+  
+  protected List<VarDeclaration> _getScopeCandidates(final AdapterType context) {
+    final ArrayList<VarDeclaration> candidates = new ArrayList<VarDeclaration>();
+    candidates.addAll(context.getInterfaceList().getInputVars());
+    candidates.addAll(context.getInterfaceList().getOutputVars());
+    return candidates;
+  }
+  
+  protected List<VarDeclaration> _getScopeCandidates(final StructuredType context) {
+    EList<VarDeclaration> _memberVariables = context.getMemberVariables();
+    return new ArrayList<VarDeclaration>(_memberVariables);
+  }
+  
+  protected List<VarDeclaration> _getScopeCandidates(final DataType context) {
+    return Collections.<VarDeclaration>emptyList();
   }
   
   public IScope scope_VarDeclaration(final Variable context, final EReference ref) {
@@ -92,5 +112,18 @@ public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvide
       return IScope.NULLSCOPE;
     }
     return null;
+  }
+  
+  public List<VarDeclaration> getScopeCandidates(final DataType context) {
+    if (context instanceof StructuredType) {
+      return _getScopeCandidates((StructuredType)context);
+    } else if (context instanceof AdapterType) {
+      return _getScopeCandidates((AdapterType)context);
+    } else if (context != null) {
+      return _getScopeCandidates(context);
+    } else {
+      throw new IllegalArgumentException("Unhandled parameter types: " +
+        Arrays.<Object>asList(context).toString());
+    }
   }
 }

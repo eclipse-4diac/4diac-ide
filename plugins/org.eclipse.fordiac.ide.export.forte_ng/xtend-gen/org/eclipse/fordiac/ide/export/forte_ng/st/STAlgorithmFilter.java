@@ -18,6 +18,7 @@ import com.google.common.base.Objects;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -27,6 +28,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
@@ -108,14 +111,30 @@ public class STAlgorithmFilter {
   public void createFBResource(final XtextResourceSet resourceSet, final BaseFBType fbType) {
     final Resource fbResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
     fbResource.getContents().add(fbType);
-    EList<AdapterDeclaration> _sockets = fbType.getInterfaceList().getSockets();
-    for (final AdapterDeclaration adapter : _sockets) {
-      this.createAdapterResource(resourceSet, adapter);
-    }
-    EList<AdapterDeclaration> _plugs = fbType.getInterfaceList().getPlugs();
-    for (final AdapterDeclaration adapter_1 : _plugs) {
-      this.createAdapterResource(resourceSet, adapter_1);
-    }
+    final Consumer<AdapterDeclaration> _function = (AdapterDeclaration adp) -> {
+      this.createAdapterResource(resourceSet, adp);
+    };
+    fbType.getInterfaceList().getSockets().forEach(_function);
+    final Consumer<AdapterDeclaration> _function_1 = (AdapterDeclaration adp) -> {
+      this.createAdapterResource(resourceSet, adp);
+    };
+    fbType.getInterfaceList().getPlugs().forEach(_function_1);
+    final Consumer<AdapterDeclaration> _function_2 = (AdapterDeclaration adp) -> {
+      this.createAdapterResource(resourceSet, adp);
+    };
+    fbType.getInterfaceList().getPlugs().forEach(_function_2);
+    final Consumer<VarDeclaration> _function_3 = (VarDeclaration adp) -> {
+      this.createStructResource(resourceSet, adp);
+    };
+    fbType.getInterfaceList().getInputVars().forEach(_function_3);
+    final Consumer<VarDeclaration> _function_4 = (VarDeclaration adp) -> {
+      this.createStructResource(resourceSet, adp);
+    };
+    fbType.getInterfaceList().getOutputVars().forEach(_function_4);
+    final Consumer<VarDeclaration> _function_5 = (VarDeclaration adp) -> {
+      this.createStructResource(resourceSet, adp);
+    };
+    fbType.getInternalVars().forEach(_function_5);
   }
   
   public boolean createAdapterResource(final XtextResourceSet resourceSet, final AdapterDeclaration adapter) {
@@ -125,6 +144,20 @@ public class STAlgorithmFilter {
       _xblockexpression = adapterResource.getContents().add(adapter.getType().getAdapterFBType());
     }
     return _xblockexpression;
+  }
+  
+  public boolean createStructResource(final XtextResourceSet resourceSet, final VarDeclaration variable) {
+    boolean _xifexpression = false;
+    DataType _type = variable.getType();
+    if ((_type instanceof StructuredType)) {
+      boolean _xblockexpression = false;
+      {
+        final Resource structResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
+        _xblockexpression = structResource.getContents().add(variable.getType());
+      }
+      _xifexpression = _xblockexpression;
+    }
+    return _xifexpression;
   }
   
   protected URI computeUnusedUri(final ResourceSet resourceSet, final String fileExtension) {

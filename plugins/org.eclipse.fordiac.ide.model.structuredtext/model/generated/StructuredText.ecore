@@ -208,7 +208,7 @@
         eType="#//Expression" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterVariable" eSuperTypes="#//Variable">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="adapter" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//AdapterDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adapter" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="var" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>
   </eClassifiers>
 </ecore:EPackage>
