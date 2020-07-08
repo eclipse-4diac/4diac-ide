@@ -19,7 +19,7 @@ package libraryElement
 context ECTransition
 inv SelfCycleMustBeGatedByEvent: self.source = self.destination implies (not self.conditionEvent.oclIsUndefined())
 
--- Transitions with lower priority than the 1 transition condition will never be taken regardless they are with pure data-driven conditions or event conditions.
+-- Transitions with lower priority than the 1 transition condition will never be taken regardless they are with pure data-driven conditions or event conditions
 -- Problem: Dead transitions
 context ECTransition
 inv TransitionLowerThanOne: not self.conditionEvent.oclIsUndefined() or self.conditionExpression <> '1' implies (self.source.outTransitions->forAll(trans | trans.conditionExpression = '1' implies (trans.getPriority() > self.getPriority())))
@@ -29,20 +29,28 @@ inv TransitionLowerThanOne: not self.conditionEvent.oclIsUndefined() or self.con
 context ECTransition
 inv TransitionHigherThanOne: self.conditionExpression <> '1' implies self.source.outTransitions->forAll(trans | (trans.conditionExpression = '1' and trans.getPriority() > self.getPriority()) implies (self.conditionEvent.oclIsUndefined()))
 
--- States which do not have any input transitions
+-- States (except start state) which do not have any input transitions
 -- Problem: Unreachable states
 context ECState
-inv UnreachableState: self.inTransitions->size() > 0
+inv UnreachableState: not self.isStartState() implies(self.inTransitions->size() > 0)
 
 -- States which do not have any outgoing EC transitions
 -- Problem: Terminal states
 context ECState
 inv TerminalState: self.outTransitions->size() > 0
 
--- States to which a path cannot be found from the EC initial state by following the directed links
+-- States (except start state) to which a path cannot be found from the EC initial state by following the directed links
 -- Problem: Dead states
 context ECState
-inv DeadState : self->closure(inTransitions.source)->select(state : ECState | state.isStartState())->size() > 0
+inv DeadState : not self.isStartState() implies (self->closure(inTransitions.source)->select(state : ECState | state.isStartState())->size() > 0)
+
+-- Event inputs of the FB type containing the ECC that are not used in any EC transitions
+context ECC
+inv UnusedEventInput: self.eCTransition.conditionEvent->includesAll(self.basicFBType.interfaceList.eventInputs->asSet())
+
+-- Event outputs of the FB type containing the ECC that are not used in any EC actions
+context ECC
+inv UnusedEventOutput: self.eCTransition.destination.eCAction.output->includesAll(self.basicFBType.interfaceList.eventOutputs->asSet())
 
 -- A guard-only cycle is the general case of a self-cycle (SelfCycleMustBeGatedByEvent), where a path exists from an EC state, through other EC states and back to itself through a path consisting of transitions with guard-only conditions (i.e., transitions not containing an event).
 -- Problem: The process that is executing the ECC may enter an infinite loop
