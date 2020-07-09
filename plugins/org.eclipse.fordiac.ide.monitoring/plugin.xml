@@ -339,19 +339,6 @@
             </visibleWhen>
          </command>
       </menuContribution>
-      <menuContribution
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar">
-         <toolbar
-               id="org.eclipse.fordiac.ide.toolbars.monitoringToolbar">
-             <command
-                   commandId="org.eclipse.fordiac.ide.monitoring.MonitorSystem"
-                   label="Monitor System"
-                   tooltip="Change monitoring state of system"
-                   icon="fordiacimage://ICON_START_MONITORING"
-                   style="toggle">
-             </command>
-         </toolbar>
-      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
