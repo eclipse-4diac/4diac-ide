@@ -73,6 +73,7 @@ public class TypeInfoWidget implements CommandExecutor {
 	private Text descriptionText;
 
 	private TableViewer versionViewer;
+	private AddDeleteWidget addDeleteVersionInfoButtons;
 	private static final String VERSION_PROPERTY = "version"; //$NON-NLS-1$
 	private static final String ORGANIZATION_PROPERTY = "organization"; //$NON-NLS-1$
 	private static final String AUTHOR_PROPERTY = "author"; //$NON-NLS-1$
@@ -140,8 +141,8 @@ public class TypeInfoWidget implements CommandExecutor {
 		versionInfoGroup.setLayout(new GridLayout(2, false));
 		versionInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		AddDeleteWidget buttons = new AddDeleteWidget();
-		buttons.createControls(versionInfoGroup, getWidgetFactory());
+		addDeleteVersionInfoButtons = new AddDeleteWidget();
+		addDeleteVersionInfoButtons.createControls(versionInfoGroup, getWidgetFactory());
 
 		versionViewer = TableWidgetFactory.createPropertyTableViewer(versionInfoGroup);
 		configureTableLayout(versionViewer.getTable());
@@ -155,7 +156,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		versionViewer.setColumnProperties(new String[] { VERSION_PROPERTY, ORGANIZATION_PROPERTY, AUTHOR_PROPERTY,
 				DATE_PROPERTY, REMARKS_PROPERTY });
 
-		buttons.bindToTableViewer(versionViewer, this, ref -> new AddNewVersionInfoCommand(type),
+		addDeleteVersionInfoButtons.bindToTableViewer(versionViewer, this, ref -> new AddNewVersionInfoCommand(type),
 				ref -> new DeleteVersionInfoCommand(type, (VersionInfo) ref));
 
 		versionViewer.setCellModifier(new ICellModifier() {
@@ -289,6 +290,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		functionText.setEnabled(enablement);
 		typeText.setEnabled(enablement);
 		descriptionText.setEnabled(enablement);
+		addDeleteVersionInfoButtons.setVisible(enablement);
 		versionViewer.setCellModifier(null);
 	}
 

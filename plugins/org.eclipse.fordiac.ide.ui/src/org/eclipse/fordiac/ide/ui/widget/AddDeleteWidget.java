@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -37,9 +36,10 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 public class AddDeleteWidget {
 	private Button createButton;
 	private Button deleteButton;
+	private Composite container;
 
 	public void createControls(Composite parent, FormToolkit widgetFactory) {
-		Composite container = createContainer(parent);
+		container = createContainer(parent);
 
 		createAddButton(widgetFactory, container);
 
@@ -47,6 +47,12 @@ public class AddDeleteWidget {
 
 		// initially nothing should be selected therefore deactivate the buttons
 		setButtonEnablement(false);
+	}
+
+	public void setVisible(boolean visible) {
+		container.setVisible(visible);
+		((GridData) container.getLayoutData()).exclude = !visible;
+		container.getParent().pack();
 	}
 
 	protected void createDeleteButton(FormToolkit widgetFactory, Composite container) {
