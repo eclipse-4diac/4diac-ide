@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate;
+import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -367,6 +368,7 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
   
   protected CharSequence _generateTransitionEvent(final AdapterEvent event) {
     StringConcatenation _builder = new StringConcatenation();
+    _builder.append(ForteLibraryElementTemplate.EXPORT_PREFIX);
     String _name = event.getAdapterDeclaration().getName();
     _builder.append(_name);
     _builder.append("().");

@@ -171,6 +171,21 @@ public class AdapterFBHeaderTemplate extends ForteFBTemplate {
     return _builder;
   }
   
+  @Override
+  protected CharSequence generateEventConstants(final List<Event> events) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("public:");
+    _builder.newLine();
+    _builder.append("\t");
+    CharSequence _generateEventConstants = super.generateEventConstants(events);
+    _builder.append(_generateEventConstants, "\t");
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("private:");
+    _builder.newLine();
+    return _builder;
+  }
+  
   protected CharSequence generateAccessors(final List<VarDeclaration> vars, final String socketFunction, final String plugFunction) {
     StringConcatenation _builder = new StringConcatenation();
     {

@@ -157,59 +157,13 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
       }
     }
     _builder.newLine();
-    {
-      boolean _isEmpty_2 = this.getType().getInterfaceList().getEventInputs().isEmpty();
-      boolean _not_2 = (!_isEmpty_2);
-      if (_not_2) {
-        {
-          EList<Event> _eventInputs = this.getType().getInterfaceList().getEventInputs();
-          for(final Event event : _eventInputs) {
-            _builder.append("static const TEventID scm_nEvent");
-            String _name = event.getName();
-            _builder.append(_name);
-            _builder.append("ID = ");
-            int _indexOf = this.getType().getInterfaceList().getEventInputs().indexOf(event);
-            _builder.append(_indexOf);
-            _builder.append(";");
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        _builder.newLine();
-        _builder.append("static const TDataIOID scm_anEIWith[];");
-        _builder.newLine();
-        _builder.append("static const TForteInt16 scm_anEIWithIndexes[];");
-        _builder.newLine();
-        _builder.append("static const CStringDictionary::TStringId scm_anEventInputNames[];");
-        _builder.newLine();
-      }
-    }
+    CharSequence _generateFBEventInputInterfaceDecl = this.generateFBEventInputInterfaceDecl();
+    _builder.append(_generateFBEventInputInterfaceDecl);
+    _builder.newLineIfNotEmpty();
     _builder.newLine();
-    {
-      boolean _isEmpty_3 = this.getType().getInterfaceList().getEventOutputs().isEmpty();
-      boolean _not_3 = (!_isEmpty_3);
-      if (_not_3) {
-        {
-          EList<Event> _eventOutputs = this.getType().getInterfaceList().getEventOutputs();
-          for(final Event event_1 : _eventOutputs) {
-            _builder.append("static const TEventID scm_nEvent");
-            String _name_1 = event_1.getName();
-            _builder.append(_name_1);
-            _builder.append("ID = ");
-            int _indexOf_1 = this.getType().getInterfaceList().getEventOutputs().indexOf(event_1);
-            _builder.append(_indexOf_1);
-            _builder.append(";");
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        _builder.newLine();
-        _builder.append("static const TDataIOID scm_anEOWith[];");
-        _builder.newLine();
-        _builder.append("static const TForteInt16 scm_anEOWithIndexes[];");
-        _builder.newLine();
-        _builder.append("static const CStringDictionary::TStringId scm_anEventOutputNames[];");
-        _builder.newLine();
-      }
-    }
+    CharSequence _generateFBEventOutputInterfaceDecl = this.generateFBEventOutputInterfaceDecl();
+    _builder.append(_generateFBEventOutputInterfaceDecl);
+    _builder.newLineIfNotEmpty();
     _builder.newLine();
     {
       if (((!this.getType().getInterfaceList().getSockets().isEmpty()) || (!this.getType().getInterfaceList().getPlugs().isEmpty()))) {
@@ -217,11 +171,11 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           EList<AdapterDeclaration> _sockets = this.getType().getInterfaceList().getSockets();
           for(final AdapterDeclaration adapter : _sockets) {
             _builder.append("static const int scm_n");
-            String _name_2 = adapter.getName();
-            _builder.append(_name_2);
+            String _name = adapter.getName();
+            _builder.append(_name);
             _builder.append("AdpNum = ");
-            int _indexOf_2 = this.getType().getInterfaceList().getSockets().indexOf(adapter);
-            _builder.append(_indexOf_2);
+            int _indexOf = this.getType().getInterfaceList().getSockets().indexOf(adapter);
+            _builder.append(_indexOf);
             _builder.append(";");
             _builder.newLineIfNotEmpty();
           }
@@ -230,12 +184,12 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           EList<AdapterDeclaration> _plugs = this.getType().getInterfaceList().getPlugs();
           for(final AdapterDeclaration adapter_1 : _plugs) {
             _builder.append("static const int scm_n");
-            String _name_3 = adapter_1.getName();
-            _builder.append(_name_3);
+            String _name_1 = adapter_1.getName();
+            _builder.append(_name_1);
             _builder.append("AdpNum = ");
             int _size = this.getType().getInterfaceList().getSockets().size();
-            int _indexOf_3 = this.getType().getInterfaceList().getPlugs().indexOf(adapter_1);
-            int _plus = (_size + _indexOf_3);
+            int _indexOf_1 = this.getType().getInterfaceList().getPlugs().indexOf(adapter_1);
+            int _plus = (_size + _indexOf_1);
             _builder.append(_plus);
             _builder.append(";");
             _builder.newLineIfNotEmpty();
@@ -244,6 +198,71 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
         _builder.newLine();
         _builder.append("static const SAdapterInstanceDef scm_astAdapterInstances[];");
         _builder.newLine();
+      }
+    }
+    return _builder;
+  }
+  
+  protected CharSequence generateFBEventOutputInterfaceDecl() {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      boolean _isEmpty = this.getType().getInterfaceList().getEventOutputs().isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        _builder.newLineIfNotEmpty();
+        CharSequence _generateEventConstants = this.generateEventConstants(this.getType().getInterfaceList().getEventOutputs());
+        _builder.append(_generateEventConstants);
+        _builder.newLineIfNotEmpty();
+        _builder.newLine();
+        _builder.append("static const TDataIOID scm_anEOWith[];");
+        _builder.newLine();
+        _builder.append("static const TForteInt16 scm_anEOWithIndexes[];");
+        _builder.newLine();
+        _builder.append("static const CStringDictionary::TStringId scm_anEventOutputNames[];");
+        _builder.newLine();
+        _builder.append("\t\t");
+      }
+    }
+    return _builder;
+  }
+  
+  protected CharSequence generateFBEventInputInterfaceDecl() {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      boolean _isEmpty = this.getType().getInterfaceList().getEventInputs().isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        _builder.newLineIfNotEmpty();
+        CharSequence _generateEventConstants = this.generateEventConstants(this.getType().getInterfaceList().getEventInputs());
+        _builder.append(_generateEventConstants);
+        _builder.newLineIfNotEmpty();
+        _builder.newLine();
+        _builder.append("static const TDataIOID scm_anEIWith[];");
+        _builder.newLine();
+        _builder.append("static const TForteInt16 scm_anEIWithIndexes[];");
+        _builder.newLine();
+        _builder.append("static const CStringDictionary::TStringId scm_anEventInputNames[];");
+        _builder.newLine();
+        _builder.append("\t\t");
+      }
+    }
+    return _builder;
+  }
+  
+  protected CharSequence generateEventConstants(final List<Event> events) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      for(final Event event : events) {
+        _builder.newLineIfNotEmpty();
+        _builder.append("static const TEventID scm_nEvent");
+        String _name = event.getName();
+        _builder.append(_name);
+        _builder.append("ID = ");
+        int _indexOf = events.indexOf(event);
+        _builder.append(_indexOf);
+        _builder.append(";");
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t\t");
       }
     }
     return _builder;
@@ -586,6 +605,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
         String _typeName = adapter.getTypeName();
         _builder.append(_typeName);
         _builder.append("& ");
+        _builder.append(ForteLibraryElementTemplate.EXPORT_PREFIX);
         String _name = adapter.getName();
         _builder.append(_name);
         _builder.append("() {");

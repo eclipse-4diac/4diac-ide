@@ -18,9 +18,8 @@ import java.nio.file.Path
 import java.util.List
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
 
 abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
@@ -73,25 +72,9 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 			static const CStringDictionary::TStringId scm_anDataOutputTypeIds[];
 		«ENDIF»
 
-		«IF !type.interfaceList.eventInputs.empty»
-			«FOR event : type.interfaceList.eventInputs»
-				static const TEventID scm_nEvent«event.name»ID = «type.interfaceList.eventInputs.indexOf(event)»;
-			«ENDFOR»
+		«generateFBEventInputInterfaceDecl()»
 
-			static const TDataIOID scm_anEIWith[];
-			static const TForteInt16 scm_anEIWithIndexes[];
-			static const CStringDictionary::TStringId scm_anEventInputNames[];
-		«ENDIF»
-
-		«IF !type.interfaceList.eventOutputs.empty»
-			«FOR event : type.interfaceList.eventOutputs»
-				static const TEventID scm_nEvent«event.name»ID = «type.interfaceList.eventOutputs.indexOf(event)»;
-			«ENDFOR»
-
-			static const TDataIOID scm_anEOWith[];
-			static const TForteInt16 scm_anEOWithIndexes[];
-			static const CStringDictionary::TStringId scm_anEventOutputNames[];
-		«ENDIF»
+		«generateFBEventOutputInterfaceDecl()»
 		
 		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
 			«FOR adapter : type.interfaceList.sockets»
@@ -104,6 +87,30 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 			static const SAdapterInstanceDef scm_astAdapterInstances[];
 		«ENDIF»
 	'''
+	
+	def protected generateFBEventOutputInterfaceDecl()
+		'''«IF !type.interfaceList.eventOutputs.empty»
+			«type.interfaceList.eventOutputs.generateEventConstants»
+			
+			static const TDataIOID scm_anEOWith[];
+			static const TForteInt16 scm_anEOWithIndexes[];
+			static const CStringDictionary::TStringId scm_anEventOutputNames[];
+		«ENDIF»'''
+
+
+	def protected generateFBEventInputInterfaceDecl()
+		'''«IF !type.interfaceList.eventInputs.empty»
+			«type.interfaceList.eventInputs.generateEventConstants»
+			
+			static const TDataIOID scm_anEIWith[];
+			static const TForteInt16 scm_anEIWithIndexes[];
+			static const CStringDictionary::TStringId scm_anEventInputNames[];
+		«ENDIF»'''
+
+	def protected generateEventConstants(List<Event> events)
+		'''«FOR event : events»
+			static const TEventID scm_nEvent«event.name»ID = «events.indexOf(event)»;
+		«ENDFOR»'''
 
 	def protected generateFBInterfaceDefinition() {
 		val inputWith = newArrayList
@@ -197,7 +204,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 
 	def protected generateAccessors(List<AdapterDeclaration> adapters) '''
 		«FOR adapter : adapters»
-			FORTE_«adapter.typeName»& «adapter.name»() {
+			FORTE_«adapter.typeName»& «EXPORT_PREFIX»«adapter.name»() {
 			  return (*static_cast<FORTE_«adapter.typeName»*>(m_apoAdapters[«adapters.indexOf(adapter)»]));
 			};
 
