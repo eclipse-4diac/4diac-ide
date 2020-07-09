@@ -121,8 +121,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 		dataTypes = dataTypeList.stream().filter(Objects::nonNull)
 				.filter(dtp -> !dataType.getName().contentEquals(dtp.getName())) // prevent infinite loop
-				.map(DataType::getName)
-				.toArray(String[]::new);
+				.map(DataType::getName).toArray(String[]::new);
 	}
 
 	private void showLabel(Composite parent) {
@@ -256,6 +255,10 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				cmd = new ChangeNameCommand(data, value.toString());
 				break;
 			case TYPE:
+				// skip if typedropdown was cancelled
+				if ((value instanceof Integer) && ((int) value == -1)) {
+					return;
+				}
 				cmd = new ChangeTypeCommand(data, dataTypeLibrary.getType(dataTypes[(int) value]));
 				break;
 			case COMMENT:
