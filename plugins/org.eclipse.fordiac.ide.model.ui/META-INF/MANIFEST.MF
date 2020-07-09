@@ -5,6 +5,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.ui;singleton:=true
 Bundle-Version: 1.13.0.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.model.ui.Activator
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.model,
  org.eclipse.core.runtime,
