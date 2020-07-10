@@ -31,7 +31,6 @@ public class Messages extends NLS {
 	public static String AlgorithmList_ConfigureTableLayout_Comment;
 	public static String AlgorithmList_ConfigureTableLayout_Name;
 	public static String AlgorithmList_ConfigureTableLayout_Language;
-	public static String CreateAlgorithmCommand_NewAlgorithm;
 	public static String ECAlgorithmGroup_Title;
 	public static String ECCActions_AddAction;
 	public static String ECCActions_AddState;
@@ -52,7 +51,6 @@ public class Messages extends NLS {
 	public static String FordiacECCPreferencePage_LABEL_ECCStateTextColor;
 	public static String FordiacECCPreferencePage_LABEL_ECCStateColor;
 	public static String FordiacECCPreferencePage_LABEL_ECCTransitionColor;
-	public static String FordiacECCPreferencePage_LABEL_PreferencePageDescription;
 	public static String ReconnectTransitionCommand_ReconnectTransition;
 	public static String StateCreationFactory_LABEL_NewECState;
 	public static String StateSection_Comment;
