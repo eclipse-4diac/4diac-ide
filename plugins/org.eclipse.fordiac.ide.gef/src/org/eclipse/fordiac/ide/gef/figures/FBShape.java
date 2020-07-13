@@ -134,9 +134,17 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	public UnderlineAlphaLabel getTypeLabel() {
 		return typeLabel;
 	}
+	
+	protected RoundedRectangle getTop() {
+		return top;
+	}
 
 	public AdvancedRoundedRectangle getMiddle() {
 		return middle;
+	}
+
+	protected AdvancedRoundedRectangle getBottom() {
+		return bottom;
 	}
 
 	@Override
@@ -360,5 +368,5 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		}
 		return ColorConstants.gray;
 	}
-
+	
 }

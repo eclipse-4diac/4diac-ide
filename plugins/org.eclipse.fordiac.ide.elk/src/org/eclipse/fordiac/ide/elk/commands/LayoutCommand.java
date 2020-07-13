@@ -119,7 +119,11 @@ public class LayoutCommand extends Command {
 		graph.getChildren().forEach(node -> {
 			AbstractFBNElementEditPart part = nodeMapping.get(node);
 			if (null != part) {
-				part.getModel().setX((int) node.getX());
+				double x = node.getX();
+				if (part.getFigure().getLabelBounds().width() > part.getFigure().getFBBounds().width()) {
+					x = node.getX() - (part.getFigure().getFBBounds().x() - part.getFigure().getLabelBounds().x());
+				}
+				part.getModel().setX((int) x);
 				part.getModel().setY((int) node.getY());
 			}
 		});
@@ -151,12 +155,12 @@ public class LayoutCommand extends Command {
 	private void updateModel(org.eclipse.fordiac.ide.model.libraryElement.Connection connModel, PointList pointList) {
 		if (pointList.size() > 2) {
 			// 3 segments
-			connModel.setDx1((int) (pointList.getPoint(1).preciseX() - pointList.getFirstPoint().preciseX()));
+			connModel.setDx1(pointList.getPoint(1).x() - pointList.getFirstPoint().x());
 			connModel.setDx2(
-					(int) (pointList.getLastPoint().preciseX() - pointList.getPoint(pointList.size() - 2).preciseX()));
+					pointList.getLastPoint().x() - pointList.getPoint(pointList.size() - 2).x());
 			if (pointList.size() > 4) {
 				// 5 segments
-				connModel.setDy((int) (pointList.getPoint(2).preciseY() - pointList.getFirstPoint().preciseY()));
+				connModel.setDy(pointList.getPoint(2).y() - pointList.getFirstPoint().y());
 			} else {
 				connModel.setDy(0);
 			}

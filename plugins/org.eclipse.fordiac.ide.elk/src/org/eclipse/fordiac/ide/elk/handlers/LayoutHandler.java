@@ -29,12 +29,16 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.elk.alg.layered.options.CrossingMinimizationStrategy;
 import org.eclipse.elk.alg.layered.options.FixedAlignment;
 import org.eclipse.elk.alg.layered.options.LayeredMetaDataProvider;
+import org.eclipse.elk.alg.layered.options.NodePlacementStrategy;
+import org.eclipse.elk.alg.layered.options.NodePromotionStrategy;
 import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
 import org.eclipse.elk.core.math.ElkPadding;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.options.Direction;
 import org.eclipse.elk.core.options.EdgeRouting;
+import org.eclipse.elk.core.options.NodeLabelPlacement;
 import org.eclipse.elk.core.options.PortConstraints;
+import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.util.NullElkProgressMonitor;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkLabel;
@@ -80,6 +84,10 @@ public class LayoutHandler extends AbstractHandler {
 			collectEditParts(viewer);
 			// build up the Elk DataStructure
 			ElkNode layoutGraph = createElkGraph();
+			// empty parent graph for SubApps
+			ElkNode parent = ElkGraphUtil.createGraph();
+			layoutGraph.setParent(parent);
+
 			setGraphProperties(layoutGraph);
 
 			// run layout algorithms
@@ -97,18 +105,35 @@ public class LayoutHandler extends AbstractHandler {
 		return null;
 	}
 
+	private void setPortProperties(ElkPort port, boolean isInput) {
+		if (isInput) {
+			port.setProperty(CoreOptions.PORT_SIDE, PortSide.WEST);
+		} else {
+			port.setProperty(CoreOptions.PORT_SIDE, PortSide.EAST);
+		}
+	}
+
+	private void setNodeProperties(ElkNode node) {
+		node.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_BK_FIXED_ALIGNMENT, FixedAlignment.NONE);
+		node.setProperty(LayeredMetaDataProvider.CROSSING_MINIMIZATION_STRATEGY,
+				CrossingMinimizationStrategy.INTERACTIVE);
+		node.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS);
+		node.setProperty(CoreOptions.INSIDE_SELF_LOOPS_ACTIVATE, true);
+		node.setProperty(CoreOptions.NODE_LABELS_PLACEMENT, NodeLabelPlacement.insideTopCenter());
+	}
+
 	private void setGraphProperties(ElkNode layoutGraph) {
 		layoutGraph.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.layered"); //$NON-NLS-1$
 		layoutGraph.setProperty(CoreOptions.EDGE_ROUTING, EdgeRouting.ORTHOGONAL);
 		layoutGraph.setProperty(CoreOptions.DIRECTION, Direction.RIGHT);
-
+		layoutGraph.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_STRATEGY, NodePlacementStrategy.LINEAR_SEGMENTS);
+		layoutGraph.setProperty(LayeredMetaDataProvider.THOROUGHNESS, 10000);
+		layoutGraph.setProperty(LayeredMetaDataProvider.LAYERING_NODE_PROMOTION_STRATEGY,
+				NodePromotionStrategy.NO_BOUNDARY);
+		layoutGraph.setProperty(CoreOptions.SPACING_NODE_NODE, (double) 40);
+		layoutGraph.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_FAVOR_STRAIGHT_EDGES, false);
 		// set padding according to the number of in and outputs (for subapps)
 		layoutGraph.setProperty(CoreOptions.PADDING, new ElkPadding(30, maxIOLabelSize + 30, 0, maxIOLabelSize + 30));
-		layoutGraph.setProperty(CoreOptions.SPACING_NODE_NODE, (double) 40);
-
-		// empty parent graph for SubApps
-		ElkNode parent = ElkGraphUtil.createGraph();
-		layoutGraph.setParent(parent);
 	}
 
 	private void clear() {
@@ -164,16 +189,13 @@ public class LayoutHandler extends AbstractHandler {
 	private void createFBNetworkElementNodes(ElkNode elkGraph) {
 		for (AbstractFBNElementEditPart elem : fbNetworkElements) {
 			ElkNode networkElemElkNode = ElkGraphUtil.createNode(elkGraph);
-			networkElemElkNode.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_BK_FIXED_ALIGNMENT,
-					FixedAlignment.NONE);
-			networkElemElkNode.setProperty(LayeredMetaDataProvider.CROSSING_MINIMIZATION_STRATEGY,
-					CrossingMinimizationStrategy.INTERACTIVE);
-			networkElemElkNode.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS);
-			networkElemElkNode.setProperty(CoreOptions.INSIDE_SELF_LOOPS_ACTIVATE, true);
-			Rectangle bounds = elem.getFigure().getBounds();
+			setNodeProperties(networkElemElkNode);
+			Rectangle bounds = elem.getFigure().getFBBounds();
 			networkElemElkNode.setLocation(bounds.x, bounds.y);
 			networkElemElkNode.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
-			ElkGraphUtil.createLabel(elem.getModel().getName(), networkElemElkNode);
+			ElkLabel label = ElkGraphUtil.createLabel(elem.getModel().getName(), networkElemElkNode);
+			Rectangle labelBounds = elem.getFigure().getLabelBounds();
+			label.setDimensions(labelBounds.width(), labelBounds.height());
 			nodes.put(elem.getModel(), networkElemElkNode);
 			nodeMapping.put(networkElemElkNode, elem);
 		}
@@ -215,12 +237,12 @@ public class LayoutHandler extends AbstractHandler {
 		// handled by elk
 		if (!isSubApp) {
 			port.setLocation(point.preciseX() - node.getX(), point.preciseY() - node.getY());
+			setPortProperties(port, interfaceElement.isIsInput());
 		} else if (interfaceElement.isIsInput()) {
 			// set the input interface inset according to the graph padding
 			port.setLocation(maxIOLabelSize, -1);
 		}
-		// set port dimensions to avoid interface collisions
-		port.setDimensions(7, 7);
+		port.setDimensions(0, 0);
 		return port;
 	}
 

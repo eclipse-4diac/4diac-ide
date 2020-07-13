@@ -14,20 +14,17 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
-import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
@@ -41,27 +38,6 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class InstanceNameEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
-
-	private static class InstanceNameFigure extends Label implements IFontUpdateListener {
-
-		public InstanceNameFigure() {
-			super();
-			setFont();
-			setTextAlignment(PositionConstants.CENTER);
-			setLabelAlignment(PositionConstants.CENTER);
-		}
-
-		private void setFont() {
-			setFont(JFaceResources.getFontRegistry().getBold(PreferenceConstants.DIAGRAM_FONT));
-		}
-
-		@Override
-		public void updateFonts() {
-			setFont();
-			invalidateTree();
-			revalidate();
-		}
-	}
 
 	private DirectEditManager manager;
 	private DiagramFontChangeListener fontChangeListener;
