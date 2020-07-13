@@ -7,6 +7,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
 
 class SimpleFBImplTemplate extends ForteFBTemplate {
 
@@ -49,6 +50,14 @@ class SimpleFBImplTemplate extends ForteFBTemplate {
 	def protected dispatch generateAlgorithm(STAlgorithm alg) '''
 		void «FBClassName»::alg_«alg.name»(void) {
 		  «alg.generate(errors)»
+		}
+	'''
+
+	def protected dispatch generateAlgorithm(OtherAlgorithm alg) '''
+		void «FBClassName»::alg_«alg.name»(void) {
+		  #pragma GCC warning "Algorithm of type: '«alg.language»' may lead to unexpected results!"
+		  #pragma message ("warning Algorithm of type: '«alg.language»' may lead to unexpected results!")
+		  «alg.text»
 		}
 	'''
 }

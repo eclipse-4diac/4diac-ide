@@ -10,6 +10,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
 
 class BasicFBImplTemplate extends ForteFBTemplate {
 
@@ -55,6 +56,14 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 		errors.add('''Cannot export algorithm «alg.class»''')
 		return ""
 	}
+
+	def protected dispatch generateAlgorithm(OtherAlgorithm alg) '''
+		void «FBClassName»::alg_«alg.name»(void) {
+		  #pragma GCC warning "Algorithm of type: '«alg.language»' may lead to unexpected results!"
+		  #pragma message ("warning Algorithm of type: '«alg.language»' may lead to unexpected results!")
+		  «alg.text»
+		}
+	'''
 
 	def protected dispatch generateAlgorithm(STAlgorithm alg) '''
 		void «FBClassName»::alg_«alg.name»(void) {
