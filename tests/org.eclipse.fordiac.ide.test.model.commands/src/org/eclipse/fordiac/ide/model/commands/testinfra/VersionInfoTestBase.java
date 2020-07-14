@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2020 Johannes Kepler University
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Ernst Blecha
+ *     - initial API and implementation and/or initial documentation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
 import static org.junit.Assume.assumeTrue;
@@ -22,7 +35,7 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 
 	// create a state description that fits our purpose
 	public static class State implements CommandTestBase.StateBase {
-		private VersionInfo vInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
+		private final VersionInfo vInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
 
 		private Command cmd;
 
@@ -40,14 +53,14 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 	}
 
 	protected static State undoCommand(Object stateObj) {
-		State state = (State) stateObj;
+		final State state = (State) stateObj;
 		assumeTrue(state.getCommand().canUndo());
 		state.getCommand().undo();
 		return (state);
 	}
 
 	protected static State redoCommand(Object stateObj) {
-		State state = (State) stateObj;
+		final State state = (State) stateObj;
 		assumeTrue(state.getCommand().canRedo());
 		state.getCommand().redo();
 		return (state);
@@ -60,7 +73,7 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
-		VersionInfo vInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
+		final VersionInfo vInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
 
 		final String DEFAULT_NAME = vInfo.getAuthor();
 		final String DEFAULT_DATE = vInfo.getDate();
@@ -76,7 +89,7 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 	}
 
 	protected static State setInitialValues() {
-		State state = new State();
+		final State state = new State();
 		state.getVersionInfo().setAuthor(SET_NAME);
 		state.getVersionInfo().setDate(SET_DATE);
 		state.getVersionInfo().setOrganization(SET_ORG);
@@ -94,7 +107,7 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 	}
 
 	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
-		List<Object[]> commands = new ArrayList<>();
+		final List<Object[]> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", //
 				State::new, //

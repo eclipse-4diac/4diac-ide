@@ -11,7 +11,6 @@
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import static org.junit.Assume.assumeNotNull;
@@ -65,7 +64,7 @@ public class ChangeOrganizationCommandTest extends VersionInfoTestBase {
 	// description will be used
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
-		List<Object> executionDescriptions = ExecutionDescription.commandList( //
+		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
 				new ExecutionDescription<State>("Change Organization", //
 						ChangeOrganizationCommandTest::executeCommand, //
 						ChangeOrganizationCommandTest::verifyState //
