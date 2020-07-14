@@ -48,7 +48,7 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 		for (Object child : children) {
 			if (child instanceof AbstractFBNElementEditPart) {
 				EditPart childPart = (EditPart) child;
-				if(childPart.isSelectable()) {
+				if (childPart.isSelectable()) {
 					selectableChildren.add(childPart);
 					addConnectionsTo(selectableChildren, childPart);
 				}
@@ -67,7 +67,7 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 			if (elementChild instanceof AbstractGraphicalEditPart) {
 				@SuppressWarnings("unchecked") // GEF method returns child edit parts
 				List<EditPart> connections = ((AbstractGraphicalEditPart) elementChild).getSourceConnections();
-				selectableChildren.addAll(connections);
+				connections.stream().filter(EditPart::isSelectable).forEach(selectableChildren::add);
 			}
 		}
 	}

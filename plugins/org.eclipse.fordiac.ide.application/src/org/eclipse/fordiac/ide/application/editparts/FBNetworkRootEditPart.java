@@ -65,6 +65,11 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 			Collection<EditPart> editPartsToSelect = new LinkedHashSet<>();
 			Collection<EditPart> editPartsToDeselect = new HashSet<>();
 			for (EditPart affectedEditPart : marqueeSelectedEditParts) {
+				if ((affectedEditPart instanceof ConnectionEditPart) && (!affectedEditPart.isSelectable())) {
+					// the connection is hidden don't add it
+					continue;
+				}
+
 				if ((affectedEditPart.getSelected() == EditPart.SELECTED_NONE)
 						|| (getCurrentSelectionMode() != TOGGLE_MODE)) {
 					// only add connections and FBs
