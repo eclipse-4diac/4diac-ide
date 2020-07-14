@@ -126,8 +126,10 @@ public class SubrangeTypeItemProvider extends DerivedTypeItemProvider {
 			case DataPackage.SUBRANGE_TYPE__SUBRANGE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

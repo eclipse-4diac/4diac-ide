@@ -32,7 +32,8 @@ public class CreateMemberVariableCommand extends CreateVariableCommand {
 	 * @param struct   the structured type
 	 */
 	public CreateMemberVariableCommand(final StructuredType struct, DataTypeLibrary dataTypeLibrary) {
-		super(struct, struct.getMemberVariables().size() - 1, null, null, dataTypeLibrary);
+		super(struct, struct.getMemberVariables().size() == 0 ? 0 : struct.getMemberVariables().size() - 1, null, null,
+				dataTypeLibrary);
 	}
 
 	public CreateMemberVariableCommand(final StructuredType struct, int index, String name, DataType dataType,

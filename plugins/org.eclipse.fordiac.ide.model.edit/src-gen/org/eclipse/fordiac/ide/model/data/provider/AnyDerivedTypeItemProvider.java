@@ -135,8 +135,10 @@ public class AnyDerivedTypeItemProvider extends DataTypeItemProvider {
 			case DataPackage.ANY_DERIVED_TYPE__COMPILER_INFO:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

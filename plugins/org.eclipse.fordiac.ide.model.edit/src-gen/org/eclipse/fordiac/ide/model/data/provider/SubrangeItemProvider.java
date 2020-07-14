@@ -151,8 +151,10 @@ public class SubrangeItemProvider extends ItemProviderAdapter implements IEditin
 			case DataPackage.SUBRANGE__UPPER_LIMIT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-		}
-		super.notifyChanged(notification);
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**

@@ -128,7 +128,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 				State::new, //
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				executionDescriptions //
-		));
+				));
 
 		return commands;
 	}

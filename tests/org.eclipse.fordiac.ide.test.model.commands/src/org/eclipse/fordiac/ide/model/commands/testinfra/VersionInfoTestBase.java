@@ -128,13 +128,13 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 				State::new, //
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				executionDescriptions //
-		));
+				));
 
 		commands.addAll(describeCommand("Start from set values", //
 				() -> setInitialValues(), //
 				(State state, State oldState, TestFunction t) -> verifySetInitialValues(state, oldState, t), //
 				executionDescriptions //
-		));
+				));
 		return commands;
 	}
 
