@@ -44,10 +44,12 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 * Base type for state descriptions, used to structure class hierarchy
 	 *
 	 */
-	protected interface StateBase {
+
+	public interface StateBase {
 		public Command getCommand();
 		public void setCommand(Command cmd);
 		Object getClone();
+
 	}
 
 	/**
