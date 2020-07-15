@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetup;
@@ -265,6 +266,24 @@ public abstract class ForteNgTestBase<T extends FBType> {
 		stAlg.setName(algorithmName);
 		stAlg.setText(algorithmText);
 		return stAlg;
+	}
+
+	/**
+	 * create a OtherAlgorithm with given name, language and content
+	 *
+	 * @param algorithmName name of the algorithm to be created
+	 * @param algorithmText content of the algorithm to be created
+	 * @param algorithmLanguage language of the algorithm to be created
+	 *
+	 * @return the created algorithm-object
+	 */
+	protected OtherAlgorithm createOtherAlgorithm(String algorithmName, String algorithmText,
+			String algorithmLanguage) {
+		final OtherAlgorithm alg = LibraryElementFactory.eINSTANCE.createOtherAlgorithm();
+		alg.setName(algorithmName);
+		alg.setText(algorithmText);
+		alg.setLanguage(algorithmLanguage);
+		return alg;
 	}
 
 	/**

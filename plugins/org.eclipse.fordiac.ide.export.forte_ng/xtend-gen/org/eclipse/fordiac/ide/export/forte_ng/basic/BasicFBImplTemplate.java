@@ -14,6 +14,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
@@ -35,7 +36,6 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
     this.type = type;
   }
   
-  @Override
   public CharSequence generate() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateHeader = this.generateHeader();
@@ -105,6 +105,37 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
     _builder.append(_class);
     _errors.add(_builder.toString());
     return "";
+  }
+  
+  protected CharSequence _generateAlgorithm(final OtherAlgorithm alg) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("void ");
+    CharSequence _fBClassName = this.getFBClassName();
+    _builder.append(_fBClassName);
+    _builder.append("::alg_");
+    String _name = alg.getName();
+    _builder.append(_name);
+    _builder.append("(void) {");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("#pragma GCC warning \"Algorithm of type: \'");
+    String _language = alg.getLanguage();
+    _builder.append(_language, "  ");
+    _builder.append("\' may lead to unexpected results!\"");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("#pragma message (\"warning Algorithm of type: \'");
+    String _language_1 = alg.getLanguage();
+    _builder.append(_language_1, "  ");
+    _builder.append("\' may lead to unexpected results!\")");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    String _text = alg.getText();
+    _builder.append(_text, "  ");
+    _builder.newLineIfNotEmpty();
+    _builder.append("}");
+    _builder.newLine();
+    return _builder;
   }
   
   protected CharSequence _generateAlgorithm(final STAlgorithm alg) {
@@ -379,7 +410,9 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
   }
   
   protected CharSequence generateAlgorithm(final Algorithm alg) {
-    if (alg instanceof STAlgorithm) {
+    if (alg instanceof OtherAlgorithm) {
+      return _generateAlgorithm((OtherAlgorithm)alg);
+    } else if (alg instanceof STAlgorithm) {
       return _generateAlgorithm((STAlgorithm)alg);
     } else if (alg != null) {
       return _generateAlgorithm(alg);

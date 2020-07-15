@@ -7,6 +7,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECState
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
 
 class BasicFBHeaderTemplate extends ForteFBTemplate {
 
@@ -79,6 +80,10 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 		errors.add('''Cannot export algorithm «alg.class»''')
 		return ""
 	}
+
+	def protected dispatch generateAlgorithm(OtherAlgorithm alg) '''
+		void alg_«alg.name»(void);
+	'''
 
 	def protected dispatch generateAlgorithm(STAlgorithm alg) '''
 		void alg_«alg.name»(void);

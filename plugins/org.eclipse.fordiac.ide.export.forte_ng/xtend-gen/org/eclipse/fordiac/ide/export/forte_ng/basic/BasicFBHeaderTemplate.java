@@ -11,6 +11,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.xtend.lib.annotations.AccessorType;
@@ -29,7 +30,6 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     this.type = type;
   }
   
-  @Override
   public CharSequence generate() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateHeader = this.generateHeader();
@@ -170,7 +170,6 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     return _builder;
   }
   
-  @Override
   protected CharSequence generateHeaderIncludes() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#include \"basicfb.h\"");
@@ -221,6 +220,16 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     return "";
   }
   
+  protected CharSequence _generateAlgorithm(final OtherAlgorithm alg) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("void alg_");
+    String _name = alg.getName();
+    _builder.append(_name);
+    _builder.append("(void);");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
   protected CharSequence _generateAlgorithm(final STAlgorithm alg) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("void alg_");
@@ -269,7 +278,9 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
   }
   
   protected CharSequence generateAlgorithm(final Algorithm alg) {
-    if (alg instanceof STAlgorithm) {
+    if (alg instanceof OtherAlgorithm) {
+      return _generateAlgorithm((OtherAlgorithm)alg);
+    } else if (alg instanceof STAlgorithm) {
       return _generateAlgorithm((STAlgorithm)alg);
     } else if (alg != null) {
       return _generateAlgorithm(alg);
