@@ -119,8 +119,8 @@ class FBNetworkImporter extends CommonElementImporter {
 				fb = convertFBtoMux(fb, demux);
 			}
 		} else {
-//TODO model refactoring - think about where and if such markers should be created maybe move to validator
-//				createFBTypeProblemMarker(IMarker.SEVERITY_ERROR, Messages.FBTImporter_REQUIRED_FB_TYPE_EXCEPTION + typeFbElement.getNodeValue() + " not available");
+			//TODO model refactoring - think about where and if such markers should be created maybe move to validator
+			//				createFBTypeProblemMarker(IMarker.SEVERITY_ERROR, Messages.FBTImporter_REQUIRED_FB_TYPE_EXCEPTION + typeFbElement.getNodeValue() + " not available");
 			// as we don't have type information we create an empty interface list
 			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 			// TODO add attribute value for missing instance name and
@@ -159,19 +159,19 @@ class FBNetworkImporter extends CommonElementImporter {
 		return null;
 	}
 
-//	private IMarker createFBTypeProblemMarker(int severity, String message) {
-//		IMarker marker = null;
-//		if(null != file){
-//			try {
-//				marker = file.createMarker(IMarker.PROBLEM);
-//				marker.setAttribute(IMarker.SEVERITY, severity);
-//				marker.setAttribute(IMarker.MESSAGE, message);
-//			} catch (CoreException e) {
-//				Activator.getDefault().logError(e.getMessage(), e);
-//			}
-//		}
-//		return marker;
-//	}
+	//	private IMarker createFBTypeProblemMarker(int severity, String message) {
+	//		IMarker marker = null;
+	//		if(null != file){
+	//			try {
+	//				marker = file.createMarker(IMarker.PROBLEM);
+	//				marker.setAttribute(IMarker.SEVERITY, severity);
+	//				marker.setAttribute(IMarker.MESSAGE, message);
+	//			} catch (CoreException e) {
+	//				Activator.getDefault().logError(e.getMessage(), e);
+	//			}
+	//		}
+	//		return marker;
+	//	}
 
 	protected void parseFBChildren(FBNetworkElement block, String parentNodeName)
 			throws TypeImportException, XMLStreamException {
@@ -271,10 +271,11 @@ class FBNetworkImporter extends CommonElementImporter {
 		if (1 == split.length) {
 			return getContainingInterfaceElement(path, conType, isInput);
 		}
-		if (2 == split.length) {
+		if (split.length >= 2) {
 			FBNetworkElement element = findFBNetworkElement(split[0]);
 			if (null != element) {
-				return getInterfaceElement(element.getInterface(), split[1], conType, isInput);
+				return getInterfaceElement(element.getInterface(), path.substring(split[0].length() + 1), conType,
+						isInput);
 			}
 		}
 		return null;
@@ -287,8 +288,8 @@ class FBNetworkImporter extends CommonElementImporter {
 	protected IInterfaceElement getContainingInterfaceElement(String interfaceElement, EClass conType,
 			boolean isInput) {
 		return getInterfaceElement(interfaceList, interfaceElement, conType, !isInput); // for connections to the
-																						// interface inputs are the
-																						// outputs of the FB
+		// interface inputs are the
+		// outputs of the FB
 	}
 
 	private static IInterfaceElement getInterfaceElement(InterfaceList il, String interfaceElement, EClass conType,

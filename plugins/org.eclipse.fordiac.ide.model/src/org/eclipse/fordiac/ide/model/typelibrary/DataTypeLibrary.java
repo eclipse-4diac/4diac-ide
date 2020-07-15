@@ -119,9 +119,11 @@ public final class DataTypeLibrary {
 	}
 
 	public List<StructuredType> getStructuredTypes() {
-		return getDerivedDataTypes().entrySet().stream()
+		List<StructuredType> types = getDerivedDataTypes().entrySet().stream()
 				.filter(entry -> (entry.getValue().getType() instanceof StructuredType))
 				.map(entry -> ((StructuredType) entry.getValue().getType())).collect(Collectors.toList());
+		types.add((StructuredType) getType("ANY_STRUCT")); //$NON-NLS-1$
+		return types;
 	}
 
 	public List<StructuredType> getStructuredTypesSorted() {

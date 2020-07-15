@@ -53,31 +53,37 @@ public class MultiplexerImpl extends StructManipulatorImpl implements Multiplexe
 		return LibraryElementPackage.Literals.MULTIPLEXER;
 	}
 
+	/**
+	 * sets all member variables of the passed StructuredType as input ports
+	 *
+	 */
 	@Override
 	protected void setMemberVariablesAsPorts(StructuredType newStructType) {
 		// create member variables of struct as data input ports
 		getInterface().getInputVars().clear();
-		Collection<VarDeclaration> list = EcoreUtil.copyAll(newStructType.getMemberVariables());
-		list.forEach(varDecl -> {
-			varDecl.setIsInput(true);
-			if (null != varDecl.getValue()) {
-				// if we have a value set it empty to get rid of default values from the struct
-				// type
-				varDecl.getValue().setValue(""); //$NON-NLS-1$
-			}
-		});
-		Event ev = getInterface().getEventInputs().get(0);
+		if (null != newStructType) {
+			Collection<VarDeclaration> list = EcoreUtil.copyAll(newStructType.getMemberVariables());
+			list.forEach(varDecl -> {
+				varDecl.setIsInput(true);
+				if (null != varDecl.getValue()) {
+					// if we have a value set it empty to get rid of default values from the struct
+					// type
+					varDecl.getValue().setValue(""); //$NON-NLS-1$
+				}
+			});
+			Event ev = getInterface().getEventInputs().get(0);
 
-		// create with constructs
-		list.forEach(varDecl -> {
-			With with = LibraryElementFactory.eINSTANCE.createWith();
-			with.setVariables(varDecl);
-			ev.getWith().add(with);
-		});
+			// create with constructs
+			list.forEach(varDecl -> {
+				With with = LibraryElementFactory.eINSTANCE.createWith();
+				with.setVariables(varDecl);
+				ev.getWith().add(with);
+			});
 
-		// add data input ports to the interface
-		getInterface().getInputVars().addAll(list);
-		getInterface().getOutputVars().get(0).setType(newStructType); // there should be only one output
+			// add data input ports to the interface
+			getInterface().getInputVars().addAll(list);
+			getInterface().getOutputVars().get(0).setType(newStructType); // there should be only one output
+		}
 	}
 
 } // MultiplexerImpl
