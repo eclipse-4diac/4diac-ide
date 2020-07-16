@@ -75,7 +75,7 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 
 	private static void valdidateModelRoutingParams(org.eclipse.fordiac.ide.model.libraryElement.Connection model,
 			Point sourceP, Point destP) {
-		if ((sourceP.y != destP.y) && (model.getDx1() == 0)) {
+		if ((sourceP.y != destP.y) && (model.getDx1() == 0) && (model.getDx2() == 0) && (model.getDy() == 0)) {
 			valdidateConnectionRoutingParams(model, sourceP, destP);
 		}
 	}
@@ -142,9 +142,11 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 				points.addPoint(new Point(sourceP.x + modelConn.getDx1(), destP.y));
 			} else {
 				// we have a five segment connection
+				final int CORRECTION_FACTOR = 1; // is needed for correct bend point placement
 				points.addPoint(new Point(sourceP.x + modelConn.getDx1(), sourceP.y + modelConn.getDy()));
-				points.addPoint(new Point(destP.x - modelConn.getDx2(), sourceP.y + modelConn.getDy()));
-				points.addPoint(new Point(destP.x - modelConn.getDx2(), destP.y));
+				points.addPoint(
+						new Point(destP.x - (modelConn.getDx2() + CORRECTION_FACTOR), sourceP.y + modelConn.getDy()));
+				points.addPoint(new Point(destP.x - (modelConn.getDx2() + CORRECTION_FACTOR), destP.y));
 			}
 		}
 	}

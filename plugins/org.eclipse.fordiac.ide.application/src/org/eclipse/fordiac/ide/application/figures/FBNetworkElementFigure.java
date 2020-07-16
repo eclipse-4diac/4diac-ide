@@ -169,5 +169,23 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 	public Rectangle getBounds() {
 		return super.getBounds();
 	}
+	
+	public Rectangle getFBBounds() {
+		int x = getTop().getBounds().x();
+		int y = getLabelBounds().y();
+		int width = getTop().getBounds().width;
+		int height = getTop().getBounds().height() + getMiddle().getBounds().height() + getBottom().getBounds().height()
+				+ getLabelBounds().height();
+		return new Rectangle(x, y, width, height);
+	}
+
+	public Rectangle getLabelBounds() {
+		for (Object figure : getChildren()) {
+			if (figure instanceof InstanceNameFigure) {
+				return ((InstanceNameFigure) figure).getBounds();
+			}
+		}
+		return null;
+	}
 
 }
