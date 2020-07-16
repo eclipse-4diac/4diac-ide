@@ -19,8 +19,6 @@ import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -63,8 +61,8 @@ public class StructManipulatorSection extends AbstractSection {
 
 	protected CCombo muxStructSelector;
 	protected CLabel muxLabel;
-	private TreeViewer memberVarViewer;
-	private Button openEditorButton;
+	protected TreeViewer memberVarViewer;
+	protected Button openEditorButton;
 
 	@Override
 	protected FBNetworkElement getInputType(Object input) {
@@ -98,7 +96,7 @@ public class StructManipulatorSection extends AbstractSection {
 
 			@Override
 			public void focusGained(FocusEvent e) {
-				fillTypeCombo();
+				fillStructTypeCombo();
 			}
 
 			@Override
@@ -161,13 +159,17 @@ public class StructManipulatorSection extends AbstractSection {
 	}
 
 	private void createMemberVariableViewer(Composite parent) {
-		memberVarViewer = new TreeViewer(parent);
+		memberVarViewer = createTreeViewer(parent);
 		configureTreeLayout(memberVarViewer);
 		memberVarViewer.setContentProvider(new TreeContentProvider());
 		memberVarViewer.setLabelProvider(new TreeLabelProvider());
 		GridLayoutFactory.fillDefaults().generateLayout(parent);
 
 		createContextMenu(memberVarViewer.getControl());
+	}
+
+	protected TreeViewer createTreeViewer(Composite parent) {
+		return new TreeViewer(parent);
 	}
 
 	private void createContextMenu(Control ctrl) {
@@ -231,11 +233,11 @@ public class StructManipulatorSection extends AbstractSection {
 	@Override
 	public void refresh() {
 		if ((null != getType()) && (null != getType().getFbNetwork())) {
-			fillTypeCombo();
+			fillStructTypeCombo();
 		}
 	}
 
-	private void fillTypeCombo() {
+	private void fillStructTypeCombo() {
 		memberVarViewer.setInput(getType());
 		String structName = getType().getStructType().getName();
 		muxStructSelector.removeAll();
@@ -269,43 +271,38 @@ public class StructManipulatorSection extends AbstractSection {
 		}
 	}
 
-	@Override
-	protected void setInputCode() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void setInputInit() {
-		// TODO Auto-generated method stub
-
-	}
-
 	public static class TreeContentProvider implements ITreeContentProvider {
 		@Override
 		public Object[] getElements(final Object inputElement) {
 			if (inputElement instanceof StructManipulator) {
-				return ((StructManipulator) inputElement).getStructType().getMemberVariables().toArray();
+				return getMemberVariableNodes(((StructManipulator) inputElement).getStructType(), null);
 			}
 			if (inputElement instanceof StructuredType) {
-				return ((StructuredType) inputElement).getMemberVariables().toArray();
+				return getMemberVariableNodes((StructuredType) inputElement, null);
 			}
 			return new Object[] {};
 		}
 
+		private static Object[] getMemberVariableNodes(final StructuredType struct, final String path) {
+			return struct.getMemberVariables().stream().map(var -> new TreeNode(var, var.getName(), path))
+					.toArray();
+		}
+
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			return ((StructuredType) ((VarDeclaration) parentElement).getType()).getMemberVariables().toArray();
+			VarDeclaration parentVar = ((TreeNode) parentElement).getVariable();
+			return getMemberVariableNodes((StructuredType) parentVar.getType(),
+					((TreeNode) parentElement).getPathName());
 		}
 
 		@Override
 		public Object getParent(Object element) {
-			return ((INamedElement) element).eContainer();
+			return null;
 		}
 
 		@Override
 		public boolean hasChildren(Object element) {
-			return ((IInterfaceElement) element).getType() instanceof StructuredType;
+			return ((TreeNode) element).getVariable().getType() instanceof StructuredType;
 		}
 	}
 
@@ -317,20 +314,57 @@ public class StructManipulatorSection extends AbstractSection {
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof VarDeclaration) {
+			if (element instanceof TreeNode) {
+				VarDeclaration var = ((TreeNode) element).getVariable();
 				switch (columnIndex) {
 				case 0:
-					return ((VarDeclaration) element).getName();
+					return var.getName();
 				case 1:
-					return ((VarDeclaration) element).getTypeName();
+					return var.getTypeName();
 				case 2:
-					return ((VarDeclaration) element).getComment();
+					return var.getComment();
 				default:
 					break;
 				}
 			}
 			return element.toString();
 		}
+	}
+
+	protected static class TreeNode {
+		private VarDeclaration variable;
+		private String parentVarName;
+		private String pathName;
+
+		public TreeNode(VarDeclaration variable, String parentVarName, String pathName) {
+			this.variable = variable;
+			this.parentVarName = parentVarName;
+			this.pathName = pathName == null ? variable.getName() : (pathName + "." + variable.getName()); //$NON-NLS-1$
+		}
+
+		public String getParentVarName() {
+			return parentVarName;
+		}
+
+		public VarDeclaration getVariable() {
+			return variable;
+		}
+
+		public String getPathName() {
+			return pathName;
+		}
+	}
+
+	@Override
+	protected void setInputCode() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void setInputInit() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 
-public class StructManipulatorEditPart extends AbstractFBNElementEditPart {
+public abstract class StructManipulatorEditPart extends AbstractFBNElementEditPart {
 	public StructManipulatorEditPart() {
 		super();
 	}

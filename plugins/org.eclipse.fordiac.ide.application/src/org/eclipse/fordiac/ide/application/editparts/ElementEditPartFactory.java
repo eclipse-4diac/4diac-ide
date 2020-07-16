@@ -57,12 +57,14 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 				part = new FBNetworkEditPart();
 			}
 		} else if (modelElement instanceof FB) {
-			if ((null != ((FB) modelElement).getType())
-					&& ((((FB) modelElement).getType().getName().contentEquals("STRUCT_MUX"))
-							|| (((FB) modelElement).getType().getName().contentEquals("STRUCT_DEMUX")))) {
-				part = new StructManipulatorEditPart();
-			} else {
-				part = new FBEditPart();
+			if (null != ((FB) modelElement).getType()) {
+				if (((FB) modelElement).getType().getName().contentEquals("STRUCT_MUX")) { //$NON-NLS-1$
+					part = new MultiplexerEditPart();
+				} else if (((FB) modelElement).getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
+					part = new DemultiplexerEditPart();
+				} else {
+					part = new FBEditPart();
+				}
 			}
 		} else if (modelElement instanceof InstanceName) {
 			part = new InstanceNameEditPart();
@@ -83,11 +85,12 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 	private static EditPart createInterfaceEditPart(final Object modelElement) {
 		EditPart part;
 		IInterfaceElement element = (IInterfaceElement) modelElement;
-		if (element.getFBNetworkElement() instanceof StructManipulator && element.getType() instanceof StructuredType) {
-			if ((element.getFBNetworkElement() instanceof Multiplexer) && (!element.isIsInput())) {
+		if ((element.getFBNetworkElement() instanceof StructManipulator)
+				&& (element.getType() instanceof StructuredType)) {
+			if (isMuxOutput(element)) {
 				return new StructInterfaceEditPart();
 			}
-			if ((element.getFBNetworkElement() instanceof Demultiplexer) && (element.isIsInput())) {
+			if (isDemuxInput(element)) {
 				return new StructInterfaceEditPart();
 			}
 		}
@@ -97,6 +100,14 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			part = new InterfaceEditPartForFBNetwork();
 		}
 		return part;
+	}
+
+	private static boolean isDemuxInput(IInterfaceElement element) {
+		return (element.getFBNetworkElement() instanceof Demultiplexer) && (element.isIsInput());
+	}
+
+	private static boolean isMuxOutput(IInterfaceElement element) {
+		return (element.getFBNetworkElement() instanceof Multiplexer) && (!element.isIsInput());
 	}
 
 }
