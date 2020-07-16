@@ -73,13 +73,14 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 	 */
 	@Override
 	public StructuredType getStructType() {
-		if (structType != null && structType.eIsProxy()) {
+		if ((structType != null) && structType.eIsProxy()) {
 			InternalEObject oldStructType = (InternalEObject) structType;
 			structType = (StructuredType) eResolveProxy(oldStructType);
 			if (structType != oldStructType) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE, oldStructType, structType));
+				}
 			}
 		}
 		return structType;
@@ -102,9 +103,10 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 	public void setStructTypeGen(StructuredType newStructType) {
 		StructuredType oldStructType = structType;
 		structType = newStructType;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE,
 					oldStructType, structType));
+		}
 	}
 
 	@Override
@@ -128,9 +130,15 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 		}
 	}
 
+	/**
+	 * sets all member variables of a given StructuredType as ports of the
+	 * StructManipulator.
+	 *
+	 * @param newStructType the StructuredType containing member variables
+	 */
 	protected abstract void setMemberVariablesAsPorts(StructuredType newStructType);
 
-	/* 
+	/*
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
@@ -139,8 +147,9 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
-			if (resolve)
+			if (resolve) {
 				return getStructType();
+			}
 			return basicGetStructType();
 		default:
 			return super.eGet(featureID, resolve, coreType);
