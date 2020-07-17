@@ -12,7 +12,6 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
-
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +20,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.gef.commands.Command;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
@@ -45,6 +45,9 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 *
 	 */
 	protected interface StateBase {
+		public Command getCommand();
+		public void setCommand(Command cmd);
+		Object getClone();
 	}
 
 	/**
@@ -210,6 +213,20 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			this.before = before;
 		}
 
+		public StateNode(StateNode<U> statenode) {
+			Object clone = statenode.state.getClone();
+			if (!(clone instanceof CommandTestBase.StateBase)) {
+				throw new RuntimeException();
+			}
+			@SuppressWarnings("unchecked")
+			U stateClone = (U) clone;
+
+			this.state = stateClone;
+			this.verifier = statenode.getVerifier();
+			this.before = statenode.getBefore();
+			this.after = statenode.getAfter();
+		}
+
 	}
 
 	/**
@@ -255,8 +272,8 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			StateVerifier<?> initialVerifier, List<Object> commands, CommandExecutor<?> undo, CommandExecutor<?> redo) {
 		final List<Object[]> descriptions = new ArrayList<>();
 
-		final String MESSAGE_MASTER = "{0} : {1}"; //$NON-NLS-1$
-		final String MESSAGE_NO_MASTER = "{1}"; //$NON-NLS-1$
+		final String MESSAGE_MAIN = "{0} : {1}"; //$NON-NLS-1$
+		final String MESSAGE_NO_MAIN = "{1}"; //$NON-NLS-1$
 
 		final String MESSAGE_VERIFY_INITIAL_STATE = "Verify initial State"; //$NON-NLS-1$
 		final String MESSAGE_EXECUTE_ALL_COMMANDS = "Execute all Commands"; //$NON-NLS-1$
@@ -266,12 +283,12 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO_ALL = "Execute all Commands interspersed with Undo and Redo"; //$NON-NLS-1$
 
 		descriptions.add(convert(
-				MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
+				MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
 						MESSAGE_VERIFY_INITIAL_STATE),
 				initializer, initialVerifier, Collections.emptyList(), undo, redo));
 
 		if (commands.size() > 1) {
-			descriptions.add(convert(MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER,
+			descriptions.add(convert(MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN,
 					description, MESSAGE_EXECUTE_ALL_COMMANDS), initializer, initialVerifier, commands, undo, redo));
 		}
 
@@ -287,21 +304,21 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			commandsWithUndoRedo = new ArrayList<>();
 			commandsWithUndoRedo.addAll(commandsUntil);
 			descriptions.add(convert(
-					MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
+					MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
 							MessageFormat.format(MESSAGE_EXECUTE_UNTIL_COMMAND_I, index, command.description)),
 					initializer, initialVerifier, commandsWithUndoRedo.clone(), undo, redo));
 			commandsWithUndoRedo.add(ExecutionDescription.undo());
 			commandsWithUndoRedoAll.add(ExecutionDescription.undo());
 			descriptions
-					.add(convert(
-							MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
-									MessageFormat.format(MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO, index,
-											command.description)),
-							initializer, initialVerifier, commandsWithUndoRedo.clone(), undo, redo));
+			.add(convert(
+					MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
+							MessageFormat.format(MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO, index,
+									command.description)),
+					initializer, initialVerifier, commandsWithUndoRedo.clone(), undo, redo));
 			commandsWithUndoRedo.add(ExecutionDescription.redo());
 			commandsWithUndoRedoAll.add(ExecutionDescription.redo());
 			descriptions.add(convert(
-					MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
+					MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
 							MessageFormat.format(MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO, index,
 									command.description)),
 					initializer, initialVerifier, commandsWithUndoRedo.clone(), undo, redo));
@@ -309,7 +326,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 
 		if (commands.size() > 1) {
 			descriptions.add(convert(
-					MessageFormat.format(null != description ? MESSAGE_MASTER : MESSAGE_NO_MASTER, description,
+					MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
 							MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO_ALL),
 					initializer, initialVerifier, commandsWithUndoRedoAll, undo, redo));
 		}
@@ -354,13 +371,14 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 				t = Assert::assertTrue;
 			}
 
+			StateNode<T> clone = new StateNode<>(current);
 			switch (command.type) {
 			case COMMAND:
 				// execute command if available and verify
 				if (null != command.executor) {
 					state = new StateNode<>(command.executor.executeCommand(current.getState()), command.verifier,
-							current);
-					current.setAfter(state);
+							clone);
+					clone.setAfter(state);
 					current = state;
 				}
 				command.verifier.verifyState(current.getState(), current.getBefore().getState(), t);
@@ -368,16 +386,16 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			case UNDO:
 				// execute undo and fix undo list
 				state = new StateNode<>(undo.executeCommand(current.getState()), current.getBefore().getVerifier(),
-						current.getBefore());
-				state.setAfter(current);
+						clone.getBefore());
+				state.setAfter(clone);
 				current = state;
 				current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), t);
 				break;
 			case REDO:
 				// execute redo and fix undo list
 				state = new StateNode<>(redo.executeCommand(current.getState()), current.getAfter().getVerifier(),
-						current);
-				current.setAfter(state);
+						clone);
+				clone.setAfter(state);
 				current = state;
 				current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), t);
 				break;
