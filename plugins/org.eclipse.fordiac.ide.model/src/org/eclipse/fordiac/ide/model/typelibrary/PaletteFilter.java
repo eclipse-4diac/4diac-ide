@@ -19,11 +19,12 @@ import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.ui.internal.misc.StringMatcher;
+import org.eclipse.ui.dialogs.SearchPattern;
 
 public class PaletteFilter {
 
 	private final Palette palette;
+	private final SearchPattern matcher = new SearchPattern();
 
 	public PaletteFilter(Palette palette) {
 		this.palette = palette;
@@ -38,14 +39,14 @@ public class PaletteFilter {
 
 	public List<PaletteEntry> findTypes(final String searchString,
 			final Stream<Entry<String, ? extends PaletteEntry>> stream) {
-		final StringMatcher matcher = setMatcher(searchString);
-		return stream.filter(entry -> matcher.match(entry.getKey()))
+		setSearchPattern(searchString);
+		return stream.filter(entry -> matcher.matches(entry.getKey()))
 				.filter(entry -> (null != entry.getValue().getType())). // only forward types that can be loaded
 																		// correctly
 				map(entry -> entry.getValue()).collect(Collectors.toList());
 	}
 
-	private StringMatcher setMatcher(final String searchString) {
+	private void setSearchPattern(final String searchString) {
 		// emulate behavior as in PatternFilter used in the pallteview and typenavigator
 		// search
 		String searchPattern = searchString;
@@ -53,6 +54,6 @@ public class PaletteFilter {
 			searchPattern += "*"; //$NON-NLS-1$
 		}
 		searchPattern = "*" + searchPattern; //$NON-NLS-1$
-		return new StringMatcher(searchPattern, true, false);
+		matcher.setPattern(searchPattern);
 	}
 }
