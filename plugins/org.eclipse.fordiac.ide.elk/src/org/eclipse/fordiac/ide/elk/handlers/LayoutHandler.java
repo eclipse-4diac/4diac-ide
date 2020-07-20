@@ -45,7 +45,6 @@ import org.eclipse.elk.graph.ElkLabel;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
@@ -56,6 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -100,7 +100,7 @@ public class LayoutHandler extends AbstractHandler {
 			((AbstractGraphicalEditPart) viewer.getRootEditPart()).getFigure().invalidateTree();
 			((AbstractGraphicalEditPart) viewer.getRootEditPart()).getFigure().revalidate();
 
-			((FBNetworkEditor) editor).getCommandStack().execute(cmd);
+			editor.getAdapter(CommandStack.class).execute(cmd);
 		}
 		return null;
 	}
