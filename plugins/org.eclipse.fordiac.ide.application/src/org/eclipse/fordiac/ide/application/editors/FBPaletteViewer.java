@@ -152,7 +152,7 @@ public class FBPaletteViewer extends PaletteViewer {
 				expandedElements = commonViewer.getExpandedElements();
 			}
 			commonViewer.expandAll();
-		} else {
+		} else if (null != expandedElements) {
 			commonViewer.setExpandedElements(expandedElements);
 			expandedElements = null;
 		}
