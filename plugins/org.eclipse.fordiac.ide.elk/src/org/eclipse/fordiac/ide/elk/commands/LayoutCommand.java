@@ -29,8 +29,12 @@ import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
+import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.PlatformUI;
@@ -136,6 +140,12 @@ public class LayoutCommand extends Command {
 			IFigure fig = interfacePart.getFigure();
 			fig.getBounds().setLocation((int) (startPort.getX() - fig.getBounds().preciseWidth()),
 					(int) (startPort.getY() - (fig.getBounds().preciseHeight() * 0.5)));
+		} else if (part.getSource() instanceof CompositeInternalInterfaceEditPart) {
+			CompositeInternalInterfaceEditPart interfacePart = (CompositeInternalInterfaceEditPart) part.getSource();
+			freeInterfaceFigure(interfacePart);
+			IFigure fig = interfacePart.getFigure();
+			fig.getBounds().setLocation((int) (startPort.getX() - fig.getBounds().preciseWidth()),
+					(int) (startPort.getY() - (fig.getBounds().preciseHeight() * 0.5)));
 		}
 		if (part.getTarget() instanceof SubAppInternalInterfaceEditPart) {
 			SubAppInternalInterfaceEditPart interfacePart = (SubAppInternalInterfaceEditPart) part.getTarget();
@@ -143,12 +153,20 @@ public class LayoutCommand extends Command {
 			IFigure fig = interfacePart.getFigure();
 			fig.getBounds().setLocation((int) endPort.getX(),
 					(int) (endPort.getY() - (fig.getBounds().preciseHeight() * 0.5)));
+		} else if (part.getTarget() instanceof CompositeInternalInterfaceEditPart) {
+			CompositeInternalInterfaceEditPart interfacePart = (CompositeInternalInterfaceEditPart) part.getTarget();
+			freeInterfaceFigure(interfacePart);
+			IFigure fig = interfacePart.getFigure();
+			fig.getBounds().setLocation((int) endPort.getX(),
+					(int) (endPort.getY() - (fig.getBounds().preciseHeight() * 0.5)));
 		}
 	}
 
-	private void freeInterfaceFigure(SubAppInternalInterfaceEditPart interfacePart) {
+	private void freeInterfaceFigure(InterfaceEditPart interfacePart) {
 		if (interfacePart.getParent() instanceof UISubAppNetworkEditPart) {
-			((UISubAppNetworkEditPart) interfacePart.getParent()).enableElkLayouting(interfacePart);
+			((EditorWithInterfaceEditPart) interfacePart.getParent()).enableElkLayouting(interfacePart);
+		} else if (interfacePart.getParent() instanceof CompositeNetworkEditPart) {
+			((CompositeNetworkEditPart) interfacePart.getParent()).enableElkLayouting(interfacePart);
 		}
 	}
 

@@ -165,6 +165,40 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 		}
 	}
 
+	public void addChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
+		IFigure child = childEditPart.getFigure();
+		if (childEditPart.getModel().isIsInput()) { // use model isInput! because EditPart.isInput treats inputs as
+													// outputs for visual appearance
+			if (childEditPart.isEvent()) {
+				int index = getFbType().getInterfaceList().getEventInputs().indexOf(childEditPart.getModel());
+				int containerSize = getLeftEventInterfaceContainer().getChildren().size();
+				getLeftEventInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
+			} else if (childEditPart.isAdapter()) {
+				int index = getFbType().getInterfaceList().getSockets().indexOf(childEditPart.getModel());
+				int containerSize = getLeftAdapterInterfaceContainer().getChildren().size();
+				getLeftAdapterInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
+			} else {
+				int index = getFbType().getInterfaceList().getInputVars().indexOf(childEditPart.getModel());
+				int containerSize = getLeftVarInterfaceContainer().getChildren().size();
+				getLeftVarInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
+			}
+		} else {
+			if (childEditPart.isEvent()) {
+				int index = getFbType().getInterfaceList().getEventOutputs().indexOf(childEditPart.getModel());
+				int containerSize = getRightEventInterfaceContainer().getChildren().size();
+				getRightEventInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
+			} else if (childEditPart.isAdapter()) {
+				int index = getFbType().getInterfaceList().getPlugs().indexOf(childEditPart.getModel());
+				int containerSize = getRightAdapterInterfaceContainer().getChildren().size();
+				getRightAdapterInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
+			} else {
+				int index = getFbType().getInterfaceList().getOutputVars().indexOf(childEditPart.getModel());
+				int containerSize = getRightVarInterfaceContainer().getChildren().size();
+				getRightVarInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
+			}
+		}
+	}
+
 	private static void insertChild(Figure container, EditPart refEditPart, IFigure child) {
 		if (null != refEditPart) {
 			int index = container.getChildren().indexOf(((GraphicalEditPart) refEditPart).getFigure());
@@ -183,7 +217,11 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	protected void removeChildVisual(final EditPart childEditPart) {
 		if (childEditPart instanceof InterfaceEditPart) {
 			IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-			getChildVisualContainer(childEditPart).remove(child);
+			try {
+				removeChildVisualInterfaceElement((InterfaceEditPart) childEditPart);
+			} catch (IllegalArgumentException e) {
+				getCastedFigure().remove(child);
+			}
 		} else {
 			super.removeChildVisual(childEditPart);
 		}
