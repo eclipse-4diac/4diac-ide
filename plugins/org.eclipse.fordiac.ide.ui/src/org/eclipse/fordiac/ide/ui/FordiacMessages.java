@@ -53,6 +53,7 @@ public class FordiacMessages extends NLS {
 	public static String Inputs;
 	public static String InstanceComment;
 	public static String InstanceName;
+	public static String InstanceInfo;
 	public static String Interface;
 	public static String Language;
 	public static String NA;
@@ -69,11 +70,14 @@ public class FordiacMessages extends NLS {
 	public static String Standard;
 	public static String SystemName;
 	public static String Type;
+	public static String TypeInfo;
 	public static String TypeLibrary;
 	public static String TypeName;
 	public static String Unmap;
 	public static String Unknown;
 	public static String Value;
+	public static String DefaultValue;
+	public static String CurrentValue;
 	public static String Variable;
 	public static String Vendor;
 	public static String Version;
