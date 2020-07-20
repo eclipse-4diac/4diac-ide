@@ -85,9 +85,11 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	public void show(String initialValue) {
 		this.initialValue = initialValue;
 		super.show();
-		Text text = getCellEditor().getText();
-		text.setSelection(initialValue.length());
-		setDirty(true);
+		if (null != initialValue) {
+			Text text = getCellEditor().getText();
+			text.setSelection(initialValue.length());
+			setDirty(true);
+		}
 	}
 
 	@Override
