@@ -35,7 +35,7 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 
 	// create a state description that fits our purpose
 	public static class State implements CommandTestBase.StateBase {
-		private final VersionInfo vInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
+		private final VersionInfo vInfo;
 
 		private Command cmd;
 
@@ -43,12 +43,27 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 			return vInfo;
 		}
 
+		@Override
 		public Command getCommand() {
 			return cmd;
 		}
 
+		@Override
 		public void setCommand(Command cmd) {
 			this.cmd = cmd;
+		}
+
+		public State() {
+			vInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
+		}
+
+		private State(State s) {
+			vInfo = s.vInfo;
+		}
+
+		@Override
+		public Object getClone() {
+			return new State(this);
 		}
 	}
 

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -34,24 +35,16 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 
 	// create a state description that fits our purpose
 	public static class State implements CommandTestBase.StateBase {
-		private final FBNetwork net = LibraryElementFactory.eINSTANCE.createFBNetwork();
-		private final FBTypePaletteEntry palette = preparePaletteWithTypeLib();
-		private final FBTypePaletteEntry functionblock = createFB();
+		private final FBNetwork net;
+		private final FBTypePaletteEntry functionblock;
 
 		private Command cmd;
-
-		private FBTypePaletteEntry preparePaletteWithTypeLib() {
-			final FBTypePaletteEntry pallEntry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
-			final TypeLibrary typelib = TypeLibrary.getTypeLibrary(null);
-			pallEntry.setPalette(typelib.getBlockTypeLib());
-			return pallEntry;
-		}
 
 		private static final String FUNCTIONBLOCK_NAME = "functionblock"; //$NON-NLS-1$
 
 		private FBTypePaletteEntry createFB() {
 			final FBTypePaletteEntry pe = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
-
+			final TypeLibrary typelib = TypeLibrary.getTypeLibrary(null);
 			final BasicFBType functionBlock = LibraryElementFactory.eINSTANCE.createBasicFBType();
 
 			functionBlock.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
@@ -60,7 +53,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 			functionBlock.setECC(LibraryElementFactory.eINSTANCE.createECC());
 
 			pe.setLabel(FUNCTIONBLOCK_NAME);
-			pe.setPalette(palette.getPalette());
+			pe.setPalette(typelib.getBlockTypeLib());
 			pe.setType(functionBlock);
 
 			return pe;
@@ -71,20 +64,33 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 			return net;
 		}
 
-		public FBTypePaletteEntry getPalette() {
-			return palette;
-		}
-
 		public FBTypePaletteEntry getFunctionblock() {
 			return functionblock;
 		}
 
+		@Override
 		public Command getCommand() {
 			return cmd;
 		}
 
+		@Override
 		public void setCommand(Command cmd) {
 			this.cmd = cmd;
+		}
+
+		public State() {
+			net = LibraryElementFactory.eINSTANCE.createFBNetwork();
+			functionblock = createFB();
+		}
+
+		private State(State s) {
+			net = EcoreUtil.copy(s.net);
+			functionblock = EcoreUtil.copy(s.functionblock);
+		}
+
+		@Override
+		public Object getClone() {
+			return new State(this);
 		}
 	}
 
