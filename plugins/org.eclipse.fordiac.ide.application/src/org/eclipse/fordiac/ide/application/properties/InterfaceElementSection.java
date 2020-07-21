@@ -225,8 +225,8 @@ public class InterfaceElementSection extends AbstractSection {
 		VarDeclaration var = (VarDeclaration) getType();
 		itype = var.getType() != null ? var.getType().getName() : ""; //$NON-NLS-1$
 		if (getType().isIsInput()) {
-			if (getType().getFBNetworkElement().getPaletteEntry().getType() instanceof FBType) {
-				IInterfaceElement ie = ((FBType) getType().getFBNetworkElement().getPaletteEntry().getType())
+			if (getType().getFBNetworkElement().getType() instanceof FBType) {
+				IInterfaceElement ie = ((FBType) getType().getFBNetworkElement().getType())
 						.getInterfaceList().getInterfaceElement(getType().getName());
 				if (ie instanceof VarDeclaration) {
 					parameterText.setText(
