@@ -182,62 +182,12 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 		}
 	}
 
-	public void removeChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
-		IFigure child = childEditPart.getFigure();
-		if (childEditPart.getModel().isIsInput()) {
-			if (childEditPart.isEvent()) {
-				try {
-					getLeftEventInterfaceContainer().remove(child);
-				} catch (IllegalArgumentException e) {
-					getCastedFigure().remove(child);
-				}
-			} else if (childEditPart.isAdapter()) {
-				try {
-					getLeftAdapterInterfaceContainer().remove(child);
-				} catch (IllegalArgumentException e) {
-					getCastedFigure().remove(child);
-				}
-			} else {
-				try {
-					getLeftVarInterfaceContainer().remove(child);
-				} catch (IllegalArgumentException e) {
-					getCastedFigure().remove(child);
-				}
-			}
-		} else {
-			if (childEditPart.isEvent()) {
-				try {
-					getRightEventInterfaceContainer().remove(child);
-				} catch (IllegalArgumentException e) {
-					getCastedFigure().remove(child);
-				}
-			} else if (childEditPart.isAdapter()) {
-				try {
-					getRightAdapterInterfaceContainer().remove(child);
-				} catch (IllegalArgumentException e) {
-					getCastedFigure().remove(child);
-				}
-			} else {
-				try {
-					getRightVarInterfaceContainer().remove(child);
-				} catch (IllegalArgumentException e) {
-					getCastedFigure().remove(child);
-				}
-			}
-		}
-	}
-
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		// handles constraint changes (e.g. moving and/or resizing) of model
 		// elements and creation of new model elements
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBNetworkXYLayoutEditPolicy());
-	}
-
-	public void enableElkLayouting(SubAppInternalInterfaceEditPart part) {
-		removeChildVisual(part);
-		getCastedFigure().add(part.getFigure());
 	}
 
 }

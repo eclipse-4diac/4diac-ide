@@ -26,6 +26,7 @@ import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.events.ControlEvent;
@@ -179,4 +180,55 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 			getParent().getViewer().getControl().removeControlListener(controlListener);
 		}
 	}
+
+	public void enableElkLayouting(InterfaceEditPart part) {
+		removeChildVisual(part);
+		getCastedFigure().add(part.getFigure());
+	}
+
+	public void removeChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
+		IFigure child = childEditPart.getFigure();
+		if (childEditPart.getModel().isIsInput()) {
+			if (childEditPart.isEvent()) {
+				try {
+					getLeftEventInterfaceContainer().remove(child);
+				} catch (IllegalArgumentException e) {
+					getCastedFigure().remove(child);
+				}
+			} else if (childEditPart.isAdapter()) {
+				try {
+					getLeftAdapterInterfaceContainer().remove(child);
+				} catch (IllegalArgumentException e) {
+					getCastedFigure().remove(child);
+				}
+			} else {
+				try {
+					getLeftVarInterfaceContainer().remove(child);
+				} catch (IllegalArgumentException e) {
+					getCastedFigure().remove(child);
+				}
+			}
+		} else {
+			if (childEditPart.isEvent()) {
+				try {
+					getRightEventInterfaceContainer().remove(child);
+				} catch (IllegalArgumentException e) {
+					getCastedFigure().remove(child);
+				}
+			} else if (childEditPart.isAdapter()) {
+				try {
+					getRightAdapterInterfaceContainer().remove(child);
+				} catch (IllegalArgumentException e) {
+					getCastedFigure().remove(child);
+				}
+			} else {
+				try {
+					getRightVarInterfaceContainer().remove(child);
+				} catch (IllegalArgumentException e) {
+					getCastedFigure().remove(child);
+				}
+			}
+		}
+	}
+
 }

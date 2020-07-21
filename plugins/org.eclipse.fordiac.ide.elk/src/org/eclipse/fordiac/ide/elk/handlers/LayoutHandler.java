@@ -47,7 +47,6 @@ import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
 import org.eclipse.fordiac.ide.elk.commands.LayoutCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
@@ -126,14 +125,15 @@ public class LayoutHandler extends AbstractHandler {
 		layoutGraph.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.layered"); //$NON-NLS-1$
 		layoutGraph.setProperty(CoreOptions.EDGE_ROUTING, EdgeRouting.ORTHOGONAL);
 		layoutGraph.setProperty(CoreOptions.DIRECTION, Direction.RIGHT);
-		layoutGraph.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_STRATEGY, NodePlacementStrategy.LINEAR_SEGMENTS);
-		layoutGraph.setProperty(LayeredMetaDataProvider.THOROUGHNESS, 10000);
+		layoutGraph.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_STRATEGY, NodePlacementStrategy.NETWORK_SIMPLEX);
+		layoutGraph.setProperty(LayeredMetaDataProvider.THOROUGHNESS, 5000);
 		layoutGraph.setProperty(LayeredMetaDataProvider.LAYERING_NODE_PROMOTION_STRATEGY,
 				NodePromotionStrategy.NO_BOUNDARY);
 		layoutGraph.setProperty(CoreOptions.SPACING_NODE_NODE, (double) 40);
 		layoutGraph.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_FAVOR_STRAIGHT_EDGES, false);
 		// set padding according to the number of in and outputs (for subapps)
-		layoutGraph.setProperty(CoreOptions.PADDING, new ElkPadding(30, maxIOLabelSize + 30, 0, maxIOLabelSize + 30));
+		layoutGraph.setProperty(CoreOptions.PADDING, new ElkPadding(60, maxIOLabelSize + 30, 0, maxIOLabelSize + 30));
+		layoutGraph.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_FAVOR_STRAIGHT_EDGES, false);
 	}
 
 	private void clear() {
@@ -225,10 +225,13 @@ public class LayoutHandler extends AbstractHandler {
 		ElkNode node = (null != interfaceElement.getFBNetworkElement())
 				? nodes.get(interfaceElement.getFBNetworkElement())
 				: graph;
-		// for untyped subapp interfaces
 		boolean isSubApp = false;
 		if (node == null) {
+			// untyped subapp interfaces
 			node = graph;
+			isSubApp = true;
+		} else if (interfaceElement.getFBNetworkElement() == null) {
+			// typed subapp and composite interfaces
 			isSubApp = true;
 		}
 		ElkPort port = ElkGraphUtil.createPort(node);
@@ -242,7 +245,8 @@ public class LayoutHandler extends AbstractHandler {
 			// set the input interface inset according to the graph padding
 			port.setLocation(maxIOLabelSize, -1);
 		}
-		port.setDimensions(0, 0);
+		// needs dimensions for interface edit parts -> should not be too close together
+		port.setDimensions(3, 3);
 		return port;
 	}
 
@@ -263,14 +267,14 @@ public class LayoutHandler extends AbstractHandler {
 			if (entry instanceof ValueEditPart) {
 				values.add((ValueEditPart) entry);
 			}
-			if (entry instanceof SubAppInternalInterfaceEditPart) {
-				SubAppInternalInterfaceEditPart part = (SubAppInternalInterfaceEditPart) entry;
+			if (entry instanceof InterfaceEditPart) {
+				InterfaceEditPart part = (InterfaceEditPart) entry;
 				calculateSubAppPadding(part);
 			}
 		});
 	}
 
-	private void calculateSubAppPadding(SubAppInternalInterfaceEditPart part) {
+	private void calculateSubAppPadding(InterfaceEditPart part) {
 		/*
 		 * maxIOLabelSize contains the width of the biggest input label and is used to
 		 * calculate the padding-left

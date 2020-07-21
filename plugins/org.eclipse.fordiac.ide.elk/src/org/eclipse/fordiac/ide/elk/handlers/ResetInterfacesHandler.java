@@ -21,8 +21,12 @@ import java.util.Set;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -35,37 +39,41 @@ public class ResetInterfacesHandler extends AbstractHandler {
 		GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 
 		if (viewer != null) {
-			Set<SubAppInternalInterfaceEditPart> interfaces = getEditParts(viewer);
+			Set<InterfaceEditPart> interfaces = getEditParts(viewer);
 			if (interfaces.isEmpty()) {
 				return null;
 			}
-			UISubAppNetworkEditPart parent = getParent(interfaces.iterator().next());
-			if (parent == null) {
-				return null;
-			}
-			for (SubAppInternalInterfaceEditPart part : interfaces) {
-				parent.removeChildVisualInterfaceElement(part);
-				parent.addChildVisualInterfaceElement(part);
+			EditorWithInterfaceEditPart parent = getParent(interfaces.iterator().next());
+			if (parent instanceof UISubAppNetworkEditPart) {
+				for (InterfaceEditPart part : interfaces) {
+					((UISubAppNetworkEditPart) parent).removeChildVisualInterfaceElement(part);
+					((UISubAppNetworkEditPart) parent).addChildVisualInterfaceElement(part);
+				}
+			} else if (parent instanceof CompositeNetworkEditPart) {
+				for (InterfaceEditPart part : interfaces) {
+					((CompositeNetworkEditPart) parent).removeChildVisualInterfaceElement(part);
+					((CompositeNetworkEditPart) parent).addChildVisualInterfaceElement(part);
+				}
 			}
 		}
 
 		return null;
 	}
 
-	private UISubAppNetworkEditPart getParent(SubAppInternalInterfaceEditPart part) {
-		if (part.getParent() instanceof UISubAppNetworkEditPart) {
-			return (UISubAppNetworkEditPart) part.getParent();
+	private EditorWithInterfaceEditPart getParent(InterfaceEditPart part) {
+		if (part.getParent() instanceof EditorWithInterfaceEditPart) {
+			return (EditorWithInterfaceEditPart) part.getParent();
 		}
 		return null;
 	}
 
-	private Set<SubAppInternalInterfaceEditPart> getEditParts(GraphicalViewer viewer) {
+	private Set<InterfaceEditPart> getEditParts(GraphicalViewer viewer) {
 		@SuppressWarnings("unchecked")
 		Map<Object, Object> editPartSet = viewer.getEditPartRegistry();
-		Set<SubAppInternalInterfaceEditPart> interfaces = new HashSet<>();
+		Set<InterfaceEditPart> interfaces = new HashSet<>();
 		for (Object part : editPartSet.values()) {
-			if (part instanceof SubAppInternalInterfaceEditPart) {
-				SubAppInternalInterfaceEditPart elem = (SubAppInternalInterfaceEditPart) part;
+			if (part instanceof CompositeInternalInterfaceEditPart || part instanceof SubAppInternalInterfaceEditPart) {
+				InterfaceEditPart elem = (InterfaceEditPart) part;
 				if (!elem.getSourceConnections().isEmpty() || !elem.getTargetConnections().isEmpty()) {
 					interfaces.add(elem);
 				}
