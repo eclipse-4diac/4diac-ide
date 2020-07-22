@@ -16,6 +16,7 @@
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *               - cleaned command stack handling for property sections
  *   Daniel Lindhuber - added copy/paste and the context menu
+ *   				  - made typedropdown methods overrideable
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -229,10 +230,28 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 				ref -> newOrderCommand((IInterfaceElement) ref, false));
 	}
 
+	// can be overridden by subclasses to use a different type dropdown
+	protected CellEditor createTypeCellEditor(TableViewer viewer) {
+		return ComboBoxWidgetFactory.createComboBoxCellEditor(viewer.getTable(), fillTypeCombo(), SWT.READ_ONLY);
+	}
+
+	// subclasses need to override this method if they use a different type dropdown
+	protected Object getTypeValue(Object element, TableViewer viewer, final int TYPE_COLUMN_INDEX) {
+		String type = ((IInterfaceElement) element).getTypeName();
+		List<String> items = Arrays
+				.asList(((ComboBoxCellEditor) viewer.getCellEditors()[TYPE_COLUMN_INDEX]).getItems());
+		return items.indexOf(type);
+	}
+
+	// subclasses need to override this method if they use a different type dropdown
+	protected Command createChangeDataTypeCommand(VarDeclaration data, Object value, TableViewer viewer) {
+		String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
+		return newChangeTypeCommand(data, getDataTypeLib().getType(dataTypeName));
+	}
+
 	protected void setCellEditors(TableViewer viewer) {
 		viewer.setCellEditors(new CellEditor[] { new CustomTextCellEditor(viewer.getTable()),
-				ComboBoxWidgetFactory.createComboBoxCellEditor(viewer.getTable(), fillTypeCombo(), SWT.READ_ONLY),
-				new CustomTextCellEditor(viewer.getTable()) });
+				createTypeCellEditor(viewer), new CustomTextCellEditor(viewer.getTable()) });
 	}
 
 	private void createOutputEdit(Composite parent) {
@@ -362,7 +381,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 					break;
 				case COMMENT_COLUMN:
 					result = ((IInterfaceElement) element).getComment() != null
-					? ((IInterfaceElement) element).getComment()
+							? ((IInterfaceElement) element).getComment()
 							: ""; //$NON-NLS-1$
 					break;
 				}
@@ -402,10 +421,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 			case NAME:
 				return ((INamedElement) element).getName();
 			case TYPE:
-				String type = ((IInterfaceElement) element).getTypeName();
-				List<String> items = Arrays
-						.asList(((ComboBoxCellEditor) viewer.getCellEditors()[TYPE_COLUMN_INDEX]).getItems());
-				return Integer.valueOf(items.indexOf(type));
+				return getTypeValue(element, viewer, TYPE_COLUMN_INDEX);
 			case COMMENT:
 				return ((INamedElement) element).getComment() != null ? ((INamedElement) element).getComment() : ""; //$NON-NLS-1$
 			default:
@@ -427,13 +443,13 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 				cmd = new ChangeCommentCommand((INamedElement) data, value.toString());
 				break;
 			case TYPE:
-				String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
 				if (data instanceof AdapterDeclaration) {
+					String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
 					DataType newType = getPalette().getAdapterTypeEntry(dataTypeName).getType();
 					cmd = newChangeTypeCommand((VarDeclaration) data, newType);
 				} else {
 					if (data instanceof VarDeclaration) {
-						cmd = newChangeTypeCommand((VarDeclaration) data, getDataTypeLib().getType(dataTypeName));
+						cmd = createChangeDataTypeCommand((VarDeclaration) data, value, viewer);
 					}
 				}
 				break;

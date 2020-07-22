@@ -19,9 +19,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import org.eclipse.fordiac.ide.gef.provider.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -35,10 +32,10 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
-import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
@@ -48,7 +45,6 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
@@ -72,9 +68,8 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	private static final String IV_COMMENT = "COMMENT"; //$NON-NLS-1$
 
 	private TableViewer internalVarsViewer;
-	private ComboBoxCellEditor typeDropDown;
+	private DataTypeDropdown typeDropDown;
 	private DataTypeLibrary dataLib;
-	private String[] dataTypes;
 
 	@Override
 	protected BaseFBType getType() {
@@ -158,7 +153,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	private CellEditor[] createCellEditors(final Table table) {
 		TextCellEditor varNameEditor = new TextCellEditor(table);
 		((Text) varNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		typeDropDown = ComboBoxWidgetFactory.createComboBoxCellEditor(table, dataTypes, SWT.READ_ONLY);
+		typeDropDown = new DataTypeDropdown(table, dataLib);
 		return new CellEditor[] { varNameEditor, typeDropDown, new TextCellEditor(table), new TextCellEditor(table),
 				new TextCellEditor(table) };
 	}
@@ -181,8 +176,6 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	@Override
 	protected void setInputInit() {
 		dataLib = getType().getTypeLibrary().getDataTypeLibrary();
-		dataTypes = dataLib.getDataTypesSorted().stream().map(DataType::getName).collect(Collectors.toList())
-				.toArray(new String[0]);
 		internalVarsViewer.setCellEditors(createCellEditors(internalVarsViewer.getTable()));
 	}
 
@@ -198,8 +191,8 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 			switch (property) {
 			case IV_NAME:
 				return var.getName();
-			case IV_TYPE: // return index of selected element in array
-				return Arrays.asList(typeDropDown.getItems()).indexOf(var.getType().getName());
+			case IV_TYPE:
+				return typeDropDown.getValue();
 			case IV_COMMENT:
 				return var.getComment();
 			case IV_ARRAY:
@@ -219,7 +212,11 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 				cmd = new ChangeNameCommand(data, value.toString());
 				break;
 			case IV_TYPE:
-				cmd = new ChangeTypeCommand(data, dataLib.getType(dataTypes[(int) value]));
+				DataType type = typeDropDown.getType((String) value);
+				if (type == null) {
+					return;
+				}
+				cmd = new ChangeTypeCommand(data, type);
 				break;
 			case IV_COMMENT:
 				cmd = new ChangeCommentCommand(data, value.toString());
