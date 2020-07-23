@@ -52,6 +52,10 @@ inv UnusedEventInput: self.eCTransition.conditionEvent->includesAll(self.basicFB
 context ECC
 inv UnusedEventOutput: self.eCTransition.destination.eCAction.output->includesAll(self.basicFBType.interfaceList.eventOutputs->asSet())
 
+-- Transition conditions as "None" without any condition (empty or spaces) are invalid transitions
+context ECTransition
+inv NoneTransitionWithoutCondition: self.conditionEvent.oclIsUndefined() implies(self.conditionExpression <> '' and Sequence{1..self.conditionExpression.size()}->select(i | self.conditionExpression.substring(i, i) = ' ')->size() <> self.conditionExpression.size() )
+
 -- A guard-only cycle is the general case of a self-cycle (SelfCycleMustBeGatedByEvent), where a path exists from an EC state, through other EC states and back to itself through a path consisting of transitions with guard-only conditions (i.e., transitions not containing an event).
 -- Problem: The process that is executing the ECC may enter an infinite loop
 -- TODO: Checking guard-only conditions (It can only detect simple cycles now.)
