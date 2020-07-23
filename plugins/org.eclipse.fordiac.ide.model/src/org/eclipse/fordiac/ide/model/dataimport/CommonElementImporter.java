@@ -349,7 +349,7 @@ abstract class CommonElementImporter {
 	private void readNameAttribute(INamedElement namedElement) throws TypeImportException {
 		String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		if (null != name) {
-			namedElement.setName(name);
+			namedElement.setName(name.trim());
 		} else {
 			throw new TypeImportException(Messages.Import_ERROR_NameNotDefined);
 		}
