@@ -39,7 +39,6 @@ public class Messages extends NLS {
 	public static String ConnectionSection_Comment;
 	public static String ConnectionSection_Source;
 	public static String ConnectionSection_Target;
-	public static String DiagramPreferences_Colors;
 	public static String DiagramPreferences_ConnectionRouter;
 	public static String DiagramPreferences_CornerDimension;
 	public static String DiagramPreferences_DefaultRouter;
@@ -52,7 +51,6 @@ public class Messages extends NLS {
 	public static String DiagramPreferences_FieldEditors_ShowGrid;
 	public static String DiagramPreferences_FieldEditors_ShowRuler;
 	public static String DiagramPreferences_FieldEditors_SnapToGrid;
-	public static String DiagramPreferences_SelectionColor;
 	public static String FBFigure_TYPE_NOT_SET;
 	public static String FordiacContextMenuProvider_Align;
 	public static String InternalVarsSection_ConfigureTableLayout_ArraySize;

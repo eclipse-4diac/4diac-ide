@@ -16,10 +16,8 @@
 package org.eclipse.fordiac.ide.gef.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceConverter;
 
 /**
  * Class used to initialize default preference values.
@@ -33,7 +31,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(DiagramPreferences.SHOW_GRID, true);
 		store.setDefault(DiagramPreferences.GRID_SPACING, 20);
 		store.setDefault(DiagramPreferences.CONNECTION_ROUTER, "Adjustable Router (no Jumplinks)"); //$NON-NLS-1$
-		PreferenceConverter.setDefault(store, DiagramPreferences.SELECTION_COLOR, ColorConstants.gray.getRGB());
 		store.setDefault(DiagramPreferences.MAX_VALUE_LABEL_SIZE, 25); // big enough to fully show an ip address and
 																		// port
 	}

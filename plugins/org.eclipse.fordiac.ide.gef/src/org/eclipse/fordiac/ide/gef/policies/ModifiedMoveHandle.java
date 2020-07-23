@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2012 Profactor GbmH, TU Wien ACIN,
- * 				 2018, 2019 Johannes Kepler University
+ * 				 2018 - 2020 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - changed color handling to not create colors during painting,
  *                 cleaned-up painting code
+ *               - improved selection feedback with the default selection color,
+ *                 thicker selection border line, and a transparent filled area.
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.policies;
 
@@ -22,34 +24,32 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.gef.Activator;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.MoveHandle;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceConverter;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * The Class ModifiedMoveHandle.
  */
 public class ModifiedMoveHandle extends MoveHandle {
 
+	private static final int SELECTION_FILL_ALPHA = 50;
+	private static final int SELECTION_BORDER_WIDTH = 2;
 	private static Color borderColor = null;
 
 	private static Color getBorderColor() {
 		if (null == borderColor) {
-			IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-			RGB color = PreferenceConverter.getColor(pf, DiagramPreferences.SELECTION_COLOR);
-			borderColor = new Color(null, color);
+			Display display = Display.getCurrent();
+			borderColor = display.getSystemColor(SWT.COLOR_LIST_SELECTION);
 		}
 		return borderColor;
 	}
 
-	private Insets insets = new Insets(2);
-	private int arc = 20;
+	private final Insets insets;
+	private final int arc;
 
 	/**
 	 * Instantiates a new modified move handle.
@@ -65,16 +65,6 @@ public class ModifiedMoveHandle extends MoveHandle {
 	}
 
 	/**
-	 * Instantiates a new modified move handle.
-	 *
-	 * @param owner the owner
-	 */
-	public ModifiedMoveHandle(GraphicalEditPart owner) {
-		super(owner);
-
-	}
-
-	/**
 	 * Initializes the handle. Sets the {@link DragTracker} and DragCursor.
 	 */
 	@Override
@@ -85,10 +75,14 @@ public class ModifiedMoveHandle extends MoveHandle {
 			public void paint(IFigure figure, Graphics g, Insets insets) {
 				Rectangle rect = getPaintRectangle(figure, insets);
 				g.setLineStyle(Graphics.LINE_SOLID);
-				g.setLineWidth(1);
+				g.setLineWidth(SELECTION_BORDER_WIDTH);
 				g.setXORMode(false);
 				g.setForegroundColor(getBorderColor());
-				g.drawRoundRectangle(rect.getResized(-1, -1), arc, arc);
+				g.setBackgroundColor(getBorderColor());
+				rect = rect.getShrinked(1, 1);
+				g.drawRoundRectangle(rect, arc, arc);
+				g.setAlpha(SELECTION_FILL_ALPHA);
+				g.fillRoundRectangle(rect, arc, arc);
 			}
 
 			@Override
