@@ -28366,21 +28366,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
             // InternalStructuredTextParser.g:9139:2: ( ( ruleAdapter_Name ) )
             // InternalStructuredTextParser.g:9140:3: ( ruleAdapter_Name )
             {
-             before(grammarAccess.getVariable_AdapterAccess().getAdapterAdapterDeclarationCrossReference_1_0()); 
+             before(grammarAccess.getVariable_AdapterAccess().getAdapterVarDeclarationCrossReference_1_0()); 
             // InternalStructuredTextParser.g:9141:3: ( ruleAdapter_Name )
             // InternalStructuredTextParser.g:9142:4: ruleAdapter_Name
             {
-             before(grammarAccess.getVariable_AdapterAccess().getAdapterAdapterDeclarationAdapter_NameParserRuleCall_1_0_1()); 
+             before(grammarAccess.getVariable_AdapterAccess().getAdapterVarDeclarationAdapter_NameParserRuleCall_1_0_1()); 
             pushFollow(FOLLOW_2);
             ruleAdapter_Name();
 
             state._fsp--;
 
-             after(grammarAccess.getVariable_AdapterAccess().getAdapterAdapterDeclarationAdapter_NameParserRuleCall_1_0_1()); 
+             after(grammarAccess.getVariable_AdapterAccess().getAdapterVarDeclarationAdapter_NameParserRuleCall_1_0_1()); 
 
             }
 
-             after(grammarAccess.getVariable_AdapterAccess().getAdapterAdapterDeclarationCrossReference_1_0()); 
+             after(grammarAccess.getVariable_AdapterAccess().getAdapterVarDeclarationCrossReference_1_0()); 
 
             }
 

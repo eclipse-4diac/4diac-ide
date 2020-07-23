@@ -575,7 +575,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     					if (current==null) {
                     						current = createModelElement(grammarAccess.getVar_Decl_LocalRule());
                     					}
-                    					setWithLastConsumed(current, "constant", true, "CONSTANT");
+                    					setWithLastConsumed(current, "constant", lv_constant_1_0 != null, "CONSTANT");
                     				
 
                     }
@@ -637,7 +637,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     						if (current==null) {
                     							current = createModelElement(grammarAccess.getVar_Decl_LocalRule());
                     						}
-                    						setWithLastConsumed(current, "located", true, "AT");
+                    						setWithLastConsumed(current, "located", lv_located_3_0 != null, "AT");
                     					
 
                     }
@@ -711,7 +711,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     						if (current==null) {
                     							current = createModelElement(grammarAccess.getVar_Decl_LocalRule());
                     						}
-                    						setWithLastConsumed(current, "array", true, "ARRAY");
+                    						setWithLastConsumed(current, "array", lv_array_6_0 != null, "ARRAY");
                     					
 
                     }
@@ -856,7 +856,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     						if (current==null) {
                     							current = createModelElement(grammarAccess.getVar_Decl_LocalRule());
                     						}
-                    						setWithLastConsumed(current, "initalized", true, ":=");
+                    						setWithLastConsumed(current, "initalized", lv_initalized_14_0 != null, ":=");
                     					
 
                     }
@@ -6301,7 +6301,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     					if (current==null) {
                     						current = createModelElement(grammarAccess.getParam_Assign_OutRule());
                     					}
-                    					setWithLastConsumed(current, "not", true, "NOT");
+                    					setWithLastConsumed(current, "not", lv_not_0_0 != null, "NOT");
                     				
 
                     }
@@ -6988,7 +6988,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
             					}
             				
 
-            					newCompositeNode(grammarAccess.getVariable_AdapterAccess().getAdapterAdapterDeclarationCrossReference_1_0());
+            					newCompositeNode(grammarAccess.getVariable_AdapterAccess().getAdapterVarDeclarationCrossReference_1_0());
             				
             pushFollow(FOLLOW_55);
             ruleAdapter_Name();
@@ -7178,7 +7178,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     						if (current==null) {
                     							current = createModelElement(grammarAccess.getMultibit_Part_AccessRule());
                     						}
-                    						setWithLastConsumed(current, "dwordaccess", true, ".%D");
+                    						setWithLastConsumed(current, "dwordaccess", lv_dwordaccess_0_0 != null, ".%D");
                     					
 
                     }
@@ -7243,7 +7243,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     						if (current==null) {
                     							current = createModelElement(grammarAccess.getMultibit_Part_AccessRule());
                     						}
-                    						setWithLastConsumed(current, "wordaccess", true, ".%W");
+                    						setWithLastConsumed(current, "wordaccess", lv_wordaccess_2_0 != null, ".%W");
                     					
 
                     }
@@ -7308,7 +7308,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     						if (current==null) {
                     							current = createModelElement(grammarAccess.getMultibit_Part_AccessRule());
                     						}
-                    						setWithLastConsumed(current, "byteaccess", true, ".%B");
+                    						setWithLastConsumed(current, "byteaccess", lv_byteaccess_4_0 != null, ".%B");
                     					
 
                     }
@@ -7373,7 +7373,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     						if (current==null) {
                     							current = createModelElement(grammarAccess.getMultibit_Part_AccessRule());
                     						}
-                    						setWithLastConsumed(current, "bitaccess", true, ".%X");
+                    						setWithLastConsumed(current, "bitaccess", lv_bitaccess_6_0 != null, ".%X");
                     					
 
                     }
@@ -7438,7 +7438,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     						if (current==null) {
                     							current = createModelElement(grammarAccess.getMultibit_Part_AccessRule());
                     						}
-                    						setWithLastConsumed(current, "bitaccess", true, ".");
+                    						setWithLastConsumed(current, "bitaccess", lv_bitaccess_8_0 != null, ".");
                     					
 
                     }

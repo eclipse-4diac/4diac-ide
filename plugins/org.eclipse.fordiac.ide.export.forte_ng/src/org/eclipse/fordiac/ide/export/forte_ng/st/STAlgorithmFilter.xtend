@@ -19,6 +19,7 @@ import java.util.List
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
+import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -85,17 +86,24 @@ class STAlgorithmFilter {
 		// create resource for function block and add copy
 		val fbResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION))
 		fbResource.contents.add(fbType)
-		for (AdapterDeclaration adapter : fbType.getInterfaceList().getSockets()) {
-			createAdapterResource(resourceSet, adapter)
-		}
-		for (AdapterDeclaration adapter : fbType.getInterfaceList().getPlugs()) {
-			createAdapterResource(resourceSet, adapter)
-		}
+		fbType.getInterfaceList().getSockets().forEach[adp | createAdapterResource(resourceSet, adp)];
+		fbType.getInterfaceList().getPlugs().forEach[adp | createAdapterResource(resourceSet, adp)];
+		fbType.getInterfaceList().getPlugs().forEach[adp | createAdapterResource(resourceSet, adp)];
+		fbType.getInterfaceList().inputVars.forEach[adp | createStructResource(resourceSet, adp)];
+		fbType.getInterfaceList().outputVars.forEach[adp | createStructResource(resourceSet, adp)];
+		fbType.internalVars.forEach[adp | createStructResource(resourceSet, adp)];
 	}
 
 	def createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
 		val adapterResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
 		adapterResource.getContents().add(adapter.getType().getAdapterFBType());
+	}
+	
+	def createStructResource(XtextResourceSet resourceSet, VarDeclaration variable) {
+		if (variable.getType() instanceof StructuredType) {
+			val structResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
+			structResource.getContents().add(variable.getType());
+		}
 	}
 
 	def protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
@@ -437,7 +445,7 @@ class STAlgorithmFilter {
 	}
 
 	def protected dispatch extractTypeInformation(VarDeclaration variable) {
-		variable.type.name
+		variable.type.name 
 	}
 
 }

@@ -18,8 +18,10 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditorCreator;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.resource.XtextResource;
@@ -56,12 +58,13 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 				XtextResourceSet resourceSet = resourceSetProvider.get();
 				Resource fbResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
 				fbResource.getContents().add(fbType);
-				for (AdapterDeclaration adapter : fbType.getInterfaceList().getSockets()) {
-					createAdapterResource(resourceSet, adapter);
-				}
-				for (AdapterDeclaration adapter : fbType.getInterfaceList().getPlugs()) {
-					createAdapterResource(resourceSet, adapter);
-				}
+
+				fbType.getInterfaceList().getSockets().forEach(adp -> createAdapterResource(resourceSet, adp));
+				fbType.getInterfaceList().getPlugs().forEach(adp -> createAdapterResource(resourceSet, adp));
+				fbType.getInterfaceList().getInputVars().forEach(var -> createStructResource(resourceSet, var));
+				fbType.getInterfaceList().getOutputVars().forEach(var -> createStructResource(resourceSet, var));
+				fbType.getInternalVars().forEach(var -> createStructResource(resourceSet, var));
+
 				return (XtextResource) resourceSet.createResource(computeUnusedUri(resourceSet, fileExtension));
 			}
 
@@ -70,6 +73,14 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 					Resource adapterResource = resourceSet
 							.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
 					adapterResource.getContents().add(adapter.getType().getAdapterFBType());
+				}
+			}
+
+			private void createStructResource(XtextResourceSet resourceSet, VarDeclaration var) {
+				if (var.getType() instanceof StructuredType) {
+					Resource structResource = resourceSet
+							.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
+					structResource.getContents().add(var.getType());
 				}
 			}
 
