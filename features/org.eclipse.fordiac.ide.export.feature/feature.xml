@@ -204,13 +204,6 @@ United States, other countries, or both.\n
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.fordiac.ide.export.forte_1.0.x"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.fordiac.ide.export.forte_lua"
          download-size="0"
          install-size="0"
