@@ -97,8 +97,8 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				systemManager.notifyListeners();
 			} else if (0 != delta.getAffectedChildren(IResourceDelta.REMOVED).length) {
 				handleProjectRemove(delta);
+				return false;
 			}
-			return false;
 		}
 		return true;
 	}
@@ -125,7 +125,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private boolean handleResourceMovedFrom(IResourceDelta delta) {
 		if (IResource.FILE == delta.getResource().getType()) {
 			handleFileMove(delta);
-			return false;
+//			return false;
 		}
 		return true;
 	}
@@ -137,6 +137,8 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			break;
 		case IResource.FOLDER:
 			// if a folder has been moved we need to update the IFile of the children
+			return true;
+		case IResource.PROJECT:
 			return true;
 		default:
 			break;
@@ -161,17 +163,18 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private void handleFileCopy(IResourceDelta delta) {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
-
-		if (isSystemFile(file)) {
-			// in case of a copied system file we just need to fix the name in the root XML
-			// node
-			renameSystemFileCopy(file);
-		} else {
-			TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
-			if (!typeLib.containsType(file)) {
-				PaletteEntry entry = typeLib.createPaletteEntry(file);
-				if (null != entry) {
-					updatePaletteEntry(file, entry);
+		if (file.getProject().isOpen()) {
+			if (isSystemFile(file)) {
+				// in case of a copied system file we just need to fix the name in the root XML
+				// node
+				renameSystemFileCopy(file);
+			} else {
+				TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
+				if (!typeLib.containsType(file)) {
+					PaletteEntry entry = typeLib.createPaletteEntry(file);
+					if (null != entry) {
+						updatePaletteEntry(file, entry);
+					}
 				}
 			}
 		}
