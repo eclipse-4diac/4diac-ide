@@ -213,4 +213,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 
 	def protected getFBClassName() '''FORTE_«type.name»'''
 
+	def protected generateBasicFBDataArray(BaseFBType baseType)
+	'''FORTE_BASIC_FB_DATA_ARRAY(«baseType.interfaceList.eventOutputs.size», «baseType.interfaceList.inputVars.size», «baseType.interfaceList.outputVars.size», «baseType.internalVars.size», «type.interfaceList.sockets.size + baseType.interfaceList.plugs.size»);'''
+
 }

@@ -634,4 +634,27 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     _builder.append(_name);
     return _builder;
   }
+  
+  protected CharSequence generateBasicFBDataArray(final BaseFBType baseType) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("FORTE_BASIC_FB_DATA_ARRAY(");
+    int _size = baseType.getInterfaceList().getEventOutputs().size();
+    _builder.append(_size);
+    _builder.append(", ");
+    int _size_1 = baseType.getInterfaceList().getInputVars().size();
+    _builder.append(_size_1);
+    _builder.append(", ");
+    int _size_2 = baseType.getInterfaceList().getOutputVars().size();
+    _builder.append(_size_2);
+    _builder.append(", ");
+    int _size_3 = baseType.getInternalVars().size();
+    _builder.append(_size_3);
+    _builder.append(", ");
+    int _size_4 = this.getType().getInterfaceList().getSockets().size();
+    int _size_5 = baseType.getInterfaceList().getPlugs().size();
+    int _plus = (_size_4 + _size_5);
+    _builder.append(_plus);
+    _builder.append(");");
+    return _builder;
+  }
 }

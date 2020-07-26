@@ -1,3 +1,21 @@
+/**
+ * Copyright (c) 2019 fortiss GmbH
+ *               2020 Johannes Kepler University
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *   Martin Jobst
+ *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl
+ *     - Add internal var generation
+ *   Ernst Blecha
+ *     - Add array-like bitaccess
+ */
 package org.eclipse.fordiac.ide.export.forte_ng.basic;
 
 import com.google.common.collect.Iterables;
@@ -30,6 +48,7 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     this.type = type;
   }
   
+  @Override
   public CharSequence generate() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateHeader = this.generateHeader();
@@ -110,24 +129,8 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     _builder.newLine();
     _builder.newLine();
     _builder.append("  ");
-    _builder.append("FORTE_BASIC_FB_DATA_ARRAY(");
-    int _size = this.type.getInterfaceList().getEventOutputs().size();
-    _builder.append(_size, "  ");
-    _builder.append(", ");
-    int _size_1 = this.type.getInterfaceList().getInputVars().size();
-    _builder.append(_size_1, "  ");
-    _builder.append(", ");
-    int _size_2 = this.type.getInterfaceList().getOutputVars().size();
-    _builder.append(_size_2, "  ");
-    _builder.append(", ");
-    int _size_3 = this.type.getInternalVars().size();
-    _builder.append(_size_3, "  ");
-    _builder.append(", ");
-    int _size_4 = this.type.getInterfaceList().getSockets().size();
-    int _size_5 = this.type.getInterfaceList().getPlugs().size();
-    int _plus = (_size_4 + _size_5);
-    _builder.append(_plus, "  ");
-    _builder.append(");");
+    CharSequence _generateBasicFBDataArray = this.generateBasicFBDataArray(this.type);
+    _builder.append(_generateBasicFBDataArray, "  ");
     _builder.newLineIfNotEmpty();
     _builder.newLine();
     _builder.append("public:");
@@ -170,6 +173,7 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     return _builder;
   }
   
+  @Override
   protected CharSequence generateHeaderIncludes() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#include \"basicfb.h\"");
