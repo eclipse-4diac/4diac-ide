@@ -26,16 +26,27 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 public class CreateMemberVariableCommand extends CreateVariableCommand {
 
 	/**
-	 * Instantiates command that creates a new member variable of a StructuredType
+	 * instantiates command that creates a new member variable of a StructuredType,
+	 * new member variable is inserted as new last element, default name is used
 	 *
-	 * @param dataType the data type
-	 * @param struct   the structured type
+	 * @param dataTypeLibrary the datatype library of the relevant project
+	 * @param struct          the structured type that gets a new member
 	 */
 	public CreateMemberVariableCommand(final StructuredType struct, DataTypeLibrary dataTypeLibrary) {
 		super(struct, struct.getMemberVariables().size() == 0 ? 0 : struct.getMemberVariables().size() - 1, null, null,
 				dataTypeLibrary);
 	}
 
+	/**
+	 * instantiates command that creates a new member variable of a StructuredType,
+	 * new member variable is inserted at the specified index. If datatype is null,
+	 * BOOL is created, otherwise the specified type is used. If name is null, the
+	 * default name is used. If a name is already blocked, the next free name is
+	 * chosen.
+	 *
+	 * @param dataTypeLibrary the datatype library of the relevant project
+	 * @param struct          the structured type that gets a new member
+	 */
 	public CreateMemberVariableCommand(final StructuredType struct, int index, String name, DataType dataType,
 			DataTypeLibrary dataTypeLibrary) {
 		super(struct, index, name, dataType, dataTypeLibrary);
