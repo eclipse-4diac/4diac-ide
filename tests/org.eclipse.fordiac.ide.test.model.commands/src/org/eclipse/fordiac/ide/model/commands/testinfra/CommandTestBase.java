@@ -185,14 +185,16 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		 * @return get state before last state transition
 		 */
 		public StateNode<U> getBefore() {
-			return null != before ? before : this;
+			StateNode<U> dummy = new StateNode<>(null,null,null);
+			return null != before ? before : dummy;
 		}
 
 		/**
 		 * @return get state from before the last undo operation
 		 */
 		public StateNode<U> getAfter() {
-			return null != after ? after : this;
+			StateNode<U> dummy = new StateNode<>(null,null,null);
+			return null != after ? after : dummy;
 		}
 
 		/**
@@ -361,8 +363,6 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		// step through all the commands/undo/redo
 		while (iterator.hasNext()) {
 			final ExecutionDescription<T> command = iterator.next();
-			StateNode<T> state = null;
-
 			// if there are more commands to be executed use assume instead of assert
 			// same reason as for initial state verifier
 			if (iterator.hasNext()) {
@@ -376,27 +376,24 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			case COMMAND:
 				// execute command if available and verify
 				if (null != command.executor) {
-					state = new StateNode<>(command.executor.executeCommand(current.getState()), command.verifier,
+					current = new StateNode<>(command.executor.executeCommand(current.getState()), command.verifier,
 							clone);
-					clone.setAfter(state);
-					current = state;
+					clone.setAfter(current);
 				}
 				command.verifier.verifyState(current.getState(), current.getBefore().getState(), t);
 				break;
 			case UNDO:
 				// execute undo and fix undo list
-				state = new StateNode<>(undo.executeCommand(current.getState()), current.getBefore().getVerifier(),
-						clone.getBefore());
-				state.setAfter(clone);
-				current = state;
+				current = new StateNode<>(undo.executeCommand(current.getState()), current.getBefore().getVerifier(),
+						clone.getBefore().getBefore());
+				current.setAfter(clone);
 				current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), t);
 				break;
 			case REDO:
 				// execute redo and fix undo list
-				state = new StateNode<>(redo.executeCommand(current.getState()), current.getAfter().getVerifier(),
+				current = new StateNode<>(redo.executeCommand(current.getState()), current.getAfter().getVerifier(),
 						clone);
-				clone.setAfter(state);
-				current = state;
+				clone.setAfter(current);
 				current.getVerifier().verifyState(current.getState(), current.getBefore().getState(), t);
 				break;
 			}

@@ -50,7 +50,7 @@ public class FBCreateCommandTest extends FBNetworkTestBase {
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs()
 				.equals(state.getFunctionblock().getFBType().getInterfaceList().getEventInputs()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs()
-				.equals(state.getFunctionblock().getFBType().getInterfaceList().getEventInputs()));
+				.equals(state.getFunctionblock().getFBType().getInterfaceList().getEventOutputs()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars()
 				.equals(state.getFunctionblock().getFBType().getInterfaceList().getInputVars()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars()
