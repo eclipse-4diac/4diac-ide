@@ -210,6 +210,7 @@
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.EditInterfaceEventSection"
                id="org.eclipse.fordiac.ide.application.properties.section.EditEvents"
+               filter="org.eclipse.fordiac.ide.application.properties.SubappTypeFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditEvents">
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart">
@@ -224,6 +225,7 @@
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.EditInterfaceDataSection"
                id="org.eclipse.fordiac.ide.application.properties.section.EditData"
+               filter="org.eclipse.fordiac.ide.application.properties.SubappTypeFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditData">
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart">
@@ -238,6 +240,7 @@
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.EditInterfaceAdapterSection"
                id="org.eclipse.fordiac.ide.application.properties.section.EditAdapters"
+               filter="org.eclipse.fordiac.ide.application.properties.SubappTypeFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters">
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart">
