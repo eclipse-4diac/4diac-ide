@@ -23,6 +23,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.draw2d.Connection;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -262,7 +263,20 @@ public class LayoutHandler extends AbstractHandler {
 				fbNetworkElements.add((AbstractFBNElementEditPart) entry);
 			}
 			if (entry instanceof ConnectionEditPart) {
-				connections.add((ConnectionEditPart) entry);
+				IFigure fig = ((ConnectionEditPart) entry).getFigure();
+				if (fig.isVisible()) {
+					/*
+					 * use isVisble instead of isHidden -> the hideConnection command handler does
+					 * not change the "hidden" field but only sets the visibility of the connection
+					 * figure
+					 * 
+					 * TODO move the visibility check to createConnectionNodes()
+					 * 
+					 * this is currently not possible because the layout command uses the edit parts
+					 * for undo
+					 */
+					connections.add((ConnectionEditPart) entry);
+				}
 			}
 			if (entry instanceof ValueEditPart) {
 				values.add((ValueEditPart) entry);
