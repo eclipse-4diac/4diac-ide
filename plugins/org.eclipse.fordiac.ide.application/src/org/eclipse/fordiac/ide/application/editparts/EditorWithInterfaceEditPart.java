@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2020 Johannes Kepler University Linz
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
  *   - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber
+ *   - added possibility to free interface elements for layouting
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -188,45 +191,30 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 
 	public void removeChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
 		IFigure child = childEditPart.getFigure();
+		IFigure container = getChildVisualContainer(childEditPart);
+		if (child.getParent() == container) {
+			container.remove(child);
+		} else {
+			getCastedFigure().remove(child);
+		}
+	}
+
+	protected Figure getChildVisualContainer(final InterfaceEditPart childEditPart) {
 		if (childEditPart.getModel().isIsInput()) {
 			if (childEditPart.isEvent()) {
-				try {
-					getLeftEventInterfaceContainer().remove(child);
-				} catch (IllegalArgumentException e) {
-					getCastedFigure().remove(child);
-				}
+				return getLeftEventInterfaceContainer();
 			} else if (childEditPart.isAdapter()) {
-				try {
-					getLeftAdapterInterfaceContainer().remove(child);
-				} catch (IllegalArgumentException e) {
-					getCastedFigure().remove(child);
-				}
+				return getLeftAdapterInterfaceContainer();
 			} else {
-				try {
-					getLeftVarInterfaceContainer().remove(child);
-				} catch (IllegalArgumentException e) {
-					getCastedFigure().remove(child);
-				}
+				return getLeftVarInterfaceContainer();
 			}
 		} else {
 			if (childEditPart.isEvent()) {
-				try {
-					getRightEventInterfaceContainer().remove(child);
-				} catch (IllegalArgumentException e) {
-					getCastedFigure().remove(child);
-				}
+				return getRightEventInterfaceContainer();
 			} else if (childEditPart.isAdapter()) {
-				try {
-					getRightAdapterInterfaceContainer().remove(child);
-				} catch (IllegalArgumentException e) {
-					getCastedFigure().remove(child);
-				}
+				return getRightAdapterInterfaceContainer();
 			} else {
-				try {
-					getRightVarInterfaceContainer().remove(child);
-				} catch (IllegalArgumentException e) {
-					getCastedFigure().remove(child);
-				}
+				return getRightVarInterfaceContainer();
 			}
 		}
 	}
