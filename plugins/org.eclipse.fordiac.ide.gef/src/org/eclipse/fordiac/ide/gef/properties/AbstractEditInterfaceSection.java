@@ -175,20 +175,18 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	protected abstract IContentProvider getInputsContentProvider();
 
-	private static void createTableLayout(Table table) {
+	protected TableLayout createTableLayout(Table table) {
 		TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText(NAME);
+		column1.setText(FordiacMessages.Name);
 		TableColumn column2 = new TableColumn(table, SWT.LEFT);
-		column2.setText(TYPE);
+		column2.setText(FordiacMessages.Type);
 		TableColumn column3 = new TableColumn(table, SWT.LEFT);
-		column3.setText(COMMENT);
-		table.setLinesVisible(true);
-		table.setHeaderVisible(true);
+		column3.setText(FordiacMessages.Comment);
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(NAME_COLUMN_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
-		table.setLayout(layout);
+		return layout;
 	}
 
 	private void createInputEdit(Composite parent) {
@@ -204,11 +202,25 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	private TableViewer createTypeTableView(Group parent) {
 		TableViewer viewer = TableWidgetFactory.createTableViewer(parent);
-		createTableLayout(viewer.getTable());
-		viewer.setColumnProperties(new String[] { NAME, TYPE, COMMENT });
-		viewer.setCellModifier(new InterfaceCellModifier(viewer));
-		viewer.setLabelProvider(new InterfaceLabelProvider());
+		viewer.getTable().setLayout(createTableLayout(viewer.getTable()));
+		viewer.getTable().setHeaderVisible(true);
+		viewer.getTable().setLinesVisible(true);
+		viewer.setColumnProperties(getColumnProperties());
+		viewer.setCellModifier(getCellModifier(viewer));
+		viewer.setLabelProvider(getLabelProvider());
 		return viewer;
+	}
+
+	protected String[] getColumnProperties() {
+		return new String[] { NAME, TYPE, COMMENT };
+	}
+
+	protected InterfaceLabelProvider getLabelProvider() {
+		return new InterfaceLabelProvider();
+	}
+
+	protected InterfaceCellModifier getCellModifier(TableViewer viewer) {
+		return new InterfaceCellModifier(viewer);
 	}
 
 	private void configureButtonList(AddDeleteReorderListWidget buttons, TableViewer viewer, boolean inputs) {
@@ -217,7 +229,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 				ref -> newOrderCommand((IInterfaceElement) ref, false));
 	}
 
-	private void setCellEditors(TableViewer viewer) {
+	protected void setCellEditors(TableViewer viewer) {
 		viewer.setCellEditors(new CellEditor[] { new CustomTextCellEditor(viewer.getTable()),
 				ComboBoxWidgetFactory.createComboBoxCellEditor(viewer.getTable(), fillTypeCombo(), SWT.READ_ONLY),
 				new CustomTextCellEditor(viewer.getTable()) });
@@ -327,6 +339,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	protected static class InterfaceLabelProvider extends LabelProvider implements ITableLabelProvider {
 
+		private static final int NAME_COLUMN = 0;
+		private static final int TYPE_COLUMN = 1;
+		private static final int COMMENT_COLUMN = 2;
+
 		@Override
 		public Image getColumnImage(final Object element, final int columnIndex) {
 			return null;
@@ -337,14 +353,14 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 			String result = null;
 			if (element instanceof IInterfaceElement) {
 				switch (columnIndex) {
-				case 0:
+				case NAME_COLUMN:
 					result = ((IInterfaceElement) element).getName();
 					break;
-				case 1:
+				case TYPE_COLUMN:
 					result = element instanceof Event ? FordiacMessages.Event
 							: ((IInterfaceElement) element).getTypeName();
 					break;
-				case 2:
+				case COMMENT_COLUMN:
 					result = ((IInterfaceElement) element).getComment() != null
 					? ((IInterfaceElement) element).getComment()
 							: ""; //$NON-NLS-1$
@@ -365,9 +381,9 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		return getTypeLibrary().getDataTypeLibrary();
 	}
 
-	private class InterfaceCellModifier implements ICellModifier {
+	protected class InterfaceCellModifier implements ICellModifier {
 		private static final int TYPE_COLUMN_INDEX = 1;
-		private TableViewer viewer;
+		protected TableViewer viewer;
 
 		public InterfaceCellModifier(TableViewer viewer) {
 			this.viewer = viewer;
@@ -389,7 +405,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 				String type = ((IInterfaceElement) element).getTypeName();
 				List<String> items = Arrays
 						.asList(((ComboBoxCellEditor) viewer.getCellEditors()[TYPE_COLUMN_INDEX]).getItems());
-				return items.indexOf(type);
+				return Integer.valueOf(items.indexOf(type));
 			case COMMENT:
 				return ((INamedElement) element).getComment() != null ? ((INamedElement) element).getComment() : ""; //$NON-NLS-1$
 			default:

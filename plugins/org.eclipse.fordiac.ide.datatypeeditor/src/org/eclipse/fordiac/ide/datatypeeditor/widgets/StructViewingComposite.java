@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -71,6 +73,12 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	private static final String INIT = "INITIAL_VALUE"; //$NON-NLS-1$
 	private static final String COMMENT = "COMMENT"; //$NON-NLS-1$
 	private static final String ARRAY = "ARRAY_SIZE"; //$NON-NLS-1$
+
+	private static final int NAME_COL_INDEX = 0;
+	private static final int TYPE_COL_INDEX = 1;
+	private static final int VALUE_COL_INDEX = 3;
+	private static final int COMMENT_COL_INDEX = 2;
+	private static final int ARRAYSIZE_COL_INDEX = 4;
 
 	private TableViewer structViewer;
 	private ComboBoxCellEditor typeDropDown;
@@ -124,9 +132,9 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				.map(DataType::getName).toArray(String[]::new);
 	}
 
-	private void showLabel(Composite parent) {
+	private static void showLabel(Composite parent) {
 		final Label label = new Label(parent, SWT.CENTER);
-		label.setText("STRUCT Editor");
+		label.setText(Messages.StructViewingComposite_Headline);
 	}
 
 	private void showTable(Composite parent) {
@@ -134,7 +142,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		configureTableLayout(structViewer.getTable());
 
 		structViewer.setCellEditors(createCellEditors(structViewer.getTable()));
-		structViewer.setColumnProperties(new String[] { NAME, TYPE, INIT, COMMENT, ARRAY });
+		structViewer.setColumnProperties(new String[] { NAME, TYPE, COMMENT, INIT, ARRAY });
 		structViewer.setContentProvider(new ArrayContentProvider());
 		structViewer.setLabelProvider(new StructVarsLabelProvider());
 		structViewer.setCellModifier(new StructCellModifier());
@@ -186,8 +194,6 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				// TODO Auto-generated method stub
-
 			}
 
 		});
@@ -195,17 +201,17 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				new TextCellEditor(table), new TextCellEditor(table) };
 	}
 
-	private void configureTableLayout(final Table table) {
+	private static void configureTableLayout(final Table table) {
 		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText("Name");
+		column1.setText(FordiacMessages.Name);
 		final TableColumn column2 = new TableColumn(table, SWT.LEFT);
-		column2.setText("Type");
+		column2.setText(FordiacMessages.Type);
 		final TableColumn column3 = new TableColumn(table, SWT.LEFT);
-		column3.setText("Initial Value");
+		column3.setText(FordiacMessages.Comment);
 		final TableColumn column4 = new TableColumn(table, SWT.LEFT);
-		column4.setText("Comment");
+		column4.setText(FordiacMessages.InitialValue);
 		final TableColumn column5 = new TableColumn(table, SWT.LEFT);
-		column5.setText("Array Size");
+		column5.setText(FordiacMessages.ArraySize);
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(3, 30));
 		layout.addColumnData(new ColumnWeightData(2, 30));
@@ -239,7 +245,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			case INIT:
 				return (var.getValue() == null) ? "" : var.getValue().getValue(); //$NON-NLS-1$
 			case ARRAY:
-				return Integer.toString(var.getArraySize());
+				return (var.getArraySize() > 0) ? Integer.toString(var.getArraySize()) : ""; //$NON-NLS-1$
 			default:
 				return "Could not load";
 			}
@@ -279,6 +285,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private static final class StructVarsLabelProvider extends LabelProvider implements ITableLabelProvider {
+
 		@Override
 		public Image getColumnImage(final Object element, final int columnIndex) {
 			return null;
@@ -289,15 +296,15 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			if (element instanceof VarDeclaration) {
 				final VarDeclaration varDecl = ((VarDeclaration) element);
 				switch (columnIndex) {
-				case 0:
+				case NAME_COL_INDEX:
 					return varDecl.getName();
-				case 1:
+				case TYPE_COL_INDEX:
 					return varDecl.getType().getName();
-				case 2:
-					return varDecl.getValue() == null ? "" : varDecl.getValue().getValue();
-				case 3:
+				case VALUE_COL_INDEX:
+					return varDecl.getValue() == null ? "" : varDecl.getValue().getValue(); //$NON-NLS-1$
+				case COMMENT_COL_INDEX:
 					return varDecl.getComment();
-				case 4:
+				case ARRAYSIZE_COL_INDEX:
 					return (varDecl.getArraySize() > 0) ? Integer.toString(varDecl.getArraySize()) : ""; //$NON-NLS-1$
 				default:
 					break;

@@ -22,8 +22,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.gef.provider.InternalVarsLabelProvider;
+import org.eclipse.fordiac.ide.gef.provider.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
@@ -37,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
@@ -101,9 +101,9 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 		internalVarsViewer = TableWidgetFactory.createTableViewer(composite);
 		configureTableLayout(internalVarsViewer.getTable());
 
-		internalVarsViewer.setColumnProperties(new String[] { IV_NAME, IV_TYPE, IV_ARRAY, IV_INIT, IV_COMMENT });
+		internalVarsViewer.setColumnProperties(new String[] { IV_NAME, IV_TYPE, IV_COMMENT, IV_INIT, IV_ARRAY });
 		internalVarsViewer.setContentProvider(new ArrayContentProvider());
-		internalVarsViewer.setLabelProvider(new InternalVarsLabelProvider());
+		internalVarsViewer.setLabelProvider(new DataLabelProvider());
 		internalVarsViewer.setCellModifier(new InternalVarsCellModifier());
 
 		buttons.bindToTableViewer(internalVarsViewer, this,
@@ -137,15 +137,15 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 
 	private static void configureTableLayout(final Table table) {
 		TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText(Messages.InternalVarsSection_ConfigureTableLayout_Name);
+		column1.setText(FordiacMessages.Name);
 		TableColumn column2 = new TableColumn(table, SWT.LEFT);
-		column2.setText(Messages.InternalVarsSection_ConfigureTableLayout_Type);
+		column2.setText(FordiacMessages.Type);
 		TableColumn column3 = new TableColumn(table, SWT.LEFT);
-		column3.setText(Messages.InternalVarsSection_ConfigureTableLayout_ArraySize);
+		column3.setText(FordiacMessages.Comment);
 		TableColumn column4 = new TableColumn(table, SWT.LEFT);
-		column4.setText(Messages.InternalVarsSection_ConfigureTableLayout_InitialValue);
+		column4.setText(FordiacMessages.InitialValue);
 		TableColumn column5 = new TableColumn(table, SWT.LEFT);
-		column5.setText(Messages.InternalVarsSection_ConfigureTableLayout_Comment);
+		column5.setText(FordiacMessages.ArraySize);
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(2, 30));
 		layout.addColumnData(new ColumnWeightData(2, 30));

@@ -22,6 +22,8 @@ public final class Messages extends NLS {
 	public static String ErrorCompositeMessage;
 	public static String MessageDialogTitle_OutsideWorkspaceError;
 	public static String MessageDialogContent_OutsideWorkspaceError;
+	public static String StructViewingComposite_Headline;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

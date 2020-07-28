@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH
- *               2019 Johannes Kepler University Linz
+ *               2019 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,7 @@
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
- *     - extract table viewer creation
+ *     - extract table viewer creation, add initialvalue/arraysize columns
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 

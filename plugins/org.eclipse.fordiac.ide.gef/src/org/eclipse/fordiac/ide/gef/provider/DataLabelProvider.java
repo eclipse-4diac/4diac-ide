@@ -19,9 +19,15 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 /**
- * The Class InternalVarsLabelProvider.
+ * A label provider that can be used to display data in columns
  */
-public class InternalVarsLabelProvider extends LabelProvider implements ITableLabelProvider {
+public class DataLabelProvider extends LabelProvider implements ITableLabelProvider {
+
+	private static final int NAME_COL_INDEX = 0;
+	private static final int TYPE_COL_INDEX = 1;
+	private static final int COMMENT_COL_INDEX = 2;
+	private static final int INITIALVALUE_COL_INDEX = 3;
+	private static final int ARRAYSIZE_COL_INDEX = 4;
 
 	@Override
 	public Image getColumnImage(final Object element, final int columnIndex) {
@@ -33,16 +39,16 @@ public class InternalVarsLabelProvider extends LabelProvider implements ITableLa
 		if (element instanceof VarDeclaration) {
 			VarDeclaration varDecl = ((VarDeclaration) element);
 			switch (columnIndex) {
-			case 0:
+			case NAME_COL_INDEX:
 				return varDecl.getName();
-			case 1:
+			case TYPE_COL_INDEX:
 				return varDecl.getType().getName();
-			case 2:
-				return (varDecl.getArraySize() > 0) ? Integer.toString(varDecl.getArraySize()) : ""; //$NON-NLS-1$
-			case 3:
-				return (varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""; //$NON-NLS-1$
-			case 4:
+			case COMMENT_COL_INDEX:
 				return varDecl.getComment();
+			case INITIALVALUE_COL_INDEX:
+				return (varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""; //$NON-NLS-1$
+			case ARRAYSIZE_COL_INDEX:
+				return (varDecl.getArraySize() > 0) ? Integer.toString(varDecl.getArraySize()) : ""; //$NON-NLS-1$
 			default:
 				break;
 			}
