@@ -158,7 +158,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 		}
 		if (childEditPart instanceof InterfaceEditPart) {
 			IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-			insertChild(getChildVisualContainer(childEditPart), refEditPart, child);
+			insertChild(getChildVisualContainer((InterfaceEditPart) childEditPart), refEditPart, child);
 			child.setVisible(isVarVisible(childEditPart));
 		} else {
 			super.addChildVisual(childEditPart, -1);
@@ -216,18 +216,14 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		if (childEditPart instanceof InterfaceEditPart) {
-			IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-			try {
-				removeChildVisualInterfaceElement((InterfaceEditPart) childEditPart);
-			} catch (IllegalArgumentException e) {
-				getCastedFigure().remove(child);
-			}
+			removeChildVisualInterfaceElement((InterfaceEditPart) childEditPart);
 		} else {
 			super.removeChildVisual(childEditPart);
 		}
 	}
 
-	private Figure getChildVisualContainer(final EditPart childEditPart) {
+	@Override
+	protected Figure getChildVisualContainer(InterfaceEditPart childEditPart) {
 		if (((InterfaceEditPart) childEditPart).getModel().isIsInput()) {
 			if (((InterfaceEditPart) childEditPart).isEvent()) {
 				return getLeftEventInterfaceContainer();
