@@ -20,7 +20,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.properties.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -43,8 +42,7 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		CompoundCommand cmd = new CompoundCommand();
-		FBNetworkEditor fbEditor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
-		CommandStack stack = fbEditor.getCommandStack();
+		CommandStack stack = HandlerUtil.getActiveEditor(event).getAdapter(CommandStack.class);
 
 		for (FBNetworkElement element : selectedNetworkElements) {
 			Command updateFBTypeCmd = getUpdateCommand(element);
