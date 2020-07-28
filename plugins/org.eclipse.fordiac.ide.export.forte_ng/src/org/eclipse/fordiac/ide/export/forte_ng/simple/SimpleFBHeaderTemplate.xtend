@@ -56,7 +56,7 @@ class SimpleFBHeaderTemplate extends ForteFBTemplate {
 
 		  «generateAlgorithms»
 
-		  FORTE_FB_DATA_ARRAY(«type.interfaceList.eventOutputs.size», «type.interfaceList.inputVars.size», «type.interfaceList.outputVars.size», «type.interfaceList.sockets.size + type.interfaceList.plugs.size»);
+		  «type.generateBasicFBDataArray»
 
 		public:
 		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : 

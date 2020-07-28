@@ -66,7 +66,7 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 
 		  virtual void executeEvent(int pa_nEIID);
 
-		  FORTE_BASIC_FB_DATA_ARRAY(«type.interfaceList.eventOutputs.size», «type.interfaceList.inputVars.size», «type.interfaceList.outputVars.size», «type.internalVars.size», «type.interfaceList.sockets.size + type.interfaceList.plugs.size»);
+		  «type.generateBasicFBDataArray»
 
 		public:
 		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :

@@ -1,3 +1,19 @@
+/**
+ * Copyright (c) 2019 fortiss GmbH
+ *               2020 Johannes Kepler University
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *   Martin Jobst
+ *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl
+ *     - Add internal var generation, fix adapter generation
+ */
 package org.eclipse.fordiac.ide.export.forte_ng.basic;
 
 import java.nio.file.Path;
@@ -36,6 +52,7 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
     this.type = type;
   }
   
+  @Override
   public CharSequence generate() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateHeader = this.generateHeader();
