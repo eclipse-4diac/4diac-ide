@@ -49,6 +49,8 @@ public class FordiacKeywords {
 	public static final String ANY_ELEMENTARY = "ANY_ELEMENTARY"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE_CLASS)
 	public static final String ANY = "ANY"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.DATATYPE_CLASS)
+	public static final String ANY_STRUCT = "ANY_STRUCT"; //$NON-NLS-1$
 
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String DINT = "DINT"; //$NON-NLS-1$
@@ -206,6 +208,7 @@ public class FordiacKeywords {
 	public static final String ADAPTER_SOCKET = "SOCKET1"; //$NON-NLS-1$
 	@ModelString
 	public static final String ADAPTER_PLUG = "PLUG1"; //$NON-NLS-1$
+
 
 	private FordiacKeywords() {
 		throw new UnsupportedOperationException();
