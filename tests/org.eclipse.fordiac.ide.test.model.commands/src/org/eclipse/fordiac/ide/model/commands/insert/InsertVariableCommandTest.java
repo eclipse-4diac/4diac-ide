@@ -11,7 +11,7 @@
  *   Daniel Lindhuber
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.test.model.commands.insert;
+package org.eclipse.fordiac.ide.model.commands.insert;
 
 import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
@@ -19,7 +19,6 @@ import static org.junit.Assume.assumeTrue;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.testinfra.InsertVariableCommandTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -28,14 +27,14 @@ import org.junit.runners.Parameterized.Parameters;
 public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 
 	private static VarDeclaration createTestVarDec(String name) {
-		VarDeclaration varDec = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		final VarDeclaration varDec = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDec.setName(name);
 		return varDec;
 	}
 
 	// insert into empty list
 	private static State executeCommandVar1(State state) {
-		VarDeclaration varDec = createTestVarDec("first");
+		final VarDeclaration varDec = createTestVarDec("first"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 0));
 		assumeNotNull(state.getCommand());
@@ -47,7 +46,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 
 	// insert at the beginning
 	private static State executeCommandVar2(State state) {
-		VarDeclaration varDec = createTestVarDec("second");
+		final VarDeclaration varDec = createTestVarDec("second"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 0));
 		assumeNotNull(state.getCommand());
@@ -59,7 +58,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 
 	// insert in the middle
 	private static State executeCommandVar3(State state) {
-		VarDeclaration varDec = createTestVarDec("third");
+		final VarDeclaration varDec = createTestVarDec("third"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 1));
 		assumeNotNull(state.getCommand());
@@ -71,7 +70,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 
 	// insert at the end
 	private static State executeCommandVar4(State state) {
-		VarDeclaration varDec = createTestVarDec("fourth");
+		final VarDeclaration varDec = createTestVarDec("fourth"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 3));
 		assumeNotNull(state.getCommand());
@@ -81,31 +80,30 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 		return state;
 	}
 
+	private static void verifyStateVarWithIndex(State state, State oldState, TestFunction t, int index) {
+		t.test(!state.getList().isEmpty());
+		t.test(state.getList().size() == (oldState.getList().size() + 1));
+		t.test(validateVarDeclaration(state.getList().get(index), state.getVarDec()));
+	}
+
 	// empty list
 	private static void verifyStateVar1(State state, State oldState, TestFunction t) {
-		t.test(!state.getList().isEmpty());
-		t.test(validateVarDeclaration(state.getList().get(0), state.getVarDec()));
+		verifyStateVarWithIndex(state, oldState, t, 0);
 	}
 
 	// beginning
 	private static void verifyStateVar2(State state, State oldState, TestFunction t) {
-		t.test(!state.getList().isEmpty());
-		t.test(state.getList().size() == 2);
-		t.test(validateVarDeclaration(state.getList().get(0), state.getVarDec()));
+		verifyStateVarWithIndex(state, oldState, t, 0);
 	}
 
 	// middle
 	private static void verifyStateVar3(State state, State oldState, TestFunction t) {
-		t.test(!state.getList().isEmpty());
-		t.test(state.getList().size() == 3);
-		t.test(validateVarDeclaration(state.getList().get(1), state.getVarDec()));
+		verifyStateVarWithIndex(state, oldState, t, 1);
 	}
 
 	// end
 	private static void verifyStateVar4(State state, State oldState, TestFunction t) {
-		t.test(!state.getList().isEmpty());
-		t.test(state.getList().size() == 4);
-		t.test(validateVarDeclaration(state.getList().get(3), state.getVarDec()));
+		verifyStateVarWithIndex(state, oldState, t, 3);
 	}
 
 	// parameter creation function, also contains description of how the textual
@@ -135,4 +133,3 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 	}
 
 }
-

@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateInterfaceElementCommandTestBase;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.junit.runners.Parameterized.Parameters;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
@@ -38,15 +39,16 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 	}
 
 	private static void verifyStateOutputWithoutName(State state, State oldState, TestFunction t) {
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars().isEmpty());
-		t.test(!state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars().isEmpty());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars().size() == 1);
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs().isEmpty());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs().isEmpty());
-		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface()
-				.getInterfaceElement(FordiacKeywords.DATA_OUTPUT));
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface()
-				.getInterfaceElement(FordiacKeywords.DATA_OUTPUT).getTypeName().equals(FordiacKeywords.BOOL));
+		InterfaceList interfacelist = state.getFbNetwork().getNetworkElements().get(0).getInterface();
+		InterfaceList oldInterfacelist = oldState.getFbNetwork().getNetworkElements().get(0).getInterface();
+
+		t.test(interfacelist.getInputVars().isEmpty());
+		t.test(!interfacelist.getOutputVars().isEmpty());
+		t.test(interfacelist.getOutputVars().size() == oldInterfacelist.getOutputVars().size() + 1);
+		t.test(interfacelist.getEventInputs().isEmpty());
+		t.test(interfacelist.getEventOutputs().isEmpty());
+		t.test(null != interfacelist.getInterfaceElement(FordiacKeywords.DATA_OUTPUT));
+		t.test(interfacelist.getInterfaceElement(FordiacKeywords.DATA_OUTPUT).getTypeName().equals(FordiacKeywords.BOOL));
 	}
 
 	private static State executeCommandOutputWithName(State state) {
@@ -60,14 +62,16 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 	}
 
 	private static void verifyStateOutputWithName(State state, State oldState, TestFunction t) {
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars().isEmpty());
-		t.test(!state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars().isEmpty());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars().size() == 2);
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs().isEmpty());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs().isEmpty());
-		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getInterfaceElement("MyOutput"));
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInterfaceElement("MyOutput")
-				.getTypeName().equals(FordiacKeywords.WORD));
+		InterfaceList interfacelist = state.getFbNetwork().getNetworkElements().get(0).getInterface();
+		InterfaceList oldInterfacelist = oldState.getFbNetwork().getNetworkElements().get(0).getInterface();
+
+		t.test(interfacelist.getInputVars().isEmpty());
+		t.test(!interfacelist.getOutputVars().isEmpty());
+		t.test(interfacelist.getOutputVars().size() == oldInterfacelist.getOutputVars().size() + 1);
+		t.test(interfacelist.getEventInputs().isEmpty());
+		t.test(interfacelist.getEventOutputs().isEmpty());
+		t.test(null != interfacelist.getInterfaceElement("MyOutput"));
+		t.test(interfacelist.getInterfaceElement("MyOutput").getTypeName().equals(FordiacKeywords.WORD));
 	}
 
 	private static State executeCommandOutputWithNameNull(State state) {
@@ -81,14 +85,16 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 	}
 
 	private static void verifyStateOutputWithNameNull(State state, State oldState, TestFunction t) {
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars().isEmpty());
-		t.test(!state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars().isEmpty());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars().size() == 3);
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs().isEmpty());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs().isEmpty());
-		t.test(null != state.getFbNetwork().getNetworkElements().get(0).getInterface().getInterfaceElement("DO2"));
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInterfaceElement("DO2").getTypeName()
-				.equals(FordiacKeywords.BYTE));
+		InterfaceList interfacelist = state.getFbNetwork().getNetworkElements().get(0).getInterface();
+		InterfaceList oldInterfacelist = oldState.getFbNetwork().getNetworkElements().get(0).getInterface();
+
+		t.test(interfacelist.getInputVars().isEmpty());
+		t.test(!interfacelist.getOutputVars().isEmpty());
+		t.test(interfacelist.getOutputVars().size() == oldInterfacelist.getOutputVars().size() + 1);
+		t.test(interfacelist.getEventInputs().isEmpty());
+		t.test(interfacelist.getEventOutputs().isEmpty());
+		t.test(null != interfacelist.getInterfaceElement("DO2"));
+		t.test(interfacelist.getInterfaceElement("DO2").getTypeName().equals(FordiacKeywords.BYTE));
 	}
 
 	// parameter creation function, also contains description of how the textual

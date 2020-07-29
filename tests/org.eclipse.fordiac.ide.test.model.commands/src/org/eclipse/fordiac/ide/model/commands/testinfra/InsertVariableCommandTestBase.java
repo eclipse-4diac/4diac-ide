@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -41,8 +44,9 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 		}
 
 		private State(State s) {
-			list = s.list;
-			varDec = s.varDec;
+			list = new BasicEList<>();
+			ECollections.setEList(list, (List<VarDeclaration>) EcoreUtil.copyAll(s.list));
+			varDec = EcoreUtil.copy(s.varDec);
 		}
 
 		@Override

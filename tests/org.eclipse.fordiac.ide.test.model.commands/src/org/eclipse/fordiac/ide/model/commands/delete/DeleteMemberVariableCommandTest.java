@@ -12,7 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.model.commands.create;
+package org.eclipse.fordiac.ide.model.commands.delete;
 
 import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
@@ -20,7 +20,6 @@ import static org.junit.Assume.assumeTrue;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.testinfra.DeleteMemberVariableCommandTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.junit.runners.Parameterized.Parameters;
@@ -42,7 +41,7 @@ public class DeleteMemberVariableCommandTest extends DeleteMemberVariableCommand
 		t.test((oldState.getStructuredType().getMemberVariables().size() - 1) == state.getStructuredType()
 				.getMemberVariables().size());
 		// verify that new variable is not in member variables anymore
-		for (VarDeclaration member : state.getStructuredType().getMemberVariables()) {
+		for (final VarDeclaration member : state.getStructuredType().getMemberVariables()) {
 			t.test(!member.getName().equals(var.getName()));
 		}
 	}
@@ -51,27 +50,27 @@ public class DeleteMemberVariableCommandTest extends DeleteMemberVariableCommand
 	// description will be used
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
-		List<Object> deletionExecutionDescriptions = ExecutionDescription
-				.commandList(new ExecutionDescription<>("Delete first member var", //$NON-NLS-1$
+		final List<Object> deletionExecutionDescriptions = ExecutionDescription.commandList(
+				new ExecutionDescription<>("Delete first member var", //$NON-NLS-1$
 						(State state) -> executeDeletion(state, varList.get(0)),
-						(State state, State oldState,
-								TestFunction t) -> verifyDeletion(state, oldState, t, varList.get(0))),
+						(State state, State oldState, TestFunction t) -> verifyDeletion(state, oldState, t,
+								varList.get(0))),
 
-						new ExecutionDescription<>("Delete middle member var", //$NON-NLS-1$
-								(State state) -> executeDeletion(state, varList.get(2)),
-								(State state, State oldState,
-										TestFunction t) -> verifyDeletion(state, oldState, t, varList.get(2))),
+				new ExecutionDescription<>("Delete middle member var", //$NON-NLS-1$
+						(State state) -> executeDeletion(state, varList.get(2)),
+						(State state, State oldState, TestFunction t) -> verifyDeletion(state, oldState, t,
+								varList.get(2))),
 
-						new ExecutionDescription<>("Delete last member var", //$NON-NLS-1$
-								(State state) -> executeDeletion(state, varList.get(varList.size() - 1)),
-								(State state, State oldState, TestFunction t) -> verifyDeletion(state, oldState, t,
-										varList.get(varList.size() - 1))),
+				new ExecutionDescription<>("Delete last member var", //$NON-NLS-1$
+						(State state) -> executeDeletion(state, varList.get(varList.size() - 1)),
+						(State state, State oldState, TestFunction t) -> verifyDeletion(state, oldState, t,
+								varList.get(varList.size() - 1))),
 
-						new ExecutionDescription<>("Delete member struct", //$NON-NLS-1$
-								(State state) -> executeDeletion(state, varList.get(3)), (State state, State oldState,
-										TestFunction t) -> verifyDeletion(state, oldState, t, varList.get(3)))
+				new ExecutionDescription<>("Delete member struct", //$NON-NLS-1$
+						(State state) -> executeDeletion(state, varList.get(3)), (State state, State oldState,
+								TestFunction t) -> verifyDeletion(state, oldState, t, varList.get(3)))
 
-						);
+		);
 		return createCommands(deletionExecutionDescriptions);
 	}
 }
