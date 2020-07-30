@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.model.commands.internal;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -55,7 +56,7 @@ public abstract class CreateVariableCommand extends AbstractCreationCommand {
 		this.dataType = dataType;
 		if (null == this.dataType) {
 			DataTypeLibrary dataLib = type.getTypeLibrary().getDataTypeLibrary();
-			this.dataType = dataLib.getType("BOOL"); //$NON-NLS-1$
+			this.dataType = dataLib.getType(FordiacKeywords.BOOL);
 		}
 		this.name = (null != name) ? name : getDefaultVarName();
 		this.index = index;
@@ -66,7 +67,7 @@ public abstract class CreateVariableCommand extends AbstractCreationCommand {
 			DataTypeLibrary dataTypeLibrary) {
 		this.dataType = dataType;
 		if (null == this.dataType) {
-			this.dataType = dataTypeLibrary.getType("BOOL"); //$NON-NLS-1$
+			this.dataType = dataTypeLibrary.getType(FordiacKeywords.BOOL);
 		}
 		this.name = (null != name) ? name : getDefaultVarName();
 		this.index = index;

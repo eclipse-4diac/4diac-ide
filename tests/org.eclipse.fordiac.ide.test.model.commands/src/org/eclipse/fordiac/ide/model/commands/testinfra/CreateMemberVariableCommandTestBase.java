@@ -53,7 +53,6 @@ extends CommandTestBase<CreateMemberVariableCommandTestBase.State> {
 		public State() {
 			struct = DataFactory.eINSTANCE.createStructuredType();
 			// TODO add user-defined datatypes to datatype library for testing
-			assert (struct.getMemberVariables().isEmpty());
 		}
 
 		public State(State s) {
@@ -90,13 +89,22 @@ extends CommandTestBase<CreateMemberVariableCommandTestBase.State> {
 		t.test(state.getStructuredType().getMemberVariables().isEmpty());
 	}
 
-	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
+	// define here the list of test sequences
+	// multiple execution descriptions are possible -> define in test class
+	protected static List<Object[]> createCommands(List<Object> autofilledExecutionDescriptions,
+			List<Object> configuredExecutionDescriptions) {
 		List<Object[]> commands = new ArrayList<>();
-
-		commands.addAll(describeCommand("Start from default values", //
+		// test series 1
+		commands.addAll(describeCommand("Autofilled Command", // //$NON-NLS-1$
 				State::new, //
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
-				executionDescriptions //
+				autofilledExecutionDescriptions //
+				));
+		// test series 2
+		commands.addAll(describeCommand("Configured Command", // //$NON-NLS-1$
+				State::new, //
+				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
+				configuredExecutionDescriptions //
 				));
 		return commands;
 	}
