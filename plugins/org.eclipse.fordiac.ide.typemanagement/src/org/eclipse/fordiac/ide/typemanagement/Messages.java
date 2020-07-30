@@ -25,6 +25,7 @@ public class Messages extends NLS {
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
 	public static String FBTypeComposedAdapterFactory_FBTypecomposedAdapterFactoryShouldNotBeInsantiated;
 	public static String NewFBTypeWizard_TemplateNotAvailable;
+	public static String NewFBTypeWizardPage_TypeAlreadyExists;
 	public static String NewFBTypeWizardPage_CreateNewType;
 	public static String NewFBTypeWizardPage_CreateNewTypeFromTemplateType;
 	public static String NewFBTypeWizardPage_CouldNotFindTemplateFiles;
