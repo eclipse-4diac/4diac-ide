@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
+import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPolicy;
@@ -140,6 +141,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 		}
 		connection.setToolTip(new ConnectionTooltipFigure(getModel()));
+		connection.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 		return connection;
 	}
 

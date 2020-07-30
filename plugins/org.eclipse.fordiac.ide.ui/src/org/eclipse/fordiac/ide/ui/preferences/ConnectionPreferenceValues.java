@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.ui.preferences;
 
 public final class ConnectionPreferenceValues {
 
-	public static final int NORMAL_LINE_WIDTH = 0;
+	public static final int NORMAL_LINE_WIDTH = 1;
 
 	public static final int HIGHLIGTHED_LINE_WIDTH = 3;
 
