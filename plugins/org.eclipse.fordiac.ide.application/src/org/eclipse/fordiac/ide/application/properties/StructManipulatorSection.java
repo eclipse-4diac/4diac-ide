@@ -52,7 +52,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -206,12 +205,10 @@ public class StructManipulatorSection extends AbstractSection {
 	}
 
 	private StructuredType getSelectedStructuredType() {
-		TreeItem[] selected = memberVarViewer.getTree().getSelection();
-		if (selected[0].getData() instanceof VarDeclaration) {
-			VarDeclaration varDecl = (VarDeclaration) selected[0].getData();
-			if (varDecl.getType() instanceof StructuredType) {
-				return (StructuredType) varDecl.getType();
-			}
+		TreeNode selected = (TreeNode) memberVarViewer.getTree().getSelection()[0].getData();
+		VarDeclaration varDecl = selected.getVariable();
+		if (varDecl.getType() instanceof StructuredType) {
+			return (StructuredType) varDecl.getType();
 		}
 		return null;
 	}
@@ -284,8 +281,7 @@ public class StructManipulatorSection extends AbstractSection {
 		}
 
 		private static Object[] getMemberVariableNodes(final StructuredType struct, final String path) {
-			return struct.getMemberVariables().stream().map(var -> new TreeNode(var, var.getName(), path))
-					.toArray();
+			return struct.getMemberVariables().stream().map(var -> new TreeNode(var, var.getName(), path)).toArray();
 		}
 
 		@Override
