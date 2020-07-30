@@ -23,9 +23,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.ui.IEditorPart;
@@ -44,15 +42,10 @@ public class ResetInterfacesHandler extends AbstractHandler {
 				return null;
 			}
 			EditorWithInterfaceEditPart parent = getParent(interfaces.iterator().next());
-			if (parent instanceof UISubAppNetworkEditPart) {
+			if (null != parent) {
 				for (InterfaceEditPart part : interfaces) {
-					((UISubAppNetworkEditPart) parent).removeChildVisualInterfaceElement(part);
-					((UISubAppNetworkEditPart) parent).addChildVisualInterfaceElement(part);
-				}
-			} else if (parent instanceof CompositeNetworkEditPart) {
-				for (InterfaceEditPart part : interfaces) {
-					((CompositeNetworkEditPart) parent).removeChildVisualInterfaceElement(part);
-					((CompositeNetworkEditPart) parent).addChildVisualInterfaceElement(part);
+					parent.removeChildVisualInterfaceElement(part);
+					parent.addChildVisualInterfaceElement(part);
 				}
 			}
 		}
@@ -60,14 +53,14 @@ public class ResetInterfacesHandler extends AbstractHandler {
 		return null;
 	}
 
-	private EditorWithInterfaceEditPart getParent(InterfaceEditPart part) {
+	private static EditorWithInterfaceEditPart getParent(InterfaceEditPart part) {
 		if (part.getParent() instanceof EditorWithInterfaceEditPart) {
 			return (EditorWithInterfaceEditPart) part.getParent();
 		}
 		return null;
 	}
 
-	private Set<InterfaceEditPart> getEditParts(GraphicalViewer viewer) {
+	private static Set<InterfaceEditPart> getEditParts(GraphicalViewer viewer) {
 		@SuppressWarnings("unchecked")
 		Map<Object, Object> editPartSet = viewer.getEditPartRegistry();
 		Set<InterfaceEditPart> interfaces = new HashSet<>();

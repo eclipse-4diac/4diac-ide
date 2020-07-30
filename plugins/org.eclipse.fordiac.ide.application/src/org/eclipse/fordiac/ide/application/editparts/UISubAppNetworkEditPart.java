@@ -13,11 +13,9 @@
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed untyped subapp interface updates and according code cleanup
  *   Daniel Lindhuber - altered methods to work with the elk layouter
+ *   Alois Zoitl - Moved code to common base class
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
@@ -26,7 +24,6 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
@@ -95,28 +92,13 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 		}
 	}
 
-	@Override
-	protected List<?> getModelChildren() {
-		ArrayList<Object> children = new ArrayList<>(super.getModelChildren());
-		InterfaceList il = getSubApp().getInterface();
-		children.addAll(il.getEventOutputs());
-		children.addAll(il.getOutputVars());
-		children.addAll(il.getPlugs());
-		children.addAll(il.getEventInputs());
-		children.addAll(il.getInputVars());
-		children.addAll(il.getSockets());
-		return children;
-	}
-
 	public SubApp getSubApp() {
 		return (SubApp) getModel().eContainer();
 	}
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		if (childEditPart instanceof InterfaceEditPart) {
-			addChildVisualInterfaceElement((InterfaceEditPart) childEditPart);
-		} else if (childEditPart instanceof SpecificLayerEditPart) {
+		if (childEditPart instanceof SpecificLayerEditPart) {
 			String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
 			IFigure layerFig = getLayer(layer);
 			if (layerFig != null) {
@@ -126,49 +108,13 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 				super.addChildVisual(childEditPart, index);
 			}
 		} else {
-			super.addChildVisual(childEditPart, -1);
-		}
-	}
-
-	public void addChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
-		IFigure child = childEditPart.getFigure();
-		if (childEditPart.getModel().isIsInput()) { // use model isInput! because EditPart.isInput treats inputs as
-													// outputs for visual appearance
-			if (childEditPart.isEvent()) {
-				int index = getSubApp().getInterface().getEventInputs().indexOf(childEditPart.getModel());
-				int containerSize = getLeftEventInterfaceContainer().getChildren().size();
-				getLeftEventInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
-			} else if (childEditPart.isAdapter()) {
-				int index = getSubApp().getInterface().getSockets().indexOf(childEditPart.getModel());
-				int containerSize = getLeftAdapterInterfaceContainer().getChildren().size();
-				getLeftAdapterInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
-			} else {
-				int index = getSubApp().getInterface().getInputVars().indexOf(childEditPart.getModel());
-				int containerSize = getLeftVarInterfaceContainer().getChildren().size();
-				getLeftVarInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
-			}
-		} else {
-			if (childEditPart.isEvent()) {
-				int index = getSubApp().getInterface().getEventOutputs().indexOf(childEditPart.getModel());
-				int containerSize = getRightEventInterfaceContainer().getChildren().size();
-				getRightEventInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
-			} else if (childEditPart.isAdapter()) {
-				int index = getSubApp().getInterface().getPlugs().indexOf(childEditPart.getModel());
-				int containerSize = getRightAdapterInterfaceContainer().getChildren().size();
-				getRightAdapterInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
-			} else {
-				int index = getSubApp().getInterface().getOutputVars().indexOf(childEditPart.getModel());
-				int containerSize = getRightVarInterfaceContainer().getChildren().size();
-				getRightVarInterfaceContainer().add(child, (index >= containerSize) ? containerSize : index);
-			}
+			super.addChildVisual(childEditPart, index);
 		}
 	}
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof InterfaceEditPart) {
-			removeChildVisualInterfaceElement((InterfaceEditPart) childEditPart);
-		} else if (childEditPart instanceof SpecificLayerEditPart) {
+		if (childEditPart instanceof SpecificLayerEditPart) {
 			String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
 			IFigure layerFig = getLayer(layer);
 			if (layerFig != null) {
@@ -188,6 +134,11 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 		// handles constraint changes (e.g. moving and/or resizing) of model
 		// elements and creation of new model elements
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBNetworkXYLayoutEditPolicy());
+	}
+
+	@Override
+	protected InterfaceList getInterfaceList() {
+		return getSubApp().getInterface();
 	}
 
 }
