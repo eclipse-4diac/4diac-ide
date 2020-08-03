@@ -14,18 +14,24 @@
  *   Alois Zoitl - reworked type selection to a type list with description
  *   Bianca Wiesmayr - extracted TableViewer creation
  *   Daniel Lindhuber - added Data Type
+ *   Lisa Sonnleithner - added duplicate check
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
+import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
@@ -138,8 +144,52 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			return false;
 		}
 
-		setErrorMessage(null);
+		// Check for duplicates in typelib if a project is selected
+		if (null != getContainerFullPath() && isDuplicate()) {
+			setErrorMessage(MessageFormat.format(Messages.NewFBTypeWizardPage_TypeAlreadyExists, getFileName()));
+			return false;
+		}
+
 		return super.validatePage();
+	}
+
+	private boolean isDuplicate() {
+		// here: getContainerFullPath().segment(0) --> name of the selected project
+		TypeLibrary lib = TypeLibrary
+				.getTypeLibrary(ResourcesPlugin.getWorkspace().getRoot().getProject(getContainerFullPath().segment(0)));
+
+		String[] s = getTemplate().getName().split("\\."); //$NON-NLS-1$
+		String fileExtension = s[s.length - 1].toUpperCase();
+		if (fileExtension.equals(TypeLibraryTags.DATA_TYPE_FILE_ENDING)) {
+			return isDtpDuplicate(lib);
+		} else {
+			return isSubFbtAdpDuplicate(lib, fileExtension);
+		}
+
+	}
+
+	private boolean isSubFbtAdpDuplicate(TypeLibrary lib, String fileExtension) {
+		EMap<String, ?> map = null;
+
+		switch (fileExtension) {
+		case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING:
+			map = lib.getBlockTypeLib().getSubAppTypes();
+			break;
+		case TypeLibraryTags.FB_TYPE_FILE_ENDING:
+			map = lib.getBlockTypeLib().getFbTypes();
+			break;
+		case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING:
+			map = lib.getBlockTypeLib().getAdapterTypes();
+			break;
+		default:
+			break;
+		}
+		return (null != map) && (map.containsKey(super.getFileName()));
+	}
+
+	private boolean isDtpDuplicate(TypeLibrary lib) {
+		Map<String, ?> map = lib.getDataTypeLibrary().getDerivedDataTypes();
+		return map.containsKey(super.getFileName());
 	}
 
 	public File getTemplate() {
