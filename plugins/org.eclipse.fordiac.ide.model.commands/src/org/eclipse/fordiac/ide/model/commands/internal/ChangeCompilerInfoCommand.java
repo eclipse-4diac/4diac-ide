@@ -14,7 +14,7 @@
  *   Bianca Wiesmayr
  *     - command now returns newly created element
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.commands.change;
+package org.eclipse.fordiac.ide.model.commands.internal;
 
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
