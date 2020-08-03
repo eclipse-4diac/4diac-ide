@@ -68,7 +68,7 @@ public class InterfaceElementSection extends AbstractSection {
 	private CLabel parameterTextCLabel;
 	private CLabel currentParameterTextCLabel;
 	private Button openEditorButton;
-	private Form form;
+	private Section infoSection;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -83,7 +83,7 @@ public class InterfaceElementSection extends AbstractSection {
 
 	protected void createTypeAndCommentSection(Composite parent) {
 
-		form = getWidgetFactory().createForm(parent);
+		Form form = getWidgetFactory().createForm(parent);
 		form.getBody().setLayout(new GridLayout(1, false));
 		form.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, false));
 
@@ -123,13 +123,13 @@ public class InterfaceElementSection extends AbstractSection {
 		// textfields in this section without a button need to span 2 cols so that all
 		// textfields are aligned
 
-		Section infoSection = getWidgetFactory().createSection(parent,
+		Section typeInfoSection = getWidgetFactory().createSection(parent,
 				Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED);
-		infoSection.setText(FordiacMessages.TypeInfo + ":"); //$NON-NLS-1$
-		infoSection.setLayout(new GridLayout(1, false));
-		infoSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		typeInfoSection.setText(FordiacMessages.TypeInfo + ":"); //$NON-NLS-1$
+		typeInfoSection.setLayout(new GridLayout(1, false));
+		typeInfoSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		Composite composite = getWidgetFactory().createComposite(infoSection);
+		Composite composite = getWidgetFactory().createComposite(typeInfoSection);
 
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
@@ -152,14 +152,12 @@ public class InterfaceElementSection extends AbstractSection {
 		parameterText = createGroupText(composite, false);
 		parameterText.setLayoutData(new GridData(SWT.FILL, 0, true, false, 2, 1));
 
-		infoSection.setClient(composite);
+		typeInfoSection.setClient(composite);
 
 	}
 
 	private void createInstanceInfoSection(Composite parent) {
-		Section infoSection = getWidgetFactory().createSection(parent,
-				Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED);
-		infoSection.setText(FordiacMessages.InstanceInfo + ":"); //$NON-NLS-1$
+		infoSection = getWidgetFactory().createSection(parent, Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED);
 		infoSection.setLayout(new GridLayout(1, false));
 		infoSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -191,9 +189,9 @@ public class InterfaceElementSection extends AbstractSection {
 		parameterText.setVisible(b);
 		currentParameterTextCLabel.setVisible(b);
 		currentParameterText.setVisible(b);
-
 		if (null != type) {
-			form.setText(FordiacMessages.Name + ": " + (getType().getName() != null ? getType().getName() : "")); //$NON-NLS-1$
+			infoSection.setText(getType().getFBNetworkElement().getName() + " . "
+					+ (getType().getName() != null ? getType().getName() : "")); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			String itype = ""; //$NON-NLS-1$
 
@@ -226,8 +224,8 @@ public class InterfaceElementSection extends AbstractSection {
 		itype = var.getType() != null ? var.getType().getName() : ""; //$NON-NLS-1$
 		if (getType().isIsInput()) {
 			if (getType().getFBNetworkElement().getType() instanceof FBType) {
-				IInterfaceElement ie = ((FBType) getType().getFBNetworkElement().getType())
-						.getInterfaceList().getInterfaceElement(getType().getName());
+				IInterfaceElement ie = ((FBType) getType().getFBNetworkElement().getType()).getInterfaceList()
+						.getInterfaceElement(getType().getName());
 				if (ie instanceof VarDeclaration) {
 					parameterText.setText(
 							(((VarDeclaration) ie).getValue() != null) ? ((VarDeclaration) ie).getValue().getValue()
