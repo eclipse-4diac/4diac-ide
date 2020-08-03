@@ -13,10 +13,20 @@
 
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
-abstract class MetricData {
-	int cnt = 0;
+class CyclomaticData extends MetricData{
+	double cc = 0;
 
-	protected abstract void add(MetricData data);
+	@Override
+	protected void add(MetricData data) {
+		if (data instanceof CyclomaticData) {
+			cc += ((CyclomaticData) data).cc;
+		}
 
-	protected abstract void divide(int div);
+	}
+
+	@Override
+	protected void divide(int div) {
+		cc /= div;	
+	}
+
 }

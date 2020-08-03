@@ -31,10 +31,11 @@
                           ifEmpty="false">
                         <or>      
                             <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Application" />
-                            <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.SubApp" />
-                            <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBType" />
                             <adapt type="org.eclipse.core.resources.IResource">
-                                <test property="org.eclipse.core.resources.extension" value="fbt" />
+                                <test property="org.eclipse.core.resources.extension" value="fbt" />               
+                            </adapt>
+							<adapt type="org.eclipse.core.resources.IResource">
+                                <test property="org.eclipse.core.resources.extension" value="sub" />               
                             </adapt>
                         </or>                  
                     </iterate>
@@ -42,5 +43,25 @@
              </visibleWhen>
           </command>                       
         </menuContribution>
+    </extension> 
+       <extension
+         point="org.eclipse.ui.menus">
+        <menuContribution
+                locationURI="menu:org.eclipse.4diac.ide.source.menu?endof=convertGroup">
+         <command
+            commandId="org.eclipse.fordiac.ide.metrics.commands.calculateCodeMetrics"
+            label="Calculate Code Metrics"
+            style="push">  
+                    <visibleWhen>
+                <with
+                     variable="activeEditor">
+                         <adapt
+                           type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+                	  </adapt>                 
+               </with>           
+         </visibleWhen>
+          </command>                       
+        </menuContribution>
     </extension>        
+           
 </plugin>
