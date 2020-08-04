@@ -13,10 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -31,10 +27,10 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
-import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -44,7 +40,6 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -53,9 +48,6 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -81,9 +73,8 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	private static final int ARRAYSIZE_COL_INDEX = 4;
 
 	private TableViewer structViewer;
-	private ComboBoxCellEditor typeDropDown;
+	private DataTypeDropdown typeDropDown;
 	private final DataTypeLibrary dataTypeLibrary;
-	private String[] dataTypes;
 	private final CommandStack cmdStack;
 	private final IWorkbenchPart part;
 
@@ -104,8 +95,6 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		showLabel(parent);
 
-		fillDataTypeArray();
-
 		AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(parent, widgetFactory);
 
@@ -122,14 +111,6 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		part.getSite().setSelectionProvider(this);
 
 		createContextMenu(structViewer);
-	}
-
-	private void fillDataTypeArray() {
-		List<DataType> dataTypeList = dataTypeLibrary.getDataTypesSorted();
-
-		dataTypes = dataTypeList.stream().filter(Objects::nonNull)
-				.filter(dtp -> !dataType.getName().contentEquals(dtp.getName())) // prevent infinite loop
-				.map(DataType::getName).toArray(String[]::new);
 	}
 
 	private static void showLabel(Composite parent) {
@@ -182,21 +163,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private CellEditor[] createCellEditors(final Table table) {
-		typeDropDown = ComboBoxWidgetFactory.createComboBoxCellEditor(table, dataTypes, SWT.READ_ONLY);
-		CCombo combobox = (CCombo) typeDropDown.getControl();
-		combobox.addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				fillDataTypeArray();
-				typeDropDown.setItems(dataTypes);
-			}
-
-			@Override
-			public void focusLost(FocusEvent e) {
-			}
-
-		});
+		typeDropDown = new DataTypeDropdown(table, dataTypeLibrary);
 		return new CellEditor[] { new TextCellEditor(table), typeDropDown, new TextCellEditor(table),
 				new TextCellEditor(table), new TextCellEditor(table) };
 	}
@@ -238,8 +205,8 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			switch (property) {
 			case NAME:
 				return var.getName();
-			case TYPE: // return index of selected element in array
-				return Arrays.asList(typeDropDown.getItems()).indexOf(var.getType().getName());
+			case TYPE:
+				return typeDropDown.getValue();
 			case COMMENT:
 				return var.getComment();
 			case INIT:
@@ -261,11 +228,11 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				cmd = new ChangeNameCommand(data, value.toString());
 				break;
 			case TYPE:
-				// skip if typedropdown was cancelled
-				if ((value instanceof Integer) && ((int) value == -1)) {
+				DataType type = typeDropDown.getType((String) value);
+				if (type == null) {
 					return;
 				}
-				cmd = new ChangeTypeCommand(data, dataTypeLibrary.getType(dataTypes[(int) value]));
+				cmd = new ChangeTypeCommand(data, type);
 				break;
 			case COMMENT:
 				cmd = new ChangeCommentCommand(data, value.toString());
