@@ -30,21 +30,21 @@ import org.junit.runners.Parameterized.Parameters;
 
 public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 
-	private static final SimpleDateFormat dayOnlyFormat = new SimpleDateFormat("d"); //$NON-NLS-1$
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); //$NON-NLS-1$
-	private static final long DELAY_TIME = 60000; // timelimit between execute and verify in miliseconds
+
+	private static Long millisBeforeFirstExecute;
+	private static final long DAY_IN_MILLISECONDS = 24l * 60l * 60l * 1000l;
 
 	public static State executeCommand(State state) {
+		if (null == millisBeforeFirstExecute) {
+			millisBeforeFirstExecute = System.currentTimeMillis();
+		}
+
 		state.setCommand(new AddNewVersionInfoCommand(state.getFbNetwork().getNetworkElements().get(0).getType()));
 		assumeNotNull(state.getCommand());
 		assumeTrue(state.getCommand().canExecute());
 
-		final int before = Integer.parseInt(dayOnlyFormat.format(new Date()));
 		state.getCommand().execute();
-		final int after = Integer.parseInt(dayOnlyFormat.format(new Date(System.currentTimeMillis() + DELAY_TIME)));
-
-		Assume.assumeTrue(after == before); // if this test skips here, the test was probably run close to midnight and
-											// we would possibly check against an incorrect value during verify
 
 		return state;
 	}
@@ -63,10 +63,16 @@ public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 		t.test(vinfo.get(index).getVersion().equals("1.0")); //$NON-NLS-1$
 		t.test(vinfo.get(index).getRemarks().equals("")); //$NON-NLS-1$
 
-		t.test(vinfo.get(index).getDate().equals(dateFormat.format(new Date()))); // This test will fail
-																					// if more than 1 minute
-																					// passes between
-																					// execute and verify
+		String dateBeforeFirstExecute = dateFormat.format(new Date(millisBeforeFirstExecute));
+		String dateDuringVerify = dateFormat.format(new Date());
+
+		// if this test skips here, this single test had a runtime (walltime) of more
+		// than one day. please fix the development system
+		Assume.assumeTrue((System.currentTimeMillis() - millisBeforeFirstExecute) < DAY_IN_MILLISECONDS);
+
+		t.test(vinfo.get(index).getDate().equals(dateBeforeFirstExecute) || // this may skip across midnight, so we
+																			// allow both days around midnight
+				vinfo.get(index).getDate().equals(dateDuringVerify));
 	}
 
 	public static void verifyState(State state, State oldState, TestFunction t) {
