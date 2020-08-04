@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
+ * Copyright (c) 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,7 +14,7 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
 public class AddDemuxPortCommand extends AbstractCreationCommand {
@@ -32,11 +32,14 @@ public class AddDemuxPortCommand extends AbstractCreationCommand {
 	private String getNewAttributeValue() {
 		if (null == oldVisibleChildren) { // default configuration
 			StringBuilder sb = new StringBuilder();
-			for (IInterfaceElement el : type.getInterface().getOutputVars()) {
-				sb.append(el.getName() + ","); //$NON-NLS-1$
+			for (VarDeclaration var : type.getStructType().getMemberVariables()) {
+				sb.append(var.getName() + ","); //$NON-NLS-1$
 			}
-			final int REMOVE_LAST_CHAR = 2;
-			return sb.substring(0, sb.length() - REMOVE_LAST_CHAR);
+			if (sb.charAt(sb.length() - 1) == ',') {
+				return sb.substring(0, sb.length() - 1);
+			}
+			oldVisibleChildren = sb.toString();
+			return oldVisibleChildren;
 		} else if ("".equals(oldVisibleChildren)) { //$NON-NLS-1$
 			return varName;
 		} else {
