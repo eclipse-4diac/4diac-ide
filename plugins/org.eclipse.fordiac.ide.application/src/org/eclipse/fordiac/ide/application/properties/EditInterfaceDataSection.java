@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 				 2019, 2020 Johannes Kepler University Linz
+ * 				 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +13,7 @@
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - create command now has enhanced guess
- *   Daniel Lindhuber - added insert command method
+ *   Daniel Lindhuber - added insert command method & cell editor classes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -34,6 +35,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 
 public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
@@ -50,6 +55,52 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 		DataType last = getLastUsedDataType(getType().getInterface(), isInput, interfaceElement);
 		return new InsertSubAppInterfaceElementCommand(interfaceElement, last, getType().getInterface(), isInput,
 				index);
+	}
+
+	@Override
+	protected InterfaceLabelProvider getLabelProvider() {
+		return new DataInterfaceLabelProvider() {
+
+			@Override
+			public Color getBackground(Object element, int columnIndex) {
+				if ((columnIndex == INITIALVALUE_COLUMN) && (!((VarDeclaration) element).isIsInput())) {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
+				}
+				return null;
+			}
+
+			@Override
+			public String getColumnText(Object element, int columnIndex) {
+				if (columnIndex == INITIALVALUE_COLUMN && !((VarDeclaration) element).isIsInput()) {
+					return "-"; //$NON-NLS-1$
+				} else {
+					return super.getColumnText(element, columnIndex);
+				}
+			}
+
+		};
+	}
+
+	@Override
+	protected InterfaceCellModifier getCellModifier(TableViewer viewer) {
+		return new DataInterfaceCellModifier(viewer) {
+			@Override
+			public boolean canModify(Object element, String property) {
+				if (INITIAL_VALUE.equals(property)) {
+					return ((VarDeclaration) element).isIsInput();
+				}
+				return super.canModify(element, property);
+			}
+
+			@Override
+			public Object getValue(Object element, String property) {
+				if (property.equals(INITIAL_VALUE) && !((VarDeclaration) element).isIsInput()) {
+					return "-"; //$NON-NLS-1$
+				} else {
+					return super.getValue(element, property);
+				}
+			}
+		};
 	}
 
 	@Override

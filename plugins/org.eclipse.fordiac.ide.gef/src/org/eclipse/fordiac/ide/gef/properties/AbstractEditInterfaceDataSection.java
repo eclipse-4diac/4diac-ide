@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
-import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
 import org.eclipse.gef.commands.Command;
@@ -40,38 +39,16 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection {
 
-	private static final String ARRAY_SIZE = "arraysize"; //$NON-NLS-1$
-	private static final String INITIAL_VALUE = "initialvalue"; //$NON-NLS-1$
-	private static final int ARRAYSIZE_WIDTH = 100;
-	private static final int INITIALVALUE_WIDTH = 100;
-	private DataTypeDropdown typeDropdown;
-
-	@Override
-	protected CellEditor createTypeCellEditor(TableViewer viewer) {
-		typeDropdown = new DataTypeDropdown(viewer.getTable(), getDataTypeLib());
-		return typeDropdown;
-	}
-
-	@Override
-	protected Object getTypeValue(Object element, TableViewer viewer, int TYPE_COLUMN_INDEX) {
-		return typeDropdown.getValue();
-	}
-
-	@Override
-	protected Command createChangeDataTypeCommand(VarDeclaration data, Object value, TableViewer viewer) {
-		if (value instanceof String) {
-			DataType dataType = typeDropdown.getType((String) value);
-			return (dataType == null) ? null : newChangeTypeCommand(data, dataType);
-		}
-		return null;
-	}
+	protected static final String ARRAY_SIZE = "arraysize"; //$NON-NLS-1$
+	protected static final String INITIAL_VALUE = "initialvalue"; //$NON-NLS-1$
+	protected static final int ARRAYSIZE_WIDTH = 100;
+	protected static final int INITIALVALUE_WIDTH = 100;
 
 	@Override
 	protected IContentProvider getOutputsContentProvider() {
@@ -167,16 +144,13 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	}
 
 	protected static class DataInterfaceLabelProvider extends InterfaceLabelProvider implements ITableColorProvider {
-		private static final int INITIALVALUE_COLUMN = 3;
-		private static final int ARRAYSIZE_COLUMN = 4;
+		protected static final int INITIALVALUE_COLUMN = 3;
+		protected static final int ARRAYSIZE_COLUMN = 4;
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
 			switch (columnIndex) {
 			case INITIALVALUE_COLUMN:
-				if (!((VarDeclaration) element).isIsInput()) {
-					return "-"; //$NON-NLS-1$
-				}
 				if (((VarDeclaration) element).getValue() == null) {
 					return ""; //$NON-NLS-1$
 				}
@@ -191,9 +165,6 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 		@Override
 		public Color getBackground(Object element, int columnIndex) {
-			if ((columnIndex == INITIALVALUE_COLUMN) && (!((VarDeclaration) element).isIsInput())) {
-				return Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
-			}
 			return null;
 		}
 
@@ -212,7 +183,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		@Override
 		public boolean canModify(Object element, String property) {
 			if (INITIAL_VALUE.equals(property)) {
-				return ((VarDeclaration) element).isIsInput();
+				return true;
 			}
 			if (ARRAY_SIZE.equals(property)) {
 				return true;
@@ -227,9 +198,6 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				int arraySize = ((VarDeclaration) element).getArraySize();
 				return (arraySize <= 0) ? "" : String.valueOf(arraySize); //$NON-NLS-1$
 			case INITIAL_VALUE:
-				if (!((VarDeclaration) element).isIsInput()) {
-					return "-"; //$NON-NLS-1$
-				}
 				if (((VarDeclaration) element).getValue() == null) {
 					return ""; //$NON-NLS-1$
 				}
