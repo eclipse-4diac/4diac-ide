@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University, Linz
+ * Copyright (c) 2020 Johannes Kepler University Linz
+ * 				 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -130,7 +131,8 @@ public class LayoutHandler extends AbstractHandler {
 		layoutGraph.setProperty(LayeredMetaDataProvider.THOROUGHNESS, 5000);
 		layoutGraph.setProperty(LayeredMetaDataProvider.LAYERING_NODE_PROMOTION_STRATEGY,
 				NodePromotionStrategy.NO_BOUNDARY);
-		layoutGraph.setProperty(CoreOptions.SPACING_NODE_NODE, (double) 40);
+		layoutGraph.setProperty(LayeredMetaDataProvider.SPACING_EDGE_NODE_BETWEEN_LAYERS, 50.0);
+		layoutGraph.setProperty(LayeredMetaDataProvider.SPACING_NODE_NODE_BETWEEN_LAYERS, 50.0);
 		layoutGraph.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_FAVOR_STRAIGHT_EDGES, false);
 		// set padding according to the number of in and outputs (for subapps)
 		layoutGraph.setProperty(CoreOptions.PADDING, new ElkPadding(60, maxIOLabelSize + 30, 0, maxIOLabelSize + 30));

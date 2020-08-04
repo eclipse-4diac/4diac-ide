@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University, Linz
+ * Copyright (c) 2020 Johannes Kepler University Linz
+ * 				 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -86,15 +87,22 @@ public class LayoutCommand extends Command {
 			conn.getModel().setDx2(0);
 			conn.getModel().setDy(0);
 		}
-		IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
-		try {
-			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.resetInterfaces", null);
-		} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
-			org.eclipse.fordiac.ide.elk.Activator.getDefault().logError(e.getMessage(), e);
-		}
+		resetInterfaceElements();
 	}
 
 	private void updateLayout(ElkNode graph) {
+		/*
+		 * interface elements need to be reset before every layout attempt
+		 * 
+		 * issue:
+		 * 	- layout command gets called within subapp/composite
+		 * 	- data or event connections get hidden
+		 * 	- layout command is called again
+		 * 	- interface elements with connections attached get placed properly,
+		 * 	  those without stay where they were
+		 */
+		resetInterfaceElements();
+
 		graph.getContainedEdges().forEach(edge -> {
 			ConnectionEditPart part = connEditParts.get(edge);
 			PointList pointList = ((AbstractPointListShape) part.getFigure()).getPoints();
@@ -117,6 +125,15 @@ public class LayoutCommand extends Command {
 			updateModel(part.getModel(), pointList);
 		});
 		updateFBPositions(graph);
+	}
+
+	private void resetInterfaceElements() {
+		IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
+		try {
+			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.resetInterfaces", null);
+		} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
+			org.eclipse.fordiac.ide.elk.Activator.getDefault().logError(e.getMessage(), e);
+		}
 	}
 
 	private void updateFBPositions(ElkNode graph) {
