@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
+ * Copyright (c) 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,6 @@
 package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
@@ -35,13 +34,15 @@ public class DeleteDemuxPortCommand extends Command {
 	private String getNewAttributeValue() {
 		if (null == oldVisibleChildren) {
 			StringBuilder sb = new StringBuilder();
-			for (IInterfaceElement el : type.getInterface().getOutputVars()) {
-				if (!el.getName().equals(name)) {
-					sb.append(el.getName() + ","); //$NON-NLS-1$
+			for (VarDeclaration var : type.getStructType().getMemberVariables()) {
+				if (!var.getName().equals(name)) {
+					sb.append(var.getName() + ","); //$NON-NLS-1$
 				}
 			}
-			final int REMOVE_LAST_CHAR = 1;
-			return sb.substring(0, sb.length() - REMOVE_LAST_CHAR);
+			if (sb.charAt(sb.length() - 1) == ',') {
+				sb.deleteCharAt(sb.length() - 1);
+			}
+			oldVisibleChildren = sb.toString();
 		}
 		return cutVarFromAttribute();
 	}
