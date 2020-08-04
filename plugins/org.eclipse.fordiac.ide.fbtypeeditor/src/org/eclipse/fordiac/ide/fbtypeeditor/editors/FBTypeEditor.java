@@ -333,11 +333,11 @@ public class FBTypeEditor extends FormEditor
 			Object selectedElement = ((IStructuredSelection) selection).getFirstElement();
 			int i = 0;
 			for (IFBTEditorPart editorPart : editors) {
-				i++;
 				if (editorPart.outlineSelectionChanged(selectedElement)) {
 					setActivePage(i);
 					break;
 				}
+				i++;
 			}
 		}
 	}
