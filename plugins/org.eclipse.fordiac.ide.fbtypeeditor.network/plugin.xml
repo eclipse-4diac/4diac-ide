@@ -48,7 +48,7 @@
          <propertyTab
                category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.propertyInterfaceElementTab"
-               label="Interface Element">
+               label="Pin">
          </propertyTab>
          <propertyTab
                category="FB-Network"
@@ -83,7 +83,7 @@
             </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+               class="org.eclipse.fordiac.ide.gef.properties.InterfaceElementSection"
                id="org.eclipse.fordiac.ide.fbnet.properties.InterfaceElementSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceElementTab">
             <input
