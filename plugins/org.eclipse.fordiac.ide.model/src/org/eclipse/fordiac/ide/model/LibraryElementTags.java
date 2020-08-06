@@ -101,6 +101,8 @@ public interface LibraryElementTags {
 	String VERSION_ATTRIBUTE = "Version"; //$NON-NLS-1$
 	String AUTHOR_ATTRIBUTE = "Author"; //$NON-NLS-1$
 
+	String SUBAPP_REPRESENTATION_ATTRIBUTE = "Unfolded"; //$NON-NLS-1$
+
 	String FBTYPE_ELEMENT = "FBType"; //$NON-NLS-1$
 	String DEVICETYPE_ELEMENT = "DeviceType"; //$NON-NLS-1$
 	String RESOURCETYPE_NAME_ELEMENT = "ResourceTypeName"; //$NON-NLS-1$

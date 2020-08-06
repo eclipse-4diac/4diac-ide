@@ -109,22 +109,25 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 				SubAppTImporter interfaceImporter = new SubAppTImporter(this);
 				subApp.setInterface(
 						interfaceImporter.parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
-				break;
+				return true;
 			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
 				subApp.setSubAppNetwork(new SubAppNetworkImporter(this, subApp.getInterface())
 						.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT));
-				break;
+				return true;
 			case LibraryElementTags.PARAMETER_ELEMENT:
-				VarDeclaration paramter = parseParameter();
-				VarDeclaration vInput = getVarNamed(subApp.getInterface(), paramter.getName(), true);
+				VarDeclaration parameter = parseParameter();
+				VarDeclaration vInput = getVarNamed(subApp.getInterface(), parameter.getName(), true);
 				if (null != vInput) {
-					vInput.setValue(paramter.getValue());
+					vInput.setValue(parameter.getValue());
 				}
-				break;
+				return true;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(subApp);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
 			default:
 				return false;
 			}
-			return true;
 		});
 	}
 

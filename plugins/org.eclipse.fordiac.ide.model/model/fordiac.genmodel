@@ -298,6 +298,7 @@
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
           ecoreFeature="ecore:EReference lib.ecore#//SubApp/subAppNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xD;&#xA;if(type instanceof SubAppType){&#xD;&#xA;   return (SubAppType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/isUnfolded" body="Attribute attr = this.getAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);&#xA;return (attr != null) &amp;&amp; &quot;true&quot;.equals(attr.getValue()); //$NON-NLS-1$"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/interfaceList"/>
@@ -478,6 +479,10 @@
       <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/getAttributeValue"
           body="return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);">
         <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/getAttributeValue/attributeName"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/deleteAttribute"
+          body="return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/deleteAttribute/attributeName"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CompositeFBType">

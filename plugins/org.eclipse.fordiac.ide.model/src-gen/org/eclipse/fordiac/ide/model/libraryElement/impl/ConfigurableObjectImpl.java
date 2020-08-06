@@ -185,6 +185,16 @@ public class ConfigurableObjectImpl extends EObjectImpl implements ConfigurableO
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean deleteAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */

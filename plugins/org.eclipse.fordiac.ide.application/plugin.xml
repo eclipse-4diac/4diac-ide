@@ -404,6 +404,11 @@
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
+            id="org.eclipse.fordiac.ide.application.commands.unfoldSubApp"
+            name="Toggle SubApp Representation">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.SaveAsSubappTypeHandler"
             id="org.eclipse.fordiac.ide.application.commands.saveAsSubappType"
             name="Save as Subapplication Type">
@@ -555,6 +560,13 @@
                 <reference definitionId="org.eclipse.fordiac.ide.application.SubAppSelection" />
             </activeWhen>
       </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.application.handlers.ToggleSubAppFolding"
+            commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp">
+            <activeWhen>
+                <reference definitionId="org.eclipse.fordiac.ide.application.SubAppSelection" />
+            </activeWhen>
+      </handler>
       <handler 
             class="org.eclipse.fordiac.ide.application.handlers.NewSubApplication"
             commandId="org.eclipse.fordiac.ide.application.commands.newSubApp">
@@ -642,6 +654,7 @@
       </menuContribution>            
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">
             <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
@@ -758,6 +771,14 @@
             </visibleWhen>
          </command>
          <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp">
             <visibleWhen
                   checkEnabled="false">
                <reference

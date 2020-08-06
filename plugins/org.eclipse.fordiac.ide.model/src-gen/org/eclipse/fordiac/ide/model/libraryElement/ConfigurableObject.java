@@ -74,4 +74,12 @@ public interface ConfigurableObject extends INamedElement {
 	 */
 	String getAttributeValue(String attributeName);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean" attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @generated
+	 */
+	boolean deleteAttribute(String attributeName);
+
 } // ConfigurableObject

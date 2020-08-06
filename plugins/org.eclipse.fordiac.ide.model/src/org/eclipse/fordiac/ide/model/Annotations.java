@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -126,9 +127,9 @@ public final class Annotations {
 
 	public static boolean isResourceConnection(Connection c) {
 		// if source element is null it is a connection from a CFB interface element
-		return (null != c.getSourceElement() && null != c.getSourceElement().getFbNetwork())
+		return ((null != c.getSourceElement()) && (null != c.getSourceElement().getFbNetwork()))
 				? (c.getSourceElement().getFbNetwork().eContainer() instanceof Resource)
-				: false;
+						: false;
 	}
 
 	public static FBNetwork getFBNetwork(Connection c) {
@@ -398,7 +399,7 @@ public final class Annotations {
 		if (fbn.isApplicationNetwork()) {
 			// no null check is need as this is already done in isApplicationNetwork
 			return (Application) fbn.eContainer();
-		} else if (fbn.isSubApplicationNetwork() && null != ((SubApp) fbn.eContainer()).getFbNetwork()) {
+		} else if (fbn.isSubApplicationNetwork() && (null != ((SubApp) fbn.eContainer()).getFbNetwork())) {
 			return ((SubApp) fbn.eContainer()).getFbNetwork().getApplication();
 		}
 		return null;
@@ -415,7 +416,7 @@ public final class Annotations {
 
 	public static SubApp getSubAppNamed(FBNetwork fbn, String name) {
 		for (FBNetworkElement element : fbn.getNetworkElements()) {
-			if (element instanceof SubApp && element.getName().equals(name)) {
+			if ((element instanceof SubApp) && element.getName().equals(name)) {
 				return (SubApp) element;
 			}
 		}
@@ -453,7 +454,7 @@ public final class Annotations {
 		return vd.getArraySize() > 0;
 	}
 
-	// *** ConfigurabeleObject ***//
+	// *** ConfigurableObject ***//
 	public static void setAttribute(ConfigurableObject object, final String attributeName, final String type,
 			final String value, final String comment) {
 		Attribute attribute = getAttribute(object, attributeName);
@@ -469,6 +470,20 @@ public final class Annotations {
 		} else {
 			attribute.setValue(value);
 		}
+	}
+
+	public static boolean deleteAttribute(ConfigurableObject object, final String attributeName) {
+		if ((object != null) && (attributeName != null)) {
+			List<Attribute> toDelete = object.getAttributes().stream()
+					.filter(attr -> attributeName.equals(attr.getName())).collect(Collectors.toList());
+			if (toDelete.isEmpty()) {
+				return false;
+			} else {
+				toDelete.forEach(attr -> object.getAttributes().remove(attr));
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static String getAttributeValue(ConfigurableObject object, final String attributeName) {
