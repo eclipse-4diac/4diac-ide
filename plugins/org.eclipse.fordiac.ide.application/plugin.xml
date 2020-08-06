@@ -74,6 +74,7 @@
                indented="true"
                label="Edit Events">
          </propertyTab>
+
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
                category="FB"
@@ -94,6 +95,30 @@
                id="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
                image="fordiacimage://ICON_FB"
                label="Type Info">
+         </propertyTab>
+         <propertyTab
+               afterTab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
+               category="FB"
+               id="org.eclipse.fordiac.ide.application.property.tab.ShowData"
+               image="fordiacimage://ICON_FB"
+               label="Data"
+               indented="true">
+         </propertyTab>
+         <propertyTab
+               afterTab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
+               category="FB"
+               id="org.eclipse.fordiac.ide.application.property.tab.ShowEvent"
+               image="fordiacimage://ICON_FB"
+               label="Events"
+               indented="true">
+         </propertyTab>
+         <propertyTab
+               afterTab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
+               category="FB"
+               id="org.eclipse.fordiac.ide.application.property.tab.ShowAdapter"
+               image="fordiacimage://ICON_FB"
+               label="Adapter"
+               indented="true">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
@@ -223,7 +248,7 @@
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.EditInterfaceEventSection"
                id="org.eclipse.fordiac.ide.application.properties.section.EditEvents"
-               filter="org.eclipse.fordiac.ide.application.properties.SubappTypeFilter"
+               filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditEvents">
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart">
@@ -238,7 +263,7 @@
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.EditInterfaceDataSection"
                id="org.eclipse.fordiac.ide.application.properties.section.EditData"
-               filter="org.eclipse.fordiac.ide.application.properties.SubappTypeFilter"
+               filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditData">
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart">
@@ -251,9 +276,27 @@
             </input>
          </propertySection>
          <propertySection
+               class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceDataSection"
+               id="org.eclipse.fordiac.ide.application.properties.section.ShowData"
+               filter="org.eclipse.fordiac.ide.application.properties.TypedFBNetworkElementFilter"
+               tab="org.eclipse.fordiac.ide.application.property.tab.ShowData">
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceEventSection"
+               id="org.eclipse.fordiac.ide.application.properties.section.ShowEvent"
+               filter="org.eclipse.fordiac.ide.application.properties.TypedFBNetworkElementFilter"
+               tab="org.eclipse.fordiac.ide.application.property.tab.ShowEvent">
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceAdapterSection"
+               id="org.eclipse.fordiac.ide.application.properties.section.ShowAdapter"
+               filter="org.eclipse.fordiac.ide.application.properties.TypedFBNetworkElementFilter"
+               tab="org.eclipse.fordiac.ide.application.property.tab.ShowAdapter">
+         </propertySection>
+         <propertySection
                class="org.eclipse.fordiac.ide.application.properties.EditInterfaceAdapterSection"
                id="org.eclipse.fordiac.ide.application.properties.section.EditAdapters"
-               filter="org.eclipse.fordiac.ide.application.properties.SubappTypeFilter"
+               filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters">
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart">

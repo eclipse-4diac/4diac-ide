@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
+ * Copyright (c) 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,18 +13,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.jface.viewers.IFilter;
 
-public class SubappTypeFilter implements IFilter {
-
+public class TypedFBNetworkElementFilter implements IFilter {
 	@Override
 	public boolean select(Object toTest) {
 		if (toTest instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) toTest).getModel().getType() == null; // only for untyped
+			return ((SubAppForFBNetworkEditPart) toTest).getModel().getType() != null; // only for typed
 		}
-		if (toTest instanceof UISubAppNetworkEditPart) {
+		if (toTest instanceof AbstractFBNElementEditPart) {
 			return true;
 		}
 		return false;

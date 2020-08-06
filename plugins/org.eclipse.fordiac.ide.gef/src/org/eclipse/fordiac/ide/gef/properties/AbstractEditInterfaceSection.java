@@ -12,7 +12,7 @@
  *   Monika Wenger, Alois Zoitl - initial implementation
  *   Alois Zoitl - moved group buttons to the top left, multi-line selection in lists,
  *               code clean-up
- *   Bianca Wiesmayr - extract table creation
+ *   Bianca Wiesmayr - extract table creation, cleanup, new read-only derived sections
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *               - cleaned command stack handling for property sections
  *   Daniel Lindhuber - added copy/paste and the context menu
@@ -40,7 +40,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -85,6 +84,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	private TableViewer inputsViewer;
 	private TableViewer outputsViewer;
 	public boolean isInputsViewer;
+	protected boolean createButtons = true;
 
 	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
@@ -190,10 +190,30 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		inputsGroup.setLayout(new GridLayout(2, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
-		buttons.createControls(inputsGroup, getWidgetFactory());
-		inputsViewer = createTypeTableView(inputsGroup);
-		configureButtonList(buttons, inputsViewer, true);
+		if (createButtons) {
+			AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+			buttons.createControls(inputsGroup, getWidgetFactory());
+			inputsViewer = createTypeTableView(inputsGroup);
+			configureButtonList(buttons, inputsViewer, true);
+		} else {
+			inputsViewer = createTypeTableView(inputsGroup);
+		}
+	}
+
+	private void createOutputEdit(Composite parent) {
+		Group outputsGroup = getWidgetFactory().createGroup(parent, "Outputs"); //$NON-NLS-1$
+		outputsGroup.setLayout(new GridLayout(2, false));
+		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		if (createButtons) {
+			AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+			buttons.createControls(outputsGroup, getWidgetFactory());
+			outputsViewer = createTypeTableView(outputsGroup);
+			configureButtonList(buttons, outputsViewer, false);
+		} else {
+			outputsViewer = createTypeTableView(outputsGroup);
+
+		}
 	}
 
 	private TableViewer createTypeTableView(Group parent) {
@@ -249,17 +269,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 				createTypeCellEditor(viewer), new CustomTextCellEditor(viewer.getTable()) });
 	}
 
-	private void createOutputEdit(Composite parent) {
-		Group outputsGroup = getWidgetFactory().createGroup(parent, "Outputs"); //$NON-NLS-1$
-		outputsGroup.setLayout(new GridLayout(2, false));
-		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
-		buttons.createControls(outputsGroup, getWidgetFactory());
-		outputsViewer = createTypeTableView(outputsGroup);
-		configureButtonList(buttons, outputsViewer, false);
-	}
-
 	@Override
 	protected void setInputCode() {
 	}
@@ -296,7 +305,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 		@Override
 		public Object[] getElements(final Object inputElement) {
-			if ((inputElement instanceof SubApp) || (inputElement instanceof FBType)) {
+			if ((inputElement instanceof FBNetworkElement) || (inputElement instanceof FBType)) {
 				if (inputs) {
 					return getInputs(inputElement);
 				} else {
