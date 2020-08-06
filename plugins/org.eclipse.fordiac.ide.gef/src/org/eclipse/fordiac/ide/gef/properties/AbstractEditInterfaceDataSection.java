@@ -23,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -34,11 +35,10 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.IContentProvider;
-import org.eclipse.jface.viewers.ITableColorProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -52,12 +52,12 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	protected IContentProvider getOutputsContentProvider() {
-		return new InterfaceContentProvider(false, InterfaceContentProviderType.DATA);
+		return new DataInterfaceContentProvider(false);
 	}
 
 	@Override
 	protected IContentProvider getInputsContentProvider() {
-		return new InterfaceContentProvider(true, InterfaceContentProviderType.DATA);
+		return new DataInterfaceContentProvider(true);
 	}
 
 	@Override
@@ -119,8 +119,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	}
 
 	@Override
-	protected InterfaceLabelProvider getLabelProvider() {
-		return new DataInterfaceLabelProvider();
+	protected LabelProvider getLabelProvider() {
+		return new DataLabelProvider();
 	}
 
 	@Override
@@ -141,37 +141,6 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	protected String[] getColumnProperties() {
 		String[] nameTypeComment = super.getColumnProperties();
 		return new String[] { nameTypeComment[0], nameTypeComment[1], nameTypeComment[2], INITIAL_VALUE, ARRAY_SIZE };
-	}
-
-	protected static class DataInterfaceLabelProvider extends InterfaceLabelProvider implements ITableColorProvider {
-		protected static final int INITIALVALUE_COLUMN = 3;
-		protected static final int ARRAYSIZE_COLUMN = 4;
-
-		@Override
-		public String getColumnText(Object element, int columnIndex) {
-			switch (columnIndex) {
-			case INITIALVALUE_COLUMN:
-				if (((VarDeclaration) element).getValue() == null) {
-					return ""; //$NON-NLS-1$
-				}
-				return ((VarDeclaration) element).getValue().getValue();
-			case ARRAYSIZE_COLUMN:
-				int arraySize = ((VarDeclaration) element).getArraySize();
-				return (arraySize <= 0) ? "" : String.valueOf(arraySize); //$NON-NLS-1$
-			default:
-				return super.getColumnText(element, columnIndex);
-			}
-		}
-
-		@Override
-		public Color getBackground(Object element, int columnIndex) {
-			return null;
-		}
-
-		@Override
-		public Color getForeground(Object element, int columnIndex) {
-			return null;
-		}
 	}
 
 	protected class DataInterfaceCellModifier extends InterfaceCellModifier {
@@ -228,6 +197,30 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				executeCommand(cmd);
 				viewer.refresh(data);
 			}
+		}
+	}
+
+	protected static class DataInterfaceContentProvider extends InterfaceContentProvider {
+		public DataInterfaceContentProvider(boolean inputs) {
+			super(inputs);
+		}
+
+		@Override
+		protected Object[] getInputs(Object inputElement) {
+			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+			if (null != interfaceList) {
+				return interfaceList.getInputVars().toArray();
+			}
+			return new Object[0];
+		}
+
+		@Override
+		protected Object[] getOutputs(Object inputElement) {
+			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+			if (null != interfaceList) {
+				return interfaceList.getOutputVars().toArray();
+			}
+			return new Object[0];
 		}
 	}
 }

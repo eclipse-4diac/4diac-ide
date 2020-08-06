@@ -30,12 +30,12 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 
 	@Override
 	protected IContentProvider getOutputsContentProvider() {
-		return new InterfaceContentProvider(false, InterfaceContentProviderType.ADAPTER);
+		return new AdapterInterfaceContentProvider(false);
 	}
 
 	@Override
 	protected IContentProvider getInputsContentProvider() {
-		return new InterfaceContentProvider(true, InterfaceContentProviderType.ADAPTER);
+		return new AdapterInterfaceContentProvider(true);
 	}
 
 	@Override
@@ -76,6 +76,30 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	public void addEntry(Object entry, int index, CompoundCommand cmd) {
 		if (entry instanceof AdapterDeclaration) {
 			cmd.add(newInsertCommand((AdapterDeclaration) entry, getIsInputsViewer(), index));
+		}
+	}
+
+	protected static class AdapterInterfaceContentProvider extends InterfaceContentProvider {
+		public AdapterInterfaceContentProvider(boolean inputs) {
+			super(inputs);
+		}
+
+		@Override
+		protected Object[] getInputs(Object inputElement) {
+			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+			if (null != interfaceList) {
+				return interfaceList.getSockets().toArray();
+			}
+			return new Object[0];
+		}
+
+		@Override
+		protected Object[] getOutputs(Object inputElement) {
+			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+			if (null != interfaceList) {
+				return interfaceList.getPlugs().toArray();
+			}
+			return new Object[0];
 		}
 	}
 }

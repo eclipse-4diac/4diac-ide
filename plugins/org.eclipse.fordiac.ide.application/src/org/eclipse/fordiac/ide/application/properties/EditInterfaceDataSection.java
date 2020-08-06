@@ -31,10 +31,12 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -58,12 +60,12 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected InterfaceLabelProvider getLabelProvider() {
-		return new DataInterfaceLabelProvider() {
+	protected LabelProvider getLabelProvider() {
+		return new DataLabelProvider() {
 
 			@Override
 			public Color getBackground(Object element, int columnIndex) {
-				if ((columnIndex == INITIALVALUE_COLUMN) && (!((VarDeclaration) element).isIsInput())) {
+				if ((columnIndex == INITIALVALUE_COL_INDEX) && (!((VarDeclaration) element).isIsInput())) {
 					return Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
 				}
 				return null;
@@ -71,7 +73,7 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 
 			@Override
 			public String getColumnText(Object element, int columnIndex) {
-				if (columnIndex == INITIALVALUE_COLUMN && !((VarDeclaration) element).isIsInput()) {
+				if ((columnIndex == INITIALVALUE_COL_INDEX) && !((VarDeclaration) element).isIsInput()) {
 					return "-"; //$NON-NLS-1$
 				} else {
 					return super.getColumnText(element, columnIndex);

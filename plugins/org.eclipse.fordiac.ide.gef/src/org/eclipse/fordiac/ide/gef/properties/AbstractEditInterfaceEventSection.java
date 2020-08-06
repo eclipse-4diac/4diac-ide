@@ -32,12 +32,14 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 
 	@Override
 	protected IContentProvider getOutputsContentProvider() {
-		return new InterfaceContentProvider(false, InterfaceContentProviderType.EVENT);
+		return new EventInterfaceContentProvider(false) {
+
+		};
 	}
 
 	@Override
 	protected IContentProvider getInputsContentProvider() {
-		return new InterfaceContentProvider(true, InterfaceContentProviderType.EVENT);
+		return new EventInterfaceContentProvider(true);
 	}
 
 	@Override
@@ -78,6 +80,30 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 	public void addEntry(Object entry, int index, CompoundCommand cmd) {
 		if (entry instanceof Event) {
 			cmd.add(newInsertCommand((Event) entry, getIsInputsViewer(), index));
+		}
+	}
+
+	protected static class EventInterfaceContentProvider extends InterfaceContentProvider {
+		public EventInterfaceContentProvider(boolean inputs) {
+			super(inputs);
+		}
+
+		@Override
+		protected Object[] getInputs(Object inputElement) {
+			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+			if (null != interfaceList) {
+				return interfaceList.getEventInputs().toArray();
+			}
+			return new Object[0];
+		}
+
+		@Override
+		protected Object[] getOutputs(Object inputElement) {
+			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+			if (null != interfaceList) {
+				return interfaceList.getEventOutputs().toArray();
+			}
+			return new Object[0];
 		}
 	}
 }

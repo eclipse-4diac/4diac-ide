@@ -33,8 +33,9 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementComma
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.edit.providers.InterfaceElementLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -59,14 +60,12 @@ import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -86,10 +85,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	private TableViewer inputsViewer;
 	private TableViewer outputsViewer;
 	public boolean isInputsViewer;
-
-	protected enum InterfaceContentProviderType {
-		EVENT, DATA, ADAPTER
-	}
 
 	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
@@ -216,8 +211,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		return new String[] { NAME, TYPE, COMMENT };
 	}
 
-	protected InterfaceLabelProvider getLabelProvider() {
-		return new InterfaceLabelProvider();
+	protected LabelProvider getLabelProvider() {
+		return new InterfaceElementLabelProvider();
 	}
 
 	protected InterfaceCellModifier getCellModifier(TableViewer viewer) {
@@ -288,50 +283,16 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		commandStack = commandStackBuffer;
 	}
 
-	protected static class InterfaceContentProvider implements IStructuredContentProvider {
+	protected abstract static class InterfaceContentProvider implements IStructuredContentProvider {
 		private boolean inputs;
-		private InterfaceContentProviderType type;
 
-		public InterfaceContentProvider(boolean inputs, InterfaceContentProviderType type) {
+		public InterfaceContentProvider(boolean inputs) {
 			this.inputs = inputs;
-			this.type = type;
 		}
 
-		private Object[] getInputs(Object inputElement) {
-			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+		protected abstract Object[] getInputs(Object inputElement);
 
-			if (null != interfaceList) {
-				switch (type) {
-				case EVENT:
-					return interfaceList.getEventInputs().toArray();
-				case ADAPTER:
-					return interfaceList.getSockets().toArray();
-				case DATA:
-					return interfaceList.getInputVars().toArray();
-				default:
-					break;
-				}
-			}
-			return new Object[0];
-		}
-
-		private Object[] getOutputs(Object inputElement) {
-			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
-
-			if (null != interfaceList) {
-				switch (type) {
-				case EVENT:
-					return interfaceList.getEventOutputs().toArray();
-				case ADAPTER:
-					return interfaceList.getPlugs().toArray();
-				case DATA:
-					return interfaceList.getOutputVars().toArray();
-				default:
-					break;
-				}
-			}
-			return new Object[0];
-		}
+		protected abstract Object[] getOutputs(Object inputElement);
 
 		@Override
 		public Object[] getElements(final Object inputElement) {
@@ -345,50 +306,14 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 			return new Object[0];
 		}
 
-		private static InterfaceList getInterfaceListFromInput(Object inputElement) {
+		static InterfaceList getInterfaceListFromInput(Object inputElement) {
 			InterfaceList interfaceList = null;
-			if (inputElement instanceof SubApp) {
-				interfaceList = ((SubApp) inputElement).getInterface();
+			if (inputElement instanceof FBNetworkElement) {
+				interfaceList = ((FBNetworkElement) inputElement).getInterface();
 			} else if (inputElement instanceof FBType) {
 				interfaceList = ((FBType) inputElement).getInterfaceList();
 			}
 			return interfaceList;
-		}
-	}
-
-	protected static class InterfaceLabelProvider extends LabelProvider implements ITableLabelProvider {
-
-		private static final int NAME_COLUMN = 0;
-		private static final int TYPE_COLUMN = 1;
-		private static final int COMMENT_COLUMN = 2;
-
-		@Override
-		public Image getColumnImage(final Object element, final int columnIndex) {
-			return null;
-		}
-
-		@Override
-		public String getColumnText(final Object element, final int columnIndex) {
-			String result = null;
-			if (element instanceof IInterfaceElement) {
-				switch (columnIndex) {
-				case NAME_COLUMN:
-					result = ((IInterfaceElement) element).getName();
-					break;
-				case TYPE_COLUMN:
-					result = element instanceof Event ? FordiacMessages.Event
-							: ((IInterfaceElement) element).getTypeName();
-					break;
-				case COMMENT_COLUMN:
-					result = ((IInterfaceElement) element).getComment() != null
-							? ((IInterfaceElement) element).getComment()
-							: ""; //$NON-NLS-1$
-					break;
-				}
-			} else {
-				result = element.toString();
-			}
-			return result;
 		}
 	}
 
@@ -464,7 +389,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		}
 	}
 
-	protected int getInsertingIndex(IInterfaceElement interfaceElement, EList interfaceList) {
+	protected int getInsertingIndex(IInterfaceElement interfaceElement,
+			EList<? extends IInterfaceElement> interfaceList) {
 		return interfaceList.indexOf(interfaceElement) + 1;
 	}
 

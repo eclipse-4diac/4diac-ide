@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
@@ -42,13 +43,10 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -65,12 +63,6 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	private static final String INIT = "INITIAL_VALUE"; //$NON-NLS-1$
 	private static final String COMMENT = "COMMENT"; //$NON-NLS-1$
 	private static final String ARRAY = "ARRAY_SIZE"; //$NON-NLS-1$
-
-	private static final int NAME_COL_INDEX = 0;
-	private static final int TYPE_COL_INDEX = 1;
-	private static final int VALUE_COL_INDEX = 3;
-	private static final int COMMENT_COL_INDEX = 2;
-	private static final int ARRAYSIZE_COL_INDEX = 4;
 
 	private TableViewer structViewer;
 	private DataTypeDropdown typeDropDown;
@@ -125,7 +117,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		structViewer.setCellEditors(createCellEditors(structViewer.getTable()));
 		structViewer.setColumnProperties(new String[] { NAME, TYPE, COMMENT, INIT, ARRAY });
 		structViewer.setContentProvider(new ArrayContentProvider());
-		structViewer.setLabelProvider(new StructVarsLabelProvider());
+		structViewer.setLabelProvider(new DataLabelProvider());
 		structViewer.setCellModifier(new StructCellModifier());
 
 		structViewer.setInput(((StructuredType) dataType).getMemberVariables());
@@ -214,7 +206,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			case ARRAY:
 				return (var.getArraySize() > 0) ? Integer.toString(var.getArraySize()) : ""; //$NON-NLS-1$
 			default:
-				return "Could not load";
+				return "Could not load"; //$NON-NLS-1$
 			}
 		}
 
@@ -248,36 +240,6 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			}
 			executeCommand(cmd);
 			structViewer.refresh(data);
-		}
-	}
-
-	private static final class StructVarsLabelProvider extends LabelProvider implements ITableLabelProvider {
-
-		@Override
-		public Image getColumnImage(final Object element, final int columnIndex) {
-			return null;
-		}
-
-		@Override
-		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof VarDeclaration) {
-				final VarDeclaration varDecl = ((VarDeclaration) element);
-				switch (columnIndex) {
-				case NAME_COL_INDEX:
-					return varDecl.getName();
-				case TYPE_COL_INDEX:
-					return varDecl.getType().getName();
-				case VALUE_COL_INDEX:
-					return varDecl.getValue() == null ? "" : varDecl.getValue().getValue(); //$NON-NLS-1$
-				case COMMENT_COL_INDEX:
-					return varDecl.getComment();
-				case ARRAYSIZE_COL_INDEX:
-					return (varDecl.getArraySize() > 0) ? Integer.toString(varDecl.getArraySize()) : ""; //$NON-NLS-1$
-				default:
-					break;
-				}
-			}
-			return element.toString();
 		}
 	}
 
