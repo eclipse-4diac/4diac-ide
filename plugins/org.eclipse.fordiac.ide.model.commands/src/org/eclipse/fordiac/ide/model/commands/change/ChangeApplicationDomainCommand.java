@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,19 +21,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 public class ChangeApplicationDomainCommand extends ChangeIdentificationCommand {
 
 	/** The new ApplicationDomain value. */
-	private String newApplicationDomain;
+	private final String newApplicationDomain;
 
 	/** The old ApplicationDomain value. */
 	private String oldApplicationDomain;
 
 	public ChangeApplicationDomainCommand(LibraryElement type, final String newApplicationDomain) {
 		super(type);
-		this.newApplicationDomain = newApplicationDomain;
+		this.newApplicationDomain = (null == newApplicationDomain) ? "" : newApplicationDomain; //$NON-NLS-1$
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -44,7 +44,7 @@ public class ChangeApplicationDomainCommand extends ChangeIdentificationCommand 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -54,7 +54,7 @@ public class ChangeApplicationDomainCommand extends ChangeIdentificationCommand 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override
