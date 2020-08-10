@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2014 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,19 +22,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 public class ChangeCompilerInfoClassdefCommand extends ChangeCompilerInfoCommand {
 
 	/** The new ApplicationDomain value. */
-	private String newClassdef;
+	private final String newClassdef;
 
 	/** The old ApplicationDomain value. */
 	private String oldClassdef;
 
 	public ChangeCompilerInfoClassdefCommand(final FBType type, final String newClassdef) {
 		super(type);
-		this.newClassdef = newClassdef;
+		this.newClassdef = (null == newClassdef) ? "" : newClassdef; //$NON-NLS-1$
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -45,7 +45,7 @@ public class ChangeCompilerInfoClassdefCommand extends ChangeCompilerInfoCommand
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -55,7 +55,7 @@ public class ChangeCompilerInfoClassdefCommand extends ChangeCompilerInfoCommand
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override

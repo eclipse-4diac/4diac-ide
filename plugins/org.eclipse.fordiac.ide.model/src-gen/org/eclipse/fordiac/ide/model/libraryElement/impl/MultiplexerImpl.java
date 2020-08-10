@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 public class MultiplexerImpl extends StructManipulatorImpl implements Multiplexer {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	protected MultiplexerImpl() {
@@ -45,7 +44,6 @@ public class MultiplexerImpl extends StructManipulatorImpl implements Multiplexe
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override

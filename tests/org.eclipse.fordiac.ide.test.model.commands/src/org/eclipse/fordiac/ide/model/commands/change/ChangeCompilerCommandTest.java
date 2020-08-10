@@ -47,13 +47,27 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 	public static void verifyDefaultState(final State state, final State oldState, final TestFunction t,
 			final int index, final int size) {
 		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
-		t.test(compilerInfo.getCompiler().size() == size);
 		t.test(null != compilerInfo);
+		t.test(compilerInfo.getCompiler().size() == size);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage().equals(Language.OTHER));
 		t.test(compilerInfo.getCompiler().get(index).getProduct().equals(FordiacMessages.Unknown));
 		t.test(compilerInfo.getCompiler().get(index).getVendor().equals(FordiacMessages.Unknown));
 		t.test(compilerInfo.getCompiler().get(index).getVersion().equals("1.0")); //$NON-NLS-1$
+	}
+
+	public static void verifyStateClassdefHeader(final State state, final State oldState, final TestFunction t) {
+		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
+		t.test(null != compilerInfo);
+		t.test(!compilerInfo.getClassdef().isEmpty());
+		t.test(!compilerInfo.getHeader().isEmpty());
+	}
+
+	public static void verifyStateEmptyClassdefHeader(final State state, final State oldState, final TestFunction t) {
+		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
+		t.test(null != compilerInfo);
+		t.test(compilerInfo.getClassdef().isEmpty());
+		t.test(compilerInfo.getHeader().isEmpty());
 	}
 
 	public static State executeDeleteCommand(final State state) {
@@ -79,7 +93,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 			final int index, final int size) {
 		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
 		t.test(compilerInfo.getCompiler().size() == size);
-		t.test(null == compilerInfo.getClassdef());
+		t.test(compilerInfo.getClassdef().isEmpty());
 		t.test(compilerInfo.getHeader().equals(HEADER_STRING));
 		t.test(null != compilerInfo);
 		t.test(!compilerInfo.getCompiler().isEmpty());
@@ -208,6 +222,124 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		t.test(compilerInfo.getCompiler().get(index).getVersion().equals(VERSION_STRING));
 	}
 
+	public static State executeChangeHeaderToNullCommand(final State state) {
+		state.setCommand(
+				new ChangeCompilerInfoHeaderCommand(state.getFbNetwork().getNetworkElements().get(0).getType(), null));
+		assumeNotNull(state.getCommand());
+		assumeTrue(state.getCommand().canExecute());
+		state.getCommand().execute();
+		return state;
+	}
+
+	public static void verifyChangedHeaderToNullState(final State state, final State oldState, final TestFunction t,
+			final int index, final int size) {
+		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
+		t.test(compilerInfo.getCompiler().size() == size);
+		t.test(compilerInfo.getClassdef().equals(CLASSDEF_STRING));
+		t.test(compilerInfo.getHeader().isEmpty());
+		t.test(null != compilerInfo);
+		t.test(!compilerInfo.getCompiler().isEmpty());
+		t.test(compilerInfo.getCompiler().get(index).getLanguage().equals(Language.OTHER));
+		t.test(compilerInfo.getCompiler().get(index).getProduct().equals(FordiacMessages.Unknown));
+		t.test(compilerInfo.getCompiler().get(index).getVendor().equals(FordiacMessages.Unknown));
+		t.test(compilerInfo.getCompiler().get(index).getVersion().equals("1.0")); //$NON-NLS-1$
+	}
+
+	public static State executeChangeClassdefToNullCommand(final State state) {
+		state.setCommand(new ChangeCompilerInfoClassdefCommand(
+				state.getFbNetwork().getNetworkElements().get(0).getType(), null));
+		assumeNotNull(state.getCommand());
+		assumeTrue(state.getCommand().canExecute());
+		state.getCommand().execute();
+		return state;
+	}
+
+	public static void verifyChangedClassdefToNullState(final State state, final State oldState, final TestFunction t,
+			final int index, final int size) {
+		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
+		t.test(compilerInfo.getCompiler().size() == size);
+		t.test(compilerInfo.getClassdef().isEmpty());
+		t.test(compilerInfo.getHeader().isEmpty());
+		t.test(null != compilerInfo);
+		t.test(!compilerInfo.getCompiler().isEmpty());
+		t.test(compilerInfo.getCompiler().get(index).getLanguage().equals(Language.OTHER));
+		t.test(compilerInfo.getCompiler().get(index).getProduct().equals(FordiacMessages.Unknown));
+		t.test(compilerInfo.getCompiler().get(index).getVendor().equals(FordiacMessages.Unknown));
+		t.test(compilerInfo.getCompiler().get(index).getVersion().equals("1.0")); //$NON-NLS-1$
+	}
+
+	public static State executeChangeVendorToNullCommand(final State state) {
+		state.setCommand(new ChangeCompilerVendorCommand(
+				state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo().getCompiler().get(0),
+				null));
+		assumeNotNull(state.getCommand());
+		assumeTrue(state.getCommand().canExecute());
+		state.getCommand().execute();
+		return state;
+	}
+
+	public static void verifyChangedVendorToNullState(final State state, final State oldState, final TestFunction t,
+			final int index, final int size) {
+		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
+		t.test(compilerInfo.getCompiler().size() == size);
+		t.test(compilerInfo.getClassdef().isEmpty());
+		t.test(compilerInfo.getHeader().isEmpty());
+		t.test(null != compilerInfo);
+		t.test(!compilerInfo.getCompiler().isEmpty());
+		t.test(compilerInfo.getCompiler().get(index).getLanguage().equals(Language.OTHER));
+		t.test(compilerInfo.getCompiler().get(index).getVendor().isEmpty());
+		t.test(compilerInfo.getCompiler().get(index).getProduct().equals(FordiacMessages.Unknown));
+		t.test(compilerInfo.getCompiler().get(index).getVersion().equals("1.0")); //$NON-NLS-1$
+	}
+
+	public static State executeChangeProductToNullCommand(final State state) {
+		state.setCommand(new ChangeCompilerProductCommand(
+				state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo().getCompiler().get(0),
+				null));
+		assumeNotNull(state.getCommand());
+		assumeTrue(state.getCommand().canExecute());
+		state.getCommand().execute();
+		return state;
+	}
+
+	public static void verifyChangedProductToNullState(final State state, final State oldState, final TestFunction t,
+			final int index, final int size) {
+		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
+		t.test(compilerInfo.getCompiler().size() == size);
+		t.test(compilerInfo.getClassdef().isEmpty());
+		t.test(compilerInfo.getHeader().isEmpty());
+		t.test(null != compilerInfo);
+		t.test(!compilerInfo.getCompiler().isEmpty());
+		t.test(compilerInfo.getCompiler().get(index).getLanguage().equals(Language.OTHER));
+		t.test(compilerInfo.getCompiler().get(index).getVendor().isEmpty());
+		t.test(compilerInfo.getCompiler().get(index).getProduct().isEmpty());
+		t.test(compilerInfo.getCompiler().get(index).getVersion().equals("1.0")); //$NON-NLS-1$
+	}
+
+	public static State executeChangeVersionToNullCommand(final State state) {
+		state.setCommand(new ChangeCompilerVersionCommand(
+				state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo().getCompiler().get(0),
+				null));
+		assumeNotNull(state.getCommand());
+		assumeTrue(state.getCommand().canExecute());
+		state.getCommand().execute();
+		return state;
+	}
+
+	public static void verifyChangedVersionToNullState(final State state, final State oldState, final TestFunction t,
+			final int index, final int size) {
+		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
+		t.test(compilerInfo.getCompiler().size() == size);
+		t.test(compilerInfo.getClassdef().isEmpty());
+		t.test(compilerInfo.getHeader().isEmpty());
+		t.test(null != compilerInfo);
+		t.test(!compilerInfo.getCompiler().isEmpty());
+		t.test(compilerInfo.getCompiler().get(index).getLanguage().equals(Language.OTHER));
+		t.test(compilerInfo.getCompiler().get(index).getVendor().isEmpty());
+		t.test(compilerInfo.getCompiler().get(index).getProduct().isEmpty());
+		t.test(compilerInfo.getCompiler().get(index).getVersion().isEmpty());
+	}
+
 	// parameter creation function, also contains description of how the textual
 	// description will be used
 	@Parameters(name = "{index}: {0}")
@@ -219,13 +351,16 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 				), //
 				new ExecutionDescription<State>("Add Compiler Info to Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeAddCommand, //
-						(State s, State o, TestFunction t) -> verifyDefaultState(s, o, t, 0, 1)//
-				), //
+						(State s, State o, TestFunction t) -> {
+							verifyDefaultState(s, o, t, 0, 1);
+							verifyStateEmptyClassdefHeader(s, o, t);
+						}), //
 				new ExecutionDescription<State>("Add second Compiler Info to Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeAddCommand, //
 						(State s, State o, TestFunction t) -> {
 							verifyDefaultState(s, o, t, 0, 2);
 							verifyDefaultState(s, o, t, 1, 2);
+							verifyStateEmptyClassdefHeader(s, o, t);
 						} //
 				), //
 				new ExecutionDescription<State>("Delete first Compiler Info from Functionblock", //$NON-NLS-1$
@@ -261,11 +396,34 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 						(State s, State o, TestFunction t) -> {
 							verifyChangedVersionState(s, o, t, 0, 2);
 							verifyDefaultState(s, o, t, 1, 2);
+							verifyStateClassdefHeader(s, o, t);
 						} //
 				), //
 				new ExecutionDescription<State>("Delete first Compiler Info from Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeDeleteCommand, //
-						(State s, State o, TestFunction t) -> verifyDefaultState(s, o, t, 0, 1) //
+						(State s, State o, TestFunction t) -> {
+							verifyDefaultState(s, o, t, 0, 1); //
+							verifyStateClassdefHeader(s, o, t);
+						}), //
+				new ExecutionDescription<State>("Change CompilerInfo Header to NULL on Functionblock", //$NON-NLS-1$
+						ChangeCompilerCommandTest::executeChangeHeaderToNullCommand, //
+						(State s, State o, TestFunction t) -> verifyChangedHeaderToNullState(s, o, t, 0, 1) //
+				), //
+				new ExecutionDescription<State>("Change CompilerInfo Classdef to NULL on Functionblock", //$NON-NLS-1$
+						ChangeCompilerCommandTest::executeChangeClassdefToNullCommand, //
+						(State s, State o, TestFunction t) -> verifyChangedClassdefToNullState(s, o, t, 0, 1) //
+				), //
+				new ExecutionDescription<State>("Change Compiler Vendor to NULL on Functionblock", //$NON-NLS-1$
+						ChangeCompilerCommandTest::executeChangeVendorToNullCommand, //
+						(State s, State o, TestFunction t) -> verifyChangedVendorToNullState(s, o, t, 0, 1) //
+				), //
+				new ExecutionDescription<State>("Change Compiler Product to NULL on Functionblock", //$NON-NLS-1$
+						ChangeCompilerCommandTest::executeChangeProductToNullCommand, //
+						(State s, State o, TestFunction t) -> verifyChangedProductToNullState(s, o, t, 0, 1) //
+				), //
+				new ExecutionDescription<State>("Change Compiler Version to NULL on Functionblock", //$NON-NLS-1$
+						ChangeCompilerCommandTest::executeChangeVersionToNullCommand, //
+						(State s, State o, TestFunction t) -> verifyChangedVersionToNullState(s, o, t, 0, 1) //
 				) //
 		);
 

@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 public class DemultiplexerImpl extends StructManipulatorImpl implements Demultiplexer {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	protected DemultiplexerImpl() {
@@ -48,7 +47,6 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override

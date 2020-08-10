@@ -70,7 +70,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String PRODUCT_EDEFAULT = null;
+	protected static final String PRODUCT_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getProduct() <em>Product</em>}' attribute.
@@ -88,7 +88,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VENDOR_EDEFAULT = null;
+	protected static final String VENDOR_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getVendor() <em>Vendor</em>}' attribute.
@@ -106,7 +106,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VERSION_EDEFAULT = null;
+	protected static final String VERSION_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.

@@ -58,7 +58,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String CLASSDEF_EDEFAULT = null;
+	protected static final String CLASSDEF_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getClassdef() <em>Classdef</em>}' attribute.
@@ -76,7 +76,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String HEADER_EDEFAULT = null;
+	protected static final String HEADER_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getHeader() <em>Header</em>}' attribute.

@@ -64,7 +64,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String CLASSIFICATION_EDEFAULT = null;
+	protected static final String CLASSIFICATION_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getClassification() <em>Classification</em>}' attribute.
@@ -83,7 +83,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String DESCRIPTION_EDEFAULT = null;
+	protected static final String DESCRIPTION_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
@@ -101,7 +101,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String FUNCTION_EDEFAULT = null;
+	protected static final String FUNCTION_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getFunction() <em>Function</em>}' attribute.
@@ -119,7 +119,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String STANDARD_EDEFAULT = null;
+	protected static final String STANDARD_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getStandard() <em>Standard</em>}' attribute.
@@ -138,7 +138,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String TYPE_EDEFAULT = null;
+	protected static final String TYPE_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute. <!--

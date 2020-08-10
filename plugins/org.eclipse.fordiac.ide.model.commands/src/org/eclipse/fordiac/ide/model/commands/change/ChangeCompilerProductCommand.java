@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2014 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,20 +22,20 @@ import org.eclipse.gef.commands.Command;
 public class ChangeCompilerProductCommand extends Command {
 
 	/** The new Compiler value. */
-	private Compiler compiler;
+	private final Compiler compiler;
 
-	private String newProduct;
+	private final String newProduct;
 	private String oldProduct;
 
 	public ChangeCompilerProductCommand(final Compiler compiler, final String newProduct) {
 		super();
 		this.compiler = compiler;
-		this.newProduct = newProduct;
+		this.newProduct = (null == newProduct) ? "" : newProduct; //$NON-NLS-1$
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -46,7 +46,7 @@ public class ChangeCompilerProductCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -56,7 +56,7 @@ public class ChangeCompilerProductCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override
