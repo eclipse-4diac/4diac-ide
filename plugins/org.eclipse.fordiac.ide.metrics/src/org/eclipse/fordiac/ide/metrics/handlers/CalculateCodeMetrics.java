@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 TU Wien, ACIN, Johannes Kepler University Linz
+ * Copyright (c) 2019 TU Wien, ACIN
+ * 				 2019-2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Peter Gsellmann - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Changed analysis result to key value pairs
+ *   Lisa Sonnleithner - Adjustments to change calculation method to average 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.handlers;
 
@@ -23,11 +25,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.metrics.analyzers.AbstractCodeMetricAnalyzer;
 import org.eclipse.fordiac.ide.metrics.analyzers.CyclomaticComplexity;
 import org.eclipse.fordiac.ide.metrics.analyzers.HalsteadMetric;
-import org.eclipse.fordiac.ide.metrics.analyzers.MetricData;
+import org.eclipse.fordiac.ide.metrics.analyzers.MetricResult;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -60,12 +64,12 @@ public class CalculateCodeMetrics extends AbstractHandler {
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
-			if (element instanceof MetricData) {
+			if (element instanceof MetricResult) {
 				switch (columnIndex) {
 				case 0:
-					return ((MetricData) element).getName();
+					return ((MetricResult) element).getName();
 				case 1:
-					return decimalFormat.format(((MetricData) element).getValue());
+					return decimalFormat.format(((MetricResult) element).getValue());
 				default:
 					break;
 				}
@@ -77,9 +81,9 @@ public class CalculateCodeMetrics extends AbstractHandler {
 
 	private static class MetricsResultDialog extends MessageDialog {
 
-		private final List<MetricData> data;
+		private final List<MetricResult> data;
 
-		public MetricsResultDialog(Shell parent, INamedElement element, final List<MetricData> data) {
+		public MetricsResultDialog(Shell parent, INamedElement element, final List<MetricResult> data) {
 			super(parent, "Calculated Metrics for " + element.getName(), null, null, INFORMATION, 0,
 					IDialogConstants.OK_LABEL);
 			this.data = data;
@@ -118,7 +122,7 @@ public class CalculateCodeMetrics extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
-		List<MetricData> result = new ArrayList<>();
+		List<MetricResult> result = new ArrayList<>();
 
 		INamedElement selectedElement = getSelectedElement(
 				(StructuredSelection) HandlerUtil.getCurrentSelection(event));
@@ -132,10 +136,19 @@ public class CalculateCodeMetrics extends AbstractHandler {
 
 	private static INamedElement getSelectedElement(StructuredSelection currentSelection) {
 		Object obj = currentSelection.getFirstElement();
+		if (obj instanceof EditPart) {
+			obj = ((EditPart) obj).getModel();
+
+		}
 
 		if (obj instanceof IFile) {
 			return checkSelectedFile((IFile) obj);
 		}
+
+		if (obj instanceof FBNetwork) {
+			return ((FBNetwork) obj).getApplication();
+		}
+
 		return (obj instanceof INamedElement) ? (INamedElement) obj : null;
 	}
 
@@ -147,7 +160,7 @@ public class CalculateCodeMetrics extends AbstractHandler {
 		return null;
 	}
 
-	private static void calculateMetrics(INamedElement element, List<MetricData> result) {
+	private static void calculateMetrics(INamedElement element, List<MetricResult> result) {
 		List<AbstractCodeMetricAnalyzer> analyzers = getAnalyzers();
 		for (AbstractCodeMetricAnalyzer analyzer : analyzers) {
 			analyzer.calculateMetrics(element);
@@ -162,7 +175,7 @@ public class CalculateCodeMetrics extends AbstractHandler {
 		return analyzers;
 	}
 
-	private static void displayResults(INamedElement element, List<MetricData> result,
+	private static void displayResults(INamedElement element, List<MetricResult> result,
 			IWorkbenchWindow workbenchWindow) {
 		MetricsResultDialog resultDialog = new MetricsResultDialog(workbenchWindow.getShell(), element, result);
 		resultDialog.open();

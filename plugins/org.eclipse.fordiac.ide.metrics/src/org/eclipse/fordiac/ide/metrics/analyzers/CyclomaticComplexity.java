@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 TU Wien, ACIN, Johannes Kepler University Linz
+ * Copyright (c) 2019 TU Wien, ACIN
+ * 				 2019-2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Peter Gsellmann - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Changed analysis result to key value pairs
+ *   Lisa Sonnleithner - Adjustments to change calculation method to average 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
@@ -18,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -26,22 +29,42 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	static final String[] CONDITIONS = { "IF", "FOR", "WHILE", "REPEAT" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
-	List<MetricData> metrics = new ArrayList<>();
+	List<MetricResult> metrics = new ArrayList<>();
 	double ccapp = 0.0;
 
 	@Override
 	public void calculateMetrics(INamedElement element) {
 		super.calculateMetrics(element);
-		metrics.add(0, new MetricData("Cyclomatic Number " + element.getName(), ccapp));
+		CyclomaticData cData = (CyclomaticData) this.data;
+		metrics.add(0, new MetricResult("Cyclomatic Number " + element.getName(), cData.cc));
+		metrics = removeDuplicates(metrics);
+	}
+
+	private List<MetricResult> removeDuplicates(List<MetricResult> list) {
+		List<MetricResult> newList = new ArrayList<>();
+		boolean dupl = false;
+		for (MetricResult m : list) {
+			for (MetricResult n : newList) {
+				if (m.equals(n)) {
+					dupl = true;
+				}
+			}
+			if (!dupl) {
+				newList.add(m);
+			}
+			dupl = false;
+		}
+		return newList;
 	}
 
 	@Override
-	public List<MetricData> getResults() {
+	public List<MetricResult> getResults() {
 		return metrics;
 	}
 
 	@Override
-	protected void analyzeBFB(BasicFBType basicFBType) {
+	protected MetricData analyzeBFB(BasicFBType basicFBType) {
+		CyclomaticData data = new CyclomaticData();
 		ECC ecc = basicFBType.getECC();
 
 		double ccfb = (ecc.getECTransition().size() - ecc.getECState().size() + 2);
@@ -54,8 +77,9 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 			}
 		}
 
-		ccapp += ccfb;
-		metrics.add(new MetricData("Cyclomatic Number " + basicFBType.getName(), ccfb));
+		data.cc += ccfb;
+		metrics.add(new MetricResult("Cyclomatic Number " + basicFBType.getName(), ccfb));
+		return data;
 	}
 
 	private static double analyzeAlgorithm(Algorithm algorithm) {
@@ -80,6 +104,19 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 			}
 		}
 		return ccAlg;
+	}
+
+	@Override
+	protected MetricData analyzeCFB(CompositeFBType compositeFBType) {
+		MetricData data = analyzeFBNetwork(((CompositeFBType) compositeFBType).getFBNetwork(), true);
+		metrics.add(new MetricResult("Cyclomatic Number " + compositeFBType.getName(), ((CyclomaticData) data).cc));
+		return data;
+
+	}
+
+	@Override
+	protected MetricData createDataType() {
+		return new CyclomaticData();
 	}
 
 }
