@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,19 +21,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 public class ChangeClassificationCommand extends ChangeIdentificationCommand {
 
 	/** The new classification value. */
-	private String newClassification;
+	private final String newClassification;
 
 	/** The old classification value. */
 	private String oldClassification;
 
 	public ChangeClassificationCommand(LibraryElement type, final String newClassification) {
 		super(type);
-		this.newClassification = newClassification;
+		this.newClassification = (null == newClassification) ? "" : newClassification; //$NON-NLS-1$
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -44,7 +44,7 @@ public class ChangeClassificationCommand extends ChangeIdentificationCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -54,7 +54,7 @@ public class ChangeClassificationCommand extends ChangeIdentificationCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override
