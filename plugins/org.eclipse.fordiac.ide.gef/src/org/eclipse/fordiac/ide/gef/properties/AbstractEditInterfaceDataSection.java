@@ -12,7 +12,7 @@
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - create command now has enhanced guess, added columns
- *   Daniel Lindhuber - added addEntry method
+ *   Daniel Lindhuber - added addEntry method & type search field
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
+import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
 import org.eclipse.gef.commands.Command;
@@ -49,6 +50,27 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	protected static final String INITIAL_VALUE = "initialvalue"; //$NON-NLS-1$
 	protected static final int ARRAYSIZE_WIDTH = 100;
 	protected static final int INITIALVALUE_WIDTH = 100;
+	private DataTypeDropdown typeDropdown;
+
+	@Override
+	protected CellEditor createTypeCellEditor(TableViewer viewer) {
+		typeDropdown = new DataTypeDropdown(viewer.getTable(), getDataTypeLib());
+		return typeDropdown;
+	}
+
+	@Override
+	protected Object getTypeValue(Object element, TableViewer viewer, int TYPE_COLUMN_INDEX) {
+		return typeDropdown.getValue();
+	}
+
+	@Override
+	protected Command createChangeDataTypeCommand(VarDeclaration data, Object value, TableViewer viewer) {
+		if (value instanceof String) {
+			DataType dataType = typeDropdown.getType((String) value);
+			return (dataType == null) ? null : newChangeTypeCommand(data, dataType);
+		}
+		return null;
+	}
 
 	@Override
 	protected IContentProvider getOutputsContentProvider() {
