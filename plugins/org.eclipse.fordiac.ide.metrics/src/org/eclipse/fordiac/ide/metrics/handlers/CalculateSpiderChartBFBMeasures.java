@@ -9,29 +9,23 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Peter Gsellmann - initial API and implementation and/or initial documentation
- *   Alois Zoitl - Changed analysis result to key value pairs
- *   Lisa Sonnleithner - Adjustments to change calculation method to average 
- *   				   - extracted superclass
+ *   Lisa Sonnleithner - initial API and implementation and/or initial documentation
  *******************************************************************************/
+
 package org.eclipse.fordiac.ide.metrics.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.metrics.analyzers.AbstractCodeMetricAnalyzer;
-import org.eclipse.fordiac.ide.metrics.analyzers.CyclomaticComplexity;
-import org.eclipse.fordiac.ide.metrics.analyzers.HalsteadMetric;
+import org.eclipse.fordiac.ide.metrics.analyzers.SpiderChartBFBMeasures;
 
-public class CalculateCodeMetrics extends AbstractCodeMetricHandler {
+public class CalculateSpiderChartBFBMeasures extends AbstractCodeMetricHandler {
 
 	protected List<AbstractCodeMetricAnalyzer> getAnalyzers() {
 		List<AbstractCodeMetricAnalyzer> analyzers = new ArrayList<>();
-		analyzers.add(new CyclomaticComplexity());
-		analyzers.add(new HalsteadMetric());
+		analyzers.add(new SpiderChartBFBMeasures());
 		return analyzers;
 	}
-
-
 
 }

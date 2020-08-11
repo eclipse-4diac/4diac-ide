@@ -212,6 +212,10 @@ public class FBTypeEditor extends FormEditor
 		return null;
 	}
 
+	public FBType getFBType() {
+		return fbType;
+	}
+	
 	public CommandStack getCommandStack() {
 		return commandStack;
 	}
