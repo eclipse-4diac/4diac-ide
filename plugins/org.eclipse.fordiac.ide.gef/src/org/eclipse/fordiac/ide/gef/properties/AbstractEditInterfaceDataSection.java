@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -84,8 +84,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	protected String[] fillTypeCombo() {
-		List<String> list = new ArrayList<>();
-		for (DataType dataType : getDataTypeLib().getDataTypesSorted()) {
+		final List<String> list = new ArrayList<>();
+		for (final DataType dataType : getDataTypeLib().getDataTypesSorted()) {
 			list.add(dataType.getName());
 		}
 		return list.toArray(new String[0]);
@@ -96,7 +96,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (null != interfaceElement) {
 			return interfaceElement.getType();
 		}
-		EList<VarDeclaration> dataList = getDataList(interfaceList, isInput);
+		final EList<VarDeclaration> dataList = getDataList(interfaceList, isInput);
 		if (!dataList.isEmpty()) {
 			return dataList.get(dataList.size() - 1).getType();
 		}
@@ -106,7 +106,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	@Override
 	protected int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput) {
 		if (null != interfaceElement) {
-			InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
+			final InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
 			return getInsertingIndex(interfaceElement, getDataList(interfaceList, isInput));
 		}
 		return -1;
@@ -128,10 +128,10 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	protected TableLayout createTableLayout(Table table) {
-		TableLayout layout = super.createTableLayout(table);
-		TableColumn column4 = new TableColumn(table, SWT.LEFT);
+		final TableLayout layout = super.createTableLayout(table);
+		final TableColumn column4 = new TableColumn(table, SWT.LEFT);
 		column4.setText(FordiacMessages.InitialValue);
-		TableColumn column5 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column5 = new TableColumn(table, SWT.LEFT);
 		column5.setText(FordiacMessages.ArraySize);
 
 		layout.addColumnData(new ColumnPixelData(INITIALVALUE_WIDTH));
@@ -153,7 +153,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	@Override
 	protected void setCellEditors(TableViewer viewer) {
 		super.setCellEditors(viewer);
-		CellEditor[] nameTypeCommentEditors = viewer.getCellEditors();
+		final CellEditor[] nameTypeCommentEditors = viewer.getCellEditors();
 		viewer.setCellEditors(
 				new CellEditor[] { nameTypeCommentEditors[0], nameTypeCommentEditors[1], nameTypeCommentEditors[2],
 						new CustomTextCellEditor(viewer.getTable()), new CustomTextCellEditor(viewer.getTable()) });
@@ -161,7 +161,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	protected String[] getColumnProperties() {
-		String[] nameTypeComment = super.getColumnProperties();
+		final String[] nameTypeComment = super.getColumnProperties();
 		return new String[] { nameTypeComment[0], nameTypeComment[1], nameTypeComment[2], INITIAL_VALUE, ARRAY_SIZE };
 	}
 
@@ -186,7 +186,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		public Object getValue(Object element, String property) {
 			switch (property) {
 			case ARRAY_SIZE:
-				int arraySize = ((VarDeclaration) element).getArraySize();
+				final int arraySize = ((VarDeclaration) element).getArraySize();
 				return (arraySize <= 0) ? "" : String.valueOf(arraySize); //$NON-NLS-1$
 			case INITIAL_VALUE:
 				if (((VarDeclaration) element).getValue() == null) {
@@ -200,8 +200,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 		@Override
 		public void modify(Object element, String property, Object value) {
-			TableItem tableItem = (TableItem) element;
-			Object data = tableItem.getData();
+			final TableItem tableItem = (TableItem) element;
+			final Object data = tableItem.getData();
 			Command cmd = null;
 
 			switch (property) {
@@ -209,7 +209,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				cmd = new ChangeArraySizeCommand((VarDeclaration) data, (String) value);
 				break;
 			case INITIAL_VALUE:
-				cmd = new ChangeInitialValueCommand((VarDeclaration) data, (String) value);
+				cmd = new ChangeValueCommand((VarDeclaration) data, (String) value);
 				break;
 			default:
 				super.modify(element, property, value);
@@ -229,7 +229,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 		@Override
 		protected Object[] getInputs(Object inputElement) {
-			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
 			if (null != interfaceList) {
 				return interfaceList.getInputVars().toArray();
 			}
@@ -238,7 +238,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 		@Override
 		protected Object[] getOutputs(Object inputElement) {
-			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
 			if (null != interfaceList) {
 				return interfaceList.getOutputVars().toArray();
 			}

@@ -30,24 +30,25 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 
 	// create a state description that fits our purpose
 	public static class State implements CommandTestBase.StateBase {
-		private VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		private final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
 		State() {
 			super();
 			var.setValue(LibraryElementFactory.eINSTANCE.createValue());
 		}
 
-		// private String value = "";
 		private Command cmd;
 
 		public VarDeclaration getVar() {
 			return var;
 		}
 
+		@Override
 		public Command getCommand() {
 			return cmd;
 		}
 
+		@Override
 		public void setCommand(Command cmd) {
 			this.cmd = cmd;
 		}
@@ -59,14 +60,14 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 	}
 
 	protected static State undoCommand(Object stateObj) {
-		State state = (State) stateObj;
+		final State state = (State) stateObj;
 		assumeTrue(state.getCommand().canUndo());
 		state.getCommand().undo();
 		return (state);
 	}
 
 	protected static State redoCommand(Object stateObj) {
-		State state = (State) stateObj;
+		final State state = (State) stateObj;
 		assumeTrue(state.getCommand().canRedo());
 		state.getCommand().redo();
 		return (state);
@@ -79,7 +80,7 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 	}
 
 	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
-		List<Object[]> commands = new ArrayList<>();
+		final List<Object[]> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", //
 				State::new, //
@@ -105,7 +106,7 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 	}
 
 	protected static State setInitialValues() {
-		State state = new State();
+		final State state = new State();
 		state.getVar().getValue().setValue(SET_VALUE);
 		return state;
 	}

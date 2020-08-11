@@ -16,10 +16,10 @@ package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeMemberVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
@@ -82,12 +82,12 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	public void createPartControl(Composite parent) {
-		TabbedPropertySheetWidgetFactory widgetFactory = new TabbedPropertySheetWidgetFactory();
+		final TabbedPropertySheetWidgetFactory widgetFactory = new TabbedPropertySheetWidgetFactory();
 		parent.setLayout(new GridLayout(2, false));
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		showLabel(parent);
 
-		AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(parent, widgetFactory);
 
 		showTable(parent);
@@ -132,7 +132,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private int getInsertionIndex() {
-		VarDeclaration alg = getLastSelectedVariable();
+		final VarDeclaration alg = getLastSelectedVariable();
 		if (null == alg) {
 			return getType().getMemberVariables().size();
 		}
@@ -140,7 +140,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private VarDeclaration getLastSelectedVariable() {
-		IStructuredSelection selection = structViewer.getStructuredSelection();
+		final IStructuredSelection selection = structViewer.getStructuredSelection();
 		if (selection.isEmpty()) {
 			return null;
 		}
@@ -220,7 +220,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				cmd = new ChangeNameCommand(data, value.toString());
 				break;
 			case TYPE:
-				DataType type = typeDropDown.getType((String) value);
+				final DataType type = typeDropDown.getType((String) value);
 				if (type == null) {
 					return;
 				}
@@ -230,7 +230,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				cmd = new ChangeCommentCommand(data, value.toString());
 				break;
 			case INIT:
-				cmd = new ChangeInitialValueCommand(data, value.toString());
+				cmd = new ChangeValueCommand(data, value.toString());
 				break;
 			case ARRAY:
 				cmd = new ChangeArraySizeCommand(data, value.toString());
@@ -251,7 +251,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	@Override
 	public void addEntry(Object entry, int index, CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
-			VarDeclaration varEntry = (VarDeclaration) entry;
+			final VarDeclaration varEntry = (VarDeclaration) entry;
 			cmd.add(new InsertVariableCommand(((StructuredType) dataType).getMemberVariables(), varEntry, index));
 		}
 	}
@@ -263,7 +263,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	@Override
 	public Object removeEntry(int index, CompoundCommand cmd) {
-		VarDeclaration entry = (VarDeclaration) getEntry(index);
+		final VarDeclaration entry = (VarDeclaration) getEntry(index);
 		cmd.add(new DeleteMemberVariableCommand(getType(), entry));
 		return entry;
 	}

@@ -21,9 +21,9 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
@@ -86,11 +86,11 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	}
 
 	public void createInternalVarsControls(final Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		AddDeleteWidget buttons = new AddDeleteWidget();
+		final AddDeleteWidget buttons = new AddDeleteWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
 		internalVarsViewer = TableWidgetFactory.createTableViewer(composite);
@@ -115,7 +115,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	}
 
 	private int getInsertionIndex() {
-		VarDeclaration alg = getLastSelectedVariable();
+		final VarDeclaration alg = getLastSelectedVariable();
 		if (null == alg) {
 			return getType().getInternalVars().size();
 		}
@@ -123,7 +123,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	}
 
 	private VarDeclaration getLastSelectedVariable() {
-		IStructuredSelection selection = internalVarsViewer.getStructuredSelection();
+		final IStructuredSelection selection = internalVarsViewer.getStructuredSelection();
 		if (selection.isEmpty()) {
 			return null;
 		}
@@ -131,17 +131,17 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	}
 
 	private static void configureTableLayout(final Table table) {
-		TableColumn column1 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText(FordiacMessages.Name);
-		TableColumn column2 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column2 = new TableColumn(table, SWT.LEFT);
 		column2.setText(FordiacMessages.Type);
-		TableColumn column3 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column3 = new TableColumn(table, SWT.LEFT);
 		column3.setText(FordiacMessages.Comment);
-		TableColumn column4 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column4 = new TableColumn(table, SWT.LEFT);
 		column4.setText(FordiacMessages.InitialValue);
-		TableColumn column5 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column5 = new TableColumn(table, SWT.LEFT);
 		column5.setText(FordiacMessages.ArraySize);
-		TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(2, 30));
 		layout.addColumnData(new ColumnWeightData(2, 30));
 		layout.addColumnData(new ColumnWeightData(1, 20));
@@ -151,7 +151,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	}
 
 	private CellEditor[] createCellEditors(final Table table) {
-		TextCellEditor varNameEditor = new TextCellEditor(table);
+		final TextCellEditor varNameEditor = new TextCellEditor(table);
 		((Text) varNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
 		typeDropDown = new DataTypeDropdown(table, dataLib);
 		return new CellEditor[] { varNameEditor, typeDropDown, new TextCellEditor(table), new TextCellEditor(table),
@@ -165,7 +165,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			internalVarsViewer.setInput(getType().getInternalVars());
@@ -187,7 +187,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			VarDeclaration var = (VarDeclaration) element;
+			final VarDeclaration var = (VarDeclaration) element;
 			switch (property) {
 			case IV_NAME:
 				return var.getName();
@@ -204,15 +204,15 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 
 		@Override
 		public void modify(final Object element, final String property, final Object value) {
-			TableItem tableItem = (TableItem) element;
-			VarDeclaration data = (VarDeclaration) tableItem.getData();
+			final TableItem tableItem = (TableItem) element;
+			final VarDeclaration data = (VarDeclaration) tableItem.getData();
 			Command cmd = null;
 			switch (property) {
 			case IV_NAME:
 				cmd = new ChangeNameCommand(data, value.toString());
 				break;
 			case IV_TYPE:
-				DataType type = typeDropDown.getType((String) value);
+				final DataType type = typeDropDown.getType((String) value);
 				if (type == null) {
 					return;
 				}
@@ -225,7 +225,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 				cmd = new ChangeArraySizeCommand(data, value.toString());
 				break;
 			default:
-				cmd = new ChangeInitialValueCommand(data, value.toString());
+				cmd = new ChangeValueCommand(data, value.toString());
 				break;
 			}
 
@@ -246,14 +246,14 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	@Override
 	public void addEntry(Object entry, int index, CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
-			VarDeclaration varEntry = (VarDeclaration) entry;
+			final VarDeclaration varEntry = (VarDeclaration) entry;
 			cmd.add(new InsertVariableCommand(getType().getInternalVars(), varEntry, index));
 		}
 	}
 
 	@Override
 	public Object removeEntry(int index, CompoundCommand cmd) {
-		VarDeclaration entry = (VarDeclaration) getEntry(index);
+		final VarDeclaration entry = (VarDeclaration) getEntry(index);
 		cmd.add(new DeleteInternalVariableCommand(getType(), entry));
 		return entry;
 	}

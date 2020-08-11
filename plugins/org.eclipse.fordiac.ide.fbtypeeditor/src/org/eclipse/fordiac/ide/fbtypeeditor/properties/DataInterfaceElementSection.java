@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -90,7 +90,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		initValueText = createGroupText(parent, true);
 		initValueText.addModifyListener(e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeInitialValueCommand((VarDeclaration) type, initValueText.getText()));
+			executeCommand(new ChangeValueCommand((VarDeclaration) type, initValueText.getText()));
 			addContentAdapter();
 		});
 	}
@@ -103,9 +103,9 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		openEditorButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				IWorkbench workbench = PlatformUI.getWorkbench();
+				final IWorkbench workbench = PlatformUI.getWorkbench();
 				if (workbench != null) {
-					IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+					final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 					if (activeWorkbenchWindow != null) {
 						openStructEditor(activeWorkbenchWindow);
 					}
@@ -113,12 +113,13 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 			}
 
 			private void openStructEditor(IWorkbenchWindow activeWorkbenchWindow) {
-				IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-				IFile file = getType().getType().getPaletteEntry().getFile();
-				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+				final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+				final IFile file = getType().getType().getPaletteEntry().getFile();
+				final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
+						.getDefaultEditor(file.getName());
 				try {
 					activePage.openEditor(new FileEditorInput(file), desc.getId());
-				} catch (PartInitException e1) {
+				} catch (final PartInitException e1) {
 					e1.printStackTrace();
 				}
 			}
@@ -137,13 +138,13 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		withEventsViewer.setContentProvider(new EventContentProvider());
 		withEventsViewer.setLabelProvider(new EventLabelProvider());
 
-		Table tableWith = withEventsViewer.getTable();
+		final Table tableWith = withEventsViewer.getTable();
 		configureTableLayout(tableWith);
 		tableWith.addListener(SWT.Selection, event -> {
 			if (event.detail == SWT.CHECK) {
-				TableItem checkedItem = (TableItem) event.item;
-				Event e = (Event) checkedItem.getData();
-				With with = e.getWith().stream().filter(w -> w.getVariables().equals(getType())).findFirst()
+				final TableItem checkedItem = (TableItem) event.item;
+				final Event e = (Event) checkedItem.getData();
+				final With with = e.getWith().stream().filter(w -> w.getVariables().equals(getType())).findFirst()
 						.orElse(null);
 				if (checkedItem.getChecked()) {
 					if (null == with) {
@@ -157,13 +158,13 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	}
 
 	private static void configureTableLayout(Table tableWith) {
-		TableColumn column1 = new TableColumn(tableWith, SWT.LEFT);
+		final TableColumn column1 = new TableColumn(tableWith, SWT.LEFT);
 		column1.setText(FordiacMessages.Event);
-		TableColumn column2 = new TableColumn(tableWith, SWT.LEFT);
+		final TableColumn column2 = new TableColumn(tableWith, SWT.LEFT);
 		column2.setText(FordiacMessages.DataType);
-		TableColumn column3 = new TableColumn(tableWith, SWT.LEFT);
+		final TableColumn column3 = new TableColumn(tableWith, SWT.LEFT);
 		column3.setText(FordiacMessages.Comment);
-		TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 100));
 		layout.addColumnData(new ColumnWeightData(20, 70));
 		layout.addColumnData(new ColumnWeightData(20, 100));
@@ -192,7 +193,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	@Override
 	public void refresh() {
 		super.refresh();
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			openEditorButton.setEnabled(getType().getType() instanceof StructuredType);
@@ -203,8 +204,8 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 				withEventsViewer.setInput(getType());
 				Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
 				getType().getWiths().stream().map(with -> withEventsViewer.testFindItem(with.eContainer()))
-				.filter(item -> (item instanceof TableItem))
-				.forEach(item -> ((TableItem) item).setChecked(true));
+						.filter(item -> (item instanceof TableItem))
+						.forEach(item -> ((TableItem) item).setChecked(true));
 			} else {
 				eventComposite.setVisible(false);
 			}
@@ -214,7 +215,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 
 	@Override
 	protected Collection<DataType> getTypes() {
-		FBType fbType = (FBType) getType().eContainer().eContainer();
+		final FBType fbType = (FBType) getType().eContainer().eContainer();
 		return fbType.getTypeLibrary().getDataTypeLibrary().getDataTypesSorted();
 	}
 }
