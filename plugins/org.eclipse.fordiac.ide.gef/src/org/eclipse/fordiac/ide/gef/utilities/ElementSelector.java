@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -31,7 +30,7 @@ public final class ElementSelector {
 	 *
 	 * @param viewObjects list with objects to select
 	 */
-	public static void selectViewObjects(Collection<? extends EObject> viewObjects) {
+	public static void selectViewObjects(Collection<? extends Object> viewObjects) {
 		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {

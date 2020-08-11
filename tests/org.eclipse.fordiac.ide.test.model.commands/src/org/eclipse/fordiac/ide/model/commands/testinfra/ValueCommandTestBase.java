@@ -96,6 +96,7 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 		return commands;
 	}
 
+	@SuppressWarnings("unused")
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
 		final VarDeclaration varDec = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDec.setValue(LibraryElementFactory.eINSTANCE.createValue());
@@ -111,6 +112,7 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 		return state;
 	}
 
+	@SuppressWarnings("unused")
 	protected static void verifySetInitialValues(State state, State oldState, TestFunction t) {
 		t.test(state.getVar().getValue().getValue().equals(SET_VALUE));
 

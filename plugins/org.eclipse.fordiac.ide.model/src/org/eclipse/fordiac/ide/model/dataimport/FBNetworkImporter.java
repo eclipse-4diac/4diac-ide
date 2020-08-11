@@ -177,19 +177,16 @@ class FBNetworkImporter extends CommonElementImporter {
 			throws TypeImportException, XMLStreamException {
 		processChildren(parentNodeName, name -> {
 			switch (name) {
-			case LibraryElementTags.PARAMETER_ELEMENT: {
+			case LibraryElementTags.PARAMETER_ELEMENT:
 				VarDeclaration parameter = parseParameter();
 				VarDeclaration vInput = getVarNamed(block.getInterface(), parameter.getName(), true);
 				if (null != vInput) {
 					vInput.setValue(parameter.getValue());
 				}
 				return true;
-			}
-
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseGenericAttributeNode(block);
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-
 				return true;
 			default:
 				return false;
@@ -200,20 +197,18 @@ class FBNetworkImporter extends CommonElementImporter {
 	protected <T extends Connection> void parseConnectionList(EClass conType, EList<T> connectionlist,
 			String parentNodeName) throws XMLStreamException, TypeImportException {
 		processChildren(parentNodeName, name -> {
-			if (LibraryElementTags.CONNECTION_ELEMENT.equals(LibraryElementTags.CONNECTION_ELEMENT)) {
-				T connection = parseConnection(conType);
-				if (null != connection) {
-					connectionlist.add(connection);
-				}
-				proceedToEndElementNamed(LibraryElementTags.CONNECTION_ELEMENT);
-				return true;
+			T connection = parseConnection(conType);
+			if (null != connection) {
+				connectionlist.add(connection);
 			}
-			return false;
+			proceedToEndElementNamed(LibraryElementTags.CONNECTION_ELEMENT);
+			return true;
 		});
 
 	}
 
 	private <T extends Connection> T parseConnection(EClass conType) {
+		@SuppressWarnings("unchecked")
 		T connection = (T) LibraryElementFactory.eINSTANCE.create(conType);
 		connection.setResTypeConnection(false);
 

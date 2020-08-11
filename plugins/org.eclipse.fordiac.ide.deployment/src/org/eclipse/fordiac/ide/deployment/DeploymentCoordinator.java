@@ -28,13 +28,7 @@ import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -102,40 +96,6 @@ public enum DeploymentCoordinator {
 			}
 			messageBox.open();
 		});
-	}
-
-	/**
-	 * Count work creating f bs.
-	 *
-	 * @param res     the res
-	 * @param fbs     the fbs
-	 * @param subApps the sub apps
-	 *
-	 * @return the int
-	 */
-	private int countWorkCreatingFBs(final FBNetwork fbNetwork) {
-		int work = 0;
-
-		for (FBNetworkElement element : fbNetwork.getNetworkElements()) {
-			if (element instanceof SubApp) {
-				work += countWorkCreatingFBs(((SubApp) element).getSubAppNetwork());
-			} else if (element instanceof FB) {
-				work++;
-				FB fb = (FB) element;
-				InterfaceList interfaceList = fb.getInterface();
-				if (interfaceList != null) {
-					for (VarDeclaration varDecl : interfaceList.getInputVars()) {
-						if (varDecl.getInputConnections().isEmpty()) {
-							Value value = varDecl.getValue();
-							if (value != null && !value.getValue().isEmpty()) {
-								work++;
-							}
-						}
-					}
-				}
-			}
-		}
-		return work;
 	}
 
 	/**

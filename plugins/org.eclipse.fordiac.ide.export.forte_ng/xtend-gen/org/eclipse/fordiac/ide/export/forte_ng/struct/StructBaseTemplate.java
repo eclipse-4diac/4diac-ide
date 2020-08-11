@@ -25,7 +25,6 @@ public abstract class StructBaseTemplate extends ForteLibraryElementTemplate {
   @Accessors(AccessorType.PROTECTED_GETTER)
   private StructuredType type;
   
-  @Override
   protected CharSequence getExportPrefix() {
     StringConcatenation _builder = new StringConcatenation();
     return _builder;

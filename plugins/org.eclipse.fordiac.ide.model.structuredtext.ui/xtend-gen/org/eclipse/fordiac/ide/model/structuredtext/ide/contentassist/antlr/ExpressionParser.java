@@ -20,7 +20,6 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @SuppressWarnings("all")
 public class ExpressionParser extends StructuredTextParser {
-  @Override
   public Collection<FollowElement> getFollowElements(final AbstractInternalContentAssistParser parser) {
     try {
       InternalStructuredTextParser typedParser = ((InternalStructuredTextParser) parser);

@@ -48,7 +48,6 @@ public class StructuredTextUiModule extends AbstractStructuredTextUiModule {
     binder.<IResourceDescriptions>bind(IResourceDescriptions.class).to(ResourceSetBasedResourceDescriptions.class);
   }
   
-  @Override
   public Provider<? extends IAllContainersState> provideIAllContainersState() {
     return Access.getWorkspaceProjectsState();
   }
@@ -57,17 +56,14 @@ public class StructuredTextUiModule extends AbstractStructuredTextUiModule {
     return StructuredTextValueConverterService.class;
   }
   
-  @Override
   public Class<? extends IResourceForEditorInputFactory> bindIResourceForEditorInputFactory() {
     return ResourceForIEditorInputFactory.class;
   }
   
-  @Override
   public Class<? extends IResourceSetProvider> bindIResourceSetProvider() {
     return SimpleResourceSetProvider.class;
   }
   
-  @Override
   public Class<? extends AbstractEditStrategyProvider> bindAbstractEditStrategyProvider() {
     final boolean autoInsert = ExtendedStructuredTextActivator.getInstance().getPreferenceStore().getBoolean(PreferenceInitializer.AUTO_INSERT);
     if ((autoInsert && (autoInsert == true))) {

@@ -32,12 +32,10 @@ public class DateValueConverter extends AbstractNullSafeConverter<Date> {
     this.format = format;
   }
   
-  @Override
   protected String internalToString(final Date value) {
     return this.format.format(value);
   }
   
-  @Override
   protected Date internalToValue(final String string, final INode node) throws ValueConverterException {
     Date _xblockexpression = null;
     {

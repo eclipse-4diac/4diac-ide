@@ -27,7 +27,7 @@ import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConst
 
 class CompositeFBFilter {
 	@Accessors(PUBLIC_GETTER)
-	private List<String> errors = new ArrayList<String>;
+	List<String> errors = new ArrayList<String>;
 	static final int ADAPTER_MARKER = 0x10000;
 
 	def lua(CompositeFBType type) '''
@@ -113,12 +113,12 @@ class CompositeFBFilter {
 	  «var conList = allCons.filter(e| e.source.outputConnections.size == 1 || (e.source.outputConnections.size > 1 && e.source.outputConnections.get(0).equals(e))).toList»
 	  «var connections = allCons.filter(e| e.source.outputConnections.size > 1 && !e.source.outputConnections.get(0).equals(e))»
 	  «FOR con : connections SEPARATOR ','»
-  	  «var dne = con.destination.FBNetworkElement»
+	  «var dne = con.destination.FBNetworkElement»
 	  «IF null !== dne»
 	  {connectionNum = «org.eclipse.fordiac.ide.export.forte_lua.filter.CompositeFBFilter.getConnectionNumber(conList, con)», «dne.luaConnectionString(con.destination, type, "dst")»}
-  	  «ELSE»
-  	  {dstID = "«con.destination.name»", -1}
-  	  «ENDIF»
+	  «ELSE»
+	  {dstID = "«con.destination.name»", -1}
+	  «ENDIF»
 	  «ENDFOR»
 	}'''
 	

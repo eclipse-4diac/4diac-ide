@@ -31,8 +31,6 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -174,30 +172,6 @@ public enum SystemManager {
 		return null;
 	}
 
-	private void loadTagProvider(AutomationSystem system) {
-		if (!tagProviders.containsKey(system)) {
-			tagProviders.put(system, new ArrayList<ITagProvider>());
-		}
-		ArrayList<ITagProvider> providers = tagProviders.get(system);
-
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID, "tagProvider"); //$NON-NLS-1$
-		for (IConfigurationElement element : elems) {
-			try {
-				Object object = element.createExecutableExtension("Interface"); //$NON-NLS-1$
-				if (object instanceof ITagProvider) {
-					ITagProvider tagProvider = (ITagProvider) object;
-					if (tagProvider.loadTagConfiguration(system.getSystemFile().getProject().getLocation())) {
-						providers.add(tagProvider);
-					}
-				}
-			} catch (CoreException corex) {
-				Activator.getDefault().logError("Error loading TagProviders!", corex); //$NON-NLS-1$
-			}
-		}
-
-	}
-
 	public void saveTagProvider(AutomationSystem system, ITagProvider tagProvider) {
 		IProject project = system.getSystemFile().getProject();
 		IPath projectPath = project.getLocation();
@@ -249,7 +223,7 @@ public enum SystemManager {
 
 	public ITagProvider getTagProvider(Class<?> class1, AutomationSystem system) {
 		if (!tagProviders.containsKey(system)) {
-			tagProviders.put(system, new ArrayList<ITagProvider>());
+			tagProviders.put(system, new ArrayList<>());
 		}
 		ITagProvider provider = null;
 		ArrayList<ITagProvider> tagProviderList = tagProviders.get(system);
@@ -270,9 +244,7 @@ public enum SystemManager {
 					saveTagProvider(system, provider);
 					tagProviderList.add(provider);
 				}
-			} catch (InstantiationException e) {
-				return null;
-			} catch (IllegalAccessException e) {
+			} catch (InstantiationException | IllegalAccessException e) {
 				return null;
 			}
 		}
@@ -285,10 +257,9 @@ public enum SystemManager {
 
 	private static void closeAllSystemEditors(final AutomationSystem refSystem) {
 		// display related stuff needs to run in a display thread
-		Display.getDefault().asyncExec(() -> {
-			EditorUtils.closeEditorsFiltered((IEditorPart editor) -> (editor instanceof ISystemEditor)
-					&& (refSystem.equals(((ISystemEditor) editor).getSystem())));
-		});
+		Display.getDefault().asyncExec(
+				() -> EditorUtils.closeEditorsFiltered((IEditorPart editor) -> (editor instanceof ISystemEditor)
+						&& (refSystem.equals(((ISystemEditor) editor).getSystem()))));
 
 	}
 

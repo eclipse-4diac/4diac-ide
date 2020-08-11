@@ -134,13 +134,12 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 			updateActions(getSelectionActions());
 			if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
 				IStructuredSelection sel = (IStructuredSelection) selection;
-				Object ob = null;
 				if (sel.getFirstElement() instanceof SequenceRootEditPart) {
-					ob = ((FBType) ((SequenceRootEditPart) sel.getFirstElement()).getModel()).getService();
+					((FBType) ((SequenceRootEditPart) sel.getFirstElement()).getModel()).getService();
 				} else if (sel.getFirstElement() instanceof OutputPrimitiveEditPart) {
-					ob = ((OutputPrimitiveEditPart) sel.getFirstElement()).getModel();
+					((OutputPrimitiveEditPart) sel.getFirstElement()).getModel();
 				} else if (sel.getFirstElement() instanceof InputPrimitiveEditPart) {
-					ob = ((InputPrimitiveEditPart) sel.getFirstElement()).getModel();
+					((InputPrimitiveEditPart) sel.getFirstElement()).getModel();
 				}
 			}
 		}

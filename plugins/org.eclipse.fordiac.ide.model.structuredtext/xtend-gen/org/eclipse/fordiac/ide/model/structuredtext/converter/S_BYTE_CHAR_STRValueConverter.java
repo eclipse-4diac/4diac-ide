@@ -20,12 +20,10 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @SuppressWarnings("all")
 public class S_BYTE_CHAR_STRValueConverter extends StringValueConverter {
-  @Override
   public char getQuote() {
     return '\'';
   }
   
-  @Override
   public char parseHexLiteral(final Reader reader) {
     try {
       char _xblockexpression = (char) 0;
@@ -55,7 +53,6 @@ public class S_BYTE_CHAR_STRValueConverter extends StringValueConverter {
     }
   }
   
-  @Override
   public CharSequence toHexLiteral(final char c) {
     String _xblockexpression = null;
     {

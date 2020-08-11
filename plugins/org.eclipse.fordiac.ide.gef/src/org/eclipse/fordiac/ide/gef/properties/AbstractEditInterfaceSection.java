@@ -149,6 +149,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 			@Override
 			public void focusLost(FocusEvent e) {
+				// Nothing to do
 			}
 
 		});
@@ -161,6 +162,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 			@Override
 			public void focusLost(FocusEvent e) {
+				// Nothing to do
 			}
 
 		});

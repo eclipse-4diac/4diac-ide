@@ -40,7 +40,6 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     super(name, prefix);
   }
   
-  @Override
   protected abstract FBType getType();
   
   protected CharSequence generateHeaderIncludes() {
@@ -96,8 +95,10 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
   protected CharSequence generateAdapterIncludes(final Iterable<AdapterDeclaration> vars) {
     StringConcatenation _builder = new StringConcatenation();
     {
-      final Function1<AdapterDeclaration, String> _function = (AdapterDeclaration it) -> {
-        return it.getTypeName();
+      final Function1<AdapterDeclaration, String> _function = new Function1<AdapterDeclaration, String>() {
+        public String apply(final AdapterDeclaration it) {
+          return it.getTypeName();
+        }
       };
       Set<String> _set = IterableExtensions.<String>toSet(IterableExtensions.<String>sort(IterableExtensions.<AdapterDeclaration, String>map(vars, _function)));
       for(final String include : _set) {
@@ -273,33 +274,37 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     {
       final ArrayList<Object> inputWith = CollectionLiterals.<Object>newArrayList();
       final ArrayList<Object> inputWithIndexes = CollectionLiterals.<Object>newArrayList();
-      final Consumer<Event> _function = (Event event) -> {
-        boolean _isEmpty = event.getWith().isEmpty();
-        if (_isEmpty) {
-          inputWithIndexes.add(Integer.valueOf((-1)));
-        } else {
-          inputWithIndexes.add(Integer.valueOf(inputWith.size()));
-          EList<With> _with = event.getWith();
-          for (final With with : _with) {
-            inputWith.add(Integer.valueOf(this.getType().getInterfaceList().getInputVars().indexOf(with.getVariables())));
+      final Consumer<Event> _function = new Consumer<Event>() {
+        public void accept(final Event event) {
+          boolean _isEmpty = event.getWith().isEmpty();
+          if (_isEmpty) {
+            inputWithIndexes.add(Integer.valueOf((-1)));
+          } else {
+            inputWithIndexes.add(Integer.valueOf(inputWith.size()));
+            EList<With> _with = event.getWith();
+            for (final With with : _with) {
+              inputWith.add(Integer.valueOf(ForteFBTemplate.this.getType().getInterfaceList().getInputVars().indexOf(with.getVariables())));
+            }
+            inputWith.add(Integer.valueOf(255));
           }
-          inputWith.add(Integer.valueOf(255));
         }
       };
       this.getType().getInterfaceList().getEventInputs().forEach(_function);
       final ArrayList<Object> outputWith = CollectionLiterals.<Object>newArrayList();
       final ArrayList<Object> outputWithIndexes = CollectionLiterals.<Object>newArrayList();
-      final Consumer<Event> _function_1 = (Event event) -> {
-        boolean _isEmpty = event.getWith().isEmpty();
-        if (_isEmpty) {
-          outputWithIndexes.add(Integer.valueOf((-1)));
-        } else {
-          outputWithIndexes.add(Integer.valueOf(outputWith.size()));
-          EList<With> _with = event.getWith();
-          for (final With with : _with) {
-            outputWith.add(Integer.valueOf(this.getType().getInterfaceList().getOutputVars().indexOf(with.getVariables())));
+      final Consumer<Event> _function_1 = new Consumer<Event>() {
+        public void accept(final Event event) {
+          boolean _isEmpty = event.getWith().isEmpty();
+          if (_isEmpty) {
+            outputWithIndexes.add(Integer.valueOf((-1)));
+          } else {
+            outputWithIndexes.add(Integer.valueOf(outputWith.size()));
+            EList<With> _with = event.getWith();
+            for (final With with : _with) {
+              outputWith.add(Integer.valueOf(ForteFBTemplate.this.getType().getInterfaceList().getOutputVars().indexOf(with.getVariables())));
+            }
+            outputWith.add(Integer.valueOf(255));
           }
-          outputWith.add(Integer.valueOf(255));
         }
       };
       this.getType().getInterfaceList().getEventOutputs().forEach(_function_1);

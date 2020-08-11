@@ -266,19 +266,18 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private void queryParameter(Resource res, FBNetworkElement fb, VarDeclaration inVar) {
-		@SuppressWarnings("nls")
-		String request = MessageFormat.format(QUERY_PARAMETER, getNextId(), fb.getName() + "." + inVar.getName());
+		String request = MessageFormat.format(QUERY_PARAMETER, getNextId(), fb.getName() + "." + inVar.getName()); //$NON-NLS-1$
 		try {
 			String result = sendREQ(res.getName(), request);
 			if (result != null) {
-				createParameter(res, inVar, parseResponse(result));
+				createParameter(inVar, parseResponse(result));
 			}
 		} catch (Exception e) {
 			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Parameter")); //$NON-NLS-1$
 		}
 	}
 
-	private static void createParameter(Resource res, VarDeclaration inVar, Response response) {
+	private static void createParameter(VarDeclaration inVar, Response response) {
 		if (null != response.getConnection()) {
 			Value value = LibraryElementFactory.eINSTANCE.createValue();
 			value.setValue(response.getConnection().getDestination());

@@ -140,7 +140,6 @@ public class AddDeleteWidget {
 		};
 	}
 
-	@SuppressWarnings("unchecked")
 	protected static void executeCompoundCommandForList(TableViewer viewer, List<Object> selection,
 			CommandExecutor executor, CommandProvider commandProvider) {
 		CompoundCommand cmd = new CompoundCommand();

@@ -35,8 +35,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 class BasicFBFilter {
 
 	@Accessors(PUBLIC_GETTER)
-	private List<String> errors = new ArrayList<String>;
-	private STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter
+	List<String> errors = new ArrayList<String>;
+	STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter
 
 	def lua(BasicFBType type) '''
 		«type.luaConstants»
@@ -117,7 +117,7 @@ class BasicFBFilter {
 		«tran.luaTransitionCondition» then return enter«tran.destination.luaStateName»(fb)«ENDFOR»'''
 
 	def private luaTransitionCondition(
-		ECTransition tran) '''«IF tran.conditionEvent != null»«tran.conditionEvent.luaInputEventName» == id«ELSE»true«ENDIF» and «IF !tran.conditionExpression.nullOrEmpty»«tran.luaTransitionConditionExpression»«ELSE»true«ENDIF»'''
+		ECTransition tran) '''«IF tran.conditionEvent !== null»«tran.conditionEvent.luaInputEventName» == id«ELSE»true«ENDIF» and «IF !tran.conditionExpression.nullOrEmpty»«tran.luaTransitionConditionExpression»«ELSE»true«ENDIF»'''
 
 	def private luaTransitionConditionExpression(ECTransition tran) {
 		val type = tran.rootContainer as BasicFBType
@@ -135,7 +135,7 @@ class BasicFBFilter {
 		local function enter«state.luaStateName»(fb)
 		  «luaFBStateVariable» = «state.luaStateName»
 		  «FOR action : state.ECAction»
-		  	«IF null != action.algorithm»«action.algorithm.luaAlgorithmName»(fb)«ENDIF»
+		  	«IF null !== action.algorithm»«action.algorithm.luaAlgorithmName»(fb)«ENDIF»
 		  	«IF action.output instanceof AdapterEvent»
 		  		«action.output?.luaSendAdapterOutputEvent»
 		  	«ELSE»	

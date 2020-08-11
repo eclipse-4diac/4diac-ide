@@ -40,6 +40,7 @@ public class ChangeIdentificationTypeCommandTest extends FBNetworkTestBase {
 		FBCreateCommandTest.verifyState(state, oldState, t);
 	}
 
+	@SuppressWarnings("unused")
 	public static void verifyState(State state, State oldState, TestFunction t, String expectedValue) {
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getIdentification().getType()
 				.equals(expectedValue));

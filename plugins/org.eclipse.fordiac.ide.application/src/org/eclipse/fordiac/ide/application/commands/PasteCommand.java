@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -48,8 +49,7 @@ import org.eclipse.swt.graphics.Point;
 public class PasteCommand extends Command {
 
 	private static final int DEFAULT_DELTA = 20;
-	@SuppressWarnings("rawtypes")
-	private final List templates;
+	private final Collection<? extends Object> templates;
 	private final FBNetwork dstFBNetwork;
 	private FBNetwork srcFBNetwork = null;
 
@@ -74,16 +74,14 @@ public class PasteCommand extends Command {
 	 *                    copied to
 	 * @param pasteRefPos the reference position for pasting the elements
 	 */
-	@SuppressWarnings("rawtypes")
-	public PasteCommand(List templates, FBNetwork destination, Point pasteRefPos) {
+	public PasteCommand(List<? extends Object> templates, FBNetwork destination, Point pasteRefPos) {
 		this.templates = templates;
 		this.dstFBNetwork = destination;
 		this.pasteRefPos = pasteRefPos;
 		calcualteDelta = true;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public PasteCommand(List templates, FBNetwork destination, int copyDeltaX, int copyDeltaY) {
+	public PasteCommand(List<? extends Object> templates, FBNetwork destination, int copyDeltaX, int copyDeltaY) {
 		this.templates = templates;
 		this.dstFBNetwork = destination;
 		xDelta = copyDeltaX;

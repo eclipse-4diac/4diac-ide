@@ -126,8 +126,10 @@ public abstract class ForteLibraryElementTemplate extends ExportTemplate {
   protected CharSequence generateTypeIncludes(final Iterable<VarDeclaration> vars) {
     StringConcatenation _builder = new StringConcatenation();
     {
-      final Function1<VarDeclaration, String> _function = (VarDeclaration it) -> {
-        return it.getTypeName();
+      final Function1<VarDeclaration, String> _function = new Function1<VarDeclaration, String>() {
+        public String apply(final VarDeclaration it) {
+          return it.getTypeName();
+        }
       };
       Set<String> _set = IterableExtensions.<String>toSet(IterableExtensions.<String>sort(IterableExtensions.<VarDeclaration, String>map(vars, _function)));
       for(final String include : _set) {
@@ -146,8 +148,10 @@ public abstract class ForteLibraryElementTemplate extends ExportTemplate {
       }
     }
     {
-      final Function1<VarDeclaration, Boolean> _function_1 = (VarDeclaration it) -> {
-        return Boolean.valueOf(it.isArray());
+      final Function1<VarDeclaration, Boolean> _function_1 = new Function1<VarDeclaration, Boolean>() {
+        public Boolean apply(final VarDeclaration it) {
+          return Boolean.valueOf(it.isArray());
+        }
       };
       boolean _exists = IterableExtensions.<VarDeclaration>exists(vars, _function_1);
       if (_exists) {
@@ -226,29 +230,33 @@ public abstract class ForteLibraryElementTemplate extends ExportTemplate {
   }
   
   protected String getFORTENameList(final List<? extends INamedElement> elements) {
-    final Function1<INamedElement, CharSequence> _function = (INamedElement it) -> {
-      return this.getFORTEString(it.getName());
+    final Function1<INamedElement, CharSequence> _function = new Function1<INamedElement, CharSequence>() {
+      public CharSequence apply(final INamedElement it) {
+        return ForteLibraryElementTemplate.this.getFORTEString(it.getName());
+      }
     };
     return IterableExtensions.join(ListExtensions.map(elements, _function), ", ");
   }
   
   protected String getFORTETypeList(final List<? extends VarDeclaration> elements) {
-    final Function1<VarDeclaration, String> _function = (VarDeclaration it) -> {
-      StringConcatenation _builder = new StringConcatenation();
-      {
-        boolean _isArray = it.isArray();
-        if (_isArray) {
-          CharSequence _fORTEString = this.getFORTEString("ARRAY");
-          _builder.append(_fORTEString);
-          _builder.append(", ");
-          int _arraySize = it.getArraySize();
-          _builder.append(_arraySize);
-          _builder.append(", ");
+    final Function1<VarDeclaration, String> _function = new Function1<VarDeclaration, String>() {
+      public String apply(final VarDeclaration it) {
+        StringConcatenation _builder = new StringConcatenation();
+        {
+          boolean _isArray = it.isArray();
+          if (_isArray) {
+            CharSequence _fORTEString = ForteLibraryElementTemplate.this.getFORTEString("ARRAY");
+            _builder.append(_fORTEString);
+            _builder.append(", ");
+            int _arraySize = it.getArraySize();
+            _builder.append(_arraySize);
+            _builder.append(", ");
+          }
         }
+        CharSequence _fORTEString_1 = ForteLibraryElementTemplate.this.getFORTEString(it.getType().getName());
+        _builder.append(_fORTEString_1);
+        return _builder.toString();
       }
-      CharSequence _fORTEString_1 = this.getFORTEString(it.getType().getName());
-      _builder.append(_fORTEString_1);
-      return _builder.toString();
     };
     return IterableExtensions.join(ListExtensions.map(elements, _function), ", ");
   }

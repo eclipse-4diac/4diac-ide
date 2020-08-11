@@ -47,7 +47,6 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @SuppressWarnings("all")
 public class ForteNgExportFilter extends TemplateExportFilter {
-  @Override
   protected Set<? extends IExportTemplate> getTemplates(final LibraryElement type) {
     Set<IExportTemplate> _switchResult = null;
     boolean _matched = false;

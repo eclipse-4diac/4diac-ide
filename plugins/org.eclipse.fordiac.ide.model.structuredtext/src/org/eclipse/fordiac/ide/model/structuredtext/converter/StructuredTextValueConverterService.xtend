@@ -22,7 +22,7 @@ import java.util.Date
 class StructuredTextValueConverterService extends AbstractDeclarativeValueConverterService {
 
 	@Inject
-	private BINARY_INTValueConverter binaryIntValueConverter;
+	BINARY_INTValueConverter binaryIntValueConverter;
 
 	@ValueConverter(rule="BINARY_INT")
 	def IValueConverter<Long> BINARY_INT() {
@@ -30,7 +30,7 @@ class StructuredTextValueConverterService extends AbstractDeclarativeValueConver
 	}
 
 	@Inject
-	private OCTAL_INTValueConverter octalIntValueConverter;
+	OCTAL_INTValueConverter octalIntValueConverter;
 
 	@ValueConverter(rule="OCTAL_INT")
 	def IValueConverter<Long> OCTAL_INT() {
@@ -38,7 +38,7 @@ class StructuredTextValueConverterService extends AbstractDeclarativeValueConver
 	}
 
 	@Inject
-	private HEX_INTValueConverter hexIntValueConverter;
+	HEX_INTValueConverter hexIntValueConverter;
 
 	@ValueConverter(rule="HEX_INT")
 	def IValueConverter<Long> HEX_INT() {
@@ -46,7 +46,7 @@ class StructuredTextValueConverterService extends AbstractDeclarativeValueConver
 	}
 
 	@Inject
-	private UNSIGNED_INTValueConverter unsignedIntValueConverter;
+	UNSIGNED_INTValueConverter unsignedIntValueConverter;
 
 	@ValueConverter(rule="UNSIGNED_INT")
 	def IValueConverter<Long> UNSIGNED_INT() {
@@ -54,7 +54,7 @@ class StructuredTextValueConverterService extends AbstractDeclarativeValueConver
 	}
 
 	@Inject
-	private S_BYTE_CHAR_STRValueConverter singleStringValueConverter;
+	S_BYTE_CHAR_STRValueConverter singleStringValueConverter;
 
 	@ValueConverter(rule="S_BYTE_CHAR_STR")
 	def IValueConverter<String> S_BYTE_CHAR_STR() {
@@ -62,7 +62,7 @@ class StructuredTextValueConverterService extends AbstractDeclarativeValueConver
 	}
 
 	@Inject
-	private D_BYTE_CHAR_STRValueConverter doubleStringValueConverter;
+	D_BYTE_CHAR_STRValueConverter doubleStringValueConverter;
 
 	@ValueConverter(rule="D_BYTE_CHAR_STR")
 	def IValueConverter<String> D_BYTE_CHAR_STR() {
@@ -70,7 +70,7 @@ class StructuredTextValueConverterService extends AbstractDeclarativeValueConver
 	}
 
 	@Inject
-	private Signed_IntValueConverter signedIntValueConverter;
+	Signed_IntValueConverter signedIntValueConverter;
 
 	@ValueConverter(rule="Signed_Int")
 	def IValueConverter<Long> Signed_int() {
@@ -78,7 +78,7 @@ class StructuredTextValueConverterService extends AbstractDeclarativeValueConver
 	}
 
 	@Inject
-	private Array_SizeValueConverter arraySizeValueConverter;
+	Array_SizeValueConverter arraySizeValueConverter;
 
 	@ValueConverter(rule="Array_Size")
 	def IValueConverter<Integer> Array_Size() {
@@ -86,7 +86,7 @@ class StructuredTextValueConverterService extends AbstractDeclarativeValueConver
 	}
 
 	@Inject
-	private Real_ValueValueConverter realValueConverter;
+	Real_ValueValueConverter realValueConverter;
 
 	@ValueConverter(rule="Real_Value")
 	def IValueConverter<Double> Real_Value() {
@@ -94,7 +94,7 @@ class StructuredTextValueConverterService extends AbstractDeclarativeValueConver
 	}
 
 	@Inject
-	private Bool_ValueValueConverter boolValueConverter;
+	Bool_ValueValueConverter boolValueConverter;
 
 	@ValueConverter(rule="Bool_Value")
 	def IValueConverter<Boolean> Bool_Value() {
@@ -102,7 +102,7 @@ class StructuredTextValueConverterService extends AbstractDeclarativeValueConver
 	}
 
 	@Inject
-	private DaytimeValueConverter daytimeValueConverter;
+	DaytimeValueConverter daytimeValueConverter;
 
 	@ValueConverter(rule="Daytime")
 	def IValueConverter<Date> Daytime() {
@@ -110,7 +110,7 @@ class StructuredTextValueConverterService extends AbstractDeclarativeValueConver
 	}
 
 	@Inject
-	private Date_LiteralValueConverter dateLiteralValueConverter;
+	Date_LiteralValueConverter dateLiteralValueConverter;
 
 	@ValueConverter(rule="Date_Literal")
 	def IValueConverter<Date> Date_Literal() {
@@ -118,7 +118,7 @@ class StructuredTextValueConverterService extends AbstractDeclarativeValueConver
 	}
 
 	@Inject
-	private Date_And_Time_ValueValueConverter dateAndTimeValueConverter;
+	Date_And_Time_ValueValueConverter dateAndTimeValueConverter;
 
 	@ValueConverter(rule="Date_And_Time_Value")
 	def IValueConverter<Date> Date_And_Time_Value() {

@@ -74,7 +74,7 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		// TODO __gebenh error handling if save fails!
-		SystemManager.INSTANCE.saveSystem(getSystem());
+		SystemManager.saveSystem(getSystem());
 		getCommandStack().markSaveLocation();
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}

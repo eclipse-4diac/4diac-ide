@@ -40,16 +40,14 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	/** The value. */
 	private String value;
 
-	private int nrOfHistory = 500;
-	private List<String> historyValues = new ArrayList<>(nrOfHistory);
-	private List<Integer> historyCycles = new ArrayList<>(nrOfHistory);
-	private List<Long> historySec = new ArrayList<>(nrOfHistory);
-	private List<Long> historyUSec = new ArrayList<>(nrOfHistory);
+	private static final int NR_OF_HISTORY = 500;
+	private List<String> historyValues = new ArrayList<>(NR_OF_HISTORY);
+	private List<Integer> historyCycles = new ArrayList<>(NR_OF_HISTORY);
 	private int currentInt = 0;
 
 	/**
 	 * Gets the value.
-	 * 
+	 *
 	 * @return the value
 	 */
 	public String getValue() {
@@ -60,12 +58,12 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 		if (currentInt == 0) {
 			return "0"; //$NON-NLS-1$
 		}
-		return historyValues.get((currentInt % nrOfHistory) - 1);
+		return historyValues.get((currentInt % NR_OF_HISTORY) - 1);
 	}
 
 	/**
 	 * Sets the value.
-	 * 
+	 *
 	 * @param value the new value
 	 */
 	public void setValue(String value) {
@@ -80,7 +78,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Gets the fb.
-	 * 
+	 *
 	 * @return the fb
 	 */
 	public FB getFb() {
@@ -89,7 +87,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Sets the fb.
-	 * 
+	 *
 	 * @param fb the new fb
 	 */
 	public void setFb(FB fb) {
@@ -98,7 +96,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Gets the monitoring element as string.
-	 * 
+	 *
 	 * @return the monitoring element as string
 	 */
 	public String getMonitoringElementAsString() {
@@ -107,7 +105,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Sets the monitoring element.
-	 * 
+	 *
 	 * @param monitoringElement the new monitoring element
 	 */
 	public void setMonitoringElement(String monitoringElement) {
@@ -116,7 +114,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Gets the resource string.
-	 * 
+	 *
 	 * @return the resource string
 	 */
 	public String getResourceString() {
@@ -125,7 +123,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Gets the fB string.
-	 * 
+	 *
 	 * @return the fB string
 	 */
 	public String getFBString() {
@@ -134,7 +132,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Gets the port string.
-	 * 
+	 *
 	 * @return the port string
 	 */
 	public String getPortString() {
@@ -143,7 +141,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Sets the element.
-	 * 
+	 *
 	 * @param element the new element
 	 */
 	public void setElement(IInterfaceElement element) {
@@ -152,7 +150,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Gets the interface element.
-	 * 
+	 *
 	 * @return the interface element
 	 */
 	public IInterfaceElement getInterfaceElement() {
@@ -164,7 +162,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Gets the part.
-	 * 
+	 *
 	 * @return the part
 	 */
 	public TestEditPart getPart() {
@@ -174,7 +172,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	@Override
 	public EditPart createEditPart() {
 		if (part == null) {
-			if (getInterfaceElement() instanceof Event && getInterfaceElement().isIsInput()) {
+			if ((getInterfaceElement() instanceof Event) && getInterfaceElement().isIsInput()) {
 				part = new TestEventEditPart();
 			} else {
 				part = new TestEditPart();
@@ -188,7 +186,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Adds the set value listener.
-	 * 
+	 *
 	 * @param listener the listener
 	 */
 	public void addSetValueListener(ISetValueListener listener) {
@@ -202,7 +200,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Adds the trigger event listener.
-	 * 
+	 *
 	 * @param listener the listener
 	 */
 	public void addTriggerEventListener(ITriggerEventListener listener) {
@@ -222,28 +220,19 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	/**
 	 * Update value.
-	 * 
+	 *
 	 * @param value the value
 	 */
 	public void updateValue(final String value, int cycle) {
-		historyValues.add(currentInt % nrOfHistory, value);
-		historyCycles.add(currentInt % nrOfHistory, cycle);
-//		historySec.add(currentInt % nrOfHistory, getSec());
-//		historyUSec.add(currentInt % nrOfHistory, getUsec());
+		historyValues.add(currentInt % NR_OF_HISTORY, value);
+		historyCycles.add(currentInt % NR_OF_HISTORY, cycle);
 		currentInt++;
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				getPart().setValue(value);
-
-			}
-		});
+		Display.getDefault().asyncExec(() -> getPart().setValue(value));
 	}
 
 	/**
 	 * Sets the background color of the element
-	 * 
+	 *
 	 * @param color
 	 */
 	public void setColor(final Color color) {

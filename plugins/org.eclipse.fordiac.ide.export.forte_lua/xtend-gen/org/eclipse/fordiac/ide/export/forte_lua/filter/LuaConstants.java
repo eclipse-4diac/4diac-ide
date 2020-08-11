@@ -532,11 +532,15 @@ public class LuaConstants {
         List<AdapterVariable> sublist = IterableExtensions.<AdapterVariable>toList(variables).subList(0, index);
         _builder.newLineIfNotEmpty();
         {
-          boolean _not = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
-            return it.getVar();
-          })).contains(av.getVar()) && ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
-            return it.getAdapter();
-          })).contains(av.getAdapter())));
+          boolean _not = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, new Function1<AdapterVariable, VarDeclaration>() {
+            public VarDeclaration apply(final AdapterVariable it) {
+              return it.getVar();
+            }
+          }).contains(av.getVar()) && ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, new Function1<AdapterVariable, VarDeclaration>() {
+            public VarDeclaration apply(final AdapterVariable it) {
+              return it.getAdapter();
+            }
+          }).contains(av.getAdapter())));
           if (_not) {
             _builder.append("local ");
             CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), av.getAdapter().getName());
@@ -562,9 +566,11 @@ public class LuaConstants {
   public static CharSequence luaFBVariablesSuffix(final Iterable<VarDeclaration> variables) {
     StringConcatenation _builder = new StringConcatenation();
     {
-      final Function1<VarDeclaration, Boolean> _function = (VarDeclaration it) -> {
-        boolean _isIsInput = it.isIsInput();
-        return Boolean.valueOf((!_isIsInput));
+      final Function1<VarDeclaration, Boolean> _function = new Function1<VarDeclaration, Boolean>() {
+        public Boolean apply(final VarDeclaration it) {
+          boolean _isIsInput = it.isIsInput();
+          return Boolean.valueOf((!_isIsInput));
+        }
       };
       Iterable<VarDeclaration> _filter = IterableExtensions.<VarDeclaration>filter(variables, _function);
       for(final VarDeclaration variable : _filter) {
@@ -588,11 +594,15 @@ public class LuaConstants {
         List<AdapterVariable> sublist = IterableExtensions.<AdapterVariable>toList(variables).subList(0, index);
         _builder.newLineIfNotEmpty();
         {
-          boolean _not = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
-            return it.getVar();
-          })).contains(av.getVar()) && ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
-            return it.getAdapter();
-          })).contains(av.getAdapter())));
+          boolean _not = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, new Function1<AdapterVariable, VarDeclaration>() {
+            public VarDeclaration apply(final AdapterVariable it) {
+              return it.getVar();
+            }
+          }).contains(av.getVar()) && ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, new Function1<AdapterVariable, VarDeclaration>() {
+            public VarDeclaration apply(final AdapterVariable it) {
+              return it.getAdapter();
+            }
+          }).contains(av.getAdapter())));
           if (_not) {
             _builder.append("fb[");
             CharSequence _xifexpression = null;
@@ -650,13 +660,15 @@ public class LuaConstants {
   public static ArrayList<Object> getTypeList(final List<VarDeclaration> vars) {
     int _size = vars.size();
     final ArrayList<Object> typeList = new ArrayList<Object>(_size);
-    final Consumer<VarDeclaration> _function = (VarDeclaration it) -> {
-      boolean _isArray = it.isArray();
-      if (_isArray) {
-        typeList.add("ARRAY");
-        typeList.add(Integer.valueOf(it.getArraySize()));
+    final Consumer<VarDeclaration> _function = new Consumer<VarDeclaration>() {
+      public void accept(final VarDeclaration it) {
+        boolean _isArray = it.isArray();
+        if (_isArray) {
+          typeList.add("ARRAY");
+          typeList.add(Integer.valueOf(it.getArraySize()));
+        }
+        typeList.add(it.getTypeName());
       }
-      typeList.add(it.getTypeName());
     };
     vars.forEach(_function);
     return typeList;
@@ -688,8 +700,10 @@ public class LuaConstants {
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("EINames = ");
-      final Function1<Event, String> _function = (Event it) -> {
-        return it.getName();
+      final Function1<Event, String> _function = new Function1<Event, String>() {
+        public String apply(final Event it) {
+          return it.getName();
+        }
       };
       CharSequence _luaStringList = LuaUtils.luaStringList(ListExtensions.<Event, String>map(ifl.getEventInputs(), _function));
       _builder.append(_luaStringList, "  ");
@@ -715,8 +729,10 @@ public class LuaConstants {
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("EONames = ");
-      final Function1<Event, String> _function_1 = (Event it) -> {
-        return it.getName();
+      final Function1<Event, String> _function_1 = new Function1<Event, String>() {
+        public String apply(final Event it) {
+          return it.getName();
+        }
       };
       CharSequence _luaStringList_1 = LuaUtils.luaStringList(ListExtensions.<Event, String>map(ifl.getEventOutputs(), _function_1));
       _builder.append(_luaStringList_1, "  ");
@@ -742,8 +758,10 @@ public class LuaConstants {
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("DINames = ");
-      final Function1<VarDeclaration, String> _function_2 = (VarDeclaration it) -> {
-        return it.getName();
+      final Function1<VarDeclaration, String> _function_2 = new Function1<VarDeclaration, String>() {
+        public String apply(final VarDeclaration it) {
+          return it.getName();
+        }
       };
       CharSequence _luaStringList_2 = LuaUtils.luaStringList(ListExtensions.<VarDeclaration, String>map(ifl.getInputVars(), _function_2));
       _builder.append(_luaStringList_2, "  ");
@@ -763,8 +781,10 @@ public class LuaConstants {
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("DONames = ");
-      final Function1<VarDeclaration, String> _function_3 = (VarDeclaration it) -> {
-        return it.getName();
+      final Function1<VarDeclaration, String> _function_3 = new Function1<VarDeclaration, String>() {
+        public String apply(final VarDeclaration it) {
+          return it.getName();
+        }
       };
       CharSequence _luaStringList_3 = LuaUtils.luaStringList(ListExtensions.<VarDeclaration, String>map(ifl.getOutputVars(), _function_3));
       _builder.append(_luaStringList_3, "  ");
@@ -788,16 +808,18 @@ public class LuaConstants {
       _builder.append("adapterInstanceDefinition = {");
       _builder.newLine();
       _builder.append("    ");
-      final Function1<AdapterDeclaration, String> _function_4 = (AdapterDeclaration it) -> {
-        StringConcatenation _builder_1 = new StringConcatenation();
-        _builder_1.append("{adapterNameID = \"");
-        String _name = it.getName();
-        _builder_1.append(_name);
-        _builder_1.append("\", adapterTypeNameID = \"");
-        String _typeName = it.getTypeName();
-        _builder_1.append(_typeName);
-        _builder_1.append("\", isPlug = true}");
-        return _builder_1.toString();
+      final Function1<AdapterDeclaration, String> _function_4 = new Function1<AdapterDeclaration, String>() {
+        public String apply(final AdapterDeclaration it) {
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("{adapterNameID = \"");
+          String _name = it.getName();
+          _builder.append(_name);
+          _builder.append("\", adapterTypeNameID = \"");
+          String _typeName = it.getTypeName();
+          _builder.append(_typeName);
+          _builder.append("\", isPlug = true}");
+          return _builder.toString();
+        }
       };
       String _join = IterableExtensions.join(ListExtensions.<AdapterDeclaration, String>map(ifl.getPlugs(), _function_4), ",\n");
       _builder.append(_join, "    ");
@@ -808,16 +830,18 @@ public class LuaConstants {
       }
       _builder.newLineIfNotEmpty();
       _builder.append("    ");
-      final Function1<AdapterDeclaration, String> _function_5 = (AdapterDeclaration it) -> {
-        StringConcatenation _builder_1 = new StringConcatenation();
-        _builder_1.append("{adapterNameID = \"");
-        String _name = it.getName();
-        _builder_1.append(_name);
-        _builder_1.append("\", adapterTypeNameID = \"");
-        String _typeName = it.getTypeName();
-        _builder_1.append(_typeName);
-        _builder_1.append("\", isPlug = false}");
-        return _builder_1.toString();
+      final Function1<AdapterDeclaration, String> _function_5 = new Function1<AdapterDeclaration, String>() {
+        public String apply(final AdapterDeclaration it) {
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("{adapterNameID = \"");
+          String _name = it.getName();
+          _builder.append(_name);
+          _builder.append("\", adapterTypeNameID = \"");
+          String _typeName = it.getTypeName();
+          _builder.append(_typeName);
+          _builder.append("\", isPlug = false}");
+          return _builder.toString();
+        }
       };
       String _join_1 = IterableExtensions.join(ListExtensions.<AdapterDeclaration, String>map(ifl.getSockets(), _function_5), ",\n");
       _builder.append(_join_1, "    ");
@@ -843,8 +867,10 @@ public class LuaConstants {
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
     _builder.append("intVarsNames = ");
-    final Function1<VarDeclaration, String> _function = (VarDeclaration it) -> {
-      return it.getName();
+    final Function1<VarDeclaration, String> _function = new Function1<VarDeclaration, String>() {
+      public String apply(final VarDeclaration it) {
+        return it.getName();
+      }
     };
     CharSequence _luaStringList = LuaUtils.luaStringList(ListExtensions.<VarDeclaration, String>map(type.getInternalVars(), _function));
     _builder.append(_luaStringList, "  ");

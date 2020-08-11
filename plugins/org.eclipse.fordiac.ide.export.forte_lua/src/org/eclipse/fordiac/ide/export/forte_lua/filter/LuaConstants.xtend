@@ -34,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
-import java.util.Map
 
 class LuaConstants {
 
@@ -216,7 +215,7 @@ class LuaConstants {
 
 	def static luaSendAdapterOutputEvent(Event event) '''fb(AEO_«event.name.replaceAll("\\.", "_")»)'''
 
-	def public static getEventWith(Event event, List<Integer> with, List<VarDeclaration> vars) {
+	def static getEventWith(Event event, List<Integer> with, List<VarDeclaration> vars) {
 		if (event.with.empty) {
 			return -1
 		}
@@ -228,7 +227,7 @@ class LuaConstants {
 		return index
 	}
 
-	def public static getTypeList(List<VarDeclaration> vars) {
+	def static getTypeList(List<VarDeclaration> vars) {
 		val typeList = new ArrayList<Object>(vars.size)
 		vars.forEach [
 			if (it.isArray) {

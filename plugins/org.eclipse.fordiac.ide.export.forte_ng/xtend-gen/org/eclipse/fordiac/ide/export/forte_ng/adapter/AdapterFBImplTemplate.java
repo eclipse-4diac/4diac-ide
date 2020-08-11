@@ -34,7 +34,6 @@ public class AdapterFBImplTemplate extends ForteFBTemplate {
     this.type = type;
   }
   
-  @Override
   public CharSequence generate() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateHeader = this.generateHeader();
@@ -60,7 +59,6 @@ public class AdapterFBImplTemplate extends ForteFBTemplate {
     return _builder;
   }
   
-  @Override
   protected CharSequence generateFBDefinition() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("DEFINE_ADAPTER_TYPE(");
@@ -224,7 +222,6 @@ public class AdapterFBImplTemplate extends ForteFBTemplate {
     return _builder;
   }
   
-  @Override
   protected CharSequence generateFBInterfaceSpecDefinition() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateFBInterfaceSpecSocket = this.generateFBInterfaceSpecSocket();

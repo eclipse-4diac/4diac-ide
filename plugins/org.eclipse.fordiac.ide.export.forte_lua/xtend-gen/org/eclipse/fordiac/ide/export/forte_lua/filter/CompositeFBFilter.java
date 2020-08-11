@@ -112,8 +112,10 @@ public class CompositeFBFilter {
     _builder.append("internalFBs = {");
     _builder.newLine();
     _builder.append("  ");
-    final Function1<FBNetworkElement, Boolean> _function = (FBNetworkElement e) -> {
-      return Boolean.valueOf((!(e instanceof AdapterFB)));
+    final Function1<FBNetworkElement, Boolean> _function = new Function1<FBNetworkElement, Boolean>() {
+      public Boolean apply(final FBNetworkElement e) {
+        return Boolean.valueOf((!(e instanceof AdapterFB)));
+      }
     };
     Iterable<FBNetworkElement> fbs = IterableExtensions.<FBNetworkElement>filter(fbn.getNetworkElements(), _function);
     _builder.newLineIfNotEmpty();
@@ -147,8 +149,10 @@ public class CompositeFBFilter {
   public static CharSequence luaParameters(final FBNetwork fbn) {
     CharSequence _xblockexpression = null;
     {
-      final Function1<FBNetworkElement, Boolean> _function = (FBNetworkElement e) -> {
-        return Boolean.valueOf((!(e instanceof AdapterFB)));
+      final Function1<FBNetworkElement, Boolean> _function = new Function1<FBNetworkElement, Boolean>() {
+        public Boolean apply(final FBNetworkElement e) {
+          return Boolean.valueOf((!(e instanceof AdapterFB)));
+        }
       };
       Iterable<FBNetworkElement> fbs = IterableExtensions.<FBNetworkElement>filter(fbn.getNetworkElements(), _function);
       ArrayList<ArrayList<?>> parameters = CompositeFBFilter.getParameters(IterableExtensions.<FBNetworkElement>toList(fbs));
@@ -191,8 +195,10 @@ public class CompositeFBFilter {
     EList<EventConnection> allCons = type.getFBNetwork().getEventConnections();
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    final Function1<EventConnection, Boolean> _function = (EventConnection e) -> {
-      return Boolean.valueOf(((e.getSource().getOutputConnections().size() == 1) || ((e.getSource().getOutputConnections().size() > 1) && e.getSource().getOutputConnections().get(0).equals(e))));
+    final Function1<EventConnection, Boolean> _function = new Function1<EventConnection, Boolean>() {
+      public Boolean apply(final EventConnection e) {
+        return Boolean.valueOf(((e.getSource().getOutputConnections().size() == 1) || ((e.getSource().getOutputConnections().size() > 1) && e.getSource().getOutputConnections().get(0).equals(e))));
+      }
     };
     Iterable<EventConnection> connections = IterableExtensions.<EventConnection>filter(allCons, _function);
     _builder.newLineIfNotEmpty();
@@ -264,12 +270,16 @@ public class CompositeFBFilter {
   }
   
   public static String luaConnectionString(final FBNetworkElement e, final IInterfaceElement ev, final CompositeFBType type, final String stringID) {
-    final Function1<AdapterDeclaration, AdapterFB> _function = (AdapterDeclaration it) -> {
-      return it.getAdapterFB();
+    final Function1<AdapterDeclaration, AdapterFB> _function = new Function1<AdapterDeclaration, AdapterFB>() {
+      public AdapterFB apply(final AdapterDeclaration it) {
+        return it.getAdapterFB();
+      }
     };
     List<AdapterFB> plugs = IterableExtensions.<AdapterFB>toList(ListExtensions.<AdapterDeclaration, AdapterFB>map(type.getInterfaceList().getPlugs(), _function));
-    final Function1<AdapterDeclaration, AdapterFB> _function_1 = (AdapterDeclaration it) -> {
-      return it.getAdapterFB();
+    final Function1<AdapterDeclaration, AdapterFB> _function_1 = new Function1<AdapterDeclaration, AdapterFB>() {
+      public AdapterFB apply(final AdapterDeclaration it) {
+        return it.getAdapterFB();
+      }
     };
     List<AdapterFB> sockets = IterableExtensions.<AdapterFB>toList(ListExtensions.<AdapterDeclaration, AdapterFB>map(type.getInterfaceList().getSockets(), _function_1));
     if ((e instanceof AdapterFB)) {
@@ -310,8 +320,10 @@ public class CompositeFBFilter {
       _builder_2.append("\", ");
       _builder_2.append(stringID);
       _builder_2.append("FBNum = ");
-      final Function1<FBNetworkElement, Boolean> _function_2 = (FBNetworkElement f) -> {
-        return Boolean.valueOf((!(f instanceof AdapterFB)));
+      final Function1<FBNetworkElement, Boolean> _function_2 = new Function1<FBNetworkElement, Boolean>() {
+        public Boolean apply(final FBNetworkElement f) {
+          return Boolean.valueOf((!(f instanceof AdapterFB)));
+        }
       };
       int _indexOf_1 = IterableExtensions.<FBNetworkElement>toList(IterableExtensions.<FBNetworkElement>filter(type.getFBNetwork().getNetworkElements(), _function_2)).indexOf(e);
       _builder_2.append(_indexOf_1);
@@ -327,14 +339,18 @@ public class CompositeFBFilter {
     EList<EventConnection> allCons = type.getFBNetwork().getEventConnections();
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    final Function1<EventConnection, Boolean> _function = (EventConnection e) -> {
-      return Boolean.valueOf(((e.getSource().getOutputConnections().size() == 1) || ((e.getSource().getOutputConnections().size() > 1) && e.getSource().getOutputConnections().get(0).equals(e))));
+    final Function1<EventConnection, Boolean> _function = new Function1<EventConnection, Boolean>() {
+      public Boolean apply(final EventConnection e) {
+        return Boolean.valueOf(((e.getSource().getOutputConnections().size() == 1) || ((e.getSource().getOutputConnections().size() > 1) && e.getSource().getOutputConnections().get(0).equals(e))));
+      }
     };
     List<EventConnection> conList = IterableExtensions.<EventConnection>toList(IterableExtensions.<EventConnection>filter(allCons, _function));
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    final Function1<EventConnection, Boolean> _function_1 = (EventConnection e) -> {
-      return Boolean.valueOf(((e.getSource().getOutputConnections().size() > 1) && (!e.getSource().getOutputConnections().get(0).equals(e))));
+    final Function1<EventConnection, Boolean> _function_1 = new Function1<EventConnection, Boolean>() {
+      public Boolean apply(final EventConnection e) {
+        return Boolean.valueOf(((e.getSource().getOutputConnections().size() > 1) && (!e.getSource().getOutputConnections().get(0).equals(e))));
+      }
     };
     Iterable<EventConnection> connections = IterableExtensions.<EventConnection>filter(allCons, _function_1);
     _builder.newLineIfNotEmpty();
@@ -346,7 +362,7 @@ public class CompositeFBFilter {
         } else {
           _builder.appendImmediate(",", "  ");
         }
-        _builder.append("  \t  ");
+        _builder.append("  ");
         FBNetworkElement dne = con.getDestination().getFBNetworkElement();
         _builder.newLineIfNotEmpty();
         {
@@ -361,9 +377,10 @@ public class CompositeFBFilter {
             _builder.append("}");
             _builder.newLineIfNotEmpty();
           } else {
+            _builder.append("  ");
             _builder.append("{dstID = \"");
             String _name = con.getDestination().getName();
-            _builder.append(_name);
+            _builder.append(_name, "  ");
             _builder.append("\", -1}");
             _builder.newLineIfNotEmpty();
           }
@@ -387,8 +404,10 @@ public class CompositeFBFilter {
     EList<DataConnection> allCons = type.getFBNetwork().getDataConnections();
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    final Function1<DataConnection, Boolean> _function = (DataConnection e) -> {
-      return Boolean.valueOf(((e.getSource().getOutputConnections().size() == 1) || ((e.getSource().getOutputConnections().size() > 1) && e.getSource().getOutputConnections().get(0).equals(e))));
+    final Function1<DataConnection, Boolean> _function = new Function1<DataConnection, Boolean>() {
+      public Boolean apply(final DataConnection e) {
+        return Boolean.valueOf(((e.getSource().getOutputConnections().size() == 1) || ((e.getSource().getOutputConnections().size() > 1) && e.getSource().getOutputConnections().get(0).equals(e))));
+      }
     };
     Iterable<DataConnection> connections = IterableExtensions.<DataConnection>filter(allCons, _function);
     _builder.newLineIfNotEmpty();
@@ -470,14 +489,18 @@ public class CompositeFBFilter {
     EList<DataConnection> allCons = type.getFBNetwork().getDataConnections();
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    final Function1<DataConnection, Boolean> _function = (DataConnection e) -> {
-      return Boolean.valueOf(((e.getSource().getOutputConnections().size() == 1) || ((e.getSource().getOutputConnections().size() > 1) && e.getSource().getOutputConnections().get(0).equals(e))));
+    final Function1<DataConnection, Boolean> _function = new Function1<DataConnection, Boolean>() {
+      public Boolean apply(final DataConnection e) {
+        return Boolean.valueOf(((e.getSource().getOutputConnections().size() == 1) || ((e.getSource().getOutputConnections().size() > 1) && e.getSource().getOutputConnections().get(0).equals(e))));
+      }
     };
     List<DataConnection> conList = IterableExtensions.<DataConnection>toList(IterableExtensions.<DataConnection>filter(allCons, _function));
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
-    final Function1<DataConnection, Boolean> _function_1 = (DataConnection e) -> {
-      return Boolean.valueOf(((e.getSource().getOutputConnections().size() > 1) && (!e.getSource().getOutputConnections().get(0).equals(e))));
+    final Function1<DataConnection, Boolean> _function_1 = new Function1<DataConnection, Boolean>() {
+      public Boolean apply(final DataConnection e) {
+        return Boolean.valueOf(((e.getSource().getOutputConnections().size() > 1) && (!e.getSource().getOutputConnections().get(0).equals(e))));
+      }
     };
     Iterable<DataConnection> connections = IterableExtensions.<DataConnection>filter(allCons, _function_1);
     _builder.newLineIfNotEmpty();
@@ -521,40 +544,50 @@ public class CompositeFBFilter {
   public static CharSequence luaFbnData(final FBNetwork fbn) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("numFBs = ");
-    final Function1<FBNetworkElement, Boolean> _function = (FBNetworkElement e) -> {
-      return Boolean.valueOf((!(e instanceof AdapterFB)));
+    final Function1<FBNetworkElement, Boolean> _function = new Function1<FBNetworkElement, Boolean>() {
+      public Boolean apply(final FBNetworkElement e) {
+        return Boolean.valueOf((!(e instanceof AdapterFB)));
+      }
     };
     int _size = IterableExtensions.size(IterableExtensions.<FBNetworkElement>filter(fbn.getNetworkElements(), _function));
     _builder.append(_size);
     _builder.append(",");
     _builder.newLineIfNotEmpty();
     _builder.append("numECons = ");
-    final Function1<EventConnection, Boolean> _function_1 = (EventConnection e) -> {
-      return Boolean.valueOf(((e.getSource().getOutputConnections().size() == 1) || ((e.getSource().getOutputConnections().size() > 1) && e.getSource().getOutputConnections().get(0).equals(e))));
+    final Function1<EventConnection, Boolean> _function_1 = new Function1<EventConnection, Boolean>() {
+      public Boolean apply(final EventConnection e) {
+        return Boolean.valueOf(((e.getSource().getOutputConnections().size() == 1) || ((e.getSource().getOutputConnections().size() > 1) && e.getSource().getOutputConnections().get(0).equals(e))));
+      }
     };
     int _size_1 = IterableExtensions.size(IterableExtensions.<EventConnection>filter(fbn.getEventConnections(), _function_1));
     _builder.append(_size_1);
     _builder.append(",");
     _builder.newLineIfNotEmpty();
     _builder.append("numFECons = ");
-    final Function1<EventConnection, Boolean> _function_2 = (EventConnection e) -> {
-      return Boolean.valueOf(((e.getSource().getOutputConnections().size() > 1) && (!e.getSource().getOutputConnections().get(0).equals(e))));
+    final Function1<EventConnection, Boolean> _function_2 = new Function1<EventConnection, Boolean>() {
+      public Boolean apply(final EventConnection e) {
+        return Boolean.valueOf(((e.getSource().getOutputConnections().size() > 1) && (!e.getSource().getOutputConnections().get(0).equals(e))));
+      }
     };
     int _size_2 = IterableExtensions.size(IterableExtensions.<EventConnection>filter(fbn.getEventConnections(), _function_2));
     _builder.append(_size_2);
     _builder.append(",");
     _builder.newLineIfNotEmpty();
     _builder.append("numDCons = ");
-    final Function1<DataConnection, Boolean> _function_3 = (DataConnection e) -> {
-      return Boolean.valueOf(((e.getSource().getOutputConnections().size() == 1) || ((e.getSource().getOutputConnections().size() > 1) && e.getSource().getOutputConnections().get(0).equals(e))));
+    final Function1<DataConnection, Boolean> _function_3 = new Function1<DataConnection, Boolean>() {
+      public Boolean apply(final DataConnection e) {
+        return Boolean.valueOf(((e.getSource().getOutputConnections().size() == 1) || ((e.getSource().getOutputConnections().size() > 1) && e.getSource().getOutputConnections().get(0).equals(e))));
+      }
     };
     int _size_3 = IterableExtensions.size(IterableExtensions.<DataConnection>filter(fbn.getDataConnections(), _function_3));
     _builder.append(_size_3);
     _builder.append(",");
     _builder.newLineIfNotEmpty();
     _builder.append("numFDCons = ");
-    final Function1<DataConnection, Boolean> _function_4 = (DataConnection e) -> {
-      return Boolean.valueOf(((e.getSource().getOutputConnections().size() > 1) && (!e.getSource().getOutputConnections().get(0).equals(e))));
+    final Function1<DataConnection, Boolean> _function_4 = new Function1<DataConnection, Boolean>() {
+      public Boolean apply(final DataConnection e) {
+        return Boolean.valueOf(((e.getSource().getOutputConnections().size() > 1) && (!e.getSource().getOutputConnections().get(0).equals(e))));
+      }
     };
     int _size_4 = IterableExtensions.size(IterableExtensions.<DataConnection>filter(fbn.getDataConnections(), _function_4));
     _builder.append(_size_4);
@@ -568,8 +601,10 @@ public class CompositeFBFilter {
   }
   
   private static int getNumParameter(final FBNetwork fbn) {
-    final Function1<FBNetworkElement, Boolean> _function = (FBNetworkElement e) -> {
-      return Boolean.valueOf((!(e instanceof AdapterFB)));
+    final Function1<FBNetworkElement, Boolean> _function = new Function1<FBNetworkElement, Boolean>() {
+      public Boolean apply(final FBNetworkElement e) {
+        return Boolean.valueOf((!(e instanceof AdapterFB)));
+      }
     };
     return CompositeFBFilter.getParameters(IterableExtensions.<FBNetworkElement>toList(IterableExtensions.<FBNetworkElement>filter(fbn.getNetworkElements(), _function))).size();
   }

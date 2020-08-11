@@ -63,17 +63,17 @@ public final class PaletteAnnotations {
 
 	public static void removeTypeEntry(Palette palette, PaletteEntry entry) {
 		if (entry instanceof AdapterTypePaletteEntry) {
-			palette.getAdapterTypes().remove(entry.getLabel());
+			palette.getAdapterTypes().removeKey(entry.getLabel());
 		} else if (entry instanceof DeviceTypePaletteEntry) {
-			palette.getDeviceTypes().remove(entry.getLabel());
+			palette.getDeviceTypes().removeKey(entry.getLabel());
 		} else if (entry instanceof FBTypePaletteEntry) {
-			palette.getFbTypes().remove(entry.getLabel());
+			palette.getFbTypes().removeKey(entry.getLabel());
 		} else if (entry instanceof ResourceTypeEntry) {
-			palette.getResourceTypes().remove(entry.getLabel());
+			palette.getResourceTypes().removeKey(entry.getLabel());
 		} else if (entry instanceof SegmentTypePaletteEntry) {
-			palette.getSegmentTypes().remove(entry.getLabel());
+			palette.getSegmentTypes().removeKey(entry.getLabel());
 		} else if (entry instanceof SubApplicationTypePaletteEntry) {
-			palette.getSubAppTypes().remove(entry.getLabel());
+			palette.getSubAppTypes().removeKey(entry.getLabel());
 		} else {
 			Activator.getDefault()
 					.logError("Unknown palette entry to be removed from palette: " + entry.getClass().getName());

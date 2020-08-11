@@ -59,7 +59,6 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getAllProperContents
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants.*
-import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaUtils.*
 
 class STAlgorithmFilter {
 

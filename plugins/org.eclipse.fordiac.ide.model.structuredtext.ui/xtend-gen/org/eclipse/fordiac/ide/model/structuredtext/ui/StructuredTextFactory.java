@@ -22,12 +22,10 @@ import org.osgi.framework.Bundle;
  */
 @SuppressWarnings("all")
 public class StructuredTextFactory extends StructuredTextExecutableExtensionFactory {
-  @Override
   protected Bundle getBundle() {
     return ExtendedStructuredTextActivator.getInstance().getBundle();
   }
   
-  @Override
   protected Injector getInjector() {
     return ExtendedStructuredTextActivator.getInstance().getInjector(
       StructuredtextActivator.ORG_ECLIPSE_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_STRUCTUREDTEXT);

@@ -22,7 +22,6 @@ import org.eclipse.xtext.serializer.impl.Serializer;
  */
 @SuppressWarnings("all")
 public class FBTypeRuntimeModule extends AbstractFBTypeRuntimeModule {
-  @Override
   public Class<? extends ISerializer> bindISerializer() {
     return Serializer.class;
   }

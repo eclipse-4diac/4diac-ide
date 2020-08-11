@@ -126,6 +126,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
+				// Nothing to do
 			}
 		});
 	}

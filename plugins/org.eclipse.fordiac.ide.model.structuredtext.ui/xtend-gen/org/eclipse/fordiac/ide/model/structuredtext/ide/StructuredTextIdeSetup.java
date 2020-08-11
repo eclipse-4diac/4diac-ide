@@ -15,7 +15,6 @@ import org.eclipse.xtext.util.Modules2;
  */
 @SuppressWarnings("all")
 public class StructuredTextIdeSetup extends StructuredTextStandaloneSetup {
-  @Override
   public Injector createInjector() {
     StructuredTextRuntimeModule _structuredTextRuntimeModule = new StructuredTextRuntimeModule();
     StructuredTextIdeModule _structuredTextIdeModule = new StructuredTextIdeModule();

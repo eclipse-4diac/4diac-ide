@@ -17,7 +17,6 @@ import org.eclipse.fordiac.ide.model.structuredtext.converter.LongValueConverter
 
 @SuppressWarnings("all")
 public class OCTAL_INTValueConverter extends LongValueConverter {
-  @Override
   public int getRadix() {
     return 8;
   }

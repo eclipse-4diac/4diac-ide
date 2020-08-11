@@ -239,17 +239,17 @@ public class DataTypeEditor extends EditorPart
 	}
 
 	@Override
-	public Object getAdapter(Class key) {
+	public  <T extends Object> T getAdapter(Class<T> key) {
 		if (key == org.eclipse.ui.views.properties.IPropertySheetPage.class) {
-			return new UndoablePropertySheetPage(getCommandStack(),
+			return key.cast(new UndoablePropertySheetPage(getCommandStack(),
 					getActionRegistry().getAction(ActionFactory.UNDO.getId()),
-					getActionRegistry().getAction(ActionFactory.REDO.getId()));
+					getActionRegistry().getAction(ActionFactory.REDO.getId())));
 		}
 		if (key == CommandStack.class) {
-			return getCommandStack();
+			return key.cast(getCommandStack());
 		}
 		if (key == ActionRegistry.class) {
-			return getActionRegistry();
+			return key.cast(getActionRegistry());
 		}
 
 		return super.getAdapter(key);

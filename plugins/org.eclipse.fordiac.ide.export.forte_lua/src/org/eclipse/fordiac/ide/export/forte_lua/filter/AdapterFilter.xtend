@@ -25,7 +25,7 @@ import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaUtils
 
 class AdapterFilter {
 	@Accessors(PUBLIC_GETTER)
-	private List<String> errors = new ArrayList<String>;
+	List<String> errors = new ArrayList<String>;
 
 	def lua(AdapterType type) '''
 		«type.interfaceList.luaEventDataInterfaceSpec»

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2015 - 2017 TU Wien ACIN, Profactor GmbH, fortiss GmbH
  * 				 2019 Johannes Keppler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,9 +9,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl, Gerhard Ebenhofer 
+ *   Alois Zoitl, Gerhard Ebenhofer
  *   - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo 
+ *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.commands;
 
@@ -52,7 +52,7 @@ public class NewAppCommand extends AbstractOperation {
 
 	/**
 	 * checks whether all required information for creating a new App are set.
-	 * 
+	 *
 	 * @return true, if can execute
 	 */
 	@Override
@@ -62,7 +62,7 @@ public class NewAppCommand extends AbstractOperation {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -77,7 +77,7 @@ public class NewAppCommand extends AbstractOperation {
 
 			system.getApplication().add(application);
 
-			SystemManager.INSTANCE.saveSystem(system);
+			SystemManager.saveSystem(system);
 			return Status.OK_STATUS;
 		}
 		return new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, "", null); //$NON-NLS-1$
@@ -86,14 +86,14 @@ public class NewAppCommand extends AbstractOperation {
 
 	/**
 	 * Redo.
-	 * 
+	 *
 	 * @see NewAppCommand#execute()
 	 */
 	@Override
 	public IStatus redo(IProgressMonitor monitor, IAdaptable info) {
 		if (system != null) {
 			system.getApplication().add(application);
-			SystemManager.INSTANCE.saveSystem(system); // to save the
+			SystemManager.saveSystem(system); // to save the
 			return Status.OK_STATUS;
 		}
 		return new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, "", null); //$NON-NLS-1$
@@ -106,7 +106,7 @@ public class NewAppCommand extends AbstractOperation {
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info) {
 		if (system != null) {
 			system.getApplication().remove(application);
-			SystemManager.INSTANCE.saveSystem(system);
+			SystemManager.saveSystem(system);
 			return Status.OK_STATUS;
 		}
 		return new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, "", null); //$NON-NLS-1$

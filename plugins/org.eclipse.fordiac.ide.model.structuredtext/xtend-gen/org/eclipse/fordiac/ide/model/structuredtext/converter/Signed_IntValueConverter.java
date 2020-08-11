@@ -21,12 +21,10 @@ import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 @SuppressWarnings("all")
 public class Signed_IntValueConverter extends AbstractNullSafeConverter<Long> {
-  @Override
   protected String internalToString(final Long value) {
     return value.toString();
   }
   
-  @Override
   protected Long internalToValue(final String string, final INode node) throws ValueConverterException {
     Long _xblockexpression = null;
     {

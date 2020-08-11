@@ -21,12 +21,10 @@ import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 @SuppressWarnings("all")
 public class Array_SizeValueConverter extends AbstractNullSafeConverter<Integer> {
-  @Override
   protected String internalToString(final Integer value) {
     return value.toString();
   }
   
-  @Override
   protected Integer internalToValue(final String string, final INode node) throws ValueConverterException {
     Integer _xblockexpression = null;
     {

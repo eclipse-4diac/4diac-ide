@@ -108,8 +108,10 @@ public class STAlgorithmFilter {
       final IParseResult parseResult = resource.getParseResult();
       boolean _hasSyntaxErrors = parseResult.hasSyntaxErrors();
       if (_hasSyntaxErrors) {
-        final Function1<INode, String> _function = (INode it) -> {
-          return it.getSyntaxErrorMessage().getMessage();
+        final Function1<INode, String> _function = new Function1<INode, String>() {
+          public String apply(final INode it) {
+            return it.getSyntaxErrorMessage().getMessage();
+          }
         };
         Iterables.<String>addAll(this.errors, IterableExtensions.<INode, String>map(parseResult.getSyntaxErrors(), _function));
         return null;
@@ -117,12 +119,16 @@ public class STAlgorithmFilter {
       EObject _rootASTElement = parseResult.getRootASTElement();
       final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
       final Set<AdapterVariable> usedAdapterVariables = IteratorExtensions.<AdapterVariable>toSet(Iterators.<AdapterVariable>filter(EcoreUtil.<Object>getAllProperContents(stalg, true), AdapterVariable.class));
-      final Function1<PrimaryVariable, VarDeclaration> _function_1 = (PrimaryVariable it) -> {
-        return it.getVar();
+      final Function1<PrimaryVariable, VarDeclaration> _function_1 = new Function1<PrimaryVariable, VarDeclaration>() {
+        public VarDeclaration apply(final PrimaryVariable it) {
+          return it.getVar();
+        }
       };
-      final Function1<VarDeclaration, Boolean> _function_2 = (VarDeclaration it) -> {
-        EObject _rootContainer = EcoreUtil.getRootContainer(it);
-        return Boolean.valueOf((_rootContainer instanceof FBType));
+      final Function1<VarDeclaration, Boolean> _function_2 = new Function1<VarDeclaration, Boolean>() {
+        public Boolean apply(final VarDeclaration it) {
+          EObject _rootContainer = EcoreUtil.getRootContainer(it);
+          return Boolean.valueOf((_rootContainer instanceof FBType));
+        }
       };
       final Set<VarDeclaration> usedFBVariables = IteratorExtensions.<VarDeclaration>toSet(IteratorExtensions.<VarDeclaration>filter(IteratorExtensions.<PrimaryVariable, VarDeclaration>map(Iterators.<PrimaryVariable>filter(EcoreUtil.<Object>getAllProperContents(stalg, true), PrimaryVariable.class), _function_1), _function_2));
       StringConcatenation _builder = new StringConcatenation();
@@ -165,8 +171,10 @@ public class STAlgorithmFilter {
       final IParseResult parseResult = resource.getParseResult();
       boolean _hasSyntaxErrors = parseResult.hasSyntaxErrors();
       if (_hasSyntaxErrors) {
-        final Function1<INode, String> _function = (INode it) -> {
-          return it.getSyntaxErrorMessage().getMessage();
+        final Function1<INode, String> _function = new Function1<INode, String>() {
+          public String apply(final INode it) {
+            return it.getSyntaxErrorMessage().getMessage();
+          }
         };
         Iterables.<String>addAll(this.errors, IterableExtensions.<INode, String>map(parseResult.getSyntaxErrors(), _function));
         return null;
