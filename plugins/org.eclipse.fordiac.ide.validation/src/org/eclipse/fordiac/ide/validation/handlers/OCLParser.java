@@ -20,6 +20,10 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.validation.Activator;
 import org.eclipse.ocl.OCLInput;
 import org.eclipse.ocl.ParserException;
@@ -28,31 +32,43 @@ import org.osgi.framework.Bundle;
 
 public class OCLParser {
 	private static final String CONSTRAINT_DIRECTORY = "constraints"; //$NON-NLS-1$
-	private static final String[] CONSTRAINT_FILES = { "ECC.ocl", "FB.ocl" };
+	private static final String CONSTRAINT_FILE_FBTYPE = "ECC.ocl";
+	private static final String CONSTRAINT_FILE_APP = "FB.ocl";
 
-	public static List<Constraint> loadOCLConstraints() {
+	public static List<Constraint> loadOCLConstraints(INamedElement element) {
 		InputStream in = null;
+		String constraintFile;
 		List<Constraint> constraints = new ArrayList<Constraint>();
 		Bundle bundle = Activator.getDefault().getBundle();
-		for (String constraintFile : CONSTRAINT_FILES) {
-			try {
-				URL url = bundle
-						.getResource(new Path(CONSTRAINT_DIRECTORY + IPath.SEPARATOR + constraintFile).toOSString());
-				in = url.openStream();
-				OCLInput document = new OCLInput(in);
-				constraints.addAll(Activator.getDefault().getOclInstance().parse(document));
+		constraintFile = getOCLFile(element);
+		try {
+			URL url = bundle
+					.getResource(new Path(CONSTRAINT_DIRECTORY + IPath.SEPARATOR + constraintFile).toOSString());
+			in = url.openStream();
+			OCLInput document = new OCLInput(in);
+			constraints.addAll(Activator.getDefault().getOclInstance().parse(document));
 
-			} catch (ParserException | IOException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-			} finally {
-				if (in != null)
-					try {
-						in.close();
-					} catch (IOException ioe) {
-						Activator.getDefault().logError(ioe.getMessage(), ioe);
-					}
-			}
+		} catch (ParserException | IOException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
+		} finally {
+			if (in != null)
+				try {
+					in.close();
+				} catch (IOException ioe) {
+					Activator.getDefault().logError(ioe.getMessage(), ioe);
+				}
 		}
 		return constraints;
+	}
+
+	private static String getOCLFile(INamedElement element) {
+		if (element instanceof FBType) {
+			return CONSTRAINT_FILE_FBTYPE;
+		}
+
+		if (element instanceof Application || element instanceof SubApp) {
+			return CONSTRAINT_FILE_APP;
+		}
+		return null;
 	}
 }
