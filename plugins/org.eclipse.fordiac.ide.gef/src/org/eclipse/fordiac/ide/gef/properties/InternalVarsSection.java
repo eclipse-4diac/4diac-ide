@@ -153,7 +153,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	private CellEditor[] createCellEditors(final Table table) {
 		final TextCellEditor varNameEditor = new TextCellEditor(table);
 		((Text) varNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		typeDropDown = new DataTypeDropdown(table, dataLib);
+		typeDropDown = new DataTypeDropdown(dataLib, internalVarsViewer);
 		return new CellEditor[] { varNameEditor, typeDropDown, new TextCellEditor(table), new TextCellEditor(table),
 				new TextCellEditor(table) };
 	}

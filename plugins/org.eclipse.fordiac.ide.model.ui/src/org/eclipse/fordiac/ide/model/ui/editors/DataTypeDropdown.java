@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
+ * Copyright (c) 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Daniel Lindhuber - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr - fix column traversal
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.ui.editors;
@@ -29,6 +30,7 @@ import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -39,6 +41,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
@@ -49,11 +53,23 @@ public class DataTypeDropdown extends TextCellEditor {
 	private DataTypeLibrary library;
 	private SimpleContentProposalProvider provider;
 	private List<DataType> types;
-	private boolean isDialogOpen;
+	private String[] elementaryTypes;
+	private TableViewer viewer;
+	/*
+	 * A flag that indicates if the content proposals have been set to elementary
+	 * types (this is the case if the text field is empty) or all types. This means
+	 * that the ModifyListener of the textControl does not have to set the types for
+	 * the proposal provider with every modify event but only when its necessary.
+	 */
+	private boolean isElementary;
 
-	public DataTypeDropdown(Composite parent, DataTypeLibrary library) {
-		super(parent);
+	private boolean isTraverseNextProcessActive;
+	private boolean isTraversePreviousProcessActive;
+
+	public DataTypeDropdown(DataTypeLibrary library, TableViewer viewer) {
+		super(viewer.getTable());
 		this.library = library;
+		this.viewer = viewer;
 		types = new ArrayList<>(); // empty list for initial provider creation
 		configureTextControl();
 		createDialogButton();
@@ -99,6 +115,86 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private void configureTextControl() {
 		textControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		textControl.addModifyListener(e -> {
+			if (textControl.getText().isEmpty()) {
+				provider.setProposals(getElementaryTypes());
+				isElementary = true;
+			} else if (isElementary) {
+				provider.setProposals(getTypesAsStringArray());
+				isElementary = false;
+			}
+		});
+		textControl.addListener(SWT.Traverse, e -> {
+			e.doit = false; // prevent the action from doing anything automatically
+			if ((e.detail == SWT.TRAVERSE_TAB_NEXT) && ((e.stateMask & SWT.CTRL) != 0)) {
+				// move within column down
+				int selIndex = viewer.getTable().getSelectionIndex() + 1;
+				if (selIndex < viewer.getTable().getItemCount()) {
+					Object data = viewer.getTable().getItem(selIndex).getData();
+					viewer.editElement(data, 1); // type column
+				}
+			} else if ((e.detail == SWT.TRAVERSE_TAB_PREVIOUS) && ((e.stateMask & SWT.CTRL) != 0)) {
+				// move within column up
+				int selIndex = viewer.getTable().getSelectionIndex() - 1;
+				if (selIndex >= 0) {
+					Object data = viewer.getTable().getItem(selIndex).getData();
+					viewer.editElement(data, 1); // type column
+				}
+			} else if (e.detail == SWT.TRAVERSE_TAB_NEXT) {
+				// move one column to the right
+				if (adapter.isProposalPopupOpen()) {
+					triggerEnterKeyEvent();
+					isTraverseNextProcessActive = true;
+				} else {
+					traverseToNextCell();
+				}
+			} else if (e.detail == SWT.TRAVERSE_TAB_PREVIOUS) {
+				// move one column to the left
+				if (adapter.isProposalPopupOpen()) {
+					triggerEnterKeyEvent();
+					isTraversePreviousProcessActive = true;
+				} else {
+					traverseToPreviousCell();
+				}
+			}
+		});
+	}
+
+	private void triggerEnterKeyEvent() {
+		Display display = Display.getCurrent();
+		if (display == null) {
+			display = Display.getDefault();
+		}
+		Event event = new Event();
+		event.keyCode = SWT.CR;
+		event.display = display;
+		event.type = SWT.KeyDown;
+		display.post(event);
+	}
+
+	private void traverseToPreviousCell() {
+		int selIndex = viewer.getTable().getSelectionIndex();
+		Object data = viewer.getTable().getItem(selIndex).getData();
+		adapter.setEnabled(false);
+		viewer.editElement(data, 0); // name column
+		adapter.setEnabled(true);
+	}
+
+	private void traverseToNextCell() {
+		int selIndex = viewer.getTable().getSelectionIndex();
+		Object data = viewer.getTable().getItem(selIndex).getData();
+		adapter.setEnabled(false);
+		viewer.editElement(data, 2); // comment column
+		adapter.setEnabled(true);
+	}
+
+	private String[] getElementaryTypes() {
+		// only load elementary types once because they do not change
+		if (elementaryTypes == null) {
+			elementaryTypes = types.stream().filter(type -> !(type instanceof StructuredType)).map(DataType::getName)
+					.toArray(String[]::new);
+		}
+		return elementaryTypes;
 	}
 
 	private String[] getTypesAsStringArray() {
@@ -112,7 +208,6 @@ public class DataTypeDropdown extends TextCellEditor {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				isDialogOpen = true;
 				openDialog();
 			}
 
@@ -134,9 +229,9 @@ public class DataTypeDropdown extends TextCellEditor {
 		dialog.setInput(types);
 		dialog.setTitle(Messages.DataTypeDropdown_Type_Selection);
 		dialog.setMessage(Messages.DataTypeDropdown_Select_Type);
+		dialog.setDoubleClickSelects(false); // because it is incompatible with multi-level tree
 		// user pressed cancel
 		if (dialog.open() != Window.OK) {
-			isDialogOpen = false;
 			deactivate();
 			return;
 		}
@@ -146,11 +241,10 @@ public class DataTypeDropdown extends TextCellEditor {
 			doSetValue(((DataType) result).getName());
 			fireApplyEditorValue();
 		}
-		isDialogOpen = false;
 		deactivate();
 	}
 
-	private LabelProvider createTreeLabelProvider() {
+	private static LabelProvider createTreeLabelProvider() {
 		return new LabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -214,26 +308,21 @@ public class DataTypeDropdown extends TextCellEditor {
 		};
 	}
 
+	static final char[] ACTIVATION_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+			'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+			'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4',
+			'5', '6', '7', '8', '9', '_', '.', SWT.BS };
+
 	private void enableContentProposal() {
 		provider = new SimpleContentProposalProvider(getTypesAsStringArray());
 		provider.setFiltering(true);
 
-		adapter = new ContentProposalAdapter(text, new TextContentAdapter(), provider, null, null);
-
+		adapter = new ContentProposalAdapter(text, new TextContentAdapter(), provider, null, ACTIVATION_CHARS);
 		adapter.addContentProposalListener(new IContentProposalListener2() {
 
 			@Override
 			public void proposalPopupClosed(ContentProposalAdapter adapter) {
-				/*
-				 * deactivate the editor if the popup is closed, no dialog is open and the text
-				 * field has no focus, otherwise the search field would stay editable even when
-				 * its focus is lost. This is due to the event order, focusLost() of the text
-				 * control is called before isProposalPopupOpen() changes its value.
-				 */
-				if (!isDialogOpen && !textControl.isFocusControl()) {
-					setValue(""); //$NON-NLS-1$
-					deactivate();
-				}
+				// no need to listen to closing
 			}
 
 			@Override
@@ -243,7 +332,17 @@ public class DataTypeDropdown extends TextCellEditor {
 
 		});
 
-		adapter.addContentProposalListener(proposal -> fireApplyEditorValue());
+		adapter.addContentProposalListener(proposal -> {
+			fireApplyEditorValue();
+			// if apply value was triggered programmatically -> tab to next/previous cell
+			if (isTraverseNextProcessActive) {
+				traverseToNextCell();
+				isTraverseNextProcessActive = false;
+			} else if (isTraversePreviousProcessActive) {
+				traverseToPreviousCell();
+				isTraversePreviousProcessActive = false;
+			}
+		});
 
 		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 
@@ -251,10 +350,7 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	@Override
 	protected void focusLost() {
-		if (!adapter.isProposalPopupOpen() && !isDialogOpen) {
-			setValue(""); //$NON-NLS-1$
-			deactivate();
-		}
+		deactivate();
 	}
 
 	@Override
@@ -287,4 +383,5 @@ public class DataTypeDropdown extends TextCellEditor {
 			types.add(type);
 		}
 	}
+
 }
