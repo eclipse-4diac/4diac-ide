@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   Daniel Lindhuber - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr - fix column traversal
+ *   Bianca Wiesmayr - fix column traversal, add context menu
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.ui.editors;
@@ -19,21 +19,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.Messages;
+import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.IContentProposalListener2;
 import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -43,6 +50,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
@@ -221,15 +231,16 @@ public class DataTypeDropdown extends TextCellEditor {
 	private void openDialog() {
 		loadContent(); // refresh content before opening
 		ITreeContentProvider treeProvider = createTreeContentProvider();
-
 		LabelProvider labelProvider = createTreeLabelProvider();
 
-		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getControl().getShell(), labelProvider,
+		DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getControl().getShell(), labelProvider,
 				treeProvider);
 		dialog.setInput(types);
 		dialog.setTitle(Messages.DataTypeDropdown_Type_Selection);
 		dialog.setMessage(Messages.DataTypeDropdown_Select_Type);
 		dialog.setDoubleClickSelects(false); // because it is incompatible with multi-level tree
+		dialog.setHelpAvailable(false);
+
 		// user pressed cancel
 		if (dialog.open() != Window.OK) {
 			deactivate();
@@ -243,6 +254,65 @@ public class DataTypeDropdown extends TextCellEditor {
 		}
 		deactivate();
 	}
+
+	private class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
+
+		public DataTypeTreeSelectionDialog(Shell parent, IBaseLabelProvider labelProvider,
+				ITreeContentProvider contentProvider) {
+			super(parent, labelProvider, contentProvider);
+		}
+
+		@Override
+		protected Control createDialogArea(Composite parent) {
+			Control control = super.createDialogArea(parent);
+			createContextMenu(getTreeViewer().getTree());
+			return control;
+		}
+
+		private void createContextMenu(Control control) {
+			Menu openEditorMenu = new Menu(control);
+			MenuItem openItem = new MenuItem(openEditorMenu, SWT.NONE);
+			openItem.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					StructuredType sel = getSelectedStructuredType(control);
+					if (sel != null) {
+						handleShellCloseEvent();
+						setResult(null); // discard selection, do not update type
+						OpenStructMenu.openStructEditor(sel.getPaletteEntry().getFile());
+					}
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+					widgetSelected(e);
+				}
+			});
+			openItem.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
+
+			openEditorMenu.addMenuListener(new MenuListener() {
+				@Override
+				public void menuShown(MenuEvent e) {
+					openItem.setEnabled((getSelectedStructuredType(control) != null)
+							&& !getSelectedStructuredType(control).getName().contentEquals(FordiacKeywords.ANY_STRUCT));
+				}
+
+				@Override
+				public void menuHidden(MenuEvent e) {
+				}
+			});
+			control.setMenu(openEditorMenu);
+		}
+
+		private StructuredType getSelectedStructuredType(Control control) {
+			Object selected = ((TreeSelection) getTreeViewer().getSelection()).getFirstElement();
+			if (selected instanceof StructuredType) {
+				return (StructuredType) selected;
+			}
+			return null;
+		}
+	}
+
 
 	private static LabelProvider createTreeLabelProvider() {
 		return new LabelProvider() {
