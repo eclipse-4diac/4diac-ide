@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.handles.AdvancedGraphicalViewerKeyHandler;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.FigureFontUpdateListener;
+import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
@@ -132,16 +133,18 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 		AdvancedScrollingGraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
 		viewer.createControl(rulerComp);
+
 		setGraphicalViewer(viewer);
 		configureGraphicalViewer();
 		hookGraphicalViewer();
 		initializeGraphicalViewer();
 
-		viewer.getControl().setFont(JFaceResources.getFont(PreferenceConstants.DIAGRAM_FONT));
+		final IFontUpdateListener rootFigureListener = new FigureFontUpdateListener(
+				((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getFigure(),
+				PreferenceConstants.DIAGRAM_FONT);
+		final IPropertyChangeListener fontChangeListener = new DiagramFontChangeListener(rootFigureListener);
 
-		final IPropertyChangeListener fontChangeListener = new DiagramFontChangeListener(
-				new FigureFontUpdateListener(((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getFigure(),
-						PreferenceConstants.DIAGRAM_FONT));
+		rootFigureListener.updateFonts(); // ensure that root figure has the right font set
 
 		JFaceResources.getFontRegistry().addListener(fontChangeListener);
 		viewer.getControl()
