@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
@@ -61,7 +62,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 			// only refresh propertypage (page) if the event is not an
 			// REMOVING_ADAPTER event - otherwise, the remove adapter in the
 			// dispose method (called when closing the editor) will fail
-			if (notification.getEventType() != Notification.REMOVING_ADAPTER && (((notification.getNewValue() == null)
+			if ((notification.getEventType() != Notification.REMOVING_ADAPTER) && (((notification.getNewValue() == null)
 					&& (notification.getNewValue() != notification.getOldValue()))
 					|| ((notification.getNewValue() != null)
 							&& !(notification.getNewValue().equals(notification.getOldValue()))))) {
@@ -120,11 +121,11 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 		Map map = getGraphicalViewer().getEditPartRegistry();
 
 		for (Object key : map.keySet()) {
-			if (key instanceof FB && ((FB) key) == selectedElement) {
+			if ((key instanceof FB) && (((FB) key) == selectedElement)) {
 				selectedElement = key;
 				break;
 			}
-			if (key instanceof Connection && ((Connection) key) == selectedElement) {
+			if ((key instanceof Connection) && (((Connection) key) == selectedElement)) {
 				selectedElement = key;
 				break;
 			}
@@ -159,10 +160,13 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 			}
 		}
 
-		setPartName(Messages.CompositeNetworkEditor_LABEL_CompositeEditor);
 		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
-
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
+	}
+
+	@Override
+	protected void setEditorPartName(IEditorInput input) {
+		setPartName(FordiacMessages.FBNetwork);
 	}
 
 	protected void configurePalette(FBTypeEditorInput fbTypeEditorInput) {
@@ -171,7 +175,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-		return null; // we are filling a the palete directly in the viewer so we don't need it here
+		return null; // we are filling the palette directly in the viewer so we don't need it here
 	}
 
 	@Override

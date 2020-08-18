@@ -46,6 +46,7 @@ public class FordiacMessages extends NLS {
 	public static String Device;
 	public static String EmptyField;
 	public static String Event;
+	public static String FBNetwork;
 	public static String Function;
 	public static String Header;
 	public static String Identification;

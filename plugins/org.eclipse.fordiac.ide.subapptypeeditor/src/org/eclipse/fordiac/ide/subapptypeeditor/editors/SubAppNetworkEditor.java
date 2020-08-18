@@ -16,15 +16,8 @@ package org.eclipse.fordiac.ide.subapptypeeditor.editors;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.CompositeNetworkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
 import org.eclipse.fordiac.ide.subapptypeeditor.editparts.SubAppTypeNetworkEditPartFactory;
-import org.eclipse.ui.IEditorInput;
 
 public class SubAppNetworkEditor extends CompositeNetworkEditor {
-
-	@Override
-	protected void setModel(IEditorInput input) {
-		super.setModel(input);
-		setPartName("Subapplication Network");
-	}
 
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {

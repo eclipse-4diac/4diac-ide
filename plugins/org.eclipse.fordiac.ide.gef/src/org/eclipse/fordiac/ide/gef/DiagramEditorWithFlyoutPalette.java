@@ -82,7 +82,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWithFlyoutPalette
-		implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
+implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
@@ -145,7 +145,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 		JFaceResources.getFontRegistry().addListener(fontChangeListener);
 		viewer.getControl()
-				.addDisposeListener(e -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
+		.addDisposeListener(e -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
 
 		rulerComp.setGraphicalViewer(getGraphicalViewer());
 	}
@@ -247,9 +247,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setModel(input);
 		super.init(site, input);
-		if (input.getName() != null) {
-			setPartName(input.getName());
-		}
+		setEditorPartName(input);
 		ActionRegistry registry = getActionRegistry();
 		IActionBars bars = site.getActionBars();
 		String id = ActionFactory.UNDO.getId();
@@ -261,10 +259,16 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		bars.updateActionBars();
 	}
 
-	protected void updateEditorTitle(String newTitel) {
-		((UntypedEditorInput) getEditorInput()).setName(newTitel); // update the editor input so that the tooltip and
-																	// header bars are correct as well
-		setPartName(newTitel);
+	protected void setEditorPartName(final IEditorInput input) {
+		if (input.getName() != null) {
+			setPartName(input.getName());
+		}
+	}
+
+	protected void updateEditorTitle(String newTitle) {
+		((UntypedEditorInput) getEditorInput()).setName(newTitle); // update the editor input so that the tooltip and
+		// header bars are correct as well
+		setPartName(newTitle);
 	}
 
 	/**
