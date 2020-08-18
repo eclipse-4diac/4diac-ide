@@ -155,7 +155,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private CellEditor[] createCellEditors(final Table table) {
-		typeDropDown = new DataTypeDropdown(table, dataTypeLibrary);
+		typeDropDown = new DataTypeDropdown(dataTypeLibrary, structViewer);
 		return new CellEditor[] { new TextCellEditor(table), typeDropDown, new TextCellEditor(table),
 				new TextCellEditor(table), new TextCellEditor(table) };
 	}
@@ -198,7 +198,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			case NAME:
 				return var.getName();
 			case TYPE:
-				return typeDropDown.getValue();
+				return var.getTypeName();
 			case COMMENT:
 				return var.getComment();
 			case INIT:

@@ -54,7 +54,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	protected CellEditor createTypeCellEditor(TableViewer viewer) {
-		typeDropdown = new DataTypeDropdown(viewer.getTable(), getDataTypeLib());
+		typeDropdown = new DataTypeDropdown(getDataTypeLib(), viewer);
 		return typeDropdown;
 	}
 
