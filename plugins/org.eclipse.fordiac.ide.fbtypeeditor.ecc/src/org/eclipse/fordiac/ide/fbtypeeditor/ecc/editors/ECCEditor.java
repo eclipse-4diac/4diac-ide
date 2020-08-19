@@ -16,6 +16,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
@@ -286,13 +288,27 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public void gotoMarker(IMarker marker) {
-		// For now we don't handle markers in this editor
+		Map<?, ?> map = getGraphicalViewer().getEditPartRegistry();
+		String lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, "Unknown");
+		if (!lineNumber.equals("Unknown")) {
+			int hashCode = Integer.parseInt(lineNumber);
+			for (Object key : map.keySet()) {
+				if (key.hashCode() == hashCode) {
+					Object obj = getGraphicalViewer().getEditPartRegistry().get(key);
+					if (obj instanceof EditPart) {
+						getGraphicalViewer().select((EditPart) obj);
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	@Override
 	public boolean isMarkerTarget(IMarker marker) {
-		// For now we don't handle markers in this editor
+		if (marker.getAttribute(IMarker.LOCATION, "Unknown").startsWith("ECC")) {
+			return true;
+		}
 		return false;
 	}
-
 }

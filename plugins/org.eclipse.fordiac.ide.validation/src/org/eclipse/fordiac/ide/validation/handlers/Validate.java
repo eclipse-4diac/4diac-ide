@@ -65,8 +65,8 @@ public class Validate extends AbstractHandler {
 					if (!Activator.getDefault().getOclInstance().check(object, constraint)) {
 						try {
 							String[] properties = ConstraintHelper.getConstraintProperties(constraint.getName());
-							addValidationMarker(iresource, properties[0], properties[1],
-									createHierarchicalName(object));
+							addValidationMarker(iresource, properties[0], properties[1], createHierarchicalName(object),
+									object.hashCode());
 						} catch (CoreException e) {
 							Activator.getDefault().logError(e.getMessage(), e);
 						}
@@ -76,8 +76,8 @@ public class Validate extends AbstractHandler {
 		return null;
 	}
 
-	private static void addValidationMarker(IResource iresource, String message, String severity, String location)
-			throws CoreException {
+	private static void addValidationMarker(IResource iresource, String message, String severity, String location,
+			int lineNumber) throws CoreException {
 		IMarker imarker = iresource.createMarker(IValidationMarker.TYPE);
 		imarker.setAttribute(IMarker.MESSAGE, message);
 		switch (severity) {
@@ -95,6 +95,7 @@ public class Validate extends AbstractHandler {
 			break;
 		}
 		imarker.setAttribute(IMarker.LOCATION, location);
+		imarker.setAttribute(IMarker.LINE_NUMBER, String.valueOf(lineNumber));
 	}
 
 	private static INamedElement getSelectedElement(StructuredSelection currentSelection) {
@@ -152,26 +153,16 @@ public class Validate extends AbstractHandler {
 			return builder.toString();
 		} else if (object instanceof ECState) {
 			ECState state = (ECState) object;
-			FBType fbType = state.getECC().getBasicFBType();
-			StringBuilder builder = new StringBuilder(fbType.getName());
-			builder.append('.');
-			builder.append("ECC");
+			StringBuilder builder = new StringBuilder("ECC");
 			builder.append('.');
 			builder.append(state.getName());
 			return builder.toString();
 		} else if (object instanceof ECC) {
-			ECC ecc = (ECC) object;
-			FBType fbType = ecc.getBasicFBType();
-			StringBuilder builder = new StringBuilder(fbType.getName());
-			builder.append('.');
-			builder.append("ECC");
+			StringBuilder builder = new StringBuilder("ECC");
 			return builder.toString();
 		} else if (object instanceof ECTransition) {
 			ECTransition transition = (ECTransition) object;
-			FBType fbType = transition.getECC().getBasicFBType();
-			StringBuilder builder = new StringBuilder(fbType.getName());
-			builder.append('.');
-			builder.append("ECC");
+			StringBuilder builder = new StringBuilder("ECC");
 			builder.append('.');
 			// TODO: ECTransition toString()? Display the coordinates of the transition?
 			builder.append("Transition X:" + transition.getX() + " Y:" + transition.getY());
