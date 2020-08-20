@@ -203,13 +203,8 @@
                enablesFor="1"
                class="org.eclipse.fordiac.ide.application.properties.FBTypeInfoSection"
                id="org.eclipse.fordiac.ide.application.properties.FBTypeInfoSection"
-               tab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab">
-            <input
-                  type="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
-            </input>
+               tab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
+	           filter="org.eclipse.fordiac.ide.application.properties.TypedFBNetworkElementFilter">
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.gef.properties.ConnectionSection"
