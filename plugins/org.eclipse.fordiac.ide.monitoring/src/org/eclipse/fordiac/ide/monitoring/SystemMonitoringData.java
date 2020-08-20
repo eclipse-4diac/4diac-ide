@@ -89,13 +89,12 @@ public class SystemMonitoringData {
 		DisableSystemMonitoringRunnable disable = new DisableSystemMonitoringRunnable(this);
 		Shell shell = Display.getDefault().getActiveShell();
 		try {
-			new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(true, true, disable);
+			new ProgressMonitorDialog(shell).run(true, true, disable);
 		} catch (InvocationTargetException ex) {
 			MessageDialog.openError(shell, "Error", ex.getMessage());
 		} catch (InterruptedException ex) {
 			MessageDialog.openInformation(shell, "Disable Monitoring Aborted", "Disable Monitoring Aborted");
 		}
-
 	}
 
 	public void disableSystemSynch(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {

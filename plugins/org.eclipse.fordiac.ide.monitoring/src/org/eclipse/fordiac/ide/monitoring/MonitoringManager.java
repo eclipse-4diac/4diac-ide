@@ -166,7 +166,6 @@ public class MonitoringManager extends AbstractMonitoringManager {
 			throws InvocationTargetException, InterruptedException {
 		SystemMonitoringData data = systemMonitoringData.remove(system);
 		if (null != data) {
-			data.disableSystem();
 			data.disableSystemSynch(monitor);
 		}
 	}
