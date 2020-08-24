@@ -21,10 +21,10 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.application.policies.FBNElementSelectionPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.tools.ScrollingDragEditPartsTracker;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -58,6 +59,7 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
@@ -352,10 +354,20 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	@Override
 	public void performDirectEdit() {
 		NewInstanceDirectEditManager directEditManager = getManager();
-		Rectangle typeLabelBounds = getFigure().getTypeLabel().getBounds();
-		Point refPoint = new Point(typeLabelBounds.x, typeLabelBounds.y);
-		directEditManager.updateRefPosition(refPoint);
+		directEditManager.updateRefPosition(getRefPoint());
 		directEditManager.show(getModel().getTypeName());
+	}
+
+	private Point getRefPoint() {
+		org.eclipse.draw2d.geometry.Point typeLabelTopLeft = getFigure().getTypeLabel().getBounds().getTopLeft()
+				.scale(getZoomManager().getZoom());
+		FigureCanvas viewerControl = (FigureCanvas) getViewer().getControl();
+		org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
+		return new Point(typeLabelTopLeft.x - location.x, typeLabelTopLeft.y - location.y);
+	}
+
+	private ZoomManager getZoomManager() {
+		return ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager();
 	}
 
 	@Override
