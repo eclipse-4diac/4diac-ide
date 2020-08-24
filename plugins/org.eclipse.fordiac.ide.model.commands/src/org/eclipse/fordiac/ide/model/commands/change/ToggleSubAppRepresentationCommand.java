@@ -10,7 +10,7 @@
  * Contributors:
  *   Bianca Wiesmayr - initial implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.commands;
+package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
