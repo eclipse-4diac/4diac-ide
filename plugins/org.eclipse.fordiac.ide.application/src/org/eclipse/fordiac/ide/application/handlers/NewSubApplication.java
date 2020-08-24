@@ -47,7 +47,7 @@ public class NewSubApplication extends AbstractHandler {
 		Point pos = null;
 		if (createNewEmptySubapp(selection)) {
 			// new empty subapp at mouse cursor location
-			pos = ((FBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getPoint();
+			pos = ((FBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getTranslatedAndZoomedPoint();
 		} else {
 			org.eclipse.swt.graphics.Point swtPos1 = FBNetworkHelper.getTopLeftCornerOfFBNetwork(selection.toList());
 			pos = new Point(swtPos1.x, swtPos1.y);
