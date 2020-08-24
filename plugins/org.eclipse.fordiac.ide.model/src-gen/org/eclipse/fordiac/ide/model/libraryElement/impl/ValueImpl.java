@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -37,17 +37,17 @@ public class ValueImpl extends EObjectImpl implements Value {
 	/**
 	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VALUE_EDEFAULT = "";
+	protected static final String VALUE_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getValue()
 	 * @generated
 	 * @ordered

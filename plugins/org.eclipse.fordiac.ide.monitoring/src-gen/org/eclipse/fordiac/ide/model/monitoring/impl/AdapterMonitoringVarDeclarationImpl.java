@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -63,17 +63,17 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = "";
+	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -87,7 +87,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = "";
+	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -120,7 +120,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * The cached value of the '{@link #getInputConnections() <em>Input
 	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getInputConnections()
 	 * @generated
 	 * @ordered
@@ -131,7 +131,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * The cached value of the '{@link #getOutputConnections() <em>Output
 	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getOutputConnections()
 	 * @generated
 	 * @ordered
@@ -141,7 +141,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	/**
 	 * The cached value of the '{@link #getType() <em>Type</em>}' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered

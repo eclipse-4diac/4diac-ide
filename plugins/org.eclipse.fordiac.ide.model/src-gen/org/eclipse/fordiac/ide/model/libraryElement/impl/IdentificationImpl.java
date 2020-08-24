@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -64,7 +64,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String CLASSIFICATION_EDEFAULT = "";
+	protected static final String CLASSIFICATION_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getClassification() <em>Classification</em>}' attribute.
@@ -83,7 +83,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String DESCRIPTION_EDEFAULT = "";
+	protected static final String DESCRIPTION_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
@@ -101,7 +101,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String FUNCTION_EDEFAULT = "";
+	protected static final String FUNCTION_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getFunction() <em>Function</em>}' attribute.
@@ -119,7 +119,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String STANDARD_EDEFAULT = "";
+	protected static final String STANDARD_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getStandard() <em>Standard</em>}' attribute.
@@ -133,17 +133,17 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	/**
 	 * The default value of the '{@link #getType() <em>Type</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String TYPE_EDEFAULT = "";
+	protected static final String TYPE_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered

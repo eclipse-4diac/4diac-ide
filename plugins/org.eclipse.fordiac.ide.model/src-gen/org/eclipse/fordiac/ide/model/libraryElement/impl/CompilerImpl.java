@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -70,7 +70,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String PRODUCT_EDEFAULT = "";
+	protected static final String PRODUCT_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getProduct() <em>Product</em>}' attribute.
@@ -88,7 +88,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VENDOR_EDEFAULT = "";
+	protected static final String VENDOR_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getVendor() <em>Vendor</em>}' attribute.
@@ -106,7 +106,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VERSION_EDEFAULT = "";
+	protected static final String VERSION_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.

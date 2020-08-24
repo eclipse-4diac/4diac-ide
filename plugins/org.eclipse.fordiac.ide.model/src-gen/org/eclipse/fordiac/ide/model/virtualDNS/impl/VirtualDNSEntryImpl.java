@@ -27,10 +27,8 @@ import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSEntryImpl#getName
- * <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSEntryImpl#getValue
- * <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSEntryImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSEntryImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -78,7 +76,6 @@ public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected VirtualDNSEntryImpl() {
@@ -87,7 +84,6 @@ public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -97,7 +93,6 @@ public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -107,7 +102,6 @@ public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -115,13 +109,11 @@ public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry 
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME, oldName,
-					name));
+			eNotify(new ENotificationImpl(this, Notification.SET, VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME, oldName, name));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -131,7 +123,6 @@ public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -139,87 +130,86 @@ public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry 
 		String oldValue = value;
 		value = newValue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE, oldValue,
-					value));
+			eNotify(new ENotificationImpl(this, Notification.SET, VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE, oldValue, value));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
-			return getName();
-		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
-			return getValue();
+			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
+				return getName();
+			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
+				return getValue();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
-			setName((String) newValue);
-			return;
-		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
-			setValue((String) newValue);
-			return;
+			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
+				setName((String)newValue);
+				return;
+			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
+				setValue((String)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
-			setName(NAME_EDEFAULT);
-			return;
-		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
-			setValue(VALUE_EDEFAULT);
-			return;
+			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
+				setValue(VALUE_EDEFAULT);
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
-			return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case VirtualDNSPackage.VIRTUAL_DNS_ENTRY__VALUE:
+				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$

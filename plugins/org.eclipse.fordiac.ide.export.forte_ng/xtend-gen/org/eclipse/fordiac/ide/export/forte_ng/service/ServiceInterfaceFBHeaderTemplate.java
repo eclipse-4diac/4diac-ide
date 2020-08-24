@@ -35,6 +35,7 @@ public class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
     this.type = type;
   }
   
+  @Override
   public CharSequence generate() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateHeader = this.generateHeader();
@@ -133,6 +134,7 @@ public class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
     return _builder;
   }
   
+  @Override
   protected CharSequence generateHeaderIncludes() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#include \"funcblock.h\"");

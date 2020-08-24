@@ -71,10 +71,8 @@ public class AdapterFilter {
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("EINames = ");
-      final Function1<Event, String> _function = new Function1<Event, String>() {
-        public String apply(final Event it) {
-          return it.getName();
-        }
+      final Function1<Event, String> _function = (Event it) -> {
+        return it.getName();
       };
       CharSequence _luaStringList = LuaUtils.luaStringList(ListExtensions.<Event, String>map(ifl.getEventInputs(), _function));
       _builder.append(_luaStringList, "  ");
@@ -100,10 +98,8 @@ public class AdapterFilter {
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("EONames = ");
-      final Function1<Event, String> _function_1 = new Function1<Event, String>() {
-        public String apply(final Event it) {
-          return it.getName();
-        }
+      final Function1<Event, String> _function_1 = (Event it) -> {
+        return it.getName();
       };
       CharSequence _luaStringList_1 = LuaUtils.luaStringList(ListExtensions.<Event, String>map(ifl.getEventOutputs(), _function_1));
       _builder.append(_luaStringList_1, "  ");
@@ -129,10 +125,8 @@ public class AdapterFilter {
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("DINames = ");
-      final Function1<VarDeclaration, String> _function_2 = new Function1<VarDeclaration, String>() {
-        public String apply(final VarDeclaration it) {
-          return it.getName();
-        }
+      final Function1<VarDeclaration, String> _function_2 = (VarDeclaration it) -> {
+        return it.getName();
       };
       CharSequence _luaStringList_2 = LuaUtils.luaStringList(ListExtensions.<VarDeclaration, String>map(ifl.getInputVars(), _function_2));
       _builder.append(_luaStringList_2, "  ");
@@ -152,10 +146,8 @@ public class AdapterFilter {
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("DONames = ");
-      final Function1<VarDeclaration, String> _function_3 = new Function1<VarDeclaration, String>() {
-        public String apply(final VarDeclaration it) {
-          return it.getName();
-        }
+      final Function1<VarDeclaration, String> _function_3 = (VarDeclaration it) -> {
+        return it.getName();
       };
       CharSequence _luaStringList_3 = LuaUtils.luaStringList(ListExtensions.<VarDeclaration, String>map(ifl.getOutputVars(), _function_3));
       _builder.append(_luaStringList_3, "  ");

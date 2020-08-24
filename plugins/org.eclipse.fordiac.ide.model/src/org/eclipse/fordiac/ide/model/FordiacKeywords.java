@@ -192,7 +192,7 @@ public class FordiacKeywords {
 	public static final String NOT = "NOT"; //$NON-NLS-1$
 
 	@ModelString
-	public static final String VARIABLE_INTERNAL = "InternalVar1";
+	public static final String VARIABLE_INTERNAL = "InternalVar1"; //$NON-NLS-1$
 
 	@ModelString
 	public static final String EVENT_INPUT = "EI1"; //$NON-NLS-1$
@@ -208,7 +208,6 @@ public class FordiacKeywords {
 	public static final String ADAPTER_SOCKET = "SOCKET1"; //$NON-NLS-1$
 	@ModelString
 	public static final String ADAPTER_PLUG = "PLUG1"; //$NON-NLS-1$
-
 
 	private FordiacKeywords() {
 		throw new UnsupportedOperationException();
