@@ -12,7 +12,7 @@
     <extension
          point="org.eclipse.ui.handlers">
          <handler
-            class="org.eclipse.fordiac.ide.validation.handlers.Validate"
+            class="org.eclipse.fordiac.ide.validation.handlers.ValidationHandler"
             commandId="org.eclipse.fordiac.ide.validation.commands.validate">
       </handler>
     </extension>
@@ -55,5 +55,11 @@
              </visibleWhen>
           </command>                       
         </menuContribution>
-    </extension>        
+    </extension>
+    <extension
+          point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorValidation">
+       <client
+             class="org.eclipse.fordiac.ide.validation.handlers.ValidationProvider">
+       </client>
+    </extension>      
 </plugin>

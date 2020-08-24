@@ -28,6 +28,7 @@ import java.util.TreeMap;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -112,12 +113,30 @@ public class FBTypeEditor extends FormEditor
 	public void doSave(final IProgressMonitor monitor) {
 		if (null != paletteEntry) {
 			if (checkTypeSaveAble()) {
+				performPresaveHooks();
 				// allow each editor to save back changes before saving to file
 				editors.forEach(editorPart -> editorPart.doSave(monitor));
 
 				getCommandStack().markSaveLocation();
 				AbstractBlockTypeExporter.saveType(paletteEntry);
 				firePropertyChange(IEditorPart.PROP_DIRTY);
+			}
+		}
+	}
+
+	private void performPresaveHooks() {
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IConfigurationElement[] config = registry
+				.getConfigurationElementsFor("org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorValidation"); //$NON-NLS-1$
+
+		for (IConfigurationElement e : config) {
+			try {
+				final Object o = e.createExecutableExtension("class"); //$NON-NLS-1$
+				if (o instanceof IFBTValidation) {
+					((IFBTValidation) o).invokeValidation(fbType);
+				}
+			} catch (CoreException ex) {
+				Activator.getDefault().logError(ex.getMessage(), ex);
 			}
 		}
 	}
