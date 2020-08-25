@@ -310,6 +310,7 @@ class STAlgorithmFilter {
 			case OR: '''||'''
 			case XOR: '''^'''
 			case AND: '''&&'''
+			case AMPERSAND: '''&&'''
 			case EQ: '''=='''
 			case NE: '''!='''
 			case LT: '''<'''

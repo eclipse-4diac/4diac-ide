@@ -794,54 +794,59 @@ public class STAlgorithmFilter {
           _builder_2.append("&&");
           _switchResult = _builder_2;
           break;
-        case EQ:
+        case AMPERSAND:
           StringConcatenation _builder_3 = new StringConcatenation();
-          _builder_3.append("==");
+          _builder_3.append("&&");
           _switchResult = _builder_3;
           break;
-        case NE:
+        case EQ:
           StringConcatenation _builder_4 = new StringConcatenation();
-          _builder_4.append("!=");
+          _builder_4.append("==");
           _switchResult = _builder_4;
           break;
-        case LT:
+        case NE:
           StringConcatenation _builder_5 = new StringConcatenation();
-          _builder_5.append("<");
+          _builder_5.append("!=");
           _switchResult = _builder_5;
           break;
-        case LE:
+        case LT:
           StringConcatenation _builder_6 = new StringConcatenation();
-          _builder_6.append("<=");
+          _builder_6.append("<");
           _switchResult = _builder_6;
           break;
-        case GT:
+        case LE:
           StringConcatenation _builder_7 = new StringConcatenation();
-          _builder_7.append(">");
+          _builder_7.append("<=");
           _switchResult = _builder_7;
           break;
-        case GE:
+        case GT:
           StringConcatenation _builder_8 = new StringConcatenation();
-          _builder_8.append(">=");
+          _builder_8.append(">");
           _switchResult = _builder_8;
           break;
-        case MOD:
+        case GE:
           StringConcatenation _builder_9 = new StringConcatenation();
-          _builder_9.append("%");
+          _builder_9.append(">=");
           _switchResult = _builder_9;
           break;
-        default:
+        case MOD:
           StringConcatenation _builder_10 = new StringConcatenation();
-          _builder_10.append("The operator ");
-          _builder_10.append(op);
-          _builder_10.append(" is not supported");
-          throw new UnsupportedOperationException(_builder_10.toString());
+          _builder_10.append("%");
+          _switchResult = _builder_10;
+          break;
+        default:
+          StringConcatenation _builder_11 = new StringConcatenation();
+          _builder_11.append("The operator ");
+          _builder_11.append(op);
+          _builder_11.append(" is not supported");
+          throw new UnsupportedOperationException(_builder_11.toString());
       }
     } else {
-      StringConcatenation _builder_10 = new StringConcatenation();
-      _builder_10.append("The operator ");
-      _builder_10.append(op);
-      _builder_10.append(" is not supported");
-      throw new UnsupportedOperationException(_builder_10.toString());
+      StringConcatenation _builder_11 = new StringConcatenation();
+      _builder_11.append("The operator ");
+      _builder_11.append(op);
+      _builder_11.append(" is not supported");
+      throw new UnsupportedOperationException(_builder_11.toString());
     }
     return _switchResult;
   }

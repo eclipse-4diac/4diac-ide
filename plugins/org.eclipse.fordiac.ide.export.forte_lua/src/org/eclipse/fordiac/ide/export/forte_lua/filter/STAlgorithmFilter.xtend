@@ -216,6 +216,7 @@ class STAlgorithmFilter {
 			case OR: "or"
 			case XOR: "~"
 			case AND: "and"
+			case AMPERSAND: "and"
 			case EQ: "=="
 			case NE: "~="
 			case LT: "<"

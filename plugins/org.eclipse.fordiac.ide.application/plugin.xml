@@ -478,6 +478,16 @@
             id="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"
             name="Update All Types">
       </command>
+       <command
+             categoryId="org.eclipse.fordiac.ide.commands.category"
+             id="org.eclipse.fordiac.ide.application.unmap"
+             name="Unmap">
+       </command>
+       <command
+             categoryId="org.eclipse.fordiac.ide.commands.category"
+             id="org.eclipse.fordiac.ide.application.unmapAll"
+             name="Unmap All">
+       </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">

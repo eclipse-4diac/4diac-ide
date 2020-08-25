@@ -18,6 +18,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -237,14 +238,15 @@ public enum SystemManager {
 		}
 		if (provider == null) {
 			try {
-				Object obj = class1.newInstance();
+				Object obj = class1.getDeclaredConstructor().newInstance();
 				if (obj instanceof ITagProvider) {
 					provider = (ITagProvider) obj;
 					provider.initialzeNewTagProvider();
 					saveTagProvider(system, provider);
 					tagProviderList.add(provider);
 				}
-			} catch (InstantiationException | IllegalAccessException e) {
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
 				return null;
 			}
 		}

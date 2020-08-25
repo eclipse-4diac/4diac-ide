@@ -145,7 +145,7 @@ Xor_Expr returns Expression:
 	And_Expr ({BinaryExpression.left=current} operator=Xor_Operator right=And_Expr)*
 ;
 
-enum And_Operator returns BinaryOperator: AND | AND='&';
+enum And_Operator returns BinaryOperator: AND | AMPERSAND='&';
 And_Expr returns Expression:
 	Compare_Expr ({BinaryExpression.left=current} operator=And_Operator right=Compare_Expr)*
 ;
