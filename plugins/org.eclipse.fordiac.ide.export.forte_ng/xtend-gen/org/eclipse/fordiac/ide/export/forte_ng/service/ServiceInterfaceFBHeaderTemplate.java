@@ -137,7 +137,7 @@ public class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
   @Override
   protected CharSequence generateHeaderIncludes() {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("#include \"funcblock.h\"");
+    _builder.append("#include \"funcbloc.h\"");
     _builder.newLine();
     CharSequence _generateHeaderIncludes = super.generateHeaderIncludes();
     _builder.append(_generateHeaderIncludes);
