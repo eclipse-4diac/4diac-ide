@@ -40,6 +40,7 @@ public class SimpleFBHeaderTemplate extends ForteFBTemplate {
     this.type = type;
   }
   
+  @Override
   public CharSequence generate() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateHeader = this.generateHeader();
@@ -156,6 +157,7 @@ public class SimpleFBHeaderTemplate extends ForteFBTemplate {
     return _builder;
   }
   
+  @Override
   protected CharSequence generateHeaderIncludes() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#include \"simplefb.h\"");

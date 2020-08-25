@@ -11,7 +11,7 @@
  * Contributors:
  *   Peter Gsellmann - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Changed analysis result to key value pairs
- *   Lisa Sonnleithner - Adjustments to change calculation method to average 
+ *   Lisa Sonnleithner - Adjustments to change calculation method to average
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.handlers;
 
@@ -55,7 +55,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class CalculateCodeMetrics extends AbstractHandler {
 
 	public static class MetricsResultLabelProvider extends LabelProvider implements ITableLabelProvider {
-		private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+		private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00"); //$NON-NLS-1$
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {

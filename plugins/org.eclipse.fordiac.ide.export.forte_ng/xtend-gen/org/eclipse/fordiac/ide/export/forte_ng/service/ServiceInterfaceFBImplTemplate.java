@@ -33,6 +33,7 @@ public class ServiceInterfaceFBImplTemplate extends ForteFBTemplate {
     this.type = type;
   }
   
+  @Override
   public CharSequence generate() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateHeader = this.generateHeader();

@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -50,7 +50,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = "";
+	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -68,7 +68,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String CONDITION_EXPRESSION_EDEFAULT = "1";
+	protected static final String CONDITION_EXPRESSION_EDEFAULT = "1"; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getConditionExpression() <em>Condition Expression</em>}' attribute.

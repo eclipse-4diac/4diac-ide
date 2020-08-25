@@ -41,6 +41,7 @@ public class AdapterFBHeaderTemplate extends ForteFBTemplate {
     this.type = type;
   }
   
+  @Override
   public CharSequence generate() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateHeader = this.generateHeader();
@@ -151,6 +152,7 @@ public class AdapterFBHeaderTemplate extends ForteFBTemplate {
     return _builder;
   }
   
+  @Override
   protected CharSequence generateHeaderIncludes() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#include \"adapter.h\"");
@@ -163,6 +165,7 @@ public class AdapterFBHeaderTemplate extends ForteFBTemplate {
     return _builder;
   }
   
+  @Override
   protected CharSequence generateFBDeclaration() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("DECLARE_ADAPTER_TYPE(");
@@ -173,6 +176,7 @@ public class AdapterFBHeaderTemplate extends ForteFBTemplate {
     return _builder;
   }
   
+  @Override
   protected CharSequence generateFBInterfaceSpecDeclaration() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("static const SFBInterfaceSpec scm_stFBInterfaceSpecSocket;");
@@ -183,6 +187,7 @@ public class AdapterFBHeaderTemplate extends ForteFBTemplate {
     return _builder;
   }
   
+  @Override
   protected CharSequence generateEventConstants(final List<Event> events) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("public:");

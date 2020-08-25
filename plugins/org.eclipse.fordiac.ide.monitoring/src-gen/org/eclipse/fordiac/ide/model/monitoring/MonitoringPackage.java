@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -39,21 +39,21 @@ public interface MonitoringPackage extends EPackage {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNAME = "monitoring";
+	String eNAME = "monitoring"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace URI.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "org.eclipse.fordiac.monitoring";
+	String eNS_URI = "org.eclipse.fordiac.monitoring"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace name.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_PREFIX = "monitoring";
+	String eNS_PREFIX = "monitoring"; //$NON-NLS-1$
 
 	/**
 	 * The singleton instance of the package.
@@ -77,7 +77,7 @@ public interface MonitoringPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringAdapterElementImpl
 	 * <em>Adapter Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringAdapterElementImpl
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getMonitoringAdapterElement()
 	 * @generated
@@ -105,7 +105,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Offline</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -123,7 +123,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Force Value</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -132,7 +132,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Current Value</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -159,7 +159,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Element</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -177,7 +177,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Offline</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -194,7 +194,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Monitored Adapter FB</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -230,7 +230,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Interface Element</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -239,7 +239,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Resource</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -248,7 +248,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Hierarchy</b></em>' attribute list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -300,7 +300,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -309,7 +309,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Is Input</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -343,7 +343,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -387,7 +387,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -396,7 +396,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Is Input</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -430,7 +430,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -439,7 +439,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Array Size</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -448,7 +448,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Withs</b></em>' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -457,7 +457,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -554,7 +554,7 @@ public interface MonitoringPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getMonitoredAdapterFB
 	 * <em>Monitored Adapter FB</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for the reference '<em>Monitored Adapter FB</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getMonitoredAdapterFB()
 	 * @see #getMonitoringAdapterElement()
@@ -577,7 +577,7 @@ public interface MonitoringPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement
 	 * <em>Adapter Port Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for class '<em>Adapter Port Element</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement
 	 * @generated
@@ -617,7 +617,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * Returns the factory that creates the instances of the model. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
@@ -668,7 +668,7 @@ public interface MonitoringPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Sec</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute MONITORING_ELEMENT__SEC = eINSTANCE.getMonitoringElement_Sec();
@@ -685,7 +685,7 @@ public interface MonitoringPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringAdapterElementImpl
 		 * <em>Adapter Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringAdapterElementImpl
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getMonitoringAdapterElement()
 		 * @generated

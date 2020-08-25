@@ -26,22 +26,21 @@ import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage;
  * <!-- begin-user-doc --> The <b>Adapter Factory</b> for the model. It provides
  * an adapter <code>createXXX</code> method for each class of the model. <!--
  * end-user-doc -->
- * 
  * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage
  * @generated
  */
 public class VirtualDNSAdapterFactory extends AdapterFactoryImpl {
 	/**
-	 * The cached model package. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached model package.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected static VirtualDNSPackage modelPackage;
 
 	/**
-	 * Creates an instance of the adapter factory. <!-- begin-user-doc --> <!--
+	 * Creates an instance of the adapter factory.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public VirtualDNSAdapterFactory() {
@@ -65,7 +64,7 @@ public class VirtualDNSAdapterFactory extends AdapterFactoryImpl {
 			return true;
 		}
 		if (object instanceof EObject) {
-			return ((EObject) object).eClass().getEPackage() == modelPackage;
+			return ((EObject)object).eClass().getEPackage() == modelPackage;
 		}
 		return false;
 	}
@@ -77,47 +76,42 @@ public class VirtualDNSAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	protected VirtualDNSSwitch<Adapter> modelSwitch = new VirtualDNSSwitch<Adapter>() {
-		@Override
-		public Adapter caseVirtualDNSEntry(VirtualDNSEntry object) {
-			return createVirtualDNSEntryAdapter();
-		}
-
-		@Override
-		public Adapter caseVirtualDNSCollection(VirtualDNSCollection object) {
-			return createVirtualDNSCollectionAdapter();
-		}
-
-		@Override
-		public Adapter caseVirtualDNSManagement(VirtualDNSManagement object) {
-			return createVirtualDNSManagementAdapter();
-		}
-
-		@Override
-		public Adapter defaultCase(EObject object) {
-			return createEObjectAdapter();
-		}
-	};
+			@Override
+			public Adapter caseVirtualDNSEntry(VirtualDNSEntry object) {
+				return createVirtualDNSEntryAdapter();
+			}
+			@Override
+			public Adapter caseVirtualDNSCollection(VirtualDNSCollection object) {
+				return createVirtualDNSCollectionAdapter();
+			}
+			@Override
+			public Adapter caseVirtualDNSManagement(VirtualDNSManagement object) {
+				return createVirtualDNSManagementAdapter();
+			}
+			@Override
+			public Adapter defaultCase(EObject object) {
+				return createEObjectAdapter();
+			}
+		};
 
 	/**
-	 * Creates an adapter for the <code>target</code>. <!-- begin-user-doc --> <!--
+	 * Creates an adapter for the <code>target</code>.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @param target the object to adapt.
 	 * @return the adapter for the <code>target</code>.
 	 * @generated
 	 */
 	@Override
 	public Adapter createAdapter(Notifier target) {
-		return modelSwitch.doSwitch((EObject) target);
+		return modelSwitch.doSwitch((EObject)target);
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry
-	 * <em>Entry</em>}'. <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry <em>Entry</em>}'.
+	 * <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry
 	 * @generated
@@ -127,12 +121,10 @@ public class VirtualDNSAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection
-	 * <em>Collection</em>}'. <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection <em>Collection</em>}'.
+	 * <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection
 	 * @generated
@@ -142,12 +134,10 @@ public class VirtualDNSAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement
-	 * <em>Management</em>}'. <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement <em>Management</em>}'.
+	 * <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement
 	 * @generated
@@ -157,9 +147,9 @@ public class VirtualDNSAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for the default case. <!-- begin-user-doc --> This
+	 * Creates a new adapter for the default case.
+	 * <!-- begin-user-doc --> This
 	 * default implementation returns null. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @generated
 	 */

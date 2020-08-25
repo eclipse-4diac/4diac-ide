@@ -23,7 +23,7 @@ public class SystemExplorer extends CommonNavigator implements ITabbedPropertySh
 
 	@Override
 	public String getContributorId() {
-		return "org.eclipse.fordiac.ide.application.editors.DiagramEditor";
+		return "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
 	}
 
 	@Override

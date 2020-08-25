@@ -24,6 +24,7 @@ public class StructuredTypeHeaderTemplate extends StructBaseTemplate {
     super(type, name, prefix);
   }
   
+  @Override
   public CharSequence generate() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateHeader = this.generateHeader();

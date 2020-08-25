@@ -169,7 +169,7 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 	public Rectangle getBounds() {
 		return super.getBounds();
 	}
-	
+
 	public Rectangle getFBBounds() {
 		int x = getTop().getBounds().x();
 		int y = getLabelBounds().y();
@@ -185,7 +185,7 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 				return ((InstanceNameFigure) figure).getBounds();
 			}
 		}
-		return null;
+		return new Rectangle();
 	}
 
 }

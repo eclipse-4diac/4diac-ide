@@ -397,16 +397,14 @@ public class BasicFBFilter {
     _builder.append("end");
     _builder.newLine();
     final String result = _builder.toString();
-    final Function1<String, String> _function = new Function1<String, String>() {
-      public String apply(final String it) {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("Error in algorithm ");
-        String _name = alg.getName();
-        _builder.append(_name);
-        _builder.append(": ");
-        _builder.append(it);
-        return _builder.toString();
-      }
+    final Function1<String, String> _function = (String it) -> {
+      StringConcatenation _builder_1 = new StringConcatenation();
+      _builder_1.append("Error in algorithm ");
+      String _name = alg.getName();
+      _builder_1.append(_name);
+      _builder_1.append(": ");
+      _builder_1.append(it);
+      return _builder_1.toString();
     };
     this.errors.addAll(ListExtensions.<String, String>map(this.stAlgorithmFilter.getErrors(), _function));
     this.stAlgorithmFilter.getErrors().clear();

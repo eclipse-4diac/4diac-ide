@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -58,7 +58,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String CLASSDEF_EDEFAULT = "";
+	protected static final String CLASSDEF_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getClassdef() <em>Classdef</em>}' attribute.
@@ -76,7 +76,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String HEADER_EDEFAULT = "";
+	protected static final String HEADER_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getHeader() <em>Header</em>}' attribute.

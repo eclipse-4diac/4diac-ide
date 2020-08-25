@@ -42,6 +42,7 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
     this.type = type;
   }
   
+  @Override
   public CharSequence generate() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateHeader = this.generateHeader();
@@ -141,6 +142,7 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
     return _builder;
   }
   
+  @Override
   protected CharSequence generateHeaderIncludes() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#include \"cfb.h\"");
@@ -156,11 +158,9 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
   protected CharSequence generateFBNetwork() {
     StringConcatenation _builder = new StringConcatenation();
     {
-      final Function1<FBNetworkElement, Boolean> _function = new Function1<FBNetworkElement, Boolean>() {
-        public Boolean apply(final FBNetworkElement it) {
-          FBType _type = it.getType();
-          return Boolean.valueOf((!(_type instanceof AdapterFBType)));
-        }
+      final Function1<FBNetworkElement, Boolean> _function = (FBNetworkElement it) -> {
+        FBType _type = it.getType();
+        return Boolean.valueOf((!(_type instanceof AdapterFBType)));
       };
       boolean _exists = IterableExtensions.<FBNetworkElement>exists(this.type.getFBNetwork().getNetworkElements(), _function);
       if (_exists) {
