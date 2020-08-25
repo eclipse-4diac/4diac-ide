@@ -64,7 +64,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 
 	private Palette palette;
 	private DiagramEditorWithFlyoutPalette editor;
-	private Point pt;
+	private Point invocationLocation;
 
 	/**
 	 * Instantiates a new FB network context menu provider.
@@ -79,15 +79,27 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		this.palette = palette;
 		this.editor = editor;
 
-		editor.getViewer().getControl().addMenuDetectListener(e -> pt = getViewer().getControl().toControl(e.x, e.y));
+		editor.getViewer().getControl()
+				.addMenuDetectListener(e -> invocationLocation = getViewer().getControl().toControl(e.x, e.y));
 
 	}
 
-	public org.eclipse.draw2d.geometry.Point getPoint() {
+	/**
+	 * Retrieve the location of the context menu relative to the view canvas with
+	 * scroll and zoom correction.
+	 *
+	 * @return the zoom and scroll corrected position where the pop-up menu was
+	 *         invoked (i.e. where the right click happened)
+	 */
+	public org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint() {
 		FigureCanvas viewerControl = (FigureCanvas) editor.getViewer().getControl();
 		org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
-		return new org.eclipse.draw2d.geometry.Point(pt.x + location.x, pt.y + location.y)
-				.scale(1.0 / getZoomManager().getZoom());
+		return new org.eclipse.draw2d.geometry.Point(invocationLocation.x + location.x,
+				invocationLocation.y + location.y).scale(1.0 / getZoomManager().getZoom());
+	}
+
+	public Point getPoint() {
+		return invocationLocation;
 	}
 
 	/*
@@ -118,7 +130,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 
 		action = getRegistry().getAction(ActionFactory.PASTE.getId());
 		if (action instanceof PasteEditPartsAction) {
-			((PasteEditPartsAction) action).setPastRefPosition(getPoint());
+			((PasteEditPartsAction) action).setPastRefPosition(getTranslatedAndZoomedPoint());
 		}
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
@@ -129,7 +141,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 	private boolean useChangeFBType;
 
 	public void buildFBInsertMenu(final IMenuManager menu, Point point, boolean useChangeFBType) {
-		pt = point;
+		invocationLocation = point;
 		this.useChangeFBType = useChangeFBType;
 		fillMenuForFolder(menu, palette.getProject());
 	}

@@ -49,7 +49,7 @@ public class InsertFB extends AbstractHandler {
 
 	private static Point getInsertPoint(GraphicalViewer viewer) {
 		if (viewer.getContextMenu() instanceof FBNetworkContextMenuProvider) {
-			return ((FBNetworkContextMenuProvider) viewer.getContextMenu()).getPoint();
+			return new Point(((FBNetworkContextMenuProvider) viewer.getContextMenu()).getPoint());
 		}
 		return new Point(0, 0);
 	}

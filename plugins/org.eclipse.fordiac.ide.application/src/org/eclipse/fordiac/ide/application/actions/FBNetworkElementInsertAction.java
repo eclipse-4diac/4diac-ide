@@ -68,6 +68,6 @@ public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 	}
 
 	private static Point getPositionInViewer(FBNetworkEditor editor) {
-		return ((FBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getPoint();
+		return ((FBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getTranslatedAndZoomedPoint();
 	}
 }
