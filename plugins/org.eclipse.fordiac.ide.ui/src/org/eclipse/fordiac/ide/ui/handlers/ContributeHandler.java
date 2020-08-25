@@ -37,7 +37,7 @@ public class ContributeHandler extends AbstractHandler {
 				browser = activeWorkbenchWindow.getWorkbench().getBrowserSupport().createBrowser(getClass().getName());
 				browser.openURL(new URL(FORDIAC_CONTRIBUTION_URL));
 			} catch (PartInitException | MalformedURLException e) {
-				UIPlugin.getDefault().logError("Error in opening the 4diac contribution web-page!", e);
+				UIPlugin.getDefault().logError("Error in opening the 4diac contribution web-page!", e); //$NON-NLS-1$
 			}
 		}
 

@@ -12,6 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,8 +47,10 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 */
 
 	public interface StateBase {
-		public Command getCommand();
-		public void setCommand(Command cmd);
+		Command getCommand();
+
+		void setCommand(Command cmd);
+
 		Object getClone();
 
 	}
@@ -135,7 +138,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		 * @return execution description that redoes a transition
 		 */
 		public static ExecutionDescription<? extends StateBase> redo() {
-			return new ExecutionDescription<>("redo", ExecutionType.REDO, null, null);
+			return new ExecutionDescription<>("redo", ExecutionType.REDO, null, null); //$NON-NLS-1$
 		}
 
 		/**
@@ -144,7 +147,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		 * @return execution description that undoes a transition
 		 */
 		public static ExecutionDescription<? extends StateBase> undo() {
-			return new ExecutionDescription<>("undo", ExecutionType.UNDO, null, null);
+			return new ExecutionDescription<>("undo", ExecutionType.UNDO, null, null); //$NON-NLS-1$
 		}
 
 		/**
@@ -187,7 +190,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		 * @return get state before last state transition
 		 */
 		public StateNode<U> getBefore() {
-			StateNode<U> dummy = new StateNode<>(null,null,null);
+			StateNode<U> dummy = new StateNode<>(null, null, null);
 			return null != before ? before : dummy;
 		}
 
@@ -195,7 +198,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		 * @return get state from before the last undo operation
 		 */
 		public StateNode<U> getAfter() {
-			StateNode<U> dummy = new StateNode<>(null,null,null);
+			StateNode<U> dummy = new StateNode<>(null, null, null);
 			return null != after ? after : dummy;
 		}
 
@@ -314,11 +317,11 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			commandsWithUndoRedo.add(ExecutionDescription.undo());
 			commandsWithUndoRedoAll.add(ExecutionDescription.undo());
 			descriptions
-			.add(convert(
-					MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
-							MessageFormat.format(MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO, index,
-									command.description)),
-					initializer, initialVerifier, commandsWithUndoRedo.clone(), undo, redo));
+					.add(convert(
+							MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
+									MessageFormat.format(MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO, index,
+											command.description)),
+							initializer, initialVerifier, commandsWithUndoRedo.clone(), undo, redo));
 			commandsWithUndoRedo.add(ExecutionDescription.redo());
 			commandsWithUndoRedoAll.add(ExecutionDescription.redo());
 			descriptions.add(convert(

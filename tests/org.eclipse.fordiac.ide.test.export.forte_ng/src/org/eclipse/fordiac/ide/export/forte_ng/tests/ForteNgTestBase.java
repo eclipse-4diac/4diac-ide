@@ -52,7 +52,7 @@ public abstract class ForteNgTestBase<T extends FBType> {
 
 	static final String ALGORITHM_NAME = "algorithm"; //$NON-NLS-1$
 
-	static final String EXPORTED_ALGORITHM_NAME = "alg_" + ALGORITHM_NAME;
+	static final String EXPORTED_ALGORITHM_NAME = "alg_" + ALGORITHM_NAME; //$NON-NLS-1$
 
 	static final String VARIABLE_NAME = "variable"; //$NON-NLS-1$
 	static final String VARIABLE2_NAME = "variable2"; //$NON-NLS-1$
@@ -61,7 +61,7 @@ public abstract class ForteNgTestBase<T extends FBType> {
 	static final String EXPORTED_VARIABLE2_NAME = addExportPrefix(VARIABLE2_NAME);
 
 	static final String FUNCTIONBLOCK_NAME = "functionblock"; //$NON-NLS-1$
-	static final String EXPORTED_FUNCTIONBLOCK_NAME = "FORTE_" + FUNCTIONBLOCK_NAME;
+	static final String EXPORTED_FUNCTIONBLOCK_NAME = "FORTE_" + FUNCTIONBLOCK_NAME; //$NON-NLS-1$
 
 	static final int INDEX_START = 0;
 	static final int SIZE_LWORD = 64;
@@ -271,8 +271,8 @@ public abstract class ForteNgTestBase<T extends FBType> {
 	/**
 	 * create a OtherAlgorithm with given name, language and content
 	 *
-	 * @param algorithmName name of the algorithm to be created
-	 * @param algorithmText content of the algorithm to be created
+	 * @param algorithmName     name of the algorithm to be created
+	 * @param algorithmText     content of the algorithm to be created
 	 * @param algorithmLanguage language of the algorithm to be created
 	 *
 	 * @return the created algorithm-object

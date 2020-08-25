@@ -65,11 +65,11 @@ public class ChangeAuthorCommandTest extends VersionInfoTestBase {
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Change Author", //
+				new ExecutionDescription<>("Change Author", // //$NON-NLS-1$
 						ChangeAuthorCommandTest::executeCommand, //
 						ChangeAuthorCommandTest::verifyState //
 				), //
-				new ExecutionDescription<State>("Change Author to null", //
+				new ExecutionDescription<>("Change Author to null", // //$NON-NLS-1$
 						ChangeAuthorCommandTest::executeCommandToNull, //
 						ChangeAuthorCommandTest::verifyStateNull //
 				) //

@@ -57,7 +57,7 @@ public final class PaletteAnnotations {
 			palette.getSubAppTypes().put(entry.getLabel(), (SubApplicationTypePaletteEntry) entry);
 		} else {
 			Activator.getDefault()
-					.logError("Unknown pallet entry to be added to palette: " + entry.getClass().getName());
+					.logError("Unknown pallet entry to be added to palette: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
 	}
 
@@ -76,7 +76,7 @@ public final class PaletteAnnotations {
 			palette.getSubAppTypes().removeKey(entry.getLabel());
 		} else {
 			Activator.getDefault()
-					.logError("Unknown palette entry to be removed from palette: " + entry.getClass().getName());
+					.logError("Unknown palette entry to be removed from palette: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
 	}
 
@@ -92,7 +92,7 @@ public final class PaletteAnnotations {
 	}
 
 	private PaletteAnnotations() {
-		throw new UnsupportedOperationException("The utility class PaletteAnnotations should not be instatiated");
+		throw new UnsupportedOperationException("The utility class PaletteAnnotations should not be instatiated"); //$NON-NLS-1$
 	}
 
 }

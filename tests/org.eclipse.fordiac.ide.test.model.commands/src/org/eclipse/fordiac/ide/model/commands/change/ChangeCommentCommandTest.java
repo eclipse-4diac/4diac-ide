@@ -25,8 +25,8 @@ import org.junit.runners.Parameterized.Parameters;
 
 public class ChangeCommentCommandTest extends FBNetworkTestBase {
 
-	private static final String COMMENT1 = "first comment";
-	private static final String COMMENT2 = "second comment";
+	private static final String COMMENT1 = "first comment"; //$NON-NLS-1$
+	private static final String COMMENT2 = "second comment"; //$NON-NLS-1$
 
 	public static State executeCommand(State state, String comment) {
 		state.setCommand(new ChangeCommentCommand(state.getFbNetwork().getNetworkElements().get(0).getType(), comment));
@@ -50,15 +50,15 @@ public class ChangeCommentCommandTest extends FBNetworkTestBase {
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Add Functionblock", //$NON-NLS-1$
+				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						ChangeCommentCommandTest::verifyStateBefore //
 				), //
-				new ExecutionDescription<State>("Change comment", //$NON-NLS-1$
+				new ExecutionDescription<>("Change comment", //$NON-NLS-1$
 						(State state) -> executeCommand(state, COMMENT1), //
 						(State s, State o, TestFunction t) -> verifyState(s, o, t, COMMENT1) //
 				), //
-				new ExecutionDescription<State>("Change comment", //$NON-NLS-1$
+				new ExecutionDescription<>("Change comment", //$NON-NLS-1$
 						(State state) -> executeCommand(state, COMMENT2), //
 						(State s, State o, TestFunction t) -> verifyState(s, o, t, COMMENT2) //
 				) //

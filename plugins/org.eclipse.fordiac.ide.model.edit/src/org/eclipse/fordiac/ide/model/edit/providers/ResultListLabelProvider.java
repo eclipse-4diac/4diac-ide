@@ -64,10 +64,8 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 
 	@Override
 	public String getText(Object element) {
-		return (element instanceof PaletteEntry)
-				? String.format("%s - %s", getStyledText(element).toString(),
-						((PaletteEntry) element).getFile().getFullPath())
-				: "-";
+		return (element instanceof PaletteEntry) ? String.format("%s - %s", getStyledText(element).toString(), //$NON-NLS-1$
+				((PaletteEntry) element).getFile().getFullPath()) : "-"; //$NON-NLS-1$
 	}
 
 }

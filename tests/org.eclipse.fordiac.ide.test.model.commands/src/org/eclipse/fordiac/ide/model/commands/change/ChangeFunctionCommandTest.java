@@ -25,7 +25,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 public class ChangeFunctionCommandTest extends FBNetworkTestBase {
 
-	private static final String FUNCTION_STRING = "new value";
+	private static final String FUNCTION_STRING = "new value"; //$NON-NLS-1$
 
 	public static State executeCommand(State state, String setValue) {
 		state.setCommand(
@@ -50,15 +50,15 @@ public class ChangeFunctionCommandTest extends FBNetworkTestBase {
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Add Functionblock", //$NON-NLS-1$
+				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						ChangeFunctionCommandTest::verifyStateBefore //
 				), //
-				new ExecutionDescription<State>("Change Function", //$NON-NLS-1$
+				new ExecutionDescription<>("Change Function", //$NON-NLS-1$
 						(State state) -> executeCommand(state, FUNCTION_STRING), //
 						(State s, State o, TestFunction t) -> verifyState(s, o, t, FUNCTION_STRING) //
 				), //
-				new ExecutionDescription<State>("Change Function", //$NON-NLS-1$
+				new ExecutionDescription<>("Change Function", //$NON-NLS-1$
 						(State state) -> executeCommand(state, null), //
 						(State s, State o, TestFunction t) -> verifyState(s, o, t, "") //$NON-NLS-1$
 				) //

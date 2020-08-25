@@ -25,7 +25,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 public class ChangeApplicationDomainCommandTest extends FBNetworkTestBase {
 
-	private static final String APPLICATION_DOMAIN_STRING = "new value";
+	private static final String APPLICATION_DOMAIN_STRING = "new value"; //$NON-NLS-1$
 
 	public static State executeCommand(State state, String setValue) {
 		state.setCommand(new ChangeApplicationDomainCommand(state.getFbNetwork().getNetworkElements().get(0).getType(),
@@ -50,15 +50,15 @@ public class ChangeApplicationDomainCommandTest extends FBNetworkTestBase {
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Add Functionblock", //$NON-NLS-1$
+				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						ChangeApplicationDomainCommandTest::verifyStateBefore //
 				), //
-				new ExecutionDescription<State>("Change Application domain", //$NON-NLS-1$
+				new ExecutionDescription<>("Change Application domain", //$NON-NLS-1$
 						(State state) -> executeCommand(state, APPLICATION_DOMAIN_STRING), //
 						(State s, State o, TestFunction t) -> verifyState(s, o, t, APPLICATION_DOMAIN_STRING) //
 				), //
-				new ExecutionDescription<State>("Change Application domain to null", //$NON-NLS-1$
+				new ExecutionDescription<>("Change Application domain to null", //$NON-NLS-1$
 						(State state) -> executeCommand(state, null), //
 						(State s, State o, TestFunction t) -> verifyState(s, o, t, "") //$NON-NLS-1$
 				) //

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2017 fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz	
- * 
+ * 				 2019 - 2020 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - fixed issues in type changes for subapp interface elements  
+ *   Alois Zoitl - fixed issues in type changes for subapp interface elements
  *   Lisa Sonnleithner - new TypeAndCommentSection
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
@@ -190,7 +190,7 @@ public class InterfaceElementSection extends AbstractSection {
 		currentParameterTextCLabel.setVisible(b);
 		currentParameterText.setVisible(b);
 		if (null != type) {
-			infoSection.setText(getType().getFBNetworkElement().getName() + " . "
+			infoSection.setText(getType().getFBNetworkElement().getName() + " . " //$NON-NLS-1$
 					+ (getType().getName() != null ? getType().getName() : "")); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			String itype = ""; //$NON-NLS-1$
@@ -224,7 +224,7 @@ public class InterfaceElementSection extends AbstractSection {
 		itype = var.getType() != null ? var.getType().getName() : ""; //$NON-NLS-1$
 		if (getType().isIsInput()) {
 			if (getType().getFBNetworkElement().getType() instanceof FBType) {
-				IInterfaceElement ie = ((FBType) getType().getFBNetworkElement().getType()).getInterfaceList()
+				IInterfaceElement ie = getType().getFBNetworkElement().getType().getInterfaceList()
 						.getInterfaceElement(getType().getName());
 				if (ie instanceof VarDeclaration) {
 					parameterText.setText(
@@ -247,7 +247,7 @@ public class InterfaceElementSection extends AbstractSection {
 		EList<VarDeclaration> list = st.getMemberVariables();
 		StringBuilder sb = new StringBuilder();
 		sb.append(st.getName());
-		sb.append(": (");
+		sb.append(": ("); //$NON-NLS-1$
 		boolean printString = false;
 		for (VarDeclaration v : list) {
 			if ((v.getType() != null)) {
@@ -256,12 +256,12 @@ public class InterfaceElementSection extends AbstractSection {
 			} else {
 				sb.append("not set");
 			}
-			sb.append(", ");
+			sb.append(", "); //$NON-NLS-1$
 		}
 		sb.delete(sb.length() - 2, sb.length());
 		sb.append(')');
 
-		return printString ? sb.toString() : "";
+		return printString ? sb.toString() : ""; //$NON-NLS-1$
 	}
 
 	@Override

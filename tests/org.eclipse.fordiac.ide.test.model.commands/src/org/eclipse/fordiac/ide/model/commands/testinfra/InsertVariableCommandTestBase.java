@@ -66,10 +66,12 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 			return list;
 		}
 
+		@Override
 		public Command getCommand() {
 			return cmd;
 		}
 
+		@Override
 		public void setCommand(Command cmd) {
 			this.cmd = cmd;
 		}
@@ -92,7 +94,7 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
 		final List<Object[]> commands = new ArrayList<>();
 
-		commands.addAll(describeCommand("Start from default values", //
+		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				executionDescriptions //

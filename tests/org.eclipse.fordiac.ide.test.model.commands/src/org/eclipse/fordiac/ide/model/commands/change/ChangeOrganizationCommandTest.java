@@ -65,11 +65,11 @@ public class ChangeOrganizationCommandTest extends VersionInfoTestBase {
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Change Organization", //
+				new ExecutionDescription<>("Change Organization", // //$NON-NLS-1$
 						ChangeOrganizationCommandTest::executeCommand, //
 						ChangeOrganizationCommandTest::verifyState //
 				), //
-				new ExecutionDescription<State>("Change Organization to null", //
+				new ExecutionDescription<>("Change Organization to null", // //$NON-NLS-1$
 						ChangeOrganizationCommandTest::executeCommandToNull, //
 						ChangeOrganizationCommandTest::verifyStateNull //
 				) //

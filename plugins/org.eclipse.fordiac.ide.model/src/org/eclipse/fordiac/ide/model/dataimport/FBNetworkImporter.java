@@ -119,8 +119,11 @@ class FBNetworkImporter extends CommonElementImporter {
 				fb = convertFBtoMux(fb, demux);
 			}
 		} else {
-			//TODO model refactoring - think about where and if such markers should be created maybe move to validator
-			//				createFBTypeProblemMarker(IMarker.SEVERITY_ERROR, Messages.FBTImporter_REQUIRED_FB_TYPE_EXCEPTION + typeFbElement.getNodeValue() + " not available");
+			// TODO model refactoring - think about where and if such markers should be
+			// created maybe move to validator
+			// createFBTypeProblemMarker(IMarker.SEVERITY_ERROR,
+			// Messages.FBTImporter_REQUIRED_FB_TYPE_EXCEPTION +
+			// typeFbElement.getNodeValue() + " not available");
 			// as we don't have type information we create an empty interface list
 			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 			// TODO add attribute value for missing instance name and
@@ -159,19 +162,19 @@ class FBNetworkImporter extends CommonElementImporter {
 		return null;
 	}
 
-	//	private IMarker createFBTypeProblemMarker(int severity, String message) {
-	//		IMarker marker = null;
-	//		if(null != file){
-	//			try {
-	//				marker = file.createMarker(IMarker.PROBLEM);
-	//				marker.setAttribute(IMarker.SEVERITY, severity);
-	//				marker.setAttribute(IMarker.MESSAGE, message);
-	//			} catch (CoreException e) {
-	//				Activator.getDefault().logError(e.getMessage(), e);
-	//			}
-	//		}
-	//		return marker;
-	//	}
+	// private IMarker createFBTypeProblemMarker(int severity, String message) {
+	// IMarker marker = null;
+	// if(null != file){
+	// try {
+	// marker = file.createMarker(IMarker.PROBLEM);
+	// marker.setAttribute(IMarker.SEVERITY, severity);
+	// marker.setAttribute(IMarker.MESSAGE, message);
+	// } catch (CoreException e) {
+	// Activator.getDefault().logError(e.getMessage(), e);
+	// }
+	// }
+	// return marker;
+	// }
 
 	protected void parseFBChildren(FBNetworkElement block, String parentNodeName)
 			throws TypeImportException, XMLStreamException {
@@ -221,7 +224,7 @@ class FBNetworkImporter extends CommonElementImporter {
 				// TODO model refactoring - this connection is missing an endpoint. add error
 				// markers or dummy connection points so that the conenction can be handled in
 				// the according FBNetowrk editor
-				Activator.getDefault().logError("Connection destination not found: " + destinationElement);
+				Activator.getDefault().logError("Connection destination not found: " + destinationElement); //$NON-NLS-1$
 				return null;
 			}
 		}
@@ -231,7 +234,7 @@ class FBNetworkImporter extends CommonElementImporter {
 			if (null != source) {
 				connection.setSource(source);
 			} else {
-				Activator.getDefault().logError("Connection source not found: " + sourceElement);
+				Activator.getDefault().logError("Connection source not found: " + sourceElement); //$NON-NLS-1$
 				return null;
 			}
 		}

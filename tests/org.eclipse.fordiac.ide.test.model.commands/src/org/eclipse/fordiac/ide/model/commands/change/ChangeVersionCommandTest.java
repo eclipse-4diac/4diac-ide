@@ -65,11 +65,11 @@ public class ChangeVersionCommandTest extends VersionInfoTestBase {
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Change Version", //
+				new ExecutionDescription<>("Change Version", // //$NON-NLS-1$
 						ChangeVersionCommandTest::executeCommand, //
 						ChangeVersionCommandTest::verifyState //
 				), //
-				new ExecutionDescription<State>("Change Version to null", //
+				new ExecutionDescription<>("Change Version to null", // //$NON-NLS-1$
 						ChangeVersionCommandTest::executeCommandToNull, //
 						ChangeVersionCommandTest::verifyStateNull //
 				) //

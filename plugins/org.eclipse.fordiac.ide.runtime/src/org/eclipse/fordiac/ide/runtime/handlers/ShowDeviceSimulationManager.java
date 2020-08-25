@@ -57,7 +57,7 @@ public class ShowDeviceSimulationManager extends AbstractHandler {
 			removeBars(newWin);
 			return newWin;
 		} catch (WorkbenchException e) {
-			Activator.getDefault().logError("Could not create simulation manager workbench window", e);
+			Activator.getDefault().logError("Could not create simulation manager workbench window", e); //$NON-NLS-1$
 		}
 		return null;
 	}
