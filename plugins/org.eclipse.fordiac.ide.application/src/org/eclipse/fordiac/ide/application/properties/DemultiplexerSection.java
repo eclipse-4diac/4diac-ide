@@ -21,10 +21,9 @@ import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ICheckStateProvider;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class DemultiplexerSection extends StructManipulatorSection {
 	@Override
@@ -35,14 +34,17 @@ public class DemultiplexerSection extends StructManipulatorSection {
 	}
 
 	@Override
-	public void setInput(IWorkbenchPart part, ISelection selection) {
-		super.setInput(part, selection);
+	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
+		super.createControls(parent, tabbedPropertySheetPage);
 
 		getViewer().setCheckStateProvider(new ICheckStateProvider() {
 			@Override
 			public boolean isChecked(Object element) {
-				TreeNode node = (TreeNode) element;
-				return getType().getInterfaceElement(node.getPathName()) != null;
+				if (null != element) {
+					TreeNode node = (TreeNode) element;
+					return null != getType().getInterfaceElement(node.getPathName());
+				}
+				return false;
 			}
 
 			@Override

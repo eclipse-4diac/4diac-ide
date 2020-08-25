@@ -151,6 +151,8 @@ public interface LibraryElementTags {
 	String SYSTEM = "System"; //$NON-NLS-1$
 
 	String STRUCTURED_TYPE_ELEMENT = "StructuredType"; //$NON-NLS-1$
+	String DEMUX_VISIBLE_CHILDREN = "VisibleChildren"; //$NON-NLS-1$
+	String VARIABLE_SEPARATOR = ","; //$NON-NLS-1$
 	String ASN1_TAG = "ASN1Tag"; //$NON-NLS-1$
 
 }

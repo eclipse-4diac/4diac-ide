@@ -229,7 +229,7 @@ public class StructManipulatorSection extends AbstractSection {
 
 	@Override
 	public void refresh() {
-		if ((null != getType()) && (null != getType().getFbNetwork())) {
+		if ((null != getType()) && (null != getType().getFbNetwork()) && !blockRefresh) {
 			fillStructTypeCombo();
 		}
 	}

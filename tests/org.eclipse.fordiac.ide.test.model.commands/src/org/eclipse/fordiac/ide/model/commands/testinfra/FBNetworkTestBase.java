@@ -42,7 +42,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 
 		private static final String FUNCTIONBLOCK_NAME = "functionblock"; //$NON-NLS-1$
 
-		private FBTypePaletteEntry createFB() {
+		private FBTypePaletteEntry createFBType() {
 			final FBTypePaletteEntry pe = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
 			final TypeLibrary typelib = TypeLibrary.getTypeLibrary(null);
 			final BasicFBType functionBlock = LibraryElementFactory.eINSTANCE.createBasicFBType();
@@ -80,7 +80,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 
 		public State() {
 			net = LibraryElementFactory.eINSTANCE.createFBNetwork();
-			functionblock = createFB();
+			functionblock = createFBType();
 		}
 
 		private State(State s) {

@@ -13,11 +13,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import static org.eclipse.fordiac.ide.model.LibraryElementTags.DEMUX_VISIBLE_CHILDREN;
+import static org.eclipse.fordiac.ide.model.LibraryElementTags.VARIABLE_SEPARATOR;
+
+import java.util.Arrays;
+
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
 public class AddDemuxPortCommand extends AbstractCreationCommand {
+
 	private Demultiplexer type;
 	private String oldVisibleChildren;
 	private String newVisibleChildren;
@@ -26,24 +32,23 @@ public class AddDemuxPortCommand extends AbstractCreationCommand {
 	public AddDemuxPortCommand(Demultiplexer type, String name) {
 		this.type = type;
 		this.varName = name;
-		oldVisibleChildren = type.getAttributeValue("VisibleChildren"); //$NON-NLS-1$
+		oldVisibleChildren = type.getAttributeValue(DEMUX_VISIBLE_CHILDREN);
 	}
 
 	private String getNewAttributeValue() {
 		if (null == oldVisibleChildren) { // default configuration
 			StringBuilder sb = new StringBuilder();
-			for (VarDeclaration var : type.getStructType().getMemberVariables()) {
-				sb.append(var.getName() + ","); //$NON-NLS-1$
+			type.getStructType().getMemberVariables()
+					.forEach(var -> sb.append(var.getName() + VARIABLE_SEPARATOR));
+			if (!type.getStructType().getMemberVariables().isEmpty()) {
+				sb.deleteCharAt(sb.length() - 1);
 			}
-			if (sb.charAt(sb.length() - 1) == ',') {
-				return sb.substring(0, sb.length() - 1);
-			}
-			oldVisibleChildren = sb.toString();
-			return oldVisibleChildren;
+			sb.append(VARIABLE_SEPARATOR + varName);
+			return sb.toString();
 		} else if ("".equals(oldVisibleChildren)) { //$NON-NLS-1$
 			return varName;
 		} else {
-			return oldVisibleChildren + "," + varName; //$NON-NLS-1$
+			return oldVisibleChildren + VARIABLE_SEPARATOR + varName;
 		}
 	}
 
@@ -56,7 +61,9 @@ public class AddDemuxPortCommand extends AbstractCreationCommand {
 	@Override
 	public boolean canExecute() {
 		// can execute if port doesn't exist in demux yet
-		return type.getInterfaceElement(varName) == null;
+		return (varName != null) && ((oldVisibleChildren == null)
+				|| Arrays.stream(oldVisibleChildren.split(VARIABLE_SEPARATOR))
+				.filter(name -> name.equals(varName)).findAny().isEmpty());
 	}
 
 	@Override
@@ -66,7 +73,11 @@ public class AddDemuxPortCommand extends AbstractCreationCommand {
 
 	@Override
 	public void undo() {
-		setVisibleChildrenAttribute(oldVisibleChildren);
+		if (oldVisibleChildren == null) {
+			type.deleteAttribute(DEMUX_VISIBLE_CHILDREN);
+		} else {
+			setVisibleChildrenAttribute(oldVisibleChildren);
+		}
 	}
 
 	@Override
@@ -75,6 +86,6 @@ public class AddDemuxPortCommand extends AbstractCreationCommand {
 	}
 
 	private void setVisibleChildrenAttribute(String value) {
-		type.setAttribute("VisibleChildren", "STRING", value, ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		type.setAttribute(DEMUX_VISIBLE_CHILDREN, FordiacKeywords.STRING, value, ""); //$NON-NLS-1$
 	}
 }

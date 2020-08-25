@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -57,9 +58,9 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 	@Override
 	public void setAttribute(String attributeName, String type, String value, String comment) {
 		super.setAttribute(attributeName, type, value, comment);
-		if ("VisibleChildren".equals(attributeName)) { //$NON-NLS-1$
+		if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(attributeName)) {
 			setMemberVariablesAsPorts(null);
-			List<String> visibleChildrenNames = Arrays.asList(value.trim().split(",")); //$NON-NLS-1$
+			List<String> visibleChildrenNames = Arrays.asList(value.trim().split(LibraryElementTags.VARIABLE_SEPARATOR)); 
 			setMemberVariablesAsPort(getVarDeclarations(visibleChildrenNames));
 		}
 	}
@@ -92,6 +93,14 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 		return found;
 	}
 
+	@Override
+	public boolean deleteAttribute(String attributeName) {
+		if (attributeName.equals(LibraryElementTags.DEMUX_VISIBLE_CHILDREN)) { 
+			setMemberVariablesAsPorts(getStructType());
+		}
+		return super.deleteAttribute(attributeName);
+	}
+
 	/**
 	 * sets all member variables of the passed StructuredType as output ports
 	 *
@@ -116,13 +125,13 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 				varDecl.getValue().setValue(""); //$NON-NLS-1$
 			}
 		});
-		Event ev = getInterface().getEventOutputs().get(0);
+		List<Event> outputEvents = getInterface().getEventOutputs();
 
 		// create with constructs
 		list.forEach(varDecl -> {
 			With with = LibraryElementFactory.eINSTANCE.createWith();
 			with.setVariables(varDecl);
-			ev.getWith().add(with);
+			outputEvents.forEach(ev -> ev.getWith().add(with));
 		});
 
 		// add data output ports to the interface

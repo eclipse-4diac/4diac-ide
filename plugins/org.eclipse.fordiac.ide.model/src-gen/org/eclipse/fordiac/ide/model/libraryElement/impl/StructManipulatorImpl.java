@@ -68,12 +68,13 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 	 */
 	@Override
 	public StructuredType getStructType() {
-		if (structType != null && structType.eIsProxy()) {
+		if ((structType != null) && structType.eIsProxy()) {
 			InternalEObject oldStructType = (InternalEObject)structType;
 			structType = (StructuredType)eResolveProxy(oldStructType);
 			if (structType != oldStructType) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE, oldStructType, structType));
+				}
 			}
 		}
 		return structType;
@@ -94,13 +95,14 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 	public void setStructTypeGen(StructuredType newStructType) {
 		StructuredType oldStructType = structType;
 		structType = newStructType;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE, oldStructType, structType));
+		}
 	}
 
 	@Override
 	public void setStructType(StructuredType newStructType) {
-		if ((null == getStructType()) || (!getStructType().equals(newStructType))) {
+		if ((null == getStructType()) || (!getStructType().getName().equals(newStructType.getName()))) {
 			setStructTypeGen(newStructType);
 			setMemberVariablesAsPorts(newStructType);
 			setAttribute("StructuredType", "STRING", getStructType().getName(), COMMENT_EDEFAULT); //$NON-NLS-1$ //$NON-NLS-2$
@@ -112,7 +114,7 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 		super.setAttribute(attributeName, type, value, comment);
 		if ("StructuredType".equals(attributeName)) { //$NON-NLS-1$
 			StructuredType newStructType = getTypeLibrary().getDataTypeLibrary().getStructuredType(value);
-			if ((null == getStructType()) || (!getStructType().equals(newStructType))) {
+			if ((null == getStructType()) || (!getStructType().getName().equals(newStructType.getName()))) {
 				setStructTypeGen(newStructType);
 				setMemberVariablesAsPorts(newStructType);
 			}
@@ -152,12 +154,12 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
-				setStructType((StructuredType)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
+			setStructType((StructuredType)newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
@@ -168,12 +170,12 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
-				setStructType((StructuredType)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
+			setStructType((StructuredType)null);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
@@ -184,10 +186,10 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
-				return structType != null;
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
+			return structType != null;
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 

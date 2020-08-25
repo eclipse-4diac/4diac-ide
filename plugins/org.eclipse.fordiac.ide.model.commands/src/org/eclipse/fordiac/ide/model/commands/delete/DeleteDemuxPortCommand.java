@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
+import static org.eclipse.fordiac.ide.model.LibraryElementTags.DEMUX_VISIBLE_CHILDREN;
+import static org.eclipse.fordiac.ide.model.LibraryElementTags.VARIABLE_SEPARATOR;
+
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
@@ -27,19 +31,14 @@ public class DeleteDemuxPortCommand extends Command {
 		this.type = type;
 		this.name = name;
 		this.var = (VarDeclaration) type.getInterfaceElement(name);
-		this.oldVisibleChildren = type.getAttributeValue("VisibleChildren"); //$NON-NLS-1$
-
+		this.oldVisibleChildren = type.getAttributeValue(DEMUX_VISIBLE_CHILDREN);
 	}
 
 	private String getNewAttributeValue() {
 		if (null == oldVisibleChildren) {
 			StringBuilder sb = new StringBuilder();
-			for (VarDeclaration var : type.getStructType().getMemberVariables()) {
-				if (!var.getName().equals(name)) {
-					sb.append(var.getName() + ","); //$NON-NLS-1$
-				}
-			}
-			if (sb.charAt(sb.length() - 1) == ',') {
+			type.getStructType().getMemberVariables().forEach(var -> sb.append(var.getName() + VARIABLE_SEPARATOR));
+			if (!type.getStructType().getMemberVariables().isEmpty()) {
 				sb.deleteCharAt(sb.length() - 1);
 			}
 			oldVisibleChildren = sb.toString();
@@ -86,6 +85,6 @@ public class DeleteDemuxPortCommand extends Command {
 	}
 
 	private void setVisibleChildrenAttribute(String value) {
-		type.setAttribute("VisibleChildren", "STRING", value, ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		type.setAttribute(DEMUX_VISIBLE_CHILDREN, FordiacKeywords.STRING, value, ""); //$NON-NLS-1$
 	}
 }
