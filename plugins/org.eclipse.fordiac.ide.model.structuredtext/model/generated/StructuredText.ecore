@@ -83,18 +83,19 @@
     <eLiterals name="OR" literal="OR"/>
     <eLiterals name="XOR" value="1" literal="XOR"/>
     <eLiterals name="AND" value="2" literal="AND"/>
-    <eLiterals name="EQ" value="3" literal="="/>
-    <eLiterals name="NE" value="4" literal="&lt;>"/>
-    <eLiterals name="LT" value="5" literal="&lt;"/>
-    <eLiterals name="LE" value="6" literal="&lt;="/>
-    <eLiterals name="GT" value="7" literal=">"/>
-    <eLiterals name="GE" value="8" literal=">="/>
-    <eLiterals name="ADD" value="9" literal="+"/>
-    <eLiterals name="SUB" value="10" literal="-"/>
-    <eLiterals name="MUL" value="11" literal="*"/>
-    <eLiterals name="DIV" value="12" literal="/"/>
-    <eLiterals name="MOD" value="13" literal="MOD"/>
-    <eLiterals name="POWER" value="14" literal="**"/>
+    <eLiterals name="AMPERSAND" value="3" literal="&amp;"/>
+    <eLiterals name="EQ" value="4" literal="="/>
+    <eLiterals name="NE" value="5" literal="&lt;>"/>
+    <eLiterals name="LT" value="6" literal="&lt;"/>
+    <eLiterals name="LE" value="7" literal="&lt;="/>
+    <eLiterals name="GT" value="8" literal=">"/>
+    <eLiterals name="GE" value="9" literal=">="/>
+    <eLiterals name="ADD" value="10" literal="+"/>
+    <eLiterals name="SUB" value="11" literal="-"/>
+    <eLiterals name="MUL" value="12" literal="*"/>
+    <eLiterals name="DIV" value="13" literal="/"/>
+    <eLiterals name="MOD" value="14" literal="MOD"/>
+    <eLiterals name="POWER" value="15" literal="**"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="UnaryOperator">
     <eLiterals name="MINUS" literal="-"/>

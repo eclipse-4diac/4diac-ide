@@ -3,12 +3,11 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext.parser.antlr;
 
+import com.google.inject.Inject;
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.internal.InternalStructuredTextParser;
 import org.eclipse.fordiac.ide.model.structuredtext.services.StructuredTextGrammarAccess;
 import org.eclipse.xtext.parser.antlr.AbstractAntlrParser;
 import org.eclipse.xtext.parser.antlr.XtextTokenStream;
-
-import com.google.inject.Inject;
 
 public class StructuredTextParser extends AbstractAntlrParser {
 
@@ -17,17 +16,18 @@ public class StructuredTextParser extends AbstractAntlrParser {
 
 	@Override
 	protected void setInitialHiddenTokens(XtextTokenStream tokenStream) {
-		tokenStream.setInitialHiddenTokens("RULE_WS", "RULE_ML_COMMENT", "RULE_SL_COMMENT"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		tokenStream.setInitialHiddenTokens("RULE_WS", "RULE_ML_COMMENT", "RULE_SL_COMMENT");
 	}
+	
 
 	@Override
 	protected InternalStructuredTextParser createParser(XtextTokenStream stream) {
 		return new InternalStructuredTextParser(stream, getGrammarAccess());
 	}
 
-	@Override
+	@Override 
 	protected String getDefaultRuleName() {
-		return "StructuredTextAlgorithm"; //$NON-NLS-1$
+		return "StructuredTextAlgorithm";
 	}
 
 	public StructuredTextGrammarAccess getGrammarAccess() {

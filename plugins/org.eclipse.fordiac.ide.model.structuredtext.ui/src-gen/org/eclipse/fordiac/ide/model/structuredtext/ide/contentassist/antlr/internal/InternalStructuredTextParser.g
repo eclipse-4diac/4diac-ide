@@ -2380,9 +2380,9 @@ rule__And_Operator__Alternatives
 	)
 	|
 	(
-		{ before(grammarAccess.getAnd_OperatorAccess().getANDEnumLiteralDeclaration_1()); }
+		{ before(grammarAccess.getAnd_OperatorAccess().getAMPERSANDEnumLiteralDeclaration_1()); }
 		(Ampersand)
-		{ after(grammarAccess.getAnd_OperatorAccess().getANDEnumLiteralDeclaration_1()); }
+		{ after(grammarAccess.getAnd_OperatorAccess().getAMPERSANDEnumLiteralDeclaration_1()); }
 	)
 ;
 finally {

@@ -10589,8 +10589,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     {
                     enumLiteral_1=(Token)match(input,Ampersand,FOLLOW_2); 
 
-                    				current = grammarAccess.getAnd_OperatorAccess().getANDEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
-                    				newLeafNode(enumLiteral_1, grammarAccess.getAnd_OperatorAccess().getANDEnumLiteralDeclaration_1());
+                    				current = grammarAccess.getAnd_OperatorAccess().getAMPERSANDEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
+                    				newLeafNode(enumLiteral_1, grammarAccess.getAnd_OperatorAccess().getAMPERSANDEnumLiteralDeclaration_1());
                     			
 
                     }

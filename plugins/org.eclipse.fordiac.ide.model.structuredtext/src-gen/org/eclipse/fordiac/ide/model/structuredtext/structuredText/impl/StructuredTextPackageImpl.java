@@ -1904,6 +1904,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.OR);
     addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.XOR);
     addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.AND);
+    addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.AMPERSAND);
     addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.EQ);
     addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.NE);
     addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LT);

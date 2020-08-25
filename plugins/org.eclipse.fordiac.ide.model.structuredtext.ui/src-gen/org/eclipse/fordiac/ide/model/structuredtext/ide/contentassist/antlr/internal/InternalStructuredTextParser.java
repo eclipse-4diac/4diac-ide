@@ -7989,7 +7989,7 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
                     // InternalStructuredTextParser.g:2382:2: ( ( Ampersand ) )
                     // InternalStructuredTextParser.g:2383:3: ( Ampersand )
                     {
-                     before(grammarAccess.getAnd_OperatorAccess().getANDEnumLiteralDeclaration_1()); 
+                     before(grammarAccess.getAnd_OperatorAccess().getAMPERSANDEnumLiteralDeclaration_1()); 
                     // InternalStructuredTextParser.g:2384:3: ( Ampersand )
                     // InternalStructuredTextParser.g:2384:4: Ampersand
                     {
@@ -7997,7 +7997,7 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
                     }
 
-                     after(grammarAccess.getAnd_OperatorAccess().getANDEnumLiteralDeclaration_1()); 
+                     after(grammarAccess.getAnd_OperatorAccess().getAMPERSANDEnumLiteralDeclaration_1()); 
 
                     }
 

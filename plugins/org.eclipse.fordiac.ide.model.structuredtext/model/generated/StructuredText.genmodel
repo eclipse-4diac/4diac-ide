@@ -10,6 +10,7 @@
       <genEnumLiterals ecoreEnumLiteral="StructuredText.ecore#//BinaryOperator/OR"/>
       <genEnumLiterals ecoreEnumLiteral="StructuredText.ecore#//BinaryOperator/XOR"/>
       <genEnumLiterals ecoreEnumLiteral="StructuredText.ecore#//BinaryOperator/AND"/>
+      <genEnumLiterals ecoreEnumLiteral="StructuredText.ecore#//BinaryOperator/AMPERSAND"/>
       <genEnumLiterals ecoreEnumLiteral="StructuredText.ecore#//BinaryOperator/EQ"/>
       <genEnumLiterals ecoreEnumLiteral="StructuredText.ecore#//BinaryOperator/NE"/>
       <genEnumLiterals ecoreEnumLiteral="StructuredText.ecore#//BinaryOperator/LT"/>

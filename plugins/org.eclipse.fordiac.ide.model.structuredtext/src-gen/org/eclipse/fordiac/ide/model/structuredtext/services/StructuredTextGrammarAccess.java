@@ -2237,14 +2237,14 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final EnumLiteralDeclaration cANDEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
 		private final Keyword cANDANDKeyword_0_0 = (Keyword)cANDEnumLiteralDeclaration_0.eContents().get(0);
-		private final EnumLiteralDeclaration cANDEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
-		private final Keyword cANDAmpersandKeyword_1_0 = (Keyword)cANDEnumLiteralDeclaration_1.eContents().get(0);
+		private final EnumLiteralDeclaration cAMPERSANDEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
+		private final Keyword cAMPERSANDAmpersandKeyword_1_0 = (Keyword)cAMPERSANDEnumLiteralDeclaration_1.eContents().get(0);
 		
 		//enum And_Operator returns BinaryOperator:
-		//	AND | AND='&';
+		//	AND | AMPERSAND='&';
 		public EnumRule getRule() { return rule; }
 		
-		//AND | AND='&'
+		//AND | AMPERSAND='&'
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//AND
@@ -2253,11 +2253,11 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 		//"AND"
 		public Keyword getANDANDKeyword_0_0() { return cANDANDKeyword_0_0; }
 		
-		//AND='&'
-		public EnumLiteralDeclaration getANDEnumLiteralDeclaration_1() { return cANDEnumLiteralDeclaration_1; }
+		//AMPERSAND='&'
+		public EnumLiteralDeclaration getAMPERSANDEnumLiteralDeclaration_1() { return cAMPERSANDEnumLiteralDeclaration_1; }
 		
 		//'&'
-		public Keyword getANDAmpersandKeyword_1_0() { return cANDAmpersandKeyword_1_0; }
+		public Keyword getAMPERSANDAmpersandKeyword_1_0() { return cAMPERSANDAmpersandKeyword_1_0; }
 	}
 	public class Compare_OperatorElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
 		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Compare_Operator");
@@ -3104,7 +3104,7 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 	}
 	
 	//enum And_Operator returns BinaryOperator:
-	//	AND | AND='&';
+	//	AND | AMPERSAND='&';
 	public And_OperatorElements getAnd_OperatorAccess() {
 		return eAnd_Operator;
 	}

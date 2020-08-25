@@ -3873,8 +3873,8 @@ ruleAnd_Operator returns [Enumerator current=null]
 		(
 			enumLiteral_1=Ampersand
 			{
-				$current = grammarAccess.getAnd_OperatorAccess().getANDEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
-				newLeafNode(enumLiteral_1, grammarAccess.getAnd_OperatorAccess().getANDEnumLiteralDeclaration_1());
+				$current = grammarAccess.getAnd_OperatorAccess().getAMPERSANDEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_1, grammarAccess.getAnd_OperatorAccess().getAMPERSANDEnumLiteralDeclaration_1());
 			}
 		)
 	)
