@@ -16,7 +16,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.application.commands.ToggleSubAppRepresentationCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
@@ -36,6 +36,4 @@ public class ToggleSubAppFolding extends AbstractHandler {
 
 		return Status.OK_STATUS;
 	}
-
-
 }
