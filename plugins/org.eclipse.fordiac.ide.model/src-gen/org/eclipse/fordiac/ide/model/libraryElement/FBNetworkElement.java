@@ -21,8 +21,10 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getInterface <em>Interface</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getMapping <em>Mapping</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getInterface
+ * <em>Interface</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getMapping
+ * <em>Mapping</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetworkElement()
@@ -38,6 +40,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Interface</em>' containment reference.
 	 * @see #setInterface(InterfaceList)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetworkElement_Interface()
@@ -47,9 +50,11 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	InterfaceList getInterface();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getInterface <em>Interface</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!--
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getInterface
+	 * <em>Interface</em>}' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Interface</em>' containment reference.
 	 * @see #getInterface()
 	 * @generated
@@ -74,8 +79,10 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	Mapping getMapping();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getMapping <em>Mapping</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getMapping
+	 * <em>Mapping</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Mapping</em>' reference.
 	 * @see #getMapping()
 	 * @generated
@@ -84,6 +91,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
@@ -91,6 +99,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true" nameRequired="true"
 	 * @generated
 	 */
@@ -98,6 +107,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
@@ -105,6 +115,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
@@ -112,6 +123,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model
 	 * @generated
 	 */
@@ -119,6 +131,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
@@ -126,6 +139,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

@@ -26,15 +26,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl#getTestResult <em>Test Result</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl#getTestResult
+ * <em>Test Result</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitive {
 	/**
-	 * The default value of the '{@link #getTestResult() <em>Test Result</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #getTestResult() <em>Test Result</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getTestResult()
 	 * @generated
 	 * @ordered
@@ -49,6 +51,7 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected OutputPrimitiveImpl() {
@@ -57,6 +60,7 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -115,61 +119,65 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
-				return getTestResult();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
+			return getTestResult();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
-				setTestResult((Integer)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
+			setTestResult((Integer) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
-				unsetTestResult();
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
+			unsetTestResult();
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
-				return isSetTestResult();
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
+			return isSetTestResult();
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 

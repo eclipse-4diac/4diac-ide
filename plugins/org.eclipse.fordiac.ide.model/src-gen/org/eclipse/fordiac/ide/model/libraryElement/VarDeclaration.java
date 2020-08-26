@@ -23,9 +23,12 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getArraySize <em>Array Size</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getWiths <em>Withs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getValue <em>Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getArraySize
+ * <em>Array Size</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getWiths
+ * <em>Withs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getValue
+ * <em>Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getVarDeclaration()
@@ -64,15 +67,18 @@ public interface VarDeclaration extends IInterfaceElement {
 	void setArraySize(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Withs</b></em>' reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.With}.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.With#getVariables <em>Variables</em>}'.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Withs</b></em>' reference list. The list
+	 * contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.With}. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.With#getVariables
+	 * <em>Variables</em>}'. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Withs</em>' reference list isn't clear, there
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Withs</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getVarDeclaration_Withs()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.With#getVariables
@@ -99,9 +105,11 @@ public interface VarDeclaration extends IInterfaceElement {
 	Value getValue();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getValue <em>Value</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!--
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getValue
+	 * <em>Value</em>}' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Value</em>' containment reference.
 	 * @see #getValue()
 	 * @generated
@@ -115,6 +123,7 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated
 	 */

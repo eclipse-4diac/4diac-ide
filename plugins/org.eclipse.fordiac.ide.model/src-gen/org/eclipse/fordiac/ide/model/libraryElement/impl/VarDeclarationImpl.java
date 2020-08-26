@@ -39,16 +39,26 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getComment <em>Comment</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#isIsInput <em>Is Input</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getInputConnections <em>Input Connections</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getOutputConnections <em>Output Connections</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getTypeName <em>Type Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getArraySize <em>Array Size</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getWiths <em>Withs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getValue <em>Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getName
+ * <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getComment
+ * <em>Comment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#isIsInput
+ * <em>Is Input</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getInputConnections
+ * <em>Input Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getOutputConnections
+ * <em>Output Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getType
+ * <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getTypeName
+ * <em>Type Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getArraySize
+ * <em>Array Size</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getWiths
+ * <em>Withs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getValue
+ * <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -77,6 +87,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -86,6 +97,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -95,6 +107,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	/**
 	 * The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered
@@ -104,6 +117,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	/**
 	 * The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered
@@ -143,8 +157,9 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	protected DataType type;
 
 	/**
-	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getTypeName()
 	 * @generated
 	 * @ordered
@@ -152,8 +167,9 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	protected static final String TYPE_NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getTypeName()
 	 * @generated
 	 * @ordered
@@ -161,8 +177,9 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	protected String typeName = TYPE_NAME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getArraySize() <em>Array Size</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #getArraySize() <em>Array Size</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getArraySize()
 	 * @generated
 	 * @ordered
@@ -170,8 +187,9 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	protected static final int ARRAY_SIZE_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getArraySize() <em>Array Size</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getArraySize() <em>Array Size</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getArraySize()
 	 * @generated
 	 * @ordered
@@ -181,6 +199,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	/**
 	 * The cached value of the '{@link #getWiths() <em>Withs</em>}' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getWiths()
 	 * @generated
 	 * @ordered
@@ -188,8 +207,9 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	protected EList<With> withs;
 
 	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -198,6 +218,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected VarDeclarationImpl() {
@@ -206,6 +227,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -215,6 +237,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -224,6 +247,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -231,11 +255,13 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		int oldArraySize = arraySize;
 		arraySize = newArraySize;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE, oldArraySize, arraySize));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE,
+					oldArraySize, arraySize));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -245,6 +271,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -252,11 +279,13 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		String oldComment = comment;
 		comment = newComment;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__COMMENT, oldComment, comment));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__COMMENT,
+					oldComment, comment));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -266,6 +295,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -273,11 +303,13 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__NAME, oldName,
+					name));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -287,6 +319,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -294,21 +327,24 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		boolean oldIsInput = isInput;
 		isInput = newIsInput;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__IS_INPUT, oldIsInput, isInput));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__IS_INPUT,
+					oldIsInput, isInput));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public DataType getType() {
 		if (type != null && type.eIsProxy()) {
-			InternalEObject oldType = (InternalEObject)type;
-			type = (DataType)eResolveProxy(oldType);
+			InternalEObject oldType = (InternalEObject) type;
+			type = (DataType) eResolveProxy(oldType);
 			if (type != oldType) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.VAR_DECLARATION__TYPE, oldType, type));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							LibraryElementPackage.VAR_DECLARATION__TYPE, oldType, type));
 			}
 		}
 		return type;
@@ -316,6 +352,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DataType basicGetType() {
@@ -324,6 +361,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -331,11 +369,13 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		DataType oldType = type;
 		type = newType;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__TYPE, oldType, type));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__TYPE, oldType,
+					type));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -345,6 +385,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -352,23 +393,27 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		String oldTypeName = typeName;
 		typeName = newTypeName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__TYPE_NAME, oldTypeName, typeName));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__TYPE_NAME,
+					oldTypeName, typeName));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<With> getWiths() {
 		if (withs == null) {
-			withs = new EObjectWithInverseResolvingEList<With>(With.class, this, LibraryElementPackage.VAR_DECLARATION__WITHS, LibraryElementPackage.WITH__VARIABLES);
+			withs = new EObjectWithInverseResolvingEList<With>(With.class, this,
+					LibraryElementPackage.VAR_DECLARATION__WITHS, LibraryElementPackage.WITH__VARIABLES);
 		}
 		return withs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -378,6 +423,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -387,22 +433,27 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Value getValue() {
 		if (value != null && value.eIsProxy()) {
-			InternalEObject oldValue = (InternalEObject)value;
-			value = (Value)eResolveProxy(oldValue);
+			InternalEObject oldValue = (InternalEObject) value;
+			value = (Value) eResolveProxy(oldValue);
 			if (value != oldValue) {
-				InternalEObject newValue = (InternalEObject)value;
-				NotificationChain msgs = oldValue.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VALUE, null, null);
+				InternalEObject newValue = (InternalEObject) value;
+				NotificationChain msgs = oldValue.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VALUE, null, null);
 				if (newValue.eInternalContainer() == null) {
-					msgs = newValue.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VALUE, null, msgs);
+					msgs = newValue.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VALUE, null, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
+				if (msgs != null)
+					msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.VAR_DECLARATION__VALUE, oldValue, value));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							LibraryElementPackage.VAR_DECLARATION__VALUE, oldValue, value));
 			}
 		}
 		return value;
@@ -410,6 +461,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Value basicGetValue() {
@@ -418,20 +470,26 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetValue(Value newValue, NotificationChain msgs) {
 		Value oldValue = value;
 		value = newValue;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__VALUE, oldValue, newValue);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.VAR_DECLARATION__VALUE, oldValue, newValue);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -439,242 +497,262 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		if (newValue != value) {
 			NotificationChain msgs = null;
 			if (value != null)
-				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VALUE, null, msgs);
+				msgs = ((InternalEObject) value).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VALUE, null, msgs);
 			if (newValue != null)
-				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VALUE, null, msgs);
+				msgs = ((InternalEObject) newValue).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VALUE, null, msgs);
 			msgs = basicSetValue(newValue, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__VALUE, newValue, newValue));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__VALUE,
+					newValue, newValue));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
+			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this,
+					LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS,
+					LibraryElementPackage.CONNECTION__DESTINATION);
 		}
 		return inputConnections;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
+			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this,
+					LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS,
+					LibraryElementPackage.CONNECTION__SOURCE);
 		}
 		return outputConnections;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputConnections()).basicAdd(otherEnd, msgs);
-			case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputConnections()).basicAdd(otherEnd, msgs);
-			case LibraryElementPackage.VAR_DECLARATION__WITHS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getWiths()).basicAdd(otherEnd, msgs);
-			default:
-				return super.eInverseAdd(otherEnd, featureID, msgs);
+		case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getInputConnections()).basicAdd(otherEnd, msgs);
+		case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getOutputConnections()).basicAdd(otherEnd,
+					msgs);
+		case LibraryElementPackage.VAR_DECLARATION__WITHS:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getWiths()).basicAdd(otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
-				return ((InternalEList<?>)getInputConnections()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
-				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.VAR_DECLARATION__WITHS:
-				return ((InternalEList<?>)getWiths()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				return basicSetValue(null, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
+			return ((InternalEList<?>) getInputConnections()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
+			return ((InternalEList<?>) getOutputConnections()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.VAR_DECLARATION__WITHS:
+			return ((InternalEList<?>) getWiths()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.VAR_DECLARATION__VALUE:
+			return basicSetValue(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.VAR_DECLARATION__NAME:
-				return getName();
-			case LibraryElementPackage.VAR_DECLARATION__COMMENT:
-				return getComment();
-			case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
-				return isIsInput();
-			case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
-				return getInputConnections();
-			case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
-				return getOutputConnections();
-			case LibraryElementPackage.VAR_DECLARATION__TYPE:
-				if (resolve) return getType();
-				return basicGetType();
-			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
-				return getTypeName();
-			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
-				return getArraySize();
-			case LibraryElementPackage.VAR_DECLARATION__WITHS:
-				return getWiths();
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				if (resolve) return getValue();
-				return basicGetValue();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.VAR_DECLARATION__NAME:
+			return getName();
+		case LibraryElementPackage.VAR_DECLARATION__COMMENT:
+			return getComment();
+		case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
+			return isIsInput();
+		case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
+			return getInputConnections();
+		case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
+			return getOutputConnections();
+		case LibraryElementPackage.VAR_DECLARATION__TYPE:
+			if (resolve)
+				return getType();
+			return basicGetType();
+		case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
+			return getTypeName();
+		case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
+			return getArraySize();
+		case LibraryElementPackage.VAR_DECLARATION__WITHS:
+			return getWiths();
+		case LibraryElementPackage.VAR_DECLARATION__VALUE:
+			if (resolve)
+				return getValue();
+			return basicGetValue();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.VAR_DECLARATION__NAME:
-				setName((String)newValue);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__COMMENT:
-				setComment((String)newValue);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
-				setIsInput((Boolean)newValue);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
-				getInputConnections().clear();
-				getInputConnections().addAll((Collection<? extends Connection>)newValue);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
-				getOutputConnections().clear();
-				getOutputConnections().addAll((Collection<? extends Connection>)newValue);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__TYPE:
-				setType((DataType)newValue);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
-				setTypeName((String)newValue);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
-				setArraySize((Integer)newValue);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__WITHS:
-				getWiths().clear();
-				getWiths().addAll((Collection<? extends With>)newValue);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				setValue((Value)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.VAR_DECLARATION__NAME:
+			setName((String) newValue);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__COMMENT:
+			setComment((String) newValue);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
+			setIsInput((Boolean) newValue);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
+			getInputConnections().clear();
+			getInputConnections().addAll((Collection<? extends Connection>) newValue);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
+			getOutputConnections().clear();
+			getOutputConnections().addAll((Collection<? extends Connection>) newValue);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__TYPE:
+			setType((DataType) newValue);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
+			setTypeName((String) newValue);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
+			setArraySize((Integer) newValue);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__WITHS:
+			getWiths().clear();
+			getWiths().addAll((Collection<? extends With>) newValue);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__VALUE:
+			setValue((Value) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.VAR_DECLARATION__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__COMMENT:
-				setComment(COMMENT_EDEFAULT);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
-				setIsInput(IS_INPUT_EDEFAULT);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
-				getInputConnections().clear();
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
-				getOutputConnections().clear();
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__TYPE:
-				setType((DataType)null);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
-				setTypeName(TYPE_NAME_EDEFAULT);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
-				setArraySize(ARRAY_SIZE_EDEFAULT);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__WITHS:
-				getWiths().clear();
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				setValue((Value)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.VAR_DECLARATION__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__COMMENT:
+			setComment(COMMENT_EDEFAULT);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
+			setIsInput(IS_INPUT_EDEFAULT);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
+			getInputConnections().clear();
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
+			getOutputConnections().clear();
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__TYPE:
+			setType((DataType) null);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
+			setTypeName(TYPE_NAME_EDEFAULT);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
+			setArraySize(ARRAY_SIZE_EDEFAULT);
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__WITHS:
+			getWiths().clear();
+			return;
+		case LibraryElementPackage.VAR_DECLARATION__VALUE:
+			setValue((Value) null);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.VAR_DECLARATION__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case LibraryElementPackage.VAR_DECLARATION__COMMENT:
-				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
-			case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
-				return isInput != IS_INPUT_EDEFAULT;
-			case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
-				return inputConnections != null && !inputConnections.isEmpty();
-			case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
-				return outputConnections != null && !outputConnections.isEmpty();
-			case LibraryElementPackage.VAR_DECLARATION__TYPE:
-				return type != null;
-			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
-				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
-			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
-				return arraySize != ARRAY_SIZE_EDEFAULT;
-			case LibraryElementPackage.VAR_DECLARATION__WITHS:
-				return withs != null && !withs.isEmpty();
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				return value != null;
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.VAR_DECLARATION__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case LibraryElementPackage.VAR_DECLARATION__COMMENT:
+			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+		case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
+			return isInput != IS_INPUT_EDEFAULT;
+		case LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS:
+			return inputConnections != null && !inputConnections.isEmpty();
+		case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
+			return outputConnections != null && !outputConnections.isEmpty();
+		case LibraryElementPackage.VAR_DECLARATION__TYPE:
+			return type != null;
+		case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
+			return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
+		case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
+			return arraySize != ARRAY_SIZE_EDEFAULT;
+		case LibraryElementPackage.VAR_DECLARATION__WITHS:
+			return withs != null && !withs.isEmpty();
+		case LibraryElementPackage.VAR_DECLARATION__VALUE:
+			return value != null;
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$

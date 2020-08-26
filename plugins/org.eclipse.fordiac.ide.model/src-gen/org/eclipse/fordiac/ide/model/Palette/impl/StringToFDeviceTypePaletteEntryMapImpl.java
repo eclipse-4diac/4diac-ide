@@ -37,17 +37,20 @@ import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToFDeviceTypePaletteEntryMapImpl#getTypedKey <em>Key</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToFDeviceTypePaletteEntryMapImpl#getTypedValue <em>Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToFDeviceTypePaletteEntryMapImpl#getTypedKey
+ * <em>Key</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToFDeviceTypePaletteEntryMapImpl#getTypedValue
+ * <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
-		implements BasicEMap.Entry<String,DeviceTypePaletteEntry> {
+		implements BasicEMap.Entry<String, DeviceTypePaletteEntry> {
 	/**
 	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -67,6 +70,7 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 	/**
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getTypedValue()
 	 * @generated
 	 * @ordered
@@ -75,6 +79,7 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected StringToFDeviceTypePaletteEntryMapImpl() {
@@ -83,6 +88,7 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -92,6 +98,7 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getTypedKey() {
@@ -100,26 +107,30 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setTypedKey(String newKey) {
 		String oldKey = key;
 		key = newKey;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__KEY, oldKey, key));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__KEY, oldKey, key));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeviceTypePaletteEntry getTypedValue() {
 		if (value != null && value.eIsProxy()) {
-			InternalEObject oldValue = (InternalEObject)value;
-			value = (DeviceTypePaletteEntry)eResolveProxy(oldValue);
+			InternalEObject oldValue = (InternalEObject) value;
+			value = (DeviceTypePaletteEntry) eResolveProxy(oldValue);
 			if (value != oldValue) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__VALUE, oldValue, value));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__VALUE, oldValue, value));
 			}
 		}
 		return value;
@@ -127,6 +138,7 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeviceTypePaletteEntry basicGetTypedValue() {
@@ -135,93 +147,102 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setTypedValue(DeviceTypePaletteEntry newValue) {
 		DeviceTypePaletteEntry oldValue = value;
 		value = newValue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__VALUE, oldValue, value));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__VALUE, oldValue, value));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__KEY:
-				return getTypedKey();
-			case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__VALUE:
-				if (resolve) return getTypedValue();
-				return basicGetTypedValue();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__KEY:
+			return getTypedKey();
+		case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__VALUE:
+			if (resolve)
+				return getTypedValue();
+			return basicGetTypedValue();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__KEY:
-				setTypedKey((String)newValue);
-				return;
-			case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__VALUE:
-				setTypedValue((DeviceTypePaletteEntry)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__KEY:
+			setTypedKey((String) newValue);
+			return;
+		case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__VALUE:
+			setTypedValue((DeviceTypePaletteEntry) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__KEY:
-				setTypedKey(KEY_EDEFAULT);
-				return;
-			case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__VALUE:
-				setTypedValue((DeviceTypePaletteEntry)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__KEY:
+			setTypedKey(KEY_EDEFAULT);
+			return;
+		case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__VALUE:
+			setTypedValue((DeviceTypePaletteEntry) null);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__KEY:
-				return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
-			case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__VALUE:
-				return value != null;
-			default:
-				return super.eIsSet(featureID);
+		case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__KEY:
+			return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
+		case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__VALUE:
+			return value != null;
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (key: "); //$NON-NLS-1$
@@ -232,12 +253,14 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected int hash = -1;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -251,6 +274,7 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -260,6 +284,7 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -269,6 +294,7 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -278,6 +304,7 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -287,6 +314,7 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -298,12 +326,13 @@ public class StringToFDeviceTypePaletteEntryMapImpl extends EObjectImpl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	public EMap<String, DeviceTypePaletteEntry> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<String, DeviceTypePaletteEntry>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<String, DeviceTypePaletteEntry>) container.eGet(eContainmentFeature());
 	}
 
 } // StringToFDeviceTypePaletteEntryMapImpl

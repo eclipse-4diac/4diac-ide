@@ -23,12 +23,18 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getApplicationDomain <em>Application Domain</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getClassification <em>Classification</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getDescription <em>Description</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getFunction <em>Function</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getStandard <em>Standard</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getType <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getApplicationDomain
+ * <em>Application Domain</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getClassification
+ * <em>Classification</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getDescription
+ * <em>Description</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getFunction
+ * <em>Function</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getStandard
+ * <em>Standard</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getType
+ * <em>Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIdentification()
@@ -55,9 +61,11 @@ public interface Identification extends EObject {
 	String getApplicationDomain();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getApplicationDomain <em>Application Domain</em>}' attribute.
-	 * <!-- begin-user-doc --> <!--
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getApplicationDomain
+	 * <em>Application Domain</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Application Domain</em>' attribute.
 	 * @see #getApplicationDomain()
 	 * @generated
@@ -83,9 +91,11 @@ public interface Identification extends EObject {
 	String getClassification();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getClassification <em>Classification</em>}' attribute.
-	 * <!-- begin-user-doc --> <!--
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getClassification
+	 * <em>Classification</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Classification</em>' attribute.
 	 * @see #getClassification()
 	 * @generated
@@ -141,8 +151,10 @@ public interface Identification extends EObject {
 	String getFunction();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getFunction <em>Function</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getFunction
+	 * <em>Function</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Function</em>' attribute.
 	 * @see #getFunction()
 	 * @generated
@@ -168,8 +180,10 @@ public interface Identification extends EObject {
 	String getStandard();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getStandard <em>Standard</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getStandard
+	 * <em>Standard</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Standard</em>' attribute.
 	 * @see #getStandard()
 	 * @generated
@@ -195,8 +209,10 @@ public interface Identification extends EObject {
 	String getType();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getType <em>Type</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getType
+	 * <em>Type</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Type</em>' attribute.
 	 * @see #getType()
 	 * @generated

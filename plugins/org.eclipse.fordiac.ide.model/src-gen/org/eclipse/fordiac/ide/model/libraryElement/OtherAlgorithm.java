@@ -21,7 +21,8 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage <em>Language</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage
+ * <em>Language</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getOtherAlgorithm()
@@ -48,8 +49,10 @@ public interface OtherAlgorithm extends TextAlgorithm {
 	String getLanguage();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage <em>Language</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage
+	 * <em>Language</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Language</em>' attribute.
 	 * @see #getLanguage()
 	 * @generated

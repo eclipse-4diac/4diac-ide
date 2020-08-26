@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 public class DemultiplexerImpl extends StructManipulatorImpl implements Demultiplexer {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected DemultiplexerImpl() {
@@ -48,6 +49,7 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -60,7 +62,8 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 		super.setAttribute(attributeName, type, value, comment);
 		if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(attributeName)) {
 			setMemberVariablesAsPorts(null);
-			List<String> visibleChildrenNames = Arrays.asList(value.trim().split(LibraryElementTags.VARIABLE_SEPARATOR)); 
+			List<String> visibleChildrenNames = Arrays
+					.asList(value.trim().split(LibraryElementTags.VARIABLE_SEPARATOR));
 			setMemberVariablesAsPort(getVarDeclarations(visibleChildrenNames));
 		}
 	}
@@ -95,7 +98,7 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 
 	@Override
 	public boolean deleteAttribute(String attributeName) {
-		if (attributeName.equals(LibraryElementTags.DEMUX_VISIBLE_CHILDREN)) { 
+		if (attributeName.equals(LibraryElementTags.DEMUX_VISIBLE_CHILDREN)) {
 			setMemberVariablesAsPorts(getStructType());
 		}
 		return super.deleteAttribute(attributeName);

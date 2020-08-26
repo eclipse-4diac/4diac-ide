@@ -73,25 +73,19 @@ public class PrimitiveItemProvider extends ItemProviderAdapter implements IEditi
 	}
 
 	/**
-	 * This adds a property descriptor for the Event feature.
-	 * <!-- begin-user-doc
+	 * This adds a property descriptor for the Event feature. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addEventPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Primitive_event_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Primitive_event_feature", "_UI_Primitive_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.PRIMITIVE__EVENT,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Primitive_event_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Primitive_event_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Primitive_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.PRIMITIVE__EVENT, true, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -101,19 +95,13 @@ public class PrimitiveItemProvider extends ItemProviderAdapter implements IEditi
 	 * @generated
 	 */
 	protected void addParametersPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Primitive_parameters_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Primitive_parameters_feature", "_UI_Primitive_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.PRIMITIVE__PARAMETERS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Primitive_parameters_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Primitive_parameters_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Primitive_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.PRIMITIVE__PARAMETERS, true, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -123,24 +111,17 @@ public class PrimitiveItemProvider extends ItemProviderAdapter implements IEditi
 	 * @generated
 	 */
 	protected void addInterfacePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Primitive_interface_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Primitive_interface_feature", "_UI_Primitive_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.PRIMITIVE__INTERFACE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Primitive_interface_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Primitive_interface_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Primitive_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.PRIMITIVE__INTERFACE, true, false, true, null, null, null));
 	}
 
 	/**
-	 * This returns Primitive.gif.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This returns Primitive.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -149,23 +130,23 @@ public class PrimitiveItemProvider extends ItemProviderAdapter implements IEditi
 	}
 
 	/**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Primitive)object).getEvent();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Primitive_type") : //$NON-NLS-1$
-			getString("_UI_Primitive_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((Primitive) object).getEvent();
+		return label == null || label.length() == 0 ? getString("_UI_Primitive_type") : //$NON-NLS-1$
+				getString("_UI_Primitive_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -173,21 +154,21 @@ public class PrimitiveItemProvider extends ItemProviderAdapter implements IEditi
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Primitive.class)) {
-			case LibraryElementPackage.PRIMITIVE__EVENT:
-			case LibraryElementPackage.PRIMITIVE__PARAMETERS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			default:
-				super.notifyChanged(notification);
-				return;
-			}
+		case LibraryElementPackage.PRIMITIVE__EVENT:
+		case LibraryElementPackage.PRIMITIVE__PARAMETERS:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+			return;
+		default:
+			super.notifyChanged(notification);
+			return;
+		}
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

@@ -23,9 +23,12 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.ArrayType#getSubranges <em>Subranges</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.ArrayType#getInitialValues <em>Initial Values</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.ArrayType#getBaseType <em>Base Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.ArrayType#getSubranges
+ * <em>Subranges</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.ArrayType#getInitialValues
+ * <em>Initial Values</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.ArrayType#getBaseType <em>Base
+ * Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getArrayType()
@@ -34,18 +37,19 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface ArrayType extends AnyDerivedType {
 	/**
-	 * Returns the value of the '<em><b>Subranges</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.data.Subrange}.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Subranges</b></em>' containment reference
+	 * list. The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.data.Subrange}. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Subranges</em>' containment reference list isn't
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Subranges</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getArrayType_Subranges()
-	 * @model containment="true" required="true"
-	 *        extendedMetaData="kind='element' name='Subrange' namespace='##targetNamespace'"
+	 * @model containment="true" required="true" extendedMetaData="kind='element'
+	 *        name='Subrange' namespace='##targetNamespace'"
 	 * @generated
 	 */
 	EList<Subrange> getSubranges();
@@ -69,9 +73,11 @@ public interface ArrayType extends AnyDerivedType {
 	String getInitialValues();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.ArrayType#getInitialValues <em>Initial Values</em>}' attribute.
-	 * <!-- begin-user-doc --> <!--
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.data.ArrayType#getInitialValues
+	 * <em>Initial Values</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Initial Values</em>' attribute.
 	 * @see #getInitialValues()
 	 * @generated
@@ -96,8 +102,10 @@ public interface ArrayType extends AnyDerivedType {
 	DataType getBaseType();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.ArrayType#getBaseType <em>Base Type</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.data.ArrayType#getBaseType <em>Base
+	 * Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Base Type</em>' reference.
 	 * @see #getBaseType()
 	 * @generated

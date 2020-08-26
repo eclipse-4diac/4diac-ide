@@ -26,8 +26,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive} object.
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class InputPrimitiveItemProvider extends PrimitiveItemProvider {
@@ -91,9 +93,10 @@ public class InputPrimitiveItemProvider extends PrimitiveItemProvider {
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -103,10 +106,10 @@ public class InputPrimitiveItemProvider extends PrimitiveItemProvider {
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

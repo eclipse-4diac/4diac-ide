@@ -23,7 +23,8 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SegmentType#getVarDeclaration <em>Var Declaration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SegmentType#getVarDeclaration
+ * <em>Var Declaration</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSegmentType()

@@ -45,13 +45,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getX <em>X</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getY <em>Y</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getColor <em>Color</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getVarDeclarations <em>Var Declarations</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getResource <em>Resource</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getProfile <em>Profile</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getInConnections <em>In Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getX
+ * <em>X</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getY
+ * <em>Y</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getColor
+ * <em>Color</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getVarDeclarations
+ * <em>Var Declarations</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getResource
+ * <em>Resource</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getProfile
+ * <em>Profile</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getInConnections
+ * <em>In Connections</em>}</li>
  * </ul>
  *
  * @generated
@@ -98,8 +105,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	protected int y = Y_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getColor() <em>Color</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getColor() <em>Color</em>}' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getColor()
 	 * @generated
 	 * @ordered
@@ -107,9 +115,10 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	protected Color color;
 
 	/**
-	 * The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!--
+	 * The cached value of the '{@link #getVarDeclarations() <em>Var
+	 * Declarations</em>}' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @see #getVarDeclarations()
 	 * @generated
 	 * @ordered
@@ -117,8 +126,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	protected EList<VarDeclaration> varDeclarations;
 
 	/**
-	 * The cached value of the '{@link #getResource() <em>Resource</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getResource() <em>Resource</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getResource()
 	 * @generated
 	 * @ordered
@@ -128,6 +138,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	/**
 	 * The default value of the '{@link #getProfile() <em>Profile</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getProfile()
 	 * @generated
 	 * @ordered
@@ -137,6 +148,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	/**
 	 * The cached value of the '{@link #getProfile() <em>Profile</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getProfile()
 	 * @generated
 	 * @ordered
@@ -144,8 +156,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	protected String profile = PROFILE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getInConnections() <em>In Connections</em>}' reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getInConnections() <em>In Connections</em>}'
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getInConnections()
 	 * @generated
 	 * @ordered
@@ -154,6 +167,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected DeviceImpl() {
@@ -162,6 +176,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -171,18 +186,21 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Resource> getResource() {
 		if (resource == null) {
-			resource = new EObjectContainmentWithInverseEList<Resource>(Resource.class, this, LibraryElementPackage.DEVICE__RESOURCE, LibraryElementPackage.RESOURCE__DEVICE);
+			resource = new EObjectContainmentWithInverseEList<Resource>(Resource.class, this,
+					LibraryElementPackage.DEVICE__RESOURCE, LibraryElementPackage.RESOURCE__DEVICE);
 		}
 		return resource;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -192,6 +210,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -204,6 +223,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -213,6 +233,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -225,22 +246,27 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Color getColor() {
 		if (color != null && color.eIsProxy()) {
-			InternalEObject oldColor = (InternalEObject)color;
-			color = (Color)eResolveProxy(oldColor);
+			InternalEObject oldColor = (InternalEObject) color;
+			color = (Color) eResolveProxy(oldColor);
 			if (color != oldColor) {
-				InternalEObject newColor = (InternalEObject)color;
-				NotificationChain msgs = oldColor.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, null);
+				InternalEObject newColor = (InternalEObject) color;
+				NotificationChain msgs = oldColor.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, null);
 				if (newColor.eInternalContainer() == null) {
-					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, msgs);
+					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR,
+							null, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
+				if (msgs != null)
+					msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEVICE__COLOR, oldColor, color));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEVICE__COLOR,
+							oldColor, color));
 			}
 		}
 		return color;
@@ -248,6 +274,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Color basicGetColor() {
@@ -256,20 +283,26 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetColor(Color newColor, NotificationChain msgs) {
 		Color oldColor = color;
 		color = newColor;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__COLOR, oldColor, newColor);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.DEVICE__COLOR, oldColor, newColor);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -277,30 +310,36 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		if (newColor != color) {
 			NotificationChain msgs = null;
 			if (color != null)
-				msgs = ((InternalEObject)color).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, msgs);
+				msgs = ((InternalEObject) color).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, msgs);
 			if (newColor != null)
-				msgs = ((InternalEObject)newColor).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, msgs);
+				msgs = ((InternalEObject) newColor).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, msgs);
 			msgs = basicSetColor(newColor, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__COLOR, newColor, newColor));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__COLOR, newColor,
+					newColor));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
-			varDeclarations = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.DEVICE__VAR_DECLARATIONS);
+			varDeclarations = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this,
+					LibraryElementPackage.DEVICE__VAR_DECLARATIONS);
 		}
 		return varDeclarations;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -310,6 +349,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -317,23 +357,27 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		String oldProfile = profile;
 		profile = newProfile;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__PROFILE, oldProfile, profile));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__PROFILE, oldProfile,
+					profile));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Link> getInConnections() {
 		if (inConnections == null) {
-			inConnections = new EObjectWithInverseResolvingEList<Link>(Link.class, this, LibraryElementPackage.DEVICE__IN_CONNECTIONS, LibraryElementPackage.LINK__DEVICE);
+			inConnections = new EObjectWithInverseResolvingEList<Link>(Link.class, this,
+					LibraryElementPackage.DEVICE__IN_CONNECTIONS, LibraryElementPackage.LINK__DEVICE);
 		}
 		return inConnections;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -343,6 +387,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -352,20 +397,23 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public DeviceType getType() {
-		//this cannot be moved to the annotation class because there we don't have the super access!!!
+		// this cannot be moved to the annotation class because there we don't have the
+		// super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
-		if(type instanceof DeviceType){
-			return (DeviceType) type; 
+		if (type instanceof DeviceType) {
+			return (DeviceType) type;
 		}
 		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -375,22 +423,27 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Color getColorGen() {
 		if (color != null && color.eIsProxy()) {
-			InternalEObject oldColor = (InternalEObject)color;
-			color = (Color)eResolveProxy(oldColor);
+			InternalEObject oldColor = (InternalEObject) color;
+			color = (Color) eResolveProxy(oldColor);
 			if (color != oldColor) {
-				InternalEObject newColor = (InternalEObject)color;
-				NotificationChain msgs = oldColor.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, null);
+				InternalEObject newColor = (InternalEObject) color;
+				NotificationChain msgs = oldColor.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, null);
 				if (newColor.eInternalContainer() == null) {
-					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, msgs);
+					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR,
+							null, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
+				if (msgs != null)
+					msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEVICE__COLOR, oldColor, color));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEVICE__COLOR,
+							oldColor, color));
 			}
 		}
 		return color;
@@ -398,189 +451,204 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.DEVICE__RESOURCE:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getResource()).basicAdd(otherEnd, msgs);
-			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInConnections()).basicAdd(otherEnd, msgs);
-			default:
-				return super.eInverseAdd(otherEnd, featureID, msgs);
+		case LibraryElementPackage.DEVICE__RESOURCE:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getResource()).basicAdd(otherEnd, msgs);
+		case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getInConnections()).basicAdd(otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.DEVICE__COLOR:
-				return basicSetColor(null, msgs);
-			case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
-				return ((InternalEList<?>)getVarDeclarations()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.DEVICE__RESOURCE:
-				return ((InternalEList<?>)getResource()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
-				return ((InternalEList<?>)getInConnections()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case LibraryElementPackage.DEVICE__COLOR:
+			return basicSetColor(null, msgs);
+		case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
+			return ((InternalEList<?>) getVarDeclarations()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.DEVICE__RESOURCE:
+			return ((InternalEList<?>) getResource()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
+			return ((InternalEList<?>) getInConnections()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.DEVICE__X:
-				return getX();
-			case LibraryElementPackage.DEVICE__Y:
-				return getY();
-			case LibraryElementPackage.DEVICE__COLOR:
-				if (resolve) return getColor();
-				return basicGetColor();
-			case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
-				return getVarDeclarations();
-			case LibraryElementPackage.DEVICE__RESOURCE:
-				return getResource();
-			case LibraryElementPackage.DEVICE__PROFILE:
-				return getProfile();
-			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
-				return getInConnections();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.DEVICE__X:
+			return getX();
+		case LibraryElementPackage.DEVICE__Y:
+			return getY();
+		case LibraryElementPackage.DEVICE__COLOR:
+			if (resolve)
+				return getColor();
+			return basicGetColor();
+		case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
+			return getVarDeclarations();
+		case LibraryElementPackage.DEVICE__RESOURCE:
+			return getResource();
+		case LibraryElementPackage.DEVICE__PROFILE:
+			return getProfile();
+		case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
+			return getInConnections();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.DEVICE__X:
-				setX((Integer)newValue);
-				return;
-			case LibraryElementPackage.DEVICE__Y:
-				setY((Integer)newValue);
-				return;
-			case LibraryElementPackage.DEVICE__COLOR:
-				setColor((Color)newValue);
-				return;
-			case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
-				getVarDeclarations().clear();
-				getVarDeclarations().addAll((Collection<? extends VarDeclaration>)newValue);
-				return;
-			case LibraryElementPackage.DEVICE__RESOURCE:
-				getResource().clear();
-				getResource().addAll((Collection<? extends Resource>)newValue);
-				return;
-			case LibraryElementPackage.DEVICE__PROFILE:
-				setProfile((String)newValue);
-				return;
-			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
-				getInConnections().clear();
-				getInConnections().addAll((Collection<? extends Link>)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.DEVICE__X:
+			setX((Integer) newValue);
+			return;
+		case LibraryElementPackage.DEVICE__Y:
+			setY((Integer) newValue);
+			return;
+		case LibraryElementPackage.DEVICE__COLOR:
+			setColor((Color) newValue);
+			return;
+		case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
+			getVarDeclarations().clear();
+			getVarDeclarations().addAll((Collection<? extends VarDeclaration>) newValue);
+			return;
+		case LibraryElementPackage.DEVICE__RESOURCE:
+			getResource().clear();
+			getResource().addAll((Collection<? extends Resource>) newValue);
+			return;
+		case LibraryElementPackage.DEVICE__PROFILE:
+			setProfile((String) newValue);
+			return;
+		case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
+			getInConnections().clear();
+			getInConnections().addAll((Collection<? extends Link>) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.DEVICE__X:
-				setX(X_EDEFAULT);
-				return;
-			case LibraryElementPackage.DEVICE__Y:
-				setY(Y_EDEFAULT);
-				return;
-			case LibraryElementPackage.DEVICE__COLOR:
-				setColor((Color)null);
-				return;
-			case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
-				getVarDeclarations().clear();
-				return;
-			case LibraryElementPackage.DEVICE__RESOURCE:
-				getResource().clear();
-				return;
-			case LibraryElementPackage.DEVICE__PROFILE:
-				setProfile(PROFILE_EDEFAULT);
-				return;
-			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
-				getInConnections().clear();
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.DEVICE__X:
+			setX(X_EDEFAULT);
+			return;
+		case LibraryElementPackage.DEVICE__Y:
+			setY(Y_EDEFAULT);
+			return;
+		case LibraryElementPackage.DEVICE__COLOR:
+			setColor((Color) null);
+			return;
+		case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
+			getVarDeclarations().clear();
+			return;
+		case LibraryElementPackage.DEVICE__RESOURCE:
+			getResource().clear();
+			return;
+		case LibraryElementPackage.DEVICE__PROFILE:
+			setProfile(PROFILE_EDEFAULT);
+			return;
+		case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
+			getInConnections().clear();
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.DEVICE__X:
-				return x != X_EDEFAULT;
-			case LibraryElementPackage.DEVICE__Y:
-				return y != Y_EDEFAULT;
-			case LibraryElementPackage.DEVICE__COLOR:
-				return color != null;
-			case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
-				return varDeclarations != null && !varDeclarations.isEmpty();
-			case LibraryElementPackage.DEVICE__RESOURCE:
-				return resource != null && !resource.isEmpty();
-			case LibraryElementPackage.DEVICE__PROFILE:
-				return PROFILE_EDEFAULT == null ? profile != null : !PROFILE_EDEFAULT.equals(profile);
-			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
-				return inConnections != null && !inConnections.isEmpty();
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.DEVICE__X:
+			return x != X_EDEFAULT;
+		case LibraryElementPackage.DEVICE__Y:
+			return y != Y_EDEFAULT;
+		case LibraryElementPackage.DEVICE__COLOR:
+			return color != null;
+		case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
+			return varDeclarations != null && !varDeclarations.isEmpty();
+		case LibraryElementPackage.DEVICE__RESOURCE:
+			return resource != null && !resource.isEmpty();
+		case LibraryElementPackage.DEVICE__PROFILE:
+			return PROFILE_EDEFAULT == null ? profile != null : !PROFILE_EDEFAULT.equals(profile);
+		case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
+			return inConnections != null && !inConnections.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
 			switch (derivedFeatureID) {
-				case LibraryElementPackage.DEVICE__X: return LibraryElementPackage.POSITIONABLE_ELEMENT__X;
-				case LibraryElementPackage.DEVICE__Y: return LibraryElementPackage.POSITIONABLE_ELEMENT__Y;
-				default: return -1;
+			case LibraryElementPackage.DEVICE__X:
+				return LibraryElementPackage.POSITIONABLE_ELEMENT__X;
+			case LibraryElementPackage.DEVICE__Y:
+				return LibraryElementPackage.POSITIONABLE_ELEMENT__Y;
+			default:
+				return -1;
 			}
 		}
 		if (baseClass == ColorizableElement.class) {
 			switch (derivedFeatureID) {
-				case LibraryElementPackage.DEVICE__COLOR: return LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR;
-				default: return -1;
+			case LibraryElementPackage.DEVICE__COLOR:
+				return LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR;
+			default:
+				return -1;
 			}
 		}
 		if (baseClass == IVarElement.class) {
 			switch (derivedFeatureID) {
-				case LibraryElementPackage.DEVICE__VAR_DECLARATIONS: return LibraryElementPackage.IVAR_ELEMENT__VAR_DECLARATIONS;
-				default: return -1;
+			case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
+				return LibraryElementPackage.IVAR_ELEMENT__VAR_DECLARATIONS;
+			default:
+				return -1;
 			}
 		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
@@ -588,27 +656,35 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
 			switch (baseFeatureID) {
-				case LibraryElementPackage.POSITIONABLE_ELEMENT__X: return LibraryElementPackage.DEVICE__X;
-				case LibraryElementPackage.POSITIONABLE_ELEMENT__Y: return LibraryElementPackage.DEVICE__Y;
-				default: return -1;
+			case LibraryElementPackage.POSITIONABLE_ELEMENT__X:
+				return LibraryElementPackage.DEVICE__X;
+			case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
+				return LibraryElementPackage.DEVICE__Y;
+			default:
+				return -1;
 			}
 		}
 		if (baseClass == ColorizableElement.class) {
 			switch (baseFeatureID) {
-				case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR: return LibraryElementPackage.DEVICE__COLOR;
-				default: return -1;
+			case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
+				return LibraryElementPackage.DEVICE__COLOR;
+			default:
+				return -1;
 			}
 		}
 		if (baseClass == IVarElement.class) {
 			switch (baseFeatureID) {
-				case LibraryElementPackage.IVAR_ELEMENT__VAR_DECLARATIONS: return LibraryElementPackage.DEVICE__VAR_DECLARATIONS;
-				default: return -1;
+			case LibraryElementPackage.IVAR_ELEMENT__VAR_DECLARATIONS:
+				return LibraryElementPackage.DEVICE__VAR_DECLARATIONS;
+			default:
+				return -1;
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
@@ -616,11 +692,13 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (x: "); //$NON-NLS-1$

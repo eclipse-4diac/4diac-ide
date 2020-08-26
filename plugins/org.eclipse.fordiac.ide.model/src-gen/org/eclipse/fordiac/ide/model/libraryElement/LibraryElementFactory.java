@@ -18,17 +18,19 @@ import org.eclipse.emf.ecore.EFactory;
 /**
  * <!-- begin-user-doc --> The <b>Factory</b> for the model. It provides a
  * create method for each non-abstract class of the model. <!-- end-user-doc -->
+ * 
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
  * @generated
  */
 public interface LibraryElementFactory extends EFactory {
 	/**
-	 * The singleton instance of the factory.
-	 * <!-- begin-user-doc --> <!--
+	 * The singleton instance of the factory. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	LibraryElementFactory eINSTANCE = org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementFactoryImpl.init();
+	LibraryElementFactory eINSTANCE = org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementFactoryImpl
+			.init();
 
 	/**
 	 * Returns a new object of class '<em>Adapter Declaration</em>'. <!--
@@ -40,126 +42,126 @@ public interface LibraryElementFactory extends EFactory {
 	AdapterDeclaration createAdapterDeclaration();
 
 	/**
-	 * Returns a new object of class '<em>Adapter Type</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Adapter Type</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Adapter Type</em>'.
 	 * @generated
 	 */
 	AdapterType createAdapterType();
 
 	/**
-	 * Returns a new object of class '<em>Application</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Application</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Application</em>'.
 	 * @generated
 	 */
 	Application createApplication();
 
 	/**
-	 * Returns a new object of class '<em>Basic FB Type</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Basic FB Type</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Basic FB Type</em>'.
 	 * @generated
 	 */
 	BasicFBType createBasicFBType();
 
 	/**
-	 * Returns a new object of class '<em>Compiler Info</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Compiler Info</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Compiler Info</em>'.
 	 * @generated
 	 */
 	CompilerInfo createCompilerInfo();
 
 	/**
-	 * Returns a new object of class '<em>Compiler</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Compiler</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Compiler</em>'.
 	 * @generated
 	 */
 	Compiler createCompiler();
 
 	/**
-	 * Returns a new object of class '<em>Device</em>'.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns a new object of class '<em>Device</em>'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Device</em>'.
 	 * @generated
 	 */
 	Device createDevice();
 
 	/**
-	 * Returns a new object of class '<em>Device Type</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Device Type</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Device Type</em>'.
 	 * @generated
 	 */
 	DeviceType createDeviceType();
 
 	/**
-	 * Returns a new object of class '<em>EC Action</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>EC Action</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>EC Action</em>'.
 	 * @generated
 	 */
 	ECAction createECAction();
 
 	/**
-	 * Returns a new object of class '<em>ECC</em>'.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns a new object of class '<em>ECC</em>'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>ECC</em>'.
 	 * @generated
 	 */
 	ECC createECC();
 
 	/**
-	 * Returns a new object of class '<em>EC State</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>EC State</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>EC State</em>'.
 	 * @generated
 	 */
 	ECState createECState();
 
 	/**
-	 * Returns a new object of class '<em>EC Transition</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>EC Transition</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>EC Transition</em>'.
 	 * @generated
 	 */
 	ECTransition createECTransition();
 
 	/**
-	 * Returns a new object of class '<em>Event</em>'.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns a new object of class '<em>Event</em>'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Event</em>'.
 	 * @generated
 	 */
 	Event createEvent();
 
 	/**
-	 * Returns a new object of class '<em>FB Network</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>FB Network</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>FB Network</em>'.
 	 * @generated
 	 */
 	FBNetwork createFBNetwork();
 
 	/**
-	 * Returns a new object of class '<em>FB</em>'.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns a new object of class '<em>FB</em>'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>FB</em>'.
 	 * @generated
 	 */
@@ -175,63 +177,63 @@ public interface LibraryElementFactory extends EFactory {
 	FBNetworkElement createFBNetworkElement();
 
 	/**
-	 * Returns a new object of class '<em>FB Type</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>FB Type</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>FB Type</em>'.
 	 * @generated
 	 */
 	FBType createFBType();
 
 	/**
-	 * Returns a new object of class '<em>Identification</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Identification</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Identification</em>'.
 	 * @generated
 	 */
 	Identification createIdentification();
 
 	/**
-	 * Returns a new object of class '<em>Input Primitive</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Input Primitive</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Input Primitive</em>'.
 	 * @generated
 	 */
 	InputPrimitive createInputPrimitive();
 
 	/**
-	 * Returns a new object of class '<em>Interface List</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Interface List</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Interface List</em>'.
 	 * @generated
 	 */
 	InterfaceList createInterfaceList();
 
 	/**
-	 * Returns a new object of class '<em>Link</em>'.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns a new object of class '<em>Link</em>'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Link</em>'.
 	 * @generated
 	 */
 	Link createLink();
 
 	/**
-	 * Returns a new object of class '<em>Mapping</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Mapping</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Mapping</em>'.
 	 * @generated
 	 */
 	Mapping createMapping();
 
 	/**
-	 * Returns a new object of class '<em>Other Algorithm</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Other Algorithm</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Other Algorithm</em>'.
 	 * @generated
 	 */
@@ -247,9 +249,9 @@ public interface LibraryElementFactory extends EFactory {
 	OutputPrimitive createOutputPrimitive();
 
 	/**
-	 * Returns a new object of class '<em>Resource</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Resource</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Resource</em>'.
 	 * @generated
 	 */
@@ -265,18 +267,18 @@ public interface LibraryElementFactory extends EFactory {
 	ResourceTypeName createResourceTypeName();
 
 	/**
-	 * Returns a new object of class '<em>Resource Type</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Resource Type</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Resource Type</em>'.
 	 * @generated
 	 */
 	ResourceType createResourceType();
 
 	/**
-	 * Returns a new object of class '<em>Segment</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Segment</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Segment</em>'.
 	 * @generated
 	 */
@@ -310,27 +312,27 @@ public interface LibraryElementFactory extends EFactory {
 	ServiceInterfaceFBType createServiceInterfaceFBType();
 
 	/**
-	 * Returns a new object of class '<em>ST Algorithm</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>ST Algorithm</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>ST Algorithm</em>'.
 	 * @generated
 	 */
 	STAlgorithm createSTAlgorithm();
 
 	/**
-	 * Returns a new object of class '<em>Sub App</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Sub App</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Sub App</em>'.
 	 * @generated
 	 */
 	SubApp createSubApp();
 
 	/**
-	 * Returns a new object of class '<em>Sub App Type</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Sub App Type</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Sub App Type</em>'.
 	 * @generated
 	 */
@@ -346,45 +348,45 @@ public interface LibraryElementFactory extends EFactory {
 	AutomationSystem createAutomationSystem();
 
 	/**
-	 * Returns a new object of class '<em>Var Declaration</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Var Declaration</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Var Declaration</em>'.
 	 * @generated
 	 */
 	VarDeclaration createVarDeclaration();
 
 	/**
-	 * Returns a new object of class '<em>Version Info</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Version Info</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Version Info</em>'.
 	 * @generated
 	 */
 	VersionInfo createVersionInfo();
 
 	/**
-	 * Returns a new object of class '<em>With</em>'.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns a new object of class '<em>With</em>'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>With</em>'.
 	 * @generated
 	 */
 	With createWith();
 
 	/**
-	 * Returns a new object of class '<em>Library Element</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Library Element</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Library Element</em>'.
 	 * @generated
 	 */
 	LibraryElement createLibraryElement();
 
 	/**
-	 * Returns a new object of class '<em>Compilable Type</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Compilable Type</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Compilable Type</em>'.
 	 * @generated
 	 */
@@ -409,9 +411,9 @@ public interface LibraryElementFactory extends EFactory {
 	CompositeFBType createCompositeFBType();
 
 	/**
-	 * Returns a new object of class '<em>Data Connection</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Data Connection</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Data Connection</em>'.
 	 * @generated
 	 */
@@ -445,9 +447,9 @@ public interface LibraryElementFactory extends EFactory {
 	ServiceInterface createServiceInterface();
 
 	/**
-	 * Returns a new object of class '<em>Value</em>'.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns a new object of class '<em>Value</em>'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Value</em>'.
 	 * @generated
 	 */
@@ -472,36 +474,36 @@ public interface LibraryElementFactory extends EFactory {
 	ResourceTypeFB createResourceTypeFB();
 
 	/**
-	 * Returns a new object of class '<em>Segment Type</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Segment Type</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Segment Type</em>'.
 	 * @generated
 	 */
 	SegmentType createSegmentType();
 
 	/**
-	 * Returns a new object of class '<em>Adapter FB Type</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Adapter FB Type</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Adapter FB Type</em>'.
 	 * @generated
 	 */
 	AdapterFBType createAdapterFBType();
 
 	/**
-	 * Returns a new object of class '<em>Adapter Event</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Adapter Event</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Adapter Event</em>'.
 	 * @generated
 	 */
 	AdapterEvent createAdapterEvent();
 
 	/**
-	 * Returns a new object of class '<em>Service</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Service</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Service</em>'.
 	 * @generated
 	 */
@@ -517,18 +519,18 @@ public interface LibraryElementFactory extends EFactory {
 	TypedConfigureableObject createTypedConfigureableObject();
 
 	/**
-	 * Returns a new object of class '<em>Adapter FB</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Adapter FB</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Adapter FB</em>'.
 	 * @generated
 	 */
 	AdapterFB createAdapterFB();
 
 	/**
-	 * Returns a new object of class '<em>Primitive</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Primitive</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Primitive</em>'.
 	 * @generated
 	 */
@@ -544,9 +546,9 @@ public interface LibraryElementFactory extends EFactory {
 	PositionableElement createPositionableElement();
 
 	/**
-	 * Returns a new object of class '<em>Color</em>'.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns a new object of class '<em>Color</em>'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Color</em>'.
 	 * @generated
 	 */
@@ -571,63 +573,63 @@ public interface LibraryElementFactory extends EFactory {
 	AttributeDeclaration createAttributeDeclaration();
 
 	/**
-	 * Returns a new object of class '<em>Simple FB Type</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Simple FB Type</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Simple FB Type</em>'.
 	 * @generated
 	 */
 	SimpleFBType createSimpleFBType();
 
 	/**
-	 * Returns a new object of class '<em>Base FB Type</em>'.
-	 * <!-- begin-user-doc
+	 * Returns a new object of class '<em>Base FB Type</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Base FB Type</em>'.
 	 * @generated
 	 */
 	BaseFBType createBaseFBType();
 
 	/**
-	 * Returns a new object of class '<em>Demultiplexer</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns a new object of class '<em>Demultiplexer</em>'. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Demultiplexer</em>'.
 	 * @generated
 	 */
 	Demultiplexer createDemultiplexer();
 
 	/**
-	 * Returns a new object of class '<em>Multiplexer</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Multiplexer</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Multiplexer</em>'.
 	 * @generated
 	 */
 	Multiplexer createMultiplexer();
 
 	/**
-	 * Returns a new object of class '<em>Local Variable</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns a new object of class '<em>Local Variable</em>'. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Local Variable</em>'.
 	 * @generated
 	 */
 	LocalVariable createLocalVariable();
 
 	/**
-	 * Returns a new object of class '<em>Attribute</em>'.
-	 * <!-- begin-user-doc -->
+	 * Returns a new object of class '<em>Attribute</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Attribute</em>'.
 	 * @generated
 	 */
 	Attribute createAttribute();
 
 	/**
-	 * Returns the package supported by this factory.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns the package supported by this factory. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the package supported by this factory.
 	 * @generated
 	 */

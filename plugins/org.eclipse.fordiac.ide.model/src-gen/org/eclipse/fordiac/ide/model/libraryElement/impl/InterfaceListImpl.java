@@ -37,20 +37,27 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getPlugs <em>Plugs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getSockets <em>Sockets</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getEventInputs <em>Event Inputs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getEventOutputs <em>Event Outputs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getInputVars <em>Input Vars</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getOutputVars <em>Output Vars</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getPlugs
+ * <em>Plugs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getSockets
+ * <em>Sockets</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getEventInputs
+ * <em>Event Inputs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getEventOutputs
+ * <em>Event Outputs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getInputVars
+ * <em>Input Vars</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getOutputVars
+ * <em>Output Vars</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	/**
-	 * The cached value of the '{@link #getPlugs() <em>Plugs</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getPlugs() <em>Plugs</em>}' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getPlugs()
 	 * @generated
 	 * @ordered
@@ -58,8 +65,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	protected EList<AdapterDeclaration> plugs;
 
 	/**
-	 * The cached value of the '{@link #getSockets() <em>Sockets</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getSockets() <em>Sockets</em>}' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getSockets()
 	 * @generated
 	 * @ordered
@@ -67,8 +75,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	protected EList<AdapterDeclaration> sockets;
 
 	/**
-	 * The cached value of the '{@link #getEventInputs() <em>Event Inputs</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getEventInputs() <em>Event Inputs</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getEventInputs()
 	 * @generated
 	 * @ordered
@@ -76,8 +85,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	protected EList<Event> eventInputs;
 
 	/**
-	 * The cached value of the '{@link #getEventOutputs() <em>Event Outputs</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getEventOutputs() <em>Event Outputs</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getEventOutputs()
 	 * @generated
 	 * @ordered
@@ -85,8 +95,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	protected EList<Event> eventOutputs;
 
 	/**
-	 * The cached value of the '{@link #getInputVars() <em>Input Vars</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getInputVars() <em>Input Vars</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getInputVars()
 	 * @generated
 	 * @ordered
@@ -94,8 +105,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	protected EList<VarDeclaration> inputVars;
 
 	/**
-	 * The cached value of the '{@link #getOutputVars() <em>Output Vars</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getOutputVars() <em>Output Vars</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getOutputVars()
 	 * @generated
 	 * @ordered
@@ -104,6 +116,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected InterfaceListImpl() {
@@ -112,6 +125,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -121,78 +135,91 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<AdapterDeclaration> getPlugs() {
 		if (plugs == null) {
-			plugs = new EObjectContainmentEList<AdapterDeclaration>(AdapterDeclaration.class, this, LibraryElementPackage.INTERFACE_LIST__PLUGS);
+			plugs = new EObjectContainmentEList<AdapterDeclaration>(AdapterDeclaration.class, this,
+					LibraryElementPackage.INTERFACE_LIST__PLUGS);
 		}
 		return plugs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<AdapterDeclaration> getSockets() {
 		if (sockets == null) {
-			sockets = new EObjectContainmentEList<AdapterDeclaration>(AdapterDeclaration.class, this, LibraryElementPackage.INTERFACE_LIST__SOCKETS);
+			sockets = new EObjectContainmentEList<AdapterDeclaration>(AdapterDeclaration.class, this,
+					LibraryElementPackage.INTERFACE_LIST__SOCKETS);
 		}
 		return sockets;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Event> getEventInputs() {
 		if (eventInputs == null) {
-			eventInputs = new EObjectContainmentEList<Event>(Event.class, this, LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS);
+			eventInputs = new EObjectContainmentEList<Event>(Event.class, this,
+					LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS);
 		}
 		return eventInputs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Event> getEventOutputs() {
 		if (eventOutputs == null) {
-			eventOutputs = new EObjectContainmentEList<Event>(Event.class, this, LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS);
+			eventOutputs = new EObjectContainmentEList<Event>(Event.class, this,
+					LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS);
 		}
 		return eventOutputs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<VarDeclaration> getInputVars() {
 		if (inputVars == null) {
-			inputVars = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.INTERFACE_LIST__INPUT_VARS);
+			inputVars = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this,
+					LibraryElementPackage.INTERFACE_LIST__INPUT_VARS);
 		}
 		return inputVars;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<VarDeclaration> getOutputVars() {
 		if (outputVars == null) {
-			outputVars = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS);
+			outputVars = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this,
+					LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS);
 		}
 		return outputVars;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -202,6 +229,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -211,6 +239,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -220,6 +249,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -229,6 +259,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -238,6 +269,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -247,6 +279,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -256,142 +289,147 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
-				return ((InternalEList<?>)getPlugs()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
-				return ((InternalEList<?>)getSockets()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
-				return ((InternalEList<?>)getEventInputs()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
-				return ((InternalEList<?>)getEventOutputs()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
-				return ((InternalEList<?>)getInputVars()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
-				return ((InternalEList<?>)getOutputVars()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case LibraryElementPackage.INTERFACE_LIST__PLUGS:
+			return ((InternalEList<?>) getPlugs()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
+			return ((InternalEList<?>) getSockets()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
+			return ((InternalEList<?>) getEventInputs()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
+			return ((InternalEList<?>) getEventOutputs()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
+			return ((InternalEList<?>) getInputVars()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
+			return ((InternalEList<?>) getOutputVars()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
-				return getPlugs();
-			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
-				return getSockets();
-			case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
-				return getEventInputs();
-			case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
-				return getEventOutputs();
-			case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
-				return getInputVars();
-			case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
-				return getOutputVars();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.INTERFACE_LIST__PLUGS:
+			return getPlugs();
+		case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
+			return getSockets();
+		case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
+			return getEventInputs();
+		case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
+			return getEventOutputs();
+		case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
+			return getInputVars();
+		case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
+			return getOutputVars();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
-				getPlugs().clear();
-				getPlugs().addAll((Collection<? extends AdapterDeclaration>)newValue);
-				return;
-			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
-				getSockets().clear();
-				getSockets().addAll((Collection<? extends AdapterDeclaration>)newValue);
-				return;
-			case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
-				getEventInputs().clear();
-				getEventInputs().addAll((Collection<? extends Event>)newValue);
-				return;
-			case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
-				getEventOutputs().clear();
-				getEventOutputs().addAll((Collection<? extends Event>)newValue);
-				return;
-			case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
-				getInputVars().clear();
-				getInputVars().addAll((Collection<? extends VarDeclaration>)newValue);
-				return;
-			case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
-				getOutputVars().clear();
-				getOutputVars().addAll((Collection<? extends VarDeclaration>)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.INTERFACE_LIST__PLUGS:
+			getPlugs().clear();
+			getPlugs().addAll((Collection<? extends AdapterDeclaration>) newValue);
+			return;
+		case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
+			getSockets().clear();
+			getSockets().addAll((Collection<? extends AdapterDeclaration>) newValue);
+			return;
+		case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
+			getEventInputs().clear();
+			getEventInputs().addAll((Collection<? extends Event>) newValue);
+			return;
+		case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
+			getEventOutputs().clear();
+			getEventOutputs().addAll((Collection<? extends Event>) newValue);
+			return;
+		case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
+			getInputVars().clear();
+			getInputVars().addAll((Collection<? extends VarDeclaration>) newValue);
+			return;
+		case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
+			getOutputVars().clear();
+			getOutputVars().addAll((Collection<? extends VarDeclaration>) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
-				getPlugs().clear();
-				return;
-			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
-				getSockets().clear();
-				return;
-			case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
-				getEventInputs().clear();
-				return;
-			case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
-				getEventOutputs().clear();
-				return;
-			case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
-				getInputVars().clear();
-				return;
-			case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
-				getOutputVars().clear();
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.INTERFACE_LIST__PLUGS:
+			getPlugs().clear();
+			return;
+		case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
+			getSockets().clear();
+			return;
+		case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
+			getEventInputs().clear();
+			return;
+		case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
+			getEventOutputs().clear();
+			return;
+		case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
+			getInputVars().clear();
+			return;
+		case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
+			getOutputVars().clear();
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
-				return plugs != null && !plugs.isEmpty();
-			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
-				return sockets != null && !sockets.isEmpty();
-			case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
-				return eventInputs != null && !eventInputs.isEmpty();
-			case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
-				return eventOutputs != null && !eventOutputs.isEmpty();
-			case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
-				return inputVars != null && !inputVars.isEmpty();
-			case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
-				return outputVars != null && !outputVars.isEmpty();
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.INTERFACE_LIST__PLUGS:
+			return plugs != null && !plugs.isEmpty();
+		case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
+			return sockets != null && !sockets.isEmpty();
+		case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
+			return eventInputs != null && !eventInputs.isEmpty();
+		case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
+			return eventOutputs != null && !eventOutputs.isEmpty();
+		case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
+			return inputVars != null && !inputVars.isEmpty();
+		case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
+			return outputVars != null && !outputVars.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 

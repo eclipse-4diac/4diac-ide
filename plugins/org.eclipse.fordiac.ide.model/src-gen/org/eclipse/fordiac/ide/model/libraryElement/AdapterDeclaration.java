@@ -23,8 +23,10 @@ import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getPaletteEntry <em>Palette Entry</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB
+ * <em>Adapter FB</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getPaletteEntry
+ * <em>Palette Entry</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration()
@@ -34,14 +36,16 @@ import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 public interface AdapterDeclaration extends VarDeclaration {
 
 	/**
-	 * Returns the value of the '<em><b>Adapter FB</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl <em>Adapter Decl</em>}'.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Adapter FB</b></em>' reference. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl
+	 * <em>Adapter Decl</em>}'. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Adapter FB</em>' reference isn't clear, there
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Adapter FB</em>' reference.
 	 * @see #setAdapterFB(AdapterFB)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration_AdapterFB()
@@ -94,6 +98,7 @@ public interface AdapterDeclaration extends VarDeclaration {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation"
 	 * @generated
 	 */

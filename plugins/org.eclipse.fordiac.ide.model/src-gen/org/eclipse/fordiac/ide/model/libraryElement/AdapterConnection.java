@@ -25,6 +25,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 public interface AdapterConnection extends Connection {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
@@ -32,6 +33,7 @@ public interface AdapterConnection extends Connection {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

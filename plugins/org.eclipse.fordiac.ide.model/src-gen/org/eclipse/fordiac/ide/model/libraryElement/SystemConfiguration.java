@@ -24,9 +24,12 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getDevices <em>Devices</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getSegments <em>Segments</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getLinks <em>Links</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getDevices
+ * <em>Devices</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getSegments
+ * <em>Segments</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getLinks
+ * <em>Links</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSystemConfiguration()
@@ -98,6 +101,7 @@ public interface SystemConfiguration extends EObject {
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
@@ -105,6 +109,7 @@ public interface SystemConfiguration extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true" nameRequired="true"
 	 * @generated
 	 */
@@ -112,6 +117,7 @@ public interface SystemConfiguration extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true" nameRequired="true"
 	 * @generated
 	 */

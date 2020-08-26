@@ -66,24 +66,17 @@ public class AdapterFBItemProvider extends FBItemProvider {
 	 * @generated
 	 */
 	protected void addAdapterDeclPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AdapterFB_adapterDecl_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_AdapterFB_adapterDecl_feature", "_UI_AdapterFB_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.ADAPTER_FB__ADAPTER_DECL,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_AdapterFB_adapterDecl_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_AdapterFB_adapterDecl_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_AdapterFB_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.ADAPTER_FB__ADAPTER_DECL, true, false, true, null, null, null));
 	}
 
 	/**
-	 * This returns AdapterFB.gif.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This returns AdapterFB.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -92,23 +85,23 @@ public class AdapterFBItemProvider extends FBItemProvider {
 	}
 
 	/**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((AdapterFB)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_AdapterFB_type") : //$NON-NLS-1$
-			getString("_UI_AdapterFB_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((AdapterFB) object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_AdapterFB_type") : //$NON-NLS-1$
+				getString("_UI_AdapterFB_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -118,10 +111,10 @@ public class AdapterFBItemProvider extends FBItemProvider {
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

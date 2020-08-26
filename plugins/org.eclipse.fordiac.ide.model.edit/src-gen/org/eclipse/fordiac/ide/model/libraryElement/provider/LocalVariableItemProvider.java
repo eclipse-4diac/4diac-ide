@@ -15,7 +15,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -31,16 +30,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable} object.
+ * <!-- begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class LocalVariableItemProvider extends VarDeclarationItemProvider {
 	/**
-	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public LocalVariableItemProvider(AdapterFactory adapterFactory) {
@@ -48,9 +48,9 @@ public class LocalVariableItemProvider extends VarDeclarationItemProvider {
 	}
 
 	/**
-	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -65,53 +65,40 @@ public class LocalVariableItemProvider extends VarDeclarationItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Array Start feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Array Start feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addArrayStartPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_LocalVariable_arrayStart_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_LocalVariable_arrayStart_feature", "_UI_LocalVariable_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.LOCAL_VARIABLE__ARRAY_START,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_LocalVariable_arrayStart_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_LocalVariable_arrayStart_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_LocalVariable_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.LOCAL_VARIABLE__ARRAY_START, true, false, false,
+						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Array Stop feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Array Stop feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addArrayStopPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_LocalVariable_arrayStop_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_LocalVariable_arrayStop_feature", "_UI_LocalVariable_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.LOCAL_VARIABLE__ARRAY_STOP,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_LocalVariable_arrayStop_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_LocalVariable_arrayStop_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_LocalVariable_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.LOCAL_VARIABLE__ARRAY_STOP, true, false, false,
+						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
 	}
 
 	/**
-	 * This returns LocalVariable.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns LocalVariable.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -120,25 +107,23 @@ public class LocalVariableItemProvider extends VarDeclarationItemProvider {
 	}
 
 	/**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LocalVariable)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_LocalVariable_type") : //$NON-NLS-1$
-			getString("_UI_LocalVariable_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((LocalVariable) object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_LocalVariable_type") : //$NON-NLS-1$
+				getString("_UI_LocalVariable_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -146,21 +131,21 @@ public class LocalVariableItemProvider extends VarDeclarationItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(LocalVariable.class)) {
-			case LibraryElementPackage.LOCAL_VARIABLE__ARRAY_START:
-			case LibraryElementPackage.LOCAL_VARIABLE__ARRAY_STOP:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			default:
-				super.notifyChanged(notification);
-				return;
-			}
+		case LibraryElementPackage.LOCAL_VARIABLE__ARRAY_START:
+		case LibraryElementPackage.LOCAL_VARIABLE__ARRAY_STOP:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+			return;
+		default:
+			super.notifyChanged(notification);
+			return;
+		}
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 public class ServiceInterfaceFBTypeImpl extends FBTypeImpl implements ServiceInterfaceFBType {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ServiceInterfaceFBTypeImpl() {
@@ -34,6 +35,7 @@ public class ServiceInterfaceFBTypeImpl extends FBTypeImpl implements ServiceInt
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

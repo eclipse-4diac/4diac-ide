@@ -27,11 +27,16 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLabel <em>Label</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getFile <em>File</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLastModificationTimestamp <em>Last Modification Timestamp</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getPalette <em>Palette</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLabel
+ * <em>Label</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getFile
+ * <em>File</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLastModificationTimestamp
+ * <em>Last Modification Timestamp</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType
+ * <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getPalette
+ * <em>Palette</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPaletteEntry()
@@ -57,8 +62,10 @@ public interface PaletteEntry extends EObject {
 	String getLabel();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLabel <em>Label</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLabel
+	 * <em>Label</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Label</em>' attribute.
 	 * @see #getLabel()
 	 * @generated
@@ -83,8 +90,10 @@ public interface PaletteEntry extends EObject {
 	IFile getFile();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getFile <em>File</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getFile
+	 * <em>File</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>File</em>' attribute.
 	 * @see #getFile()
 	 * @generated
@@ -92,40 +101,47 @@ public interface PaletteEntry extends EObject {
 	void setFile(IFile value);
 
 	/**
-	 * Returns the value of the '<em><b>Last Modification Timestamp</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Last Modification Timestamp</b></em>'
+	 * attribute. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Last Modification Timestamp</em>' attribute isn't
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Last Modification Timestamp</em>' attribute.
 	 * @see #setLastModificationTimestamp(long)
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPaletteEntry_LastModificationTimestamp()
-	 * @model unique="false" dataType="org.eclipse.emf.ecore.xml.type.Long" transient="true" ordered="false"
+	 * @model unique="false" dataType="org.eclipse.emf.ecore.xml.type.Long"
+	 *        transient="true" ordered="false"
 	 * @generated
 	 */
 	long getLastModificationTimestamp();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLastModificationTimestamp <em>Last Modification Timestamp</em>}' attribute.
-	 * <!-- begin-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLastModificationTimestamp
+	 * <em>Last Modification Timestamp</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Last Modification Timestamp</em>' attribute.
+	 * 
+	 * @param value the new value of the '<em>Last Modification Timestamp</em>'
+	 *              attribute.
 	 * @see #getLastModificationTimestamp()
 	 * @generated
 	 */
 	void setLastModificationTimestamp(long value);
 
 	/**
-	 * Returns the value of the '<em><b>Type</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry <em>Palette Entry</em>}'.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Type</b></em>' reference. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry
+	 * <em>Palette Entry</em>}'. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Type</em>' reference isn't clear, there really
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Type</em>' reference.
 	 * @see #setType(LibraryElement)
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPaletteEntry_Type()
@@ -136,8 +152,10 @@ public interface PaletteEntry extends EObject {
 	LibraryElement getType();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType <em>Type</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType
+	 * <em>Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Type</em>' reference.
 	 * @see #getType()
 	 * @generated
@@ -157,8 +175,10 @@ public interface PaletteEntry extends EObject {
 	Palette getPalette();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getPalette <em>Palette</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getPalette
+	 * <em>Palette</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Palette</em>' reference.
 	 * @see #getPalette()
 	 * @generated
@@ -167,13 +187,16 @@ public interface PaletteEntry extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+	 * 
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        required="true"
 	 * @generated
 	 */
 	String getProjectRelativeTypePath();
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model
 	 * @generated
 	 */
@@ -181,15 +204,18 @@ public interface PaletteEntry extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
+	 * 
+	 * @model kind="operation"
+	 *        dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
 	 * @generated
 	 */
 	TypeImporter getTypeImporter();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary"
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation"
+	 *        dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary"
 	 * @generated
 	 */
 	TypeLibrary getTypeLibrary();

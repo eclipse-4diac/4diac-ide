@@ -25,9 +25,12 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getVersionInfo <em>Version Info</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getIdentification <em>Identification</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry <em>Palette Entry</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getVersionInfo
+ * <em>Version Info</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getIdentification
+ * <em>Identification</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry
+ * <em>Palette Entry</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLibraryElement()
@@ -54,13 +57,14 @@ public interface LibraryElement extends INamedElement {
 	EList<VersionInfo> getVersionInfo();
 
 	/**
-	 * Returns the value of the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Identification</em>' containment reference isn't
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Identification</em>' containment reference.
 	 * @see #setIdentification(Identification)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLibraryElement_Identification()
@@ -70,24 +74,29 @@ public interface LibraryElement extends INamedElement {
 	Identification getIdentification();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getIdentification <em>Identification</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!--
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getIdentification
+	 * <em>Identification</em>}' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * @param value the new value of the '<em>Identification</em>' containment reference.
+	 * 
+	 * @param value the new value of the '<em>Identification</em>' containment
+	 *              reference.
 	 * @see #getIdentification()
 	 * @generated
 	 */
 	void setIdentification(Identification value);
 
 	/**
-	 * Returns the value of the '<em><b>Palette Entry</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Palette Entry</b></em>' reference. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType
+	 * <em>Type</em>}'. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Palette Entry</em>' reference isn't clear, there
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Palette Entry</em>' reference.
 	 * @see #setPaletteEntry(PaletteEntry)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLibraryElement_PaletteEntry()
@@ -110,9 +119,11 @@ public interface LibraryElement extends INamedElement {
 	void setPaletteEntry(PaletteEntry value);
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary" required="true"
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation"
+	 *        dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary"
+	 *        required="true"
 	 * @generated
 	 */
 	TypeLibrary getTypeLibrary();

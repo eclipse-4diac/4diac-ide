@@ -26,15 +26,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherAlgorithmImpl#getLanguage <em>Language</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherAlgorithmImpl#getLanguage
+ * <em>Language</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgorithm {
 	/**
-	 * The default value of the '{@link #getLanguage() <em>Language</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #getLanguage() <em>Language</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getLanguage()
 	 * @generated
 	 * @ordered
@@ -44,6 +46,7 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 	/**
 	 * The cached value of the '{@link #getLanguage() <em>Language</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getLanguage()
 	 * @generated
 	 * @ordered
@@ -52,6 +55,7 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected OtherAlgorithmImpl() {
@@ -60,6 +64,7 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -69,6 +74,7 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -78,6 +84,7 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -85,76 +92,83 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 		String oldLanguage = language;
 		language = newLanguage;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE, oldLanguage, language));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE,
+					oldLanguage, language));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
-				return getLanguage();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
+			return getLanguage();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
-				setLanguage((String)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
+			setLanguage((String) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
-				setLanguage(LANGUAGE_EDEFAULT);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
+			setLanguage(LANGUAGE_EDEFAULT);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
-				return LANGUAGE_EDEFAULT == null ? language != null : !LANGUAGE_EDEFAULT.equals(language);
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
+			return LANGUAGE_EDEFAULT == null ? language != null : !LANGUAGE_EDEFAULT.equals(language);
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (language: "); //$NON-NLS-1$

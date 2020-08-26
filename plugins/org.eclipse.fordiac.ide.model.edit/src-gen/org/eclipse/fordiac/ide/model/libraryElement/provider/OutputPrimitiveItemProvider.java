@@ -30,8 +30,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive} object.
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class OutputPrimitiveItemProvider extends PrimitiveItemProvider {
@@ -68,19 +70,13 @@ public class OutputPrimitiveItemProvider extends PrimitiveItemProvider {
 	 * @generated
 	 */
 	protected void addTestResultPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_OutputPrimitive_TestResult_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_OutputPrimitive_TestResult_feature", "_UI_OutputPrimitive_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.OUTPUT_PRIMITIVE__TEST_RESULT,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_OutputPrimitive_TestResult_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_OutputPrimitive_TestResult_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_OutputPrimitive_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.OUTPUT_PRIMITIVE__TEST_RESULT, true, false, false,
+						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -119,9 +115,10 @@ public class OutputPrimitiveItemProvider extends PrimitiveItemProvider {
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -129,20 +126,20 @@ public class OutputPrimitiveItemProvider extends PrimitiveItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(OutputPrimitive.class)) {
-			case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			default:
-				super.notifyChanged(notification);
-				return;
-			}
+		case LibraryElementPackage.OUTPUT_PRIMITIVE__TEST_RESULT:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+			return;
+		default:
+			super.notifyChanged(notification);
+			return;
+		}
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

@@ -24,9 +24,12 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getRightInterface <em>Right Interface</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getLeftInterface <em>Left Interface</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getServiceSequence <em>Service Sequence</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getRightInterface
+ * <em>Right Interface</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getLeftInterface
+ * <em>Left Interface</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getServiceSequence
+ * <em>Service Sequence</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getService()
@@ -56,13 +59,14 @@ public interface Service extends EObject {
 	EList<ServiceSequence> getServiceSequence();
 
 	/**
-	 * Returns the value of the '<em><b>Right Interface</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Right Interface</b></em>' containment
+	 * reference. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Right Interface</em>' attribute isn't clear, there
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Right Interface</em>' containment reference.
 	 * @see #setRightInterface(ServiceInterface)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getService_RightInterface()
@@ -72,23 +76,27 @@ public interface Service extends EObject {
 	ServiceInterface getRightInterface();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getRightInterface <em>Right Interface</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getRightInterface
+	 * <em>Right Interface</em>}' containment reference. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Right Interface</em>' containment reference.
+	 * 
+	 * @param value the new value of the '<em>Right Interface</em>' containment
+	 *              reference.
 	 * @see #getRightInterface()
 	 * @generated
 	 */
 	void setRightInterface(ServiceInterface value);
 
 	/**
-	 * Returns the value of the '<em><b>Left Interface</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Left Interface</b></em>' containment
+	 * reference. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Left Interface</em>' attribute isn't clear, there
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Left Interface</em>' containment reference.
 	 * @see #setLeftInterface(ServiceInterface)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getService_LeftInterface()
@@ -98,10 +106,13 @@ public interface Service extends EObject {
 	ServiceInterface getLeftInterface();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getLeftInterface <em>Left Interface</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!--
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getLeftInterface
+	 * <em>Left Interface</em>}' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * @param value the new value of the '<em>Left Interface</em>' containment reference.
+	 * 
+	 * @param value the new value of the '<em>Left Interface</em>' containment
+	 *              reference.
 	 * @see #getLeftInterface()
 	 * @generated
 	 */

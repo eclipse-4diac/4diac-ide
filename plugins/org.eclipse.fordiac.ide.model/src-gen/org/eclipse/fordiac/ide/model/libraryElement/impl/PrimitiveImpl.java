@@ -29,9 +29,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getEvent <em>Event</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getParameters <em>Parameters</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getInterface <em>Interface</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getEvent
+ * <em>Event</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getParameters
+ * <em>Parameters</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getInterface
+ * <em>Interface</em>}</li>
  * </ul>
  *
  * @generated
@@ -58,8 +61,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	protected String event = EVENT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getParameters() <em>Parameters</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #getParameters() <em>Parameters</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getParameters()
 	 * @generated
 	 * @ordered
@@ -67,8 +71,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	protected static final String PARAMETERS_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getParameters()
 	 * @generated
 	 * @ordered
@@ -76,8 +81,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	protected String parameters = PARAMETERS_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getInterface() <em>Interface</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getInterface() <em>Interface</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getInterface()
 	 * @generated
 	 * @ordered
@@ -86,6 +92,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected PrimitiveImpl() {
@@ -94,6 +101,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -103,6 +111,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -112,6 +121,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -119,11 +129,13 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 		String oldEvent = event;
 		event = newEvent;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__EVENT, oldEvent, event));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__EVENT, oldEvent,
+					event));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -133,6 +145,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -140,21 +153,24 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 		String oldParameters = parameters;
 		parameters = newParameters;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__PARAMETERS, oldParameters, parameters));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__PARAMETERS,
+					oldParameters, parameters));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public ServiceInterface getInterface() {
 		if (interface_ != null && interface_.eIsProxy()) {
-			InternalEObject oldInterface = (InternalEObject)interface_;
-			interface_ = (ServiceInterface)eResolveProxy(oldInterface);
+			InternalEObject oldInterface = (InternalEObject) interface_;
+			interface_ = (ServiceInterface) eResolveProxy(oldInterface);
 			if (interface_ != oldInterface) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.PRIMITIVE__INTERFACE, oldInterface, interface_));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							LibraryElementPackage.PRIMITIVE__INTERFACE, oldInterface, interface_));
 			}
 		}
 		return interface_;
@@ -162,6 +178,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ServiceInterface basicGetInterface() {
@@ -170,6 +187,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -177,97 +195,105 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 		ServiceInterface oldInterface = interface_;
 		interface_ = newInterface;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__INTERFACE, oldInterface, interface_));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__INTERFACE,
+					oldInterface, interface_));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.PRIMITIVE__EVENT:
-				return getEvent();
-			case LibraryElementPackage.PRIMITIVE__PARAMETERS:
-				return getParameters();
-			case LibraryElementPackage.PRIMITIVE__INTERFACE:
-				if (resolve) return getInterface();
-				return basicGetInterface();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.PRIMITIVE__EVENT:
+			return getEvent();
+		case LibraryElementPackage.PRIMITIVE__PARAMETERS:
+			return getParameters();
+		case LibraryElementPackage.PRIMITIVE__INTERFACE:
+			if (resolve)
+				return getInterface();
+			return basicGetInterface();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.PRIMITIVE__EVENT:
-				setEvent((String)newValue);
-				return;
-			case LibraryElementPackage.PRIMITIVE__PARAMETERS:
-				setParameters((String)newValue);
-				return;
-			case LibraryElementPackage.PRIMITIVE__INTERFACE:
-				setInterface((ServiceInterface)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.PRIMITIVE__EVENT:
+			setEvent((String) newValue);
+			return;
+		case LibraryElementPackage.PRIMITIVE__PARAMETERS:
+			setParameters((String) newValue);
+			return;
+		case LibraryElementPackage.PRIMITIVE__INTERFACE:
+			setInterface((ServiceInterface) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.PRIMITIVE__EVENT:
-				setEvent(EVENT_EDEFAULT);
-				return;
-			case LibraryElementPackage.PRIMITIVE__PARAMETERS:
-				setParameters(PARAMETERS_EDEFAULT);
-				return;
-			case LibraryElementPackage.PRIMITIVE__INTERFACE:
-				setInterface((ServiceInterface)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.PRIMITIVE__EVENT:
+			setEvent(EVENT_EDEFAULT);
+			return;
+		case LibraryElementPackage.PRIMITIVE__PARAMETERS:
+			setParameters(PARAMETERS_EDEFAULT);
+			return;
+		case LibraryElementPackage.PRIMITIVE__INTERFACE:
+			setInterface((ServiceInterface) null);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.PRIMITIVE__EVENT:
-				return EVENT_EDEFAULT == null ? event != null : !EVENT_EDEFAULT.equals(event);
-			case LibraryElementPackage.PRIMITIVE__PARAMETERS:
-				return PARAMETERS_EDEFAULT == null ? parameters != null : !PARAMETERS_EDEFAULT.equals(parameters);
-			case LibraryElementPackage.PRIMITIVE__INTERFACE:
-				return interface_ != null;
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.PRIMITIVE__EVENT:
+			return EVENT_EDEFAULT == null ? event != null : !EVENT_EDEFAULT.equals(event);
+		case LibraryElementPackage.PRIMITIVE__PARAMETERS:
+			return PARAMETERS_EDEFAULT == null ? parameters != null : !PARAMETERS_EDEFAULT.equals(parameters);
+		case LibraryElementPackage.PRIMITIVE__INTERFACE:
+			return interface_ != null;
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (event: "); //$NON-NLS-1$

@@ -24,10 +24,14 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECState <em>EC State</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECTransition <em>EC Transition</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getStart <em>Start</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType <em>Basic FB Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECState <em>EC
+ * State</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECTransition
+ * <em>EC Transition</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getStart
+ * <em>Start</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType
+ * <em>Basic FB Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECC()
@@ -36,39 +40,47 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface ECC extends EObject {
 	/**
-	 * Returns the value of the '<em><b>EC State</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ECState}.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC <em>ECC</em>}'.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>EC State</b></em>' containment reference
+	 * list. The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.ECState}. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC
+	 * <em>ECC</em>}'. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>EC State</em>' containment reference list isn't
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>EC State</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECC_ECState()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC
 	 * @model opposite="eCC" containment="true" required="true"
-	 *        extendedMetaData="kind='element' name='ECState' namespace='##targetNamespace'"
+	 *        extendedMetaData="kind='element' name='ECState'
+	 *        namespace='##targetNamespace'"
 	 * @generated
 	 */
 	EList<ECState> getECState();
 
 	/**
-	 * Returns the value of the '<em><b>EC Transition</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition}.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getECC <em>ECC</em>}'.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>EC Transition</b></em>' containment
+	 * reference list. The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition}. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getECC
+	 * <em>ECC</em>}'. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>EC Transition</em>' containment reference list
 	 * isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>EC Transition</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECC_ECTransition()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getECC
 	 * @model opposite="eCC" containment="true" required="true"
-	 *        extendedMetaData="kind='element' name='ECTransition' namespace='##targetNamespace'"
+	 *        extendedMetaData="kind='element' name='ECTransition'
+	 *        namespace='##targetNamespace'"
 	 * @generated
 	 */
 	EList<ECTransition> getECTransition();
@@ -91,8 +103,10 @@ public interface ECC extends EObject {
 	ECState getStart();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getStart <em>Start</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getStart
+	 * <em>Start</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Start</em>' reference.
 	 * @see #getStart()
 	 * @generated
@@ -101,8 +115,10 @@ public interface ECC extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Basic FB Type</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getECC <em>ECC</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * It is bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getECC
+	 * <em>ECC</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Basic FB Type</em>' container reference.
 	 * @see #setBasicFBType(BasicFBType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECC_BasicFBType()
@@ -113,10 +129,13 @@ public interface ECC extends EObject {
 	BasicFBType getBasicFBType();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType <em>Basic FB Type</em>}' container reference.
-	 * <!-- begin-user-doc --> <!--
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType
+	 * <em>Basic FB Type</em>}' container reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * @param value the new value of the '<em>Basic FB Type</em>' container reference.
+	 * 
+	 * @param value the new value of the '<em>Basic FB Type</em>' container
+	 *              reference.
 	 * @see #getBasicFBType()
 	 * @generated
 	 */

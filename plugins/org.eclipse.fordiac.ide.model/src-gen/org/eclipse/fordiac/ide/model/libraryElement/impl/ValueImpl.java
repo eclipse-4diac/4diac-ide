@@ -28,7 +28,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl#getValue <em>Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl#getValue
+ * <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -56,6 +57,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ValueImpl() {
@@ -64,6 +66,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -73,6 +76,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -82,6 +86,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -94,6 +99,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -103,71 +109,77 @@ public class ValueImpl extends EObjectImpl implements Value {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.VALUE__VALUE:
-				return getValue();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.VALUE__VALUE:
+			return getValue();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.VALUE__VALUE:
-				setValue((String)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.VALUE__VALUE:
+			setValue((String) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.VALUE__VALUE:
-				setValue(VALUE_EDEFAULT);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.VALUE__VALUE:
+			setValue(VALUE_EDEFAULT);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.VALUE__VALUE:
-				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.VALUE__VALUE:
+			return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (value: "); //$NON-NLS-1$

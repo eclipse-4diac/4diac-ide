@@ -26,6 +26,7 @@ public interface ResourceTypeFB extends FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

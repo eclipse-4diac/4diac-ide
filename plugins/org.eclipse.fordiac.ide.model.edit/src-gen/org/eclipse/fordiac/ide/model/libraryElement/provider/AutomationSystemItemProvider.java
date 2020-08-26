@@ -30,8 +30,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem} object.
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class AutomationSystemItemProvider extends LibraryElementItemProvider {
@@ -79,30 +81,24 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 
 			addPalettePropertyDescriptor(object);
 			addSystemFilePropertyDescriptor(object);
+			addCommandStackPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Palette feature.
-	 * <!-- begin-user-doc
+	 * This adds a property descriptor for the Palette feature. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addPalettePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AutomationSystem_palette_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_AutomationSystem_palette_feature", "_UI_AutomationSystem_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.AUTOMATION_SYSTEM__PALETTE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(
+				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_AutomationSystem_palette_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_AutomationSystem_palette_feature", //$NON-NLS-1$ //$NON-NLS-2$
+						"_UI_AutomationSystem_type"), //$NON-NLS-1$
+				LibraryElementPackage.Literals.AUTOMATION_SYSTEM__PALETTE, true, false, true, null, null, null));
 	}
 
 	/**
@@ -112,26 +108,38 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 	 * @generated
 	 */
 	protected void addSystemFilePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AutomationSystem_systemFile_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_AutomationSystem_systemFile_feature", "_UI_AutomationSystem_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.AUTOMATION_SYSTEM__SYSTEM_FILE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_AutomationSystem_systemFile_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_AutomationSystem_systemFile_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_AutomationSystem_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.AUTOMATION_SYSTEM__SYSTEM_FILE, true, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * This adds a property descriptor for the Command Stack feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected void addCommandStackPropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_AutomationSystem_commandStack_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_AutomationSystem_commandStack_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_AutomationSystem_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.AUTOMATION_SYSTEM__COMMAND_STACK, true, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an
+	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
+	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -146,11 +154,13 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
+		// Check the type of the specified child object and return the proper feature to
+		// use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
@@ -180,9 +190,10 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -190,45 +201,41 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(AutomationSystem.class)) {
-			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
-			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
-			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-				return;
-			default:
-				super.notifyChanged(notification);
-				return;
-			}
+		case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
+		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
+		case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+			return;
+		case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
+		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+			return;
+		default:
+			super.notifyChanged(notification);
+			return;
+		}
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.AUTOMATION_SYSTEM__APPLICATION,
-				 LibraryElementFactory.eINSTANCE.createApplication()));
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.AUTOMATION_SYSTEM__APPLICATION,
+				LibraryElementFactory.eINSTANCE.createApplication()));
 
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.AUTOMATION_SYSTEM__MAPPING,
-				 LibraryElementFactory.eINSTANCE.createMapping()));
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.AUTOMATION_SYSTEM__MAPPING,
+				LibraryElementFactory.eINSTANCE.createMapping()));
 
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION,
-				 LibraryElementFactory.eINSTANCE.createSystemConfiguration()));
+		newChildDescriptors
+				.add(createChildParameter(LibraryElementPackage.Literals.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION,
+						LibraryElementFactory.eINSTANCE.createSystemConfiguration()));
 	}
 
 }

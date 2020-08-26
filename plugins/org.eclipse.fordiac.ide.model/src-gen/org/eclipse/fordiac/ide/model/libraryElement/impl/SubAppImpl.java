@@ -32,16 +32,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl#getSubAppNetwork <em>Sub App Network</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl#getSubAppNetwork
+ * <em>Sub App Network</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	/**
-	 * The cached value of the '{@link #getSubAppNetwork() <em>Sub App Network</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!--
+	 * The cached value of the '{@link #getSubAppNetwork() <em>Sub App
+	 * Network</em>}' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @see #getSubAppNetwork()
 	 * @generated
 	 * @ordered
@@ -50,6 +52,7 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SubAppImpl() {
@@ -58,6 +61,7 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -67,22 +71,27 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public FBNetwork getSubAppNetwork() {
 		if (subAppNetwork != null && subAppNetwork.eIsProxy()) {
-			InternalEObject oldSubAppNetwork = (InternalEObject)subAppNetwork;
-			subAppNetwork = (FBNetwork)eResolveProxy(oldSubAppNetwork);
+			InternalEObject oldSubAppNetwork = (InternalEObject) subAppNetwork;
+			subAppNetwork = (FBNetwork) eResolveProxy(oldSubAppNetwork);
 			if (subAppNetwork != oldSubAppNetwork) {
-				InternalEObject newSubAppNetwork = (InternalEObject)subAppNetwork;
-				NotificationChain msgs = oldSubAppNetwork.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, null, null);
+				InternalEObject newSubAppNetwork = (InternalEObject) subAppNetwork;
+				NotificationChain msgs = oldSubAppNetwork.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, null, null);
 				if (newSubAppNetwork.eInternalContainer() == null) {
-					msgs = newSubAppNetwork.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, null, msgs);
+					msgs = newSubAppNetwork.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, null, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
+				if (msgs != null)
+					msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, oldSubAppNetwork, subAppNetwork));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, oldSubAppNetwork, subAppNetwork));
 			}
 		}
 		return subAppNetwork;
@@ -90,6 +99,7 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public FBNetwork basicGetSubAppNetwork() {
@@ -98,20 +108,26 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetSubAppNetwork(FBNetwork newSubAppNetwork, NotificationChain msgs) {
 		FBNetwork oldSubAppNetwork = subAppNetwork;
 		subAppNetwork = newSubAppNetwork;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, oldSubAppNetwork, newSubAppNetwork);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, oldSubAppNetwork, newSubAppNetwork);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -119,32 +135,38 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 		if (newSubAppNetwork != subAppNetwork) {
 			NotificationChain msgs = null;
 			if (subAppNetwork != null)
-				msgs = ((InternalEObject)subAppNetwork).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, null, msgs);
+				msgs = ((InternalEObject) subAppNetwork).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, null, msgs);
 			if (newSubAppNetwork != null)
-				msgs = ((InternalEObject)newSubAppNetwork).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, null, msgs);
+				msgs = ((InternalEObject) newSubAppNetwork).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, null, msgs);
 			msgs = basicSetSubAppNetwork(newSubAppNetwork, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, newSubAppNetwork, newSubAppNetwork));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SUB_APP__SUB_APP_NETWORK,
+					newSubAppNetwork, newSubAppNetwork));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public SubAppType getType() {
-		//this cannot be moved to the annotation class because there we don't have the super access!!!
+		// this cannot be moved to the annotation class because there we don't have the
+		// super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
-		if(type instanceof SubAppType){
-		   return (SubAppType) type; 
+		if (type instanceof SubAppType) {
+			return (SubAppType) type;
 		}
 		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -155,76 +177,82 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
-				return basicSetSubAppNetwork(null, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
+			return basicSetSubAppNetwork(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
-				if (resolve) return getSubAppNetwork();
-				return basicGetSubAppNetwork();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
+			if (resolve)
+				return getSubAppNetwork();
+			return basicGetSubAppNetwork();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
-				setSubAppNetwork((FBNetwork)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
+			setSubAppNetwork((FBNetwork) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
-				setSubAppNetwork((FBNetwork)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
+			setSubAppNetwork((FBNetwork) null);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
-				return subAppNetwork != null;
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
+			return subAppNetwork != null;
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 

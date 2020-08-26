@@ -32,16 +32,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl#getVarDeclaration <em>Var Declaration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl#getVarDeclaration
+ * <em>Var Declaration</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class SegmentTypeImpl extends CompilableTypeImpl implements SegmentType {
 	/**
-	 * The cached value of the '{@link #getVarDeclaration() <em>Var Declaration</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!--
+	 * The cached value of the '{@link #getVarDeclaration() <em>Var
+	 * Declaration</em>}' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @see #getVarDeclaration()
 	 * @generated
 	 * @ordered
@@ -50,6 +52,7 @@ public class SegmentTypeImpl extends CompilableTypeImpl implements SegmentType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SegmentTypeImpl() {
@@ -58,6 +61,7 @@ public class SegmentTypeImpl extends CompilableTypeImpl implements SegmentType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -67,89 +71,96 @@ public class SegmentTypeImpl extends CompilableTypeImpl implements SegmentType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<VarDeclaration> getVarDeclaration() {
 		if (varDeclaration == null) {
-			varDeclaration = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION);
+			varDeclaration = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this,
+					LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION);
 		}
 		return varDeclaration;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
-				return ((InternalEList<?>)getVarDeclaration()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
+			return ((InternalEList<?>) getVarDeclaration()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
-				return getVarDeclaration();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
+			return getVarDeclaration();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
-				getVarDeclaration().clear();
-				getVarDeclaration().addAll((Collection<? extends VarDeclaration>)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
+			getVarDeclaration().clear();
+			getVarDeclaration().addAll((Collection<? extends VarDeclaration>) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
-				getVarDeclaration().clear();
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
+			getVarDeclaration().clear();
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
-				return varDeclaration != null && !varDeclaration.isEmpty();
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
+			return varDeclaration != null && !varDeclaration.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 

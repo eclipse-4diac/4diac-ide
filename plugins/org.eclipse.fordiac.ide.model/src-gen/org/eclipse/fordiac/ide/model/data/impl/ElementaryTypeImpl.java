@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.data.ElementaryType;
 public class ElementaryTypeImpl extends ValueTypeImpl implements ElementaryType {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ElementaryTypeImpl() {
@@ -34,6 +35,7 @@ public class ElementaryTypeImpl extends ValueTypeImpl implements ElementaryType 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

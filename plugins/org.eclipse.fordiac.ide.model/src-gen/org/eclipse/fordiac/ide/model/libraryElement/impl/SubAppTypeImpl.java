@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 public class SubAppTypeImpl extends CompositeFBTypeImpl implements SubAppType {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SubAppTypeImpl() {
@@ -34,6 +35,7 @@ public class SubAppTypeImpl extends CompositeFBTypeImpl implements SubAppType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

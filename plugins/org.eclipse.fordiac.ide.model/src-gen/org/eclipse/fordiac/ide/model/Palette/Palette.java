@@ -27,13 +27,20 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary <em>Type Library</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAdapterTypes <em>Adapter Types</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getDeviceTypes <em>Device Types</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getFbTypes <em>Fb Types</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getResourceTypes <em>Resource Types</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getSegmentTypes <em>Segment Types</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getSubAppTypes <em>Sub App Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary
+ * <em>Type Library</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAdapterTypes
+ * <em>Adapter Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getDeviceTypes
+ * <em>Device Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getFbTypes <em>Fb
+ * Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getResourceTypes
+ * <em>Resource Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getSegmentTypes
+ * <em>Segment Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getSubAppTypes
+ * <em>Sub App Types</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette()
@@ -59,9 +66,9 @@ public interface Palette extends EObject {
 	IProject getProject();
 
 	/**
-	 * Returns the value of the '<em><b>Type Library</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the value of the '<em><b>Type Library</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Type Library</em>' attribute.
 	 * @see #setTypeLibrary(TypeLibrary)
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_TypeLibrary()
@@ -71,9 +78,10 @@ public interface Palette extends EObject {
 	TypeLibrary getTypeLibrary();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary <em>Type Library</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary <em>Type
+	 * Library</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Type Library</em>' attribute.
 	 * @see #getTypeLibrary()
 	 * @generated
@@ -137,13 +145,15 @@ public interface Palette extends EObject {
 	EMap<String, SegmentTypePaletteEntry> getSegmentTypes();
 
 	/**
-	 * Returns the value of the '<em><b>Sub App Types</b></em>' map.
-	 * The key is of type {@link java.lang.String},
-	 * and the value is of type {@link org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry},
+	 * Returns the value of the '<em><b>Sub App Types</b></em>' map. The key is of
+	 * type {@link java.lang.String}, and the value is of type
+	 * {@link org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry},
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Sub App Types</em>' map.
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_SubAppTypes()
-	 * @model mapType="org.eclipse.fordiac.ide.model.Palette.StringToSubApplicationTypePaletteEntryMap&lt;org.eclipse.emf.ecore.EString, org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry&gt;"
+	 * @model mapType="org.eclipse.fordiac.ide.model.Palette.StringToSubApplicationTypePaletteEntryMap&lt;org.eclipse.emf.ecore.EString,
+	 *        org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry&gt;"
 	 * @generated
 	 */
 	EMap<String, SubApplicationTypePaletteEntry> getSubAppTypes();
@@ -164,6 +174,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation"
 	 * @generated
 	 */
@@ -171,6 +182,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -178,6 +190,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -185,6 +198,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -192,6 +206,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -199,6 +214,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -206,6 +222,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -213,6 +230,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model entryRequired="true"
 	 * @generated
 	 */
@@ -220,6 +238,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model entryRequired="true"
 	 * @generated
 	 */

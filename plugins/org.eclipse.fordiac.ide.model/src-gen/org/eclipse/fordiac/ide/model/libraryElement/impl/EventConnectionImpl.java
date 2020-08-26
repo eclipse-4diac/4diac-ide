@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 public class EventConnectionImpl extends ConnectionImpl implements EventConnection {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected EventConnectionImpl() {
@@ -35,6 +36,7 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -44,6 +46,7 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -53,6 +56,7 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

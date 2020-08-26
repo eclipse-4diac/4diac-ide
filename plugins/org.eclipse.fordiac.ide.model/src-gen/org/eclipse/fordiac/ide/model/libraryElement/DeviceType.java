@@ -23,12 +23,18 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getVarDeclaration <em>Var Declaration</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getResourceTypeName <em>Resource Type Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getResource <em>Resource</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getFBNetwork <em>FB Network</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getProfile <em>Profile</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getAttributeDeclarations <em>Attribute Declarations</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getVarDeclaration
+ * <em>Var Declaration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getResourceTypeName
+ * <em>Resource Type Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getResource
+ * <em>Resource</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getFBNetwork
+ * <em>FB Network</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getProfile
+ * <em>Profile</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getAttributeDeclarations
+ * <em>Attribute Declarations</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDeviceType()
@@ -103,20 +109,24 @@ public interface DeviceType extends CompilableType {
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>FB Network</em>' containment reference.
 	 * @see #setFBNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDeviceType_FBNetwork()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='FBNetwork' namespace='##targetNamespace'"
+	 * @model containment="true" extendedMetaData="kind='element' name='FBNetwork'
+	 *        namespace='##targetNamespace'"
 	 * @generated
 	 */
 	FBNetwork getFBNetwork();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getFBNetwork <em>FB Network</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!--
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getFBNetwork
+	 * <em>FB Network</em>}' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * @param value the new value of the '<em>FB Network</em>' containment reference.
+	 * 
+	 * @param value the new value of the '<em>FB Network</em>' containment
+	 *              reference.
 	 * @see #getFBNetwork()
 	 * @generated
 	 */
@@ -140,8 +150,10 @@ public interface DeviceType extends CompilableType {
 	String getProfile();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getProfile <em>Profile</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getProfile
+	 * <em>Profile</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Profile</em>' attribute.
 	 * @see #getProfile()
 	 * @generated
@@ -149,15 +161,18 @@ public interface DeviceType extends CompilableType {
 	void setProfile(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Attribute Declarations</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration}.
+	 * Returns the value of the '<em><b>Attribute Declarations</b></em>' containment
+	 * reference list. The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Attribute Declarations</em>' containment reference
 	 * list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Attribute Declarations</em>' containment reference list.
+	 * 
+	 * @return the value of the '<em>Attribute Declarations</em>' containment
+	 *         reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDeviceType_AttributeDeclarations()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated

@@ -23,8 +23,10 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getAttributeDeclaration <em>Attribute Declaration</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getValue <em>Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getAttributeDeclaration
+ * <em>Attribute Declaration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getValue
+ * <em>Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAttribute()
@@ -40,6 +42,7 @@ public interface Attribute extends INamedElement, TypedElement {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Attribute Declaration</em>' reference.
 	 * @see #setAttributeDeclaration(AttributeDeclaration)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAttribute_AttributeDeclaration()
@@ -49,9 +52,11 @@ public interface Attribute extends INamedElement, TypedElement {
 	AttributeDeclaration getAttributeDeclaration();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getAttributeDeclaration <em>Attribute Declaration</em>}' reference.
-	 * <!-- begin-user-doc --> <!--
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getAttributeDeclaration
+	 * <em>Attribute Declaration</em>}' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Attribute Declaration</em>' reference.
 	 * @see #getAttributeDeclaration()
 	 * @generated
@@ -77,8 +82,10 @@ public interface Attribute extends INamedElement, TypedElement {
 	String getValue();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getValue <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getValue
+	 * <em>Value</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Value</em>' attribute.
 	 * @see #getValue()
 	 * @generated

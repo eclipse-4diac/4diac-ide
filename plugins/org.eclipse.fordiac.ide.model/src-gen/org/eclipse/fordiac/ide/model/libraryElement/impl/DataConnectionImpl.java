@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public class DataConnectionImpl extends ConnectionImpl implements DataConnection {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected DataConnectionImpl() {
@@ -35,6 +36,7 @@ public class DataConnectionImpl extends ConnectionImpl implements DataConnection
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -44,6 +46,7 @@ public class DataConnectionImpl extends ConnectionImpl implements DataConnection
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -53,6 +56,7 @@ public class DataConnectionImpl extends ConnectionImpl implements DataConnection
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

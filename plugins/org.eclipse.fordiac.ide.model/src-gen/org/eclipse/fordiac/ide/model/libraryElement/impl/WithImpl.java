@@ -30,15 +30,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl#getVariables <em>Variables</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl#getVariables
+ * <em>Variables</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class WithImpl extends EObjectImpl implements With {
 	/**
-	 * The cached value of the '{@link #getVariables() <em>Variables</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getVariables() <em>Variables</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getVariables()
 	 * @generated
 	 * @ordered
@@ -47,6 +49,7 @@ public class WithImpl extends EObjectImpl implements With {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected WithImpl() {
@@ -55,6 +58,7 @@ public class WithImpl extends EObjectImpl implements With {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -64,16 +68,18 @@ public class WithImpl extends EObjectImpl implements With {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public VarDeclaration getVariables() {
 		if (variables != null && variables.eIsProxy()) {
-			InternalEObject oldVariables = (InternalEObject)variables;
-			variables = (VarDeclaration)eResolveProxy(oldVariables);
+			InternalEObject oldVariables = (InternalEObject) variables;
+			variables = (VarDeclaration) eResolveProxy(oldVariables);
 			if (variables != oldVariables) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.WITH__VARIABLES, oldVariables, variables));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.WITH__VARIABLES,
+							oldVariables, variables));
 			}
 		}
 		return variables;
@@ -81,6 +87,7 @@ public class WithImpl extends EObjectImpl implements With {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public VarDeclaration basicGetVariables() {
@@ -89,20 +96,26 @@ public class WithImpl extends EObjectImpl implements With {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetVariables(VarDeclaration newVariables, NotificationChain msgs) {
 		VarDeclaration oldVariables = variables;
 		variables = newVariables;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.WITH__VARIABLES, oldVariables, newVariables);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.WITH__VARIABLES, oldVariables, newVariables);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -110,104 +123,115 @@ public class WithImpl extends EObjectImpl implements With {
 		if (newVariables != variables) {
 			NotificationChain msgs = null;
 			if (variables != null)
-				msgs = ((InternalEObject)variables).eInverseRemove(this, LibraryElementPackage.VAR_DECLARATION__WITHS, VarDeclaration.class, msgs);
+				msgs = ((InternalEObject) variables).eInverseRemove(this, LibraryElementPackage.VAR_DECLARATION__WITHS,
+						VarDeclaration.class, msgs);
 			if (newVariables != null)
-				msgs = ((InternalEObject)newVariables).eInverseAdd(this, LibraryElementPackage.VAR_DECLARATION__WITHS, VarDeclaration.class, msgs);
+				msgs = ((InternalEObject) newVariables).eInverseAdd(this, LibraryElementPackage.VAR_DECLARATION__WITHS,
+						VarDeclaration.class, msgs);
 			msgs = basicSetVariables(newVariables, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.WITH__VARIABLES, newVariables, newVariables));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.WITH__VARIABLES, newVariables,
+					newVariables));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.WITH__VARIABLES:
-				if (variables != null)
-					msgs = ((InternalEObject)variables).eInverseRemove(this, LibraryElementPackage.VAR_DECLARATION__WITHS, VarDeclaration.class, msgs);
-				return basicSetVariables((VarDeclaration)otherEnd, msgs);
-			default:
-				return super.eInverseAdd(otherEnd, featureID, msgs);
+		case LibraryElementPackage.WITH__VARIABLES:
+			if (variables != null)
+				msgs = ((InternalEObject) variables).eInverseRemove(this, LibraryElementPackage.VAR_DECLARATION__WITHS,
+						VarDeclaration.class, msgs);
+			return basicSetVariables((VarDeclaration) otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.WITH__VARIABLES:
-				return basicSetVariables(null, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case LibraryElementPackage.WITH__VARIABLES:
+			return basicSetVariables(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.WITH__VARIABLES:
-				if (resolve) return getVariables();
-				return basicGetVariables();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.WITH__VARIABLES:
+			if (resolve)
+				return getVariables();
+			return basicGetVariables();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.WITH__VARIABLES:
-				setVariables((VarDeclaration)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.WITH__VARIABLES:
+			setVariables((VarDeclaration) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.WITH__VARIABLES:
-				setVariables((VarDeclaration)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.WITH__VARIABLES:
+			setVariables((VarDeclaration) null);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.WITH__VARIABLES:
-				return variables != null;
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.WITH__VARIABLES:
+			return variables != null;
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 

@@ -27,8 +27,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl#getComment <em>Comment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl#getName
+ * <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl#getComment
+ * <em>Comment</em>}</li>
  * </ul>
  *
  * @generated
@@ -57,6 +59,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -66,6 +69,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -74,6 +78,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ServiceInterfaceImpl() {
@@ -82,6 +87,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -91,6 +97,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -100,6 +107,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -107,11 +115,13 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_INTERFACE__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_INTERFACE__NAME,
+					oldName, name));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -121,6 +131,7 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -128,86 +139,93 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 		String oldComment = comment;
 		comment = newComment;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_INTERFACE__COMMENT, oldComment, comment));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_INTERFACE__COMMENT,
+					oldComment, comment));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.SERVICE_INTERFACE__NAME:
-				return getName();
-			case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
-				return getComment();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.SERVICE_INTERFACE__NAME:
+			return getName();
+		case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
+			return getComment();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.SERVICE_INTERFACE__NAME:
-				setName((String)newValue);
-				return;
-			case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
-				setComment((String)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.SERVICE_INTERFACE__NAME:
+			setName((String) newValue);
+			return;
+		case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
+			setComment((String) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SERVICE_INTERFACE__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
-				setComment(COMMENT_EDEFAULT);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.SERVICE_INTERFACE__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
+			setComment(COMMENT_EDEFAULT);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SERVICE_INTERFACE__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
-				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.SERVICE_INTERFACE__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case LibraryElementPackage.SERVICE_INTERFACE__COMMENT:
+			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$

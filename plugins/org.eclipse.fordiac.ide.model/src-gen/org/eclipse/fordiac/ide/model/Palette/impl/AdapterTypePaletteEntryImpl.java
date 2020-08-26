@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements AdapterTypePaletteEntry {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected AdapterTypePaletteEntryImpl() {
@@ -40,6 +41,7 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -49,29 +51,32 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public AdapterType getType() {
 		LibraryElement type = super.getType();
-		if(type instanceof AdapterType){
-		   return (AdapterType) type;
+		if (type instanceof AdapterType) {
+			return (AdapterType) type;
 		}
 		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if(type instanceof AdapterType){
+		if (type instanceof AdapterType) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
-				Status  exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no AdapterType as type entry for AdapterTypePaletteEntry");  //$NON-NLS-1$
+			if (null != type) {
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+						"tried to set no AdapterType as type entry for AdapterTypePaletteEntry"); //$NON-NLS-1$
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
@@ -79,6 +84,7 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

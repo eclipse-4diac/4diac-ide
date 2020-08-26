@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements SegmentTypePaletteEntry {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SegmentTypePaletteEntryImpl() {
@@ -40,6 +41,7 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -49,29 +51,32 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public SegmentType getSegmentType() {
 		LibraryElement type = getType();
-		if(type instanceof SegmentType){
-		   return (SegmentType) type;
+		if (type instanceof SegmentType) {
+			return (SegmentType) type;
 		}
 		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if(type instanceof SegmentType){
+		if (type instanceof SegmentType) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
-				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no SegmentType as type entry for SegmentTypePaletteEntry"); //$NON-NLS-1$
+			if (null != type) {
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+						"tried to set no SegmentType as type entry for SegmentTypePaletteEntry"); //$NON-NLS-1$
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
@@ -79,6 +84,7 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

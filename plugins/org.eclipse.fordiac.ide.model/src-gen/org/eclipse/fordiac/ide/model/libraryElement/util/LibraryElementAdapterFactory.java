@@ -97,21 +97,22 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  * <!-- begin-user-doc --> The <b>Adapter Factory</b> for the model. It provides
  * an adapter <code>createXXX</code> method for each class of the model. <!--
  * end-user-doc -->
+ * 
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
  * @generated
  */
 public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	/**
-	 * The cached model package.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached model package. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected static LibraryElementPackage modelPackage;
 
 	/**
-	 * Creates an instance of the adapter factory.
-	 * <!-- begin-user-doc --> <!--
+	 * Creates an instance of the adapter factory. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public LibraryElementAdapterFactory() {
@@ -135,7 +136,7 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 			return true;
 		}
 		if (object instanceof EObject) {
-			return ((EObject)object).eClass().getEPackage() == modelPackage;
+			return ((EObject) object).eClass().getEPackage() == modelPackage;
 		}
 		return false;
 	}
@@ -147,331 +148,408 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	protected LibraryElementSwitch<Adapter> modelSwitch = new LibraryElementSwitch<Adapter>() {
-			@Override
-			public Adapter caseAdapterDeclaration(AdapterDeclaration object) {
-				return createAdapterDeclarationAdapter();
-			}
-			@Override
-			public Adapter caseAdapterType(AdapterType object) {
-				return createAdapterTypeAdapter();
-			}
-			@Override
-			public Adapter caseAlgorithm(Algorithm object) {
-				return createAlgorithmAdapter();
-			}
-			@Override
-			public Adapter caseApplication(Application object) {
-				return createApplicationAdapter();
-			}
-			@Override
-			public Adapter caseBasicFBType(BasicFBType object) {
-				return createBasicFBTypeAdapter();
-			}
-			@Override
-			public Adapter caseCompilerInfo(CompilerInfo object) {
-				return createCompilerInfoAdapter();
-			}
-			@Override
-			public Adapter caseCompiler(org.eclipse.fordiac.ide.model.libraryElement.Compiler object) {
-				return createCompilerAdapter();
-			}
-			@Override
-			public Adapter caseConnection(Connection object) {
-				return createConnectionAdapter();
-			}
-			@Override
-			public Adapter caseDevice(Device object) {
-				return createDeviceAdapter();
-			}
-			@Override
-			public Adapter caseDeviceType(DeviceType object) {
-				return createDeviceTypeAdapter();
-			}
-			@Override
-			public Adapter caseECAction(ECAction object) {
-				return createECActionAdapter();
-			}
-			@Override
-			public Adapter caseECC(ECC object) {
-				return createECCAdapter();
-			}
-			@Override
-			public Adapter caseECState(ECState object) {
-				return createECStateAdapter();
-			}
-			@Override
-			public Adapter caseECTransition(ECTransition object) {
-				return createECTransitionAdapter();
-			}
-			@Override
-			public Adapter caseEvent(Event object) {
-				return createEventAdapter();
-			}
-			@Override
-			public Adapter caseFB(FB object) {
-				return createFBAdapter();
-			}
-			@Override
-			public Adapter caseFBNetworkElement(FBNetworkElement object) {
-				return createFBNetworkElementAdapter();
-			}
-			@Override
-			public Adapter caseSubApp(SubApp object) {
-				return createSubAppAdapter();
-			}
-			@Override
-			public Adapter caseFBType(FBType object) {
-				return createFBTypeAdapter();
-			}
-			@Override
-			public Adapter caseIdentification(Identification object) {
-				return createIdentificationAdapter();
-			}
-			@Override
-			public Adapter caseInputPrimitive(InputPrimitive object) {
-				return createInputPrimitiveAdapter();
-			}
-			@Override
-			public Adapter caseInterfaceList(InterfaceList object) {
-				return createInterfaceListAdapter();
-			}
-			@Override
-			public Adapter caseLink(Link object) {
-				return createLinkAdapter();
-			}
-			@Override
-			public Adapter caseMapping(Mapping object) {
-				return createMappingAdapter();
-			}
-			@Override
-			public Adapter caseOtherAlgorithm(OtherAlgorithm object) {
-				return createOtherAlgorithmAdapter();
-			}
-			@Override
-			public Adapter caseOutputPrimitive(OutputPrimitive object) {
-				return createOutputPrimitiveAdapter();
-			}
-			@Override
-			public Adapter caseAttribute(Attribute object) {
-				return createAttributeAdapter();
-			}
-			@Override
-			public Adapter caseResource(Resource object) {
-				return createResourceAdapter();
-			}
-			@Override
-			public Adapter caseResourceTypeName(ResourceTypeName object) {
-				return createResourceTypeNameAdapter();
-			}
-			@Override
-			public Adapter caseResourceType(ResourceType object) {
-				return createResourceTypeAdapter();
-			}
-			@Override
-			public Adapter caseSegment(Segment object) {
-				return createSegmentAdapter();
-			}
-			@Override
-			public Adapter caseServiceSequence(ServiceSequence object) {
-				return createServiceSequenceAdapter();
-			}
-			@Override
-			public Adapter caseServiceTransaction(ServiceTransaction object) {
-				return createServiceTransactionAdapter();
-			}
-			@Override
-			public Adapter caseServiceInterfaceFBType(ServiceInterfaceFBType object) {
-				return createServiceInterfaceFBTypeAdapter();
-			}
-			@Override
-			public Adapter caseSTAlgorithm(STAlgorithm object) {
-				return createSTAlgorithmAdapter();
-			}
-			@Override
-			public Adapter caseFBNetwork(FBNetwork object) {
-				return createFBNetworkAdapter();
-			}
-			@Override
-			public Adapter caseSubAppType(SubAppType object) {
-				return createSubAppTypeAdapter();
-			}
-			@Override
-			public Adapter caseAutomationSystem(AutomationSystem object) {
-				return createAutomationSystemAdapter();
-			}
-			@Override
-			public Adapter caseVarDeclaration(VarDeclaration object) {
-				return createVarDeclarationAdapter();
-			}
-			@Override
-			public Adapter caseVersionInfo(VersionInfo object) {
-				return createVersionInfoAdapter();
-			}
-			@Override
-			public Adapter caseWith(With object) {
-				return createWithAdapter();
-			}
-			@Override
-			public Adapter caseLibraryElement(LibraryElement object) {
-				return createLibraryElementAdapter();
-			}
-			@Override
-			public Adapter caseCompilableType(CompilableType object) {
-				return createCompilableTypeAdapter();
-			}
-			@Override
-			public Adapter caseConfigurableObject(ConfigurableObject object) {
-				return createConfigurableObjectAdapter();
-			}
-			@Override
-			public Adapter caseCompositeFBType(CompositeFBType object) {
-				return createCompositeFBTypeAdapter();
-			}
-			@Override
-			public Adapter caseTextAlgorithm(TextAlgorithm object) {
-				return createTextAlgorithmAdapter();
-			}
-			@Override
-			public Adapter caseDataConnection(DataConnection object) {
-				return createDataConnectionAdapter();
-			}
-			@Override
-			public Adapter caseEventConnection(EventConnection object) {
-				return createEventConnectionAdapter();
-			}
-			@Override
-			public Adapter caseAdapterConnection(AdapterConnection object) {
-				return createAdapterConnectionAdapter();
-			}
-			@Override
-			public Adapter caseServiceInterface(ServiceInterface object) {
-				return createServiceInterfaceAdapter();
-			}
-			@Override
-			public Adapter caseIInterfaceElement(IInterfaceElement object) {
-				return createIInterfaceElementAdapter();
-			}
-			@Override
-			public Adapter caseValue(Value object) {
-				return createValueAdapter();
-			}
-			@Override
-			public Adapter caseSystemConfiguration(SystemConfiguration object) {
-				return createSystemConfigurationAdapter();
-			}
-			@Override
-			public Adapter caseINamedElement(INamedElement object) {
-				return createINamedElementAdapter();
-			}
-			@Override
-			public Adapter caseResourceTypeFB(ResourceTypeFB object) {
-				return createResourceTypeFBAdapter();
-			}
-			@Override
-			public Adapter caseSegmentType(SegmentType object) {
-				return createSegmentTypeAdapter();
-			}
-			@Override
-			public Adapter caseAdapterFBType(AdapterFBType object) {
-				return createAdapterFBTypeAdapter();
-			}
-			@Override
-			public Adapter caseAdapterEvent(AdapterEvent object) {
-				return createAdapterEventAdapter();
-			}
-			@Override
-			public Adapter caseService(Service object) {
-				return createServiceAdapter();
-			}
-			@Override
-			public Adapter caseTypedConfigureableObject(TypedConfigureableObject object) {
-				return createTypedConfigureableObjectAdapter();
-			}
-			@Override
-			public Adapter caseAdapterFB(AdapterFB object) {
-				return createAdapterFBAdapter();
-			}
-			@Override
-			public Adapter casePrimitive(Primitive object) {
-				return createPrimitiveAdapter();
-			}
-			@Override
-			public Adapter casePositionableElement(PositionableElement object) {
-				return createPositionableElementAdapter();
-			}
-			@Override
-			public Adapter caseColor(Color object) {
-				return createColorAdapter();
-			}
-			@Override
-			public Adapter caseColorizableElement(ColorizableElement object) {
-				return createColorizableElementAdapter();
-			}
-			@Override
-			public Adapter caseIVarElement(IVarElement object) {
-				return createIVarElementAdapter();
-			}
-			@Override
-			public Adapter caseAttributeDeclaration(AttributeDeclaration object) {
-				return createAttributeDeclarationAdapter();
-			}
-			@Override
-			public Adapter caseTypedElement(TypedElement object) {
-				return createTypedElementAdapter();
-			}
-			@Override
-			public Adapter caseSimpleFBType(SimpleFBType object) {
-				return createSimpleFBTypeAdapter();
-			}
-			@Override
-			public Adapter caseBaseFBType(BaseFBType object) {
-				return createBaseFBTypeAdapter();
-			}
-			@Override
-			public Adapter caseStructManipulator(StructManipulator object) {
-				return createStructManipulatorAdapter();
-			}
-			@Override
-			public Adapter caseDemultiplexer(Demultiplexer object) {
-				return createDemultiplexerAdapter();
-			}
-			@Override
-			public Adapter caseMultiplexer(Multiplexer object) {
-				return createMultiplexerAdapter();
-			}
-			@Override
-			public Adapter caseLocalVariable(LocalVariable object) {
-				return createLocalVariableAdapter();
-			}
-			@Override
-			public Adapter caseDataType(DataType object) {
-				return createDataTypeAdapter();
-			}
-			@Override
-			public Adapter defaultCase(EObject object) {
-				return createEObjectAdapter();
-			}
-		};
+		@Override
+		public Adapter caseAdapterDeclaration(AdapterDeclaration object) {
+			return createAdapterDeclarationAdapter();
+		}
+
+		@Override
+		public Adapter caseAdapterType(AdapterType object) {
+			return createAdapterTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseAlgorithm(Algorithm object) {
+			return createAlgorithmAdapter();
+		}
+
+		@Override
+		public Adapter caseApplication(Application object) {
+			return createApplicationAdapter();
+		}
+
+		@Override
+		public Adapter caseBasicFBType(BasicFBType object) {
+			return createBasicFBTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseCompilerInfo(CompilerInfo object) {
+			return createCompilerInfoAdapter();
+		}
+
+		@Override
+		public Adapter caseCompiler(org.eclipse.fordiac.ide.model.libraryElement.Compiler object) {
+			return createCompilerAdapter();
+		}
+
+		@Override
+		public Adapter caseConnection(Connection object) {
+			return createConnectionAdapter();
+		}
+
+		@Override
+		public Adapter caseDevice(Device object) {
+			return createDeviceAdapter();
+		}
+
+		@Override
+		public Adapter caseDeviceType(DeviceType object) {
+			return createDeviceTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseECAction(ECAction object) {
+			return createECActionAdapter();
+		}
+
+		@Override
+		public Adapter caseECC(ECC object) {
+			return createECCAdapter();
+		}
+
+		@Override
+		public Adapter caseECState(ECState object) {
+			return createECStateAdapter();
+		}
+
+		@Override
+		public Adapter caseECTransition(ECTransition object) {
+			return createECTransitionAdapter();
+		}
+
+		@Override
+		public Adapter caseEvent(Event object) {
+			return createEventAdapter();
+		}
+
+		@Override
+		public Adapter caseFB(FB object) {
+			return createFBAdapter();
+		}
+
+		@Override
+		public Adapter caseFBNetworkElement(FBNetworkElement object) {
+			return createFBNetworkElementAdapter();
+		}
+
+		@Override
+		public Adapter caseSubApp(SubApp object) {
+			return createSubAppAdapter();
+		}
+
+		@Override
+		public Adapter caseFBType(FBType object) {
+			return createFBTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseIdentification(Identification object) {
+			return createIdentificationAdapter();
+		}
+
+		@Override
+		public Adapter caseInputPrimitive(InputPrimitive object) {
+			return createInputPrimitiveAdapter();
+		}
+
+		@Override
+		public Adapter caseInterfaceList(InterfaceList object) {
+			return createInterfaceListAdapter();
+		}
+
+		@Override
+		public Adapter caseLink(Link object) {
+			return createLinkAdapter();
+		}
+
+		@Override
+		public Adapter caseMapping(Mapping object) {
+			return createMappingAdapter();
+		}
+
+		@Override
+		public Adapter caseOtherAlgorithm(OtherAlgorithm object) {
+			return createOtherAlgorithmAdapter();
+		}
+
+		@Override
+		public Adapter caseOutputPrimitive(OutputPrimitive object) {
+			return createOutputPrimitiveAdapter();
+		}
+
+		@Override
+		public Adapter caseAttribute(Attribute object) {
+			return createAttributeAdapter();
+		}
+
+		@Override
+		public Adapter caseResource(Resource object) {
+			return createResourceAdapter();
+		}
+
+		@Override
+		public Adapter caseResourceTypeName(ResourceTypeName object) {
+			return createResourceTypeNameAdapter();
+		}
+
+		@Override
+		public Adapter caseResourceType(ResourceType object) {
+			return createResourceTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseSegment(Segment object) {
+			return createSegmentAdapter();
+		}
+
+		@Override
+		public Adapter caseServiceSequence(ServiceSequence object) {
+			return createServiceSequenceAdapter();
+		}
+
+		@Override
+		public Adapter caseServiceTransaction(ServiceTransaction object) {
+			return createServiceTransactionAdapter();
+		}
+
+		@Override
+		public Adapter caseServiceInterfaceFBType(ServiceInterfaceFBType object) {
+			return createServiceInterfaceFBTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseSTAlgorithm(STAlgorithm object) {
+			return createSTAlgorithmAdapter();
+		}
+
+		@Override
+		public Adapter caseFBNetwork(FBNetwork object) {
+			return createFBNetworkAdapter();
+		}
+
+		@Override
+		public Adapter caseSubAppType(SubAppType object) {
+			return createSubAppTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseAutomationSystem(AutomationSystem object) {
+			return createAutomationSystemAdapter();
+		}
+
+		@Override
+		public Adapter caseVarDeclaration(VarDeclaration object) {
+			return createVarDeclarationAdapter();
+		}
+
+		@Override
+		public Adapter caseVersionInfo(VersionInfo object) {
+			return createVersionInfoAdapter();
+		}
+
+		@Override
+		public Adapter caseWith(With object) {
+			return createWithAdapter();
+		}
+
+		@Override
+		public Adapter caseLibraryElement(LibraryElement object) {
+			return createLibraryElementAdapter();
+		}
+
+		@Override
+		public Adapter caseCompilableType(CompilableType object) {
+			return createCompilableTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseConfigurableObject(ConfigurableObject object) {
+			return createConfigurableObjectAdapter();
+		}
+
+		@Override
+		public Adapter caseCompositeFBType(CompositeFBType object) {
+			return createCompositeFBTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseTextAlgorithm(TextAlgorithm object) {
+			return createTextAlgorithmAdapter();
+		}
+
+		@Override
+		public Adapter caseDataConnection(DataConnection object) {
+			return createDataConnectionAdapter();
+		}
+
+		@Override
+		public Adapter caseEventConnection(EventConnection object) {
+			return createEventConnectionAdapter();
+		}
+
+		@Override
+		public Adapter caseAdapterConnection(AdapterConnection object) {
+			return createAdapterConnectionAdapter();
+		}
+
+		@Override
+		public Adapter caseServiceInterface(ServiceInterface object) {
+			return createServiceInterfaceAdapter();
+		}
+
+		@Override
+		public Adapter caseIInterfaceElement(IInterfaceElement object) {
+			return createIInterfaceElementAdapter();
+		}
+
+		@Override
+		public Adapter caseValue(Value object) {
+			return createValueAdapter();
+		}
+
+		@Override
+		public Adapter caseSystemConfiguration(SystemConfiguration object) {
+			return createSystemConfigurationAdapter();
+		}
+
+		@Override
+		public Adapter caseINamedElement(INamedElement object) {
+			return createINamedElementAdapter();
+		}
+
+		@Override
+		public Adapter caseResourceTypeFB(ResourceTypeFB object) {
+			return createResourceTypeFBAdapter();
+		}
+
+		@Override
+		public Adapter caseSegmentType(SegmentType object) {
+			return createSegmentTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseAdapterFBType(AdapterFBType object) {
+			return createAdapterFBTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseAdapterEvent(AdapterEvent object) {
+			return createAdapterEventAdapter();
+		}
+
+		@Override
+		public Adapter caseService(Service object) {
+			return createServiceAdapter();
+		}
+
+		@Override
+		public Adapter caseTypedConfigureableObject(TypedConfigureableObject object) {
+			return createTypedConfigureableObjectAdapter();
+		}
+
+		@Override
+		public Adapter caseAdapterFB(AdapterFB object) {
+			return createAdapterFBAdapter();
+		}
+
+		@Override
+		public Adapter casePrimitive(Primitive object) {
+			return createPrimitiveAdapter();
+		}
+
+		@Override
+		public Adapter casePositionableElement(PositionableElement object) {
+			return createPositionableElementAdapter();
+		}
+
+		@Override
+		public Adapter caseColor(Color object) {
+			return createColorAdapter();
+		}
+
+		@Override
+		public Adapter caseColorizableElement(ColorizableElement object) {
+			return createColorizableElementAdapter();
+		}
+
+		@Override
+		public Adapter caseIVarElement(IVarElement object) {
+			return createIVarElementAdapter();
+		}
+
+		@Override
+		public Adapter caseAttributeDeclaration(AttributeDeclaration object) {
+			return createAttributeDeclarationAdapter();
+		}
+
+		@Override
+		public Adapter caseTypedElement(TypedElement object) {
+			return createTypedElementAdapter();
+		}
+
+		@Override
+		public Adapter caseSimpleFBType(SimpleFBType object) {
+			return createSimpleFBTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseBaseFBType(BaseFBType object) {
+			return createBaseFBTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseStructManipulator(StructManipulator object) {
+			return createStructManipulatorAdapter();
+		}
+
+		@Override
+		public Adapter caseDemultiplexer(Demultiplexer object) {
+			return createDemultiplexerAdapter();
+		}
+
+		@Override
+		public Adapter caseMultiplexer(Multiplexer object) {
+			return createMultiplexerAdapter();
+		}
+
+		@Override
+		public Adapter caseLocalVariable(LocalVariable object) {
+			return createLocalVariableAdapter();
+		}
+
+		@Override
+		public Adapter caseDataType(DataType object) {
+			return createDataTypeAdapter();
+		}
+
+		@Override
+		public Adapter defaultCase(EObject object) {
+			return createEObjectAdapter();
+		}
+	};
 
 	/**
-	 * Creates an adapter for the <code>target</code>.
-	 * <!-- begin-user-doc --> <!--
+	 * Creates an adapter for the <code>target</code>. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @param target the object to adapt.
 	 * @return the adapter for the <code>target</code>.
 	 * @generated
 	 */
 	@Override
 	public Adapter createAdapter(Notifier target) {
-		return modelSwitch.doSwitch((EObject)target);
+		return modelSwitch.doSwitch((EObject) target);
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration <em>Adapter Declaration</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+	 * <em>Adapter Declaration</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 	 * @generated
@@ -481,10 +559,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType <em>Adapter Type</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType <em>Adapter
+	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 	 * @generated
@@ -494,10 +574,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Algorithm <em>Algorithm</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Algorithm
+	 * <em>Algorithm</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 	 * @generated
@@ -507,10 +589,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Application <em>Application</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Application
+	 * <em>Application</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Application
 	 * @generated
@@ -520,10 +604,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType <em>Basic FB Type</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType <em>Basic FB
+	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 	 * @generated
@@ -533,10 +619,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo <em>Compiler Info</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo
+	 * <em>Compiler Info</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo
 	 * @generated
@@ -546,10 +634,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler <em>Compiler</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler
+	 * <em>Compiler</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Compiler
 	 * @generated
@@ -559,10 +649,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection <em>Connection</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection
+	 * <em>Connection</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection
 	 * @generated
@@ -572,10 +664,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Device <em>Device</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Device
+	 * <em>Device</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Device
 	 * @generated
@@ -585,10 +679,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType <em>Device Type</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType <em>Device
+	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeviceType
 	 * @generated
@@ -598,10 +694,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction <em>EC Action</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction <em>EC
+	 * Action</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECAction
 	 * @generated
@@ -626,10 +724,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState <em>EC State</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState <em>EC
+	 * State</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState
 	 * @generated
@@ -639,10 +739,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition <em>EC Transition</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition <em>EC
+	 * Transition</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 	 * @generated
@@ -652,10 +754,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Event <em>Event</em>}'.
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Event <em>Event</em>}'.
 	 * <!-- begin-user-doc --> This default implementation returns null so that we
 	 * can easily ignore cases; it's useful to ignore a case when inheritance will
 	 * catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Event
 	 * @generated
@@ -665,10 +769,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork <em>FB Network</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork <em>FB
+	 * Network</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetwork
 	 * @generated
@@ -693,10 +799,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement <em>FB Network Element</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement <em>FB
+	 * Network Element</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
 	 * @generated
@@ -706,10 +814,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.FBType <em>FB Type</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBType <em>FB
+	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBType
 	 * @generated
@@ -719,11 +829,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification <em>Identification</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification
+	 * <em>Identification</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Identification
 	 * @generated
@@ -733,10 +845,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive <em>Input Primitive</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive <em>Input
+	 * Primitive</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive
 	 * @generated
@@ -746,11 +860,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList <em>Interface List</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
+	 * <em>Interface List</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 	 * @generated
@@ -760,10 +876,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Link <em>Link</em>}'.
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Link <em>Link</em>}'.
 	 * <!-- begin-user-doc --> This default implementation returns null so that we
 	 * can easily ignore cases; it's useful to ignore a case when inheritance will
 	 * catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Link
 	 * @generated
@@ -773,10 +891,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Mapping <em>Mapping</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Mapping
+	 * <em>Mapping</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Mapping
 	 * @generated
@@ -786,10 +906,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm <em>Other Algorithm</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm <em>Other
+	 * Algorithm</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
 	 * @generated
@@ -799,11 +921,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive <em>Output Primitive</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive
+	 * <em>Output Primitive</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive
 	 * @generated
@@ -813,10 +937,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource <em>Resource</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource
+	 * <em>Resource</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Resource
 	 * @generated
@@ -826,11 +952,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName <em>Resource Type Name</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName
+	 * <em>Resource Type Name</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName
 	 * @generated
@@ -840,10 +968,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType <em>Resource Type</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType
+	 * <em>Resource Type</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ResourceType
 	 * @generated
@@ -853,10 +983,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment <em>Segment</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment
+	 * <em>Segment</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Segment
 	 * @generated
@@ -866,11 +998,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence <em>Service Sequence</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence
+	 * <em>Service Sequence</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence
 	 * @generated
@@ -880,11 +1014,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction <em>Service Transaction</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction
+	 * <em>Service Transaction</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction
 	 * @generated
@@ -894,11 +1030,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType <em>Service Interface FB Type</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
+	 * <em>Service Interface FB Type</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
 	 * @generated
@@ -908,10 +1046,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm <em>ST Algorithm</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm <em>ST
+	 * Algorithm</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 	 * @generated
@@ -921,10 +1061,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp <em>Sub App</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp <em>Sub
+	 * App</em>}'. <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SubApp
 	 * @generated
@@ -934,10 +1076,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.SubAppType <em>Sub App Type</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SubAppType <em>Sub App
+	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SubAppType
 	 * @generated
@@ -947,11 +1091,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem <em>Automation System</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem
+	 * <em>Automation System</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem
 	 * @generated
@@ -961,10 +1107,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration <em>Var Declaration</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration <em>Var
+	 * Declaration</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 	 * @generated
@@ -974,10 +1122,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo <em>Version Info</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo <em>Version
+	 * Info</em>}'. <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VersionInfo
 	 * @generated
@@ -987,10 +1137,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.With <em>With</em>}'.
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.With <em>With</em>}'.
 	 * <!-- begin-user-doc --> This default implementation returns null so that we
 	 * can easily ignore cases; it's useful to ignore a case when inheritance will
 	 * catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.With
 	 * @generated
@@ -1000,11 +1152,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement <em>Library Element</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
+	 * <em>Library Element</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 	 * @generated
@@ -1014,11 +1168,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType <em>Compilable Type</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType
+	 * <em>Compilable Type</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CompilableType
 	 * @generated
@@ -1028,11 +1184,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject <em>Configurable Object</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject
+	 * <em>Configurable Object</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject
 	 * @generated
@@ -1042,11 +1200,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType <em>Composite FB Type</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
+	 * <em>Composite FB Type</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 	 * @generated
@@ -1056,10 +1216,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm <em>Text Algorithm</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm <em>Text
+	 * Algorithm</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm
 	 * @generated
@@ -1069,10 +1231,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.DataConnection <em>Data Connection</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.DataConnection <em>Data
+	 * Connection</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.DataConnection
 	 * @generated
@@ -1082,11 +1246,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.EventConnection <em>Event Connection</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.EventConnection
+	 * <em>Event Connection</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.EventConnection
 	 * @generated
@@ -1096,11 +1262,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection <em>Adapter Connection</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection
+	 * <em>Adapter Connection</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection
 	 * @generated
@@ -1110,11 +1278,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface <em>Service Interface</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface
+	 * <em>Service Interface</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface
 	 * @generated
@@ -1124,11 +1294,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement <em>IInterface Element</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
+	 * <em>IInterface Element</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 	 * @generated
@@ -1138,10 +1310,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Value <em>Value</em>}'.
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Value <em>Value</em>}'.
 	 * <!-- begin-user-doc --> This default implementation returns null so that we
 	 * can easily ignore cases; it's useful to ignore a case when inheritance will
 	 * catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Value
 	 * @generated
@@ -1151,11 +1325,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration <em>System Configuration</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration
+	 * <em>System Configuration</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration
 	 * @generated
@@ -1165,10 +1341,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed
+	 * Element</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 	 * @generated
@@ -1178,11 +1356,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB <em>Resource Type FB</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB
+	 * <em>Resource Type FB</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB
 	 * @generated
@@ -1192,10 +1372,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.SegmentType <em>Segment Type</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SegmentType <em>Segment
+	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SegmentType
 	 * @generated
@@ -1205,11 +1387,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType <em>Adapter FB Type</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
+	 * <em>Adapter FB Type</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 	 * @generated
@@ -1219,10 +1403,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent <em>Adapter Event</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent <em>Adapter
+	 * Event</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
 	 * @generated
@@ -1232,10 +1418,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Service <em>Service</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Service
+	 * <em>Service</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Service
 	 * @generated
@@ -1245,11 +1433,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject <em>Typed Configureable Object</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject
+	 * <em>Typed Configureable Object</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject
 	 * @generated
@@ -1259,10 +1449,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB <em>Adapter FB</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB <em>Adapter
+	 * FB</em>}'. <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 	 * @generated
@@ -1272,10 +1464,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive <em>Primitive</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive
+	 * <em>Primitive</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Primitive
 	 * @generated
@@ -1285,11 +1479,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement <em>Positionable Element</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement
+	 * <em>Positionable Element</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.PositionableElement
 	 * @generated
@@ -1299,10 +1495,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Color <em>Color</em>}'.
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Color <em>Color</em>}'.
 	 * <!-- begin-user-doc --> This default implementation returns null so that we
 	 * can easily ignore cases; it's useful to ignore a case when inheritance will
 	 * catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Color
 	 * @generated
@@ -1312,11 +1510,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement <em>Colorizable Element</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement
+	 * <em>Colorizable Element</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement
 	 * @generated
@@ -1326,10 +1526,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar Element</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar
+	 * Element</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IVarElement
 	 * @generated
@@ -1339,11 +1541,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration <em>Attribute Declaration</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration
+	 * <em>Attribute Declaration</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration
 	 * @generated
@@ -1353,10 +1557,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement <em>Typed Element</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement <em>Typed
+	 * Element</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedElement
 	 * @generated
@@ -1366,10 +1572,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType <em>Simple FB Type</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType <em>Simple
+	 * FB Type</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 	 * @generated
@@ -1379,10 +1587,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType <em>Base FB Type</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType <em>Base FB
+	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 	 * @generated
@@ -1392,11 +1602,13 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator <em>Struct Manipulator</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator
+	 * <em>Struct Manipulator</em>}'. <!-- begin-user-doc --> This default
+	 * implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway. <!--
+	 * end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.StructManipulator
 	 * @generated
@@ -1406,11 +1618,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer <em>Demultiplexer</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer
+	 * <em>Demultiplexer</em>}'. <!-- begin-user-doc --> This default implementation
+	 * returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer
 	 * @generated
@@ -1420,11 +1633,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Multiplexer <em>Multiplexer</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Multiplexer
+	 * <em>Multiplexer</em>}'. <!-- begin-user-doc --> This default implementation
+	 * returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Multiplexer
 	 * @generated
@@ -1434,11 +1648,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable <em>Local Variable</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable <em>Local
+	 * Variable</em>}'. <!-- begin-user-doc --> This default implementation returns
+	 * null so that we can easily ignore cases; it's useful to ignore a case when
+	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LocalVariable
 	 * @generated
@@ -1448,10 +1663,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute <em>Attribute</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute
+	 * <em>Attribute</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Attribute
 	 * @generated
@@ -1476,9 +1693,9 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for the default case.
-	 * <!-- begin-user-doc --> This
+	 * Creates a new adapter for the default case. <!-- begin-user-doc --> This
 	 * default implementation returns null. <!-- end-user-doc -->
+	 * 
 	 * @return the new adapter.
 	 * @generated
 	 */

@@ -23,7 +23,8 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration#getInitialValue <em>Initial Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration#getInitialValue
+ * <em>Initial Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAttributeDeclaration()

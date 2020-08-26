@@ -23,8 +23,10 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getComment <em>Comment</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getComment
+ * <em>Comment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getName
+ * <em>Name</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedValue()
@@ -51,8 +53,10 @@ public interface EnumeratedValue extends EObject {
 	String getComment();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getComment <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getComment
+	 * <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Comment</em>' attribute.
 	 * @see #getComment()
 	 * @generated
@@ -78,8 +82,10 @@ public interface EnumeratedValue extends EObject {
 	String getName();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getName <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getName
+	 * <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated

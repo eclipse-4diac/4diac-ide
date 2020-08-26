@@ -24,7 +24,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement#getVarDeclarations <em>Var Declarations</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement#getVarDeclarations
+ * <em>Var Declarations</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIVarElement()

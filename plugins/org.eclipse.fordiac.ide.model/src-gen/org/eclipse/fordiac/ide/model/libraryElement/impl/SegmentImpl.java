@@ -40,12 +40,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getX <em>X</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getY <em>Y</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getColor <em>Color</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getWidth <em>Width</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getVarDeclarations <em>Var Declarations</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getOutConnections <em>Out Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getX
+ * <em>X</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getY
+ * <em>Y</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getColor
+ * <em>Color</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getWidth
+ * <em>Width</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getVarDeclarations
+ * <em>Var Declarations</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getOutConnections
+ * <em>Out Connections</em>}</li>
  * </ul>
  *
  * @generated
@@ -92,8 +98,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	protected int y = Y_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getColor() <em>Color</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getColor() <em>Color</em>}' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getColor()
 	 * @generated
 	 * @ordered
@@ -121,9 +128,10 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	protected int width = WIDTH_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!--
+	 * The cached value of the '{@link #getVarDeclarations() <em>Var
+	 * Declarations</em>}' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @see #getVarDeclarations()
 	 * @generated
 	 * @ordered
@@ -143,6 +151,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SegmentImpl() {
@@ -151,6 +160,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -160,6 +170,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -169,6 +180,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -181,6 +193,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -190,6 +203,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -202,22 +216,27 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Color getColor() {
 		if (color != null && color.eIsProxy()) {
-			InternalEObject oldColor = (InternalEObject)color;
-			color = (Color)eResolveProxy(oldColor);
+			InternalEObject oldColor = (InternalEObject) color;
+			color = (Color) eResolveProxy(oldColor);
 			if (color != oldColor) {
-				InternalEObject newColor = (InternalEObject)color;
-				NotificationChain msgs = oldColor.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR, null, null);
+				InternalEObject newColor = (InternalEObject) color;
+				NotificationChain msgs = oldColor.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR, null, null);
 				if (newColor.eInternalContainer() == null) {
-					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR, null, msgs);
+					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR,
+							null, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
+				if (msgs != null)
+					msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SEGMENT__COLOR, oldColor, color));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SEGMENT__COLOR,
+							oldColor, color));
 			}
 		}
 		return color;
@@ -225,6 +244,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Color basicGetColor() {
@@ -233,20 +253,26 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetColor(Color newColor, NotificationChain msgs) {
 		Color oldColor = color;
 		color = newColor;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SEGMENT__COLOR, oldColor, newColor);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.SEGMENT__COLOR, oldColor, newColor);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -254,18 +280,22 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		if (newColor != color) {
 			NotificationChain msgs = null;
 			if (color != null)
-				msgs = ((InternalEObject)color).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR, null, msgs);
+				msgs = ((InternalEObject) color).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR, null, msgs);
 			if (newColor != null)
-				msgs = ((InternalEObject)newColor).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR, null, msgs);
+				msgs = ((InternalEObject) newColor).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR, null, msgs);
 			msgs = basicSetColor(newColor, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SEGMENT__COLOR, newColor, newColor));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SEGMENT__COLOR, newColor,
+					newColor));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -275,6 +305,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -282,65 +313,77 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		int oldWidth = width;
 		width = newWidth;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SEGMENT__WIDTH, oldWidth, width));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SEGMENT__WIDTH, oldWidth,
+					width));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
-			varDeclarations = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.SEGMENT__VAR_DECLARATIONS);
+			varDeclarations = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this,
+					LibraryElementPackage.SEGMENT__VAR_DECLARATIONS);
 		}
 		return varDeclarations;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Link> getOutConnections() {
 		if (outConnections == null) {
-			outConnections = new EObjectWithInverseResolvingEList<Link>(Link.class, this, LibraryElementPackage.SEGMENT__OUT_CONNECTIONS, LibraryElementPackage.LINK__SEGMENT);
+			outConnections = new EObjectWithInverseResolvingEList<Link>(Link.class, this,
+					LibraryElementPackage.SEGMENT__OUT_CONNECTIONS, LibraryElementPackage.LINK__SEGMENT);
 		}
 		return outConnections;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public SegmentType getType() {
-		//this cannot be moved to the annotation class because there we don't have the super access!!!
+		// this cannot be moved to the annotation class because there we don't have the
+		// super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
-		if(type instanceof SegmentType){
-			return (SegmentType) type; 
+		if (type instanceof SegmentType) {
+			return (SegmentType) type;
 		}
 		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Color getColorGen() {
 		if (color != null && color.eIsProxy()) {
-			InternalEObject oldColor = (InternalEObject)color;
-			color = (Color)eResolveProxy(oldColor);
+			InternalEObject oldColor = (InternalEObject) color;
+			color = (Color) eResolveProxy(oldColor);
 			if (color != oldColor) {
-				InternalEObject newColor = (InternalEObject)color;
-				NotificationChain msgs = oldColor.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR, null, null);
+				InternalEObject newColor = (InternalEObject) color;
+				NotificationChain msgs = oldColor.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR, null, null);
 				if (newColor.eInternalContainer() == null) {
-					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR, null, msgs);
+					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR,
+							null, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
+				if (msgs != null)
+					msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SEGMENT__COLOR, oldColor, color));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SEGMENT__COLOR,
+							oldColor, color));
 			}
 		}
 		return color;
@@ -348,168 +391,181 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutConnections()).basicAdd(otherEnd, msgs);
-			default:
-				return super.eInverseAdd(otherEnd, featureID, msgs);
+		case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getOutConnections()).basicAdd(otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT__COLOR:
-				return basicSetColor(null, msgs);
-			case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
-				return ((InternalEList<?>)getVarDeclarations()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
-				return ((InternalEList<?>)getOutConnections()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case LibraryElementPackage.SEGMENT__COLOR:
+			return basicSetColor(null, msgs);
+		case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
+			return ((InternalEList<?>) getVarDeclarations()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
+			return ((InternalEList<?>) getOutConnections()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT__X:
-				return getX();
-			case LibraryElementPackage.SEGMENT__Y:
-				return getY();
-			case LibraryElementPackage.SEGMENT__COLOR:
-				if (resolve) return getColor();
-				return basicGetColor();
-			case LibraryElementPackage.SEGMENT__WIDTH:
-				return getWidth();
-			case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
-				return getVarDeclarations();
-			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
-				return getOutConnections();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.SEGMENT__X:
+			return getX();
+		case LibraryElementPackage.SEGMENT__Y:
+			return getY();
+		case LibraryElementPackage.SEGMENT__COLOR:
+			if (resolve)
+				return getColor();
+			return basicGetColor();
+		case LibraryElementPackage.SEGMENT__WIDTH:
+			return getWidth();
+		case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
+			return getVarDeclarations();
+		case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
+			return getOutConnections();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT__X:
-				setX((Integer)newValue);
-				return;
-			case LibraryElementPackage.SEGMENT__Y:
-				setY((Integer)newValue);
-				return;
-			case LibraryElementPackage.SEGMENT__COLOR:
-				setColor((Color)newValue);
-				return;
-			case LibraryElementPackage.SEGMENT__WIDTH:
-				setWidth((Integer)newValue);
-				return;
-			case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
-				getVarDeclarations().clear();
-				getVarDeclarations().addAll((Collection<? extends VarDeclaration>)newValue);
-				return;
-			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
-				getOutConnections().clear();
-				getOutConnections().addAll((Collection<? extends Link>)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.SEGMENT__X:
+			setX((Integer) newValue);
+			return;
+		case LibraryElementPackage.SEGMENT__Y:
+			setY((Integer) newValue);
+			return;
+		case LibraryElementPackage.SEGMENT__COLOR:
+			setColor((Color) newValue);
+			return;
+		case LibraryElementPackage.SEGMENT__WIDTH:
+			setWidth((Integer) newValue);
+			return;
+		case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
+			getVarDeclarations().clear();
+			getVarDeclarations().addAll((Collection<? extends VarDeclaration>) newValue);
+			return;
+		case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
+			getOutConnections().clear();
+			getOutConnections().addAll((Collection<? extends Link>) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT__X:
-				setX(X_EDEFAULT);
-				return;
-			case LibraryElementPackage.SEGMENT__Y:
-				setY(Y_EDEFAULT);
-				return;
-			case LibraryElementPackage.SEGMENT__COLOR:
-				setColor((Color)null);
-				return;
-			case LibraryElementPackage.SEGMENT__WIDTH:
-				setWidth(WIDTH_EDEFAULT);
-				return;
-			case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
-				getVarDeclarations().clear();
-				return;
-			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
-				getOutConnections().clear();
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.SEGMENT__X:
+			setX(X_EDEFAULT);
+			return;
+		case LibraryElementPackage.SEGMENT__Y:
+			setY(Y_EDEFAULT);
+			return;
+		case LibraryElementPackage.SEGMENT__COLOR:
+			setColor((Color) null);
+			return;
+		case LibraryElementPackage.SEGMENT__WIDTH:
+			setWidth(WIDTH_EDEFAULT);
+			return;
+		case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
+			getVarDeclarations().clear();
+			return;
+		case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
+			getOutConnections().clear();
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT__X:
-				return x != X_EDEFAULT;
-			case LibraryElementPackage.SEGMENT__Y:
-				return y != Y_EDEFAULT;
-			case LibraryElementPackage.SEGMENT__COLOR:
-				return color != null;
-			case LibraryElementPackage.SEGMENT__WIDTH:
-				return width != WIDTH_EDEFAULT;
-			case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
-				return varDeclarations != null && !varDeclarations.isEmpty();
-			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
-				return outConnections != null && !outConnections.isEmpty();
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.SEGMENT__X:
+			return x != X_EDEFAULT;
+		case LibraryElementPackage.SEGMENT__Y:
+			return y != Y_EDEFAULT;
+		case LibraryElementPackage.SEGMENT__COLOR:
+			return color != null;
+		case LibraryElementPackage.SEGMENT__WIDTH:
+			return width != WIDTH_EDEFAULT;
+		case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
+			return varDeclarations != null && !varDeclarations.isEmpty();
+		case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
+			return outConnections != null && !outConnections.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
 			switch (derivedFeatureID) {
-				case LibraryElementPackage.SEGMENT__X: return LibraryElementPackage.POSITIONABLE_ELEMENT__X;
-				case LibraryElementPackage.SEGMENT__Y: return LibraryElementPackage.POSITIONABLE_ELEMENT__Y;
-				default: return -1;
+			case LibraryElementPackage.SEGMENT__X:
+				return LibraryElementPackage.POSITIONABLE_ELEMENT__X;
+			case LibraryElementPackage.SEGMENT__Y:
+				return LibraryElementPackage.POSITIONABLE_ELEMENT__Y;
+			default:
+				return -1;
 			}
 		}
 		if (baseClass == ColorizableElement.class) {
 			switch (derivedFeatureID) {
-				case LibraryElementPackage.SEGMENT__COLOR: return LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR;
-				default: return -1;
+			case LibraryElementPackage.SEGMENT__COLOR:
+				return LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR;
+			default:
+				return -1;
 			}
 		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
@@ -517,21 +573,27 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
 			switch (baseFeatureID) {
-				case LibraryElementPackage.POSITIONABLE_ELEMENT__X: return LibraryElementPackage.SEGMENT__X;
-				case LibraryElementPackage.POSITIONABLE_ELEMENT__Y: return LibraryElementPackage.SEGMENT__Y;
-				default: return -1;
+			case LibraryElementPackage.POSITIONABLE_ELEMENT__X:
+				return LibraryElementPackage.SEGMENT__X;
+			case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
+				return LibraryElementPackage.SEGMENT__Y;
+			default:
+				return -1;
 			}
 		}
 		if (baseClass == ColorizableElement.class) {
 			switch (baseFeatureID) {
-				case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR: return LibraryElementPackage.SEGMENT__COLOR;
-				default: return -1;
+			case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
+				return LibraryElementPackage.SEGMENT__COLOR;
+			default:
+				return -1;
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
@@ -539,11 +601,13 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (x: "); //$NON-NLS-1$

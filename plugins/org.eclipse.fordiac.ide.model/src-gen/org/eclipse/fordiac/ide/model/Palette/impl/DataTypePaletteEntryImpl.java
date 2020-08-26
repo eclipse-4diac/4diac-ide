@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 public class DataTypePaletteEntryImpl extends PaletteEntryImpl implements DataTypePaletteEntry {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected DataTypePaletteEntryImpl() {
@@ -42,6 +43,7 @@ public class DataTypePaletteEntryImpl extends PaletteEntryImpl implements DataTy
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -51,6 +53,7 @@ public class DataTypePaletteEntryImpl extends PaletteEntryImpl implements DataTy
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -64,6 +67,7 @@ public class DataTypePaletteEntryImpl extends PaletteEntryImpl implements DataTy
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -82,6 +86,7 @@ public class DataTypePaletteEntryImpl extends PaletteEntryImpl implements DataTy
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

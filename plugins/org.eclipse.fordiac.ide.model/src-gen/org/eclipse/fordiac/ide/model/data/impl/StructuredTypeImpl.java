@@ -32,16 +32,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl#getMemberVariables <em>Member Variables</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl#getMemberVariables
+ * <em>Member Variables</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class StructuredTypeImpl extends AnyDerivedTypeImpl implements StructuredType {
 	/**
-	 * The cached value of the '{@link #getMemberVariables() <em>Member Variables</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getMemberVariables() <em>Member
+	 * Variables</em>}' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @see #getMemberVariables()
 	 * @generated
 	 * @ordered
@@ -50,6 +52,7 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected StructuredTypeImpl() {
@@ -58,6 +61,7 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -66,91 +70,97 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<VarDeclaration> getMemberVariables() {
 		if (memberVariables == null) {
-			memberVariables = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES);
+			memberVariables = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this,
+					DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES);
 		}
 		return memberVariables;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
-				return ((InternalEList<?>)getMemberVariables()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+			return ((InternalEList<?>) getMemberVariables()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
-				return getMemberVariables();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+			return getMemberVariables();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
-				getMemberVariables().clear();
-				getMemberVariables().addAll((Collection<? extends VarDeclaration>)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+			getMemberVariables().clear();
+			getMemberVariables().addAll((Collection<? extends VarDeclaration>) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
-				getMemberVariables().clear();
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+			getMemberVariables().clear();
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
-				return memberVariables != null && !memberVariables.isEmpty();
-			default:
-				return super.eIsSet(featureID);
+		case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+			return memberVariables != null && !memberVariables.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 

@@ -23,7 +23,8 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getAlgorithm <em>Algorithm</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getAlgorithm
+ * <em>Algorithm</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSimpleFBType()
@@ -39,19 +40,22 @@ public interface SimpleFBType extends BaseFBType {
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Algorithm</em>' containment reference.
 	 * @see #setAlgorithm(Algorithm)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSimpleFBType_Algorithm()
-	 * @model containment="true" required="true"
-	 *        extendedMetaData="kind='element' name='Algorithm' namespace='##targetNamespace'"
+	 * @model containment="true" required="true" extendedMetaData="kind='element'
+	 *        name='Algorithm' namespace='##targetNamespace'"
 	 * @generated
 	 */
 	Algorithm getAlgorithm();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getAlgorithm <em>Algorithm</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!--
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getAlgorithm
+	 * <em>Algorithm</em>}' containment reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Algorithm</em>' containment reference.
 	 * @see #getAlgorithm()
 	 * @generated

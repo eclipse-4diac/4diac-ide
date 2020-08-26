@@ -24,11 +24,16 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#isIsInput <em>Is Input</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections <em>Input Connections</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections <em>Output Connections</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getTypeName <em>Type Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#isIsInput
+ * <em>Is Input</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections
+ * <em>Input Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections
+ * <em>Output Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getType
+ * <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getTypeName
+ * <em>Type Name</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIInterfaceElement()
@@ -54,8 +59,10 @@ public interface IInterfaceElement extends INamedElement {
 	boolean isIsInput();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#isIsInput <em>Is Input</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#isIsInput
+	 * <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Is Input</em>' attribute.
 	 * @see #isIsInput()
 	 * @generated
@@ -64,14 +71,17 @@ public interface IInterfaceElement extends INamedElement {
 
 	/**
 	 * Returns the value of the '<em><b>Input Connections</b></em>' reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.Connection}.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination <em>Destination</em>}'.
-	 * <!-- begin-user-doc -->
+	 * The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.Connection}. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination
+	 * <em>Destination</em>}'. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Input Connections</em>' reference list isn't
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Input Connections</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIInterfaceElement_InputConnections()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination
@@ -82,14 +92,17 @@ public interface IInterfaceElement extends INamedElement {
 
 	/**
 	 * Returns the value of the '<em><b>Output Connections</b></em>' reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.Connection}.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource <em>Source</em>}'.
-	 * <!-- begin-user-doc -->
+	 * The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.Connection}. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource
+	 * <em>Source</em>}'. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Output Connections</em>' reference list isn't
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Output Connections</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIInterfaceElement_OutputConnections()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource
@@ -116,8 +129,10 @@ public interface IInterfaceElement extends INamedElement {
 	DataType getType();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getType <em>Type</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getType
+	 * <em>Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Type</em>' reference.
 	 * @see #getType()
 	 * @generated
@@ -142,8 +157,10 @@ public interface IInterfaceElement extends INamedElement {
 	String getTypeName();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getTypeName <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getTypeName
+	 * <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Type Name</em>' attribute.
 	 * @see #getTypeName()
 	 * @generated
@@ -152,6 +169,7 @@ public interface IInterfaceElement extends INamedElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

@@ -33,17 +33,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getAlgorithm <em>Algorithm</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getOutput <em>Output</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getECState <em>EC State</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getAlgorithm
+ * <em>Algorithm</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getOutput
+ * <em>Output</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getECState
+ * <em>EC State</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ECActionImpl extends EObjectImpl implements ECAction {
 	/**
-	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getAlgorithm()
 	 * @generated
 	 * @ordered
@@ -53,6 +57,7 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 	/**
 	 * The cached value of the '{@link #getOutput() <em>Output</em>}' reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getOutput()
 	 * @generated
 	 * @ordered
@@ -61,6 +66,7 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ECActionImpl() {
@@ -69,6 +75,7 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -78,16 +85,18 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Algorithm getAlgorithm() {
 		if (algorithm != null && algorithm.eIsProxy()) {
-			InternalEObject oldAlgorithm = (InternalEObject)algorithm;
-			algorithm = (Algorithm)eResolveProxy(oldAlgorithm);
+			InternalEObject oldAlgorithm = (InternalEObject) algorithm;
+			algorithm = (Algorithm) eResolveProxy(oldAlgorithm);
 			if (algorithm != oldAlgorithm) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.EC_ACTION__ALGORITHM, oldAlgorithm, algorithm));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							LibraryElementPackage.EC_ACTION__ALGORITHM, oldAlgorithm, algorithm));
 			}
 		}
 		return algorithm;
@@ -95,6 +104,7 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Algorithm basicGetAlgorithm() {
@@ -103,6 +113,7 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -110,21 +121,24 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		Algorithm oldAlgorithm = algorithm;
 		algorithm = newAlgorithm;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_ACTION__ALGORITHM, oldAlgorithm, algorithm));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_ACTION__ALGORITHM,
+					oldAlgorithm, algorithm));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Event getOutput() {
 		if (output != null && output.eIsProxy()) {
-			InternalEObject oldOutput = (InternalEObject)output;
-			output = (Event)eResolveProxy(oldOutput);
+			InternalEObject oldOutput = (InternalEObject) output;
+			output = (Event) eResolveProxy(oldOutput);
 			if (output != oldOutput) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.EC_ACTION__OUTPUT, oldOutput, output));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.EC_ACTION__OUTPUT,
+							oldOutput, output));
 			}
 		}
 		return output;
@@ -132,6 +146,7 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Event basicGetOutput() {
@@ -140,6 +155,7 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -147,182 +163,203 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		Event oldOutput = output;
 		output = newOutput;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_ACTION__OUTPUT, oldOutput, output));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_ACTION__OUTPUT, oldOutput,
+					output));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public ECState getECState() {
-		if (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE) return null;
-		return (ECState)eContainer();
+		if (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE)
+			return null;
+		return (ECState) eContainer();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ECState basicGetECState() {
-		if (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE) return null;
-		return (ECState)eInternalContainer();
+		if (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE)
+			return null;
+		return (ECState) eInternalContainer();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetECState(ECState newECState, NotificationChain msgs) {
-		msgs = eBasicSetContainer((InternalEObject)newECState, LibraryElementPackage.EC_ACTION__EC_STATE, msgs);
+		msgs = eBasicSetContainer((InternalEObject) newECState, LibraryElementPackage.EC_ACTION__EC_STATE, msgs);
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void setECState(ECState newECState) {
-		if (newECState != eInternalContainer() || (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE && newECState != null)) {
+		if (newECState != eInternalContainer()
+				|| (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE && newECState != null)) {
 			if (EcoreUtil.isAncestor(this, newECState))
 				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
 			NotificationChain msgs = null;
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
 			if (newECState != null)
-				msgs = ((InternalEObject)newECState).eInverseAdd(this, LibraryElementPackage.EC_STATE__EC_ACTION, ECState.class, msgs);
+				msgs = ((InternalEObject) newECState).eInverseAdd(this, LibraryElementPackage.EC_STATE__EC_ACTION,
+						ECState.class, msgs);
 			msgs = basicSetECState(newECState, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_ACTION__EC_STATE, newECState, newECState));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_ACTION__EC_STATE, newECState,
+					newECState));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.EC_ACTION__EC_STATE:
-				if (eInternalContainer() != null)
-					msgs = eBasicRemoveFromContainer(msgs);
-				return basicSetECState((ECState)otherEnd, msgs);
-			default:
-				return super.eInverseAdd(otherEnd, featureID, msgs);
+		case LibraryElementPackage.EC_ACTION__EC_STATE:
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			return basicSetECState((ECState) otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.EC_ACTION__EC_STATE:
-				return basicSetECState(null, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case LibraryElementPackage.EC_ACTION__EC_STATE:
+			return basicSetECState(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
-			case LibraryElementPackage.EC_ACTION__EC_STATE:
-				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.EC_STATE__EC_ACTION, ECState.class, msgs);
-			default:
-				return super.eBasicRemoveFromContainerFeature(msgs);
+		case LibraryElementPackage.EC_ACTION__EC_STATE:
+			return eInternalContainer().eInverseRemove(this, LibraryElementPackage.EC_STATE__EC_ACTION, ECState.class,
+					msgs);
+		default:
+			return super.eBasicRemoveFromContainerFeature(msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.EC_ACTION__ALGORITHM:
-				if (resolve) return getAlgorithm();
-				return basicGetAlgorithm();
-			case LibraryElementPackage.EC_ACTION__OUTPUT:
-				if (resolve) return getOutput();
-				return basicGetOutput();
-			case LibraryElementPackage.EC_ACTION__EC_STATE:
-				if (resolve) return getECState();
-				return basicGetECState();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.EC_ACTION__ALGORITHM:
+			if (resolve)
+				return getAlgorithm();
+			return basicGetAlgorithm();
+		case LibraryElementPackage.EC_ACTION__OUTPUT:
+			if (resolve)
+				return getOutput();
+			return basicGetOutput();
+		case LibraryElementPackage.EC_ACTION__EC_STATE:
+			if (resolve)
+				return getECState();
+			return basicGetECState();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.EC_ACTION__ALGORITHM:
-				setAlgorithm((Algorithm)newValue);
-				return;
-			case LibraryElementPackage.EC_ACTION__OUTPUT:
-				setOutput((Event)newValue);
-				return;
-			case LibraryElementPackage.EC_ACTION__EC_STATE:
-				setECState((ECState)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.EC_ACTION__ALGORITHM:
+			setAlgorithm((Algorithm) newValue);
+			return;
+		case LibraryElementPackage.EC_ACTION__OUTPUT:
+			setOutput((Event) newValue);
+			return;
+		case LibraryElementPackage.EC_ACTION__EC_STATE:
+			setECState((ECState) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.EC_ACTION__ALGORITHM:
-				setAlgorithm((Algorithm)null);
-				return;
-			case LibraryElementPackage.EC_ACTION__OUTPUT:
-				setOutput((Event)null);
-				return;
-			case LibraryElementPackage.EC_ACTION__EC_STATE:
-				setECState((ECState)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.EC_ACTION__ALGORITHM:
+			setAlgorithm((Algorithm) null);
+			return;
+		case LibraryElementPackage.EC_ACTION__OUTPUT:
+			setOutput((Event) null);
+			return;
+		case LibraryElementPackage.EC_ACTION__EC_STATE:
+			setECState((ECState) null);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.EC_ACTION__ALGORITHM:
-				return algorithm != null;
-			case LibraryElementPackage.EC_ACTION__OUTPUT:
-				return output != null;
-			case LibraryElementPackage.EC_ACTION__EC_STATE:
-				return basicGetECState() != null;
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.EC_ACTION__ALGORITHM:
+			return algorithm != null;
+		case LibraryElementPackage.EC_ACTION__OUTPUT:
+			return output != null;
+		case LibraryElementPackage.EC_ACTION__EC_STATE:
+			return basicGetECState() != null;
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 

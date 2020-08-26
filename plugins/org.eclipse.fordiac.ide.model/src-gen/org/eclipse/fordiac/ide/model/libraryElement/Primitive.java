@@ -23,9 +23,12 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getEvent <em>Event</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getParameters <em>Parameters</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getInterface <em>Interface</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getEvent
+ * <em>Event</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getParameters
+ * <em>Parameters</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getInterface
+ * <em>Interface</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPrimitive()
@@ -52,8 +55,10 @@ public interface Primitive extends EObject {
 	String getEvent();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getEvent <em>Event</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getEvent
+	 * <em>Event</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Event</em>' attribute.
 	 * @see #getEvent()
 	 * @generated
@@ -108,8 +113,10 @@ public interface Primitive extends EObject {
 	ServiceInterface getInterface();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getInterface <em>Interface</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getInterface
+	 * <em>Interface</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Interface</em>' reference.
 	 * @see #getInterface()
 	 * @generated

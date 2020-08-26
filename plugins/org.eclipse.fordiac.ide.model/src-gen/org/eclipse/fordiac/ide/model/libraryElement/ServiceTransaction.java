@@ -24,9 +24,12 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getInputPrimitive <em>Input Primitive</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getOutputPrimitive <em>Output Primitive</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getTestResult <em>Test Result</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getInputPrimitive
+ * <em>Input Primitive</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getOutputPrimitive
+ * <em>Output Primitive</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getTestResult
+ * <em>Test Result</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceTransaction()
@@ -35,27 +38,31 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface ServiceTransaction extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Input Primitive</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Input Primitive</b></em>' containment
+	 * reference. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Input Primitive</em>' containment reference isn't
 	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Input Primitive</em>' containment reference.
 	 * @see #setInputPrimitive(InputPrimitive)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceTransaction_InputPrimitive()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='InputPrimitive' namespace='##targetNamespace'"
+	 * @model containment="true" extendedMetaData="kind='element'
+	 *        name='InputPrimitive' namespace='##targetNamespace'"
 	 * @generated
 	 */
 	InputPrimitive getInputPrimitive();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getInputPrimitive <em>Input Primitive</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getInputPrimitive
+	 * <em>Input Primitive</em>}' containment reference. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Input Primitive</em>' containment reference.
+	 * 
+	 * @param value the new value of the '<em>Input Primitive</em>' containment
+	 *              reference.
 	 * @see #getInputPrimitive()
 	 * @generated
 	 */
@@ -82,20 +89,22 @@ public interface ServiceTransaction extends EObject {
 	EList<OutputPrimitive> getOutputPrimitive();
 
 	/**
-	 * Returns the value of the '<em><b>Test Result</b></em>' attribute.
-	 * The default value is <code>"0"</code>.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Test Result</b></em>' attribute. The default
+	 * value is <code>"0"</code>. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Test Result</em>' attribute isn't clear, there
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Test Result</em>' attribute.
 	 * @see #isSetTestResult()
 	 * @see #unsetTestResult()
 	 * @see #setTestResult(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceTransaction_TestResult()
-	 * @model default="0" unique="false" unsettable="true" dataType="org.eclipse.emf.ecore.xml.type.Int" volatile="true" ordered="false"
+	 * @model default="0" unique="false" unsettable="true"
+	 *        dataType="org.eclipse.emf.ecore.xml.type.Int" volatile="true"
+	 *        ordered="false"
 	 * @generated
 	 */
 	int getTestResult();
@@ -128,9 +137,11 @@ public interface ServiceTransaction extends EObject {
 	void unsetTestResult();
 
 	/**
-	 * Returns whether the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getTestResult <em>Test Result</em>}' attribute is set.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns whether the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getTestResult
+	 * <em>Test Result</em>}' attribute is set. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @return whether the value of the '<em>Test Result</em>' attribute is set.
 	 * @see #unsetTestResult()
 	 * @see #getTestResult()

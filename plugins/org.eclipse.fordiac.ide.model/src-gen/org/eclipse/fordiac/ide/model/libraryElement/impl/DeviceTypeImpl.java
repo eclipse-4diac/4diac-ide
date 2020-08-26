@@ -38,21 +38,28 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getVarDeclaration <em>Var Declaration</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getResourceTypeName <em>Resource Type Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getResource <em>Resource</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getFBNetwork <em>FB Network</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getProfile <em>Profile</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getAttributeDeclarations <em>Attribute Declarations</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getVarDeclaration
+ * <em>Var Declaration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getResourceTypeName
+ * <em>Resource Type Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getResource
+ * <em>Resource</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getFBNetwork
+ * <em>FB Network</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getProfile
+ * <em>Profile</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getAttributeDeclarations
+ * <em>Attribute Declarations</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	/**
-	 * The cached value of the '{@link #getVarDeclaration() <em>Var Declaration</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!--
+	 * The cached value of the '{@link #getVarDeclaration() <em>Var
+	 * Declaration</em>}' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @see #getVarDeclaration()
 	 * @generated
 	 * @ordered
@@ -60,9 +67,10 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	protected EList<VarDeclaration> varDeclaration;
 
 	/**
-	 * The cached value of the '{@link #getResourceTypeName() <em>Resource Type Name</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!--
+	 * The cached value of the '{@link #getResourceTypeName() <em>Resource Type
+	 * Name</em>}' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @see #getResourceTypeName()
 	 * @generated
 	 * @ordered
@@ -70,8 +78,9 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	protected EList<ResourceTypeName> resourceTypeName;
 
 	/**
-	 * The cached value of the '{@link #getResource() <em>Resource</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getResource() <em>Resource</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getResource()
 	 * @generated
 	 * @ordered
@@ -79,8 +88,9 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	protected EList<Resource> resource;
 
 	/**
-	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getFBNetwork()
 	 * @generated
 	 * @ordered
@@ -90,6 +100,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	/**
 	 * The default value of the '{@link #getProfile() <em>Profile</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getProfile()
 	 * @generated
 	 * @ordered
@@ -99,6 +110,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	/**
 	 * The cached value of the '{@link #getProfile() <em>Profile</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getProfile()
 	 * @generated
 	 * @ordered
@@ -106,9 +118,10 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	protected String profile = PROFILE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAttributeDeclarations() <em>Attribute Declarations</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!--
+	 * The cached value of the '{@link #getAttributeDeclarations() <em>Attribute
+	 * Declarations</em>}' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @see #getAttributeDeclarations()
 	 * @generated
 	 * @ordered
@@ -117,6 +130,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected DeviceTypeImpl() {
@@ -125,6 +139,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -134,42 +149,49 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<VarDeclaration> getVarDeclaration() {
 		if (varDeclaration == null) {
-			varDeclaration = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION);
+			varDeclaration = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this,
+					LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION);
 		}
 		return varDeclaration;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<ResourceTypeName> getResourceTypeName() {
 		if (resourceTypeName == null) {
-			resourceTypeName = new EObjectContainmentEList<ResourceTypeName>(ResourceTypeName.class, this, LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME);
+			resourceTypeName = new EObjectContainmentEList<ResourceTypeName>(ResourceTypeName.class, this,
+					LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME);
 		}
 		return resourceTypeName;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<Resource> getResource() {
 		if (resource == null) {
-			resource = new EObjectContainmentEList<Resource>(Resource.class, this, LibraryElementPackage.DEVICE_TYPE__RESOURCE);
+			resource = new EObjectContainmentEList<Resource>(Resource.class, this,
+					LibraryElementPackage.DEVICE_TYPE__RESOURCE);
 		}
 		return resource;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -179,20 +201,26 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetFBNetwork(FBNetwork newFBNetwork, NotificationChain msgs) {
 		FBNetwork oldFBNetwork = fBNetwork;
 		fBNetwork = newFBNetwork;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE_TYPE__FB_NETWORK, oldFBNetwork, newFBNetwork);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.DEVICE_TYPE__FB_NETWORK, oldFBNetwork, newFBNetwork);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -200,18 +228,22 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		if (newFBNetwork != fBNetwork) {
 			NotificationChain msgs = null;
 			if (fBNetwork != null)
-				msgs = ((InternalEObject)fBNetwork).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE_TYPE__FB_NETWORK, null, msgs);
+				msgs = ((InternalEObject) fBNetwork).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE_TYPE__FB_NETWORK, null, msgs);
 			if (newFBNetwork != null)
-				msgs = ((InternalEObject)newFBNetwork).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE_TYPE__FB_NETWORK, null, msgs);
+				msgs = ((InternalEObject) newFBNetwork).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE_TYPE__FB_NETWORK, null, msgs);
 			msgs = basicSetFBNetwork(newFBNetwork, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE_TYPE__FB_NETWORK, newFBNetwork, newFBNetwork));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE_TYPE__FB_NETWORK,
+					newFBNetwork, newFBNetwork));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -221,6 +253,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -228,165 +261,175 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		String oldProfile = profile;
 		profile = newProfile;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE_TYPE__PROFILE, oldProfile, profile));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE_TYPE__PROFILE,
+					oldProfile, profile));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<AttributeDeclaration> getAttributeDeclarations() {
 		if (attributeDeclarations == null) {
-			attributeDeclarations = new EObjectContainmentEList.Resolving<AttributeDeclaration>(AttributeDeclaration.class, this, LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS);
+			attributeDeclarations = new EObjectContainmentEList.Resolving<AttributeDeclaration>(
+					AttributeDeclaration.class, this, LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS);
 		}
 		return attributeDeclarations;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
-				return ((InternalEList<?>)getVarDeclaration()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
-				return ((InternalEList<?>)getResourceTypeName()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
-				return ((InternalEList<?>)getResource()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
-				return basicSetFBNetwork(null, msgs);
-			case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
-				return ((InternalEList<?>)getAttributeDeclarations()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
+			return ((InternalEList<?>) getVarDeclaration()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
+			return ((InternalEList<?>) getResourceTypeName()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
+			return ((InternalEList<?>) getResource()).basicRemove(otherEnd, msgs);
+		case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
+			return basicSetFBNetwork(null, msgs);
+		case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
+			return ((InternalEList<?>) getAttributeDeclarations()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
-				return getVarDeclaration();
-			case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
-				return getResourceTypeName();
-			case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
-				return getResource();
-			case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
-				return getFBNetwork();
-			case LibraryElementPackage.DEVICE_TYPE__PROFILE:
-				return getProfile();
-			case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
-				return getAttributeDeclarations();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
+			return getVarDeclaration();
+		case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
+			return getResourceTypeName();
+		case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
+			return getResource();
+		case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
+			return getFBNetwork();
+		case LibraryElementPackage.DEVICE_TYPE__PROFILE:
+			return getProfile();
+		case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
+			return getAttributeDeclarations();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
-				getVarDeclaration().clear();
-				getVarDeclaration().addAll((Collection<? extends VarDeclaration>)newValue);
-				return;
-			case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
-				getResourceTypeName().clear();
-				getResourceTypeName().addAll((Collection<? extends ResourceTypeName>)newValue);
-				return;
-			case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
-				getResource().clear();
-				getResource().addAll((Collection<? extends Resource>)newValue);
-				return;
-			case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
-				setFBNetwork((FBNetwork)newValue);
-				return;
-			case LibraryElementPackage.DEVICE_TYPE__PROFILE:
-				setProfile((String)newValue);
-				return;
-			case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
-				getAttributeDeclarations().clear();
-				getAttributeDeclarations().addAll((Collection<? extends AttributeDeclaration>)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
+			getVarDeclaration().clear();
+			getVarDeclaration().addAll((Collection<? extends VarDeclaration>) newValue);
+			return;
+		case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
+			getResourceTypeName().clear();
+			getResourceTypeName().addAll((Collection<? extends ResourceTypeName>) newValue);
+			return;
+		case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
+			getResource().clear();
+			getResource().addAll((Collection<? extends Resource>) newValue);
+			return;
+		case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
+			setFBNetwork((FBNetwork) newValue);
+			return;
+		case LibraryElementPackage.DEVICE_TYPE__PROFILE:
+			setProfile((String) newValue);
+			return;
+		case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
+			getAttributeDeclarations().clear();
+			getAttributeDeclarations().addAll((Collection<? extends AttributeDeclaration>) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
-				getVarDeclaration().clear();
-				return;
-			case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
-				getResourceTypeName().clear();
-				return;
-			case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
-				getResource().clear();
-				return;
-			case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
-				setFBNetwork((FBNetwork)null);
-				return;
-			case LibraryElementPackage.DEVICE_TYPE__PROFILE:
-				setProfile(PROFILE_EDEFAULT);
-				return;
-			case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
-				getAttributeDeclarations().clear();
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
+			getVarDeclaration().clear();
+			return;
+		case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
+			getResourceTypeName().clear();
+			return;
+		case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
+			getResource().clear();
+			return;
+		case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
+			setFBNetwork((FBNetwork) null);
+			return;
+		case LibraryElementPackage.DEVICE_TYPE__PROFILE:
+			setProfile(PROFILE_EDEFAULT);
+			return;
+		case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
+			getAttributeDeclarations().clear();
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
-				return varDeclaration != null && !varDeclaration.isEmpty();
-			case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
-				return resourceTypeName != null && !resourceTypeName.isEmpty();
-			case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
-				return resource != null && !resource.isEmpty();
-			case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
-				return fBNetwork != null;
-			case LibraryElementPackage.DEVICE_TYPE__PROFILE:
-				return PROFILE_EDEFAULT == null ? profile != null : !PROFILE_EDEFAULT.equals(profile);
-			case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
-				return attributeDeclarations != null && !attributeDeclarations.isEmpty();
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
+			return varDeclaration != null && !varDeclaration.isEmpty();
+		case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
+			return resourceTypeName != null && !resourceTypeName.isEmpty();
+		case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
+			return resource != null && !resource.isEmpty();
+		case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
+			return fBNetwork != null;
+		case LibraryElementPackage.DEVICE_TYPE__PROFILE:
+			return PROFILE_EDEFAULT == null ? profile != null : !PROFILE_EDEFAULT.equals(profile);
+		case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
+			return attributeDeclarations != null && !attributeDeclarations.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (profile: "); //$NON-NLS-1$

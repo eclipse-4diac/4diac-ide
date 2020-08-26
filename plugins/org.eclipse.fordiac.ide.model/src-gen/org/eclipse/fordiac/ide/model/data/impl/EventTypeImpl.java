@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.data.EventType;
 public class EventTypeImpl extends DataTypeImpl implements EventType {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected EventTypeImpl() {
@@ -34,6 +35,7 @@ public class EventTypeImpl extends DataTypeImpl implements EventType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

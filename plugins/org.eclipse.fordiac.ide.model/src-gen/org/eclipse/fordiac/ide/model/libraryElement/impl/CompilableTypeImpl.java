@@ -29,15 +29,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl#getCompilerInfo <em>Compiler Info</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl#getCompilerInfo
+ * <em>Compiler Info</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class CompilableTypeImpl extends LibraryElementImpl implements CompilableType {
 	/**
-	 * The cached value of the '{@link #getCompilerInfo() <em>Compiler Info</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getCompilerInfo() <em>Compiler Info</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getCompilerInfo()
 	 * @generated
 	 * @ordered
@@ -46,6 +48,7 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected CompilableTypeImpl() {
@@ -54,6 +57,7 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -63,22 +67,27 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public CompilerInfo getCompilerInfo() {
 		if (compilerInfo != null && compilerInfo.eIsProxy()) {
-			InternalEObject oldCompilerInfo = (InternalEObject)compilerInfo;
-			compilerInfo = (CompilerInfo)eResolveProxy(oldCompilerInfo);
+			InternalEObject oldCompilerInfo = (InternalEObject) compilerInfo;
+			compilerInfo = (CompilerInfo) eResolveProxy(oldCompilerInfo);
 			if (compilerInfo != oldCompilerInfo) {
-				InternalEObject newCompilerInfo = (InternalEObject)compilerInfo;
-				NotificationChain msgs = oldCompilerInfo.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, null, null);
+				InternalEObject newCompilerInfo = (InternalEObject) compilerInfo;
+				NotificationChain msgs = oldCompilerInfo.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, null, null);
 				if (newCompilerInfo.eInternalContainer() == null) {
-					msgs = newCompilerInfo.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, null, msgs);
+					msgs = newCompilerInfo.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, null, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
+				if (msgs != null)
+					msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, oldCompilerInfo, compilerInfo));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, oldCompilerInfo, compilerInfo));
 			}
 		}
 		return compilerInfo;
@@ -86,6 +95,7 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public CompilerInfo basicGetCompilerInfo() {
@@ -94,20 +104,26 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetCompilerInfo(CompilerInfo newCompilerInfo, NotificationChain msgs) {
 		CompilerInfo oldCompilerInfo = compilerInfo;
 		compilerInfo = newCompilerInfo;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, oldCompilerInfo, newCompilerInfo);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, oldCompilerInfo, newCompilerInfo);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -115,88 +131,97 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 		if (newCompilerInfo != compilerInfo) {
 			NotificationChain msgs = null;
 			if (compilerInfo != null)
-				msgs = ((InternalEObject)compilerInfo).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, null, msgs);
+				msgs = ((InternalEObject) compilerInfo).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, null, msgs);
 			if (newCompilerInfo != null)
-				msgs = ((InternalEObject)newCompilerInfo).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, null, msgs);
+				msgs = ((InternalEObject) newCompilerInfo).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, null, msgs);
 			msgs = basicSetCompilerInfo(newCompilerInfo, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO, newCompilerInfo, newCompilerInfo));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO,
+					newCompilerInfo, newCompilerInfo));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
-				return basicSetCompilerInfo(null, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
+			return basicSetCompilerInfo(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
-				if (resolve) return getCompilerInfo();
-				return basicGetCompilerInfo();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
+			if (resolve)
+				return getCompilerInfo();
+			return basicGetCompilerInfo();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
-				setCompilerInfo((CompilerInfo)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
+			setCompilerInfo((CompilerInfo) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
-				setCompilerInfo((CompilerInfo)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
+			setCompilerInfo((CompilerInfo) null);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
-				return compilerInfo != null;
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
+			return compilerInfo != null;
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 

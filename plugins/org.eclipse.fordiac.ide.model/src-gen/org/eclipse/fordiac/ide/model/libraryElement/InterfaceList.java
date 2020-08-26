@@ -24,12 +24,18 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getPlugs <em>Plugs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getSockets <em>Sockets</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getEventInputs <em>Event Inputs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getEventOutputs <em>Event Outputs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getInputVars <em>Input Vars</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getOutputVars <em>Output Vars</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getPlugs
+ * <em>Plugs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getSockets
+ * <em>Sockets</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getEventInputs
+ * <em>Event Inputs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getEventOutputs
+ * <em>Event Outputs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getInputVars
+ * <em>Input Vars</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getOutputVars
+ * <em>Output Vars</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getInterfaceList()
@@ -153,6 +159,7 @@ public interface InterfaceList extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true" many="false"
 	 * @generated
 	 */
@@ -160,6 +167,7 @@ public interface InterfaceList extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model nameRequired="true"
 	 * @generated
 	 */
@@ -167,6 +175,7 @@ public interface InterfaceList extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model nameRequired="true"
 	 * @generated
 	 */
@@ -174,6 +183,7 @@ public interface InterfaceList extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true" nameRequired="true"
 	 * @generated
 	 */
@@ -181,6 +191,7 @@ public interface InterfaceList extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
@@ -188,6 +199,7 @@ public interface InterfaceList extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model
 	 * @generated
 	 */
@@ -195,6 +207,7 @@ public interface InterfaceList extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model required="true"
 	 * @generated
 	 */

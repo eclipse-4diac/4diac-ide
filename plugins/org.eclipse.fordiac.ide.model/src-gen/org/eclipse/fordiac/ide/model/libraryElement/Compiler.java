@@ -23,10 +23,14 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getLanguage <em>Language</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getProduct <em>Product</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVendor <em>Vendor</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVersion <em>Version</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getLanguage
+ * <em>Language</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getProduct
+ * <em>Product</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVendor
+ * <em>Vendor</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVersion
+ * <em>Version</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCompiler()
@@ -58,8 +62,10 @@ public interface Compiler extends EObject {
 	Language getLanguage();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getLanguage <em>Language</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getLanguage
+	 * <em>Language</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Language</em>' attribute.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Language
 	 * @see #isSetLanguage()
@@ -70,8 +76,10 @@ public interface Compiler extends EObject {
 	void setLanguage(Language value);
 
 	/**
-	 * Unsets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getLanguage <em>Language</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Unsets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getLanguage
+	 * <em>Language</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isSetLanguage()
 	 * @see #getLanguage()
 	 * @see #setLanguage(Language)
@@ -80,9 +88,11 @@ public interface Compiler extends EObject {
 	void unsetLanguage();
 
 	/**
-	 * Returns whether the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getLanguage <em>Language</em>}' attribute is set.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns whether the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getLanguage
+	 * <em>Language</em>}' attribute is set. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 * 
 	 * @return whether the value of the '<em>Language</em>' attribute is set.
 	 * @see #unsetLanguage()
 	 * @see #getLanguage()
@@ -110,8 +120,10 @@ public interface Compiler extends EObject {
 	String getProduct();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getProduct <em>Product</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getProduct
+	 * <em>Product</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Product</em>' attribute.
 	 * @see #getProduct()
 	 * @generated
@@ -137,8 +149,10 @@ public interface Compiler extends EObject {
 	String getVendor();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVendor <em>Vendor</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVendor
+	 * <em>Vendor</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Vendor</em>' attribute.
 	 * @see #getVendor()
 	 * @generated
@@ -164,8 +178,10 @@ public interface Compiler extends EObject {
 	String getVersion();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVersion <em>Version</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVersion
+	 * <em>Version</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Version</em>' attribute.
 	 * @see #getVersion()
 	 * @generated

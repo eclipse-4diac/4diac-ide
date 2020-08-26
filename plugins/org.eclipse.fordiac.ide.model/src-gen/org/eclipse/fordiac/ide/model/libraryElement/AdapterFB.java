@@ -21,7 +21,8 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl <em>Adapter Decl</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl
+ * <em>Adapter Decl</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterFB()
@@ -30,14 +31,16 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  */
 public interface AdapterFB extends FB {
 	/**
-	 * Returns the value of the '<em><b>Adapter Decl</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}'.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Adapter Decl</b></em>' reference. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB
+	 * <em>Adapter FB</em>}'. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Adapter Decl</em>' reference isn't clear, there
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Adapter Decl</em>' reference.
 	 * @see #setAdapterDecl(AdapterDeclaration)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterFB_AdapterDecl()
@@ -66,6 +69,7 @@ public interface AdapterFB extends FB {
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated
 	 */
@@ -73,6 +77,7 @@ public interface AdapterFB extends FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated
 	 */
@@ -80,6 +85,7 @@ public interface AdapterFB extends FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

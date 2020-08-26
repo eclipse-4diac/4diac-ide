@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl implements SubApplicationTypePaletteEntry {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SubApplicationTypePaletteEntryImpl() {
@@ -40,6 +41,7 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -49,29 +51,32 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public SubAppType getSubApplicationType() {
 		LibraryElement type = getType();
-		if(type instanceof SubAppType){
-		   return (SubAppType) type;
+		if (type instanceof SubAppType) {
+			return (SubAppType) type;
 		}
 		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if(type instanceof SubAppType){
+		if (type instanceof SubAppType) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
-				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry"); //$NON-NLS-1$
+			if (null != type) {
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+						"tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry"); //$NON-NLS-1$
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
@@ -79,6 +84,7 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

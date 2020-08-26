@@ -24,10 +24,14 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getNetworkElements <em>Network Elements</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getDataConnections <em>Data Connections</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getEventConnections <em>Event Connections</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getAdapterConnections <em>Adapter Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getNetworkElements
+ * <em>Network Elements</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getDataConnections
+ * <em>Data Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getEventConnections
+ * <em>Event Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getAdapterConnections
+ * <em>Adapter Connections</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetwork()
@@ -116,6 +120,7 @@ public interface FBNetwork extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model connectionRequired="true"
 	 * @generated
 	 */
@@ -123,6 +128,7 @@ public interface FBNetwork extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model connectionRequired="true"
 	 * @generated
 	 */
@@ -130,6 +136,7 @@ public interface FBNetwork extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated
 	 */
@@ -137,6 +144,7 @@ public interface FBNetwork extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated
 	 */
@@ -144,6 +152,7 @@ public interface FBNetwork extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated
 	 */
@@ -151,6 +160,7 @@ public interface FBNetwork extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated
 	 */
@@ -158,6 +168,7 @@ public interface FBNetwork extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation"
 	 * @generated
 	 */
@@ -165,6 +176,7 @@ public interface FBNetwork extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation"
 	 * @generated
 	 */
@@ -172,21 +184,27 @@ public interface FBNetwork extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String" nameRequired="true"
+	 * 
+	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        nameRequired="true"
 	 * @generated
 	 */
 	FB getFBNamed(String name);
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String" nameRequired="true"
+	 * 
+	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        nameRequired="true"
 	 * @generated
 	 */
 	SubApp getSubAppNamed(String name);
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String" nameRequired="true"
+	 * 
+	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        nameRequired="true"
 	 * @generated
 	 */
 	FBNetworkElement getElementNamed(String name);

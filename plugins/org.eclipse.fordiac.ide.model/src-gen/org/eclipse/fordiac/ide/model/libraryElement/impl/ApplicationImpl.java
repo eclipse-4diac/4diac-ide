@@ -30,15 +30,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl#getFBNetwork <em>FB Network</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl#getFBNetwork
+ * <em>FB Network</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ApplicationImpl extends ConfigurableObjectImpl implements Application {
 	/**
-	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getFBNetwork()
 	 * @generated
 	 * @ordered
@@ -47,6 +49,7 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ApplicationImpl() {
@@ -55,6 +58,7 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -64,22 +68,27 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public FBNetwork getFBNetwork() {
 		if (fBNetwork != null && fBNetwork.eIsProxy()) {
-			InternalEObject oldFBNetwork = (InternalEObject)fBNetwork;
-			fBNetwork = (FBNetwork)eResolveProxy(oldFBNetwork);
+			InternalEObject oldFBNetwork = (InternalEObject) fBNetwork;
+			fBNetwork = (FBNetwork) eResolveProxy(oldFBNetwork);
 			if (fBNetwork != oldFBNetwork) {
-				InternalEObject newFBNetwork = (InternalEObject)fBNetwork;
-				NotificationChain msgs = oldFBNetwork.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.APPLICATION__FB_NETWORK, null, null);
+				InternalEObject newFBNetwork = (InternalEObject) fBNetwork;
+				NotificationChain msgs = oldFBNetwork.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.APPLICATION__FB_NETWORK, null, null);
 				if (newFBNetwork.eInternalContainer() == null) {
-					msgs = newFBNetwork.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.APPLICATION__FB_NETWORK, null, msgs);
+					msgs = newFBNetwork.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.APPLICATION__FB_NETWORK, null, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
+				if (msgs != null)
+					msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.APPLICATION__FB_NETWORK, oldFBNetwork, fBNetwork));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							LibraryElementPackage.APPLICATION__FB_NETWORK, oldFBNetwork, fBNetwork));
 			}
 		}
 		return fBNetwork;
@@ -87,6 +96,7 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public FBNetwork basicGetFBNetwork() {
@@ -95,20 +105,26 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetFBNetwork(FBNetwork newFBNetwork, NotificationChain msgs) {
 		FBNetwork oldFBNetwork = fBNetwork;
 		fBNetwork = newFBNetwork;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.APPLICATION__FB_NETWORK, oldFBNetwork, newFBNetwork);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.APPLICATION__FB_NETWORK, oldFBNetwork, newFBNetwork);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -116,18 +132,22 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 		if (newFBNetwork != fBNetwork) {
 			NotificationChain msgs = null;
 			if (fBNetwork != null)
-				msgs = ((InternalEObject)fBNetwork).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.APPLICATION__FB_NETWORK, null, msgs);
+				msgs = ((InternalEObject) fBNetwork).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.APPLICATION__FB_NETWORK, null, msgs);
 			if (newFBNetwork != null)
-				msgs = ((InternalEObject)newFBNetwork).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.APPLICATION__FB_NETWORK, null, msgs);
+				msgs = ((InternalEObject) newFBNetwork).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.APPLICATION__FB_NETWORK, null, msgs);
 			msgs = basicSetFBNetwork(newFBNetwork, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.APPLICATION__FB_NETWORK, newFBNetwork, newFBNetwork));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.APPLICATION__FB_NETWORK,
+					newFBNetwork, newFBNetwork));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -137,76 +157,82 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.APPLICATION__FB_NETWORK:
-				return basicSetFBNetwork(null, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case LibraryElementPackage.APPLICATION__FB_NETWORK:
+			return basicSetFBNetwork(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.APPLICATION__FB_NETWORK:
-				if (resolve) return getFBNetwork();
-				return basicGetFBNetwork();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case LibraryElementPackage.APPLICATION__FB_NETWORK:
+			if (resolve)
+				return getFBNetwork();
+			return basicGetFBNetwork();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.APPLICATION__FB_NETWORK:
-				setFBNetwork((FBNetwork)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case LibraryElementPackage.APPLICATION__FB_NETWORK:
+			setFBNetwork((FBNetwork) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.APPLICATION__FB_NETWORK:
-				setFBNetwork((FBNetwork)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case LibraryElementPackage.APPLICATION__FB_NETWORK:
+			setFBNetwork((FBNetwork) null);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.APPLICATION__FB_NETWORK:
-				return fBNetwork != null;
-			default:
-				return super.eIsSet(featureID);
+		case LibraryElementPackage.APPLICATION__FB_NETWORK:
+			return fBNetwork != null;
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 

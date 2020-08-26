@@ -15,7 +15,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -25,16 +24,17 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.Multiplexer} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.Multiplexer} object. <!--
+ * begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class MultiplexerItemProvider extends StructManipulatorItemProvider {
 	/**
-	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MultiplexerItemProvider(AdapterFactory adapterFactory) {
@@ -42,9 +42,9 @@ public class MultiplexerItemProvider extends StructManipulatorItemProvider {
 	}
 
 	/**
-	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -74,18 +74,16 @@ public class MultiplexerItemProvider extends StructManipulatorItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Multiplexer)object).getName();
-		return (label == null) || (label.length() == 0) ?
-				getString("_UI_Multiplexer_type") : //$NON-NLS-1$
+		String label = ((Multiplexer) object).getName();
+		return (label == null) || (label.length() == 0) ? getString("_UI_Multiplexer_type") : //$NON-NLS-1$
 				label + " (" + ((Multiplexer) object).getStructType().getName() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -95,10 +93,10 @@ public class MultiplexerItemProvider extends StructManipulatorItemProvider {
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

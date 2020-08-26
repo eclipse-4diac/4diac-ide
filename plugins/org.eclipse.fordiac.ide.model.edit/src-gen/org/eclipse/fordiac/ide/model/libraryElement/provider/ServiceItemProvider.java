@@ -43,7 +43,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Service;
  * 
  * @generated
  */
-public class ServiceItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class ServiceItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
+		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -79,26 +80,21 @@ public class ServiceItemProvider extends ItemProviderAdapter implements IEditing
 	 * @generated
 	 */
 	protected void addServiceSequencePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Service_serviceSequence_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Service_serviceSequence_feature", "_UI_Service_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.SERVICE__SERVICE_SEQUENCE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Service_serviceSequence_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Service_serviceSequence_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Service_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.SERVICE__SERVICE_SEQUENCE, true, false, true, null, null, null));
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an
+	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
+	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -112,11 +108,13 @@ public class ServiceItemProvider extends ItemProviderAdapter implements IEditing
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
+		// Check the type of the specified child object and return the proper feature to
+		// use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
@@ -129,19 +127,12 @@ public class ServiceItemProvider extends ItemProviderAdapter implements IEditing
 	 * @generated
 	 */
 	protected void addRightInterfacePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Service_rightInterface_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Service_rightInterface_feature", "_UI_Service_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.SERVICE__RIGHT_INTERFACE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Service_rightInterface_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Service_rightInterface_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Service_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.SERVICE__RIGHT_INTERFACE, true, false, true, null, null, null));
 	}
 
 	/**
@@ -151,24 +142,17 @@ public class ServiceItemProvider extends ItemProviderAdapter implements IEditing
 	 * @generated
 	 */
 	protected void addLeftInterfacePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Service_leftInterface_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Service_leftInterface_feature", "_UI_Service_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.SERVICE__LEFT_INTERFACE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Service_leftInterface_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Service_leftInterface_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Service_type"), //$NON-NLS-1$
+						LibraryElementPackage.Literals.SERVICE__LEFT_INTERFACE, true, false, true, null, null, null));
 	}
 
 	/**
-	 * This returns Service.gif.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This returns Service.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -200,9 +184,10 @@ public class ServiceItemProvider extends ItemProviderAdapter implements IEditing
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -210,36 +195,34 @@ public class ServiceItemProvider extends ItemProviderAdapter implements IEditing
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Service.class)) {
-			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-				return;
-			default:
-				super.notifyChanged(notification);
-				return;
-			}
+		case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+			return;
+		default:
+			super.notifyChanged(notification);
+			return;
+		}
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.SERVICE__SERVICE_SEQUENCE,
-				 LibraryElementFactory.eINSTANCE.createServiceSequence()));
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.SERVICE__SERVICE_SEQUENCE,
+				LibraryElementFactory.eINSTANCE.createServiceSequence()));
 	}
 
 	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Return the resource locator for this item provider's resources. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
