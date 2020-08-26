@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 		 2019 Johannes Kepler University Linz 
+ *               2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +16,7 @@
  *   			 - separated FBNetworkElement from instance name for better
  *                 direct editing of instance names
  *               - added separate colors for different data types
+ *   Bianca Wiesmayr, Alois Zoitl - forward direct editing request to instance name
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -344,8 +346,11 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	public void performRequest(final Request request) {
 		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 				|| (request.getType() == RequestConstants.REQ_OPEN)) {
-			// currently we don't want to be direct editable through double or long dobule
-			// click or
+			// forward direct edit request to instance name
+			@SuppressWarnings("unchecked")
+			List<EditPart> children = getChildren();
+			children.stream().filter(e -> e instanceof InstanceNameEditPart)
+			.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
 		}
 		super.performRequest(request);
