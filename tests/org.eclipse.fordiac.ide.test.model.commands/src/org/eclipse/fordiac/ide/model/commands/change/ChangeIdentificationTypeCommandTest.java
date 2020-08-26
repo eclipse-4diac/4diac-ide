@@ -25,7 +25,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 public class ChangeIdentificationTypeCommandTest extends FBNetworkTestBase {
 
-	private static final String IDENTIFICATION_TYPE_STRING = "new value";
+	private static final String IDENTIFICATION_TYPE_STRING = "new value"; //$NON-NLS-1$
 
 	public static State executeCommand(State state, String setValue) {
 		state.setCommand(new ChangeIdentifcationTypeCommand(state.getFbNetwork().getNetworkElements().get(0).getType(),
@@ -51,15 +51,15 @@ public class ChangeIdentificationTypeCommandTest extends FBNetworkTestBase {
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Add Functionblock", //$NON-NLS-1$
+				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						ChangeIdentificationTypeCommandTest::verifyStateBefore //
 				), //
-				new ExecutionDescription<State>("Change Identification Type", //$NON-NLS-1$
+				new ExecutionDescription<>("Change Identification Type", //$NON-NLS-1$
 						(State state) -> executeCommand(state, IDENTIFICATION_TYPE_STRING), //
 						(State s, State o, TestFunction t) -> verifyState(s, o, t, IDENTIFICATION_TYPE_STRING) //
 				), //
-				new ExecutionDescription<State>("Change Identification Type to null", //$NON-NLS-1$
+				new ExecutionDescription<>("Change Identification Type to null", //$NON-NLS-1$
 						(State state) -> executeCommand(state, null), //
 						(State s, State o, TestFunction t) -> verifyState(s, o, t, "") //$NON-NLS-1$
 				) //

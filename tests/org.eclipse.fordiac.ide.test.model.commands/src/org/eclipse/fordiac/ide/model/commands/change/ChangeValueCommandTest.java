@@ -24,7 +24,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 public class ChangeValueCommandTest extends ValueCommandTestBase {
 
-	private static final String NEW_VALUE = "new";
+	private static final String NEW_VALUE = "new"; //$NON-NLS-1$
 
 	private static State executeCommand(State state) {
 		state.setCommand(new ChangeValueCommand(state.getVar(), NEW_VALUE));
@@ -55,11 +55,11 @@ public class ChangeValueCommandTest extends ValueCommandTestBase {
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Change Value", //
+				new ExecutionDescription<>("Change Value", // //$NON-NLS-1$
 						ChangeValueCommandTest::executeCommand, //
 						ChangeValueCommandTest::verifyState //
 				), //
-				new ExecutionDescription<State>("Change Value to null", //
+				new ExecutionDescription<>("Change Value to null", // //$NON-NLS-1$
 						ChangeValueCommandTest::executeCommandToNull, //
 						ChangeValueCommandTest::verifyStateNull //
 				) //

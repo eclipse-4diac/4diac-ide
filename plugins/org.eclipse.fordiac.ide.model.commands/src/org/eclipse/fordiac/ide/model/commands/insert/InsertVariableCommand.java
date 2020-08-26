@@ -42,7 +42,7 @@ public class InsertVariableCommand extends Command {
 		varDecl.setArraySize(type.getArraySize());
 		Value value = LibraryElementFactory.eINSTANCE.createValue();
 		Value typeValue = type.getValue();
-		value.setValue((typeValue == null) ? "" : typeValue.getValue());
+		value.setValue((typeValue == null) ? "" : typeValue.getValue()); //$NON-NLS-1$
 		varDecl.setValue(value);
 		redo();
 		varDecl.setName(NameRepository.createUniqueName(varDecl, type.getName()));

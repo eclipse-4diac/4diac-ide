@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -31,43 +31,47 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
  * <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
+ *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
  * @model kind="package"
  * @generated
  */
 public interface LibraryElementPackage extends EPackage {
 	/**
-	 * The package name.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The package name. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	String eNAME = "libraryElement";
+	String eNAME = "libraryElement"; //$NON-NLS-1$
 
 	/**
-	 * The package namespace URI.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The package namespace URI. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	String eNS_URI = "org.eclipse.fordiac.ide.model.libraryElement";
+	String eNS_URI = "org.eclipse.fordiac.ide.model.libraryElement"; //$NON-NLS-1$
 
 	/**
-	 * The package namespace name.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The package namespace name. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	String eNS_PREFIX = "libraryElement";
+	String eNS_PREFIX = "libraryElement"; //$NON-NLS-1$
 
 	/**
-	 * The singleton instance of the package.
-	 * <!-- begin-user-doc --> <!--
+	 * The singleton instance of the package. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @generated
 	 */
-	LibraryElementPackage eINSTANCE = org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl.init();
+	LibraryElementPackage eINSTANCE = org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl
+			.init();
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed
+	 * Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getINamedElement()
 	 * @generated
@@ -75,9 +79,11 @@ public interface LibraryElementPackage extends EPackage {
 	int INAMED_ELEMENT = 53;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl <em>Configurable Object</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl
+	 * <em>Configurable Object</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConfigurableObject()
 	 * @generated
@@ -85,9 +91,11 @@ public interface LibraryElementPackage extends EPackage {
 	int CONFIGURABLE_OBJECT = 43;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl <em>Adapter Declaration</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl
+	 * <em>Adapter Declaration</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterDeclaration()
 	 * @generated
@@ -95,9 +103,9 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_DECLARATION = 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -106,7 +114,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -115,6 +123,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>INamed Element</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -125,7 +134,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl
 	 * <em>Library Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLibraryElement()
 	 * @generated
@@ -137,7 +146,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl
 	 * <em>Compilable Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompilableType()
 	 * @generated
@@ -145,8 +154,10 @@ public interface LibraryElementPackage extends EPackage {
 	int COMPILABLE_TYPE = 42;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl <em>Adapter Type</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl
+	 * <em>Adapter Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterType()
 	 * @generated
@@ -154,8 +165,10 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_TYPE = 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl <em>Algorithm</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl
+	 * <em>Algorithm</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAlgorithm()
 	 * @generated
@@ -163,8 +176,10 @@ public interface LibraryElementPackage extends EPackage {
 	int ALGORITHM = 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl <em>Application</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl
+	 * <em>Application</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getApplication()
 	 * @generated
@@ -172,8 +187,10 @@ public interface LibraryElementPackage extends EPackage {
 	int APPLICATION = 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl <em>FB Type</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl <em>FB
+	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBType()
 	 * @generated
@@ -181,8 +198,10 @@ public interface LibraryElementPackage extends EPackage {
 	int FB_TYPE = 18;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl <em>Basic FB Type</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl
+	 * <em>Basic FB Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBasicFBType()
 	 * @generated
@@ -190,8 +209,10 @@ public interface LibraryElementPackage extends EPackage {
 	int BASIC_FB_TYPE = 4;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl <em>Compiler Info</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl
+	 * <em>Compiler Info</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompilerInfo()
 	 * @generated
@@ -199,8 +220,10 @@ public interface LibraryElementPackage extends EPackage {
 	int COMPILER_INFO = 5;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl <em>Compiler</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl
+	 * <em>Compiler</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompiler()
 	 * @generated
@@ -208,8 +231,10 @@ public interface LibraryElementPackage extends EPackage {
 	int COMPILER = 6;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl <em>Connection</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl
+	 * <em>Connection</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConnection()
 	 * @generated
@@ -217,8 +242,10 @@ public interface LibraryElementPackage extends EPackage {
 	int CONNECTION = 7;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl <em>Device</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl
+	 * <em>Device</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDevice()
 	 * @generated
@@ -226,8 +253,10 @@ public interface LibraryElementPackage extends EPackage {
 	int DEVICE = 8;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl <em>Device Type</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl
+	 * <em>Device Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDeviceType()
 	 * @generated
@@ -235,8 +264,10 @@ public interface LibraryElementPackage extends EPackage {
 	int DEVICE_TYPE = 9;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl <em>EC Action</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl <em>EC
+	 * Action</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECAction()
 	 * @generated
@@ -244,8 +275,10 @@ public interface LibraryElementPackage extends EPackage {
 	int EC_ACTION = 10;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl <em>ECC</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl
+	 * <em>ECC</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECC()
 	 * @generated
@@ -253,8 +286,10 @@ public interface LibraryElementPackage extends EPackage {
 	int ECC = 11;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl <em>EC State</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl <em>EC
+	 * State</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECState()
 	 * @generated
@@ -262,8 +297,10 @@ public interface LibraryElementPackage extends EPackage {
 	int EC_STATE = 12;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl <em>EC Transition</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl
+	 * <em>EC Transition</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECTransition()
 	 * @generated
@@ -271,9 +308,11 @@ public interface LibraryElementPackage extends EPackage {
 	int EC_TRANSITION = 13;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement <em>IInterface Element</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
+	 * <em>IInterface Element</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIInterfaceElement()
 	 * @generated
@@ -281,9 +320,9 @@ public interface LibraryElementPackage extends EPackage {
 	int IINTERFACE_ELEMENT = 50;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -292,7 +331,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -301,7 +340,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Is Input</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -310,6 +349,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -318,15 +358,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS = INAMED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -335,7 +376,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -344,14 +385,17 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>IInterface Element</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int IINTERFACE_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl <em>Event</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl
+	 * <em>Event</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getEvent()
 	 * @generated
@@ -359,8 +403,10 @@ public interface LibraryElementPackage extends EPackage {
 	int EVENT = 14;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl <em>FB Network</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl
+	 * <em>FB Network</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBNetwork()
 	 * @generated
@@ -368,8 +414,10 @@ public interface LibraryElementPackage extends EPackage {
 	int FB_NETWORK = 35;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl <em>FB</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl
+	 * <em>FB</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFB()
 	 * @generated
@@ -381,7 +429,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl
 	 * <em>Identification</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIdentification()
 	 * @generated
@@ -393,7 +441,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InputPrimitiveImpl
 	 * <em>Input Primitive</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.InputPrimitiveImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInputPrimitive()
 	 * @generated
@@ -405,7 +453,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl
 	 * <em>Interface List</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceList()
 	 * @generated
@@ -413,8 +461,10 @@ public interface LibraryElementPackage extends EPackage {
 	int INTERFACE_LIST = 21;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl <em>Link</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl
+	 * <em>Link</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLink()
 	 * @generated
@@ -422,8 +472,10 @@ public interface LibraryElementPackage extends EPackage {
 	int LINK = 22;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl <em>Mapping</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl
+	 * <em>Mapping</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMapping()
 	 * @generated
@@ -435,7 +487,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextAlgorithmImpl
 	 * <em>Text Algorithm</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TextAlgorithmImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextAlgorithm()
 	 * @generated
@@ -447,7 +499,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherAlgorithmImpl
 	 * <em>Other Algorithm</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OtherAlgorithmImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherAlgorithm()
 	 * @generated
@@ -459,7 +511,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl
 	 * <em>Output Primitive</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOutputPrimitive()
 	 * @generated
@@ -467,8 +519,10 @@ public interface LibraryElementPackage extends EPackage {
 	int OUTPUT_PRIMITIVE = 25;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl <em>Resource</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl
+	 * <em>Resource</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResource()
 	 * @generated
@@ -476,9 +530,11 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE = 27;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeNameImpl <em>Resource Type Name</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeNameImpl
+	 * <em>Resource Type Name</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeNameImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeName()
 	 * @generated
@@ -486,8 +542,10 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE_NAME = 28;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl <em>Resource Type</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl
+	 * <em>Resource Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceType()
 	 * @generated
@@ -495,8 +553,10 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE = 29;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl <em>Segment</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl
+	 * <em>Segment</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegment()
 	 * @generated
@@ -508,7 +568,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl
 	 * <em>Service Sequence</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceSequence()
 	 * @generated
@@ -516,9 +576,11 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_SEQUENCE = 31;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl <em>Service Transaction</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl
+	 * <em>Service Transaction</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceTransaction()
 	 * @generated
@@ -526,9 +588,11 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_TRANSACTION = 32;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceFBTypeImpl <em>Service Interface FB Type</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceFBTypeImpl
+	 * <em>Service Interface FB Type</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceFBTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterfaceFBType()
 	 * @generated
@@ -536,8 +600,10 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_INTERFACE_FB_TYPE = 33;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STAlgorithmImpl <em>ST Algorithm</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STAlgorithmImpl
+	 * <em>ST Algorithm</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.STAlgorithmImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTAlgorithm()
 	 * @generated
@@ -545,8 +611,10 @@ public interface LibraryElementPackage extends EPackage {
 	int ST_ALGORITHM = 34;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl <em>Sub App</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl <em>Sub
+	 * App</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubApp()
 	 * @generated
@@ -554,8 +622,10 @@ public interface LibraryElementPackage extends EPackage {
 	int SUB_APP = 17;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppTypeImpl <em>Sub App Type</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppTypeImpl
+	 * <em>Sub App Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubAppType()
 	 * @generated
@@ -567,7 +637,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl
 	 * <em>Automation System</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAutomationSystem()
 	 * @generated
@@ -579,7 +649,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl
 	 * <em>Var Declaration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclaration()
 	 * @generated
@@ -587,9 +657,9 @@ public interface LibraryElementPackage extends EPackage {
 	int VAR_DECLARATION = 38;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -598,7 +668,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -607,7 +677,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Is Input</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -616,6 +686,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -624,15 +695,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int VAR_DECLARATION__OUTPUT_CONNECTIONS = IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -641,7 +713,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -650,7 +722,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Array Size</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -659,7 +731,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Withs</b></em>' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -668,7 +740,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -677,15 +749,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Var Declaration</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int VAR_DECLARATION_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -694,7 +767,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -703,7 +776,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Is Input</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -712,6 +785,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -720,15 +794,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_DECLARATION__OUTPUT_CONNECTIONS = VAR_DECLARATION__OUTPUT_CONNECTIONS;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -737,7 +812,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -746,7 +821,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Array Size</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -755,7 +830,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Withs</b></em>' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -764,7 +839,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -773,7 +848,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Adapter FB</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -782,24 +857,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_DECLARATION__PALETTE_ENTRY = VAR_DECLARATION_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of structural features of the '<em>Adapter Declaration</em>' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The number of structural features of the '<em>Adapter Declaration</em>'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_DECLARATION_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -808,23 +884,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LIBRARY_ELEMENT__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LIBRARY_ELEMENT__VERSION_INFO = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -833,7 +911,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -842,15 +920,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Library Element</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LIBRARY_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -859,23 +938,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_TYPE__COMMENT = DataPackage.DATA_TYPE__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_TYPE__VERSION_INFO = DataPackage.DATA_TYPE__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -884,7 +965,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -893,7 +974,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Adapter FB Type</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -902,16 +983,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Adapter Type</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_TYPE_FEATURE_COUNT = DataPackage.DATA_TYPE_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -920,7 +1001,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -929,16 +1010,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Algorithm</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ALGORITHM_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -947,32 +1028,34 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int CONFIGURABLE_OBJECT__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int CONFIGURABLE_OBJECT__ATTRIBUTES = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Configurable Object</em>' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The number of structural features of the '<em>Configurable Object</em>'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int CONFIGURABLE_OBJECT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -981,15 +1064,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int APPLICATION__COMMENT = CONFIGURABLE_OBJECT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -998,6 +1082,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>FB Network</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1006,16 +1091,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Application</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int APPLICATION_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1024,23 +1109,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COMPILABLE_TYPE__COMMENT = LIBRARY_ELEMENT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COMPILABLE_TYPE__VERSION_INFO = LIBRARY_ELEMENT__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1049,7 +1136,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1058,6 +1145,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1066,15 +1154,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Compilable Type</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COMPILABLE_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1083,23 +1172,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_TYPE__COMMENT = COMPILABLE_TYPE__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_TYPE__VERSION_INFO = COMPILABLE_TYPE__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1108,7 +1199,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1117,14 +1208,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_TYPE__COMPILER_INFO = COMPILABLE_TYPE__COMPILER_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Interface List</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1133,7 +1226,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1142,15 +1235,17 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>FB Type</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl <em>Base FB Type</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl
+	 * <em>Base FB Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBaseFBType()
 	 * @generated
@@ -1158,9 +1253,9 @@ public interface LibraryElementPackage extends EPackage {
 	int BASE_FB_TYPE = 69;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1169,23 +1264,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int BASE_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int BASE_FB_TYPE__VERSION_INFO = FB_TYPE__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1194,7 +1291,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1203,14 +1300,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int BASE_FB_TYPE__COMPILER_INFO = FB_TYPE__COMPILER_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Interface List</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1219,15 +1318,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int BASE_FB_TYPE__SERVICE = FB_TYPE__SERVICE;
 
 	/**
-	 * The feature id for the '<em><b>Internal Vars</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Internal Vars</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1236,16 +1336,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Base FB Type</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int BASE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1254,23 +1354,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int BASIC_FB_TYPE__COMMENT = BASE_FB_TYPE__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int BASIC_FB_TYPE__VERSION_INFO = BASE_FB_TYPE__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1279,7 +1381,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1288,14 +1390,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int BASIC_FB_TYPE__COMPILER_INFO = BASE_FB_TYPE__COMPILER_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Interface List</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1304,15 +1408,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int BASIC_FB_TYPE__SERVICE = BASE_FB_TYPE__SERVICE;
 
 	/**
-	 * The feature id for the '<em><b>Internal Vars</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Internal Vars</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1321,15 +1426,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>ECC</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int BASIC_FB_TYPE__ECC = BASE_FB_TYPE_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Algorithm</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Algorithm</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1338,7 +1444,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Basic FB Type</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1347,6 +1453,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1355,7 +1462,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Classdef</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1364,7 +1471,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Header</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1373,7 +1480,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Compiler Info</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1382,7 +1489,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Language</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1391,7 +1498,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Product</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1400,7 +1507,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Vendor</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1409,7 +1516,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Version</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1418,16 +1525,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Compiler</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COMPILER_FEATURE_COUNT = 4;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1436,42 +1543,43 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int CONNECTION__COMMENT = CONFIGURABLE_OBJECT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int CONNECTION__ATTRIBUTES = CONFIGURABLE_OBJECT__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Dx1</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Dx1</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int CONNECTION__DX1 = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Dx2</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Dx2</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int CONNECTION__DX2 = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Dy</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Dy</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1480,7 +1588,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1489,7 +1597,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Broken Connection</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1498,7 +1606,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1507,7 +1615,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Destination</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1516,16 +1624,18 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Connection</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int CONNECTION_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 7;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl <em>Typed Configureable Object</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl
+	 * <em>Typed Configureable Object</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedConfigureableObject()
 	 * @generated
@@ -1533,9 +1643,9 @@ public interface LibraryElementPackage extends EPackage {
 	int TYPED_CONFIGUREABLE_OBJECT = 59;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1544,15 +1654,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int TYPED_CONFIGUREABLE_OBJECT__COMMENT = CONFIGURABLE_OBJECT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1561,24 +1672,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Typed Configureable Object</em>' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The number of structural features of the '<em>Typed Configureable
+	 * Object</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1587,15 +1699,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEVICE__COMMENT = TYPED_CONFIGUREABLE_OBJECT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1604,25 +1717,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEVICE__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEVICE__X = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1631,15 +1744,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Color</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEVICE__COLOR = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Var Declarations</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1648,6 +1762,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Resource</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1656,7 +1771,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Profile</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1665,7 +1780,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>In Connections</b></em>' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1674,16 +1789,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Device</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEVICE_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 7;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1692,23 +1807,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEVICE_TYPE__COMMENT = COMPILABLE_TYPE__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEVICE_TYPE__VERSION_INFO = COMPILABLE_TYPE__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1717,7 +1834,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1726,22 +1843,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEVICE_TYPE__COMPILER_INFO = COMPILABLE_TYPE__COMPILER_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Var Declaration</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Var Declaration</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEVICE_TYPE__VAR_DECLARATION = COMPILABLE_TYPE_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Resource Type Name</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Resource Type Name</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1750,6 +1870,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Resource</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1758,6 +1879,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>FB Network</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1766,15 +1888,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Profile</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEVICE_TYPE__PROFILE = COMPILABLE_TYPE_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Attribute Declarations</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attribute Declarations</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1783,7 +1906,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Device Type</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1792,7 +1915,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Algorithm</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1801,7 +1924,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Output</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1810,7 +1933,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>EC State</b></em>' container reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1819,7 +1942,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>EC Action</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1828,23 +1951,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>EC State</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ECC__EC_STATE = 0;
 
 	/**
-	 * The feature id for the '<em><b>EC Transition</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>EC Transition</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ECC__EC_TRANSITION = 1;
 
 	/**
-	 * The feature id for the '<em><b>Start</b></em>' reference.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Start</b></em>' reference. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1853,6 +1978,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Basic FB Type</b></em>' container reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1861,16 +1987,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>ECC</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ECC_FEATURE_COUNT = 4;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1879,33 +2005,34 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EC_STATE__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EC_STATE__X = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EC_STATE__Y = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>EC Action</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>EC Action</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1914,7 +2041,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Out Transitions</b></em>' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1923,7 +2050,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>In Transitions</b></em>' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1932,7 +2059,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>ECC</b></em>' container reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -1941,15 +2068,17 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>EC State</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EC_STATE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl <em>Primitive</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl
+	 * <em>Primitive</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPrimitive()
 	 * @generated
@@ -1957,8 +2086,10 @@ public interface LibraryElementPackage extends EPackage {
 	int PRIMITIVE = 61;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl <em>Version Info</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl
+	 * <em>Version Info</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVersionInfo()
 	 * @generated
@@ -1966,8 +2097,10 @@ public interface LibraryElementPackage extends EPackage {
 	int VERSION_INFO = 39;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl <em>With</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl
+	 * <em>With</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getWith()
 	 * @generated
@@ -1979,7 +2112,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompositeFBTypeImpl
 	 * <em>Composite FB Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompositeFBTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompositeFBType()
 	 * @generated
@@ -1991,7 +2124,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DataConnectionImpl
 	 * <em>Data Connection</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DataConnectionImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDataConnection()
 	 * @generated
@@ -2003,7 +2136,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventConnectionImpl
 	 * <em>Event Connection</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.EventConnectionImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getEventConnection()
 	 * @generated
@@ -2011,9 +2144,11 @@ public interface LibraryElementPackage extends EPackage {
 	int EVENT_CONNECTION = 47;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterConnectionImpl <em>Adapter Connection</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterConnectionImpl
+	 * <em>Adapter Connection</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterConnectionImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterConnection()
 	 * @generated
@@ -2025,7 +2160,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl
 	 * <em>Service Interface</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterface()
 	 * @generated
@@ -2033,8 +2168,10 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_INTERFACE = 49;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl <em>Value</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl
+	 * <em>Value</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getValue()
 	 * @generated
@@ -2042,9 +2179,11 @@ public interface LibraryElementPackage extends EPackage {
 	int VALUE = 51;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl <em>System Configuration</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl
+	 * <em>System Configuration</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSystemConfiguration()
 	 * @generated
@@ -2052,8 +2191,10 @@ public interface LibraryElementPackage extends EPackage {
 	int SYSTEM_CONFIGURATION = 52;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl <em>Segment Type</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl
+	 * <em>Segment Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegmentType()
 	 * @generated
@@ -2065,7 +2206,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBTypeImpl
 	 * <em>Adapter FB Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterFBType()
 	 * @generated
@@ -2073,8 +2214,10 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_FB_TYPE = 56;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl <em>Adapter Event</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl
+	 * <em>Adapter Event</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterEvent()
 	 * @generated
@@ -2082,8 +2225,10 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_EVENT = 57;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl <em>Service</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl
+	 * <em>Service</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getService()
 	 * @generated
@@ -2091,8 +2236,10 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE = 58;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl <em>Adapter FB</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl
+	 * <em>Adapter FB</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterFB()
 	 * @generated
@@ -2100,9 +2247,11 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_FB = 60;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl <em>Positionable Element</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl
+	 * <em>Positionable Element</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPositionableElement()
 	 * @generated
@@ -2110,44 +2259,45 @@ public interface LibraryElementPackage extends EPackage {
 	int POSITIONABLE_ELEMENT = 62;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int POSITIONABLE_ELEMENT__X = 0;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int POSITIONABLE_ELEMENT__Y = 1;
 
 	/**
-	 * The number of structural features of the '<em>Positionable Element</em>' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The number of structural features of the '<em>Positionable Element</em>'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int POSITIONABLE_ELEMENT_FEATURE_COUNT = 2;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EC_TRANSITION__X = POSITIONABLE_ELEMENT__X;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2156,7 +2306,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2165,7 +2315,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Condition Expression</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2174,7 +2324,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2183,7 +2333,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Destination</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2192,7 +2342,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Condition Event</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2201,7 +2351,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>ECC</b></em>' container reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2210,16 +2360,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>EC Transition</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EC_TRANSITION_FEATURE_COUNT = POSITIONABLE_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2228,7 +2378,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2237,7 +2387,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Is Input</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2246,6 +2396,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2254,15 +2405,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EVENT__OUTPUT_CONNECTIONS = IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2271,7 +2423,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2280,6 +2432,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>With</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2288,16 +2441,18 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Event</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EVENT_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl <em>FB Network Element</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl
+	 * <em>FB Network Element</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBNetworkElement()
 	 * @generated
@@ -2305,9 +2460,9 @@ public interface LibraryElementPackage extends EPackage {
 	int FB_NETWORK_ELEMENT = 16;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2316,15 +2471,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_NETWORK_ELEMENT__COMMENT = TYPED_CONFIGUREABLE_OBJECT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2333,25 +2489,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_NETWORK_ELEMENT__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_NETWORK_ELEMENT__X = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2360,6 +2516,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2368,7 +2525,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Mapping</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2377,15 +2534,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>FB Network Element</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_NETWORK_ELEMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2394,15 +2552,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB__COMMENT = FB_NETWORK_ELEMENT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2411,25 +2570,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB__PALETTE_ENTRY = FB_NETWORK_ELEMENT__PALETTE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB__X = FB_NETWORK_ELEMENT__X;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2438,6 +2597,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2446,7 +2606,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Mapping</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2455,16 +2615,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>FB</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2473,15 +2633,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SUB_APP__COMMENT = FB_NETWORK_ELEMENT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2490,25 +2651,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SUB_APP__PALETTE_ENTRY = FB_NETWORK_ELEMENT__PALETTE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SUB_APP__X = FB_NETWORK_ELEMENT__X;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2517,6 +2678,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2525,15 +2687,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Mapping</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SUB_APP__MAPPING = FB_NETWORK_ELEMENT__MAPPING;
 
 	/**
-	 * The feature id for the '<em><b>Sub App Network</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Sub App Network</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2542,7 +2705,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Sub App</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2551,7 +2714,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Application Domain</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2560,7 +2723,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Classification</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2569,7 +2732,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2578,7 +2741,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Function</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2587,16 +2750,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Standard</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int IDENTIFICATION__STANDARD = 4;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2605,15 +2768,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Identification</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int IDENTIFICATION_FEATURE_COUNT = 6;
 
 	/**
-	 * The feature id for the '<em><b>Event</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Event</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2622,7 +2786,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Parameters</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2631,7 +2795,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2640,16 +2804,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Primitive</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int PRIMITIVE_FEATURE_COUNT = 3;
 
 	/**
-	 * The feature id for the '<em><b>Event</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Event</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2658,7 +2822,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Parameters</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2667,7 +2831,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2676,6 +2840,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Input Primitive</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2684,6 +2849,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Plugs</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2692,38 +2858,43 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sockets</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int INTERFACE_LIST__SOCKETS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Event Inputs</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Event Inputs</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int INTERFACE_LIST__EVENT_INPUTS = 2;
 
 	/**
-	 * The feature id for the '<em><b>Event Outputs</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Event Outputs</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int INTERFACE_LIST__EVENT_OUTPUTS = 3;
 
 	/**
-	 * The feature id for the '<em><b>Input Vars</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Input Vars</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int INTERFACE_LIST__INPUT_VARS = 4;
 
 	/**
-	 * The feature id for the '<em><b>Output Vars</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Output Vars</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2732,15 +2903,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Interface List</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int INTERFACE_LIST_FEATURE_COUNT = 6;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2749,15 +2921,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LINK__COMMENT = CONFIGURABLE_OBJECT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2766,7 +2939,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Segment</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2775,7 +2948,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Device</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2784,25 +2957,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Link</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LINK_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>From</b></em>' reference.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>From</b></em>' reference. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MAPPING__FROM = 0;
 
 	/**
-	 * The feature id for the '<em><b>To</b></em>' reference.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>To</b></em>' reference. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2811,16 +2984,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Mapping</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MAPPING_FEATURE_COUNT = 2;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2829,16 +3002,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int TEXT_ALGORITHM__COMMENT = ALGORITHM__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Text</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Text</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2847,15 +3020,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Text Algorithm</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int TEXT_ALGORITHM_FEATURE_COUNT = ALGORITHM_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2864,16 +3038,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int OTHER_ALGORITHM__COMMENT = TEXT_ALGORITHM__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Text</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Text</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2882,7 +3056,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Language</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2891,15 +3065,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Other Algorithm</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int OTHER_ALGORITHM_FEATURE_COUNT = TEXT_ALGORITHM_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Event</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Event</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2908,7 +3083,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Parameters</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2917,7 +3092,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2926,7 +3101,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Test Result</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2935,6 +3110,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Output Primitive</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -2945,7 +3121,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeFBImpl
 	 * <em>Resource Type FB</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeFBImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeFB()
 	 * @generated
@@ -2953,8 +3129,10 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE_FB = 54;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl <em>Color</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl
+	 * <em>Color</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getColor()
 	 * @generated
@@ -2962,9 +3140,11 @@ public interface LibraryElementPackage extends EPackage {
 	int COLOR = 63;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl <em>Colorizable Element</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl
+	 * <em>Colorizable Element</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getColorizableElement()
 	 * @generated
@@ -2972,8 +3152,10 @@ public interface LibraryElementPackage extends EPackage {
 	int COLORIZABLE_ELEMENT = 64;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar Element</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar
+	 * Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IVarElement
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIVarElement()
 	 * @generated
@@ -2981,9 +3163,11 @@ public interface LibraryElementPackage extends EPackage {
 	int IVAR_ELEMENT = 65;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl <em>Attribute Declaration</em>}' class.
-	 * <!-- begin-user-doc --> <!--
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl
+	 * <em>Attribute Declaration</em>}' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAttributeDeclaration()
 	 * @generated
@@ -2991,8 +3175,10 @@ public interface LibraryElementPackage extends EPackage {
 	int ATTRIBUTE_DECLARATION = 66;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl <em>Attribute</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl
+	 * <em>Attribute</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAttribute()
 	 * @generated
@@ -3000,9 +3186,9 @@ public interface LibraryElementPackage extends EPackage {
 	int ATTRIBUTE = 26;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3011,16 +3197,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ATTRIBUTE__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3029,15 +3215,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Attribute Declaration</b></em>' reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ATTRIBUTE__ATTRIBUTE_DECLARATION = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Value</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3046,16 +3233,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Attribute</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ATTRIBUTE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3064,15 +3251,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE__COMMENT = TYPED_CONFIGUREABLE_OBJECT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3081,15 +3269,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Var Declarations</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3098,24 +3287,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>FB Network</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE__FB_NETWORK = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE__X = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3124,7 +3314,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Device</b></em>' container reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3133,7 +3323,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Device Type Resource</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3142,16 +3332,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Resource</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3160,15 +3350,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Resource Type Name</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE_TYPE_NAME_FEATURE_COUNT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3177,23 +3368,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE_TYPE__COMMENT = COMPILABLE_TYPE__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE_TYPE__VERSION_INFO = COMPILABLE_TYPE__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3202,7 +3395,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3211,14 +3404,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE_TYPE__COMPILER_INFO = COMPILABLE_TYPE__COMPILER_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Var Declaration</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Var Declaration</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3227,6 +3422,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>FB Network</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3235,7 +3431,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Supported FB Types</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3244,16 +3440,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Resource Type</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3262,15 +3458,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SEGMENT__COMMENT = TYPED_CONFIGUREABLE_OBJECT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3279,25 +3476,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SEGMENT__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SEGMENT__X = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3306,24 +3503,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Color</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SEGMENT__COLOR = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Width</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Width</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SEGMENT__WIDTH = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Var Declarations</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3332,7 +3530,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Out Connections</b></em>' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3341,16 +3539,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Segment</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SEGMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3359,15 +3557,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE_SEQUENCE__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Service Transaction</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Service Transaction</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3376,7 +3575,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Test Result</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3385,22 +3584,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Service Sequence</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE_SEQUENCE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Input Primitive</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Input Primitive</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE_TRANSACTION__INPUT_PRIMITIVE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Output Primitive</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Output Primitive</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3409,24 +3611,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Test Result</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE_TRANSACTION__TEST_RESULT = 2;
 
 	/**
-	 * The number of structural features of the '<em>Service Transaction</em>' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The number of structural features of the '<em>Service Transaction</em>'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE_TRANSACTION_FEATURE_COUNT = 3;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3435,23 +3638,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE_INTERFACE_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE_INTERFACE_FB_TYPE__VERSION_INFO = FB_TYPE__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3460,7 +3665,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3469,14 +3674,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE_INTERFACE_FB_TYPE__COMPILER_INFO = FB_TYPE__COMPILER_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Interface List</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3485,24 +3692,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE_INTERFACE_FB_TYPE__SERVICE = FB_TYPE__SERVICE;
 
 	/**
-	 * The number of structural features of the '<em>Service Interface FB Type</em>' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The number of structural features of the '<em>Service Interface FB Type</em>'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE_INTERFACE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3511,16 +3719,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ST_ALGORITHM__COMMENT = TEXT_ALGORITHM__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Text</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Text</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3529,39 +3737,43 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>ST Algorithm</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ST_ALGORITHM_FEATURE_COUNT = TEXT_ALGORITHM_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Network Elements</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Network Elements</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_NETWORK__NETWORK_ELEMENTS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Data Connections</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Data Connections</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_NETWORK__DATA_CONNECTIONS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Event Connections</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Event Connections</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_NETWORK__EVENT_CONNECTIONS = 2;
 
 	/**
-	 * The feature id for the '<em><b>Adapter Connections</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Adapter Connections</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3570,16 +3782,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>FB Network</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB_NETWORK_FEATURE_COUNT = 4;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3588,23 +3800,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COMPOSITE_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COMPOSITE_FB_TYPE__VERSION_INFO = FB_TYPE__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3613,7 +3827,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3622,14 +3836,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COMPOSITE_FB_TYPE__COMPILER_INFO = FB_TYPE__COMPILER_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Interface List</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3638,7 +3854,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3647,6 +3863,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>FB Network</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3655,15 +3872,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Composite FB Type</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COMPOSITE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3672,23 +3890,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SUB_APP_TYPE__COMMENT = COMPOSITE_FB_TYPE__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SUB_APP_TYPE__VERSION_INFO = COMPOSITE_FB_TYPE__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3697,7 +3917,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3706,14 +3926,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SUB_APP_TYPE__COMPILER_INFO = COMPOSITE_FB_TYPE__COMPILER_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Interface List</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3722,7 +3944,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3731,6 +3953,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>FB Network</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3739,16 +3962,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Sub App Type</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SUB_APP_TYPE_FEATURE_COUNT = COMPOSITE_FB_TYPE_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3757,23 +3980,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int AUTOMATION_SYSTEM__COMMENT = LIBRARY_ELEMENT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int AUTOMATION_SYSTEM__VERSION_INFO = LIBRARY_ELEMENT__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3782,15 +4007,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int AUTOMATION_SYSTEM__PALETTE_ENTRY = LIBRARY_ELEMENT__PALETTE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>Application</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Application</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3799,6 +4025,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Mapping</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3807,15 +4034,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int AUTOMATION_SYSTEM__PALETTE = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>System Configuration</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>System Configuration</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3824,16 +4052,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>System File</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int AUTOMATION_SYSTEM__SYSTEM_FILE = LIBRARY_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Command Stack</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Command Stack</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3842,6 +4070,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Automation System</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3850,16 +4079,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Author</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int VERSION_INFO__AUTHOR = 0;
 
 	/**
-	 * The feature id for the '<em><b>Date</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Date</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3868,7 +4097,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Organization</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3877,7 +4106,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Remarks</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3886,7 +4115,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Version</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3895,7 +4124,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Version Info</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3904,7 +4133,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Variables</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3913,16 +4142,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>With</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int WITH_FEATURE_COUNT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3931,42 +4160,43 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DATA_CONNECTION__COMMENT = CONNECTION__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DATA_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Dx1</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Dx1</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DATA_CONNECTION__DX1 = CONNECTION__DX1;
 
 	/**
-	 * The feature id for the '<em><b>Dx2</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Dx2</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DATA_CONNECTION__DX2 = CONNECTION__DX2;
 
 	/**
-	 * The feature id for the '<em><b>Dy</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Dy</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3975,7 +4205,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3984,7 +4214,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Broken Connection</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -3993,7 +4223,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4002,7 +4232,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Destination</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4011,15 +4241,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Data Connection</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DATA_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4028,42 +4259,43 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EVENT_CONNECTION__COMMENT = CONNECTION__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EVENT_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Dx1</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Dx1</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EVENT_CONNECTION__DX1 = CONNECTION__DX1;
 
 	/**
-	 * The feature id for the '<em><b>Dx2</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Dx2</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EVENT_CONNECTION__DX2 = CONNECTION__DX2;
 
 	/**
-	 * The feature id for the '<em><b>Dy</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Dy</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4072,7 +4304,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4081,7 +4313,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Broken Connection</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4090,7 +4322,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4099,7 +4331,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Destination</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4108,15 +4340,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Event Connection</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int EVENT_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4125,42 +4358,43 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_CONNECTION__COMMENT = CONNECTION__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Dx1</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Dx1</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_CONNECTION__DX1 = CONNECTION__DX1;
 
 	/**
-	 * The feature id for the '<em><b>Dx2</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Dx2</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_CONNECTION__DX2 = CONNECTION__DX2;
 
 	/**
-	 * The feature id for the '<em><b>Dy</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Dy</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4169,7 +4403,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4178,7 +4412,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Broken Connection</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4187,7 +4421,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4196,7 +4430,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Destination</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4205,15 +4439,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Adapter Connection</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4222,7 +4457,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4231,15 +4466,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Service Interface</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE_INTERFACE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Value</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4248,7 +4484,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Value</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4257,6 +4493,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Devices</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4265,6 +4502,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Segments</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4273,23 +4511,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Links</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SYSTEM_CONFIGURATION__LINKS = 2;
 
 	/**
-	 * The number of structural features of the '<em>System Configuration</em>' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The number of structural features of the '<em>System Configuration</em>'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SYSTEM_CONFIGURATION_FEATURE_COUNT = 3;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4298,15 +4538,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE_TYPE_FB__COMMENT = FB__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4315,25 +4556,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE_TYPE_FB__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE_TYPE_FB__X = FB__X;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4342,6 +4583,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4350,7 +4592,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Mapping</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4359,15 +4601,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Resource Type FB</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE_TYPE_FB_FEATURE_COUNT = FB_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4376,23 +4619,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SEGMENT_TYPE__COMMENT = COMPILABLE_TYPE__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SEGMENT_TYPE__VERSION_INFO = COMPILABLE_TYPE__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4401,7 +4646,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4410,14 +4655,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SEGMENT_TYPE__COMPILER_INFO = COMPILABLE_TYPE__COMPILER_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Var Declaration</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Var Declaration</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4426,16 +4673,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Segment Type</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SEGMENT_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4444,23 +4691,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_FB_TYPE__VERSION_INFO = FB_TYPE__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4469,7 +4718,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4478,14 +4727,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_FB_TYPE__COMPILER_INFO = FB_TYPE__COMPILER_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Interface List</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4494,7 +4745,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4503,7 +4754,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Adapter Type</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4512,15 +4763,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Adapter FB Type</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4529,7 +4781,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4538,7 +4790,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Is Input</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4547,6 +4799,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4555,15 +4808,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_EVENT__OUTPUT_CONNECTIONS = EVENT__OUTPUT_CONNECTIONS;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4572,7 +4826,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4581,6 +4835,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>With</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4589,7 +4844,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Adapter Declaration</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4598,31 +4853,34 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Adapter Event</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Right Interface</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Right Interface</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE__RIGHT_INTERFACE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Left Interface</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Left Interface</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE__LEFT_INTERFACE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Service Sequence</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Service Sequence</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4631,16 +4889,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Service</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SERVICE_FEATURE_COUNT = 3;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4649,15 +4907,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_FB__COMMENT = FB__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4666,25 +4925,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_FB__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_FB__X = FB__X;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4693,6 +4952,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4701,7 +4961,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Mapping</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4710,7 +4970,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Adapter Decl</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4719,34 +4979,34 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Adapter FB</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_FB_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Red</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Red</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COLOR__RED = 0;
 
 	/**
-	 * The feature id for the '<em><b>Green</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Green</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COLOR__GREEN = 1;
 
 	/**
-	 * The feature id for the '<em><b>Blue</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Blue</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4755,7 +5015,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Color</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4764,23 +5024,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Color</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COLORIZABLE_ELEMENT__COLOR = 0;
 
 	/**
-	 * The number of structural features of the '<em>Colorizable Element</em>' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The number of structural features of the '<em>Colorizable Element</em>'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COLORIZABLE_ELEMENT_FEATURE_COUNT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Var Declarations</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4789,16 +5051,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>IVar Element</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int IVAR_ELEMENT_FEATURE_COUNT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4807,16 +5069,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ATTRIBUTE_DECLARATION__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4825,23 +5087,26 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Initial Value</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ATTRIBUTE_DECLARATION__INITIAL_VALUE = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of structural features of the '<em>Attribute Declaration</em>' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The number of structural features of the '<em>Attribute Declaration</em>'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ATTRIBUTE_DECLARATION_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement <em>Typed Element</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement <em>Typed
+	 * Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedElement
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedElement()
 	 * @generated
@@ -4849,9 +5114,9 @@ public interface LibraryElementPackage extends EPackage {
 	int TYPED_ELEMENT = 67;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4860,7 +5125,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Typed Element</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4871,7 +5136,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl
 	 * <em>Simple FB Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSimpleFBType()
 	 * @generated
@@ -4879,9 +5144,9 @@ public interface LibraryElementPackage extends EPackage {
 	int SIMPLE_FB_TYPE = 68;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4890,23 +5155,25 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SIMPLE_FB_TYPE__COMMENT = BASE_FB_TYPE__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SIMPLE_FB_TYPE__VERSION_INFO = BASE_FB_TYPE__VERSION_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4915,7 +5182,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4924,14 +5191,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SIMPLE_FB_TYPE__COMPILER_INFO = BASE_FB_TYPE__COMPILER_INFO;
 
 	/**
-	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Interface List</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4940,15 +5209,16 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SIMPLE_FB_TYPE__SERVICE = BASE_FB_TYPE__SERVICE;
 
 	/**
-	 * The feature id for the '<em><b>Internal Vars</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Internal Vars</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4957,6 +5227,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Algorithm</b></em>' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -4965,15 +5236,18 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Simple FB Type</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SIMPLE_FB_TYPE_FEATURE_COUNT = BASE_FB_TYPE_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl <em>Struct Manipulator</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl
+	 * <em>Struct Manipulator</em>}' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStructManipulator()
 	 * @generated
@@ -4981,54 +5255,54 @@ public interface LibraryElementPackage extends EPackage {
 	int STRUCT_MANIPULATOR = 70;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int STRUCT_MANIPULATOR__NAME = FB__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int STRUCT_MANIPULATOR__COMMENT = FB__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int STRUCT_MANIPULATOR__ATTRIBUTES = FB__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int STRUCT_MANIPULATOR__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int STRUCT_MANIPULATOR__X = FB__X;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -5036,26 +5310,26 @@ public interface LibraryElementPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int STRUCT_MANIPULATOR__INTERFACE = FB__INTERFACE;
 
 	/**
-	 * The feature id for the '<em><b>Mapping</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Mapping</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int STRUCT_MANIPULATOR__MAPPING = FB__MAPPING;
 
 	/**
-	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Struct Type</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -5063,17 +5337,18 @@ public interface LibraryElementPackage extends EPackage {
 
 	/**
 	 * The number of structural features of the '<em>Struct Manipulator</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int STRUCT_MANIPULATOR_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl <em>Demultiplexer</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl
+	 * <em>Demultiplexer</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDemultiplexer()
 	 * @generated
@@ -5081,54 +5356,54 @@ public interface LibraryElementPackage extends EPackage {
 	int DEMULTIPLEXER = 71;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEMULTIPLEXER__NAME = STRUCT_MANIPULATOR__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEMULTIPLEXER__COMMENT = STRUCT_MANIPULATOR__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEMULTIPLEXER__ATTRIBUTES = STRUCT_MANIPULATOR__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEMULTIPLEXER__PALETTE_ENTRY = STRUCT_MANIPULATOR__PALETTE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEMULTIPLEXER__X = STRUCT_MANIPULATOR__X;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -5136,44 +5411,45 @@ public interface LibraryElementPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEMULTIPLEXER__INTERFACE = STRUCT_MANIPULATOR__INTERFACE;
 
 	/**
-	 * The feature id for the '<em><b>Mapping</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Mapping</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEMULTIPLEXER__MAPPING = STRUCT_MANIPULATOR__MAPPING;
 
 	/**
-	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Struct Type</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEMULTIPLEXER__STRUCT_TYPE = STRUCT_MANIPULATOR__STRUCT_TYPE;
 
 	/**
-	 * The number of structural features of the '<em>Demultiplexer</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The number of structural features of the '<em>Demultiplexer</em>' class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DEMULTIPLEXER_FEATURE_COUNT = STRUCT_MANIPULATOR_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl <em>Multiplexer</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl
+	 * <em>Multiplexer</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMultiplexer()
 	 * @generated
@@ -5181,54 +5457,54 @@ public interface LibraryElementPackage extends EPackage {
 	int MULTIPLEXER = 72;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MULTIPLEXER__NAME = STRUCT_MANIPULATOR__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MULTIPLEXER__COMMENT = STRUCT_MANIPULATOR__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MULTIPLEXER__ATTRIBUTES = STRUCT_MANIPULATOR__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MULTIPLEXER__PALETTE_ENTRY = STRUCT_MANIPULATOR__PALETTE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>X</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>X</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MULTIPLEXER__X = STRUCT_MANIPULATOR__X;
 
 	/**
-	 * The feature id for the '<em><b>Y</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The feature id for the '<em><b>Y</b></em>' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -5236,44 +5512,46 @@ public interface LibraryElementPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MULTIPLEXER__INTERFACE = STRUCT_MANIPULATOR__INTERFACE;
 
 	/**
-	 * The feature id for the '<em><b>Mapping</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Mapping</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MULTIPLEXER__MAPPING = STRUCT_MANIPULATOR__MAPPING;
 
 	/**
-	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Struct Type</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MULTIPLEXER__STRUCT_TYPE = STRUCT_MANIPULATOR__STRUCT_TYPE;
 
 	/**
-	 * The number of structural features of the '<em>Multiplexer</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The number of structural features of the '<em>Multiplexer</em>' class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MULTIPLEXER_FEATURE_COUNT = STRUCT_MANIPULATOR_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl <em>Local Variable</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl
+	 * <em>Local Variable</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLocalVariable()
 	 * @generated
@@ -5281,27 +5559,27 @@ public interface LibraryElementPackage extends EPackage {
 	int LOCAL_VARIABLE = 73;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LOCAL_VARIABLE__NAME = VAR_DECLARATION__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LOCAL_VARIABLE__COMMENT = VAR_DECLARATION__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Is Input</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Is Input</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -5309,8 +5587,8 @@ public interface LibraryElementPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -5318,71 +5596,71 @@ public interface LibraryElementPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LOCAL_VARIABLE__OUTPUT_CONNECTIONS = VAR_DECLARATION__OUTPUT_CONNECTIONS;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LOCAL_VARIABLE__TYPE = VAR_DECLARATION__TYPE;
 
 	/**
-	 * The feature id for the '<em><b>Type Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LOCAL_VARIABLE__TYPE_NAME = VAR_DECLARATION__TYPE_NAME;
 
 	/**
-	 * The feature id for the '<em><b>Array Size</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Array Size</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LOCAL_VARIABLE__ARRAY_SIZE = VAR_DECLARATION__ARRAY_SIZE;
 
 	/**
-	 * The feature id for the '<em><b>Withs</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Withs</b></em>' reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LOCAL_VARIABLE__WITHS = VAR_DECLARATION__WITHS;
 
 	/**
-	 * The feature id for the '<em><b>Value</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Value</b></em>' containment reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LOCAL_VARIABLE__VALUE = VAR_DECLARATION__VALUE;
 
 	/**
-	 * The feature id for the '<em><b>Array Start</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Array Start</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LOCAL_VARIABLE__ARRAY_START = VAR_DECLARATION_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Array Stop</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Array Stop</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -5390,16 +5668,18 @@ public interface LibraryElementPackage extends EPackage {
 
 	/**
 	 * The number of structural features of the '<em>Local Variable</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int LOCAL_VARIABLE_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Language
+	 * <em>Language</em>}' enum. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Language
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
@@ -5407,9 +5687,9 @@ public interface LibraryElementPackage extends EPackage {
 	int LANGUAGE = 74;
 
 	/**
-	 * The meta object id for the '<em>IProject</em>' data type.
-	 * <!-- begin-user-doc
+	 * The meta object id for the '<em>IProject</em>' data type. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.core.resources.IProject
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
@@ -5417,9 +5697,9 @@ public interface LibraryElementPackage extends EPackage {
 	int IPROJECT = 75;
 
 	/**
-	 * The meta object id for the '<em>IFile</em>' data type.
-	 * <!-- begin-user-doc
+	 * The meta object id for the '<em>IFile</em>' data type. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.core.resources.IFile
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
@@ -5427,9 +5707,9 @@ public interface LibraryElementPackage extends EPackage {
 	int IFILE = 76;
 
 	/**
-	 * The meta object id for the '<em>Command Stack</em>' data type.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The meta object id for the '<em>Command Stack</em>' data type. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.gef.commands.CommandStack
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
 	 * @generated
@@ -5437,8 +5717,10 @@ public interface LibraryElementPackage extends EPackage {
 	int COMMAND_STACK = 77;
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration <em>Adapter Declaration</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+	 * <em>Adapter Declaration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Adapter Declaration</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 	 * @generated
@@ -5446,8 +5728,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAdapterDeclaration();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB
+	 * <em>Adapter FB</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Adapter FB</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB()
 	 * @see #getAdapterDeclaration()
@@ -5456,8 +5740,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAdapterDeclaration_AdapterFB();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getPaletteEntry <em>Palette Entry</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getPaletteEntry
+	 * <em>Palette Entry</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Palette Entry</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getPaletteEntry()
 	 * @see #getAdapterDeclaration()
@@ -5466,8 +5752,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAdapterDeclaration_PaletteEntry();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType <em>Adapter Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType <em>Adapter
+	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Adapter Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 	 * @generated
@@ -5475,8 +5763,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAdapterType();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getAdapterFBType <em>Adapter FB Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getAdapterFBType
+	 * <em>Adapter FB Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Adapter FB Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getAdapterFBType()
 	 * @see #getAdapterType()
@@ -5485,8 +5775,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAdapterType_AdapterFBType();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Algorithm <em>Algorithm</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Algorithm
+	 * <em>Algorithm</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Algorithm</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 	 * @generated
@@ -5494,8 +5786,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAlgorithm();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Application <em>Application</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Application
+	 * <em>Application</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Application</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Application
 	 * @generated
@@ -5503,8 +5797,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getApplication();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Application#getFBNetwork <em>FB Network</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Application#getFBNetwork
+	 * <em>FB Network</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>FB Network</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Application#getFBNetwork()
 	 * @see #getApplication()
@@ -5513,8 +5809,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getApplication_FBNetwork();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType <em>Basic FB Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType <em>Basic FB
+	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Basic FB Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 	 * @generated
@@ -5522,8 +5820,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getBasicFBType();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getECC <em>ECC</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getECC
+	 * <em>ECC</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>ECC</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getECC()
 	 * @see #getBasicFBType()
@@ -5532,9 +5832,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getBasicFBType_ECC();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getAlgorithm <em>Algorithm</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Algorithm</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getAlgorithm
+	 * <em>Algorithm</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list
+	 *         '<em>Algorithm</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getAlgorithm()
 	 * @see #getBasicFBType()
 	 * @generated
@@ -5542,8 +5845,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getBasicFBType_Algorithm();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo <em>Compiler Info</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo
+	 * <em>Compiler Info</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Compiler Info</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo
 	 * @generated
@@ -5551,9 +5856,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getCompilerInfo();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getCompiler <em>Compiler</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Compiler</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getCompiler
+	 * <em>Compiler</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list
+	 *         '<em>Compiler</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getCompiler()
 	 * @see #getCompilerInfo()
 	 * @generated
@@ -5561,8 +5869,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getCompilerInfo_Compiler();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getClassdef <em>Classdef</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getClassdef
+	 * <em>Classdef</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Classdef</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getClassdef()
 	 * @see #getCompilerInfo()
@@ -5571,8 +5881,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getCompilerInfo_Classdef();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getHeader <em>Header</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getHeader
+	 * <em>Header</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Header</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo#getHeader()
 	 * @see #getCompilerInfo()
@@ -5581,8 +5893,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getCompilerInfo_Header();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler <em>Compiler</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler
+	 * <em>Compiler</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Compiler</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Compiler
 	 * @generated
@@ -5590,8 +5904,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getCompiler();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getLanguage <em>Language</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getLanguage
+	 * <em>Language</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Language</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Compiler#getLanguage()
 	 * @see #getCompiler()
@@ -5600,8 +5916,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getCompiler_Language();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getProduct <em>Product</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getProduct
+	 * <em>Product</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Product</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Compiler#getProduct()
 	 * @see #getCompiler()
@@ -5610,8 +5928,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getCompiler_Product();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVendor <em>Vendor</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVendor
+	 * <em>Vendor</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Vendor</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVendor()
 	 * @see #getCompiler()
@@ -5620,8 +5940,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getCompiler_Vendor();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVersion <em>Version</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVersion
+	 * <em>Version</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Version</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Compiler#getVersion()
 	 * @see #getCompiler()
@@ -5630,8 +5952,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getCompiler_Version();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection <em>Connection</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection
+	 * <em>Connection</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Connection</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection
 	 * @generated
@@ -5639,8 +5963,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getConnection();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx1 <em>Dx1</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx1
+	 * <em>Dx1</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Dx1</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx1()
 	 * @see #getConnection()
@@ -5649,8 +5975,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getConnection_Dx1();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx2 <em>Dx2</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx2
+	 * <em>Dx2</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Dx2</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx2()
 	 * @see #getConnection()
@@ -5659,8 +5987,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getConnection_Dx2();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDy <em>Dy</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDy
+	 * <em>Dy</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Dy</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getDy()
 	 * @see #getConnection()
@@ -5669,8 +5999,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getConnection_Dy();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection <em>Res Type Connection</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection
+	 * <em>Res Type Connection</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Res Type Connection</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection()
 	 * @see #getConnection()
@@ -5679,8 +6011,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getConnection_ResTypeConnection();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection <em>Broken Connection</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection
+	 * <em>Broken Connection</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Broken Connection</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection()
 	 * @see #getConnection()
@@ -5689,8 +6023,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getConnection_BrokenConnection();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource <em>Source</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource
+	 * <em>Source</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Source</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource()
 	 * @see #getConnection()
@@ -5699,8 +6035,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getConnection_Source();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination <em>Destination</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination
+	 * <em>Destination</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Destination</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination()
 	 * @see #getConnection()
@@ -5709,8 +6047,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getConnection_Destination();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Device <em>Device</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Device
+	 * <em>Device</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Device</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Device
 	 * @generated
@@ -5718,9 +6058,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getDevice();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.Device#getResource <em>Resource</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Resource</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Device#getResource
+	 * <em>Resource</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list
+	 *         '<em>Resource</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Device#getResource()
 	 * @see #getDevice()
 	 * @generated
@@ -5728,8 +6071,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getDevice_Resource();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Device#getProfile <em>Profile</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Device#getProfile
+	 * <em>Profile</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Profile</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Device#getProfile()
 	 * @see #getDevice()
@@ -5738,8 +6083,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getDevice_Profile();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.Device#getInConnections <em>In Connections</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Device#getInConnections
+	 * <em>In Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference list '<em>In Connections</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Device#getInConnections()
 	 * @see #getDevice()
@@ -5748,8 +6095,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getDevice_InConnections();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType <em>Device Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType <em>Device
+	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Device Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeviceType
 	 * @generated
@@ -5757,9 +6106,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getDeviceType();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getVarDeclaration <em>Var Declaration</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Var Declaration</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getVarDeclaration
+	 * <em>Var Declaration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Var
+	 *         Declaration</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getVarDeclaration()
 	 * @see #getDeviceType()
 	 * @generated
@@ -5767,9 +6119,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getDeviceType_VarDeclaration();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getResourceTypeName <em>Resource Type Name</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Resource Type Name</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getResourceTypeName
+	 * <em>Resource Type Name</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Resource Type
+	 *         Name</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getResourceTypeName()
 	 * @see #getDeviceType()
 	 * @generated
@@ -5777,9 +6132,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getDeviceType_ResourceTypeName();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getResource <em>Resource</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Resource</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getResource
+	 * <em>Resource</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list
+	 *         '<em>Resource</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getResource()
 	 * @see #getDeviceType()
 	 * @generated
@@ -5787,8 +6145,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getDeviceType_Resource();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getFBNetwork <em>FB Network</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getFBNetwork
+	 * <em>FB Network</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>FB Network</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getFBNetwork()
 	 * @see #getDeviceType()
@@ -5797,8 +6157,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getDeviceType_FBNetwork();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getProfile <em>Profile</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getProfile
+	 * <em>Profile</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Profile</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getProfile()
 	 * @see #getDeviceType()
@@ -5811,7 +6173,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getAttributeDeclarations
 	 * <em>Attribute Declarations</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for the containment reference list '<em>Attribute
 	 *         Declarations</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeviceType#getAttributeDeclarations()
@@ -5821,8 +6183,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getDeviceType_AttributeDeclarations();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction <em>EC Action</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction <em>EC
+	 * Action</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EC Action</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECAction
 	 * @generated
@@ -5830,8 +6194,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getECAction();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getAlgorithm <em>Algorithm</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getAlgorithm
+	 * <em>Algorithm</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Algorithm</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECAction#getAlgorithm()
 	 * @see #getECAction()
@@ -5840,8 +6206,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECAction_Algorithm();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getOutput <em>Output</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getOutput
+	 * <em>Output</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Output</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECAction#getOutput()
 	 * @see #getECAction()
@@ -5850,8 +6218,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECAction_Output();
 
 	/**
-	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState <em>EC State</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the container reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState
+	 * <em>EC State</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the container reference '<em>EC State</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState()
 	 * @see #getECAction()
@@ -5863,7 +6233,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * Returns the meta object for class
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC <em>ECC</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for class '<em>ECC</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC
 	 * @generated
@@ -5871,9 +6241,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getECC();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECState <em>EC State</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>EC State</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECState <em>EC
+	 * State</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>EC
+	 *         State</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC#getECState()
 	 * @see #getECC()
 	 * @generated
@@ -5881,9 +6254,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECC_ECState();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECTransition <em>EC Transition</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>EC Transition</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECTransition
+	 * <em>EC Transition</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>EC
+	 *         Transition</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC#getECTransition()
 	 * @see #getECC()
 	 * @generated
@@ -5891,8 +6267,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECC_ECTransition();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getStart <em>Start</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getStart
+	 * <em>Start</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Start</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC#getStart()
 	 * @see #getECC()
@@ -5901,8 +6279,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECC_Start();
 
 	/**
-	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType <em>Basic FB Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the container reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType
+	 * <em>Basic FB Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the container reference '<em>Basic FB Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType()
 	 * @see #getECC()
@@ -5911,8 +6291,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECC_BasicFBType();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState <em>EC State</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState <em>EC
+	 * State</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EC State</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState
 	 * @generated
@@ -5920,9 +6302,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getECState();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECAction <em>EC Action</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>EC Action</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECAction
+	 * <em>EC Action</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>EC
+	 *         Action</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState#getECAction()
 	 * @see #getECState()
 	 * @generated
@@ -5930,8 +6315,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECState_ECAction();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getOutTransitions <em>Out Transitions</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getOutTransitions
+	 * <em>Out Transitions</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference list '<em>Out Transitions</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState#getOutTransitions()
 	 * @see #getECState()
@@ -5940,8 +6327,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECState_OutTransitions();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getInTransitions <em>In Transitions</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getInTransitions
+	 * <em>In Transitions</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference list '<em>In Transitions</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState#getInTransitions()
 	 * @see #getECState()
@@ -5950,8 +6339,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECState_InTransitions();
 
 	/**
-	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC <em>ECC</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the container reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC
+	 * <em>ECC</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the container reference '<em>ECC</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC()
 	 * @see #getECState()
@@ -5960,8 +6351,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECState_ECC();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition <em>EC Transition</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition <em>EC
+	 * Transition</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EC Transition</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 	 * @generated
@@ -5969,8 +6362,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getECTransition();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getComment <em>Comment</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getComment
+	 * <em>Comment</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Comment</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getComment()
 	 * @see #getECTransition()
@@ -5983,7 +6378,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionExpression
 	 * <em>Condition Expression</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for the attribute '<em>Condition Expression</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionExpression()
 	 * @see #getECTransition()
@@ -5992,8 +6387,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getECTransition_ConditionExpression();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getDestination <em>Destination</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getDestination
+	 * <em>Destination</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Destination</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getDestination()
 	 * @see #getECTransition()
@@ -6002,8 +6399,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECTransition_Destination();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionEvent <em>Condition Event</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionEvent
+	 * <em>Condition Event</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Condition Event</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionEvent()
 	 * @see #getECTransition()
@@ -6012,8 +6411,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECTransition_ConditionEvent();
 
 	/**
-	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getECC <em>ECC</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the container reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getECC
+	 * <em>ECC</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the container reference '<em>ECC</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getECC()
 	 * @see #getECTransition()
@@ -6022,8 +6423,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECTransition_ECC();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource <em>Source</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource
+	 * <em>Source</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Source</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource()
 	 * @see #getECTransition()
@@ -6032,8 +6435,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECTransition_Source();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Event <em>Event</em>}'.
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Event <em>Event</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Event</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Event
 	 * @generated
@@ -6041,8 +6446,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getEvent();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.Event#getWith <em>With</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Event#getWith
+	 * <em>With</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>With</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Event#getWith()
 	 * @see #getEvent()
@@ -6051,8 +6458,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getEvent_With();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork <em>FB Network</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork <em>FB
+	 * Network</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>FB Network</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetwork
 	 * @generated
@@ -6060,9 +6469,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getFBNetwork();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getNetworkElements <em>Network Elements</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Network Elements</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getNetworkElements
+	 * <em>Network Elements</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Network
+	 *         Elements</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getNetworkElements()
 	 * @see #getFBNetwork()
 	 * @generated
@@ -6070,9 +6482,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getFBNetwork_NetworkElements();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getDataConnections <em>Data Connections</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Data Connections</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getDataConnections
+	 * <em>Data Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Data
+	 *         Connections</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getDataConnections()
 	 * @see #getFBNetwork()
 	 * @generated
@@ -6080,9 +6495,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getFBNetwork_DataConnections();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getEventConnections <em>Event Connections</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Event Connections</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getEventConnections
+	 * <em>Event Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Event
+	 *         Connections</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getEventConnections()
 	 * @see #getFBNetwork()
 	 * @generated
@@ -6090,9 +6508,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getFBNetwork_EventConnections();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getAdapterConnections <em>Adapter Connections</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Adapter Connections</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getAdapterConnections
+	 * <em>Adapter Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Adapter
+	 *         Connections</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getAdapterConnections()
 	 * @see #getFBNetwork()
 	 * @generated
@@ -6103,7 +6524,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * Returns the meta object for class
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FB <em>FB</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for class '<em>FB</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FB
 	 * @generated
@@ -6111,8 +6532,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getFB();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement <em>FB Network Element</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement <em>FB
+	 * Network Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>FB Network Element</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
 	 * @generated
@@ -6120,8 +6543,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getFBNetworkElement();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getInterface <em>Interface</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getInterface
+	 * <em>Interface</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Interface</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getInterface()
 	 * @see #getFBNetworkElement()
@@ -6130,8 +6555,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getFBNetworkElement_Interface();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getMapping <em>Mapping</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getMapping
+	 * <em>Mapping</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Mapping</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getMapping()
 	 * @see #getFBNetworkElement()
@@ -6140,8 +6567,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getFBNetworkElement_Mapping();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.FBType <em>FB Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBType <em>FB
+	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>FB Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBType
 	 * @generated
@@ -6149,9 +6578,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getFBType();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.FBType#getInterfaceList <em>Interface List</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Interface List</em>'.
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBType#getInterfaceList
+	 * <em>Interface List</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference '<em>Interface
+	 *         List</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBType#getInterfaceList()
 	 * @see #getFBType()
 	 * @generated
@@ -6159,8 +6591,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getFBType_InterfaceList();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.FBType#getService <em>Service</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.FBType#getService
+	 * <em>Service</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Service</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBType#getService()
 	 * @see #getFBType()
@@ -6169,8 +6603,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getFBType_Service();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification <em>Identification</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification
+	 * <em>Identification</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Identification</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Identification
 	 * @generated
@@ -6178,8 +6614,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getIdentification();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getApplicationDomain <em>Application Domain</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getApplicationDomain
+	 * <em>Application Domain</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Application Domain</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Identification#getApplicationDomain()
 	 * @see #getIdentification()
@@ -6188,8 +6626,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getIdentification_ApplicationDomain();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getClassification <em>Classification</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getClassification
+	 * <em>Classification</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Classification</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Identification#getClassification()
 	 * @see #getIdentification()
@@ -6198,8 +6638,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getIdentification_Classification();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getDescription <em>Description</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getDescription
+	 * <em>Description</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Description</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Identification#getDescription()
 	 * @see #getIdentification()
@@ -6208,8 +6650,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getIdentification_Description();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getFunction <em>Function</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getFunction
+	 * <em>Function</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Function</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Identification#getFunction()
 	 * @see #getIdentification()
@@ -6218,8 +6662,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getIdentification_Function();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getStandard <em>Standard</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getStandard
+	 * <em>Standard</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Standard</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Identification#getStandard()
 	 * @see #getIdentification()
@@ -6228,8 +6674,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getIdentification_Standard();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getType
+	 * <em>Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Identification#getType()
 	 * @see #getIdentification()
@@ -6238,8 +6686,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getIdentification_Type();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive <em>Input Primitive</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive <em>Input
+	 * Primitive</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Input Primitive</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive
 	 * @generated
@@ -6247,8 +6697,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getInputPrimitive();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList <em>Interface List</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
+	 * <em>Interface List</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Interface List</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 	 * @generated
@@ -6256,8 +6708,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getInterfaceList();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getPlugs <em>Plugs</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getPlugs
+	 * <em>Plugs</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Plugs</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getPlugs()
 	 * @see #getInterfaceList()
@@ -6266,9 +6720,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getInterfaceList_Plugs();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getSockets <em>Sockets</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Sockets</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getSockets
+	 * <em>Sockets</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list
+	 *         '<em>Sockets</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getSockets()
 	 * @see #getInterfaceList()
 	 * @generated
@@ -6276,9 +6733,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getInterfaceList_Sockets();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getEventInputs <em>Event Inputs</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Event Inputs</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getEventInputs
+	 * <em>Event Inputs</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Event
+	 *         Inputs</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getEventInputs()
 	 * @see #getInterfaceList()
 	 * @generated
@@ -6286,9 +6746,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getInterfaceList_EventInputs();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getEventOutputs <em>Event Outputs</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Event Outputs</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getEventOutputs
+	 * <em>Event Outputs</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Event
+	 *         Outputs</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getEventOutputs()
 	 * @see #getInterfaceList()
 	 * @generated
@@ -6296,9 +6759,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getInterfaceList_EventOutputs();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getInputVars <em>Input Vars</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Input Vars</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getInputVars
+	 * <em>Input Vars</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Input
+	 *         Vars</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getInputVars()
 	 * @see #getInterfaceList()
 	 * @generated
@@ -6306,9 +6772,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getInterfaceList_InputVars();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getOutputVars <em>Output Vars</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Output Vars</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getOutputVars
+	 * <em>Output Vars</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Output
+	 *         Vars</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getOutputVars()
 	 * @see #getInterfaceList()
 	 * @generated
@@ -6316,8 +6785,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getInterfaceList_OutputVars();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Link <em>Link</em>}'.
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Link <em>Link</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Link</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Link
 	 * @generated
@@ -6325,8 +6796,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getLink();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Link#getSegment <em>Segment</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Link#getSegment
+	 * <em>Segment</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Segment</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Link#getSegment()
 	 * @see #getLink()
@@ -6335,8 +6808,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getLink_Segment();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Link#getDevice <em>Device</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Link#getDevice
+	 * <em>Device</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Device</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Link#getDevice()
 	 * @see #getLink()
@@ -6345,8 +6820,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getLink_Device();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Mapping <em>Mapping</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Mapping
+	 * <em>Mapping</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Mapping</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Mapping
 	 * @generated
@@ -6354,8 +6831,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getMapping();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Mapping#getFrom <em>From</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Mapping#getFrom
+	 * <em>From</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>From</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Mapping#getFrom()
 	 * @see #getMapping()
@@ -6364,8 +6843,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getMapping_From();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Mapping#getTo <em>To</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Mapping#getTo
+	 * <em>To</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>To</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Mapping#getTo()
 	 * @see #getMapping()
@@ -6374,8 +6855,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getMapping_To();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm <em>Other Algorithm</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm <em>Other
+	 * Algorithm</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Other Algorithm</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
 	 * @generated
@@ -6383,8 +6866,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getOtherAlgorithm();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage <em>Language</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage
+	 * <em>Language</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Language</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage()
 	 * @see #getOtherAlgorithm()
@@ -6393,8 +6878,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getOtherAlgorithm_Language();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive <em>Output Primitive</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive
+	 * <em>Output Primitive</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Output Primitive</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive
 	 * @generated
@@ -6402,8 +6889,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getOutputPrimitive();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive#getTestResult <em>Test Result</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive#getTestResult
+	 * <em>Test Result</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Test Result</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive#getTestResult()
 	 * @see #getOutputPrimitive()
@@ -6412,8 +6901,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getOutputPrimitive_TestResult();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource <em>Resource</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource
+	 * <em>Resource</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Resource</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Resource
 	 * @generated
@@ -6421,8 +6912,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getResource();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource#getFBNetwork <em>FB Network</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource#getFBNetwork
+	 * <em>FB Network</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>FB Network</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Resource#getFBNetwork()
 	 * @see #getResource()
@@ -6431,8 +6924,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getResource_FBNetwork();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource#getX <em>X</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource#getX
+	 * <em>X</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>X</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Resource#getX()
 	 * @see #getResource()
@@ -6441,8 +6936,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getResource_X();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource#getY <em>Y</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource#getY
+	 * <em>Y</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Y</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Resource#getY()
 	 * @see #getResource()
@@ -6451,8 +6948,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getResource_Y();
 
 	/**
-	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource#getDevice <em>Device</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the container reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource#getDevice
+	 * <em>Device</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the container reference '<em>Device</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Resource#getDevice()
 	 * @see #getResource()
@@ -6465,7 +6964,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource#isDeviceTypeResource
 	 * <em>Device Type Resource</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for the attribute '<em>Device Type Resource</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Resource#isDeviceTypeResource()
 	 * @see #getResource()
@@ -6474,8 +6973,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getResource_DeviceTypeResource();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName <em>Resource Type Name</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName
+	 * <em>Resource Type Name</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Resource Type Name</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName
 	 * @generated
@@ -6483,8 +6984,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getResourceTypeName();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName#getName
+	 * <em>Name</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName#getName()
 	 * @see #getResourceTypeName()
@@ -6493,8 +6996,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getResourceTypeName_Name();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType <em>Resource Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType
+	 * <em>Resource Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Resource Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ResourceType
 	 * @generated
@@ -6502,9 +7007,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getResourceType();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getVarDeclaration <em>Var Declaration</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Var Declaration</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getVarDeclaration
+	 * <em>Var Declaration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Var
+	 *         Declaration</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getVarDeclaration()
 	 * @see #getResourceType()
 	 * @generated
@@ -6512,8 +7020,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getResourceType_VarDeclaration();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getFBNetwork <em>FB Network</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getFBNetwork
+	 * <em>FB Network</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>FB Network</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getFBNetwork()
 	 * @see #getResourceType()
@@ -6522,8 +7032,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getResourceType_FBNetwork();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getSupportedFBTypes <em>Supported FB Types</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getSupportedFBTypes
+	 * <em>Supported FB Types</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Supported FB Types</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ResourceType#getSupportedFBTypes()
 	 * @see #getResourceType()
@@ -6532,8 +7044,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getResourceType_SupportedFBTypes();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment <em>Segment</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment
+	 * <em>Segment</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Segment</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Segment
 	 * @generated
@@ -6541,8 +7055,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getSegment();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getWidth <em>Width</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getWidth
+	 * <em>Width</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Width</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Segment#getWidth()
 	 * @see #getSegment()
@@ -6551,9 +7067,12 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getSegment_Width();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getVarDeclarations <em>Var Declarations</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Var Declarations</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getVarDeclarations
+	 * <em>Var Declarations</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Var
+	 *         Declarations</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Segment#getVarDeclarations()
 	 * @see #getSegment()
 	 * @generated
@@ -6561,8 +7080,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getSegment_VarDeclarations();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getOutConnections <em>Out Connections</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getOutConnections
+	 * <em>Out Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference list '<em>Out Connections</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Segment#getOutConnections()
 	 * @see #getSegment()
@@ -6571,8 +7092,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getSegment_OutConnections();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence <em>Service Sequence</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence
+	 * <em>Service Sequence</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Service Sequence</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence
 	 * @generated
@@ -6580,9 +7103,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getServiceSequence();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceTransaction <em>Service Transaction</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Service Transaction</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceTransaction
+	 * <em>Service Transaction</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Service
+	 *         Transaction</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceTransaction()
 	 * @see #getServiceSequence()
 	 * @generated
@@ -6590,8 +7116,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getServiceSequence_ServiceTransaction();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult <em>Test Result</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult
+	 * <em>Test Result</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Test Result</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult()
 	 * @see #getServiceSequence()
@@ -6600,8 +7128,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getServiceSequence_TestResult();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction <em>Service Transaction</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction
+	 * <em>Service Transaction</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Service Transaction</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction
 	 * @generated
@@ -6609,9 +7139,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getServiceTransaction();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getInputPrimitive <em>Input Primitive</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Input Primitive</em>'.
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getInputPrimitive
+	 * <em>Input Primitive</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference '<em>Input
+	 *         Primitive</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getInputPrimitive()
 	 * @see #getServiceTransaction()
 	 * @generated
@@ -6619,9 +7152,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getServiceTransaction_InputPrimitive();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getOutputPrimitive <em>Output Primitive</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Output Primitive</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getOutputPrimitive
+	 * <em>Output Primitive</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Output
+	 *         Primitive</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getOutputPrimitive()
 	 * @see #getServiceTransaction()
 	 * @generated
@@ -6629,8 +7165,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getServiceTransaction_OutputPrimitive();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getTestResult <em>Test Result</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getTestResult
+	 * <em>Test Result</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Test Result</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getTestResult()
 	 * @see #getServiceTransaction()
@@ -6639,9 +7177,11 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getServiceTransaction_TestResult();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType <em>Service Interface FB Type</em>}'.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
+	 * <em>Service Interface FB Type</em>}'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Service Interface FB Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
 	 * @generated
@@ -6649,8 +7189,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getServiceInterfaceFBType();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm <em>ST Algorithm</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm <em>ST
+	 * Algorithm</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>ST Algorithm</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 	 * @generated
@@ -6658,8 +7200,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getSTAlgorithm();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp <em>Sub App</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp <em>Sub
+	 * App</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Sub App</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SubApp
 	 * @generated
@@ -6667,9 +7211,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getSubApp();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork <em>Sub App Network</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Sub App Network</em>'.
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork
+	 * <em>Sub App Network</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference '<em>Sub App
+	 *         Network</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork()
 	 * @see #getSubApp()
 	 * @generated
@@ -6677,8 +7224,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getSubApp_SubAppNetwork();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.SubAppType <em>Sub App Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SubAppType <em>Sub App
+	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Sub App Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SubAppType
 	 * @generated
@@ -6686,8 +7235,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getSubAppType();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem <em>Automation System</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem
+	 * <em>Automation System</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Automation System</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem
 	 * @generated
@@ -6695,9 +7246,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAutomationSystem();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getApplication <em>Application</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Application</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getApplication
+	 * <em>Application</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list
+	 *         '<em>Application</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getApplication()
 	 * @see #getAutomationSystem()
 	 * @generated
@@ -6705,9 +7259,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAutomationSystem_Application();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getMapping <em>Mapping</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Mapping</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getMapping
+	 * <em>Mapping</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list
+	 *         '<em>Mapping</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getMapping()
 	 * @see #getAutomationSystem()
 	 * @generated
@@ -6715,8 +7272,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAutomationSystem_Mapping();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette <em>Palette</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette
+	 * <em>Palette</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Palette</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette()
 	 * @see #getAutomationSystem()
@@ -6729,7 +7288,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration
 	 * <em>System Configuration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for the containment reference '<em>System
 	 *         Configuration</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration()
@@ -6739,8 +7298,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAutomationSystem_SystemConfiguration();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemFile <em>System File</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemFile
+	 * <em>System File</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>System File</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemFile()
 	 * @see #getAutomationSystem()
@@ -6749,9 +7310,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getAutomationSystem_SystemFile();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getCommandStack <em>Command Stack</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getCommandStack
+	 * <em>Command Stack</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Command Stack</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getCommandStack()
 	 * @see #getAutomationSystem()
@@ -6760,8 +7322,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getAutomationSystem_CommandStack();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration <em>Var Declaration</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration <em>Var
+	 * Declaration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Var Declaration</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 	 * @generated
@@ -6769,8 +7333,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getVarDeclaration();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getArraySize <em>Array Size</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getArraySize
+	 * <em>Array Size</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Array Size</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getArraySize()
 	 * @see #getVarDeclaration()
@@ -6779,8 +7345,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getVarDeclaration_ArraySize();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getWiths <em>Withs</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getWiths
+	 * <em>Withs</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference list '<em>Withs</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getWiths()
 	 * @see #getVarDeclaration()
@@ -6789,8 +7357,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getVarDeclaration_Withs();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getValue <em>Value</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getValue
+	 * <em>Value</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getValue()
 	 * @see #getVarDeclaration()
@@ -6799,8 +7369,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getVarDeclaration_Value();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo <em>Version Info</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo <em>Version
+	 * Info</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Version Info</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VersionInfo
 	 * @generated
@@ -6808,8 +7380,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getVersionInfo();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getAuthor <em>Author</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getAuthor
+	 * <em>Author</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Author</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getAuthor()
 	 * @see #getVersionInfo()
@@ -6818,8 +7392,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getVersionInfo_Author();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getDate <em>Date</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getDate
+	 * <em>Date</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Date</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getDate()
 	 * @see #getVersionInfo()
@@ -6828,8 +7404,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getVersionInfo_Date();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getOrganization <em>Organization</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getOrganization
+	 * <em>Organization</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Organization</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getOrganization()
 	 * @see #getVersionInfo()
@@ -6838,8 +7416,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getVersionInfo_Organization();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getRemarks <em>Remarks</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getRemarks
+	 * <em>Remarks</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Remarks</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getRemarks()
 	 * @see #getVersionInfo()
@@ -6848,8 +7428,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getVersionInfo_Remarks();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getVersion <em>Version</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getVersion
+	 * <em>Version</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Version</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VersionInfo#getVersion()
 	 * @see #getVersionInfo()
@@ -6858,8 +7440,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getVersionInfo_Version();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.With <em>With</em>}'.
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.With <em>With</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>With</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.With
 	 * @generated
@@ -6867,8 +7451,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getWith();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.With#getVariables <em>Variables</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.With#getVariables
+	 * <em>Variables</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Variables</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.With#getVariables()
 	 * @see #getWith()
@@ -6877,8 +7463,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getWith_Variables();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement <em>Library Element</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
+	 * <em>Library Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Library Element</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 	 * @generated
@@ -6886,9 +7474,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getLibraryElement();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getVersionInfo <em>Version Info</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Version Info</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getVersionInfo
+	 * <em>Version Info</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Version
+	 *         Info</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getVersionInfo()
 	 * @see #getLibraryElement()
 	 * @generated
@@ -6896,9 +7487,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getLibraryElement_VersionInfo();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getIdentification <em>Identification</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Identification</em>'.
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getIdentification
+	 * <em>Identification</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference
+	 *         '<em>Identification</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getIdentification()
 	 * @see #getLibraryElement()
 	 * @generated
@@ -6906,8 +7500,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getLibraryElement_Identification();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry <em>Palette Entry</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry
+	 * <em>Palette Entry</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Palette Entry</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry()
 	 * @see #getLibraryElement()
@@ -6916,8 +7512,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getLibraryElement_PaletteEntry();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType <em>Compilable Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType
+	 * <em>Compilable Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Compilable Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CompilableType
 	 * @generated
@@ -6925,9 +7523,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getCompilableType();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType#getCompilerInfo <em>Compiler Info</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Compiler Info</em>'.
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType#getCompilerInfo
+	 * <em>Compiler Info</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference '<em>Compiler
+	 *         Info</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CompilableType#getCompilerInfo()
 	 * @see #getCompilableType()
 	 * @generated
@@ -6935,8 +7536,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getCompilableType_CompilerInfo();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject <em>Configurable Object</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject
+	 * <em>Configurable Object</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Configurable Object</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject
 	 * @generated
@@ -6944,9 +7547,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getConfigurableObject();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject#getAttributes <em>Attributes</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Attributes</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject#getAttributes
+	 * <em>Attributes</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list
+	 *         '<em>Attributes</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject#getAttributes()
 	 * @see #getConfigurableObject()
 	 * @generated
@@ -6954,8 +7560,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getConfigurableObject_Attributes();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType <em>Composite FB Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
+	 * <em>Composite FB Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Composite FB Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 	 * @generated
@@ -6963,8 +7571,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getCompositeFBType();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType#getFBNetwork <em>FB Network</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType#getFBNetwork
+	 * <em>FB Network</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>FB Network</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType#getFBNetwork()
 	 * @see #getCompositeFBType()
@@ -6973,8 +7583,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getCompositeFBType_FBNetwork();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm <em>Text Algorithm</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm <em>Text
+	 * Algorithm</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Text Algorithm</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm
 	 * @generated
@@ -6982,8 +7594,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getTextAlgorithm();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm#getText <em>Text</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm#getText
+	 * <em>Text</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Text</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm#getText()
 	 * @see #getTextAlgorithm()
@@ -6992,8 +7606,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getTextAlgorithm_Text();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.DataConnection <em>Data Connection</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.DataConnection <em>Data
+	 * Connection</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Data Connection</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.DataConnection
 	 * @generated
@@ -7001,8 +7617,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getDataConnection();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.EventConnection <em>Event Connection</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.EventConnection
+	 * <em>Event Connection</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Event Connection</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.EventConnection
 	 * @generated
@@ -7010,8 +7628,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getEventConnection();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection <em>Adapter Connection</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection
+	 * <em>Adapter Connection</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Adapter Connection</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection
 	 * @generated
@@ -7019,8 +7639,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAdapterConnection();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface <em>Service Interface</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface
+	 * <em>Service Interface</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Service Interface</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface
 	 * @generated
@@ -7028,8 +7650,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getServiceInterface();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement <em>IInterface Element</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
+	 * <em>IInterface Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>IInterface Element</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 	 * @generated
@@ -7037,8 +7661,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getIInterfaceElement();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#isIsInput <em>Is Input</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#isIsInput
+	 * <em>Is Input</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Is Input</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#isIsInput()
 	 * @see #getIInterfaceElement()
@@ -7047,8 +7673,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getIInterfaceElement_IsInput();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections <em>Input Connections</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections
+	 * <em>Input Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference list '<em>Input Connections</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections()
 	 * @see #getIInterfaceElement()
@@ -7057,8 +7685,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getIInterfaceElement_InputConnections();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections <em>Output Connections</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections
+	 * <em>Output Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference list '<em>Output Connections</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections()
 	 * @see #getIInterfaceElement()
@@ -7067,8 +7697,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getIInterfaceElement_OutputConnections();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getType
+	 * <em>Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getType()
 	 * @see #getIInterfaceElement()
@@ -7077,8 +7709,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getIInterfaceElement_Type();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getTypeName <em>Type Name</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getTypeName
+	 * <em>Type Name</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Type Name</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getTypeName()
 	 * @see #getIInterfaceElement()
@@ -7087,8 +7721,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getIInterfaceElement_TypeName();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Value <em>Value</em>}'.
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Value <em>Value</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Value</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Value
 	 * @generated
@@ -7096,8 +7732,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getValue();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Value#getValue <em>Value</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Value#getValue
+	 * <em>Value</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Value#getValue()
 	 * @see #getValue()
@@ -7110,7 +7748,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration
 	 * <em>System Configuration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for class '<em>System Configuration</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration
 	 * @generated
@@ -7118,9 +7756,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getSystemConfiguration();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getDevices <em>Devices</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Devices</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getDevices
+	 * <em>Devices</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list
+	 *         '<em>Devices</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getDevices()
 	 * @see #getSystemConfiguration()
 	 * @generated
@@ -7128,9 +7769,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getSystemConfiguration_Devices();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getSegments <em>Segments</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Segments</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getSegments
+	 * <em>Segments</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list
+	 *         '<em>Segments</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getSegments()
 	 * @see #getSystemConfiguration()
 	 * @generated
@@ -7138,8 +7782,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getSystemConfiguration_Segments();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getLinks <em>Links</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getLinks
+	 * <em>Links</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Links</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration#getLinks()
 	 * @see #getSystemConfiguration()
@@ -7148,8 +7794,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getSystemConfiguration_Links();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed
+	 * Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>INamed Element</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 	 * @generated
@@ -7157,8 +7805,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getINamedElement();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getName
+	 * <em>Name</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getName()
 	 * @see #getINamedElement()
@@ -7167,8 +7817,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getINamedElement_Name();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getComment <em>Comment</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getComment
+	 * <em>Comment</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Comment</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.INamedElement#getComment()
 	 * @see #getINamedElement()
@@ -7177,8 +7829,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getINamedElement_Comment();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB <em>Resource Type FB</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB
+	 * <em>Resource Type FB</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Resource Type FB</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB
 	 * @generated
@@ -7186,8 +7840,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getResourceTypeFB();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.SegmentType <em>Segment Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SegmentType <em>Segment
+	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Segment Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SegmentType
 	 * @generated
@@ -7195,9 +7851,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getSegmentType();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.SegmentType#getVarDeclaration <em>Var Declaration</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Var Declaration</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SegmentType#getVarDeclaration
+	 * <em>Var Declaration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Var
+	 *         Declaration</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SegmentType#getVarDeclaration()
 	 * @see #getSegmentType()
 	 * @generated
@@ -7205,8 +7864,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getSegmentType_VarDeclaration();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType <em>Adapter FB Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
+	 * <em>Adapter FB Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Adapter FB Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 	 * @generated
@@ -7214,8 +7875,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAdapterFBType();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType#getAdapterType <em>Adapter Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType#getAdapterType
+	 * <em>Adapter Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Adapter Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType#getAdapterType()
 	 * @see #getAdapterFBType()
@@ -7224,8 +7887,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAdapterFBType_AdapterType();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent <em>Adapter Event</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent <em>Adapter
+	 * Event</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Adapter Event</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
 	 * @generated
@@ -7233,8 +7898,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAdapterEvent();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent#getAdapterDeclaration <em>Adapter Declaration</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent#getAdapterDeclaration
+	 * <em>Adapter Declaration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Adapter Declaration</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent#getAdapterDeclaration()
 	 * @see #getAdapterEvent()
@@ -7243,8 +7910,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAdapterEvent_AdapterDeclaration();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Service <em>Service</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Service
+	 * <em>Service</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Service</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Service
 	 * @generated
@@ -7252,9 +7921,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getService();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getServiceSequence <em>Service Sequence</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Service Sequence</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getServiceSequence
+	 * <em>Service Sequence</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Service
+	 *         Sequence</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Service#getServiceSequence()
 	 * @see #getService()
 	 * @generated
@@ -7262,9 +7934,11 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getService_ServiceSequence();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject <em>Typed Configureable Object</em>}'.
-	 * <!-- begin-user-doc --> <!--
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject
+	 * <em>Typed Configureable Object</em>}'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Typed Configureable Object</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject
 	 * @generated
@@ -7272,8 +7946,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getTypedConfigureableObject();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject#getPaletteEntry <em>Palette Entry</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject#getPaletteEntry
+	 * <em>Palette Entry</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Palette Entry</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject#getPaletteEntry()
 	 * @see #getTypedConfigureableObject()
@@ -7282,8 +7958,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getTypedConfigureableObject_PaletteEntry();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB <em>Adapter FB</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB <em>Adapter
+	 * FB</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Adapter FB</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 	 * @generated
@@ -7291,8 +7969,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAdapterFB();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl <em>Adapter Decl</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl
+	 * <em>Adapter Decl</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Adapter Decl</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl()
 	 * @see #getAdapterFB()
@@ -7301,8 +7981,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAdapterFB_AdapterDecl();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive <em>Primitive</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive
+	 * <em>Primitive</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Primitive</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Primitive
 	 * @generated
@@ -7310,8 +7992,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getPrimitive();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getEvent <em>Event</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getEvent
+	 * <em>Event</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Event</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Primitive#getEvent()
 	 * @see #getPrimitive()
@@ -7320,8 +8004,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getPrimitive_Event();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getParameters <em>Parameters</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getParameters
+	 * <em>Parameters</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Parameters</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Primitive#getParameters()
 	 * @see #getPrimitive()
@@ -7330,8 +8016,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getPrimitive_Parameters();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getInterface <em>Interface</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getInterface
+	 * <em>Interface</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Interface</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Primitive#getInterface()
 	 * @see #getPrimitive()
@@ -7344,7 +8032,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement
 	 * <em>Positionable Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for class '<em>Positionable Element</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.PositionableElement
 	 * @generated
@@ -7352,8 +8040,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getPositionableElement();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getX <em>X</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getX
+	 * <em>X</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>X</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getX()
 	 * @see #getPositionableElement()
@@ -7362,8 +8052,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getPositionableElement_X();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getY <em>Y</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getY
+	 * <em>Y</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Y</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getY()
 	 * @see #getPositionableElement()
@@ -7372,8 +8064,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getPositionableElement_Y();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Color <em>Color</em>}'.
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Color <em>Color</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Color</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Color
 	 * @generated
@@ -7381,8 +8075,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getColor();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Color#getRed <em>Red</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Color#getRed
+	 * <em>Red</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Red</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Color#getRed()
 	 * @see #getColor()
@@ -7391,8 +8087,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getColor_Red();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Color#getGreen <em>Green</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Color#getGreen
+	 * <em>Green</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Green</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Color#getGreen()
 	 * @see #getColor()
@@ -7401,8 +8099,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getColor_Green();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Color#getBlue <em>Blue</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Color#getBlue
+	 * <em>Blue</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Blue</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Color#getBlue()
 	 * @see #getColor()
@@ -7411,8 +8111,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getColor_Blue();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement <em>Colorizable Element</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement
+	 * <em>Colorizable Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Colorizable Element</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement
 	 * @generated
@@ -7420,8 +8122,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getColorizableElement();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement#getColor <em>Color</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement#getColor
+	 * <em>Color</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Color</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement#getColor()
 	 * @see #getColorizableElement()
@@ -7430,8 +8134,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getColorizableElement_Color();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar Element</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar
+	 * Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>IVar Element</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IVarElement
 	 * @generated
@@ -7439,9 +8145,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getIVarElement();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement#getVarDeclarations <em>Var Declarations</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Var Declarations</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement#getVarDeclarations
+	 * <em>Var Declarations</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Var
+	 *         Declarations</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IVarElement#getVarDeclarations()
 	 * @see #getIVarElement()
 	 * @generated
@@ -7453,7 +8162,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration
 	 * <em>Attribute Declaration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for class '<em>Attribute Declaration</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration
 	 * @generated
@@ -7461,8 +8170,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAttributeDeclaration();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration#getInitialValue <em>Initial Value</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration#getInitialValue
+	 * <em>Initial Value</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Initial Value</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration#getInitialValue()
 	 * @see #getAttributeDeclaration()
@@ -7471,8 +8182,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getAttributeDeclaration_InitialValue();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement <em>Typed Element</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement <em>Typed
+	 * Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Typed Element</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedElement
 	 * @generated
@@ -7480,8 +8193,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getTypedElement();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement#getType
+	 * <em>Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedElement#getType()
 	 * @see #getTypedElement()
@@ -7490,8 +8205,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getTypedElement_Type();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType <em>Simple FB Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType <em>Simple
+	 * FB Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Simple FB Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 	 * @generated
@@ -7499,8 +8216,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getSimpleFBType();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getAlgorithm <em>Algorithm</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getAlgorithm
+	 * <em>Algorithm</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Algorithm</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getAlgorithm()
 	 * @see #getSimpleFBType()
@@ -7509,8 +8228,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getSimpleFBType_Algorithm();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType <em>Base FB Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType <em>Base FB
+	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Base FB Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 	 * @generated
@@ -7518,9 +8239,12 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getBaseFBType();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getInternalVars <em>Internal Vars</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Internal Vars</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getInternalVars
+	 * <em>Internal Vars</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Internal
+	 *         Vars</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getInternalVars()
 	 * @see #getBaseFBType()
 	 * @generated
@@ -7528,9 +8252,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getBaseFBType_InternalVars();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator <em>Struct Manipulator</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator
+	 * <em>Struct Manipulator</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Struct Manipulator</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.StructManipulator
 	 * @generated
@@ -7538,9 +8263,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getStructManipulator();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator#getStructType <em>Struct Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator#getStructType
+	 * <em>Struct Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Struct Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.StructManipulator#getStructType()
 	 * @see #getStructManipulator()
@@ -7549,9 +8275,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getStructManipulator_StructType();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer <em>Demultiplexer</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer
+	 * <em>Demultiplexer</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Demultiplexer</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer
 	 * @generated
@@ -7559,9 +8286,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getDemultiplexer();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Multiplexer <em>Multiplexer</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Multiplexer
+	 * <em>Multiplexer</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Multiplexer</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Multiplexer
 	 * @generated
@@ -7569,9 +8297,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getMultiplexer();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable <em>Local Variable</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable <em>Local
+	 * Variable</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Local Variable</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LocalVariable
 	 * @generated
@@ -7579,9 +8308,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getLocalVariable();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStart <em>Array Start</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStart
+	 * <em>Array Start</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Array Start</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStart()
 	 * @see #getLocalVariable()
@@ -7590,9 +8320,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getLocalVariable_ArrayStart();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStop <em>Array Stop</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStop
+	 * <em>Array Stop</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Array Stop</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStop()
 	 * @see #getLocalVariable()
@@ -7601,8 +8332,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getLocalVariable_ArrayStop();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute <em>Attribute</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute
+	 * <em>Attribute</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Attribute</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Attribute
 	 * @generated
@@ -7614,7 +8347,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getAttributeDeclaration
 	 * <em>Attribute Declaration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for the reference '<em>Attribute Declaration</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Attribute#getAttributeDeclaration()
 	 * @see #getAttribute()
@@ -7623,8 +8356,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAttribute_AttributeDeclaration();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getValue <em>Value</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getValue
+	 * <em>Value</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Attribute#getValue()
 	 * @see #getAttribute()
@@ -7633,9 +8368,12 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getAttribute_Value();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getRightInterface <em>Right Interface</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Right Interface</em>'.
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getRightInterface
+	 * <em>Right Interface</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference '<em>Right
+	 *         Interface</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Service#getRightInterface()
 	 * @see #getService()
 	 * @generated
@@ -7643,9 +8381,12 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getService_RightInterface();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getLeftInterface <em>Left Interface</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Left Interface</em>'.
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Service#getLeftInterface
+	 * <em>Left Interface</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference '<em>Left
+	 *         Interface</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Service#getLeftInterface()
 	 * @see #getService()
 	 * @generated
@@ -7653,8 +8394,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getService_LeftInterface();
 
 	/**
-	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for enum
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Language
+	 * <em>Language</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for enum '<em>Language</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Language
 	 * @generated
@@ -7665,7 +8408,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * Returns the meta object for data type
 	 * '{@link org.eclipse.core.resources.IProject <em>IProject</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for data type '<em>IProject</em>'.
 	 * @see org.eclipse.core.resources.IProject
 	 * @model instanceClass="org.eclipse.core.resources.IProject"
@@ -7677,7 +8420,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * Returns the meta object for data type
 	 * '{@link org.eclipse.core.resources.IFile <em>IFile</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for data type '<em>IFile</em>'.
 	 * @see org.eclipse.core.resources.IFile
 	 * @model instanceClass="org.eclipse.core.resources.IFile"
@@ -7686,9 +8429,10 @@ public interface LibraryElementPackage extends EPackage {
 	EDataType getIFile();
 
 	/**
-	 * Returns the meta object for data type '{@link org.eclipse.gef.commands.CommandStack <em>Command Stack</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the meta object for data type
+	 * '{@link org.eclipse.gef.commands.CommandStack <em>Command Stack</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for data type '<em>Command Stack</em>'.
 	 * @see org.eclipse.gef.commands.CommandStack
 	 * @model instanceClass="org.eclipse.gef.commands.CommandStack"
@@ -7699,7 +8443,7 @@ public interface LibraryElementPackage extends EPackage {
 	/**
 	 * Returns the factory that creates the instances of the model. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
@@ -7714,13 +8458,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl <em>Adapter Declaration</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl
+		 * <em>Adapter Declaration</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterDeclaration()
 		 * @generated
@@ -7728,22 +8475,26 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ADAPTER_DECLARATION = eINSTANCE.getAdapterDeclaration();
 
 		/**
-		 * The meta object literal for the '<em><b>Adapter FB</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Adapter FB</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ADAPTER_DECLARATION__ADAPTER_FB = eINSTANCE.getAdapterDeclaration_AdapterFB();
 
 		/**
-		 * The meta object literal for the '<em><b>Palette Entry</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Palette Entry</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ADAPTER_DECLARATION__PALETTE_ENTRY = eINSTANCE.getAdapterDeclaration_PaletteEntry();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl <em>Adapter Type</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl
+		 * <em>Adapter Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterType()
 		 * @generated
@@ -7751,15 +8502,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ADAPTER_TYPE = eINSTANCE.getAdapterType();
 
 		/**
-		 * The meta object literal for the '<em><b>Adapter FB Type</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Adapter FB Type</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ADAPTER_TYPE__ADAPTER_FB_TYPE = eINSTANCE.getAdapterType_AdapterFBType();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl <em>Algorithm</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl
+		 * <em>Algorithm</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAlgorithm()
 		 * @generated
@@ -7767,8 +8521,10 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ALGORITHM = eINSTANCE.getAlgorithm();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl <em>Application</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl
+		 * <em>Application</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getApplication()
 		 * @generated
@@ -7776,15 +8532,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass APPLICATION = eINSTANCE.getApplication();
 
 		/**
-		 * The meta object literal for the '<em><b>FB Network</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>FB Network</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference APPLICATION__FB_NETWORK = eINSTANCE.getApplication_FBNetwork();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl <em>Basic FB Type</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl
+		 * <em>Basic FB Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBasicFBType()
 		 * @generated
@@ -7792,22 +8551,26 @@ public interface LibraryElementPackage extends EPackage {
 		EClass BASIC_FB_TYPE = eINSTANCE.getBasicFBType();
 
 		/**
-		 * The meta object literal for the '<em><b>ECC</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>ECC</b></em>' containment reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference BASIC_FB_TYPE__ECC = eINSTANCE.getBasicFBType_ECC();
 
 		/**
-		 * The meta object literal for the '<em><b>Algorithm</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Algorithm</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference BASIC_FB_TYPE__ALGORITHM = eINSTANCE.getBasicFBType_Algorithm();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl <em>Compiler Info</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl
+		 * <em>Compiler Info</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompilerInfo()
 		 * @generated
@@ -7815,8 +8578,9 @@ public interface LibraryElementPackage extends EPackage {
 		EClass COMPILER_INFO = eINSTANCE.getCompilerInfo();
 
 		/**
-		 * The meta object literal for the '<em><b>Compiler</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Compiler</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference COMPILER_INFO__COMPILER = eINSTANCE.getCompilerInfo_Compiler();
@@ -7824,6 +8588,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Classdef</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute COMPILER_INFO__CLASSDEF = eINSTANCE.getCompilerInfo_Classdef();
@@ -7831,13 +8596,16 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Header</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute COMPILER_INFO__HEADER = eINSTANCE.getCompilerInfo_Header();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl <em>Compiler</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl
+		 * <em>Compiler</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompiler()
 		 * @generated
@@ -7847,6 +8615,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Language</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute COMPILER__LANGUAGE = eINSTANCE.getCompiler_Language();
@@ -7854,6 +8623,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Product</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute COMPILER__PRODUCT = eINSTANCE.getCompiler_Product();
@@ -7861,6 +8631,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Vendor</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute COMPILER__VENDOR = eINSTANCE.getCompiler_Vendor();
@@ -7868,13 +8639,16 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Version</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute COMPILER__VERSION = eINSTANCE.getCompiler_Version();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl <em>Connection</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl
+		 * <em>Connection</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConnection()
 		 * @generated
@@ -7884,7 +8658,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Dx1</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute CONNECTION__DX1 = eINSTANCE.getConnection_Dx1();
@@ -7892,7 +8666,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Dx2</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute CONNECTION__DX2 = eINSTANCE.getConnection_Dx2();
@@ -7900,21 +8674,23 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Dy</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute CONNECTION__DY = eINSTANCE.getConnection_Dy();
 
 		/**
-		 * The meta object literal for the '<em><b>Res Type Connection</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Res Type Connection</b></em>'
+		 * attribute feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute CONNECTION__RES_TYPE_CONNECTION = eINSTANCE.getConnection_ResTypeConnection();
 
 		/**
-		 * The meta object literal for the '<em><b>Broken Connection</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Broken Connection</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute CONNECTION__BROKEN_CONNECTION = eINSTANCE.getConnection_BrokenConnection();
@@ -7922,20 +8698,24 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Source</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference CONNECTION__SOURCE = eINSTANCE.getConnection_Source();
 
 		/**
-		 * The meta object literal for the '<em><b>Destination</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Destination</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference CONNECTION__DESTINATION = eINSTANCE.getConnection_Destination();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl <em>Device</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl
+		 * <em>Device</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDevice()
 		 * @generated
@@ -7943,8 +8723,9 @@ public interface LibraryElementPackage extends EPackage {
 		EClass DEVICE = eINSTANCE.getDevice();
 
 		/**
-		 * The meta object literal for the '<em><b>Resource</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Resource</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference DEVICE__RESOURCE = eINSTANCE.getDevice_Resource();
@@ -7952,20 +8733,24 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Profile</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute DEVICE__PROFILE = eINSTANCE.getDevice_Profile();
 
 		/**
-		 * The meta object literal for the '<em><b>In Connections</b></em>' reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>In Connections</b></em>' reference
+		 * list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference DEVICE__IN_CONNECTIONS = eINSTANCE.getDevice_InConnections();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl <em>Device Type</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl
+		 * <em>Device Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDeviceType()
 		 * @generated
@@ -7973,8 +8758,9 @@ public interface LibraryElementPackage extends EPackage {
 		EClass DEVICE_TYPE = eINSTANCE.getDeviceType();
 
 		/**
-		 * The meta object literal for the '<em><b>Var Declaration</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Var Declaration</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference DEVICE_TYPE__VAR_DECLARATION = eINSTANCE.getDeviceType_VarDeclaration();
@@ -7983,21 +8769,23 @@ public interface LibraryElementPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Resource Type Name</b></em>'
 		 * containment reference list feature. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference DEVICE_TYPE__RESOURCE_TYPE_NAME = eINSTANCE.getDeviceType_ResourceTypeName();
 
 		/**
-		 * The meta object literal for the '<em><b>Resource</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Resource</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference DEVICE_TYPE__RESOURCE = eINSTANCE.getDeviceType_Resource();
 
 		/**
-		 * The meta object literal for the '<em><b>FB Network</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>FB Network</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference DEVICE_TYPE__FB_NETWORK = eINSTANCE.getDeviceType_FBNetwork();
@@ -8005,6 +8793,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Profile</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute DEVICE_TYPE__PROFILE = eINSTANCE.getDeviceType_Profile();
@@ -8013,14 +8802,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Attribute Declarations</b></em>'
 		 * containment reference list feature. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference DEVICE_TYPE__ATTRIBUTE_DECLARATIONS = eINSTANCE.getDeviceType_AttributeDeclarations();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl <em>EC Action</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl <em>EC
+		 * Action</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECAction()
 		 * @generated
@@ -8028,8 +8819,9 @@ public interface LibraryElementPackage extends EPackage {
 		EClass EC_ACTION = eINSTANCE.getECAction();
 
 		/**
-		 * The meta object literal for the '<em><b>Algorithm</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Algorithm</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EC_ACTION__ALGORITHM = eINSTANCE.getECAction_Algorithm();
@@ -8037,20 +8829,24 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Output</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EC_ACTION__OUTPUT = eINSTANCE.getECAction_Output();
 
 		/**
-		 * The meta object literal for the '<em><b>EC State</b></em>' container reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>EC State</b></em>' container
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EC_ACTION__EC_STATE = eINSTANCE.getECAction_ECState();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl <em>ECC</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl
+		 * <em>ECC</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECC()
 		 * @generated
@@ -8058,15 +8854,17 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ECC = eINSTANCE.getECC();
 
 		/**
-		 * The meta object literal for the '<em><b>EC State</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>EC State</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ECC__EC_STATE = eINSTANCE.getECC_ECState();
 
 		/**
-		 * The meta object literal for the '<em><b>EC Transition</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>EC Transition</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ECC__EC_TRANSITION = eINSTANCE.getECC_ECTransition();
@@ -8074,20 +8872,24 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Start</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ECC__START = eINSTANCE.getECC_Start();
 
 		/**
-		 * The meta object literal for the '<em><b>Basic FB Type</b></em>' container reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Basic FB Type</b></em>' container
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ECC__BASIC_FB_TYPE = eINSTANCE.getECC_BasicFBType();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl <em>EC State</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl <em>EC
+		 * State</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECState()
 		 * @generated
@@ -8095,36 +8897,42 @@ public interface LibraryElementPackage extends EPackage {
 		EClass EC_STATE = eINSTANCE.getECState();
 
 		/**
-		 * The meta object literal for the '<em><b>EC Action</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>EC Action</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EC_STATE__EC_ACTION = eINSTANCE.getECState_ECAction();
 
 		/**
-		 * The meta object literal for the '<em><b>Out Transitions</b></em>' reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Out Transitions</b></em>' reference
+		 * list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EC_STATE__OUT_TRANSITIONS = eINSTANCE.getECState_OutTransitions();
 
 		/**
-		 * The meta object literal for the '<em><b>In Transitions</b></em>' reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>In Transitions</b></em>' reference
+		 * list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EC_STATE__IN_TRANSITIONS = eINSTANCE.getECState_InTransitions();
 
 		/**
-		 * The meta object literal for the '<em><b>ECC</b></em>' container reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>ECC</b></em>' container reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EC_STATE__ECC = eINSTANCE.getECState_ECC();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl <em>EC Transition</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl
+		 * <em>EC Transition</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getECTransition()
 		 * @generated
@@ -8134,34 +8942,39 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute EC_TRANSITION__COMMENT = eINSTANCE.getECTransition_Comment();
 
 		/**
-		 * The meta object literal for the '<em><b>Condition Expression</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Condition Expression</b></em>'
+		 * attribute feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute EC_TRANSITION__CONDITION_EXPRESSION = eINSTANCE.getECTransition_ConditionExpression();
 
 		/**
-		 * The meta object literal for the '<em><b>Destination</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Destination</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EC_TRANSITION__DESTINATION = eINSTANCE.getECTransition_Destination();
 
 		/**
-		 * The meta object literal for the '<em><b>Condition Event</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Condition Event</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EC_TRANSITION__CONDITION_EVENT = eINSTANCE.getECTransition_ConditionEvent();
 
 		/**
-		 * The meta object literal for the '<em><b>ECC</b></em>' container reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>ECC</b></em>' container reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EC_TRANSITION__ECC = eINSTANCE.getECTransition_ECC();
@@ -8169,13 +8982,16 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Source</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EC_TRANSITION__SOURCE = eINSTANCE.getECTransition_Source();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl <em>Event</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl
+		 * <em>Event</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getEvent()
 		 * @generated
@@ -8183,15 +8999,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass EVENT = eINSTANCE.getEvent();
 
 		/**
-		 * The meta object literal for the '<em><b>With</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>With</b></em>' containment reference
+		 * list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EVENT__WITH = eINSTANCE.getEvent_With();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl <em>FB Network</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl
+		 * <em>FB Network</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBNetwork()
 		 * @generated
@@ -8202,7 +9021,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Network Elements</b></em>'
 		 * containment reference list feature. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference FB_NETWORK__NETWORK_ELEMENTS = eINSTANCE.getFBNetwork_NetworkElements();
@@ -8211,7 +9030,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Data Connections</b></em>'
 		 * containment reference list feature. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference FB_NETWORK__DATA_CONNECTIONS = eINSTANCE.getFBNetwork_DataConnections();
@@ -8220,7 +9039,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Event Connections</b></em>'
 		 * containment reference list feature. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference FB_NETWORK__EVENT_CONNECTIONS = eINSTANCE.getFBNetwork_EventConnections();
@@ -8229,14 +9048,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Adapter Connections</b></em>'
 		 * containment reference list feature. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference FB_NETWORK__ADAPTER_CONNECTIONS = eINSTANCE.getFBNetwork_AdapterConnections();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl <em>FB</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl
+		 * <em>FB</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFB()
 		 * @generated
@@ -8244,9 +9065,11 @@ public interface LibraryElementPackage extends EPackage {
 		EClass FB = eINSTANCE.getFB();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl <em>FB Network Element</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl
+		 * <em>FB Network Element</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBNetworkElement()
 		 * @generated
@@ -8254,8 +9077,9 @@ public interface LibraryElementPackage extends EPackage {
 		EClass FB_NETWORK_ELEMENT = eINSTANCE.getFBNetworkElement();
 
 		/**
-		 * The meta object literal for the '<em><b>Interface</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Interface</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference FB_NETWORK_ELEMENT__INTERFACE = eINSTANCE.getFBNetworkElement_Interface();
@@ -8263,13 +9087,16 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Mapping</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference FB_NETWORK_ELEMENT__MAPPING = eINSTANCE.getFBNetworkElement_Mapping();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl <em>FB Type</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl <em>FB
+		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBType()
 		 * @generated
@@ -8277,15 +9104,17 @@ public interface LibraryElementPackage extends EPackage {
 		EClass FB_TYPE = eINSTANCE.getFBType();
 
 		/**
-		 * The meta object literal for the '<em><b>Interface List</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Interface List</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference FB_TYPE__INTERFACE_LIST = eINSTANCE.getFBType_InterfaceList();
 
 		/**
-		 * The meta object literal for the '<em><b>Service</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Service</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference FB_TYPE__SERVICE = eINSTANCE.getFBType_Service();
@@ -8295,7 +9124,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl
 		 * <em>Identification</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIdentification()
 		 * @generated
@@ -8303,22 +9132,25 @@ public interface LibraryElementPackage extends EPackage {
 		EClass IDENTIFICATION = eINSTANCE.getIdentification();
 
 		/**
-		 * The meta object literal for the '<em><b>Application Domain</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Application Domain</b></em>'
+		 * attribute feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute IDENTIFICATION__APPLICATION_DOMAIN = eINSTANCE.getIdentification_ApplicationDomain();
 
 		/**
-		 * The meta object literal for the '<em><b>Classification</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Classification</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute IDENTIFICATION__CLASSIFICATION = eINSTANCE.getIdentification_Classification();
 
 		/**
-		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Description</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute IDENTIFICATION__DESCRIPTION = eINSTANCE.getIdentification_Description();
@@ -8326,6 +9158,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Function</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute IDENTIFICATION__FUNCTION = eINSTANCE.getIdentification_Function();
@@ -8333,6 +9166,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Standard</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute IDENTIFICATION__STANDARD = eINSTANCE.getIdentification_Standard();
@@ -8340,6 +9174,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute IDENTIFICATION__TYPE = eINSTANCE.getIdentification_Type();
@@ -8349,7 +9184,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InputPrimitiveImpl
 		 * <em>Input Primitive</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.InputPrimitiveImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInputPrimitive()
 		 * @generated
@@ -8361,7 +9196,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl
 		 * <em>Interface List</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceList()
 		 * @generated
@@ -8369,50 +9204,58 @@ public interface LibraryElementPackage extends EPackage {
 		EClass INTERFACE_LIST = eINSTANCE.getInterfaceList();
 
 		/**
-		 * The meta object literal for the '<em><b>Plugs</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Plugs</b></em>' containment reference
+		 * list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference INTERFACE_LIST__PLUGS = eINSTANCE.getInterfaceList_Plugs();
 
 		/**
-		 * The meta object literal for the '<em><b>Sockets</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Sockets</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference INTERFACE_LIST__SOCKETS = eINSTANCE.getInterfaceList_Sockets();
 
 		/**
-		 * The meta object literal for the '<em><b>Event Inputs</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Event Inputs</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference INTERFACE_LIST__EVENT_INPUTS = eINSTANCE.getInterfaceList_EventInputs();
 
 		/**
-		 * The meta object literal for the '<em><b>Event Outputs</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Event Outputs</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference INTERFACE_LIST__EVENT_OUTPUTS = eINSTANCE.getInterfaceList_EventOutputs();
 
 		/**
-		 * The meta object literal for the '<em><b>Input Vars</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Input Vars</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference INTERFACE_LIST__INPUT_VARS = eINSTANCE.getInterfaceList_InputVars();
 
 		/**
-		 * The meta object literal for the '<em><b>Output Vars</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Output Vars</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference INTERFACE_LIST__OUTPUT_VARS = eINSTANCE.getInterfaceList_OutputVars();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl <em>Link</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl
+		 * <em>Link</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLink()
 		 * @generated
@@ -8422,6 +9265,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Segment</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference LINK__SEGMENT = eINSTANCE.getLink_Segment();
@@ -8429,13 +9273,16 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Device</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference LINK__DEVICE = eINSTANCE.getLink_Device();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl <em>Mapping</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl
+		 * <em>Mapping</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMapping()
 		 * @generated
@@ -8445,6 +9292,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>From</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference MAPPING__FROM = eINSTANCE.getMapping_From();
@@ -8452,7 +9300,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>To</b></em>' reference feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference MAPPING__TO = eINSTANCE.getMapping_To();
@@ -8462,7 +9310,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherAlgorithmImpl
 		 * <em>Other Algorithm</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OtherAlgorithmImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherAlgorithm()
 		 * @generated
@@ -8472,6 +9320,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Language</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute OTHER_ALGORITHM__LANGUAGE = eINSTANCE.getOtherAlgorithm_Language();
@@ -8481,7 +9330,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl
 		 * <em>Output Primitive</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOutputPrimitive()
 		 * @generated
@@ -8489,15 +9338,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass OUTPUT_PRIMITIVE = eINSTANCE.getOutputPrimitive();
 
 		/**
-		 * The meta object literal for the '<em><b>Test Result</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Test Result</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute OUTPUT_PRIMITIVE__TEST_RESULT = eINSTANCE.getOutputPrimitive_TestResult();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl <em>Resource</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl
+		 * <em>Resource</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResource()
 		 * @generated
@@ -8505,8 +9357,9 @@ public interface LibraryElementPackage extends EPackage {
 		EClass RESOURCE = eINSTANCE.getResource();
 
 		/**
-		 * The meta object literal for the '<em><b>FB Network</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>FB Network</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference RESOURCE__FB_NETWORK = eINSTANCE.getResource_FBNetwork();
@@ -8514,7 +9367,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>X</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute RESOURCE__X = eINSTANCE.getResource_X();
@@ -8522,29 +9375,33 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Y</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute RESOURCE__Y = eINSTANCE.getResource_Y();
 
 		/**
-		 * The meta object literal for the '<em><b>Device</b></em>' container reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Device</b></em>' container reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference RESOURCE__DEVICE = eINSTANCE.getResource_Device();
 
 		/**
-		 * The meta object literal for the '<em><b>Device Type Resource</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Device Type Resource</b></em>'
+		 * attribute feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute RESOURCE__DEVICE_TYPE_RESOURCE = eINSTANCE.getResource_DeviceTypeResource();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeNameImpl <em>Resource Type Name</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeNameImpl
+		 * <em>Resource Type Name</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeNameImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeName()
 		 * @generated
@@ -8554,13 +9411,16 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute RESOURCE_TYPE_NAME__NAME = eINSTANCE.getResourceTypeName_Name();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl <em>Resource Type</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl
+		 * <em>Resource Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceType()
 		 * @generated
@@ -8568,29 +9428,34 @@ public interface LibraryElementPackage extends EPackage {
 		EClass RESOURCE_TYPE = eINSTANCE.getResourceType();
 
 		/**
-		 * The meta object literal for the '<em><b>Var Declaration</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Var Declaration</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference RESOURCE_TYPE__VAR_DECLARATION = eINSTANCE.getResourceType_VarDeclaration();
 
 		/**
-		 * The meta object literal for the '<em><b>FB Network</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>FB Network</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference RESOURCE_TYPE__FB_NETWORK = eINSTANCE.getResourceType_FBNetwork();
 
 		/**
-		 * The meta object literal for the '<em><b>Supported FB Types</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Supported FB Types</b></em>'
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference RESOURCE_TYPE__SUPPORTED_FB_TYPES = eINSTANCE.getResourceType_SupportedFBTypes();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl <em>Segment</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl
+		 * <em>Segment</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegment()
 		 * @generated
@@ -8600,6 +9465,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Width</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute SEGMENT__WIDTH = eINSTANCE.getSegment_Width();
@@ -8608,14 +9474,15 @@ public interface LibraryElementPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Var Declarations</b></em>'
 		 * containment reference list feature. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference SEGMENT__VAR_DECLARATIONS = eINSTANCE.getSegment_VarDeclarations();
 
 		/**
-		 * The meta object literal for the '<em><b>Out Connections</b></em>' reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Out Connections</b></em>' reference
+		 * list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SEGMENT__OUT_CONNECTIONS = eINSTANCE.getSegment_OutConnections();
@@ -8625,7 +9492,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl
 		 * <em>Service Sequence</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceSequence()
 		 * @generated
@@ -8636,22 +9503,25 @@ public interface LibraryElementPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Service Transaction</b></em>'
 		 * containment reference list feature. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference SERVICE_SEQUENCE__SERVICE_TRANSACTION = eINSTANCE.getServiceSequence_ServiceTransaction();
 
 		/**
-		 * The meta object literal for the '<em><b>Test Result</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Test Result</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute SERVICE_SEQUENCE__TEST_RESULT = eINSTANCE.getServiceSequence_TestResult();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl <em>Service Transaction</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl
+		 * <em>Service Transaction</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceTransaction()
 		 * @generated
@@ -8659,8 +9529,9 @@ public interface LibraryElementPackage extends EPackage {
 		EClass SERVICE_TRANSACTION = eINSTANCE.getServiceTransaction();
 
 		/**
-		 * The meta object literal for the '<em><b>Input Primitive</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Input Primitive</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SERVICE_TRANSACTION__INPUT_PRIMITIVE = eINSTANCE.getServiceTransaction_InputPrimitive();
@@ -8669,22 +9540,25 @@ public interface LibraryElementPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Output Primitive</b></em>'
 		 * containment reference list feature. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference SERVICE_TRANSACTION__OUTPUT_PRIMITIVE = eINSTANCE.getServiceTransaction_OutputPrimitive();
 
 		/**
-		 * The meta object literal for the '<em><b>Test Result</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Test Result</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute SERVICE_TRANSACTION__TEST_RESULT = eINSTANCE.getServiceTransaction_TestResult();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceFBTypeImpl <em>Service Interface FB Type</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceFBTypeImpl
+		 * <em>Service Interface FB Type</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceFBTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterfaceFBType()
 		 * @generated
@@ -8692,8 +9566,10 @@ public interface LibraryElementPackage extends EPackage {
 		EClass SERVICE_INTERFACE_FB_TYPE = eINSTANCE.getServiceInterfaceFBType();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STAlgorithmImpl <em>ST Algorithm</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STAlgorithmImpl
+		 * <em>ST Algorithm</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.STAlgorithmImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTAlgorithm()
 		 * @generated
@@ -8701,8 +9577,10 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ST_ALGORITHM = eINSTANCE.getSTAlgorithm();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl <em>Sub App</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl <em>Sub
+		 * App</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubApp()
 		 * @generated
@@ -8710,15 +9588,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass SUB_APP = eINSTANCE.getSubApp();
 
 		/**
-		 * The meta object literal for the '<em><b>Sub App Network</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Sub App Network</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SUB_APP__SUB_APP_NETWORK = eINSTANCE.getSubApp_SubAppNetwork();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppTypeImpl <em>Sub App Type</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppTypeImpl
+		 * <em>Sub App Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubAppType()
 		 * @generated
@@ -8730,7 +9611,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl
 		 * <em>Automation System</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAutomationSystem()
 		 * @generated
@@ -8738,15 +9619,17 @@ public interface LibraryElementPackage extends EPackage {
 		EClass AUTOMATION_SYSTEM = eINSTANCE.getAutomationSystem();
 
 		/**
-		 * The meta object literal for the '<em><b>Application</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Application</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference AUTOMATION_SYSTEM__APPLICATION = eINSTANCE.getAutomationSystem_Application();
 
 		/**
-		 * The meta object literal for the '<em><b>Mapping</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Mapping</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference AUTOMATION_SYSTEM__MAPPING = eINSTANCE.getAutomationSystem_Mapping();
@@ -8754,28 +9637,31 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Palette</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference AUTOMATION_SYSTEM__PALETTE = eINSTANCE.getAutomationSystem_Palette();
 
 		/**
-		 * The meta object literal for the '<em><b>System Configuration</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>System Configuration</b></em>'
+		 * containment reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION = eINSTANCE.getAutomationSystem_SystemConfiguration();
 
 		/**
-		 * The meta object literal for the '<em><b>System File</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>System File</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute AUTOMATION_SYSTEM__SYSTEM_FILE = eINSTANCE.getAutomationSystem_SystemFile();
 
 		/**
-		 * The meta object literal for the '<em><b>Command Stack</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Command Stack</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute AUTOMATION_SYSTEM__COMMAND_STACK = eINSTANCE.getAutomationSystem_CommandStack();
@@ -8785,7 +9671,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl
 		 * <em>Var Declaration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclaration()
 		 * @generated
@@ -8793,29 +9679,34 @@ public interface LibraryElementPackage extends EPackage {
 		EClass VAR_DECLARATION = eINSTANCE.getVarDeclaration();
 
 		/**
-		 * The meta object literal for the '<em><b>Array Size</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Array Size</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute VAR_DECLARATION__ARRAY_SIZE = eINSTANCE.getVarDeclaration_ArraySize();
 
 		/**
-		 * The meta object literal for the '<em><b>Withs</b></em>' reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Withs</b></em>' reference list
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference VAR_DECLARATION__WITHS = eINSTANCE.getVarDeclaration_Withs();
 
 		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference VAR_DECLARATION__VALUE = eINSTANCE.getVarDeclaration_Value();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl <em>Version Info</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl
+		 * <em>Version Info</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVersionInfo()
 		 * @generated
@@ -8825,6 +9716,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Author</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute VERSION_INFO__AUTHOR = eINSTANCE.getVersionInfo_Author();
@@ -8832,13 +9724,15 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute VERSION_INFO__DATE = eINSTANCE.getVersionInfo_Date();
 
 		/**
-		 * The meta object literal for the '<em><b>Organization</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Organization</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute VERSION_INFO__ORGANIZATION = eINSTANCE.getVersionInfo_Organization();
@@ -8846,6 +9740,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Remarks</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute VERSION_INFO__REMARKS = eINSTANCE.getVersionInfo_Remarks();
@@ -8853,13 +9748,16 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Version</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute VERSION_INFO__VERSION = eINSTANCE.getVersionInfo_Version();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl <em>With</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl
+		 * <em>With</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getWith()
 		 * @generated
@@ -8867,8 +9765,9 @@ public interface LibraryElementPackage extends EPackage {
 		EClass WITH = eINSTANCE.getWith();
 
 		/**
-		 * The meta object literal for the '<em><b>Variables</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Variables</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference WITH__VARIABLES = eINSTANCE.getWith_Variables();
@@ -8878,7 +9777,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl
 		 * <em>Library Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLibraryElement()
 		 * @generated
@@ -8886,22 +9785,25 @@ public interface LibraryElementPackage extends EPackage {
 		EClass LIBRARY_ELEMENT = eINSTANCE.getLibraryElement();
 
 		/**
-		 * The meta object literal for the '<em><b>Version Info</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Version Info</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference LIBRARY_ELEMENT__VERSION_INFO = eINSTANCE.getLibraryElement_VersionInfo();
 
 		/**
-		 * The meta object literal for the '<em><b>Identification</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Identification</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference LIBRARY_ELEMENT__IDENTIFICATION = eINSTANCE.getLibraryElement_Identification();
 
 		/**
-		 * The meta object literal for the '<em><b>Palette Entry</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Palette Entry</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference LIBRARY_ELEMENT__PALETTE_ENTRY = eINSTANCE.getLibraryElement_PaletteEntry();
@@ -8911,7 +9813,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl
 		 * <em>Compilable Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompilableType()
 		 * @generated
@@ -8919,16 +9821,19 @@ public interface LibraryElementPackage extends EPackage {
 		EClass COMPILABLE_TYPE = eINSTANCE.getCompilableType();
 
 		/**
-		 * The meta object literal for the '<em><b>Compiler Info</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Compiler Info</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference COMPILABLE_TYPE__COMPILER_INFO = eINSTANCE.getCompilableType_CompilerInfo();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl <em>Configurable Object</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl
+		 * <em>Configurable Object</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConfigurableObject()
 		 * @generated
@@ -8936,8 +9841,9 @@ public interface LibraryElementPackage extends EPackage {
 		EClass CONFIGURABLE_OBJECT = eINSTANCE.getConfigurableObject();
 
 		/**
-		 * The meta object literal for the '<em><b>Attributes</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Attributes</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference CONFIGURABLE_OBJECT__ATTRIBUTES = eINSTANCE.getConfigurableObject_Attributes();
@@ -8947,7 +9853,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompositeFBTypeImpl
 		 * <em>Composite FB Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CompositeFBTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCompositeFBType()
 		 * @generated
@@ -8955,8 +9861,9 @@ public interface LibraryElementPackage extends EPackage {
 		EClass COMPOSITE_FB_TYPE = eINSTANCE.getCompositeFBType();
 
 		/**
-		 * The meta object literal for the '<em><b>FB Network</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>FB Network</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference COMPOSITE_FB_TYPE__FB_NETWORK = eINSTANCE.getCompositeFBType_FBNetwork();
@@ -8966,7 +9873,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextAlgorithmImpl
 		 * <em>Text Algorithm</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TextAlgorithmImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextAlgorithm()
 		 * @generated
@@ -8976,6 +9883,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Text</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute TEXT_ALGORITHM__TEXT = eINSTANCE.getTextAlgorithm_Text();
@@ -8985,7 +9893,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DataConnectionImpl
 		 * <em>Data Connection</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DataConnectionImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDataConnection()
 		 * @generated
@@ -8997,7 +9905,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventConnectionImpl
 		 * <em>Event Connection</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.EventConnectionImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getEventConnection()
 		 * @generated
@@ -9005,9 +9913,11 @@ public interface LibraryElementPackage extends EPackage {
 		EClass EVENT_CONNECTION = eINSTANCE.getEventConnection();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterConnectionImpl <em>Adapter Connection</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterConnectionImpl
+		 * <em>Adapter Connection</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterConnectionImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterConnection()
 		 * @generated
@@ -9019,7 +9929,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl
 		 * <em>Service Interface</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterface()
 		 * @generated
@@ -9027,9 +9937,11 @@ public interface LibraryElementPackage extends EPackage {
 		EClass SERVICE_INTERFACE = eINSTANCE.getServiceInterface();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement <em>IInterface Element</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
+		 * <em>IInterface Element</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIInterfaceElement()
 		 * @generated
@@ -9039,20 +9951,23 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Is Input</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute IINTERFACE_ELEMENT__IS_INPUT = eINSTANCE.getIInterfaceElement_IsInput();
 
 		/**
-		 * The meta object literal for the '<em><b>Input Connections</b></em>' reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Input Connections</b></em>' reference
+		 * list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference IINTERFACE_ELEMENT__INPUT_CONNECTIONS = eINSTANCE.getIInterfaceElement_InputConnections();
 
 		/**
-		 * The meta object literal for the '<em><b>Output Connections</b></em>' reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Output Connections</b></em>'
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS = eINSTANCE.getIInterfaceElement_OutputConnections();
@@ -9060,20 +9975,24 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Type</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference IINTERFACE_ELEMENT__TYPE = eINSTANCE.getIInterfaceElement_Type();
 
 		/**
-		 * The meta object literal for the '<em><b>Type Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Type Name</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute IINTERFACE_ELEMENT__TYPE_NAME = eINSTANCE.getIInterfaceElement_TypeName();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl <em>Value</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl
+		 * <em>Value</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getValue()
 		 * @generated
@@ -9083,14 +10002,17 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute VALUE__VALUE = eINSTANCE.getValue_Value();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl <em>System Configuration</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl
+		 * <em>System Configuration</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSystemConfiguration()
 		 * @generated
@@ -9098,29 +10020,34 @@ public interface LibraryElementPackage extends EPackage {
 		EClass SYSTEM_CONFIGURATION = eINSTANCE.getSystemConfiguration();
 
 		/**
-		 * The meta object literal for the '<em><b>Devices</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Devices</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SYSTEM_CONFIGURATION__DEVICES = eINSTANCE.getSystemConfiguration_Devices();
 
 		/**
-		 * The meta object literal for the '<em><b>Segments</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Segments</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SYSTEM_CONFIGURATION__SEGMENTS = eINSTANCE.getSystemConfiguration_Segments();
 
 		/**
-		 * The meta object literal for the '<em><b>Links</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Links</b></em>' containment reference
+		 * list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SYSTEM_CONFIGURATION__LINKS = eINSTANCE.getSystemConfiguration_Links();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed
+		 * Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getINamedElement()
 		 * @generated
@@ -9130,6 +10057,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute INAMED_ELEMENT__NAME = eINSTANCE.getINamedElement_Name();
@@ -9137,6 +10065,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute INAMED_ELEMENT__COMMENT = eINSTANCE.getINamedElement_Comment();
@@ -9146,7 +10075,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeFBImpl
 		 * <em>Resource Type FB</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeFBImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeFB()
 		 * @generated
@@ -9154,8 +10083,10 @@ public interface LibraryElementPackage extends EPackage {
 		EClass RESOURCE_TYPE_FB = eINSTANCE.getResourceTypeFB();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl <em>Segment Type</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl
+		 * <em>Segment Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegmentType()
 		 * @generated
@@ -9163,8 +10094,9 @@ public interface LibraryElementPackage extends EPackage {
 		EClass SEGMENT_TYPE = eINSTANCE.getSegmentType();
 
 		/**
-		 * The meta object literal for the '<em><b>Var Declaration</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Var Declaration</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SEGMENT_TYPE__VAR_DECLARATION = eINSTANCE.getSegmentType_VarDeclaration();
@@ -9174,7 +10106,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBTypeImpl
 		 * <em>Adapter FB Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterFBType()
 		 * @generated
@@ -9182,15 +10114,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ADAPTER_FB_TYPE = eINSTANCE.getAdapterFBType();
 
 		/**
-		 * The meta object literal for the '<em><b>Adapter Type</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Adapter Type</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ADAPTER_FB_TYPE__ADAPTER_TYPE = eINSTANCE.getAdapterFBType_AdapterType();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl <em>Adapter Event</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl
+		 * <em>Adapter Event</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterEventImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterEvent()
 		 * @generated
@@ -9198,15 +10133,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ADAPTER_EVENT = eINSTANCE.getAdapterEvent();
 
 		/**
-		 * The meta object literal for the '<em><b>Adapter Declaration</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Adapter Declaration</b></em>'
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ADAPTER_EVENT__ADAPTER_DECLARATION = eINSTANCE.getAdapterEvent_AdapterDeclaration();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl <em>Service</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl
+		 * <em>Service</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getService()
 		 * @generated
@@ -9217,15 +10155,17 @@ public interface LibraryElementPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Service Sequence</b></em>'
 		 * containment reference list feature. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference SERVICE__SERVICE_SEQUENCE = eINSTANCE.getService_ServiceSequence();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl <em>Typed Configureable Object</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl
+		 * <em>Typed Configureable Object</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedConfigureableObject()
 		 * @generated
@@ -9233,15 +10173,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass TYPED_CONFIGUREABLE_OBJECT = eINSTANCE.getTypedConfigureableObject();
 
 		/**
-		 * The meta object literal for the '<em><b>Palette Entry</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Palette Entry</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY = eINSTANCE.getTypedConfigureableObject_PaletteEntry();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl <em>Adapter FB</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl
+		 * <em>Adapter FB</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAdapterFB()
 		 * @generated
@@ -9249,15 +10192,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ADAPTER_FB = eINSTANCE.getAdapterFB();
 
 		/**
-		 * The meta object literal for the '<em><b>Adapter Decl</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Adapter Decl</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ADAPTER_FB__ADAPTER_DECL = eINSTANCE.getAdapterFB_AdapterDecl();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl <em>Primitive</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl
+		 * <em>Primitive</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPrimitive()
 		 * @generated
@@ -9267,28 +10213,33 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Event</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute PRIMITIVE__EVENT = eINSTANCE.getPrimitive_Event();
 
 		/**
-		 * The meta object literal for the '<em><b>Parameters</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Parameters</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute PRIMITIVE__PARAMETERS = eINSTANCE.getPrimitive_Parameters();
 
 		/**
-		 * The meta object literal for the '<em><b>Interface</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Interface</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference PRIMITIVE__INTERFACE = eINSTANCE.getPrimitive_Interface();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl <em>Positionable Element</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl
+		 * <em>Positionable Element</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPositionableElement()
 		 * @generated
@@ -9298,7 +10249,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>X</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute POSITIONABLE_ELEMENT__X = eINSTANCE.getPositionableElement_X();
@@ -9306,14 +10257,16 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Y</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute POSITIONABLE_ELEMENT__Y = eINSTANCE.getPositionableElement_Y();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl <em>Color</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl
+		 * <em>Color</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ColorImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getColor()
 		 * @generated
@@ -9323,7 +10276,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Red</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute COLOR__RED = eINSTANCE.getColor_Red();
@@ -9331,6 +10284,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Green</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute COLOR__GREEN = eINSTANCE.getColor_Green();
@@ -9338,14 +10292,17 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Blue</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute COLOR__BLUE = eINSTANCE.getColor_Blue();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl <em>Colorizable Element</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl
+		 * <em>Colorizable Element</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ColorizableElementImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getColorizableElement()
 		 * @generated
@@ -9353,15 +10310,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass COLORIZABLE_ELEMENT = eINSTANCE.getColorizableElement();
 
 		/**
-		 * The meta object literal for the '<em><b>Color</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Color</b></em>' containment reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference COLORIZABLE_ELEMENT__COLOR = eINSTANCE.getColorizableElement_Color();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar Element</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar
+		 * Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.IVarElement
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIVarElement()
 		 * @generated
@@ -9372,15 +10332,17 @@ public interface LibraryElementPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Var Declarations</b></em>'
 		 * containment reference list feature. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference IVAR_ELEMENT__VAR_DECLARATIONS = eINSTANCE.getIVarElement_VarDeclarations();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl <em>Attribute Declaration</em>}' class.
-		 * <!-- begin-user-doc --> <!--
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl
+		 * <em>Attribute Declaration</em>}' class. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAttributeDeclaration()
 		 * @generated
@@ -9388,15 +10350,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ATTRIBUTE_DECLARATION = eINSTANCE.getAttributeDeclaration();
 
 		/**
-		 * The meta object literal for the '<em><b>Initial Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Initial Value</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute ATTRIBUTE_DECLARATION__INITIAL_VALUE = eINSTANCE.getAttributeDeclaration_InitialValue();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement <em>Typed Element</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement <em>Typed
+		 * Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedElement
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedElement()
 		 * @generated
@@ -9406,6 +10371,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute TYPED_ELEMENT__TYPE = eINSTANCE.getTypedElement_Type();
@@ -9415,7 +10381,7 @@ public interface LibraryElementPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl
 		 * <em>Simple FB Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSimpleFBType()
 		 * @generated
@@ -9423,15 +10389,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass SIMPLE_FB_TYPE = eINSTANCE.getSimpleFBType();
 
 		/**
-		 * The meta object literal for the '<em><b>Algorithm</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Algorithm</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SIMPLE_FB_TYPE__ALGORITHM = eINSTANCE.getSimpleFBType_Algorithm();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl <em>Base FB Type</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl
+		 * <em>Base FB Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBaseFBType()
 		 * @generated
@@ -9439,16 +10408,19 @@ public interface LibraryElementPackage extends EPackage {
 		EClass BASE_FB_TYPE = eINSTANCE.getBaseFBType();
 
 		/**
-		 * The meta object literal for the '<em><b>Internal Vars</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Internal Vars</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference BASE_FB_TYPE__INTERNAL_VARS = eINSTANCE.getBaseFBType_InternalVars();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl <em>Struct Manipulator</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl
+		 * <em>Struct Manipulator</em>}' class. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStructManipulator()
 		 * @generated
@@ -9456,17 +10428,18 @@ public interface LibraryElementPackage extends EPackage {
 		EClass STRUCT_MANIPULATOR = eINSTANCE.getStructManipulator();
 
 		/**
-		 * The meta object literal for the '<em><b>Struct Type</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Struct Type</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference STRUCT_MANIPULATOR__STRUCT_TYPE = eINSTANCE.getStructManipulator_StructType();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl <em>Demultiplexer</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl
+		 * <em>Demultiplexer</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDemultiplexer()
 		 * @generated
@@ -9474,9 +10447,10 @@ public interface LibraryElementPackage extends EPackage {
 		EClass DEMULTIPLEXER = eINSTANCE.getDemultiplexer();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl <em>Multiplexer</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl
+		 * <em>Multiplexer</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.MultiplexerImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMultiplexer()
 		 * @generated
@@ -9484,9 +10458,11 @@ public interface LibraryElementPackage extends EPackage {
 		EClass MULTIPLEXER = eINSTANCE.getMultiplexer();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl <em>Local Variable</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl
+		 * <em>Local Variable</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
+		 * -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLocalVariable()
 		 * @generated
@@ -9494,24 +10470,26 @@ public interface LibraryElementPackage extends EPackage {
 		EClass LOCAL_VARIABLE = eINSTANCE.getLocalVariable();
 
 		/**
-		 * The meta object literal for the '<em><b>Array Start</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Array Start</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute LOCAL_VARIABLE__ARRAY_START = eINSTANCE.getLocalVariable_ArrayStart();
 
 		/**
-		 * The meta object literal for the '<em><b>Array Stop</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Array Stop</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute LOCAL_VARIABLE__ARRAY_STOP = eINSTANCE.getLocalVariable_ArrayStop();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl <em>Attribute</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl
+		 * <em>Attribute</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAttribute()
 		 * @generated
@@ -9519,8 +10497,9 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ATTRIBUTE = eINSTANCE.getAttribute();
 
 		/**
-		 * The meta object literal for the '<em><b>Attribute Declaration</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Attribute Declaration</b></em>'
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ATTRIBUTE__ATTRIBUTE_DECLARATION = eINSTANCE.getAttribute_AttributeDeclaration();
@@ -9528,27 +10507,32 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute ATTRIBUTE__VALUE = eINSTANCE.getAttribute_Value();
 
 		/**
-		 * The meta object literal for the '<em><b>Right Interface</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Right Interface</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SERVICE__RIGHT_INTERFACE = eINSTANCE.getService_RightInterface();
 
 		/**
-		 * The meta object literal for the '<em><b>Left Interface</b></em>' containment reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Left Interface</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SERVICE__LEFT_INTERFACE = eINSTANCE.getService_LeftInterface();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Language
+		 * <em>Language</em>}' enum. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.Language
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 		 * @generated
@@ -9558,7 +10542,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em>IProject</em>' data type. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.core.resources.IProject
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 		 * @generated
@@ -9568,7 +10552,7 @@ public interface LibraryElementPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em>IFile</em>' data type. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.core.resources.IFile
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 		 * @generated
@@ -9576,9 +10560,9 @@ public interface LibraryElementPackage extends EPackage {
 		EDataType IFILE = eINSTANCE.getIFile();
 
 		/**
-		 * The meta object literal for the '<em>Command Stack</em>' data type.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * The meta object literal for the '<em>Command Stack</em>' data type. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.gef.commands.CommandStack
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
 		 * @generated

@@ -48,11 +48,12 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
 		t.test(null != interfacelist.getInterfaceElement(FordiacKeywords.DATA_INPUT));
-		t.test(interfacelist.getInterfaceElement(FordiacKeywords.DATA_INPUT).getTypeName().equals(FordiacKeywords.BOOL));
+		t.test(interfacelist.getInterfaceElement(FordiacKeywords.DATA_INPUT).getTypeName()
+				.equals(FordiacKeywords.BOOL));
 	}
 
 	private static State executeCommandInputWithName(State state) {
-		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.DWORD), "MyInput",
+		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.DWORD), "MyInput", //$NON-NLS-1$
 				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ true, /* index */ 1));
 		assumeNotNull(state.getCommand());
 		assumeTrue(state.getCommand().canExecute());
@@ -70,8 +71,8 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(null != interfacelist.getInterfaceElement("MyInput"));
-		t.test(interfacelist.getInterfaceElement("MyInput").getTypeName().equals(FordiacKeywords.DWORD));
+		t.test(null != interfacelist.getInterfaceElement("MyInput")); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement("MyInput").getTypeName().equals(FordiacKeywords.DWORD)); //$NON-NLS-1$
 	}
 
 	private static State executeCommandInputWithNameNull(State state) {
@@ -93,8 +94,8 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(null != interfacelist.getInterfaceElement("DI2"));
-		t.test(interfacelist.getInterfaceElement("DI2").getTypeName().equals(FordiacKeywords.DWORD));
+		t.test(null != interfacelist.getInterfaceElement("DI2")); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement("DI2").getTypeName().equals(FordiacKeywords.DWORD)); //$NON-NLS-1$
 	}
 
 	// parameter creation function, also contains description of how the textual
@@ -102,15 +103,15 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Add Input without name", //
+				new ExecutionDescription<>("Add Input without name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandInputsTest::executeCommandInputWithoutName, //
 						CreateInterfaceElementCommandInputsTest::verifyStateInputWithoutName //
 				), //
-				new ExecutionDescription<State>("Add Input with name \"MyInput\"", //
+				new ExecutionDescription<>("Add Input with name \"MyInput\"", // //$NON-NLS-1$
 						CreateInterfaceElementCommandInputsTest::executeCommandInputWithName, //
 						CreateInterfaceElementCommandInputsTest::verifyStateInputWithName //
 				), //
-				new ExecutionDescription<State>("Add Input with null as name", //
+				new ExecutionDescription<>("Add Input with null as name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandInputsTest::executeCommandInputWithNameNull, //
 						CreateInterfaceElementCommandInputsTest::verifyStateInputWithNameNull //
 				) //

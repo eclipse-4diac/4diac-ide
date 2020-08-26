@@ -124,11 +124,11 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
 		final List<Object[]> commands = new ArrayList<>();
 
-		commands.addAll(describeCommand("Start from default values", //
+		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				executionDescriptions //
-				));
+		));
 
 		return commands;
 	}

@@ -33,11 +33,11 @@ import org.junit.runners.Parameterized.Parameters;
 
 public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTestBase {
 
-	private static final String ALGORITHM_NAME = "algorithm1";
-	private static final String ALGORITHM2_NAME = "algorithm2";
-	private static final String ALGORITHM3_NAME = "algorithm3";
-	private static final String ALGORITHM_TEXT = "Hokus Pokus";
-	private static final String ALGORITHM_COMMENT = "Magic!";
+	private static final String ALGORITHM_NAME = "algorithm1"; //$NON-NLS-1$
+	private static final String ALGORITHM2_NAME = "algorithm2"; //$NON-NLS-1$
+	private static final String ALGORITHM3_NAME = "algorithm3"; //$NON-NLS-1$
+	private static final String ALGORITHM_TEXT = "Hokus Pokus"; //$NON-NLS-1$
+	private static final String ALGORITHM_COMMENT = "Magic!"; //$NON-NLS-1$
 
 	private static State executeCommandWithIndex(State state, int index) {
 		getBaseFBType(state, Assume::assumeTrue);
@@ -103,15 +103,15 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Add a ST algorithm", //$NON-NLS-1$
+				new ExecutionDescription<>("Add a ST algorithm", //$NON-NLS-1$
 						InsertAlgorithmCommandTest::executeCommand1, //
 						InsertAlgorithmCommandTest::verifyState1 //
 				), //
-				new ExecutionDescription<State>("Add a second ST algorithm at index 0", //$NON-NLS-1$
+				new ExecutionDescription<>("Add a second ST algorithm at index 0", //$NON-NLS-1$
 						InsertAlgorithmCommandTest::executeCommand2, //
 						InsertAlgorithmCommandTest::verifyState2 //
 				), //
-				new ExecutionDescription<State>("Add a third ST algorithm at end of list", //$NON-NLS-1$
+				new ExecutionDescription<>("Add a third ST algorithm at end of list", //$NON-NLS-1$
 						InsertAlgorithmCommandTest::executeCommand3, //
 						InsertAlgorithmCommandTest::verifyState3 //
 				) //

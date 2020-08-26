@@ -64,7 +64,7 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 	private static void verifyStateVar2(State state, State oldState, TestFunction t) {
 		verifyStateVar1(state, oldState, t);
 		BaseFBType baseFBType = getBaseFBType(state, t);
-		t.test(baseFBType.getInternalVars().get(1).getName().equals("InternalVar2"));
+		t.test(baseFBType.getInternalVars().get(1).getName().equals("InternalVar2")); //$NON-NLS-1$
 		t.test(baseFBType.getInternalVars().get(1).getTypeName().equals(FordiacKeywords.DWORD));
 	}
 
@@ -84,7 +84,7 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 		verifyStateVar2(state, oldState, t);
 		BaseFBType baseFBType = getBaseFBType(state, t);
 		t.test(baseFBType.getInternalVars().get(2).getName().equals("INTERNALVAR1")); //$NON-NLS-1$
-		t.test(baseFBType.getInternalVars().get(2).getTypeName().equals(FordiacKeywords.BOOL)); //$NON-NLS-1$
+		t.test(baseFBType.getInternalVars().get(2).getTypeName().equals(FordiacKeywords.BOOL));
 	}
 
 	// parameter creation function, also contains description of how the textual
@@ -92,15 +92,15 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Add an internal variable", //$NON-NLS-1$
+				new ExecutionDescription<>("Add an internal variable", //$NON-NLS-1$
 						CreateInternalVariableCommandTest::executeCommandVar1, //
 						CreateInternalVariableCommandTest::verifyStateVar1 //
 				), //
-				new ExecutionDescription<State>("Add a second internal variable", //$NON-NLS-1$
+				new ExecutionDescription<>("Add a second internal variable", //$NON-NLS-1$
 						CreateInternalVariableCommandTest::executeCommandVar2, //
 						CreateInternalVariableCommandTest::verifyStateVar2 //
 				), //
-				new ExecutionDescription<State>("Add a third internal variable", //$NON-NLS-1$
+				new ExecutionDescription<>("Add a third internal variable", //$NON-NLS-1$
 						CreateInternalVariableCommandTest::executeCommandVar3, //
 						CreateInternalVariableCommandTest::verifyStateVar3 //
 				) //

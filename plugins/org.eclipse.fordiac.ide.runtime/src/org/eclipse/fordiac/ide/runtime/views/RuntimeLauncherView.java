@@ -171,7 +171,7 @@ public class RuntimeLauncherView extends ViewPart {
 	}
 
 	private static void setRuntimePathLink(IRuntimeLauncher launcher, Link configuredRuntimePathLabel) {
-		configuredRuntimePathLabel.setText("<a>" + getRuntimePath(launcher) + "</a>");
+		configuredRuntimePathLabel.setText("<a>" + getRuntimePath(launcher) + "</a>"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static String getRuntimePath(IRuntimeLauncher launcher) {

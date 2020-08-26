@@ -47,12 +47,12 @@ public class CreateInterfaceElementCommandEventInputTest extends CreateInterface
 		t.test(!interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventInputs().size() == oldInterfacelist.getEventInputs().size() + 1);
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(null != interfacelist.getInterfaceElement("EI1"));
-		t.test(interfacelist.getInterfaceElement("EI1").getTypeName().equals("Event"));
+		t.test(null != interfacelist.getInterfaceElement("EI1")); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement("EI1").getTypeName().equals("Event")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static State executeCommandInputWithName(State state) {
-		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), "MyInput",
+		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), "MyInput", //$NON-NLS-1$
 				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ true, /* index */ 1));
 		assumeNotNull(state.getCommand());
 		assumeTrue(state.getCommand().canExecute());
@@ -70,8 +70,8 @@ public class CreateInterfaceElementCommandEventInputTest extends CreateInterface
 		t.test(!interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventInputs().size() == oldInterfacelist.getEventInputs().size() + 1);
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(null != interfacelist.getInterfaceElement("MyInput"));
-		t.test(interfacelist.getInterfaceElement("MyInput").getTypeName().equals("Event"));
+		t.test(null != interfacelist.getInterfaceElement("MyInput")); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement("MyInput").getTypeName().equals("Event")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static State executeCommandInputWithNameNull(State state) {
@@ -93,8 +93,8 @@ public class CreateInterfaceElementCommandEventInputTest extends CreateInterface
 		t.test(!interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventInputs().size() == oldInterfacelist.getEventInputs().size() + 1);
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(null != interfacelist.getInterfaceElement("EI2"));
-		t.test(interfacelist.getInterfaceElement("EI2").getTypeName().equals("Event"));
+		t.test(null != interfacelist.getInterfaceElement("EI2")); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement("EI2").getTypeName().equals("Event")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	// parameter creation function, also contains description of how the textual
@@ -102,15 +102,15 @@ public class CreateInterfaceElementCommandEventInputTest extends CreateInterface
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Add Event Input without name", //
+				new ExecutionDescription<>("Add Event Input without name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandEventInputTest::executeCommandInputWithoutName, //
 						CreateInterfaceElementCommandEventInputTest::verifyStateInputWithoutName //
 				), //
-				new ExecutionDescription<State>("Add Event Input with name \"MyInput\"", //
+				new ExecutionDescription<>("Add Event Input with name \"MyInput\"", // //$NON-NLS-1$
 						CreateInterfaceElementCommandEventInputTest::executeCommandInputWithName, //
 						CreateInterfaceElementCommandEventInputTest::verifyStateInputWithName //
 				), //
-				new ExecutionDescription<State>("Add Event Input with null as name", //
+				new ExecutionDescription<>("Add Event Input with null as name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandEventInputTest::executeCommandInputWithNameNull, //
 						CreateInterfaceElementCommandEventInputTest::verifyStateInputWithNameNull //
 				) //

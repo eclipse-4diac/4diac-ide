@@ -68,7 +68,7 @@ public class LayoutCommand extends Command {
 	public void redo() {
 		IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		try {
-			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.layout", null);
+			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.layout", null); //$NON-NLS-1$
 		} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
 			org.eclipse.fordiac.ide.elk.Activator.getDefault().logError(e.getMessage(), e);
 		}
@@ -93,13 +93,11 @@ public class LayoutCommand extends Command {
 	private void updateLayout(ElkNode graph) {
 		/*
 		 * interface elements need to be reset before every layout attempt
-		 * 
-		 * issue:
-		 * 	- layout command gets called within subapp/composite
-		 * 	- data or event connections get hidden
-		 * 	- layout command is called again
-		 * 	- interface elements with connections attached get placed properly,
-		 * 	  those without stay where they were
+		 *
+		 * issue: - layout command gets called within subapp/composite - data or event
+		 * connections get hidden - layout command is called again - interface elements
+		 * with connections attached get placed properly, those without stay where they
+		 * were
 		 */
 		resetInterfaceElements();
 
@@ -130,7 +128,7 @@ public class LayoutCommand extends Command {
 	private void resetInterfaceElements() {
 		IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		try {
-			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.resetInterfaces", null);
+			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.resetInterfaces", null); //$NON-NLS-1$
 		} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
 			org.eclipse.fordiac.ide.elk.Activator.getDefault().logError(e.getMessage(), e);
 		}
@@ -191,8 +189,7 @@ public class LayoutCommand extends Command {
 		if (pointList.size() > 2) {
 			// 3 segments
 			connModel.setDx1(pointList.getPoint(1).x() - pointList.getFirstPoint().x());
-			connModel.setDx2(
-					pointList.getLastPoint().x() - pointList.getPoint(pointList.size() - 2).x());
+			connModel.setDx2(pointList.getLastPoint().x() - pointList.getPoint(pointList.size() - 2).x());
 			if (pointList.size() > 4) {
 				// 5 segments
 				connModel.setDy(pointList.getPoint(2).y() - pointList.getFirstPoint().y());

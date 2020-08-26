@@ -213,7 +213,7 @@ abstract class CommonElementExporter {
 		try {
 			XMLStreamWriter newWriter = outputFactory.createXMLStreamWriter(outputStream,
 					StandardCharsets.UTF_8.name());
-			newWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0");
+			newWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0"); //$NON-NLS-1$
 			return newWriter;
 		} catch (XMLStreamException e) {
 			Activator.getDefault().logError(e.getMessage(), e);

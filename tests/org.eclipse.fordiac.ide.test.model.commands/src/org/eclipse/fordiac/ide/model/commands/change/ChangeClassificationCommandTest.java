@@ -25,7 +25,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 public class ChangeClassificationCommandTest extends FBNetworkTestBase {
 
-	private static final String CLASSIFICATION_STRING = "new value";
+	private static final String CLASSIFICATION_STRING = "new value"; //$NON-NLS-1$
 
 	public static State executeCommand(State state, String setValue) {
 		state.setCommand(
@@ -50,15 +50,15 @@ public class ChangeClassificationCommandTest extends FBNetworkTestBase {
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> data() {
 		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
-				new ExecutionDescription<State>("Add Functionblock", //$NON-NLS-1$
+				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						ChangeClassificationCommandTest::verifyStateBefore //
 				), //
-				new ExecutionDescription<State>("Change Classification", //$NON-NLS-1$
+				new ExecutionDescription<>("Change Classification", //$NON-NLS-1$
 						(State state) -> executeCommand(state, CLASSIFICATION_STRING), //
 						(State s, State o, TestFunction t) -> verifyState(s, o, t, CLASSIFICATION_STRING) //
 				), //
-				new ExecutionDescription<State>("Change Classification to null", //$NON-NLS-1$
+				new ExecutionDescription<>("Change Classification to null", //$NON-NLS-1$
 						(State state) -> executeCommand(state, null), //
 						(State s, State o, TestFunction t) -> verifyState(s, o, t, "") //$NON-NLS-1$
 				) //

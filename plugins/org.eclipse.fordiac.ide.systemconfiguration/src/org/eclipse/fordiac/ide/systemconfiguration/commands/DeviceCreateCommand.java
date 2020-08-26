@@ -116,10 +116,10 @@ public class DeviceCreateCommand extends Command {
 				Resource copy = cmd.getResource();
 				copy.setName(res.getName());
 			} else {
-				org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault().logInfo("Referenced Resource Type: "
-						+ (res.getName() != null ? res.getName() : "N/A")
-						+ (res.getPaletteEntry() != null ? " (" + res.getTypeName() + ") " : "(N/A)")
-						+ " not found. Please check whether your palette contains that type and add it manually to your device!");
+				org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault().logInfo("Referenced Resource Type: " //$NON-NLS-1$
+						+ (res.getName() != null ? res.getName() : "N/A") //$NON-NLS-1$
+						+ (res.getPaletteEntry() != null ? " (" + res.getTypeName() + ") " : "(N/A)") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						+ " not found. Please check whether your palette contains that type and add it manually to your device!"); //$NON-NLS-1$
 			}
 		}
 		createDefaultResource();

@@ -26,7 +26,7 @@ import org.eclipse.gef.commands.Command;
 
 public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandTestBase.State> {
 
-	private static final String SET_VALUE = "default";
+	private static final String SET_VALUE = "default"; //$NON-NLS-1$
 
 	// create a state description that fits our purpose
 	public static class State implements CommandTestBase.StateBase {
@@ -82,13 +82,13 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
 		final List<Object[]> commands = new ArrayList<>();
 
-		commands.addAll(describeCommand("Start from default values", //
+		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				executionDescriptions //
 		));
 
-		commands.addAll(describeCommand("Start from set values", //
+		commands.addAll(describeCommand("Start from set values", // //$NON-NLS-1$
 				() -> setInitialValues(), //
 				(State state, State oldState, TestFunction t) -> verifySetInitialValues(state, oldState, t), //
 				executionDescriptions //

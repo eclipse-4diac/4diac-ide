@@ -63,6 +63,6 @@ public final class ElementSelector {
 	}
 
 	private ElementSelector() {
-		throw new UnsupportedOperationException("do not instantiate this class");
+		throw new UnsupportedOperationException("do not instantiate this class"); //$NON-NLS-1$
 	}
 }

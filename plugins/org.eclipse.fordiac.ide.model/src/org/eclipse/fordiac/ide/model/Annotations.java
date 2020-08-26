@@ -129,7 +129,7 @@ public final class Annotations {
 		// if source element is null it is a connection from a CFB interface element
 		return ((null != c.getSourceElement()) && (null != c.getSourceElement().getFbNetwork()))
 				? (c.getSourceElement().getFbNetwork().eContainer() instanceof Resource)
-						: false;
+				: false;
 	}
 
 	public static FBNetwork getFBNetwork(Connection c) {
@@ -613,7 +613,7 @@ public final class Annotations {
 	}
 
 	private Annotations() {
-		throw new UnsupportedOperationException("The utility class Annotations should not be instatiated");
+		throw new UnsupportedOperationException("The utility class Annotations should not be instatiated"); //$NON-NLS-1$
 	}
 
 }

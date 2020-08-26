@@ -36,7 +36,7 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
 		final List<Object[]> commands = new ArrayList<>();
 
-		commands.addAll(describeCommand("Start from default values", //
+		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				CreateInterfaceElementCommandTestBase::initializeState, //
 				(State state, State oldState, TestFunction t) -> verifyInitialState(state, oldState, t), //
 				executionDescriptions //

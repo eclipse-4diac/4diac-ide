@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
@@ -86,8 +87,8 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 		try {
 			ImportUtils.copyFile(template, targetTypeFile);
 			String fileEnding = typeName.substring(typeName.lastIndexOf('.'), typeName.length());
-			return (fileEnding.equals(".dtp")) ? finishDataTypeCreation(targetTypeFile)
-					: finishFBTypeCreation(targetTypeFile);
+			return (fileEnding.equalsIgnoreCase("." + TypeLibraryTags.DATA_TYPE_FILE_ENDING)) //$NON-NLS-1$
+					? finishDataTypeCreation(targetTypeFile) : finishFBTypeCreation(targetTypeFile);
 		} catch (Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
