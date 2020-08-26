@@ -46,7 +46,7 @@ public class PropertiesItemProvider extends TransientLibraryElementItemProvider 
 
 	@Override
 	public String getText(Object object) {
-		return FordiacMessages.Properties;
+		return FordiacMessages.TypeInfo;
 	}
 
 	@Override
