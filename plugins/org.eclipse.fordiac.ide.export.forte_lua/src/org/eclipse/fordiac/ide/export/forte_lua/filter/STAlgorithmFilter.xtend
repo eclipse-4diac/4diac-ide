@@ -59,6 +59,7 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getAllProperContents
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants.*
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
 
 class STAlgorithmFilter {
 
@@ -255,7 +256,7 @@ class STAlgorithmFilter {
 		ArrayVariable expr) '''«expr.array.luaExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»(«index.luaExpression») + 1«ENDFOR»'''
 
 	def private dispatch CharSequence luaExpression(
-		AdapterVariable expr) '''«expr.^var.name.luaAdapterVariable(expr.adapter.name)»'''
+		AdapterVariable expr) '''«expr.^var.name.luaAdapterVariable((expr.curr as AdapterRoot).adapter.name)»'''
 
 	def private dispatch CharSequence luaExpression(PrimaryVariable expr) '''«expr.^var.luaVariable»'''
 }

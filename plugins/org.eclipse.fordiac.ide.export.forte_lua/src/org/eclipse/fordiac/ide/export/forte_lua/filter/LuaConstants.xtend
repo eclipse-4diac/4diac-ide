@@ -18,6 +18,9 @@ package org.eclipse.fordiac.ide.export.forte_lua.filter
 
 import java.util.ArrayList
 import java.util.List
+import org.eclipse.emf.common.util.EList
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECC
@@ -27,13 +30,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaUtils.*
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
-import org.eclipse.emf.common.util.EList
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
 
 class LuaConstants {
 
@@ -193,6 +194,10 @@ class LuaConstants {
 			«ENDIF»
 		«ENDFOR»
 	'''
+	
+	protected def static VarDeclaration getAdapter(AdapterVariable adapterVar) {
+		(adapterVar.curr as AdapterRoot).adapter
+	}
 
 	def static luaFBVariablesSuffix(Iterable<VarDeclaration> variables) '''
 		«FOR variable : variables.filter[!it.isIsInput]»

@@ -214,6 +214,15 @@ public class StructuredTextSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case StructuredTextPackage.ADAPTER_VARIABLE:
+      {
+        AdapterVariable adapterVariable = (AdapterVariable)theEObject;
+        T result = caseAdapterVariable(adapterVariable);
+        if (result == null) result = caseVariable(adapterVariable);
+        if (result == null) result = caseExpression(adapterVariable);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case StructuredTextPackage.PARTIAL_ACCESS:
       {
         PartialAccess partialAccess = (PartialAccess)theEObject;
@@ -362,12 +371,13 @@ public class StructuredTextSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case StructuredTextPackage.ADAPTER_VARIABLE:
+      case StructuredTextPackage.ADAPTER_ROOT:
       {
-        AdapterVariable adapterVariable = (AdapterVariable)theEObject;
-        T result = caseAdapterVariable(adapterVariable);
-        if (result == null) result = caseVariable(adapterVariable);
-        if (result == null) result = caseExpression(adapterVariable);
+        AdapterRoot adapterRoot = (AdapterRoot)theEObject;
+        T result = caseAdapterRoot(adapterRoot);
+        if (result == null) result = caseAdapterVariable(adapterRoot);
+        if (result == null) result = caseVariable(adapterRoot);
+        if (result == null) result = caseExpression(adapterRoot);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -664,6 +674,22 @@ public class StructuredTextSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Adapter Variable</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Adapter Variable</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAdapterVariable(AdapterVariable object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Partial Access</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -936,17 +962,17 @@ public class StructuredTextSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Adapter Variable</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Adapter Root</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Adapter Variable</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Adapter Root</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseAdapterVariable(AdapterVariable object)
+  public T caseAdapterRoot(AdapterRoot object)
   {
     return null;
   }

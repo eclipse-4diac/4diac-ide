@@ -117,6 +117,10 @@
     <genClasses ecoreClass="StructuredText.ecore#//Variable">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference StructuredText.ecore#//Variable/part"/>
     </genClasses>
+    <genClasses ecoreClass="StructuredText.ecore#//AdapterVariable">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference StructuredText.ecore#//AdapterVariable/curr"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference StructuredText.ecore#//AdapterVariable/var"/>
+    </genClasses>
     <genClasses ecoreClass="StructuredText.ecore#//PartialAccess">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute StructuredText.ecore#//PartialAccess/dwordaccess"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute StructuredText.ecore#//PartialAccess/index"/>
@@ -174,9 +178,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference StructuredText.ecore#//ArrayVariable/array"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference StructuredText.ecore#//ArrayVariable/index"/>
     </genClasses>
-    <genClasses ecoreClass="StructuredText.ecore#//AdapterVariable">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference StructuredText.ecore#//AdapterVariable/adapter"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference StructuredText.ecore#//AdapterVariable/var"/>
+    <genClasses ecoreClass="StructuredText.ecore#//AdapterRoot">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference StructuredText.ecore#//AdapterRoot/adapter"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -1467,26 +1467,59 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 	public class Variable_AdapterElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Variable_Adapter");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cAdapterVariableAction_0 = (Action)cGroup.eContents().get(0);
+		private final RuleCall cAdapterRootParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Action cAdapterVariableCurrAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Keyword cFullStopKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Assignment cVarAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final CrossReference cVarVarDeclarationCrossReference_1_2_0 = (CrossReference)cVarAssignment_1_2.eContents().get(0);
+		private final RuleCall cVarVarDeclarationVariable_NameParserRuleCall_1_2_0_1 = (RuleCall)cVarVarDeclarationCrossReference_1_2_0.eContents().get(1);
+		
+		//Variable_Adapter AdapterVariable:
+		//	AdapterRoot ({AdapterVariable.curr=current} '.' var=[libraryElement::VarDeclaration|Variable_Name])+;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//AdapterRoot ({AdapterVariable.curr=current} '.' var=[libraryElement::VarDeclaration|Variable_Name])+
+		public Group getGroup() { return cGroup; }
+		
+		//AdapterRoot
+		public RuleCall getAdapterRootParserRuleCall_0() { return cAdapterRootParserRuleCall_0; }
+		
+		//({AdapterVariable.curr=current} '.' var=[libraryElement::VarDeclaration|Variable_Name])+
+		public Group getGroup_1() { return cGroup_1; }
+		
+		//{AdapterVariable.curr=current}
+		public Action getAdapterVariableCurrAction_1_0() { return cAdapterVariableCurrAction_1_0; }
+		
+		//'.'
+		public Keyword getFullStopKeyword_1_1() { return cFullStopKeyword_1_1; }
+		
+		//var=[libraryElement::VarDeclaration|Variable_Name]
+		public Assignment getVarAssignment_1_2() { return cVarAssignment_1_2; }
+		
+		//[libraryElement::VarDeclaration|Variable_Name]
+		public CrossReference getVarVarDeclarationCrossReference_1_2_0() { return cVarVarDeclarationCrossReference_1_2_0; }
+		
+		//Variable_Name
+		public RuleCall getVarVarDeclarationVariable_NameParserRuleCall_1_2_0_1() { return cVarVarDeclarationVariable_NameParserRuleCall_1_2_0_1; }
+	}
+	public class AdapterRootElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.AdapterRoot");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cAdapterRootAction_0 = (Action)cGroup.eContents().get(0);
 		private final Assignment cAdapterAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final CrossReference cAdapterVarDeclarationCrossReference_1_0 = (CrossReference)cAdapterAssignment_1.eContents().get(0);
 		private final RuleCall cAdapterVarDeclarationAdapter_NameParserRuleCall_1_0_1 = (RuleCall)cAdapterVarDeclarationCrossReference_1_0.eContents().get(1);
-		private final Keyword cFullStopKeyword_2 = (Keyword)cGroup.eContents().get(2);
-		private final Assignment cVarAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final CrossReference cVarVarDeclarationCrossReference_3_0 = (CrossReference)cVarAssignment_3.eContents().get(0);
-		private final RuleCall cVarVarDeclarationVariable_NameParserRuleCall_3_0_1 = (RuleCall)cVarVarDeclarationCrossReference_3_0.eContents().get(1);
 		
-		//Variable_Adapter Variable:
-		//	{AdapterVariable} adapter=[libraryElement::VarDeclaration|Adapter_Name] '.'
-		//	var=[libraryElement::VarDeclaration|Variable_Name];
+		//AdapterRoot AdapterVariable:
+		//	{AdapterRoot} adapter=[libraryElement::VarDeclaration|Adapter_Name];
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{AdapterVariable} adapter=[libraryElement::VarDeclaration|Adapter_Name] '.'
-		//var=[libraryElement::VarDeclaration|Variable_Name]
+		//{AdapterRoot} adapter=[libraryElement::VarDeclaration|Adapter_Name]
 		public Group getGroup() { return cGroup; }
 		
-		//{AdapterVariable}
-		public Action getAdapterVariableAction_0() { return cAdapterVariableAction_0; }
+		//{AdapterRoot}
+		public Action getAdapterRootAction_0() { return cAdapterRootAction_0; }
 		
 		//adapter=[libraryElement::VarDeclaration|Adapter_Name]
 		public Assignment getAdapterAssignment_1() { return cAdapterAssignment_1; }
@@ -1496,18 +1529,6 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 		
 		//Adapter_Name
 		public RuleCall getAdapterVarDeclarationAdapter_NameParserRuleCall_1_0_1() { return cAdapterVarDeclarationAdapter_NameParserRuleCall_1_0_1; }
-		
-		//'.'
-		public Keyword getFullStopKeyword_2() { return cFullStopKeyword_2; }
-		
-		//var=[libraryElement::VarDeclaration|Variable_Name]
-		public Assignment getVarAssignment_3() { return cVarAssignment_3; }
-		
-		//[libraryElement::VarDeclaration|Variable_Name]
-		public CrossReference getVarVarDeclarationCrossReference_3_0() { return cVarVarDeclarationCrossReference_3_0; }
-		
-		//Variable_Name
-		public RuleCall getVarVarDeclarationVariable_NameParserRuleCall_3_0_1() { return cVarVarDeclarationVariable_NameParserRuleCall_3_0_1; }
 	}
 	public class Multibit_Part_AccessElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Multibit_Part_Access");
@@ -2692,6 +2713,7 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 	private final VariableElements pVariable;
 	private final Variable_SubscriptElements pVariable_Subscript;
 	private final Variable_AdapterElements pVariable_Adapter;
+	private final AdapterRootElements pAdapterRoot;
 	private final Multibit_Part_AccessElements pMultibit_Part_Access;
 	private final Adapter_NameElements pAdapter_Name;
 	private final Variable_PrimaryElements pVariable_Primary;
@@ -2787,6 +2809,7 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 		this.pVariable = new VariableElements();
 		this.pVariable_Subscript = new Variable_SubscriptElements();
 		this.pVariable_Adapter = new Variable_AdapterElements();
+		this.pAdapterRoot = new AdapterRootElements();
 		this.pMultibit_Part_Access = new Multibit_Part_AccessElements();
 		this.pAdapter_Name = new Adapter_NameElements();
 		this.pVariable_Primary = new Variable_PrimaryElements();
@@ -3316,15 +3339,24 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 		return getVariable_SubscriptAccess().getRule();
 	}
 	
-	//Variable_Adapter Variable:
-	//	{AdapterVariable} adapter=[libraryElement::VarDeclaration|Adapter_Name] '.'
-	//	var=[libraryElement::VarDeclaration|Variable_Name];
+	//Variable_Adapter AdapterVariable:
+	//	AdapterRoot ({AdapterVariable.curr=current} '.' var=[libraryElement::VarDeclaration|Variable_Name])+;
 	public Variable_AdapterElements getVariable_AdapterAccess() {
 		return pVariable_Adapter;
 	}
 	
 	public ParserRule getVariable_AdapterRule() {
 		return getVariable_AdapterAccess().getRule();
+	}
+	
+	//AdapterRoot AdapterVariable:
+	//	{AdapterRoot} adapter=[libraryElement::VarDeclaration|Adapter_Name];
+	public AdapterRootElements getAdapterRootAccess() {
+		return pAdapterRoot;
+	}
+	
+	public ParserRule getAdapterRootRule() {
+		return getAdapterRootAccess().getRule();
 	}
 	
 	//Multibit_Part_Access PartialAccess:

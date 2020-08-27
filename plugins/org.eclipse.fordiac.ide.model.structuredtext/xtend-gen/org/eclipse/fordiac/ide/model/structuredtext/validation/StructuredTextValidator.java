@@ -18,6 +18,7 @@ import java.util.Arrays;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess;
@@ -183,7 +184,27 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
   }
   
   protected String _extractTypeInformation(final AdapterVariable variable) {
-    return variable.getVar().getType().getName();
+    String _xblockexpression = null;
+    {
+      final AdapterVariable head = variable.getCurr();
+      String _switchResult = null;
+      boolean _matched = false;
+      if (head instanceof AdapterRoot) {
+        _matched=true;
+        _switchResult = ((AdapterRoot)head).getAdapter().getType().getName();
+      }
+      if (!_matched) {
+        if (head instanceof AdapterVariable) {
+          _matched=true;
+          _switchResult = head.getVar().getType().getName();
+        }
+      }
+      if (!_matched) {
+        _switchResult = "";
+      }
+      _xblockexpression = _switchResult;
+    }
+    return _xblockexpression;
   }
   
   @Check

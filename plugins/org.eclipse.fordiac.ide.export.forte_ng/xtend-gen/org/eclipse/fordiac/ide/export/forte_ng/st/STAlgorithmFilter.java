@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser;
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ArrayVariable;
@@ -119,45 +120,37 @@ public class STAlgorithmFilter {
       this.createAdapterResource(resourceSet, adp);
     };
     fbType.getInterfaceList().getPlugs().forEach(_function_1);
-    final Consumer<AdapterDeclaration> _function_2 = (AdapterDeclaration adp) -> {
-      this.createAdapterResource(resourceSet, adp);
+    final Consumer<VarDeclaration> _function_2 = (VarDeclaration v) -> {
+      this.createStructResource(resourceSet, v);
     };
-    fbType.getInterfaceList().getPlugs().forEach(_function_2);
-    final Consumer<VarDeclaration> _function_3 = (VarDeclaration adp) -> {
-      this.createStructResource(resourceSet, adp);
+    fbType.getInterfaceList().getInputVars().forEach(_function_2);
+    final Consumer<VarDeclaration> _function_3 = (VarDeclaration v) -> {
+      this.createStructResource(resourceSet, v);
     };
-    fbType.getInterfaceList().getInputVars().forEach(_function_3);
-    final Consumer<VarDeclaration> _function_4 = (VarDeclaration adp) -> {
-      this.createStructResource(resourceSet, adp);
+    fbType.getInterfaceList().getOutputVars().forEach(_function_3);
+    final Consumer<VarDeclaration> _function_4 = (VarDeclaration v) -> {
+      this.createStructResource(resourceSet, v);
     };
-    fbType.getInterfaceList().getOutputVars().forEach(_function_4);
-    final Consumer<VarDeclaration> _function_5 = (VarDeclaration adp) -> {
-      this.createStructResource(resourceSet, adp);
-    };
-    fbType.getInternalVars().forEach(_function_5);
+    fbType.getInternalVars().forEach(_function_4);
   }
   
-  public boolean createAdapterResource(final XtextResourceSet resourceSet, final AdapterDeclaration adapter) {
-    boolean _xblockexpression = false;
-    {
-      final Resource adapterResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
-      _xblockexpression = adapterResource.getContents().add(adapter.getType().getAdapterFBType());
-    }
-    return _xblockexpression;
+  public void createAdapterResource(final XtextResourceSet resourceSet, final AdapterDeclaration adapter) {
+    final Resource adapterResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
+    adapterResource.getContents().add(adapter.getType().getAdapterFBType());
   }
   
-  public boolean createStructResource(final XtextResourceSet resourceSet, final VarDeclaration variable) {
-    boolean _xifexpression = false;
+  public void createStructResource(final XtextResourceSet resourceSet, final VarDeclaration variable) {
     DataType _type = variable.getType();
     if ((_type instanceof StructuredType)) {
-      boolean _xblockexpression = false;
-      {
-        final Resource structResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
-        _xblockexpression = structResource.getContents().add(variable.getType());
-      }
-      _xifexpression = _xblockexpression;
+      final Resource structResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
+      DataType _type_1 = variable.getType();
+      final StructuredType type = ((StructuredType) _type_1);
+      structResource.getContents().add(type);
+      final Consumer<VarDeclaration> _function = (VarDeclaration v) -> {
+        this.createStructResource(resourceSet, v);
+      };
+      type.getMemberVariables().forEach(_function);
     }
-    return _xifexpression;
   }
   
   protected URI computeUnusedUri(final ResourceSet resourceSet, final String fileExtension) {
@@ -1071,14 +1064,47 @@ public class STAlgorithmFilter {
   
   protected CharSequence _generateExpression(final AdapterVariable expr) {
     StringConcatenation _builder = new StringConcatenation();
+    CharSequence _generateExpression = this.generateExpression(expr.getCurr());
+    _builder.append(_generateExpression);
+    _builder.append(".");
+    String _name = expr.getVar().getName();
+    _builder.append(_name);
+    _builder.append("()");
+    CharSequence _xifexpression = null;
+    EObject _eContainer = expr.eContainer();
+    boolean _not = (!(_eContainer instanceof AdapterVariable));
+    if (_not) {
+      _xifexpression = this.generateBitaccess(expr);
+    }
+    _builder.append(_xifexpression);
+    return _builder;
+  }
+  
+  protected CharSequence _generateExpression(final AdapterRoot expr) {
+    StringConcatenation _builder = new StringConcatenation();
     _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
     String _name = expr.getAdapter().getName();
     _builder.append(_name);
-    _builder.append("().");
-    CharSequence _generateVarAccess = this.generateVarAccess(expr.getVar());
-    _builder.append(_generateVarAccess);
-    CharSequence _generateBitaccess = this.generateBitaccess(expr);
-    _builder.append(_generateBitaccess);
+    _builder.append("()");
+    return _builder;
+  }
+  
+  public CharSequence generateStructAdapterVarAccess(final EList<VarDeclaration> list) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      boolean _hasElements = false;
+      for(final VarDeclaration variable : list) {
+        if (!_hasElements) {
+          _hasElements = true;
+          _builder.append(".");
+        } else {
+          _builder.appendImmediate(".", "");
+        }
+        String _name = variable.getName();
+        _builder.append(_name);
+        _builder.append("()");
+      }
+    }
     return _builder;
   }
   
@@ -1156,8 +1182,13 @@ public class STAlgorithmFilter {
     PartialAccess _part = variable.getPart();
     boolean _tripleNotEquals = (null != _part);
     if (_tripleNotEquals) {
-      _xifexpression = this.generateBitaccess(variable.getVar(), variable.getVar().getType().getName(), this.extractTypeInformation(variable), 
-        variable.getPart().getIndex());
+      CharSequence _xblockexpression = null;
+      {
+        final VarDeclaration lastvar = variable.getVar();
+        _xblockexpression = this.generateBitaccess(lastvar, lastvar.getType().getName(), this.extractTypeInformation(variable), 
+          variable.getPart().getIndex());
+      }
+      _xifexpression = _xblockexpression;
     }
     return _xifexpression;
   }
@@ -1290,7 +1321,9 @@ public class STAlgorithmFilter {
   }
   
   protected CharSequence generateExpression(final EObject expr) {
-    if (expr instanceof IntLiteral) {
+    if (expr instanceof AdapterRoot) {
+      return _generateExpression((AdapterRoot)expr);
+    } else if (expr instanceof IntLiteral) {
       return _generateExpression((IntLiteral)expr);
     } else if (expr instanceof RealLiteral) {
       return _generateExpression((RealLiteral)expr);

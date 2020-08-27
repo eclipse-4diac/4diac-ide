@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -535,19 +536,19 @@ public class LuaConstants {
           boolean _not = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
             return it.getVar();
           })).contains(av.getVar()) && ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
-            return it.getAdapter();
-          })).contains(av.getAdapter())));
+            return LuaConstants.getAdapter(it);
+          })).contains(LuaConstants.getAdapter(av))));
           if (_not) {
             _builder.append("local ");
-            CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), av.getAdapter().getName());
+            CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), LuaConstants.getAdapter(av).getName());
             _builder.append(_luaAdapterVariable);
             _builder.append(" = fb[");
             CharSequence _xifexpression = null;
             boolean _isIsInput = av.getVar().isIsInput();
             if (_isIsInput) {
-              _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), av.getAdapter().getName());
+              _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
             } else {
-              _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), av.getAdapter().getName());
+              _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
             }
             _builder.append(_xifexpression);
             _builder.append("]");
@@ -557,6 +558,11 @@ public class LuaConstants {
       }
     }
     return _builder;
+  }
+  
+  protected static VarDeclaration getAdapter(final AdapterVariable adapterVar) {
+    AdapterVariable _curr = adapterVar.getCurr();
+    return ((AdapterRoot) _curr).getAdapter();
   }
   
   public static CharSequence luaFBVariablesSuffix(final Iterable<VarDeclaration> variables) {
@@ -591,20 +597,20 @@ public class LuaConstants {
           boolean _not = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
             return it.getVar();
           })).contains(av.getVar()) && ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
-            return it.getAdapter();
-          })).contains(av.getAdapter())));
+            return LuaConstants.getAdapter(it);
+          })).contains(LuaConstants.getAdapter(av))));
           if (_not) {
             _builder.append("fb[");
             CharSequence _xifexpression = null;
             boolean _isIsInput = av.getVar().isIsInput();
             if (_isIsInput) {
-              _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), av.getAdapter().getName());
+              _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
             } else {
-              _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), av.getAdapter().getName());
+              _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
             }
             _builder.append(_xifexpression);
             _builder.append("] = ");
-            CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), av.getAdapter().getName());
+            CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), LuaConstants.getAdapter(av).getName());
             _builder.append(_luaAdapterVariable);
             _builder.newLineIfNotEmpty();
           }

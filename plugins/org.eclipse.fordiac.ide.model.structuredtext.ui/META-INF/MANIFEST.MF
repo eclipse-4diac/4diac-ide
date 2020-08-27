@@ -20,10 +20,10 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.xtext.ui.shared
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr,
- org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr.internal,
- org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr.lexer,
  org.eclipse.fordiac.ide.model.structuredtext.ui.contentassist,
- org.eclipse.fordiac.ide.model.structuredtext.ui.quickfix
+ org.eclipse.fordiac.ide.model.structuredtext.ui.quickfix,
+ org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr.lexer,
+ org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr.internal
 Bundle-Activator: org.eclipse.fordiac.ide.model.structuredtext.ui.ExtendedStructuredTextActivator
 Import-Package: org.apache.log4j
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.structuredtext.ui

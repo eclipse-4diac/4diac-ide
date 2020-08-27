@@ -84,6 +84,7 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
       case StructuredTextPackage.IN_ARGUMENT: return createInArgument();
       case StructuredTextPackage.OUT_ARGUMENT: return createOutArgument();
       case StructuredTextPackage.VARIABLE: return createVariable();
+      case StructuredTextPackage.ADAPTER_VARIABLE: return createAdapterVariable();
       case StructuredTextPackage.PARTIAL_ACCESS: return createPartialAccess();
       case StructuredTextPackage.PRIMARY_VARIABLE: return createPrimaryVariable();
       case StructuredTextPackage.CONSTANT: return createConstant();
@@ -101,7 +102,7 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
       case StructuredTextPackage.BINARY_EXPRESSION: return createBinaryExpression();
       case StructuredTextPackage.UNARY_EXPRESSION: return createUnaryExpression();
       case StructuredTextPackage.ARRAY_VARIABLE: return createArrayVariable();
-      case StructuredTextPackage.ADAPTER_VARIABLE: return createAdapterVariable();
+      case StructuredTextPackage.ADAPTER_ROOT: return createAdapterRoot();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -371,6 +372,18 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * @generated
    */
   @Override
+  public AdapterVariable createAdapterVariable()
+  {
+    AdapterVariableImpl adapterVariable = new AdapterVariableImpl();
+    return adapterVariable;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public PartialAccess createPartialAccess()
   {
     PartialAccessImpl partialAccess = new PartialAccessImpl();
@@ -575,10 +588,10 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * @generated
    */
   @Override
-  public AdapterVariable createAdapterVariable()
+  public AdapterRoot createAdapterRoot()
   {
-    AdapterVariableImpl adapterVariable = new AdapterVariableImpl();
-    return adapterVariable;
+    AdapterRootImpl adapterRoot = new AdapterRootImpl();
+    return adapterRoot;
   }
 
   /**
