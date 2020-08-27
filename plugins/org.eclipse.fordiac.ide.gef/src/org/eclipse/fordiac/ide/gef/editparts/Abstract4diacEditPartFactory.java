@@ -59,7 +59,7 @@ public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 
 	/**
 	 * Maps an object to an EditPart.
-	 * 
+	 *
 	 * @throws RuntimeException if no match was found (programming error)
 	 */
 	protected abstract EditPart getPartForElement(EditPart context, Object modelElement);
@@ -67,6 +67,6 @@ public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 	protected RuntimeException createEditpartCreationException(final Object modelElement) {
 		return new RuntimeException(MessageFormat.format(
 				Messages.Abstract4diacEditPartFactory_LABEL_RUNTIMEException_CantCreateModelForElement,
-				new Object[] { ((modelElement != null) ? modelElement.getClass().getName() : "null") })); //$NON-NLS-1$
+				((modelElement != null) ? modelElement.getClass().getName() : "null"))); //$NON-NLS-1$
 	}
 }

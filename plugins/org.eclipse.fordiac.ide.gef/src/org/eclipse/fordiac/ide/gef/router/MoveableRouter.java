@@ -22,8 +22,6 @@ import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
-import org.eclipse.fordiac.ide.gef.FixedAnchor;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.policies.AdjustConnectionEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -159,11 +157,11 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 	}
 
 	private static boolean needsSwap(Connection conn) {
-		if ((conn.getSourceAnchor() instanceof FixedAnchor)
-				&& (((FixedAnchor) conn.getSourceAnchor()).getEditPart() instanceof InterfaceEditPart)) {
-			InterfaceEditPart ep = (InterfaceEditPart) ((FixedAnchor) conn.getSourceAnchor()).getEditPart();
-			return ep.isInput();
-		}
+		//		if ((conn.getSourceAnchor() instanceof FixedAnchor)
+		//				&& (((FixedAnchor) conn.getSourceAnchor()).getEditPart() instanceof InterfaceEditPart)) {
+		//			InterfaceEditPart ep = (InterfaceEditPart) ((FixedAnchor) conn.getSourceAnchor()).getEditPart();
+		//			return ep.isInput();
+		//		}
 		return false;
 	}
 

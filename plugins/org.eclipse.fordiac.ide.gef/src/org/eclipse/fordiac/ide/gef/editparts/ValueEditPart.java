@@ -111,7 +111,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			if (isInput()) {
 				x = bounds.x - 2 - calculateWidth();
 			} else {
-				x = bounds.x + bounds.width + 2;
+				x = (bounds.x + bounds.width + 2);
 			}
 			int y = bounds.y;
 			return new Point(x, y);
@@ -184,6 +184,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			}
 
 			setToolTip(new ValueToolTipFigure(getIInterfaceElement(), getModel()));
+
 		}
 
 	}
@@ -364,7 +365,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT) || (request.getType() == RequestConstants.REQ_OPEN)) {
 			performDirectEdit();
 
 		} else {

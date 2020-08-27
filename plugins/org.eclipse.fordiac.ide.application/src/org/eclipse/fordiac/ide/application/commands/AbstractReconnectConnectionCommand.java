@@ -14,6 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
@@ -61,6 +62,11 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 			IInterfaceElement targetIE = ((InterfaceEditPart) target).getModel();
 			return checkSourceAndTarget(sourceIE, targetIE);
 		}
+		if (source instanceof SubAppForFBNetworkEditPart) {
+			boolean unfoldedSource = ((SubAppForFBNetworkEditPart) source).getModel().isUnfolded();
+			// TODO check for the specific connections in unfolded subapps (contained
+			// elements with parent interface)
+		}
 		return false;
 	}
 
@@ -86,7 +92,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	protected void doReconnectSource() {
 		connectionCreateCmd.setSource(((InterfaceEditPart) request.getTarget()).getModel());
 		connectionCreateCmd
-				.setDestination(((InterfaceEditPart) request.getConnectionEditPart().getTarget()).getModel());
+		.setDestination(((InterfaceEditPart) request.getConnectionEditPart().getTarget()).getModel());
 	}
 
 	protected void doReconnectTarget() {

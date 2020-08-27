@@ -144,7 +144,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		return middle;
 	}
 
-	protected AdvancedRoundedRectangle getBottom() {
+	public AdvancedRoundedRectangle getBottom() {
 		return bottom;
 	}
 
@@ -207,7 +207,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		bottom = new AdvancedRoundedRectangle(PositionConstants.SOUTH | PositionConstants.EAST | PositionConstants.WEST,
 				borderColor);
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
-		GridLayout bottomLayout = new GridLayout(2, false);
+		GridLayout bottomLayout = new GridLayout(3, false);
 		bottomLayout.marginHeight = 4;
 		bottomLayout.marginWidth = 0;
 		bottomLayout.horizontalSpacing = 0;
@@ -223,6 +223,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 
 		setBottomIOs(bottom);
 	}
+
 
 	private void configureFBMiddle(final FBType fbType, Figure fbFigureContainer, Color borderColor) {
 		Figure middleContainer = new Figure();
@@ -312,18 +313,22 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		bottomOutputArea.setLayoutManager(new ToolbarLayout(false));
 		((ToolbarLayout) bottomOutputArea.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 
-		GridData bottomOutputsLayoutData = new GridData(
-				GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
+		GridData bottomOutputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		parent.add(bottomOutputArea);
-		parent.setConstraint(bottomOutputArea, bottomOutputsLayoutData);
+				parent.setConstraint(bottomOutputArea, bottomOutputsLayoutData);
 
-		dataOutputs.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) dataOutputs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		bottomOutputArea.add(dataOutputs);
+				dataOutputs.setLayoutManager(new ToolbarLayout(false));
+				((ToolbarLayout) dataOutputs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+				bottomOutputArea.add(dataOutputs);
 
-		plugs.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) plugs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		bottomOutputArea.add(plugs);
+				plugs.setLayoutManager(new ToolbarLayout(false));
+				((ToolbarLayout) plugs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+				bottomOutputArea.add(plugs);
+	}
+
+	protected void createContainedFigure(IFigure parent) {
+		// potential hook for Figure representing FB contents
 	}
 
 	protected void setupTypeNameAndVersion(final FBType type, Figure container, Color borderColor) {
