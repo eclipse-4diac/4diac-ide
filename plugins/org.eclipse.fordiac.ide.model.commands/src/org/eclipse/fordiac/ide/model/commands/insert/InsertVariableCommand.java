@@ -37,7 +37,7 @@ public class InsertVariableCommand extends Command {
 	public void execute() {
 		varDecl = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDecl.setType(type.getType());
-		varDecl.setTypeName(type.getName());
+		varDecl.setTypeName(type.getType().getName());
 		varDecl.setComment(type.getComment());
 		varDecl.setArraySize(type.getArraySize());
 		Value value = LibraryElementFactory.eINSTANCE.createValue();

@@ -19,9 +19,11 @@ import static org.junit.Assume.assumeTrue;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.testinfra.InsertVariableCommandTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.junit.runners.Parameterized.Parameters;
 
 public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
@@ -29,6 +31,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 	private static VarDeclaration createTestVarDec(String name) {
 		final VarDeclaration varDec = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDec.setName(name);
+		varDec.setType(new DataTypeLibrary().getType(FordiacKeywords.BOOL));
 		return varDec;
 	}
 
