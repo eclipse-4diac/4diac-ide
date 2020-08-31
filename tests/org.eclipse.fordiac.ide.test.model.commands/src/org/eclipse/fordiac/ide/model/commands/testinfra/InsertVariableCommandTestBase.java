@@ -118,7 +118,7 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 		 * can not check the name because if it is already taken a unique one will be
 		 * generated
 		 */
-		if (newVar.getType() != oldVar.getType()) {
+		if (!newVar.getType().getName().equals(oldVar.getType().getName())) {
 			return false;
 		}
 		if (!newVar.getComment().equals(oldVar.getComment())) {
