@@ -2,6 +2,7 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="fBTEditorTabs" name="Function Block Type Editor Tabs" schema="schema/fBTEditorTabs.exsd"/>
+   <extension-point id="fBTEditorValidation" name="Function Block Type Editor Validation" schema="schema/fBTEditorValidation.exsd"/>
    
    <extension
          point="org.eclipse.ui.editors">

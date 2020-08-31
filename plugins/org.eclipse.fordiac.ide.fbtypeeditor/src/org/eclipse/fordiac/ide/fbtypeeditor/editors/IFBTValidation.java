@@ -10,15 +10,10 @@
  * Contributors:
  *   Sandor Bacsi - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.validation.handlers;
+package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
-import java.util.ResourceBundle;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-public class ConstraintHelper {
-	private static final String FORDIAC_CONSTRAINT_PROPERTIES = "constraints";
-	private static ResourceBundle fordiacConstraintProperties = ResourceBundle.getBundle(FORDIAC_CONSTRAINT_PROPERTIES);
-
-	public static String[] getConstraintProperties(String name) {
-		return fordiacConstraintProperties.getString(name).split(";");
-	}
+public interface IFBTValidation {
+	void invokeValidation(INamedElement namedElement);
 }

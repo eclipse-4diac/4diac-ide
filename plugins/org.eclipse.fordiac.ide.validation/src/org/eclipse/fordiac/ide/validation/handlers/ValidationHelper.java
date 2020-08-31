@@ -14,9 +14,6 @@ package org.eclipse.fordiac.ide.validation.handlers;
 
 import java.util.List;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -24,8 +21,6 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EParameter;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -36,20 +31,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.validation.Activator;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ocl.ecore.Constraint;
 import org.eclipse.ocl.expressions.Variable;
-import org.eclipse.ui.handlers.HandlerUtil;
 
-public class Validate extends AbstractHandler {
-	@Override
-	public Object execute(ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
-		INamedElement selectedElement = getSelectedElement(
-				(StructuredSelection) HandlerUtil.getCurrentSelection(event));
-		List<Constraint> constraints = OCLParser.loadOCLConstraints(selectedElement);
-		IResource iresource = getFile(selectedElement);
+public class ValidationHelper {
+	public static void validate(INamedElement namedElement) {
+		List<Constraint> constraints = OCLParser.loadOCLConstraints(namedElement);
+		IResource iresource = getFile(namedElement);
 		try {
 			iresource.deleteMarkers(IValidationMarker.TYPE, true, IResource.DEPTH_INFINITE);
 		} catch (CoreException e) {
@@ -58,7 +47,7 @@ public class Validate extends AbstractHandler {
 		for (Constraint constraint : constraints) {
 			Variable<EClassifier, EParameter> context = constraint.getSpecification().getContextVariable();
 			String contextName = (context.getType().getName());
-			for (TreeIterator<?> iterator = selectedElement.eAllContents(); iterator.hasNext();) {
+			for (TreeIterator<?> iterator = namedElement.eAllContents(); iterator.hasNext();) {
 				EObject object = (EObject) iterator.next();
 				String objectName = object.eClass().getName();
 				if (contextName.equals(objectName))
@@ -73,7 +62,6 @@ public class Validate extends AbstractHandler {
 					}
 			}
 		}
-		return null;
 	}
 
 	private static void addValidationMarker(IResource iresource, String message, String severity, String location,
@@ -96,22 +84,6 @@ public class Validate extends AbstractHandler {
 		}
 		imarker.setAttribute(IMarker.LOCATION, location);
 		imarker.setAttribute(IMarker.LINE_NUMBER, String.valueOf(lineNumber));
-	}
-
-	private static INamedElement getSelectedElement(StructuredSelection currentSelection) {
-		Object obj = currentSelection.getFirstElement();
-		if (obj instanceof IFile) {
-			return checkSelectedFile((IFile) obj);
-		}
-		return (obj instanceof INamedElement) ? (INamedElement) obj : null;
-	}
-
-	private static INamedElement checkSelectedFile(IFile file) {
-		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
-		if (entry instanceof FBTypePaletteEntry) {
-			return ((FBTypePaletteEntry) entry).getFBType();
-		}
-		return null;
 	}
 
 	private static IResource getFile(INamedElement element) {
@@ -164,7 +136,6 @@ public class Validate extends AbstractHandler {
 			ECTransition transition = (ECTransition) object;
 			StringBuilder builder = new StringBuilder("ECC");
 			builder.append('.');
-			// TODO: ECTransition toString()? Display the coordinates of the transition?
 			builder.append("Transition X:" + transition.getX() + " Y:" + transition.getY());
 			return builder.toString();
 		} else {
