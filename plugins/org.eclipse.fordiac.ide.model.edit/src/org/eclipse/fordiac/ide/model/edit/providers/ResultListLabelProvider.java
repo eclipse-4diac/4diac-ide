@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -45,21 +46,25 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 	public Image getImage(Object element) {
 		if (element instanceof PaletteEntry) {
 			PaletteEntry entry = (PaletteEntry) element;
-			if (entry.getType() instanceof SubAppType) {
-				return FordiacImage.ICON_SUB_APP.getImage();
-			} else if (entry.getType() instanceof BasicFBType) {
-				return FordiacImage.ICON_BASIC_FB.getImage();
-			} else if (entry.getType() instanceof SimpleFBType) {
-				return FordiacImage.ICON_SIMPLE_FB.getImage();
-			} else if (entry.getType() instanceof CompositeFBType) {
-				return FordiacImage.ICON_COMPOSITE_FB.getImage();
-			} else if (entry.getType() instanceof StructuredType) {
-				return FordiacImage.ICON_DATA_TYPE.getImage();
-			} else {
-				return FordiacImage.ICON_SIFB.getImage();
-			}
+			return getTypeImage(entry.getType());
 		}
 		return null;
+	}
+
+	public static Image getTypeImage(LibraryElement type) {
+		if (type instanceof SubAppType) {
+			return FordiacImage.ICON_SUB_APP.getImage();
+		} else if (type instanceof BasicFBType) {
+			return FordiacImage.ICON_BASIC_FB.getImage();
+		} else if (type instanceof SimpleFBType) {
+			return FordiacImage.ICON_SIMPLE_FB.getImage();
+		} else if (type instanceof CompositeFBType) {
+			return FordiacImage.ICON_COMPOSITE_FB.getImage();
+		} else if (type instanceof StructuredType) {
+			return FordiacImage.ICON_DATA_TYPE.getImage();
+		} else {
+			return FordiacImage.ICON_SIFB.getImage();
+		}
 	}
 
 	@Override

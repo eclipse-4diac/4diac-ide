@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.gef.draw2d.AdvancedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -134,7 +135,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	public UnderlineAlphaLabel getTypeLabel() {
 		return typeLabel;
 	}
-	
+
 	protected RoundedRectangle getTop() {
 		return top;
 	}
@@ -342,6 +343,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		typeLabel = new UnderlineAlphaLabel(null != typeName ? typeName : FordiacMessages.ND);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
 		typeLabel.setOpaque(false);
+		typeLabel.setIcon(ResultListLabelProvider.getTypeImage(type));
 		middle.add(typeLabel);
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 	}
@@ -368,5 +370,5 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		}
 		return ColorConstants.gray;
 	}
-	
+
 }
