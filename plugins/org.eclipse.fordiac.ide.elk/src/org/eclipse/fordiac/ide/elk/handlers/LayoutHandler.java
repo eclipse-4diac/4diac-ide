@@ -133,6 +133,9 @@ public class LayoutHandler extends AbstractHandler {
 				NodePromotionStrategy.NO_BOUNDARY);
 		layoutGraph.setProperty(LayeredMetaDataProvider.SPACING_EDGE_NODE_BETWEEN_LAYERS, 50.0);
 		layoutGraph.setProperty(LayeredMetaDataProvider.SPACING_NODE_NODE_BETWEEN_LAYERS, 50.0);
+		layoutGraph.setProperty(CoreOptions.SPACING_COMPONENT_COMPONENT, 50.0);
+		layoutGraph.setProperty(CoreOptions.ASPECT_RATIO, 1.0); // increase to prevent line break
+		layoutGraph.setProperty(CoreOptions.SEPARATE_CONNECTED_COMPONENTS, true);
 		layoutGraph.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_FAVOR_STRAIGHT_EDGES, false);
 		// set padding according to the number of in and outputs (for subapps)
 		layoutGraph.setProperty(CoreOptions.PADDING, new ElkPadding(60, maxIOLabelSize + 30, 0, maxIOLabelSize + 30));
