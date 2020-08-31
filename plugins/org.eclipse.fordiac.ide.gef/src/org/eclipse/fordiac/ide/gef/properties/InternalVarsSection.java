@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2017 fortiss GmbH
  * 				 2019 - 2020 Johannes Kepler University Linz
+ * 				 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +17,7 @@
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *   Daniel Lindhuber - added copy and paste
  *   Bianca Wiesmayr - extracted super class for simple and basic FB, added context menu
+ *   Daniel Lindhuber - changed type selection to search field
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -192,7 +194,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 			case IV_NAME:
 				return var.getName();
 			case IV_TYPE:
-				return typeDropDown.getValue();
+				return var.getTypeName();
 			case IV_COMMENT:
 				return var.getComment();
 			case IV_ARRAY:

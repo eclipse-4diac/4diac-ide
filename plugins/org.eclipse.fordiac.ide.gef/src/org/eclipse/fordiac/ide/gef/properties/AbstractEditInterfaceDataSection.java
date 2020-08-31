@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 				 2019 - 2020 Johannes Kepler University Linz
+ * 				 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -60,7 +61,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	protected Object getTypeValue(Object element, TableViewer viewer, int TYPE_COLUMN_INDEX) {
-		return typeDropdown.getValue();
+		VarDeclaration var = (VarDeclaration) element;
+		return var.getTypeName();
 	}
 
 	@Override
