@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser;
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ArrayVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AssignmentStatement;
@@ -608,7 +609,8 @@ public class STAlgorithmFilter {
   
   private CharSequence _luaExpression(final AdapterVariable expr) {
     StringConcatenation _builder = new StringConcatenation();
-    CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(expr.getVar().getName(), expr.getAdapter().getName());
+    AdapterVariable _curr = expr.getCurr();
+    CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(expr.getVar().getName(), ((AdapterRoot) _curr).getAdapter().getName());
     _builder.append(_luaAdapterVariable);
     return _builder;
   }

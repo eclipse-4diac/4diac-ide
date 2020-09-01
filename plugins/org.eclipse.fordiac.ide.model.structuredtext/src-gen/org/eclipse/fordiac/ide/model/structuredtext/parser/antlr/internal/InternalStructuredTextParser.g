@@ -2574,10 +2574,66 @@ ruleVariable_Adapter returns [EObject current=null]
 	leaveRule();
 }:
 	(
+		{
+			newCompositeNode(grammarAccess.getVariable_AdapterAccess().getAdapterRootParserRuleCall_0());
+		}
+		this_AdapterRoot_0=ruleAdapterRoot
+		{
+			$current = $this_AdapterRoot_0.current;
+			afterParserOrEnumRuleCall();
+		}
+		(
+			(
+				{
+					$current = forceCreateModelElementAndSet(
+						grammarAccess.getVariable_AdapterAccess().getAdapterVariableCurrAction_1_0(),
+						$current);
+				}
+			)
+			otherlv_2=FullStop
+			{
+				newLeafNode(otherlv_2, grammarAccess.getVariable_AdapterAccess().getFullStopKeyword_1_1());
+			}
+			(
+				(
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getVariable_AdapterRule());
+						}
+					}
+					{
+						newCompositeNode(grammarAccess.getVariable_AdapterAccess().getVarVarDeclarationCrossReference_1_2_0());
+					}
+					ruleVariable_Name
+					{
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+		)+
+	)
+;
+
+// Entry rule entryRuleAdapterRoot
+entryRuleAdapterRoot returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getAdapterRootRule()); }
+	iv_ruleAdapterRoot=ruleAdapterRoot
+	{ $current=$iv_ruleAdapterRoot.current; }
+	EOF;
+
+// Rule AdapterRoot
+ruleAdapterRoot returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
 		(
 			{
 				$current = forceCreateModelElement(
-					grammarAccess.getVariable_AdapterAccess().getAdapterVariableAction_0(),
+					grammarAccess.getAdapterRootAccess().getAdapterRootAction_0(),
 					$current);
 			}
 		)
@@ -2585,33 +2641,13 @@ ruleVariable_Adapter returns [EObject current=null]
 			(
 				{
 					if ($current==null) {
-						$current = createModelElement(grammarAccess.getVariable_AdapterRule());
+						$current = createModelElement(grammarAccess.getAdapterRootRule());
 					}
 				}
 				{
-					newCompositeNode(grammarAccess.getVariable_AdapterAccess().getAdapterVarDeclarationCrossReference_1_0());
+					newCompositeNode(grammarAccess.getAdapterRootAccess().getAdapterVarDeclarationCrossReference_1_0());
 				}
 				ruleAdapter_Name
-				{
-					afterParserOrEnumRuleCall();
-				}
-			)
-		)
-		otherlv_2=FullStop
-		{
-			newLeafNode(otherlv_2, grammarAccess.getVariable_AdapterAccess().getFullStopKeyword_2());
-		}
-		(
-			(
-				{
-					if ($current==null) {
-						$current = createModelElement(grammarAccess.getVariable_AdapterRule());
-					}
-				}
-				{
-					newCompositeNode(grammarAccess.getVariable_AdapterAccess().getVarVarDeclarationCrossReference_3_0());
-				}
-				ruleVariable_Name
 				{
 					afterParserOrEnumRuleCall();
 				}

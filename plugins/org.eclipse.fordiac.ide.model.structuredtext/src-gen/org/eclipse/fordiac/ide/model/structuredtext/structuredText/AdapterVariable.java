@@ -14,7 +14,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getAdapter <em>Adapter</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getCurr <em>Curr</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getVar <em>Var</em>}</li>
  * </ul>
  *
@@ -25,26 +25,26 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public interface AdapterVariable extends Variable
 {
   /**
-   * Returns the value of the '<em><b>Adapter</b></em>' reference.
+   * Returns the value of the '<em><b>Curr</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Adapter</em>' reference.
-   * @see #setAdapter(VarDeclaration)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getAdapterVariable_Adapter()
-   * @model
+   * @return the value of the '<em>Curr</em>' containment reference.
+   * @see #setCurr(AdapterVariable)
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getAdapterVariable_Curr()
+   * @model containment="true"
    * @generated
    */
-  VarDeclaration getAdapter();
+  AdapterVariable getCurr();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getAdapter <em>Adapter</em>}' reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getCurr <em>Curr</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Adapter</em>' reference.
-   * @see #getAdapter()
+   * @param value the new value of the '<em>Curr</em>' containment reference.
+   * @see #getCurr()
    * @generated
    */
-  void setAdapter(VarDeclaration value);
+  void setCurr(AdapterVariable value);
 
   /**
    * Returns the value of the '<em><b>Var</b></em>' reference.

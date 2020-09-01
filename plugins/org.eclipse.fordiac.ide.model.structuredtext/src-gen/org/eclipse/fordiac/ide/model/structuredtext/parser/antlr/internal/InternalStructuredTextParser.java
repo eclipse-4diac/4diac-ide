@@ -1145,11 +1145,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                 {
                 int LA9_1 = input.LA(2);
 
-                if ( ((LA9_1>=B && LA9_1<=X)||LA9_1==ColonEqualsSign||LA9_1==FullStop||LA9_1==LeftSquareBracket) ) {
-                    alt9=1;
-                }
-                else if ( (LA9_1==LeftParenthesis) ) {
+                if ( (LA9_1==LeftParenthesis) ) {
                     alt9=2;
+                }
+                else if ( ((LA9_1>=B && LA9_1<=X)||LA9_1==ColonEqualsSign||LA9_1==FullStop||LA9_1==LeftSquareBracket) ) {
+                    alt9=1;
                 }
                 else {
                     NoViableAltException nvae =
@@ -5458,11 +5458,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                 {
                 int LA28_1 = input.LA(2);
 
-                if ( (LA28_1==EOF||LA28_1==END_REPEAT||LA28_1==THEN||(LA28_1>=B && LA28_1<=AND)||LA28_1==MOD||(LA28_1>=XOR && LA28_1<=AsteriskAsterisk)||(LA28_1>=LessThanSignEqualsSign && LA28_1<=LessThanSignGreaterThanSign)||LA28_1==GreaterThanSignEqualsSign||(LA28_1>=BY && LA28_1<=DO)||(LA28_1>=OF && LA28_1<=TO)||LA28_1==Ampersand||(LA28_1>=RightParenthesis && LA28_1<=Solidus)||(LA28_1>=Semicolon && LA28_1<=GreaterThanSign)||(LA28_1>=LeftSquareBracket && LA28_1<=RightSquareBracket)) ) {
-                    alt28=1;
-                }
-                else if ( (LA28_1==LeftParenthesis) ) {
+                if ( (LA28_1==LeftParenthesis) ) {
                     alt28=2;
+                }
+                else if ( (LA28_1==EOF||LA28_1==END_REPEAT||LA28_1==THEN||(LA28_1>=B && LA28_1<=AND)||LA28_1==MOD||(LA28_1>=XOR && LA28_1<=AsteriskAsterisk)||(LA28_1>=LessThanSignEqualsSign && LA28_1<=LessThanSignGreaterThanSign)||LA28_1==GreaterThanSignEqualsSign||(LA28_1>=BY && LA28_1<=DO)||(LA28_1>=OF && LA28_1<=TO)||LA28_1==Ampersand||(LA28_1>=RightParenthesis && LA28_1<=Solidus)||(LA28_1>=Semicolon && LA28_1<=GreaterThanSign)||(LA28_1>=LeftSquareBracket && LA28_1<=RightSquareBracket)) ) {
+                    alt28=1;
                 }
                 else {
                     NoViableAltException nvae =
@@ -6603,11 +6603,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                 else if ( (LA36_1==FullStop) ) {
                     int LA36_6 = input.LA(3);
 
-                    if ( (LA36_6==DT||LA36_6==LT||LA36_6==T||LA36_6==RULE_ID) ) {
-                        alt36=2;
-                    }
-                    else if ( (LA36_6==RULE_UNSIGNED_INT) ) {
+                    if ( (LA36_6==RULE_UNSIGNED_INT) ) {
                         alt36=1;
+                    }
+                    else if ( (LA36_6==DT||LA36_6==LT||LA36_6==T||LA36_6==RULE_ID) ) {
+                        alt36=2;
                     }
                     else {
                         NoViableAltException nvae =
@@ -6634,11 +6634,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                 else if ( (LA36_2==FullStop) ) {
                     int LA36_6 = input.LA(3);
 
-                    if ( (LA36_6==DT||LA36_6==LT||LA36_6==T||LA36_6==RULE_ID) ) {
-                        alt36=2;
-                    }
-                    else if ( (LA36_6==RULE_UNSIGNED_INT) ) {
+                    if ( (LA36_6==RULE_UNSIGNED_INT) ) {
                         alt36=1;
+                    }
+                    else if ( (LA36_6==DT||LA36_6==LT||LA36_6==T||LA36_6==RULE_ID) ) {
+                        alt36=2;
                     }
                     else {
                         NoViableAltException nvae =
@@ -6665,11 +6665,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                 else if ( (LA36_3==FullStop) ) {
                     int LA36_6 = input.LA(3);
 
-                    if ( (LA36_6==DT||LA36_6==LT||LA36_6==T||LA36_6==RULE_ID) ) {
-                        alt36=2;
-                    }
-                    else if ( (LA36_6==RULE_UNSIGNED_INT) ) {
+                    if ( (LA36_6==RULE_UNSIGNED_INT) ) {
                         alt36=1;
+                    }
+                    else if ( (LA36_6==DT||LA36_6==LT||LA36_6==T||LA36_6==RULE_ID) ) {
+                        alt36=2;
                     }
                     else {
                         NoViableAltException nvae =
@@ -6690,17 +6690,14 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                 {
                 int LA36_4 = input.LA(2);
 
-                if ( (LA36_4==EOF||LA36_4==END_REPEAT||LA36_4==THEN||(LA36_4>=B && LA36_4<=AND)||LA36_4==MOD||(LA36_4>=XOR && LA36_4<=AsteriskAsterisk)||(LA36_4>=ColonEqualsSign && LA36_4<=LessThanSignGreaterThanSign)||LA36_4==GreaterThanSignEqualsSign||(LA36_4>=BY && LA36_4<=DO)||(LA36_4>=OF && LA36_4<=TO)||LA36_4==Ampersand||(LA36_4>=RightParenthesis && LA36_4<=HyphenMinus)||(LA36_4>=Solidus && LA36_4<=GreaterThanSign)||(LA36_4>=LeftSquareBracket && LA36_4<=RightSquareBracket)) ) {
-                    alt36=1;
-                }
-                else if ( (LA36_4==FullStop) ) {
+                if ( (LA36_4==FullStop) ) {
                     int LA36_6 = input.LA(3);
 
-                    if ( (LA36_6==DT||LA36_6==LT||LA36_6==T||LA36_6==RULE_ID) ) {
-                        alt36=2;
-                    }
-                    else if ( (LA36_6==RULE_UNSIGNED_INT) ) {
+                    if ( (LA36_6==RULE_UNSIGNED_INT) ) {
                         alt36=1;
+                    }
+                    else if ( (LA36_6==DT||LA36_6==LT||LA36_6==T||LA36_6==RULE_ID) ) {
+                        alt36=2;
                     }
                     else {
                         NoViableAltException nvae =
@@ -6708,6 +6705,9 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
                         throw nvae;
                     }
+                }
+                else if ( (LA36_4==EOF||LA36_4==END_REPEAT||LA36_4==THEN||(LA36_4>=B && LA36_4<=AND)||LA36_4==MOD||(LA36_4>=XOR && LA36_4<=AsteriskAsterisk)||(LA36_4>=ColonEqualsSign && LA36_4<=LessThanSignGreaterThanSign)||LA36_4==GreaterThanSignEqualsSign||(LA36_4>=BY && LA36_4<=DO)||(LA36_4>=OF && LA36_4<=TO)||LA36_4==Ampersand||(LA36_4>=RightParenthesis && LA36_4<=HyphenMinus)||(LA36_4>=Solidus && LA36_4<=GreaterThanSign)||(LA36_4>=LeftSquareBracket && LA36_4<=RightSquareBracket)) ) {
+                    alt36=1;
                 }
                 else {
                     NoViableAltException nvae =
@@ -6949,81 +6949,214 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleVariable_Adapter"
-    // InternalStructuredTextParser.g:2569:1: ruleVariable_Adapter returns [EObject current=null] : ( () ( ( ruleAdapter_Name ) ) otherlv_2= FullStop ( ( ruleVariable_Name ) ) ) ;
+    // InternalStructuredTextParser.g:2569:1: ruleVariable_Adapter returns [EObject current=null] : (this_AdapterRoot_0= ruleAdapterRoot ( () otherlv_2= FullStop ( ( ruleVariable_Name ) ) )+ ) ;
     public final EObject ruleVariable_Adapter() throws RecognitionException {
         EObject current = null;
 
         Token otherlv_2=null;
+        EObject this_AdapterRoot_0 = null;
+
 
 
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:2575:2: ( ( () ( ( ruleAdapter_Name ) ) otherlv_2= FullStop ( ( ruleVariable_Name ) ) ) )
-            // InternalStructuredTextParser.g:2576:2: ( () ( ( ruleAdapter_Name ) ) otherlv_2= FullStop ( ( ruleVariable_Name ) ) )
+            // InternalStructuredTextParser.g:2575:2: ( (this_AdapterRoot_0= ruleAdapterRoot ( () otherlv_2= FullStop ( ( ruleVariable_Name ) ) )+ ) )
+            // InternalStructuredTextParser.g:2576:2: (this_AdapterRoot_0= ruleAdapterRoot ( () otherlv_2= FullStop ( ( ruleVariable_Name ) ) )+ )
             {
-            // InternalStructuredTextParser.g:2576:2: ( () ( ( ruleAdapter_Name ) ) otherlv_2= FullStop ( ( ruleVariable_Name ) ) )
-            // InternalStructuredTextParser.g:2577:3: () ( ( ruleAdapter_Name ) ) otherlv_2= FullStop ( ( ruleVariable_Name ) )
+            // InternalStructuredTextParser.g:2576:2: (this_AdapterRoot_0= ruleAdapterRoot ( () otherlv_2= FullStop ( ( ruleVariable_Name ) ) )+ )
+            // InternalStructuredTextParser.g:2577:3: this_AdapterRoot_0= ruleAdapterRoot ( () otherlv_2= FullStop ( ( ruleVariable_Name ) ) )+
             {
-            // InternalStructuredTextParser.g:2577:3: ()
-            // InternalStructuredTextParser.g:2578:4: 
+
+            			newCompositeNode(grammarAccess.getVariable_AdapterAccess().getAdapterRootParserRuleCall_0());
+            		
+            pushFollow(FOLLOW_55);
+            this_AdapterRoot_0=ruleAdapterRoot();
+
+            state._fsp--;
+
+
+            			current = this_AdapterRoot_0;
+            			afterParserOrEnumRuleCall();
+            		
+            // InternalStructuredTextParser.g:2585:3: ( () otherlv_2= FullStop ( ( ruleVariable_Name ) ) )+
+            int cnt39=0;
+            loop39:
+            do {
+                int alt39=2;
+                int LA39_0 = input.LA(1);
+
+                if ( (LA39_0==FullStop) ) {
+                    int LA39_2 = input.LA(2);
+
+                    if ( (LA39_2==DT||LA39_2==LT||LA39_2==T||LA39_2==RULE_ID) ) {
+                        alt39=1;
+                    }
+
+
+                }
+
+
+                switch (alt39) {
+            	case 1 :
+            	    // InternalStructuredTextParser.g:2586:4: () otherlv_2= FullStop ( ( ruleVariable_Name ) )
+            	    {
+            	    // InternalStructuredTextParser.g:2586:4: ()
+            	    // InternalStructuredTextParser.g:2587:5: 
+            	    {
+
+            	    					current = forceCreateModelElementAndSet(
+            	    						grammarAccess.getVariable_AdapterAccess().getAdapterVariableCurrAction_1_0(),
+            	    						current);
+            	    				
+
+            	    }
+
+            	    otherlv_2=(Token)match(input,FullStop,FOLLOW_8); 
+
+            	    				newLeafNode(otherlv_2, grammarAccess.getVariable_AdapterAccess().getFullStopKeyword_1_1());
+            	    			
+            	    // InternalStructuredTextParser.g:2597:4: ( ( ruleVariable_Name ) )
+            	    // InternalStructuredTextParser.g:2598:5: ( ruleVariable_Name )
+            	    {
+            	    // InternalStructuredTextParser.g:2598:5: ( ruleVariable_Name )
+            	    // InternalStructuredTextParser.g:2599:6: ruleVariable_Name
+            	    {
+
+            	    						if (current==null) {
+            	    							current = createModelElement(grammarAccess.getVariable_AdapterRule());
+            	    						}
+            	    					
+
+            	    						newCompositeNode(grammarAccess.getVariable_AdapterAccess().getVarVarDeclarationCrossReference_1_2_0());
+            	    					
+            	    pushFollow(FOLLOW_56);
+            	    ruleVariable_Name();
+
+            	    state._fsp--;
+
+
+            	    						afterParserOrEnumRuleCall();
+            	    					
+
+            	    }
+
+
+            	    }
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    if ( cnt39 >= 1 ) break loop39;
+                        EarlyExitException eee =
+                            new EarlyExitException(39, input);
+                        throw eee;
+                }
+                cnt39++;
+            } while (true);
+
+
+            }
+
+
+            }
+
+
+            	leaveRule();
+
+        }
+
+            catch (RecognitionException re) {
+                recover(input,re);
+                appendSkippedTokens();
+            }
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "ruleVariable_Adapter"
+
+
+    // $ANTLR start "entryRuleAdapterRoot"
+    // InternalStructuredTextParser.g:2618:1: entryRuleAdapterRoot returns [EObject current=null] : iv_ruleAdapterRoot= ruleAdapterRoot EOF ;
+    public final EObject entryRuleAdapterRoot() throws RecognitionException {
+        EObject current = null;
+
+        EObject iv_ruleAdapterRoot = null;
+
+
+        try {
+            // InternalStructuredTextParser.g:2618:52: (iv_ruleAdapterRoot= ruleAdapterRoot EOF )
+            // InternalStructuredTextParser.g:2619:2: iv_ruleAdapterRoot= ruleAdapterRoot EOF
+            {
+             newCompositeNode(grammarAccess.getAdapterRootRule()); 
+            pushFollow(FOLLOW_1);
+            iv_ruleAdapterRoot=ruleAdapterRoot();
+
+            state._fsp--;
+
+             current =iv_ruleAdapterRoot; 
+            match(input,EOF,FOLLOW_2); 
+
+            }
+
+        }
+
+            catch (RecognitionException re) {
+                recover(input,re);
+                appendSkippedTokens();
+            }
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "entryRuleAdapterRoot"
+
+
+    // $ANTLR start "ruleAdapterRoot"
+    // InternalStructuredTextParser.g:2625:1: ruleAdapterRoot returns [EObject current=null] : ( () ( ( ruleAdapter_Name ) ) ) ;
+    public final EObject ruleAdapterRoot() throws RecognitionException {
+        EObject current = null;
+
+
+        	enterRule();
+
+        try {
+            // InternalStructuredTextParser.g:2631:2: ( ( () ( ( ruleAdapter_Name ) ) ) )
+            // InternalStructuredTextParser.g:2632:2: ( () ( ( ruleAdapter_Name ) ) )
+            {
+            // InternalStructuredTextParser.g:2632:2: ( () ( ( ruleAdapter_Name ) ) )
+            // InternalStructuredTextParser.g:2633:3: () ( ( ruleAdapter_Name ) )
+            {
+            // InternalStructuredTextParser.g:2633:3: ()
+            // InternalStructuredTextParser.g:2634:4: 
             {
 
             				current = forceCreateModelElement(
-            					grammarAccess.getVariable_AdapterAccess().getAdapterVariableAction_0(),
+            					grammarAccess.getAdapterRootAccess().getAdapterRootAction_0(),
             					current);
             			
 
             }
 
-            // InternalStructuredTextParser.g:2584:3: ( ( ruleAdapter_Name ) )
-            // InternalStructuredTextParser.g:2585:4: ( ruleAdapter_Name )
+            // InternalStructuredTextParser.g:2640:3: ( ( ruleAdapter_Name ) )
+            // InternalStructuredTextParser.g:2641:4: ( ruleAdapter_Name )
             {
-            // InternalStructuredTextParser.g:2585:4: ( ruleAdapter_Name )
-            // InternalStructuredTextParser.g:2586:5: ruleAdapter_Name
-            {
-
-            					if (current==null) {
-            						current = createModelElement(grammarAccess.getVariable_AdapterRule());
-            					}
-            				
-
-            					newCompositeNode(grammarAccess.getVariable_AdapterAccess().getAdapterVarDeclarationCrossReference_1_0());
-            				
-            pushFollow(FOLLOW_55);
-            ruleAdapter_Name();
-
-            state._fsp--;
-
-
-            					afterParserOrEnumRuleCall();
-            				
-
-            }
-
-
-            }
-
-            otherlv_2=(Token)match(input,FullStop,FOLLOW_8); 
-
-            			newLeafNode(otherlv_2, grammarAccess.getVariable_AdapterAccess().getFullStopKeyword_2());
-            		
-            // InternalStructuredTextParser.g:2604:3: ( ( ruleVariable_Name ) )
-            // InternalStructuredTextParser.g:2605:4: ( ruleVariable_Name )
-            {
-            // InternalStructuredTextParser.g:2605:4: ( ruleVariable_Name )
-            // InternalStructuredTextParser.g:2606:5: ruleVariable_Name
+            // InternalStructuredTextParser.g:2641:4: ( ruleAdapter_Name )
+            // InternalStructuredTextParser.g:2642:5: ruleAdapter_Name
             {
 
             					if (current==null) {
-            						current = createModelElement(grammarAccess.getVariable_AdapterRule());
+            						current = createModelElement(grammarAccess.getAdapterRootRule());
             					}
             				
 
-            					newCompositeNode(grammarAccess.getVariable_AdapterAccess().getVarVarDeclarationCrossReference_3_0());
+            					newCompositeNode(grammarAccess.getAdapterRootAccess().getAdapterVarDeclarationCrossReference_1_0());
             				
             pushFollow(FOLLOW_2);
-            ruleVariable_Name();
+            ruleAdapter_Name();
 
             state._fsp--;
 
@@ -7055,11 +7188,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         }
         return current;
     }
-    // $ANTLR end "ruleVariable_Adapter"
+    // $ANTLR end "ruleAdapterRoot"
 
 
     // $ANTLR start "entryRuleMultibit_Part_Access"
-    // InternalStructuredTextParser.g:2624:1: entryRuleMultibit_Part_Access returns [EObject current=null] : iv_ruleMultibit_Part_Access= ruleMultibit_Part_Access EOF ;
+    // InternalStructuredTextParser.g:2660:1: entryRuleMultibit_Part_Access returns [EObject current=null] : iv_ruleMultibit_Part_Access= ruleMultibit_Part_Access EOF ;
     public final EObject entryRuleMultibit_Part_Access() throws RecognitionException {
         EObject current = null;
 
@@ -7067,8 +7200,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:2624:61: (iv_ruleMultibit_Part_Access= ruleMultibit_Part_Access EOF )
-            // InternalStructuredTextParser.g:2625:2: iv_ruleMultibit_Part_Access= ruleMultibit_Part_Access EOF
+            // InternalStructuredTextParser.g:2660:61: (iv_ruleMultibit_Part_Access= ruleMultibit_Part_Access EOF )
+            // InternalStructuredTextParser.g:2661:2: iv_ruleMultibit_Part_Access= ruleMultibit_Part_Access EOF
             {
              newCompositeNode(grammarAccess.getMultibit_Part_AccessRule()); 
             pushFollow(FOLLOW_1);
@@ -7095,7 +7228,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMultibit_Part_Access"
-    // InternalStructuredTextParser.g:2631:1: ruleMultibit_Part_Access returns [EObject current=null] : ( ( ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) ) ) | ( ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) ) ) | ( ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) ) ) ) ;
+    // InternalStructuredTextParser.g:2667:1: ruleMultibit_Part_Access returns [EObject current=null] : ( ( ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) ) ) | ( ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) ) ) | ( ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) ) ) ) ;
     public final EObject ruleMultibit_Part_Access() throws RecognitionException {
         EObject current = null;
 
@@ -7119,56 +7252,56 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:2637:2: ( ( ( ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) ) ) | ( ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) ) ) | ( ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) ) ) ) )
-            // InternalStructuredTextParser.g:2638:2: ( ( ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) ) ) | ( ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) ) ) | ( ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) ) ) )
+            // InternalStructuredTextParser.g:2673:2: ( ( ( ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) ) ) | ( ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) ) ) | ( ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) ) ) ) )
+            // InternalStructuredTextParser.g:2674:2: ( ( ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) ) ) | ( ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) ) ) | ( ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) ) ) )
             {
-            // InternalStructuredTextParser.g:2638:2: ( ( ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) ) ) | ( ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) ) ) | ( ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) ) ) )
-            int alt39=5;
+            // InternalStructuredTextParser.g:2674:2: ( ( ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) ) ) | ( ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) ) ) | ( ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) ) ) | ( ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) ) ) )
+            int alt40=5;
             switch ( input.LA(1) ) {
             case D:
                 {
-                alt39=1;
+                alt40=1;
                 }
                 break;
             case W:
                 {
-                alt39=2;
+                alt40=2;
                 }
                 break;
             case B:
                 {
-                alt39=3;
+                alt40=3;
                 }
                 break;
             case X:
                 {
-                alt39=4;
+                alt40=4;
                 }
                 break;
             case FullStop:
                 {
-                alt39=5;
+                alt40=5;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 39, 0, input);
+                    new NoViableAltException("", 40, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt39) {
+            switch (alt40) {
                 case 1 :
-                    // InternalStructuredTextParser.g:2639:3: ( ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) ) )
+                    // InternalStructuredTextParser.g:2675:3: ( ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) ) )
                     {
-                    // InternalStructuredTextParser.g:2639:3: ( ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) ) )
-                    // InternalStructuredTextParser.g:2640:4: ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) )
+                    // InternalStructuredTextParser.g:2675:3: ( ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) ) )
+                    // InternalStructuredTextParser.g:2676:4: ( (lv_dwordaccess_0_0= D ) ) ( (lv_index_1_0= rulePartial_Value ) )
                     {
-                    // InternalStructuredTextParser.g:2640:4: ( (lv_dwordaccess_0_0= D ) )
-                    // InternalStructuredTextParser.g:2641:5: (lv_dwordaccess_0_0= D )
+                    // InternalStructuredTextParser.g:2676:4: ( (lv_dwordaccess_0_0= D ) )
+                    // InternalStructuredTextParser.g:2677:5: (lv_dwordaccess_0_0= D )
                     {
-                    // InternalStructuredTextParser.g:2641:5: (lv_dwordaccess_0_0= D )
-                    // InternalStructuredTextParser.g:2642:6: lv_dwordaccess_0_0= D
+                    // InternalStructuredTextParser.g:2677:5: (lv_dwordaccess_0_0= D )
+                    // InternalStructuredTextParser.g:2678:6: lv_dwordaccess_0_0= D
                     {
                     lv_dwordaccess_0_0=(Token)match(input,D,FOLLOW_12); 
 
@@ -7186,11 +7319,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // InternalStructuredTextParser.g:2654:4: ( (lv_index_1_0= rulePartial_Value ) )
-                    // InternalStructuredTextParser.g:2655:5: (lv_index_1_0= rulePartial_Value )
+                    // InternalStructuredTextParser.g:2690:4: ( (lv_index_1_0= rulePartial_Value ) )
+                    // InternalStructuredTextParser.g:2691:5: (lv_index_1_0= rulePartial_Value )
                     {
-                    // InternalStructuredTextParser.g:2655:5: (lv_index_1_0= rulePartial_Value )
-                    // InternalStructuredTextParser.g:2656:6: lv_index_1_0= rulePartial_Value
+                    // InternalStructuredTextParser.g:2691:5: (lv_index_1_0= rulePartial_Value )
+                    // InternalStructuredTextParser.g:2692:6: lv_index_1_0= rulePartial_Value
                     {
 
                     						newCompositeNode(grammarAccess.getMultibit_Part_AccessAccess().getIndexPartial_ValueParserRuleCall_0_1_0());
@@ -7224,16 +7357,16 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:2675:3: ( ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) ) )
+                    // InternalStructuredTextParser.g:2711:3: ( ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) ) )
                     {
-                    // InternalStructuredTextParser.g:2675:3: ( ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) ) )
-                    // InternalStructuredTextParser.g:2676:4: ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) )
+                    // InternalStructuredTextParser.g:2711:3: ( ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) ) )
+                    // InternalStructuredTextParser.g:2712:4: ( (lv_wordaccess_2_0= W ) ) ( (lv_index_3_0= rulePartial_Value ) )
                     {
-                    // InternalStructuredTextParser.g:2676:4: ( (lv_wordaccess_2_0= W ) )
-                    // InternalStructuredTextParser.g:2677:5: (lv_wordaccess_2_0= W )
+                    // InternalStructuredTextParser.g:2712:4: ( (lv_wordaccess_2_0= W ) )
+                    // InternalStructuredTextParser.g:2713:5: (lv_wordaccess_2_0= W )
                     {
-                    // InternalStructuredTextParser.g:2677:5: (lv_wordaccess_2_0= W )
-                    // InternalStructuredTextParser.g:2678:6: lv_wordaccess_2_0= W
+                    // InternalStructuredTextParser.g:2713:5: (lv_wordaccess_2_0= W )
+                    // InternalStructuredTextParser.g:2714:6: lv_wordaccess_2_0= W
                     {
                     lv_wordaccess_2_0=(Token)match(input,W,FOLLOW_12); 
 
@@ -7251,11 +7384,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // InternalStructuredTextParser.g:2690:4: ( (lv_index_3_0= rulePartial_Value ) )
-                    // InternalStructuredTextParser.g:2691:5: (lv_index_3_0= rulePartial_Value )
+                    // InternalStructuredTextParser.g:2726:4: ( (lv_index_3_0= rulePartial_Value ) )
+                    // InternalStructuredTextParser.g:2727:5: (lv_index_3_0= rulePartial_Value )
                     {
-                    // InternalStructuredTextParser.g:2691:5: (lv_index_3_0= rulePartial_Value )
-                    // InternalStructuredTextParser.g:2692:6: lv_index_3_0= rulePartial_Value
+                    // InternalStructuredTextParser.g:2727:5: (lv_index_3_0= rulePartial_Value )
+                    // InternalStructuredTextParser.g:2728:6: lv_index_3_0= rulePartial_Value
                     {
 
                     						newCompositeNode(grammarAccess.getMultibit_Part_AccessAccess().getIndexPartial_ValueParserRuleCall_1_1_0());
@@ -7289,16 +7422,16 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalStructuredTextParser.g:2711:3: ( ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) ) )
+                    // InternalStructuredTextParser.g:2747:3: ( ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) ) )
                     {
-                    // InternalStructuredTextParser.g:2711:3: ( ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) ) )
-                    // InternalStructuredTextParser.g:2712:4: ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) )
+                    // InternalStructuredTextParser.g:2747:3: ( ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) ) )
+                    // InternalStructuredTextParser.g:2748:4: ( (lv_byteaccess_4_0= B ) ) ( (lv_index_5_0= rulePartial_Value ) )
                     {
-                    // InternalStructuredTextParser.g:2712:4: ( (lv_byteaccess_4_0= B ) )
-                    // InternalStructuredTextParser.g:2713:5: (lv_byteaccess_4_0= B )
+                    // InternalStructuredTextParser.g:2748:4: ( (lv_byteaccess_4_0= B ) )
+                    // InternalStructuredTextParser.g:2749:5: (lv_byteaccess_4_0= B )
                     {
-                    // InternalStructuredTextParser.g:2713:5: (lv_byteaccess_4_0= B )
-                    // InternalStructuredTextParser.g:2714:6: lv_byteaccess_4_0= B
+                    // InternalStructuredTextParser.g:2749:5: (lv_byteaccess_4_0= B )
+                    // InternalStructuredTextParser.g:2750:6: lv_byteaccess_4_0= B
                     {
                     lv_byteaccess_4_0=(Token)match(input,B,FOLLOW_12); 
 
@@ -7316,11 +7449,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // InternalStructuredTextParser.g:2726:4: ( (lv_index_5_0= rulePartial_Value ) )
-                    // InternalStructuredTextParser.g:2727:5: (lv_index_5_0= rulePartial_Value )
+                    // InternalStructuredTextParser.g:2762:4: ( (lv_index_5_0= rulePartial_Value ) )
+                    // InternalStructuredTextParser.g:2763:5: (lv_index_5_0= rulePartial_Value )
                     {
-                    // InternalStructuredTextParser.g:2727:5: (lv_index_5_0= rulePartial_Value )
-                    // InternalStructuredTextParser.g:2728:6: lv_index_5_0= rulePartial_Value
+                    // InternalStructuredTextParser.g:2763:5: (lv_index_5_0= rulePartial_Value )
+                    // InternalStructuredTextParser.g:2764:6: lv_index_5_0= rulePartial_Value
                     {
 
                     						newCompositeNode(grammarAccess.getMultibit_Part_AccessAccess().getIndexPartial_ValueParserRuleCall_2_1_0());
@@ -7354,16 +7487,16 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalStructuredTextParser.g:2747:3: ( ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) ) )
+                    // InternalStructuredTextParser.g:2783:3: ( ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) ) )
                     {
-                    // InternalStructuredTextParser.g:2747:3: ( ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) ) )
-                    // InternalStructuredTextParser.g:2748:4: ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) )
+                    // InternalStructuredTextParser.g:2783:3: ( ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) ) )
+                    // InternalStructuredTextParser.g:2784:4: ( (lv_bitaccess_6_0= X ) ) ( (lv_index_7_0= rulePartial_Value ) )
                     {
-                    // InternalStructuredTextParser.g:2748:4: ( (lv_bitaccess_6_0= X ) )
-                    // InternalStructuredTextParser.g:2749:5: (lv_bitaccess_6_0= X )
+                    // InternalStructuredTextParser.g:2784:4: ( (lv_bitaccess_6_0= X ) )
+                    // InternalStructuredTextParser.g:2785:5: (lv_bitaccess_6_0= X )
                     {
-                    // InternalStructuredTextParser.g:2749:5: (lv_bitaccess_6_0= X )
-                    // InternalStructuredTextParser.g:2750:6: lv_bitaccess_6_0= X
+                    // InternalStructuredTextParser.g:2785:5: (lv_bitaccess_6_0= X )
+                    // InternalStructuredTextParser.g:2786:6: lv_bitaccess_6_0= X
                     {
                     lv_bitaccess_6_0=(Token)match(input,X,FOLLOW_12); 
 
@@ -7381,11 +7514,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // InternalStructuredTextParser.g:2762:4: ( (lv_index_7_0= rulePartial_Value ) )
-                    // InternalStructuredTextParser.g:2763:5: (lv_index_7_0= rulePartial_Value )
+                    // InternalStructuredTextParser.g:2798:4: ( (lv_index_7_0= rulePartial_Value ) )
+                    // InternalStructuredTextParser.g:2799:5: (lv_index_7_0= rulePartial_Value )
                     {
-                    // InternalStructuredTextParser.g:2763:5: (lv_index_7_0= rulePartial_Value )
-                    // InternalStructuredTextParser.g:2764:6: lv_index_7_0= rulePartial_Value
+                    // InternalStructuredTextParser.g:2799:5: (lv_index_7_0= rulePartial_Value )
+                    // InternalStructuredTextParser.g:2800:6: lv_index_7_0= rulePartial_Value
                     {
 
                     						newCompositeNode(grammarAccess.getMultibit_Part_AccessAccess().getIndexPartial_ValueParserRuleCall_3_1_0());
@@ -7419,16 +7552,16 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 5 :
-                    // InternalStructuredTextParser.g:2783:3: ( ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) ) )
+                    // InternalStructuredTextParser.g:2819:3: ( ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) ) )
                     {
-                    // InternalStructuredTextParser.g:2783:3: ( ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) ) )
-                    // InternalStructuredTextParser.g:2784:4: ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) )
+                    // InternalStructuredTextParser.g:2819:3: ( ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) ) )
+                    // InternalStructuredTextParser.g:2820:4: ( (lv_bitaccess_8_0= FullStop ) ) ( (lv_index_9_0= rulePartial_Value ) )
                     {
-                    // InternalStructuredTextParser.g:2784:4: ( (lv_bitaccess_8_0= FullStop ) )
-                    // InternalStructuredTextParser.g:2785:5: (lv_bitaccess_8_0= FullStop )
+                    // InternalStructuredTextParser.g:2820:4: ( (lv_bitaccess_8_0= FullStop ) )
+                    // InternalStructuredTextParser.g:2821:5: (lv_bitaccess_8_0= FullStop )
                     {
-                    // InternalStructuredTextParser.g:2785:5: (lv_bitaccess_8_0= FullStop )
-                    // InternalStructuredTextParser.g:2786:6: lv_bitaccess_8_0= FullStop
+                    // InternalStructuredTextParser.g:2821:5: (lv_bitaccess_8_0= FullStop )
+                    // InternalStructuredTextParser.g:2822:6: lv_bitaccess_8_0= FullStop
                     {
                     lv_bitaccess_8_0=(Token)match(input,FullStop,FOLLOW_12); 
 
@@ -7446,11 +7579,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // InternalStructuredTextParser.g:2798:4: ( (lv_index_9_0= rulePartial_Value ) )
-                    // InternalStructuredTextParser.g:2799:5: (lv_index_9_0= rulePartial_Value )
+                    // InternalStructuredTextParser.g:2834:4: ( (lv_index_9_0= rulePartial_Value ) )
+                    // InternalStructuredTextParser.g:2835:5: (lv_index_9_0= rulePartial_Value )
                     {
-                    // InternalStructuredTextParser.g:2799:5: (lv_index_9_0= rulePartial_Value )
-                    // InternalStructuredTextParser.g:2800:6: lv_index_9_0= rulePartial_Value
+                    // InternalStructuredTextParser.g:2835:5: (lv_index_9_0= rulePartial_Value )
+                    // InternalStructuredTextParser.g:2836:6: lv_index_9_0= rulePartial_Value
                     {
 
                     						newCompositeNode(grammarAccess.getMultibit_Part_AccessAccess().getIndexPartial_ValueParserRuleCall_4_1_0());
@@ -7506,7 +7639,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleAdapter_Name"
-    // InternalStructuredTextParser.g:2822:1: entryRuleAdapter_Name returns [String current=null] : iv_ruleAdapter_Name= ruleAdapter_Name EOF ;
+    // InternalStructuredTextParser.g:2858:1: entryRuleAdapter_Name returns [String current=null] : iv_ruleAdapter_Name= ruleAdapter_Name EOF ;
     public final String entryRuleAdapter_Name() throws RecognitionException {
         String current = null;
 
@@ -7514,8 +7647,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:2822:52: (iv_ruleAdapter_Name= ruleAdapter_Name EOF )
-            // InternalStructuredTextParser.g:2823:2: iv_ruleAdapter_Name= ruleAdapter_Name EOF
+            // InternalStructuredTextParser.g:2858:52: (iv_ruleAdapter_Name= ruleAdapter_Name EOF )
+            // InternalStructuredTextParser.g:2859:2: iv_ruleAdapter_Name= ruleAdapter_Name EOF
             {
              newCompositeNode(grammarAccess.getAdapter_NameRule()); 
             pushFollow(FOLLOW_1);
@@ -7542,7 +7675,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleAdapter_Name"
-    // InternalStructuredTextParser.g:2829:1: ruleAdapter_Name returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT ) ;
+    // InternalStructuredTextParser.g:2865:1: ruleAdapter_Name returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT ) ;
     public final AntlrDatatypeRuleToken ruleAdapter_Name() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -7553,42 +7686,42 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:2835:2: ( (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT ) )
-            // InternalStructuredTextParser.g:2836:2: (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT )
+            // InternalStructuredTextParser.g:2871:2: ( (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT ) )
+            // InternalStructuredTextParser.g:2872:2: (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT )
             {
-            // InternalStructuredTextParser.g:2836:2: (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT )
-            int alt40=4;
+            // InternalStructuredTextParser.g:2872:2: (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT )
+            int alt41=4;
             switch ( input.LA(1) ) {
             case RULE_ID:
                 {
-                alt40=1;
+                alt41=1;
                 }
                 break;
             case T:
                 {
-                alt40=2;
+                alt41=2;
                 }
                 break;
             case LT:
                 {
-                alt40=3;
+                alt41=3;
                 }
                 break;
             case DT:
                 {
-                alt40=4;
+                alt41=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 40, 0, input);
+                    new NoViableAltException("", 41, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt40) {
+            switch (alt41) {
                 case 1 :
-                    // InternalStructuredTextParser.g:2837:3: this_ID_0= RULE_ID
+                    // InternalStructuredTextParser.g:2873:3: this_ID_0= RULE_ID
                     {
                     this_ID_0=(Token)match(input,RULE_ID,FOLLOW_2); 
 
@@ -7601,7 +7734,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:2845:3: kw= T
+                    // InternalStructuredTextParser.g:2881:3: kw= T
                     {
                     kw=(Token)match(input,T,FOLLOW_2); 
 
@@ -7612,7 +7745,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalStructuredTextParser.g:2851:3: kw= LT
+                    // InternalStructuredTextParser.g:2887:3: kw= LT
                     {
                     kw=(Token)match(input,LT,FOLLOW_2); 
 
@@ -7623,7 +7756,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalStructuredTextParser.g:2857:3: kw= DT
+                    // InternalStructuredTextParser.g:2893:3: kw= DT
                     {
                     kw=(Token)match(input,DT,FOLLOW_2); 
 
@@ -7656,7 +7789,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleVariable_Primary"
-    // InternalStructuredTextParser.g:2866:1: entryRuleVariable_Primary returns [EObject current=null] : iv_ruleVariable_Primary= ruleVariable_Primary EOF ;
+    // InternalStructuredTextParser.g:2902:1: entryRuleVariable_Primary returns [EObject current=null] : iv_ruleVariable_Primary= ruleVariable_Primary EOF ;
     public final EObject entryRuleVariable_Primary() throws RecognitionException {
         EObject current = null;
 
@@ -7664,8 +7797,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:2866:57: (iv_ruleVariable_Primary= ruleVariable_Primary EOF )
-            // InternalStructuredTextParser.g:2867:2: iv_ruleVariable_Primary= ruleVariable_Primary EOF
+            // InternalStructuredTextParser.g:2902:57: (iv_ruleVariable_Primary= ruleVariable_Primary EOF )
+            // InternalStructuredTextParser.g:2903:2: iv_ruleVariable_Primary= ruleVariable_Primary EOF
             {
              newCompositeNode(grammarAccess.getVariable_PrimaryRule()); 
             pushFollow(FOLLOW_1);
@@ -7692,7 +7825,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleVariable_Primary"
-    // InternalStructuredTextParser.g:2873:1: ruleVariable_Primary returns [EObject current=null] : ( ( ruleVariable_Name ) ) ;
+    // InternalStructuredTextParser.g:2909:1: ruleVariable_Primary returns [EObject current=null] : ( ( ruleVariable_Name ) ) ;
     public final EObject ruleVariable_Primary() throws RecognitionException {
         EObject current = null;
 
@@ -7700,14 +7833,14 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:2879:2: ( ( ( ruleVariable_Name ) ) )
-            // InternalStructuredTextParser.g:2880:2: ( ( ruleVariable_Name ) )
+            // InternalStructuredTextParser.g:2915:2: ( ( ( ruleVariable_Name ) ) )
+            // InternalStructuredTextParser.g:2916:2: ( ( ruleVariable_Name ) )
             {
-            // InternalStructuredTextParser.g:2880:2: ( ( ruleVariable_Name ) )
-            // InternalStructuredTextParser.g:2881:3: ( ruleVariable_Name )
+            // InternalStructuredTextParser.g:2916:2: ( ( ruleVariable_Name ) )
+            // InternalStructuredTextParser.g:2917:3: ( ruleVariable_Name )
             {
-            // InternalStructuredTextParser.g:2881:3: ( ruleVariable_Name )
-            // InternalStructuredTextParser.g:2882:4: ruleVariable_Name
+            // InternalStructuredTextParser.g:2917:3: ( ruleVariable_Name )
+            // InternalStructuredTextParser.g:2918:4: ruleVariable_Name
             {
 
             				if (current==null) {
@@ -7751,7 +7884,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleVariable_Name"
-    // InternalStructuredTextParser.g:2899:1: entryRuleVariable_Name returns [String current=null] : iv_ruleVariable_Name= ruleVariable_Name EOF ;
+    // InternalStructuredTextParser.g:2935:1: entryRuleVariable_Name returns [String current=null] : iv_ruleVariable_Name= ruleVariable_Name EOF ;
     public final String entryRuleVariable_Name() throws RecognitionException {
         String current = null;
 
@@ -7759,8 +7892,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:2899:53: (iv_ruleVariable_Name= ruleVariable_Name EOF )
-            // InternalStructuredTextParser.g:2900:2: iv_ruleVariable_Name= ruleVariable_Name EOF
+            // InternalStructuredTextParser.g:2935:53: (iv_ruleVariable_Name= ruleVariable_Name EOF )
+            // InternalStructuredTextParser.g:2936:2: iv_ruleVariable_Name= ruleVariable_Name EOF
             {
              newCompositeNode(grammarAccess.getVariable_NameRule()); 
             pushFollow(FOLLOW_1);
@@ -7787,7 +7920,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleVariable_Name"
-    // InternalStructuredTextParser.g:2906:1: ruleVariable_Name returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT ) ;
+    // InternalStructuredTextParser.g:2942:1: ruleVariable_Name returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT ) ;
     public final AntlrDatatypeRuleToken ruleVariable_Name() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -7798,42 +7931,42 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:2912:2: ( (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT ) )
-            // InternalStructuredTextParser.g:2913:2: (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT )
+            // InternalStructuredTextParser.g:2948:2: ( (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT ) )
+            // InternalStructuredTextParser.g:2949:2: (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT )
             {
-            // InternalStructuredTextParser.g:2913:2: (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT )
-            int alt41=4;
+            // InternalStructuredTextParser.g:2949:2: (this_ID_0= RULE_ID | kw= T | kw= LT | kw= DT )
+            int alt42=4;
             switch ( input.LA(1) ) {
             case RULE_ID:
                 {
-                alt41=1;
+                alt42=1;
                 }
                 break;
             case T:
                 {
-                alt41=2;
+                alt42=2;
                 }
                 break;
             case LT:
                 {
-                alt41=3;
+                alt42=3;
                 }
                 break;
             case DT:
                 {
-                alt41=4;
+                alt42=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 41, 0, input);
+                    new NoViableAltException("", 42, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt41) {
+            switch (alt42) {
                 case 1 :
-                    // InternalStructuredTextParser.g:2914:3: this_ID_0= RULE_ID
+                    // InternalStructuredTextParser.g:2950:3: this_ID_0= RULE_ID
                     {
                     this_ID_0=(Token)match(input,RULE_ID,FOLLOW_2); 
 
@@ -7846,7 +7979,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:2922:3: kw= T
+                    // InternalStructuredTextParser.g:2958:3: kw= T
                     {
                     kw=(Token)match(input,T,FOLLOW_2); 
 
@@ -7857,7 +7990,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalStructuredTextParser.g:2928:3: kw= LT
+                    // InternalStructuredTextParser.g:2964:3: kw= LT
                     {
                     kw=(Token)match(input,LT,FOLLOW_2); 
 
@@ -7868,7 +8001,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalStructuredTextParser.g:2934:3: kw= DT
+                    // InternalStructuredTextParser.g:2970:3: kw= DT
                     {
                     kw=(Token)match(input,DT,FOLLOW_2); 
 
@@ -7901,7 +8034,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleConstant"
-    // InternalStructuredTextParser.g:2943:1: entryRuleConstant returns [EObject current=null] : iv_ruleConstant= ruleConstant EOF ;
+    // InternalStructuredTextParser.g:2979:1: entryRuleConstant returns [EObject current=null] : iv_ruleConstant= ruleConstant EOF ;
     public final EObject entryRuleConstant() throws RecognitionException {
         EObject current = null;
 
@@ -7909,8 +8042,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:2943:49: (iv_ruleConstant= ruleConstant EOF )
-            // InternalStructuredTextParser.g:2944:2: iv_ruleConstant= ruleConstant EOF
+            // InternalStructuredTextParser.g:2979:49: (iv_ruleConstant= ruleConstant EOF )
+            // InternalStructuredTextParser.g:2980:2: iv_ruleConstant= ruleConstant EOF
             {
              newCompositeNode(grammarAccess.getConstantRule()); 
             pushFollow(FOLLOW_1);
@@ -7937,7 +8070,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleConstant"
-    // InternalStructuredTextParser.g:2950:1: ruleConstant returns [EObject current=null] : (this_Numeric_Literal_0= ruleNumeric_Literal | this_Char_Literal_1= ruleChar_Literal | this_Time_Literal_2= ruleTime_Literal | this_Bool_Literal_3= ruleBool_Literal ) ;
+    // InternalStructuredTextParser.g:2986:1: ruleConstant returns [EObject current=null] : (this_Numeric_Literal_0= ruleNumeric_Literal | this_Char_Literal_1= ruleChar_Literal | this_Time_Literal_2= ruleTime_Literal | this_Bool_Literal_3= ruleBool_Literal ) ;
     public final EObject ruleConstant() throws RecognitionException {
         EObject current = null;
 
@@ -7954,11 +8087,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:2956:2: ( (this_Numeric_Literal_0= ruleNumeric_Literal | this_Char_Literal_1= ruleChar_Literal | this_Time_Literal_2= ruleTime_Literal | this_Bool_Literal_3= ruleBool_Literal ) )
-            // InternalStructuredTextParser.g:2957:2: (this_Numeric_Literal_0= ruleNumeric_Literal | this_Char_Literal_1= ruleChar_Literal | this_Time_Literal_2= ruleTime_Literal | this_Bool_Literal_3= ruleBool_Literal )
+            // InternalStructuredTextParser.g:2992:2: ( (this_Numeric_Literal_0= ruleNumeric_Literal | this_Char_Literal_1= ruleChar_Literal | this_Time_Literal_2= ruleTime_Literal | this_Bool_Literal_3= ruleBool_Literal ) )
+            // InternalStructuredTextParser.g:2993:2: (this_Numeric_Literal_0= ruleNumeric_Literal | this_Char_Literal_1= ruleChar_Literal | this_Time_Literal_2= ruleTime_Literal | this_Bool_Literal_3= ruleBool_Literal )
             {
-            // InternalStructuredTextParser.g:2957:2: (this_Numeric_Literal_0= ruleNumeric_Literal | this_Char_Literal_1= ruleChar_Literal | this_Time_Literal_2= ruleTime_Literal | this_Bool_Literal_3= ruleBool_Literal )
-            int alt42=4;
+            // InternalStructuredTextParser.g:2993:2: (this_Numeric_Literal_0= ruleNumeric_Literal | this_Char_Literal_1= ruleChar_Literal | this_Time_Literal_2= ruleTime_Literal | this_Bool_Literal_3= ruleBool_Literal )
+            int alt43=4;
             switch ( input.LA(1) ) {
             case LREAL:
             case UDINT:
@@ -7977,7 +8110,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
             case RULE_OCTAL_INT:
             case RULE_HEX_INT:
                 {
-                alt42=1;
+                alt43=1;
                 }
                 break;
             case WSTRING:
@@ -7987,7 +8120,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
             case RULE_S_BYTE_CHAR_STR:
             case RULE_D_BYTE_CHAR_STR:
                 {
-                alt42=2;
+                alt43=2;
                 }
                 break;
             case RULE_TIMEOFDAY:
@@ -7995,26 +8128,26 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
             case RULE_DATETIME:
             case RULE_DATE:
                 {
-                alt42=3;
+                alt43=3;
                 }
                 break;
             case FALSE:
             case BOOL:
             case TRUE:
                 {
-                alt42=4;
+                alt43=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 42, 0, input);
+                    new NoViableAltException("", 43, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt42) {
+            switch (alt43) {
                 case 1 :
-                    // InternalStructuredTextParser.g:2958:3: this_Numeric_Literal_0= ruleNumeric_Literal
+                    // InternalStructuredTextParser.g:2994:3: this_Numeric_Literal_0= ruleNumeric_Literal
                     {
 
                     			newCompositeNode(grammarAccess.getConstantAccess().getNumeric_LiteralParserRuleCall_0());
@@ -8032,7 +8165,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:2967:3: this_Char_Literal_1= ruleChar_Literal
+                    // InternalStructuredTextParser.g:3003:3: this_Char_Literal_1= ruleChar_Literal
                     {
 
                     			newCompositeNode(grammarAccess.getConstantAccess().getChar_LiteralParserRuleCall_1());
@@ -8050,7 +8183,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalStructuredTextParser.g:2976:3: this_Time_Literal_2= ruleTime_Literal
+                    // InternalStructuredTextParser.g:3012:3: this_Time_Literal_2= ruleTime_Literal
                     {
 
                     			newCompositeNode(grammarAccess.getConstantAccess().getTime_LiteralParserRuleCall_2());
@@ -8068,7 +8201,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalStructuredTextParser.g:2985:3: this_Bool_Literal_3= ruleBool_Literal
+                    // InternalStructuredTextParser.g:3021:3: this_Bool_Literal_3= ruleBool_Literal
                     {
 
                     			newCompositeNode(grammarAccess.getConstantAccess().getBool_LiteralParserRuleCall_3());
@@ -8108,7 +8241,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleNumeric_Literal"
-    // InternalStructuredTextParser.g:2997:1: entryRuleNumeric_Literal returns [EObject current=null] : iv_ruleNumeric_Literal= ruleNumeric_Literal EOF ;
+    // InternalStructuredTextParser.g:3033:1: entryRuleNumeric_Literal returns [EObject current=null] : iv_ruleNumeric_Literal= ruleNumeric_Literal EOF ;
     public final EObject entryRuleNumeric_Literal() throws RecognitionException {
         EObject current = null;
 
@@ -8116,8 +8249,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:2997:56: (iv_ruleNumeric_Literal= ruleNumeric_Literal EOF )
-            // InternalStructuredTextParser.g:2998:2: iv_ruleNumeric_Literal= ruleNumeric_Literal EOF
+            // InternalStructuredTextParser.g:3033:56: (iv_ruleNumeric_Literal= ruleNumeric_Literal EOF )
+            // InternalStructuredTextParser.g:3034:2: iv_ruleNumeric_Literal= ruleNumeric_Literal EOF
             {
              newCompositeNode(grammarAccess.getNumeric_LiteralRule()); 
             pushFollow(FOLLOW_1);
@@ -8144,7 +8277,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleNumeric_Literal"
-    // InternalStructuredTextParser.g:3004:1: ruleNumeric_Literal returns [EObject current=null] : (this_Int_Literal_0= ruleInt_Literal | this_Real_Literal_1= ruleReal_Literal ) ;
+    // InternalStructuredTextParser.g:3040:1: ruleNumeric_Literal returns [EObject current=null] : (this_Int_Literal_0= ruleInt_Literal | this_Real_Literal_1= ruleReal_Literal ) ;
     public final EObject ruleNumeric_Literal() throws RecognitionException {
         EObject current = null;
 
@@ -8157,11 +8290,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3010:2: ( (this_Int_Literal_0= ruleInt_Literal | this_Real_Literal_1= ruleReal_Literal ) )
-            // InternalStructuredTextParser.g:3011:2: (this_Int_Literal_0= ruleInt_Literal | this_Real_Literal_1= ruleReal_Literal )
+            // InternalStructuredTextParser.g:3046:2: ( (this_Int_Literal_0= ruleInt_Literal | this_Real_Literal_1= ruleReal_Literal ) )
+            // InternalStructuredTextParser.g:3047:2: (this_Int_Literal_0= ruleInt_Literal | this_Real_Literal_1= ruleReal_Literal )
             {
-            // InternalStructuredTextParser.g:3011:2: (this_Int_Literal_0= ruleInt_Literal | this_Real_Literal_1= ruleReal_Literal )
-            int alt43=2;
+            // InternalStructuredTextParser.g:3047:2: (this_Int_Literal_0= ruleInt_Literal | this_Real_Literal_1= ruleReal_Literal )
+            int alt44=2;
             switch ( input.LA(1) ) {
             case UDINT:
             case ULINT:
@@ -8175,32 +8308,32 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
             case RULE_OCTAL_INT:
             case RULE_HEX_INT:
                 {
-                alt43=1;
+                alt44=1;
                 }
                 break;
             case PlusSign:
                 {
-                int LA43_2 = input.LA(2);
+                int LA44_2 = input.LA(2);
 
-                if ( (LA43_2==RULE_UNSIGNED_INT) ) {
-                    int LA43_4 = input.LA(3);
+                if ( (LA44_2==RULE_UNSIGNED_INT) ) {
+                    int LA44_4 = input.LA(3);
 
-                    if ( (LA43_4==FullStop) ) {
-                        alt43=2;
+                    if ( (LA44_4==EOF||LA44_4==END_REPEAT||LA44_4==THEN||LA44_4==AND||LA44_4==MOD||(LA44_4>=XOR && LA44_4<=AsteriskAsterisk)||(LA44_4>=LessThanSignEqualsSign && LA44_4<=LessThanSignGreaterThanSign)||LA44_4==GreaterThanSignEqualsSign||(LA44_4>=BY && LA44_4<=DO)||(LA44_4>=OF && LA44_4<=TO)||LA44_4==Ampersand||(LA44_4>=RightParenthesis && LA44_4<=HyphenMinus)||(LA44_4>=Solidus && LA44_4<=GreaterThanSign)||LA44_4==RightSquareBracket) ) {
+                        alt44=1;
                     }
-                    else if ( (LA43_4==EOF||LA43_4==END_REPEAT||LA43_4==THEN||LA43_4==AND||LA43_4==MOD||(LA43_4>=XOR && LA43_4<=AsteriskAsterisk)||(LA43_4>=LessThanSignEqualsSign && LA43_4<=LessThanSignGreaterThanSign)||LA43_4==GreaterThanSignEqualsSign||(LA43_4>=BY && LA43_4<=DO)||(LA43_4>=OF && LA43_4<=TO)||LA43_4==Ampersand||(LA43_4>=RightParenthesis && LA43_4<=HyphenMinus)||(LA43_4>=Solidus && LA43_4<=GreaterThanSign)||LA43_4==RightSquareBracket) ) {
-                        alt43=1;
+                    else if ( (LA44_4==FullStop) ) {
+                        alt44=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 43, 4, input);
+                            new NoViableAltException("", 44, 4, input);
 
                         throw nvae;
                     }
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 43, 2, input);
+                        new NoViableAltException("", 44, 2, input);
 
                     throw nvae;
                 }
@@ -8208,27 +8341,27 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                 break;
             case HyphenMinus:
                 {
-                int LA43_3 = input.LA(2);
+                int LA44_3 = input.LA(2);
 
-                if ( (LA43_3==RULE_UNSIGNED_INT) ) {
-                    int LA43_4 = input.LA(3);
+                if ( (LA44_3==RULE_UNSIGNED_INT) ) {
+                    int LA44_4 = input.LA(3);
 
-                    if ( (LA43_4==FullStop) ) {
-                        alt43=2;
+                    if ( (LA44_4==EOF||LA44_4==END_REPEAT||LA44_4==THEN||LA44_4==AND||LA44_4==MOD||(LA44_4>=XOR && LA44_4<=AsteriskAsterisk)||(LA44_4>=LessThanSignEqualsSign && LA44_4<=LessThanSignGreaterThanSign)||LA44_4==GreaterThanSignEqualsSign||(LA44_4>=BY && LA44_4<=DO)||(LA44_4>=OF && LA44_4<=TO)||LA44_4==Ampersand||(LA44_4>=RightParenthesis && LA44_4<=HyphenMinus)||(LA44_4>=Solidus && LA44_4<=GreaterThanSign)||LA44_4==RightSquareBracket) ) {
+                        alt44=1;
                     }
-                    else if ( (LA43_4==EOF||LA43_4==END_REPEAT||LA43_4==THEN||LA43_4==AND||LA43_4==MOD||(LA43_4>=XOR && LA43_4<=AsteriskAsterisk)||(LA43_4>=LessThanSignEqualsSign && LA43_4<=LessThanSignGreaterThanSign)||LA43_4==GreaterThanSignEqualsSign||(LA43_4>=BY && LA43_4<=DO)||(LA43_4>=OF && LA43_4<=TO)||LA43_4==Ampersand||(LA43_4>=RightParenthesis && LA43_4<=HyphenMinus)||(LA43_4>=Solidus && LA43_4<=GreaterThanSign)||LA43_4==RightSquareBracket) ) {
-                        alt43=1;
+                    else if ( (LA44_4==FullStop) ) {
+                        alt44=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 43, 4, input);
+                            new NoViableAltException("", 44, 4, input);
 
                         throw nvae;
                     }
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 43, 3, input);
+                        new NoViableAltException("", 44, 3, input);
 
                     throw nvae;
                 }
@@ -8236,17 +8369,17 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                 break;
             case RULE_UNSIGNED_INT:
                 {
-                int LA43_4 = input.LA(2);
+                int LA44_4 = input.LA(2);
 
-                if ( (LA43_4==FullStop) ) {
-                    alt43=2;
+                if ( (LA44_4==EOF||LA44_4==END_REPEAT||LA44_4==THEN||LA44_4==AND||LA44_4==MOD||(LA44_4>=XOR && LA44_4<=AsteriskAsterisk)||(LA44_4>=LessThanSignEqualsSign && LA44_4<=LessThanSignGreaterThanSign)||LA44_4==GreaterThanSignEqualsSign||(LA44_4>=BY && LA44_4<=DO)||(LA44_4>=OF && LA44_4<=TO)||LA44_4==Ampersand||(LA44_4>=RightParenthesis && LA44_4<=HyphenMinus)||(LA44_4>=Solidus && LA44_4<=GreaterThanSign)||LA44_4==RightSquareBracket) ) {
+                    alt44=1;
                 }
-                else if ( (LA43_4==EOF||LA43_4==END_REPEAT||LA43_4==THEN||LA43_4==AND||LA43_4==MOD||(LA43_4>=XOR && LA43_4<=AsteriskAsterisk)||(LA43_4>=LessThanSignEqualsSign && LA43_4<=LessThanSignGreaterThanSign)||LA43_4==GreaterThanSignEqualsSign||(LA43_4>=BY && LA43_4<=DO)||(LA43_4>=OF && LA43_4<=TO)||LA43_4==Ampersand||(LA43_4>=RightParenthesis && LA43_4<=HyphenMinus)||(LA43_4>=Solidus && LA43_4<=GreaterThanSign)||LA43_4==RightSquareBracket) ) {
-                    alt43=1;
+                else if ( (LA44_4==FullStop) ) {
+                    alt44=2;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 43, 4, input);
+                        new NoViableAltException("", 44, 4, input);
 
                     throw nvae;
                 }
@@ -8255,19 +8388,19 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
             case LREAL:
             case REAL:
                 {
-                alt43=2;
+                alt44=2;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 43, 0, input);
+                    new NoViableAltException("", 44, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt43) {
+            switch (alt44) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3012:3: this_Int_Literal_0= ruleInt_Literal
+                    // InternalStructuredTextParser.g:3048:3: this_Int_Literal_0= ruleInt_Literal
                     {
 
                     			newCompositeNode(grammarAccess.getNumeric_LiteralAccess().getInt_LiteralParserRuleCall_0());
@@ -8285,7 +8418,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:3021:3: this_Real_Literal_1= ruleReal_Literal
+                    // InternalStructuredTextParser.g:3057:3: this_Real_Literal_1= ruleReal_Literal
                     {
 
                     			newCompositeNode(grammarAccess.getNumeric_LiteralAccess().getReal_LiteralParserRuleCall_1());
@@ -8325,7 +8458,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleInt_Literal"
-    // InternalStructuredTextParser.g:3033:1: entryRuleInt_Literal returns [EObject current=null] : iv_ruleInt_Literal= ruleInt_Literal EOF ;
+    // InternalStructuredTextParser.g:3069:1: entryRuleInt_Literal returns [EObject current=null] : iv_ruleInt_Literal= ruleInt_Literal EOF ;
     public final EObject entryRuleInt_Literal() throws RecognitionException {
         EObject current = null;
 
@@ -8333,8 +8466,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:3033:52: (iv_ruleInt_Literal= ruleInt_Literal EOF )
-            // InternalStructuredTextParser.g:3034:2: iv_ruleInt_Literal= ruleInt_Literal EOF
+            // InternalStructuredTextParser.g:3069:52: (iv_ruleInt_Literal= ruleInt_Literal EOF )
+            // InternalStructuredTextParser.g:3070:2: iv_ruleInt_Literal= ruleInt_Literal EOF
             {
              newCompositeNode(grammarAccess.getInt_LiteralRule()); 
             pushFollow(FOLLOW_1);
@@ -8361,7 +8494,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleInt_Literal"
-    // InternalStructuredTextParser.g:3040:1: ruleInt_Literal returns [EObject current=null] : ( ( ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign )? ( ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) ) ) ) ;
+    // InternalStructuredTextParser.g:3076:1: ruleInt_Literal returns [EObject current=null] : ( ( ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign )? ( ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) ) ) ) ;
     public final EObject ruleInt_Literal() throws RecognitionException {
         EObject current = null;
 
@@ -8378,33 +8511,33 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3046:2: ( ( ( ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign )? ( ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) ) ) ) )
-            // InternalStructuredTextParser.g:3047:2: ( ( ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign )? ( ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) ) ) )
+            // InternalStructuredTextParser.g:3082:2: ( ( ( ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign )? ( ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) ) ) ) )
+            // InternalStructuredTextParser.g:3083:2: ( ( ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign )? ( ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) ) ) )
             {
-            // InternalStructuredTextParser.g:3047:2: ( ( ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign )? ( ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) ) ) )
-            // InternalStructuredTextParser.g:3048:3: ( ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign )? ( ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) ) )
+            // InternalStructuredTextParser.g:3083:2: ( ( ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign )? ( ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) ) ) )
+            // InternalStructuredTextParser.g:3084:3: ( ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign )? ( ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) ) )
             {
-            // InternalStructuredTextParser.g:3048:3: ( ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign )?
-            int alt44=2;
-            int LA44_0 = input.LA(1);
+            // InternalStructuredTextParser.g:3084:3: ( ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign )?
+            int alt45=2;
+            int LA45_0 = input.LA(1);
 
-            if ( ((LA44_0>=UDINT && LA44_0<=ULINT)||LA44_0==USINT||LA44_0==DINT||LA44_0==LINT||LA44_0==SINT||LA44_0==UINT||LA44_0==INT) ) {
-                alt44=1;
+            if ( ((LA45_0>=UDINT && LA45_0<=ULINT)||LA45_0==USINT||LA45_0==DINT||LA45_0==LINT||LA45_0==SINT||LA45_0==UINT||LA45_0==INT) ) {
+                alt45=1;
             }
-            switch (alt44) {
+            switch (alt45) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3049:4: ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign
+                    // InternalStructuredTextParser.g:3085:4: ( (lv_type_0_0= ruleInt_Type_Name ) ) otherlv_1= NumberSign
                     {
-                    // InternalStructuredTextParser.g:3049:4: ( (lv_type_0_0= ruleInt_Type_Name ) )
-                    // InternalStructuredTextParser.g:3050:5: (lv_type_0_0= ruleInt_Type_Name )
+                    // InternalStructuredTextParser.g:3085:4: ( (lv_type_0_0= ruleInt_Type_Name ) )
+                    // InternalStructuredTextParser.g:3086:5: (lv_type_0_0= ruleInt_Type_Name )
                     {
-                    // InternalStructuredTextParser.g:3050:5: (lv_type_0_0= ruleInt_Type_Name )
-                    // InternalStructuredTextParser.g:3051:6: lv_type_0_0= ruleInt_Type_Name
+                    // InternalStructuredTextParser.g:3086:5: (lv_type_0_0= ruleInt_Type_Name )
+                    // InternalStructuredTextParser.g:3087:6: lv_type_0_0= ruleInt_Type_Name
                     {
 
                     						newCompositeNode(grammarAccess.getInt_LiteralAccess().getTypeInt_Type_NameEnumRuleCall_0_0_0());
                     					
-                    pushFollow(FOLLOW_56);
+                    pushFollow(FOLLOW_57);
                     lv_type_0_0=ruleInt_Type_Name();
 
                     state._fsp--;
@@ -8426,7 +8559,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_1=(Token)match(input,NumberSign,FOLLOW_57); 
+                    otherlv_1=(Token)match(input,NumberSign,FOLLOW_58); 
 
                     				newLeafNode(otherlv_1, grammarAccess.getInt_LiteralAccess().getNumberSignKeyword_0_1());
                     			
@@ -8436,47 +8569,47 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
             }
 
-            // InternalStructuredTextParser.g:3073:3: ( ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) ) )
-            // InternalStructuredTextParser.g:3074:4: ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) )
+            // InternalStructuredTextParser.g:3109:3: ( ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) ) )
+            // InternalStructuredTextParser.g:3110:4: ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) )
             {
-            // InternalStructuredTextParser.g:3074:4: ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) )
-            // InternalStructuredTextParser.g:3075:5: (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT )
+            // InternalStructuredTextParser.g:3110:4: ( (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT ) )
+            // InternalStructuredTextParser.g:3111:5: (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT )
             {
-            // InternalStructuredTextParser.g:3075:5: (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT )
-            int alt45=4;
+            // InternalStructuredTextParser.g:3111:5: (lv_value_2_1= ruleSigned_Int | lv_value_2_2= RULE_BINARY_INT | lv_value_2_3= RULE_OCTAL_INT | lv_value_2_4= RULE_HEX_INT )
+            int alt46=4;
             switch ( input.LA(1) ) {
             case PlusSign:
             case HyphenMinus:
             case RULE_UNSIGNED_INT:
                 {
-                alt45=1;
+                alt46=1;
                 }
                 break;
             case RULE_BINARY_INT:
                 {
-                alt45=2;
+                alt46=2;
                 }
                 break;
             case RULE_OCTAL_INT:
                 {
-                alt45=3;
+                alt46=3;
                 }
                 break;
             case RULE_HEX_INT:
                 {
-                alt45=4;
+                alt46=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 45, 0, input);
+                    new NoViableAltException("", 46, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt45) {
+            switch (alt46) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3076:6: lv_value_2_1= ruleSigned_Int
+                    // InternalStructuredTextParser.g:3112:6: lv_value_2_1= ruleSigned_Int
                     {
 
                     						newCompositeNode(grammarAccess.getInt_LiteralAccess().getValueSigned_IntParserRuleCall_1_0_0());
@@ -8501,7 +8634,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:3092:6: lv_value_2_2= RULE_BINARY_INT
+                    // InternalStructuredTextParser.g:3128:6: lv_value_2_2= RULE_BINARY_INT
                     {
                     lv_value_2_2=(Token)match(input,RULE_BINARY_INT,FOLLOW_2); 
 
@@ -8521,7 +8654,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalStructuredTextParser.g:3107:6: lv_value_2_3= RULE_OCTAL_INT
+                    // InternalStructuredTextParser.g:3143:6: lv_value_2_3= RULE_OCTAL_INT
                     {
                     lv_value_2_3=(Token)match(input,RULE_OCTAL_INT,FOLLOW_2); 
 
@@ -8541,7 +8674,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalStructuredTextParser.g:3122:6: lv_value_2_4= RULE_HEX_INT
+                    // InternalStructuredTextParser.g:3158:6: lv_value_2_4= RULE_HEX_INT
                     {
                     lv_value_2_4=(Token)match(input,RULE_HEX_INT,FOLLOW_2); 
 
@@ -8592,7 +8725,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleSigned_Int"
-    // InternalStructuredTextParser.g:3143:1: entryRuleSigned_Int returns [String current=null] : iv_ruleSigned_Int= ruleSigned_Int EOF ;
+    // InternalStructuredTextParser.g:3179:1: entryRuleSigned_Int returns [String current=null] : iv_ruleSigned_Int= ruleSigned_Int EOF ;
     public final String entryRuleSigned_Int() throws RecognitionException {
         String current = null;
 
@@ -8600,8 +8733,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:3143:50: (iv_ruleSigned_Int= ruleSigned_Int EOF )
-            // InternalStructuredTextParser.g:3144:2: iv_ruleSigned_Int= ruleSigned_Int EOF
+            // InternalStructuredTextParser.g:3179:50: (iv_ruleSigned_Int= ruleSigned_Int EOF )
+            // InternalStructuredTextParser.g:3180:2: iv_ruleSigned_Int= ruleSigned_Int EOF
             {
              newCompositeNode(grammarAccess.getSigned_IntRule()); 
             pushFollow(FOLLOW_1);
@@ -8628,7 +8761,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSigned_Int"
-    // InternalStructuredTextParser.g:3150:1: ruleSigned_Int returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : ( (kw= PlusSign | kw= HyphenMinus )? this_UNSIGNED_INT_2= RULE_UNSIGNED_INT ) ;
+    // InternalStructuredTextParser.g:3186:1: ruleSigned_Int returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : ( (kw= PlusSign | kw= HyphenMinus )? this_UNSIGNED_INT_2= RULE_UNSIGNED_INT ) ;
     public final AntlrDatatypeRuleToken ruleSigned_Int() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -8639,25 +8772,25 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3156:2: ( ( (kw= PlusSign | kw= HyphenMinus )? this_UNSIGNED_INT_2= RULE_UNSIGNED_INT ) )
-            // InternalStructuredTextParser.g:3157:2: ( (kw= PlusSign | kw= HyphenMinus )? this_UNSIGNED_INT_2= RULE_UNSIGNED_INT )
+            // InternalStructuredTextParser.g:3192:2: ( ( (kw= PlusSign | kw= HyphenMinus )? this_UNSIGNED_INT_2= RULE_UNSIGNED_INT ) )
+            // InternalStructuredTextParser.g:3193:2: ( (kw= PlusSign | kw= HyphenMinus )? this_UNSIGNED_INT_2= RULE_UNSIGNED_INT )
             {
-            // InternalStructuredTextParser.g:3157:2: ( (kw= PlusSign | kw= HyphenMinus )? this_UNSIGNED_INT_2= RULE_UNSIGNED_INT )
-            // InternalStructuredTextParser.g:3158:3: (kw= PlusSign | kw= HyphenMinus )? this_UNSIGNED_INT_2= RULE_UNSIGNED_INT
+            // InternalStructuredTextParser.g:3193:2: ( (kw= PlusSign | kw= HyphenMinus )? this_UNSIGNED_INT_2= RULE_UNSIGNED_INT )
+            // InternalStructuredTextParser.g:3194:3: (kw= PlusSign | kw= HyphenMinus )? this_UNSIGNED_INT_2= RULE_UNSIGNED_INT
             {
-            // InternalStructuredTextParser.g:3158:3: (kw= PlusSign | kw= HyphenMinus )?
-            int alt46=3;
-            int LA46_0 = input.LA(1);
+            // InternalStructuredTextParser.g:3194:3: (kw= PlusSign | kw= HyphenMinus )?
+            int alt47=3;
+            int LA47_0 = input.LA(1);
 
-            if ( (LA46_0==PlusSign) ) {
-                alt46=1;
+            if ( (LA47_0==PlusSign) ) {
+                alt47=1;
             }
-            else if ( (LA46_0==HyphenMinus) ) {
-                alt46=2;
+            else if ( (LA47_0==HyphenMinus) ) {
+                alt47=2;
             }
-            switch (alt46) {
+            switch (alt47) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3159:4: kw= PlusSign
+                    // InternalStructuredTextParser.g:3195:4: kw= PlusSign
                     {
                     kw=(Token)match(input,PlusSign,FOLLOW_12); 
 
@@ -8668,7 +8801,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:3165:4: kw= HyphenMinus
+                    // InternalStructuredTextParser.g:3201:4: kw= HyphenMinus
                     {
                     kw=(Token)match(input,HyphenMinus,FOLLOW_12); 
 
@@ -8711,7 +8844,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRulePartial_Value"
-    // InternalStructuredTextParser.g:3182:1: entryRulePartial_Value returns [String current=null] : iv_rulePartial_Value= rulePartial_Value EOF ;
+    // InternalStructuredTextParser.g:3218:1: entryRulePartial_Value returns [String current=null] : iv_rulePartial_Value= rulePartial_Value EOF ;
     public final String entryRulePartial_Value() throws RecognitionException {
         String current = null;
 
@@ -8719,8 +8852,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:3182:53: (iv_rulePartial_Value= rulePartial_Value EOF )
-            // InternalStructuredTextParser.g:3183:2: iv_rulePartial_Value= rulePartial_Value EOF
+            // InternalStructuredTextParser.g:3218:53: (iv_rulePartial_Value= rulePartial_Value EOF )
+            // InternalStructuredTextParser.g:3219:2: iv_rulePartial_Value= rulePartial_Value EOF
             {
              newCompositeNode(grammarAccess.getPartial_ValueRule()); 
             pushFollow(FOLLOW_1);
@@ -8747,7 +8880,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "rulePartial_Value"
-    // InternalStructuredTextParser.g:3189:1: rulePartial_Value returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : this_UNSIGNED_INT_0= RULE_UNSIGNED_INT ;
+    // InternalStructuredTextParser.g:3225:1: rulePartial_Value returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : this_UNSIGNED_INT_0= RULE_UNSIGNED_INT ;
     public final AntlrDatatypeRuleToken rulePartial_Value() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -8757,8 +8890,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3195:2: (this_UNSIGNED_INT_0= RULE_UNSIGNED_INT )
-            // InternalStructuredTextParser.g:3196:2: this_UNSIGNED_INT_0= RULE_UNSIGNED_INT
+            // InternalStructuredTextParser.g:3231:2: (this_UNSIGNED_INT_0= RULE_UNSIGNED_INT )
+            // InternalStructuredTextParser.g:3232:2: this_UNSIGNED_INT_0= RULE_UNSIGNED_INT
             {
             this_UNSIGNED_INT_0=(Token)match(input,RULE_UNSIGNED_INT,FOLLOW_2); 
 
@@ -8787,7 +8920,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleArray_Size"
-    // InternalStructuredTextParser.g:3206:1: entryRuleArray_Size returns [String current=null] : iv_ruleArray_Size= ruleArray_Size EOF ;
+    // InternalStructuredTextParser.g:3242:1: entryRuleArray_Size returns [String current=null] : iv_ruleArray_Size= ruleArray_Size EOF ;
     public final String entryRuleArray_Size() throws RecognitionException {
         String current = null;
 
@@ -8795,8 +8928,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:3206:50: (iv_ruleArray_Size= ruleArray_Size EOF )
-            // InternalStructuredTextParser.g:3207:2: iv_ruleArray_Size= ruleArray_Size EOF
+            // InternalStructuredTextParser.g:3242:50: (iv_ruleArray_Size= ruleArray_Size EOF )
+            // InternalStructuredTextParser.g:3243:2: iv_ruleArray_Size= ruleArray_Size EOF
             {
              newCompositeNode(grammarAccess.getArray_SizeRule()); 
             pushFollow(FOLLOW_1);
@@ -8823,7 +8956,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleArray_Size"
-    // InternalStructuredTextParser.g:3213:1: ruleArray_Size returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : this_UNSIGNED_INT_0= RULE_UNSIGNED_INT ;
+    // InternalStructuredTextParser.g:3249:1: ruleArray_Size returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : this_UNSIGNED_INT_0= RULE_UNSIGNED_INT ;
     public final AntlrDatatypeRuleToken ruleArray_Size() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -8833,8 +8966,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3219:2: (this_UNSIGNED_INT_0= RULE_UNSIGNED_INT )
-            // InternalStructuredTextParser.g:3220:2: this_UNSIGNED_INT_0= RULE_UNSIGNED_INT
+            // InternalStructuredTextParser.g:3255:2: (this_UNSIGNED_INT_0= RULE_UNSIGNED_INT )
+            // InternalStructuredTextParser.g:3256:2: this_UNSIGNED_INT_0= RULE_UNSIGNED_INT
             {
             this_UNSIGNED_INT_0=(Token)match(input,RULE_UNSIGNED_INT,FOLLOW_2); 
 
@@ -8863,7 +8996,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleReal_Literal"
-    // InternalStructuredTextParser.g:3230:1: entryRuleReal_Literal returns [EObject current=null] : iv_ruleReal_Literal= ruleReal_Literal EOF ;
+    // InternalStructuredTextParser.g:3266:1: entryRuleReal_Literal returns [EObject current=null] : iv_ruleReal_Literal= ruleReal_Literal EOF ;
     public final EObject entryRuleReal_Literal() throws RecognitionException {
         EObject current = null;
 
@@ -8871,8 +9004,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:3230:53: (iv_ruleReal_Literal= ruleReal_Literal EOF )
-            // InternalStructuredTextParser.g:3231:2: iv_ruleReal_Literal= ruleReal_Literal EOF
+            // InternalStructuredTextParser.g:3266:53: (iv_ruleReal_Literal= ruleReal_Literal EOF )
+            // InternalStructuredTextParser.g:3267:2: iv_ruleReal_Literal= ruleReal_Literal EOF
             {
              newCompositeNode(grammarAccess.getReal_LiteralRule()); 
             pushFollow(FOLLOW_1);
@@ -8899,7 +9032,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleReal_Literal"
-    // InternalStructuredTextParser.g:3237:1: ruleReal_Literal returns [EObject current=null] : ( ( ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleReal_Value ) ) ) ;
+    // InternalStructuredTextParser.g:3273:1: ruleReal_Literal returns [EObject current=null] : ( ( ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleReal_Value ) ) ) ;
     public final EObject ruleReal_Literal() throws RecognitionException {
         EObject current = null;
 
@@ -8913,33 +9046,33 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3243:2: ( ( ( ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleReal_Value ) ) ) )
-            // InternalStructuredTextParser.g:3244:2: ( ( ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleReal_Value ) ) )
+            // InternalStructuredTextParser.g:3279:2: ( ( ( ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleReal_Value ) ) ) )
+            // InternalStructuredTextParser.g:3280:2: ( ( ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleReal_Value ) ) )
             {
-            // InternalStructuredTextParser.g:3244:2: ( ( ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleReal_Value ) ) )
-            // InternalStructuredTextParser.g:3245:3: ( ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleReal_Value ) )
+            // InternalStructuredTextParser.g:3280:2: ( ( ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleReal_Value ) ) )
+            // InternalStructuredTextParser.g:3281:3: ( ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleReal_Value ) )
             {
-            // InternalStructuredTextParser.g:3245:3: ( ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign )?
-            int alt47=2;
-            int LA47_0 = input.LA(1);
+            // InternalStructuredTextParser.g:3281:3: ( ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign )?
+            int alt48=2;
+            int LA48_0 = input.LA(1);
 
-            if ( (LA47_0==LREAL||LA47_0==REAL) ) {
-                alt47=1;
+            if ( (LA48_0==LREAL||LA48_0==REAL) ) {
+                alt48=1;
             }
-            switch (alt47) {
+            switch (alt48) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3246:4: ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign
+                    // InternalStructuredTextParser.g:3282:4: ( (lv_type_0_0= ruleReal_Type_Name ) ) otherlv_1= NumberSign
                     {
-                    // InternalStructuredTextParser.g:3246:4: ( (lv_type_0_0= ruleReal_Type_Name ) )
-                    // InternalStructuredTextParser.g:3247:5: (lv_type_0_0= ruleReal_Type_Name )
+                    // InternalStructuredTextParser.g:3282:4: ( (lv_type_0_0= ruleReal_Type_Name ) )
+                    // InternalStructuredTextParser.g:3283:5: (lv_type_0_0= ruleReal_Type_Name )
                     {
-                    // InternalStructuredTextParser.g:3247:5: (lv_type_0_0= ruleReal_Type_Name )
-                    // InternalStructuredTextParser.g:3248:6: lv_type_0_0= ruleReal_Type_Name
+                    // InternalStructuredTextParser.g:3283:5: (lv_type_0_0= ruleReal_Type_Name )
+                    // InternalStructuredTextParser.g:3284:6: lv_type_0_0= ruleReal_Type_Name
                     {
 
                     						newCompositeNode(grammarAccess.getReal_LiteralAccess().getTypeReal_Type_NameEnumRuleCall_0_0_0());
                     					
-                    pushFollow(FOLLOW_56);
+                    pushFollow(FOLLOW_57);
                     lv_type_0_0=ruleReal_Type_Name();
 
                     state._fsp--;
@@ -8961,7 +9094,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_1=(Token)match(input,NumberSign,FOLLOW_58); 
+                    otherlv_1=(Token)match(input,NumberSign,FOLLOW_59); 
 
                     				newLeafNode(otherlv_1, grammarAccess.getReal_LiteralAccess().getNumberSignKeyword_0_1());
                     			
@@ -8971,11 +9104,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
             }
 
-            // InternalStructuredTextParser.g:3270:3: ( (lv_value_2_0= ruleReal_Value ) )
-            // InternalStructuredTextParser.g:3271:4: (lv_value_2_0= ruleReal_Value )
+            // InternalStructuredTextParser.g:3306:3: ( (lv_value_2_0= ruleReal_Value ) )
+            // InternalStructuredTextParser.g:3307:4: (lv_value_2_0= ruleReal_Value )
             {
-            // InternalStructuredTextParser.g:3271:4: (lv_value_2_0= ruleReal_Value )
-            // InternalStructuredTextParser.g:3272:5: lv_value_2_0= ruleReal_Value
+            // InternalStructuredTextParser.g:3307:4: (lv_value_2_0= ruleReal_Value )
+            // InternalStructuredTextParser.g:3308:5: lv_value_2_0= ruleReal_Value
             {
 
             					newCompositeNode(grammarAccess.getReal_LiteralAccess().getValueReal_ValueParserRuleCall_1_0());
@@ -9025,7 +9158,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleReal_Value"
-    // InternalStructuredTextParser.g:3293:1: entryRuleReal_Value returns [String current=null] : iv_ruleReal_Value= ruleReal_Value EOF ;
+    // InternalStructuredTextParser.g:3329:1: entryRuleReal_Value returns [String current=null] : iv_ruleReal_Value= ruleReal_Value EOF ;
     public final String entryRuleReal_Value() throws RecognitionException {
         String current = null;
 
@@ -9033,8 +9166,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:3293:50: (iv_ruleReal_Value= ruleReal_Value EOF )
-            // InternalStructuredTextParser.g:3294:2: iv_ruleReal_Value= ruleReal_Value EOF
+            // InternalStructuredTextParser.g:3329:50: (iv_ruleReal_Value= ruleReal_Value EOF )
+            // InternalStructuredTextParser.g:3330:2: iv_ruleReal_Value= ruleReal_Value EOF
             {
              newCompositeNode(grammarAccess.getReal_ValueRule()); 
             pushFollow(FOLLOW_1);
@@ -9061,7 +9194,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleReal_Value"
-    // InternalStructuredTextParser.g:3300:1: ruleReal_Value returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_Signed_Int_0= ruleSigned_Int kw= FullStop this_UNSIGNED_INT_2= RULE_UNSIGNED_INT (kw= E this_Signed_Int_4= ruleSigned_Int )? ) ;
+    // InternalStructuredTextParser.g:3336:1: ruleReal_Value returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_Signed_Int_0= ruleSigned_Int kw= FullStop this_UNSIGNED_INT_2= RULE_UNSIGNED_INT (kw= E this_Signed_Int_4= ruleSigned_Int )? ) ;
     public final AntlrDatatypeRuleToken ruleReal_Value() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -9076,11 +9209,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3306:2: ( (this_Signed_Int_0= ruleSigned_Int kw= FullStop this_UNSIGNED_INT_2= RULE_UNSIGNED_INT (kw= E this_Signed_Int_4= ruleSigned_Int )? ) )
-            // InternalStructuredTextParser.g:3307:2: (this_Signed_Int_0= ruleSigned_Int kw= FullStop this_UNSIGNED_INT_2= RULE_UNSIGNED_INT (kw= E this_Signed_Int_4= ruleSigned_Int )? )
+            // InternalStructuredTextParser.g:3342:2: ( (this_Signed_Int_0= ruleSigned_Int kw= FullStop this_UNSIGNED_INT_2= RULE_UNSIGNED_INT (kw= E this_Signed_Int_4= ruleSigned_Int )? ) )
+            // InternalStructuredTextParser.g:3343:2: (this_Signed_Int_0= ruleSigned_Int kw= FullStop this_UNSIGNED_INT_2= RULE_UNSIGNED_INT (kw= E this_Signed_Int_4= ruleSigned_Int )? )
             {
-            // InternalStructuredTextParser.g:3307:2: (this_Signed_Int_0= ruleSigned_Int kw= FullStop this_UNSIGNED_INT_2= RULE_UNSIGNED_INT (kw= E this_Signed_Int_4= ruleSigned_Int )? )
-            // InternalStructuredTextParser.g:3308:3: this_Signed_Int_0= ruleSigned_Int kw= FullStop this_UNSIGNED_INT_2= RULE_UNSIGNED_INT (kw= E this_Signed_Int_4= ruleSigned_Int )?
+            // InternalStructuredTextParser.g:3343:2: (this_Signed_Int_0= ruleSigned_Int kw= FullStop this_UNSIGNED_INT_2= RULE_UNSIGNED_INT (kw= E this_Signed_Int_4= ruleSigned_Int )? )
+            // InternalStructuredTextParser.g:3344:3: this_Signed_Int_0= ruleSigned_Int kw= FullStop this_UNSIGNED_INT_2= RULE_UNSIGNED_INT (kw= E this_Signed_Int_4= ruleSigned_Int )?
             {
 
             			newCompositeNode(grammarAccess.getReal_ValueAccess().getSigned_IntParserRuleCall_0());
@@ -9101,25 +9234,25 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
             			current.merge(kw);
             			newLeafNode(kw, grammarAccess.getReal_ValueAccess().getFullStopKeyword_1());
             		
-            this_UNSIGNED_INT_2=(Token)match(input,RULE_UNSIGNED_INT,FOLLOW_59); 
+            this_UNSIGNED_INT_2=(Token)match(input,RULE_UNSIGNED_INT,FOLLOW_60); 
 
             			current.merge(this_UNSIGNED_INT_2);
             		
 
             			newLeafNode(this_UNSIGNED_INT_2, grammarAccess.getReal_ValueAccess().getUNSIGNED_INTTerminalRuleCall_2());
             		
-            // InternalStructuredTextParser.g:3330:3: (kw= E this_Signed_Int_4= ruleSigned_Int )?
-            int alt48=2;
-            int LA48_0 = input.LA(1);
+            // InternalStructuredTextParser.g:3366:3: (kw= E this_Signed_Int_4= ruleSigned_Int )?
+            int alt49=2;
+            int LA49_0 = input.LA(1);
 
-            if ( (LA48_0==E) ) {
-                alt48=1;
+            if ( (LA49_0==E) ) {
+                alt49=1;
             }
-            switch (alt48) {
+            switch (alt49) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3331:4: kw= E this_Signed_Int_4= ruleSigned_Int
+                    // InternalStructuredTextParser.g:3367:4: kw= E this_Signed_Int_4= ruleSigned_Int
                     {
-                    kw=(Token)match(input,E,FOLLOW_60); 
+                    kw=(Token)match(input,E,FOLLOW_61); 
 
                     				current.merge(kw);
                     				newLeafNode(kw, grammarAccess.getReal_ValueAccess().getEKeyword_3_0());
@@ -9167,7 +9300,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleBool_Literal"
-    // InternalStructuredTextParser.g:3351:1: entryRuleBool_Literal returns [EObject current=null] : iv_ruleBool_Literal= ruleBool_Literal EOF ;
+    // InternalStructuredTextParser.g:3387:1: entryRuleBool_Literal returns [EObject current=null] : iv_ruleBool_Literal= ruleBool_Literal EOF ;
     public final EObject entryRuleBool_Literal() throws RecognitionException {
         EObject current = null;
 
@@ -9175,8 +9308,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:3351:53: (iv_ruleBool_Literal= ruleBool_Literal EOF )
-            // InternalStructuredTextParser.g:3352:2: iv_ruleBool_Literal= ruleBool_Literal EOF
+            // InternalStructuredTextParser.g:3387:53: (iv_ruleBool_Literal= ruleBool_Literal EOF )
+            // InternalStructuredTextParser.g:3388:2: iv_ruleBool_Literal= ruleBool_Literal EOF
             {
              newCompositeNode(grammarAccess.getBool_LiteralRule()); 
             pushFollow(FOLLOW_1);
@@ -9203,7 +9336,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleBool_Literal"
-    // InternalStructuredTextParser.g:3358:1: ruleBool_Literal returns [EObject current=null] : ( ( ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleBool_Value ) ) ) ;
+    // InternalStructuredTextParser.g:3394:1: ruleBool_Literal returns [EObject current=null] : ( ( ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleBool_Value ) ) ) ;
     public final EObject ruleBool_Literal() throws RecognitionException {
         EObject current = null;
 
@@ -9217,33 +9350,33 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3364:2: ( ( ( ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleBool_Value ) ) ) )
-            // InternalStructuredTextParser.g:3365:2: ( ( ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleBool_Value ) ) )
+            // InternalStructuredTextParser.g:3400:2: ( ( ( ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleBool_Value ) ) ) )
+            // InternalStructuredTextParser.g:3401:2: ( ( ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleBool_Value ) ) )
             {
-            // InternalStructuredTextParser.g:3365:2: ( ( ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleBool_Value ) ) )
-            // InternalStructuredTextParser.g:3366:3: ( ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleBool_Value ) )
+            // InternalStructuredTextParser.g:3401:2: ( ( ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleBool_Value ) ) )
+            // InternalStructuredTextParser.g:3402:3: ( ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign )? ( (lv_value_2_0= ruleBool_Value ) )
             {
-            // InternalStructuredTextParser.g:3366:3: ( ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign )?
-            int alt49=2;
-            int LA49_0 = input.LA(1);
+            // InternalStructuredTextParser.g:3402:3: ( ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign )?
+            int alt50=2;
+            int LA50_0 = input.LA(1);
 
-            if ( (LA49_0==BOOL) ) {
-                alt49=1;
+            if ( (LA50_0==BOOL) ) {
+                alt50=1;
             }
-            switch (alt49) {
+            switch (alt50) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3367:4: ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign
+                    // InternalStructuredTextParser.g:3403:4: ( (lv_type_0_0= ruleBool_Type_Name ) ) otherlv_1= NumberSign
                     {
-                    // InternalStructuredTextParser.g:3367:4: ( (lv_type_0_0= ruleBool_Type_Name ) )
-                    // InternalStructuredTextParser.g:3368:5: (lv_type_0_0= ruleBool_Type_Name )
+                    // InternalStructuredTextParser.g:3403:4: ( (lv_type_0_0= ruleBool_Type_Name ) )
+                    // InternalStructuredTextParser.g:3404:5: (lv_type_0_0= ruleBool_Type_Name )
                     {
-                    // InternalStructuredTextParser.g:3368:5: (lv_type_0_0= ruleBool_Type_Name )
-                    // InternalStructuredTextParser.g:3369:6: lv_type_0_0= ruleBool_Type_Name
+                    // InternalStructuredTextParser.g:3404:5: (lv_type_0_0= ruleBool_Type_Name )
+                    // InternalStructuredTextParser.g:3405:6: lv_type_0_0= ruleBool_Type_Name
                     {
 
                     						newCompositeNode(grammarAccess.getBool_LiteralAccess().getTypeBool_Type_NameEnumRuleCall_0_0_0());
                     					
-                    pushFollow(FOLLOW_56);
+                    pushFollow(FOLLOW_57);
                     lv_type_0_0=ruleBool_Type_Name();
 
                     state._fsp--;
@@ -9275,11 +9408,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
             }
 
-            // InternalStructuredTextParser.g:3391:3: ( (lv_value_2_0= ruleBool_Value ) )
-            // InternalStructuredTextParser.g:3392:4: (lv_value_2_0= ruleBool_Value )
+            // InternalStructuredTextParser.g:3427:3: ( (lv_value_2_0= ruleBool_Value ) )
+            // InternalStructuredTextParser.g:3428:4: (lv_value_2_0= ruleBool_Value )
             {
-            // InternalStructuredTextParser.g:3392:4: (lv_value_2_0= ruleBool_Value )
-            // InternalStructuredTextParser.g:3393:5: lv_value_2_0= ruleBool_Value
+            // InternalStructuredTextParser.g:3428:4: (lv_value_2_0= ruleBool_Value )
+            // InternalStructuredTextParser.g:3429:5: lv_value_2_0= ruleBool_Value
             {
 
             					newCompositeNode(grammarAccess.getBool_LiteralAccess().getValueBool_ValueParserRuleCall_1_0());
@@ -9329,7 +9462,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleBool_Value"
-    // InternalStructuredTextParser.g:3414:1: entryRuleBool_Value returns [String current=null] : iv_ruleBool_Value= ruleBool_Value EOF ;
+    // InternalStructuredTextParser.g:3450:1: entryRuleBool_Value returns [String current=null] : iv_ruleBool_Value= ruleBool_Value EOF ;
     public final String entryRuleBool_Value() throws RecognitionException {
         String current = null;
 
@@ -9337,8 +9470,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:3414:50: (iv_ruleBool_Value= ruleBool_Value EOF )
-            // InternalStructuredTextParser.g:3415:2: iv_ruleBool_Value= ruleBool_Value EOF
+            // InternalStructuredTextParser.g:3450:50: (iv_ruleBool_Value= ruleBool_Value EOF )
+            // InternalStructuredTextParser.g:3451:2: iv_ruleBool_Value= ruleBool_Value EOF
             {
              newCompositeNode(grammarAccess.getBool_ValueRule()); 
             pushFollow(FOLLOW_1);
@@ -9365,7 +9498,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleBool_Value"
-    // InternalStructuredTextParser.g:3421:1: ruleBool_Value returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (kw= FALSE | kw= TRUE ) ;
+    // InternalStructuredTextParser.g:3457:1: ruleBool_Value returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (kw= FALSE | kw= TRUE ) ;
     public final AntlrDatatypeRuleToken ruleBool_Value() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -9375,28 +9508,28 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3427:2: ( (kw= FALSE | kw= TRUE ) )
-            // InternalStructuredTextParser.g:3428:2: (kw= FALSE | kw= TRUE )
+            // InternalStructuredTextParser.g:3463:2: ( (kw= FALSE | kw= TRUE ) )
+            // InternalStructuredTextParser.g:3464:2: (kw= FALSE | kw= TRUE )
             {
-            // InternalStructuredTextParser.g:3428:2: (kw= FALSE | kw= TRUE )
-            int alt50=2;
-            int LA50_0 = input.LA(1);
+            // InternalStructuredTextParser.g:3464:2: (kw= FALSE | kw= TRUE )
+            int alt51=2;
+            int LA51_0 = input.LA(1);
 
-            if ( (LA50_0==FALSE) ) {
-                alt50=1;
+            if ( (LA51_0==FALSE) ) {
+                alt51=1;
             }
-            else if ( (LA50_0==TRUE) ) {
-                alt50=2;
+            else if ( (LA51_0==TRUE) ) {
+                alt51=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 50, 0, input);
+                    new NoViableAltException("", 51, 0, input);
 
                 throw nvae;
             }
-            switch (alt50) {
+            switch (alt51) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3429:3: kw= FALSE
+                    // InternalStructuredTextParser.g:3465:3: kw= FALSE
                     {
                     kw=(Token)match(input,FALSE,FOLLOW_2); 
 
@@ -9407,7 +9540,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:3435:3: kw= TRUE
+                    // InternalStructuredTextParser.g:3471:3: kw= TRUE
                     {
                     kw=(Token)match(input,TRUE,FOLLOW_2); 
 
@@ -9440,7 +9573,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleChar_Literal"
-    // InternalStructuredTextParser.g:3444:1: entryRuleChar_Literal returns [EObject current=null] : iv_ruleChar_Literal= ruleChar_Literal EOF ;
+    // InternalStructuredTextParser.g:3480:1: entryRuleChar_Literal returns [EObject current=null] : iv_ruleChar_Literal= ruleChar_Literal EOF ;
     public final EObject entryRuleChar_Literal() throws RecognitionException {
         EObject current = null;
 
@@ -9448,8 +9581,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:3444:53: (iv_ruleChar_Literal= ruleChar_Literal EOF )
-            // InternalStructuredTextParser.g:3445:2: iv_ruleChar_Literal= ruleChar_Literal EOF
+            // InternalStructuredTextParser.g:3480:53: (iv_ruleChar_Literal= ruleChar_Literal EOF )
+            // InternalStructuredTextParser.g:3481:2: iv_ruleChar_Literal= ruleChar_Literal EOF
             {
              newCompositeNode(grammarAccess.getChar_LiteralRule()); 
             pushFollow(FOLLOW_1);
@@ -9476,7 +9609,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleChar_Literal"
-    // InternalStructuredTextParser.g:3451:1: ruleChar_Literal returns [EObject current=null] : ( ( ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign )? ( ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) ) ) ) ;
+    // InternalStructuredTextParser.g:3487:1: ruleChar_Literal returns [EObject current=null] : ( ( ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign )? ( ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) ) ) ) ;
     public final EObject ruleChar_Literal() throws RecognitionException {
         EObject current = null;
 
@@ -9491,33 +9624,33 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3457:2: ( ( ( ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign )? ( ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) ) ) ) )
-            // InternalStructuredTextParser.g:3458:2: ( ( ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign )? ( ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) ) ) )
+            // InternalStructuredTextParser.g:3493:2: ( ( ( ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign )? ( ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) ) ) ) )
+            // InternalStructuredTextParser.g:3494:2: ( ( ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign )? ( ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) ) ) )
             {
-            // InternalStructuredTextParser.g:3458:2: ( ( ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign )? ( ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) ) ) )
-            // InternalStructuredTextParser.g:3459:3: ( ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign )? ( ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) ) )
+            // InternalStructuredTextParser.g:3494:2: ( ( ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign )? ( ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) ) ) )
+            // InternalStructuredTextParser.g:3495:3: ( ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign )? ( ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) ) )
             {
-            // InternalStructuredTextParser.g:3459:3: ( ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign )?
-            int alt52=2;
-            int LA52_0 = input.LA(1);
+            // InternalStructuredTextParser.g:3495:3: ( ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign )?
+            int alt53=2;
+            int LA53_0 = input.LA(1);
 
-            if ( (LA52_0==WSTRING||LA52_0==STRING||LA52_0==WCHAR||LA52_0==CHAR) ) {
-                alt52=1;
+            if ( (LA53_0==WSTRING||LA53_0==STRING||LA53_0==WCHAR||LA53_0==CHAR) ) {
+                alt53=1;
             }
-            switch (alt52) {
+            switch (alt53) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3460:4: ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign
+                    // InternalStructuredTextParser.g:3496:4: ( (lv_type_0_0= ruleString_Type_Name ) ) ( (lv_length_1_0= RULE_UNSIGNED_INT ) )? otherlv_2= NumberSign
                     {
-                    // InternalStructuredTextParser.g:3460:4: ( (lv_type_0_0= ruleString_Type_Name ) )
-                    // InternalStructuredTextParser.g:3461:5: (lv_type_0_0= ruleString_Type_Name )
+                    // InternalStructuredTextParser.g:3496:4: ( (lv_type_0_0= ruleString_Type_Name ) )
+                    // InternalStructuredTextParser.g:3497:5: (lv_type_0_0= ruleString_Type_Name )
                     {
-                    // InternalStructuredTextParser.g:3461:5: (lv_type_0_0= ruleString_Type_Name )
-                    // InternalStructuredTextParser.g:3462:6: lv_type_0_0= ruleString_Type_Name
+                    // InternalStructuredTextParser.g:3497:5: (lv_type_0_0= ruleString_Type_Name )
+                    // InternalStructuredTextParser.g:3498:6: lv_type_0_0= ruleString_Type_Name
                     {
 
                     						newCompositeNode(grammarAccess.getChar_LiteralAccess().getTypeString_Type_NameEnumRuleCall_0_0_0());
                     					
-                    pushFollow(FOLLOW_61);
+                    pushFollow(FOLLOW_62);
                     lv_type_0_0=ruleString_Type_Name();
 
                     state._fsp--;
@@ -9539,21 +9672,21 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // InternalStructuredTextParser.g:3479:4: ( (lv_length_1_0= RULE_UNSIGNED_INT ) )?
-                    int alt51=2;
-                    int LA51_0 = input.LA(1);
+                    // InternalStructuredTextParser.g:3515:4: ( (lv_length_1_0= RULE_UNSIGNED_INT ) )?
+                    int alt52=2;
+                    int LA52_0 = input.LA(1);
 
-                    if ( (LA51_0==RULE_UNSIGNED_INT) ) {
-                        alt51=1;
+                    if ( (LA52_0==RULE_UNSIGNED_INT) ) {
+                        alt52=1;
                     }
-                    switch (alt51) {
+                    switch (alt52) {
                         case 1 :
-                            // InternalStructuredTextParser.g:3480:5: (lv_length_1_0= RULE_UNSIGNED_INT )
+                            // InternalStructuredTextParser.g:3516:5: (lv_length_1_0= RULE_UNSIGNED_INT )
                             {
-                            // InternalStructuredTextParser.g:3480:5: (lv_length_1_0= RULE_UNSIGNED_INT )
-                            // InternalStructuredTextParser.g:3481:6: lv_length_1_0= RULE_UNSIGNED_INT
+                            // InternalStructuredTextParser.g:3516:5: (lv_length_1_0= RULE_UNSIGNED_INT )
+                            // InternalStructuredTextParser.g:3517:6: lv_length_1_0= RULE_UNSIGNED_INT
                             {
-                            lv_length_1_0=(Token)match(input,RULE_UNSIGNED_INT,FOLLOW_56); 
+                            lv_length_1_0=(Token)match(input,RULE_UNSIGNED_INT,FOLLOW_57); 
 
                             						newLeafNode(lv_length_1_0, grammarAccess.getChar_LiteralAccess().getLengthUNSIGNED_INTTerminalRuleCall_0_1_0());
                             					
@@ -9576,7 +9709,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_2=(Token)match(input,NumberSign,FOLLOW_62); 
+                    otherlv_2=(Token)match(input,NumberSign,FOLLOW_63); 
 
                     				newLeafNode(otherlv_2, grammarAccess.getChar_LiteralAccess().getNumberSignKeyword_0_2());
                     			
@@ -9586,31 +9719,31 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
             }
 
-            // InternalStructuredTextParser.g:3502:3: ( ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) ) )
-            // InternalStructuredTextParser.g:3503:4: ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) )
+            // InternalStructuredTextParser.g:3538:3: ( ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) ) )
+            // InternalStructuredTextParser.g:3539:4: ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) )
             {
-            // InternalStructuredTextParser.g:3503:4: ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) )
-            // InternalStructuredTextParser.g:3504:5: (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR )
+            // InternalStructuredTextParser.g:3539:4: ( (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR ) )
+            // InternalStructuredTextParser.g:3540:5: (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR )
             {
-            // InternalStructuredTextParser.g:3504:5: (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR )
-            int alt53=2;
-            int LA53_0 = input.LA(1);
+            // InternalStructuredTextParser.g:3540:5: (lv_value_3_1= RULE_S_BYTE_CHAR_STR | lv_value_3_2= RULE_D_BYTE_CHAR_STR )
+            int alt54=2;
+            int LA54_0 = input.LA(1);
 
-            if ( (LA53_0==RULE_S_BYTE_CHAR_STR) ) {
-                alt53=1;
+            if ( (LA54_0==RULE_S_BYTE_CHAR_STR) ) {
+                alt54=1;
             }
-            else if ( (LA53_0==RULE_D_BYTE_CHAR_STR) ) {
-                alt53=2;
+            else if ( (LA54_0==RULE_D_BYTE_CHAR_STR) ) {
+                alt54=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 53, 0, input);
+                    new NoViableAltException("", 54, 0, input);
 
                 throw nvae;
             }
-            switch (alt53) {
+            switch (alt54) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3505:6: lv_value_3_1= RULE_S_BYTE_CHAR_STR
+                    // InternalStructuredTextParser.g:3541:6: lv_value_3_1= RULE_S_BYTE_CHAR_STR
                     {
                     lv_value_3_1=(Token)match(input,RULE_S_BYTE_CHAR_STR,FOLLOW_2); 
 
@@ -9630,7 +9763,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:3520:6: lv_value_3_2= RULE_D_BYTE_CHAR_STR
+                    // InternalStructuredTextParser.g:3556:6: lv_value_3_2= RULE_D_BYTE_CHAR_STR
                     {
                     lv_value_3_2=(Token)match(input,RULE_D_BYTE_CHAR_STR,FOLLOW_2); 
 
@@ -9681,7 +9814,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleTime_Literal"
-    // InternalStructuredTextParser.g:3541:1: entryRuleTime_Literal returns [EObject current=null] : iv_ruleTime_Literal= ruleTime_Literal EOF ;
+    // InternalStructuredTextParser.g:3577:1: entryRuleTime_Literal returns [EObject current=null] : iv_ruleTime_Literal= ruleTime_Literal EOF ;
     public final EObject entryRuleTime_Literal() throws RecognitionException {
         EObject current = null;
 
@@ -9689,8 +9822,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:3541:53: (iv_ruleTime_Literal= ruleTime_Literal EOF )
-            // InternalStructuredTextParser.g:3542:2: iv_ruleTime_Literal= ruleTime_Literal EOF
+            // InternalStructuredTextParser.g:3577:53: (iv_ruleTime_Literal= ruleTime_Literal EOF )
+            // InternalStructuredTextParser.g:3578:2: iv_ruleTime_Literal= ruleTime_Literal EOF
             {
              newCompositeNode(grammarAccess.getTime_LiteralRule()); 
             pushFollow(FOLLOW_1);
@@ -9717,7 +9850,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleTime_Literal"
-    // InternalStructuredTextParser.g:3548:1: ruleTime_Literal returns [EObject current=null] : ( ( (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME ) ) ) ;
+    // InternalStructuredTextParser.g:3584:1: ruleTime_Literal returns [EObject current=null] : ( ( (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME ) ) ) ;
     public final EObject ruleTime_Literal() throws RecognitionException {
         EObject current = null;
 
@@ -9730,48 +9863,48 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3554:2: ( ( ( (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME ) ) ) )
-            // InternalStructuredTextParser.g:3555:2: ( ( (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME ) ) )
+            // InternalStructuredTextParser.g:3590:2: ( ( ( (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME ) ) ) )
+            // InternalStructuredTextParser.g:3591:2: ( ( (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME ) ) )
             {
-            // InternalStructuredTextParser.g:3555:2: ( ( (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME ) ) )
-            // InternalStructuredTextParser.g:3556:3: ( (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME ) )
+            // InternalStructuredTextParser.g:3591:2: ( ( (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME ) ) )
+            // InternalStructuredTextParser.g:3592:3: ( (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME ) )
             {
-            // InternalStructuredTextParser.g:3556:3: ( (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME ) )
-            // InternalStructuredTextParser.g:3557:4: (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME )
+            // InternalStructuredTextParser.g:3592:3: ( (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME ) )
+            // InternalStructuredTextParser.g:3593:4: (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME )
             {
-            // InternalStructuredTextParser.g:3557:4: (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME )
-            int alt54=4;
+            // InternalStructuredTextParser.g:3593:4: (lv_literal_0_1= RULE_TIME | lv_literal_0_2= RULE_DATE | lv_literal_0_3= RULE_TIMEOFDAY | lv_literal_0_4= RULE_DATETIME )
+            int alt55=4;
             switch ( input.LA(1) ) {
             case RULE_TIME:
                 {
-                alt54=1;
+                alt55=1;
                 }
                 break;
             case RULE_DATE:
                 {
-                alt54=2;
+                alt55=2;
                 }
                 break;
             case RULE_TIMEOFDAY:
                 {
-                alt54=3;
+                alt55=3;
                 }
                 break;
             case RULE_DATETIME:
                 {
-                alt54=4;
+                alt55=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 54, 0, input);
+                    new NoViableAltException("", 55, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt54) {
+            switch (alt55) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3558:5: lv_literal_0_1= RULE_TIME
+                    // InternalStructuredTextParser.g:3594:5: lv_literal_0_1= RULE_TIME
                     {
                     lv_literal_0_1=(Token)match(input,RULE_TIME,FOLLOW_2); 
 
@@ -9791,7 +9924,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:3573:5: lv_literal_0_2= RULE_DATE
+                    // InternalStructuredTextParser.g:3609:5: lv_literal_0_2= RULE_DATE
                     {
                     lv_literal_0_2=(Token)match(input,RULE_DATE,FOLLOW_2); 
 
@@ -9811,7 +9944,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalStructuredTextParser.g:3588:5: lv_literal_0_3= RULE_TIMEOFDAY
+                    // InternalStructuredTextParser.g:3624:5: lv_literal_0_3= RULE_TIMEOFDAY
                     {
                     lv_literal_0_3=(Token)match(input,RULE_TIMEOFDAY,FOLLOW_2); 
 
@@ -9831,7 +9964,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalStructuredTextParser.g:3603:5: lv_literal_0_4= RULE_DATETIME
+                    // InternalStructuredTextParser.g:3639:5: lv_literal_0_4= RULE_DATETIME
                     {
                     lv_literal_0_4=(Token)match(input,RULE_DATETIME,FOLLOW_2); 
 
@@ -9879,7 +10012,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleType_Name"
-    // InternalStructuredTextParser.g:3623:1: entryRuleType_Name returns [String current=null] : iv_ruleType_Name= ruleType_Name EOF ;
+    // InternalStructuredTextParser.g:3659:1: entryRuleType_Name returns [String current=null] : iv_ruleType_Name= ruleType_Name EOF ;
     public final String entryRuleType_Name() throws RecognitionException {
         String current = null;
 
@@ -9887,8 +10020,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalStructuredTextParser.g:3623:49: (iv_ruleType_Name= ruleType_Name EOF )
-            // InternalStructuredTextParser.g:3624:2: iv_ruleType_Name= ruleType_Name EOF
+            // InternalStructuredTextParser.g:3659:49: (iv_ruleType_Name= ruleType_Name EOF )
+            // InternalStructuredTextParser.g:3660:2: iv_ruleType_Name= ruleType_Name EOF
             {
              newCompositeNode(grammarAccess.getType_NameRule()); 
             pushFollow(FOLLOW_1);
@@ -9915,7 +10048,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleType_Name"
-    // InternalStructuredTextParser.g:3630:1: ruleType_Name returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | kw= DINT | kw= INT | kw= SINT | kw= LINT | kw= UINT | kw= USINT | kw= UDINT | kw= ULINT | kw= REAL | kw= LREAL | kw= STRING | kw= WSTRING | kw= CHAR | kw= WCHAR | kw= TIME | kw= LTIME | kw= TIME_OF_DAY | kw= LTIME_OF_DAY | kw= TOD | kw= LTOD | kw= DATE | kw= LDATE | kw= DATE_AND_TIME | kw= LDATE_AND_TIME | kw= BOOL | kw= LWORD | kw= DWORD | kw= WORD | kw= BYTE ) ;
+    // InternalStructuredTextParser.g:3666:1: ruleType_Name returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | kw= DINT | kw= INT | kw= SINT | kw= LINT | kw= UINT | kw= USINT | kw= UDINT | kw= ULINT | kw= REAL | kw= LREAL | kw= STRING | kw= WSTRING | kw= CHAR | kw= WCHAR | kw= TIME | kw= LTIME | kw= TIME_OF_DAY | kw= LTIME_OF_DAY | kw= TOD | kw= LTOD | kw= DATE | kw= LDATE | kw= DATE_AND_TIME | kw= LDATE_AND_TIME | kw= BOOL | kw= LWORD | kw= DWORD | kw= WORD | kw= BYTE ) ;
     public final AntlrDatatypeRuleToken ruleType_Name() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -9926,172 +10059,172 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3636:2: ( (this_ID_0= RULE_ID | kw= DINT | kw= INT | kw= SINT | kw= LINT | kw= UINT | kw= USINT | kw= UDINT | kw= ULINT | kw= REAL | kw= LREAL | kw= STRING | kw= WSTRING | kw= CHAR | kw= WCHAR | kw= TIME | kw= LTIME | kw= TIME_OF_DAY | kw= LTIME_OF_DAY | kw= TOD | kw= LTOD | kw= DATE | kw= LDATE | kw= DATE_AND_TIME | kw= LDATE_AND_TIME | kw= BOOL | kw= LWORD | kw= DWORD | kw= WORD | kw= BYTE ) )
-            // InternalStructuredTextParser.g:3637:2: (this_ID_0= RULE_ID | kw= DINT | kw= INT | kw= SINT | kw= LINT | kw= UINT | kw= USINT | kw= UDINT | kw= ULINT | kw= REAL | kw= LREAL | kw= STRING | kw= WSTRING | kw= CHAR | kw= WCHAR | kw= TIME | kw= LTIME | kw= TIME_OF_DAY | kw= LTIME_OF_DAY | kw= TOD | kw= LTOD | kw= DATE | kw= LDATE | kw= DATE_AND_TIME | kw= LDATE_AND_TIME | kw= BOOL | kw= LWORD | kw= DWORD | kw= WORD | kw= BYTE )
+            // InternalStructuredTextParser.g:3672:2: ( (this_ID_0= RULE_ID | kw= DINT | kw= INT | kw= SINT | kw= LINT | kw= UINT | kw= USINT | kw= UDINT | kw= ULINT | kw= REAL | kw= LREAL | kw= STRING | kw= WSTRING | kw= CHAR | kw= WCHAR | kw= TIME | kw= LTIME | kw= TIME_OF_DAY | kw= LTIME_OF_DAY | kw= TOD | kw= LTOD | kw= DATE | kw= LDATE | kw= DATE_AND_TIME | kw= LDATE_AND_TIME | kw= BOOL | kw= LWORD | kw= DWORD | kw= WORD | kw= BYTE ) )
+            // InternalStructuredTextParser.g:3673:2: (this_ID_0= RULE_ID | kw= DINT | kw= INT | kw= SINT | kw= LINT | kw= UINT | kw= USINT | kw= UDINT | kw= ULINT | kw= REAL | kw= LREAL | kw= STRING | kw= WSTRING | kw= CHAR | kw= WCHAR | kw= TIME | kw= LTIME | kw= TIME_OF_DAY | kw= LTIME_OF_DAY | kw= TOD | kw= LTOD | kw= DATE | kw= LDATE | kw= DATE_AND_TIME | kw= LDATE_AND_TIME | kw= BOOL | kw= LWORD | kw= DWORD | kw= WORD | kw= BYTE )
             {
-            // InternalStructuredTextParser.g:3637:2: (this_ID_0= RULE_ID | kw= DINT | kw= INT | kw= SINT | kw= LINT | kw= UINT | kw= USINT | kw= UDINT | kw= ULINT | kw= REAL | kw= LREAL | kw= STRING | kw= WSTRING | kw= CHAR | kw= WCHAR | kw= TIME | kw= LTIME | kw= TIME_OF_DAY | kw= LTIME_OF_DAY | kw= TOD | kw= LTOD | kw= DATE | kw= LDATE | kw= DATE_AND_TIME | kw= LDATE_AND_TIME | kw= BOOL | kw= LWORD | kw= DWORD | kw= WORD | kw= BYTE )
-            int alt55=30;
+            // InternalStructuredTextParser.g:3673:2: (this_ID_0= RULE_ID | kw= DINT | kw= INT | kw= SINT | kw= LINT | kw= UINT | kw= USINT | kw= UDINT | kw= ULINT | kw= REAL | kw= LREAL | kw= STRING | kw= WSTRING | kw= CHAR | kw= WCHAR | kw= TIME | kw= LTIME | kw= TIME_OF_DAY | kw= LTIME_OF_DAY | kw= TOD | kw= LTOD | kw= DATE | kw= LDATE | kw= DATE_AND_TIME | kw= LDATE_AND_TIME | kw= BOOL | kw= LWORD | kw= DWORD | kw= WORD | kw= BYTE )
+            int alt56=30;
             switch ( input.LA(1) ) {
             case RULE_ID:
                 {
-                alt55=1;
+                alt56=1;
                 }
                 break;
             case DINT:
                 {
-                alt55=2;
+                alt56=2;
                 }
                 break;
             case INT:
                 {
-                alt55=3;
+                alt56=3;
                 }
                 break;
             case SINT:
                 {
-                alt55=4;
+                alt56=4;
                 }
                 break;
             case LINT:
                 {
-                alt55=5;
+                alt56=5;
                 }
                 break;
             case UINT:
                 {
-                alt55=6;
+                alt56=6;
                 }
                 break;
             case USINT:
                 {
-                alt55=7;
+                alt56=7;
                 }
                 break;
             case UDINT:
                 {
-                alt55=8;
+                alt56=8;
                 }
                 break;
             case ULINT:
                 {
-                alt55=9;
+                alt56=9;
                 }
                 break;
             case REAL:
                 {
-                alt55=10;
+                alt56=10;
                 }
                 break;
             case LREAL:
                 {
-                alt55=11;
+                alt56=11;
                 }
                 break;
             case STRING:
                 {
-                alt55=12;
+                alt56=12;
                 }
                 break;
             case WSTRING:
                 {
-                alt55=13;
+                alt56=13;
                 }
                 break;
             case CHAR:
                 {
-                alt55=14;
+                alt56=14;
                 }
                 break;
             case WCHAR:
                 {
-                alt55=15;
+                alt56=15;
                 }
                 break;
             case TIME:
                 {
-                alt55=16;
+                alt56=16;
                 }
                 break;
             case LTIME:
                 {
-                alt55=17;
+                alt56=17;
                 }
                 break;
             case TIME_OF_DAY:
                 {
-                alt55=18;
+                alt56=18;
                 }
                 break;
             case LTIME_OF_DAY:
                 {
-                alt55=19;
+                alt56=19;
                 }
                 break;
             case TOD:
                 {
-                alt55=20;
+                alt56=20;
                 }
                 break;
             case LTOD:
                 {
-                alt55=21;
+                alt56=21;
                 }
                 break;
             case DATE:
                 {
-                alt55=22;
+                alt56=22;
                 }
                 break;
             case LDATE:
                 {
-                alt55=23;
+                alt56=23;
                 }
                 break;
             case DATE_AND_TIME:
                 {
-                alt55=24;
+                alt56=24;
                 }
                 break;
             case LDATE_AND_TIME:
                 {
-                alt55=25;
+                alt56=25;
                 }
                 break;
             case BOOL:
                 {
-                alt55=26;
+                alt56=26;
                 }
                 break;
             case LWORD:
                 {
-                alt55=27;
+                alt56=27;
                 }
                 break;
             case DWORD:
                 {
-                alt55=28;
+                alt56=28;
                 }
                 break;
             case WORD:
                 {
-                alt55=29;
+                alt56=29;
                 }
                 break;
             case BYTE:
                 {
-                alt55=30;
+                alt56=30;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 55, 0, input);
+                    new NoViableAltException("", 56, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt55) {
+            switch (alt56) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3638:3: this_ID_0= RULE_ID
+                    // InternalStructuredTextParser.g:3674:3: this_ID_0= RULE_ID
                     {
                     this_ID_0=(Token)match(input,RULE_ID,FOLLOW_2); 
 
@@ -10104,7 +10237,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:3646:3: kw= DINT
+                    // InternalStructuredTextParser.g:3682:3: kw= DINT
                     {
                     kw=(Token)match(input,DINT,FOLLOW_2); 
 
@@ -10115,7 +10248,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalStructuredTextParser.g:3652:3: kw= INT
+                    // InternalStructuredTextParser.g:3688:3: kw= INT
                     {
                     kw=(Token)match(input,INT,FOLLOW_2); 
 
@@ -10126,7 +10259,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalStructuredTextParser.g:3658:3: kw= SINT
+                    // InternalStructuredTextParser.g:3694:3: kw= SINT
                     {
                     kw=(Token)match(input,SINT,FOLLOW_2); 
 
@@ -10137,7 +10270,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 5 :
-                    // InternalStructuredTextParser.g:3664:3: kw= LINT
+                    // InternalStructuredTextParser.g:3700:3: kw= LINT
                     {
                     kw=(Token)match(input,LINT,FOLLOW_2); 
 
@@ -10148,7 +10281,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 6 :
-                    // InternalStructuredTextParser.g:3670:3: kw= UINT
+                    // InternalStructuredTextParser.g:3706:3: kw= UINT
                     {
                     kw=(Token)match(input,UINT,FOLLOW_2); 
 
@@ -10159,7 +10292,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 7 :
-                    // InternalStructuredTextParser.g:3676:3: kw= USINT
+                    // InternalStructuredTextParser.g:3712:3: kw= USINT
                     {
                     kw=(Token)match(input,USINT,FOLLOW_2); 
 
@@ -10170,7 +10303,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 8 :
-                    // InternalStructuredTextParser.g:3682:3: kw= UDINT
+                    // InternalStructuredTextParser.g:3718:3: kw= UDINT
                     {
                     kw=(Token)match(input,UDINT,FOLLOW_2); 
 
@@ -10181,7 +10314,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 9 :
-                    // InternalStructuredTextParser.g:3688:3: kw= ULINT
+                    // InternalStructuredTextParser.g:3724:3: kw= ULINT
                     {
                     kw=(Token)match(input,ULINT,FOLLOW_2); 
 
@@ -10192,7 +10325,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 10 :
-                    // InternalStructuredTextParser.g:3694:3: kw= REAL
+                    // InternalStructuredTextParser.g:3730:3: kw= REAL
                     {
                     kw=(Token)match(input,REAL,FOLLOW_2); 
 
@@ -10203,7 +10336,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 11 :
-                    // InternalStructuredTextParser.g:3700:3: kw= LREAL
+                    // InternalStructuredTextParser.g:3736:3: kw= LREAL
                     {
                     kw=(Token)match(input,LREAL,FOLLOW_2); 
 
@@ -10214,7 +10347,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 12 :
-                    // InternalStructuredTextParser.g:3706:3: kw= STRING
+                    // InternalStructuredTextParser.g:3742:3: kw= STRING
                     {
                     kw=(Token)match(input,STRING,FOLLOW_2); 
 
@@ -10225,7 +10358,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 13 :
-                    // InternalStructuredTextParser.g:3712:3: kw= WSTRING
+                    // InternalStructuredTextParser.g:3748:3: kw= WSTRING
                     {
                     kw=(Token)match(input,WSTRING,FOLLOW_2); 
 
@@ -10236,7 +10369,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 14 :
-                    // InternalStructuredTextParser.g:3718:3: kw= CHAR
+                    // InternalStructuredTextParser.g:3754:3: kw= CHAR
                     {
                     kw=(Token)match(input,CHAR,FOLLOW_2); 
 
@@ -10247,7 +10380,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 15 :
-                    // InternalStructuredTextParser.g:3724:3: kw= WCHAR
+                    // InternalStructuredTextParser.g:3760:3: kw= WCHAR
                     {
                     kw=(Token)match(input,WCHAR,FOLLOW_2); 
 
@@ -10258,7 +10391,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 16 :
-                    // InternalStructuredTextParser.g:3730:3: kw= TIME
+                    // InternalStructuredTextParser.g:3766:3: kw= TIME
                     {
                     kw=(Token)match(input,TIME,FOLLOW_2); 
 
@@ -10269,7 +10402,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 17 :
-                    // InternalStructuredTextParser.g:3736:3: kw= LTIME
+                    // InternalStructuredTextParser.g:3772:3: kw= LTIME
                     {
                     kw=(Token)match(input,LTIME,FOLLOW_2); 
 
@@ -10280,7 +10413,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 18 :
-                    // InternalStructuredTextParser.g:3742:3: kw= TIME_OF_DAY
+                    // InternalStructuredTextParser.g:3778:3: kw= TIME_OF_DAY
                     {
                     kw=(Token)match(input,TIME_OF_DAY,FOLLOW_2); 
 
@@ -10291,7 +10424,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 19 :
-                    // InternalStructuredTextParser.g:3748:3: kw= LTIME_OF_DAY
+                    // InternalStructuredTextParser.g:3784:3: kw= LTIME_OF_DAY
                     {
                     kw=(Token)match(input,LTIME_OF_DAY,FOLLOW_2); 
 
@@ -10302,7 +10435,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 20 :
-                    // InternalStructuredTextParser.g:3754:3: kw= TOD
+                    // InternalStructuredTextParser.g:3790:3: kw= TOD
                     {
                     kw=(Token)match(input,TOD,FOLLOW_2); 
 
@@ -10313,7 +10446,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 21 :
-                    // InternalStructuredTextParser.g:3760:3: kw= LTOD
+                    // InternalStructuredTextParser.g:3796:3: kw= LTOD
                     {
                     kw=(Token)match(input,LTOD,FOLLOW_2); 
 
@@ -10324,7 +10457,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 22 :
-                    // InternalStructuredTextParser.g:3766:3: kw= DATE
+                    // InternalStructuredTextParser.g:3802:3: kw= DATE
                     {
                     kw=(Token)match(input,DATE,FOLLOW_2); 
 
@@ -10335,7 +10468,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 23 :
-                    // InternalStructuredTextParser.g:3772:3: kw= LDATE
+                    // InternalStructuredTextParser.g:3808:3: kw= LDATE
                     {
                     kw=(Token)match(input,LDATE,FOLLOW_2); 
 
@@ -10346,7 +10479,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 24 :
-                    // InternalStructuredTextParser.g:3778:3: kw= DATE_AND_TIME
+                    // InternalStructuredTextParser.g:3814:3: kw= DATE_AND_TIME
                     {
                     kw=(Token)match(input,DATE_AND_TIME,FOLLOW_2); 
 
@@ -10357,7 +10490,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 25 :
-                    // InternalStructuredTextParser.g:3784:3: kw= LDATE_AND_TIME
+                    // InternalStructuredTextParser.g:3820:3: kw= LDATE_AND_TIME
                     {
                     kw=(Token)match(input,LDATE_AND_TIME,FOLLOW_2); 
 
@@ -10368,7 +10501,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 26 :
-                    // InternalStructuredTextParser.g:3790:3: kw= BOOL
+                    // InternalStructuredTextParser.g:3826:3: kw= BOOL
                     {
                     kw=(Token)match(input,BOOL,FOLLOW_2); 
 
@@ -10379,7 +10512,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 27 :
-                    // InternalStructuredTextParser.g:3796:3: kw= LWORD
+                    // InternalStructuredTextParser.g:3832:3: kw= LWORD
                     {
                     kw=(Token)match(input,LWORD,FOLLOW_2); 
 
@@ -10390,7 +10523,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 28 :
-                    // InternalStructuredTextParser.g:3802:3: kw= DWORD
+                    // InternalStructuredTextParser.g:3838:3: kw= DWORD
                     {
                     kw=(Token)match(input,DWORD,FOLLOW_2); 
 
@@ -10401,7 +10534,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 29 :
-                    // InternalStructuredTextParser.g:3808:3: kw= WORD
+                    // InternalStructuredTextParser.g:3844:3: kw= WORD
                     {
                     kw=(Token)match(input,WORD,FOLLOW_2); 
 
@@ -10412,7 +10545,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 30 :
-                    // InternalStructuredTextParser.g:3814:3: kw= BYTE
+                    // InternalStructuredTextParser.g:3850:3: kw= BYTE
                     {
                     kw=(Token)match(input,BYTE,FOLLOW_2); 
 
@@ -10445,7 +10578,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleOr_Operator"
-    // InternalStructuredTextParser.g:3823:1: ruleOr_Operator returns [Enumerator current=null] : (enumLiteral_0= OR ) ;
+    // InternalStructuredTextParser.g:3859:1: ruleOr_Operator returns [Enumerator current=null] : (enumLiteral_0= OR ) ;
     public final Enumerator ruleOr_Operator() throws RecognitionException {
         Enumerator current = null;
 
@@ -10455,11 +10588,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3829:2: ( (enumLiteral_0= OR ) )
-            // InternalStructuredTextParser.g:3830:2: (enumLiteral_0= OR )
+            // InternalStructuredTextParser.g:3865:2: ( (enumLiteral_0= OR ) )
+            // InternalStructuredTextParser.g:3866:2: (enumLiteral_0= OR )
             {
-            // InternalStructuredTextParser.g:3830:2: (enumLiteral_0= OR )
-            // InternalStructuredTextParser.g:3831:3: enumLiteral_0= OR
+            // InternalStructuredTextParser.g:3866:2: (enumLiteral_0= OR )
+            // InternalStructuredTextParser.g:3867:3: enumLiteral_0= OR
             {
             enumLiteral_0=(Token)match(input,OR,FOLLOW_2); 
 
@@ -10489,7 +10622,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleXor_Operator"
-    // InternalStructuredTextParser.g:3840:1: ruleXor_Operator returns [Enumerator current=null] : (enumLiteral_0= XOR ) ;
+    // InternalStructuredTextParser.g:3876:1: ruleXor_Operator returns [Enumerator current=null] : (enumLiteral_0= XOR ) ;
     public final Enumerator ruleXor_Operator() throws RecognitionException {
         Enumerator current = null;
 
@@ -10499,11 +10632,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3846:2: ( (enumLiteral_0= XOR ) )
-            // InternalStructuredTextParser.g:3847:2: (enumLiteral_0= XOR )
+            // InternalStructuredTextParser.g:3882:2: ( (enumLiteral_0= XOR ) )
+            // InternalStructuredTextParser.g:3883:2: (enumLiteral_0= XOR )
             {
-            // InternalStructuredTextParser.g:3847:2: (enumLiteral_0= XOR )
-            // InternalStructuredTextParser.g:3848:3: enumLiteral_0= XOR
+            // InternalStructuredTextParser.g:3883:2: (enumLiteral_0= XOR )
+            // InternalStructuredTextParser.g:3884:3: enumLiteral_0= XOR
             {
             enumLiteral_0=(Token)match(input,XOR,FOLLOW_2); 
 
@@ -10533,7 +10666,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleAnd_Operator"
-    // InternalStructuredTextParser.g:3857:1: ruleAnd_Operator returns [Enumerator current=null] : ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) ) ;
+    // InternalStructuredTextParser.g:3893:1: ruleAnd_Operator returns [Enumerator current=null] : ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) ) ;
     public final Enumerator ruleAnd_Operator() throws RecognitionException {
         Enumerator current = null;
 
@@ -10544,31 +10677,31 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3863:2: ( ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) ) )
-            // InternalStructuredTextParser.g:3864:2: ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) )
+            // InternalStructuredTextParser.g:3899:2: ( ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) ) )
+            // InternalStructuredTextParser.g:3900:2: ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) )
             {
-            // InternalStructuredTextParser.g:3864:2: ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) )
-            int alt56=2;
-            int LA56_0 = input.LA(1);
+            // InternalStructuredTextParser.g:3900:2: ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) )
+            int alt57=2;
+            int LA57_0 = input.LA(1);
 
-            if ( (LA56_0==AND) ) {
-                alt56=1;
+            if ( (LA57_0==AND) ) {
+                alt57=1;
             }
-            else if ( (LA56_0==Ampersand) ) {
-                alt56=2;
+            else if ( (LA57_0==Ampersand) ) {
+                alt57=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 56, 0, input);
+                    new NoViableAltException("", 57, 0, input);
 
                 throw nvae;
             }
-            switch (alt56) {
+            switch (alt57) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3865:3: (enumLiteral_0= AND )
+                    // InternalStructuredTextParser.g:3901:3: (enumLiteral_0= AND )
                     {
-                    // InternalStructuredTextParser.g:3865:3: (enumLiteral_0= AND )
-                    // InternalStructuredTextParser.g:3866:4: enumLiteral_0= AND
+                    // InternalStructuredTextParser.g:3901:3: (enumLiteral_0= AND )
+                    // InternalStructuredTextParser.g:3902:4: enumLiteral_0= AND
                     {
                     enumLiteral_0=(Token)match(input,AND,FOLLOW_2); 
 
@@ -10582,10 +10715,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:3873:3: (enumLiteral_1= Ampersand )
+                    // InternalStructuredTextParser.g:3909:3: (enumLiteral_1= Ampersand )
                     {
-                    // InternalStructuredTextParser.g:3873:3: (enumLiteral_1= Ampersand )
-                    // InternalStructuredTextParser.g:3874:4: enumLiteral_1= Ampersand
+                    // InternalStructuredTextParser.g:3909:3: (enumLiteral_1= Ampersand )
+                    // InternalStructuredTextParser.g:3910:4: enumLiteral_1= Ampersand
                     {
                     enumLiteral_1=(Token)match(input,Ampersand,FOLLOW_2); 
 
@@ -10621,7 +10754,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleCompare_Operator"
-    // InternalStructuredTextParser.g:3884:1: ruleCompare_Operator returns [Enumerator current=null] : ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) ) ;
+    // InternalStructuredTextParser.g:3920:1: ruleCompare_Operator returns [Enumerator current=null] : ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) ) ;
     public final Enumerator ruleCompare_Operator() throws RecognitionException {
         Enumerator current = null;
 
@@ -10632,31 +10765,31 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3890:2: ( ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) ) )
-            // InternalStructuredTextParser.g:3891:2: ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) )
+            // InternalStructuredTextParser.g:3926:2: ( ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) ) )
+            // InternalStructuredTextParser.g:3927:2: ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) )
             {
-            // InternalStructuredTextParser.g:3891:2: ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) )
-            int alt57=2;
-            int LA57_0 = input.LA(1);
+            // InternalStructuredTextParser.g:3927:2: ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) )
+            int alt58=2;
+            int LA58_0 = input.LA(1);
 
-            if ( (LA57_0==EqualsSign) ) {
-                alt57=1;
+            if ( (LA58_0==EqualsSign) ) {
+                alt58=1;
             }
-            else if ( (LA57_0==LessThanSignGreaterThanSign) ) {
-                alt57=2;
+            else if ( (LA58_0==LessThanSignGreaterThanSign) ) {
+                alt58=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 57, 0, input);
+                    new NoViableAltException("", 58, 0, input);
 
                 throw nvae;
             }
-            switch (alt57) {
+            switch (alt58) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3892:3: (enumLiteral_0= EqualsSign )
+                    // InternalStructuredTextParser.g:3928:3: (enumLiteral_0= EqualsSign )
                     {
-                    // InternalStructuredTextParser.g:3892:3: (enumLiteral_0= EqualsSign )
-                    // InternalStructuredTextParser.g:3893:4: enumLiteral_0= EqualsSign
+                    // InternalStructuredTextParser.g:3928:3: (enumLiteral_0= EqualsSign )
+                    // InternalStructuredTextParser.g:3929:4: enumLiteral_0= EqualsSign
                     {
                     enumLiteral_0=(Token)match(input,EqualsSign,FOLLOW_2); 
 
@@ -10670,10 +10803,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:3900:3: (enumLiteral_1= LessThanSignGreaterThanSign )
+                    // InternalStructuredTextParser.g:3936:3: (enumLiteral_1= LessThanSignGreaterThanSign )
                     {
-                    // InternalStructuredTextParser.g:3900:3: (enumLiteral_1= LessThanSignGreaterThanSign )
-                    // InternalStructuredTextParser.g:3901:4: enumLiteral_1= LessThanSignGreaterThanSign
+                    // InternalStructuredTextParser.g:3936:3: (enumLiteral_1= LessThanSignGreaterThanSign )
+                    // InternalStructuredTextParser.g:3937:4: enumLiteral_1= LessThanSignGreaterThanSign
                     {
                     enumLiteral_1=(Token)match(input,LessThanSignGreaterThanSign,FOLLOW_2); 
 
@@ -10709,7 +10842,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleEqu_Operator"
-    // InternalStructuredTextParser.g:3911:1: ruleEqu_Operator returns [Enumerator current=null] : ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) ) ;
+    // InternalStructuredTextParser.g:3947:1: ruleEqu_Operator returns [Enumerator current=null] : ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) ) ;
     public final Enumerator ruleEqu_Operator() throws RecognitionException {
         Enumerator current = null;
 
@@ -10722,45 +10855,45 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3917:2: ( ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) ) )
-            // InternalStructuredTextParser.g:3918:2: ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) )
+            // InternalStructuredTextParser.g:3953:2: ( ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) ) )
+            // InternalStructuredTextParser.g:3954:2: ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) )
             {
-            // InternalStructuredTextParser.g:3918:2: ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) )
-            int alt58=4;
+            // InternalStructuredTextParser.g:3954:2: ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) )
+            int alt59=4;
             switch ( input.LA(1) ) {
             case LessThanSign:
                 {
-                alt58=1;
+                alt59=1;
                 }
                 break;
             case LessThanSignEqualsSign:
                 {
-                alt58=2;
+                alt59=2;
                 }
                 break;
             case GreaterThanSign:
                 {
-                alt58=3;
+                alt59=3;
                 }
                 break;
             case GreaterThanSignEqualsSign:
                 {
-                alt58=4;
+                alt59=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 58, 0, input);
+                    new NoViableAltException("", 59, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt58) {
+            switch (alt59) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3919:3: (enumLiteral_0= LessThanSign )
+                    // InternalStructuredTextParser.g:3955:3: (enumLiteral_0= LessThanSign )
                     {
-                    // InternalStructuredTextParser.g:3919:3: (enumLiteral_0= LessThanSign )
-                    // InternalStructuredTextParser.g:3920:4: enumLiteral_0= LessThanSign
+                    // InternalStructuredTextParser.g:3955:3: (enumLiteral_0= LessThanSign )
+                    // InternalStructuredTextParser.g:3956:4: enumLiteral_0= LessThanSign
                     {
                     enumLiteral_0=(Token)match(input,LessThanSign,FOLLOW_2); 
 
@@ -10774,10 +10907,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:3927:3: (enumLiteral_1= LessThanSignEqualsSign )
+                    // InternalStructuredTextParser.g:3963:3: (enumLiteral_1= LessThanSignEqualsSign )
                     {
-                    // InternalStructuredTextParser.g:3927:3: (enumLiteral_1= LessThanSignEqualsSign )
-                    // InternalStructuredTextParser.g:3928:4: enumLiteral_1= LessThanSignEqualsSign
+                    // InternalStructuredTextParser.g:3963:3: (enumLiteral_1= LessThanSignEqualsSign )
+                    // InternalStructuredTextParser.g:3964:4: enumLiteral_1= LessThanSignEqualsSign
                     {
                     enumLiteral_1=(Token)match(input,LessThanSignEqualsSign,FOLLOW_2); 
 
@@ -10791,10 +10924,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalStructuredTextParser.g:3935:3: (enumLiteral_2= GreaterThanSign )
+                    // InternalStructuredTextParser.g:3971:3: (enumLiteral_2= GreaterThanSign )
                     {
-                    // InternalStructuredTextParser.g:3935:3: (enumLiteral_2= GreaterThanSign )
-                    // InternalStructuredTextParser.g:3936:4: enumLiteral_2= GreaterThanSign
+                    // InternalStructuredTextParser.g:3971:3: (enumLiteral_2= GreaterThanSign )
+                    // InternalStructuredTextParser.g:3972:4: enumLiteral_2= GreaterThanSign
                     {
                     enumLiteral_2=(Token)match(input,GreaterThanSign,FOLLOW_2); 
 
@@ -10808,10 +10941,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalStructuredTextParser.g:3943:3: (enumLiteral_3= GreaterThanSignEqualsSign )
+                    // InternalStructuredTextParser.g:3979:3: (enumLiteral_3= GreaterThanSignEqualsSign )
                     {
-                    // InternalStructuredTextParser.g:3943:3: (enumLiteral_3= GreaterThanSignEqualsSign )
-                    // InternalStructuredTextParser.g:3944:4: enumLiteral_3= GreaterThanSignEqualsSign
+                    // InternalStructuredTextParser.g:3979:3: (enumLiteral_3= GreaterThanSignEqualsSign )
+                    // InternalStructuredTextParser.g:3980:4: enumLiteral_3= GreaterThanSignEqualsSign
                     {
                     enumLiteral_3=(Token)match(input,GreaterThanSignEqualsSign,FOLLOW_2); 
 
@@ -10847,7 +10980,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleAdd_Operator"
-    // InternalStructuredTextParser.g:3954:1: ruleAdd_Operator returns [Enumerator current=null] : ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) ) ;
+    // InternalStructuredTextParser.g:3990:1: ruleAdd_Operator returns [Enumerator current=null] : ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) ) ;
     public final Enumerator ruleAdd_Operator() throws RecognitionException {
         Enumerator current = null;
 
@@ -10858,31 +10991,31 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3960:2: ( ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) ) )
-            // InternalStructuredTextParser.g:3961:2: ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) )
+            // InternalStructuredTextParser.g:3996:2: ( ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) ) )
+            // InternalStructuredTextParser.g:3997:2: ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) )
             {
-            // InternalStructuredTextParser.g:3961:2: ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) )
-            int alt59=2;
-            int LA59_0 = input.LA(1);
+            // InternalStructuredTextParser.g:3997:2: ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) )
+            int alt60=2;
+            int LA60_0 = input.LA(1);
 
-            if ( (LA59_0==PlusSign) ) {
-                alt59=1;
+            if ( (LA60_0==PlusSign) ) {
+                alt60=1;
             }
-            else if ( (LA59_0==HyphenMinus) ) {
-                alt59=2;
+            else if ( (LA60_0==HyphenMinus) ) {
+                alt60=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 59, 0, input);
+                    new NoViableAltException("", 60, 0, input);
 
                 throw nvae;
             }
-            switch (alt59) {
+            switch (alt60) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3962:3: (enumLiteral_0= PlusSign )
+                    // InternalStructuredTextParser.g:3998:3: (enumLiteral_0= PlusSign )
                     {
-                    // InternalStructuredTextParser.g:3962:3: (enumLiteral_0= PlusSign )
-                    // InternalStructuredTextParser.g:3963:4: enumLiteral_0= PlusSign
+                    // InternalStructuredTextParser.g:3998:3: (enumLiteral_0= PlusSign )
+                    // InternalStructuredTextParser.g:3999:4: enumLiteral_0= PlusSign
                     {
                     enumLiteral_0=(Token)match(input,PlusSign,FOLLOW_2); 
 
@@ -10896,10 +11029,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:3970:3: (enumLiteral_1= HyphenMinus )
+                    // InternalStructuredTextParser.g:4006:3: (enumLiteral_1= HyphenMinus )
                     {
-                    // InternalStructuredTextParser.g:3970:3: (enumLiteral_1= HyphenMinus )
-                    // InternalStructuredTextParser.g:3971:4: enumLiteral_1= HyphenMinus
+                    // InternalStructuredTextParser.g:4006:3: (enumLiteral_1= HyphenMinus )
+                    // InternalStructuredTextParser.g:4007:4: enumLiteral_1= HyphenMinus
                     {
                     enumLiteral_1=(Token)match(input,HyphenMinus,FOLLOW_2); 
 
@@ -10935,7 +11068,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleTerm_Operator"
-    // InternalStructuredTextParser.g:3981:1: ruleTerm_Operator returns [Enumerator current=null] : ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) ) ;
+    // InternalStructuredTextParser.g:4017:1: ruleTerm_Operator returns [Enumerator current=null] : ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) ) ;
     public final Enumerator ruleTerm_Operator() throws RecognitionException {
         Enumerator current = null;
 
@@ -10947,40 +11080,40 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:3987:2: ( ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) ) )
-            // InternalStructuredTextParser.g:3988:2: ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) )
+            // InternalStructuredTextParser.g:4023:2: ( ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) ) )
+            // InternalStructuredTextParser.g:4024:2: ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) )
             {
-            // InternalStructuredTextParser.g:3988:2: ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) )
-            int alt60=3;
+            // InternalStructuredTextParser.g:4024:2: ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) )
+            int alt61=3;
             switch ( input.LA(1) ) {
             case Asterisk:
                 {
-                alt60=1;
+                alt61=1;
                 }
                 break;
             case Solidus:
                 {
-                alt60=2;
+                alt61=2;
                 }
                 break;
             case MOD:
                 {
-                alt60=3;
+                alt61=3;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 60, 0, input);
+                    new NoViableAltException("", 61, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt60) {
+            switch (alt61) {
                 case 1 :
-                    // InternalStructuredTextParser.g:3989:3: (enumLiteral_0= Asterisk )
+                    // InternalStructuredTextParser.g:4025:3: (enumLiteral_0= Asterisk )
                     {
-                    // InternalStructuredTextParser.g:3989:3: (enumLiteral_0= Asterisk )
-                    // InternalStructuredTextParser.g:3990:4: enumLiteral_0= Asterisk
+                    // InternalStructuredTextParser.g:4025:3: (enumLiteral_0= Asterisk )
+                    // InternalStructuredTextParser.g:4026:4: enumLiteral_0= Asterisk
                     {
                     enumLiteral_0=(Token)match(input,Asterisk,FOLLOW_2); 
 
@@ -10994,10 +11127,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:3997:3: (enumLiteral_1= Solidus )
+                    // InternalStructuredTextParser.g:4033:3: (enumLiteral_1= Solidus )
                     {
-                    // InternalStructuredTextParser.g:3997:3: (enumLiteral_1= Solidus )
-                    // InternalStructuredTextParser.g:3998:4: enumLiteral_1= Solidus
+                    // InternalStructuredTextParser.g:4033:3: (enumLiteral_1= Solidus )
+                    // InternalStructuredTextParser.g:4034:4: enumLiteral_1= Solidus
                     {
                     enumLiteral_1=(Token)match(input,Solidus,FOLLOW_2); 
 
@@ -11011,10 +11144,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalStructuredTextParser.g:4005:3: (enumLiteral_2= MOD )
+                    // InternalStructuredTextParser.g:4041:3: (enumLiteral_2= MOD )
                     {
-                    // InternalStructuredTextParser.g:4005:3: (enumLiteral_2= MOD )
-                    // InternalStructuredTextParser.g:4006:4: enumLiteral_2= MOD
+                    // InternalStructuredTextParser.g:4041:3: (enumLiteral_2= MOD )
+                    // InternalStructuredTextParser.g:4042:4: enumLiteral_2= MOD
                     {
                     enumLiteral_2=(Token)match(input,MOD,FOLLOW_2); 
 
@@ -11050,7 +11183,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "rulePower_Operator"
-    // InternalStructuredTextParser.g:4016:1: rulePower_Operator returns [Enumerator current=null] : (enumLiteral_0= AsteriskAsterisk ) ;
+    // InternalStructuredTextParser.g:4052:1: rulePower_Operator returns [Enumerator current=null] : (enumLiteral_0= AsteriskAsterisk ) ;
     public final Enumerator rulePower_Operator() throws RecognitionException {
         Enumerator current = null;
 
@@ -11060,11 +11193,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:4022:2: ( (enumLiteral_0= AsteriskAsterisk ) )
-            // InternalStructuredTextParser.g:4023:2: (enumLiteral_0= AsteriskAsterisk )
+            // InternalStructuredTextParser.g:4058:2: ( (enumLiteral_0= AsteriskAsterisk ) )
+            // InternalStructuredTextParser.g:4059:2: (enumLiteral_0= AsteriskAsterisk )
             {
-            // InternalStructuredTextParser.g:4023:2: (enumLiteral_0= AsteriskAsterisk )
-            // InternalStructuredTextParser.g:4024:3: enumLiteral_0= AsteriskAsterisk
+            // InternalStructuredTextParser.g:4059:2: (enumLiteral_0= AsteriskAsterisk )
+            // InternalStructuredTextParser.g:4060:3: enumLiteral_0= AsteriskAsterisk
             {
             enumLiteral_0=(Token)match(input,AsteriskAsterisk,FOLLOW_2); 
 
@@ -11094,7 +11227,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleUnary_Operator"
-    // InternalStructuredTextParser.g:4033:1: ruleUnary_Operator returns [Enumerator current=null] : ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) ) ;
+    // InternalStructuredTextParser.g:4069:1: ruleUnary_Operator returns [Enumerator current=null] : ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) ) ;
     public final Enumerator ruleUnary_Operator() throws RecognitionException {
         Enumerator current = null;
 
@@ -11106,40 +11239,40 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:4039:2: ( ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) ) )
-            // InternalStructuredTextParser.g:4040:2: ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) )
+            // InternalStructuredTextParser.g:4075:2: ( ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) ) )
+            // InternalStructuredTextParser.g:4076:2: ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) )
             {
-            // InternalStructuredTextParser.g:4040:2: ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) )
-            int alt61=3;
+            // InternalStructuredTextParser.g:4076:2: ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) )
+            int alt62=3;
             switch ( input.LA(1) ) {
             case HyphenMinus:
                 {
-                alt61=1;
+                alt62=1;
                 }
                 break;
             case PlusSign:
                 {
-                alt61=2;
+                alt62=2;
                 }
                 break;
             case NOT:
                 {
-                alt61=3;
+                alt62=3;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 61, 0, input);
+                    new NoViableAltException("", 62, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt61) {
+            switch (alt62) {
                 case 1 :
-                    // InternalStructuredTextParser.g:4041:3: (enumLiteral_0= HyphenMinus )
+                    // InternalStructuredTextParser.g:4077:3: (enumLiteral_0= HyphenMinus )
                     {
-                    // InternalStructuredTextParser.g:4041:3: (enumLiteral_0= HyphenMinus )
-                    // InternalStructuredTextParser.g:4042:4: enumLiteral_0= HyphenMinus
+                    // InternalStructuredTextParser.g:4077:3: (enumLiteral_0= HyphenMinus )
+                    // InternalStructuredTextParser.g:4078:4: enumLiteral_0= HyphenMinus
                     {
                     enumLiteral_0=(Token)match(input,HyphenMinus,FOLLOW_2); 
 
@@ -11153,10 +11286,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:4049:3: (enumLiteral_1= PlusSign )
+                    // InternalStructuredTextParser.g:4085:3: (enumLiteral_1= PlusSign )
                     {
-                    // InternalStructuredTextParser.g:4049:3: (enumLiteral_1= PlusSign )
-                    // InternalStructuredTextParser.g:4050:4: enumLiteral_1= PlusSign
+                    // InternalStructuredTextParser.g:4085:3: (enumLiteral_1= PlusSign )
+                    // InternalStructuredTextParser.g:4086:4: enumLiteral_1= PlusSign
                     {
                     enumLiteral_1=(Token)match(input,PlusSign,FOLLOW_2); 
 
@@ -11170,10 +11303,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalStructuredTextParser.g:4057:3: (enumLiteral_2= NOT )
+                    // InternalStructuredTextParser.g:4093:3: (enumLiteral_2= NOT )
                     {
-                    // InternalStructuredTextParser.g:4057:3: (enumLiteral_2= NOT )
-                    // InternalStructuredTextParser.g:4058:4: enumLiteral_2= NOT
+                    // InternalStructuredTextParser.g:4093:3: (enumLiteral_2= NOT )
+                    // InternalStructuredTextParser.g:4094:4: enumLiteral_2= NOT
                     {
                     enumLiteral_2=(Token)match(input,NOT,FOLLOW_2); 
 
@@ -11209,7 +11342,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleInt_Type_Name"
-    // InternalStructuredTextParser.g:4068:1: ruleInt_Type_Name returns [Enumerator current=null] : ( (enumLiteral_0= DINT ) | (enumLiteral_1= INT ) | (enumLiteral_2= SINT ) | (enumLiteral_3= LINT ) | (enumLiteral_4= UINT ) | (enumLiteral_5= USINT ) | (enumLiteral_6= UDINT ) | (enumLiteral_7= ULINT ) ) ;
+    // InternalStructuredTextParser.g:4104:1: ruleInt_Type_Name returns [Enumerator current=null] : ( (enumLiteral_0= DINT ) | (enumLiteral_1= INT ) | (enumLiteral_2= SINT ) | (enumLiteral_3= LINT ) | (enumLiteral_4= UINT ) | (enumLiteral_5= USINT ) | (enumLiteral_6= UDINT ) | (enumLiteral_7= ULINT ) ) ;
     public final Enumerator ruleInt_Type_Name() throws RecognitionException {
         Enumerator current = null;
 
@@ -11226,65 +11359,65 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:4074:2: ( ( (enumLiteral_0= DINT ) | (enumLiteral_1= INT ) | (enumLiteral_2= SINT ) | (enumLiteral_3= LINT ) | (enumLiteral_4= UINT ) | (enumLiteral_5= USINT ) | (enumLiteral_6= UDINT ) | (enumLiteral_7= ULINT ) ) )
-            // InternalStructuredTextParser.g:4075:2: ( (enumLiteral_0= DINT ) | (enumLiteral_1= INT ) | (enumLiteral_2= SINT ) | (enumLiteral_3= LINT ) | (enumLiteral_4= UINT ) | (enumLiteral_5= USINT ) | (enumLiteral_6= UDINT ) | (enumLiteral_7= ULINT ) )
+            // InternalStructuredTextParser.g:4110:2: ( ( (enumLiteral_0= DINT ) | (enumLiteral_1= INT ) | (enumLiteral_2= SINT ) | (enumLiteral_3= LINT ) | (enumLiteral_4= UINT ) | (enumLiteral_5= USINT ) | (enumLiteral_6= UDINT ) | (enumLiteral_7= ULINT ) ) )
+            // InternalStructuredTextParser.g:4111:2: ( (enumLiteral_0= DINT ) | (enumLiteral_1= INT ) | (enumLiteral_2= SINT ) | (enumLiteral_3= LINT ) | (enumLiteral_4= UINT ) | (enumLiteral_5= USINT ) | (enumLiteral_6= UDINT ) | (enumLiteral_7= ULINT ) )
             {
-            // InternalStructuredTextParser.g:4075:2: ( (enumLiteral_0= DINT ) | (enumLiteral_1= INT ) | (enumLiteral_2= SINT ) | (enumLiteral_3= LINT ) | (enumLiteral_4= UINT ) | (enumLiteral_5= USINT ) | (enumLiteral_6= UDINT ) | (enumLiteral_7= ULINT ) )
-            int alt62=8;
+            // InternalStructuredTextParser.g:4111:2: ( (enumLiteral_0= DINT ) | (enumLiteral_1= INT ) | (enumLiteral_2= SINT ) | (enumLiteral_3= LINT ) | (enumLiteral_4= UINT ) | (enumLiteral_5= USINT ) | (enumLiteral_6= UDINT ) | (enumLiteral_7= ULINT ) )
+            int alt63=8;
             switch ( input.LA(1) ) {
             case DINT:
                 {
-                alt62=1;
+                alt63=1;
                 }
                 break;
             case INT:
                 {
-                alt62=2;
+                alt63=2;
                 }
                 break;
             case SINT:
                 {
-                alt62=3;
+                alt63=3;
                 }
                 break;
             case LINT:
                 {
-                alt62=4;
+                alt63=4;
                 }
                 break;
             case UINT:
                 {
-                alt62=5;
+                alt63=5;
                 }
                 break;
             case USINT:
                 {
-                alt62=6;
+                alt63=6;
                 }
                 break;
             case UDINT:
                 {
-                alt62=7;
+                alt63=7;
                 }
                 break;
             case ULINT:
                 {
-                alt62=8;
+                alt63=8;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 62, 0, input);
+                    new NoViableAltException("", 63, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt62) {
+            switch (alt63) {
                 case 1 :
-                    // InternalStructuredTextParser.g:4076:3: (enumLiteral_0= DINT )
+                    // InternalStructuredTextParser.g:4112:3: (enumLiteral_0= DINT )
                     {
-                    // InternalStructuredTextParser.g:4076:3: (enumLiteral_0= DINT )
-                    // InternalStructuredTextParser.g:4077:4: enumLiteral_0= DINT
+                    // InternalStructuredTextParser.g:4112:3: (enumLiteral_0= DINT )
+                    // InternalStructuredTextParser.g:4113:4: enumLiteral_0= DINT
                     {
                     enumLiteral_0=(Token)match(input,DINT,FOLLOW_2); 
 
@@ -11298,10 +11431,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:4084:3: (enumLiteral_1= INT )
+                    // InternalStructuredTextParser.g:4120:3: (enumLiteral_1= INT )
                     {
-                    // InternalStructuredTextParser.g:4084:3: (enumLiteral_1= INT )
-                    // InternalStructuredTextParser.g:4085:4: enumLiteral_1= INT
+                    // InternalStructuredTextParser.g:4120:3: (enumLiteral_1= INT )
+                    // InternalStructuredTextParser.g:4121:4: enumLiteral_1= INT
                     {
                     enumLiteral_1=(Token)match(input,INT,FOLLOW_2); 
 
@@ -11315,10 +11448,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalStructuredTextParser.g:4092:3: (enumLiteral_2= SINT )
+                    // InternalStructuredTextParser.g:4128:3: (enumLiteral_2= SINT )
                     {
-                    // InternalStructuredTextParser.g:4092:3: (enumLiteral_2= SINT )
-                    // InternalStructuredTextParser.g:4093:4: enumLiteral_2= SINT
+                    // InternalStructuredTextParser.g:4128:3: (enumLiteral_2= SINT )
+                    // InternalStructuredTextParser.g:4129:4: enumLiteral_2= SINT
                     {
                     enumLiteral_2=(Token)match(input,SINT,FOLLOW_2); 
 
@@ -11332,10 +11465,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalStructuredTextParser.g:4100:3: (enumLiteral_3= LINT )
+                    // InternalStructuredTextParser.g:4136:3: (enumLiteral_3= LINT )
                     {
-                    // InternalStructuredTextParser.g:4100:3: (enumLiteral_3= LINT )
-                    // InternalStructuredTextParser.g:4101:4: enumLiteral_3= LINT
+                    // InternalStructuredTextParser.g:4136:3: (enumLiteral_3= LINT )
+                    // InternalStructuredTextParser.g:4137:4: enumLiteral_3= LINT
                     {
                     enumLiteral_3=(Token)match(input,LINT,FOLLOW_2); 
 
@@ -11349,10 +11482,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 5 :
-                    // InternalStructuredTextParser.g:4108:3: (enumLiteral_4= UINT )
+                    // InternalStructuredTextParser.g:4144:3: (enumLiteral_4= UINT )
                     {
-                    // InternalStructuredTextParser.g:4108:3: (enumLiteral_4= UINT )
-                    // InternalStructuredTextParser.g:4109:4: enumLiteral_4= UINT
+                    // InternalStructuredTextParser.g:4144:3: (enumLiteral_4= UINT )
+                    // InternalStructuredTextParser.g:4145:4: enumLiteral_4= UINT
                     {
                     enumLiteral_4=(Token)match(input,UINT,FOLLOW_2); 
 
@@ -11366,10 +11499,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 6 :
-                    // InternalStructuredTextParser.g:4116:3: (enumLiteral_5= USINT )
+                    // InternalStructuredTextParser.g:4152:3: (enumLiteral_5= USINT )
                     {
-                    // InternalStructuredTextParser.g:4116:3: (enumLiteral_5= USINT )
-                    // InternalStructuredTextParser.g:4117:4: enumLiteral_5= USINT
+                    // InternalStructuredTextParser.g:4152:3: (enumLiteral_5= USINT )
+                    // InternalStructuredTextParser.g:4153:4: enumLiteral_5= USINT
                     {
                     enumLiteral_5=(Token)match(input,USINT,FOLLOW_2); 
 
@@ -11383,10 +11516,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 7 :
-                    // InternalStructuredTextParser.g:4124:3: (enumLiteral_6= UDINT )
+                    // InternalStructuredTextParser.g:4160:3: (enumLiteral_6= UDINT )
                     {
-                    // InternalStructuredTextParser.g:4124:3: (enumLiteral_6= UDINT )
-                    // InternalStructuredTextParser.g:4125:4: enumLiteral_6= UDINT
+                    // InternalStructuredTextParser.g:4160:3: (enumLiteral_6= UDINT )
+                    // InternalStructuredTextParser.g:4161:4: enumLiteral_6= UDINT
                     {
                     enumLiteral_6=(Token)match(input,UDINT,FOLLOW_2); 
 
@@ -11400,10 +11533,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 8 :
-                    // InternalStructuredTextParser.g:4132:3: (enumLiteral_7= ULINT )
+                    // InternalStructuredTextParser.g:4168:3: (enumLiteral_7= ULINT )
                     {
-                    // InternalStructuredTextParser.g:4132:3: (enumLiteral_7= ULINT )
-                    // InternalStructuredTextParser.g:4133:4: enumLiteral_7= ULINT
+                    // InternalStructuredTextParser.g:4168:3: (enumLiteral_7= ULINT )
+                    // InternalStructuredTextParser.g:4169:4: enumLiteral_7= ULINT
                     {
                     enumLiteral_7=(Token)match(input,ULINT,FOLLOW_2); 
 
@@ -11439,7 +11572,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleReal_Type_Name"
-    // InternalStructuredTextParser.g:4143:1: ruleReal_Type_Name returns [Enumerator current=null] : ( (enumLiteral_0= REAL ) | (enumLiteral_1= LREAL ) ) ;
+    // InternalStructuredTextParser.g:4179:1: ruleReal_Type_Name returns [Enumerator current=null] : ( (enumLiteral_0= REAL ) | (enumLiteral_1= LREAL ) ) ;
     public final Enumerator ruleReal_Type_Name() throws RecognitionException {
         Enumerator current = null;
 
@@ -11450,31 +11583,31 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:4149:2: ( ( (enumLiteral_0= REAL ) | (enumLiteral_1= LREAL ) ) )
-            // InternalStructuredTextParser.g:4150:2: ( (enumLiteral_0= REAL ) | (enumLiteral_1= LREAL ) )
+            // InternalStructuredTextParser.g:4185:2: ( ( (enumLiteral_0= REAL ) | (enumLiteral_1= LREAL ) ) )
+            // InternalStructuredTextParser.g:4186:2: ( (enumLiteral_0= REAL ) | (enumLiteral_1= LREAL ) )
             {
-            // InternalStructuredTextParser.g:4150:2: ( (enumLiteral_0= REAL ) | (enumLiteral_1= LREAL ) )
-            int alt63=2;
-            int LA63_0 = input.LA(1);
+            // InternalStructuredTextParser.g:4186:2: ( (enumLiteral_0= REAL ) | (enumLiteral_1= LREAL ) )
+            int alt64=2;
+            int LA64_0 = input.LA(1);
 
-            if ( (LA63_0==REAL) ) {
-                alt63=1;
+            if ( (LA64_0==REAL) ) {
+                alt64=1;
             }
-            else if ( (LA63_0==LREAL) ) {
-                alt63=2;
+            else if ( (LA64_0==LREAL) ) {
+                alt64=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 63, 0, input);
+                    new NoViableAltException("", 64, 0, input);
 
                 throw nvae;
             }
-            switch (alt63) {
+            switch (alt64) {
                 case 1 :
-                    // InternalStructuredTextParser.g:4151:3: (enumLiteral_0= REAL )
+                    // InternalStructuredTextParser.g:4187:3: (enumLiteral_0= REAL )
                     {
-                    // InternalStructuredTextParser.g:4151:3: (enumLiteral_0= REAL )
-                    // InternalStructuredTextParser.g:4152:4: enumLiteral_0= REAL
+                    // InternalStructuredTextParser.g:4187:3: (enumLiteral_0= REAL )
+                    // InternalStructuredTextParser.g:4188:4: enumLiteral_0= REAL
                     {
                     enumLiteral_0=(Token)match(input,REAL,FOLLOW_2); 
 
@@ -11488,10 +11621,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:4159:3: (enumLiteral_1= LREAL )
+                    // InternalStructuredTextParser.g:4195:3: (enumLiteral_1= LREAL )
                     {
-                    // InternalStructuredTextParser.g:4159:3: (enumLiteral_1= LREAL )
-                    // InternalStructuredTextParser.g:4160:4: enumLiteral_1= LREAL
+                    // InternalStructuredTextParser.g:4195:3: (enumLiteral_1= LREAL )
+                    // InternalStructuredTextParser.g:4196:4: enumLiteral_1= LREAL
                     {
                     enumLiteral_1=(Token)match(input,LREAL,FOLLOW_2); 
 
@@ -11527,7 +11660,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleString_Type_Name"
-    // InternalStructuredTextParser.g:4170:1: ruleString_Type_Name returns [Enumerator current=null] : ( (enumLiteral_0= STRING ) | (enumLiteral_1= WSTRING ) | (enumLiteral_2= CHAR ) | (enumLiteral_3= WCHAR ) ) ;
+    // InternalStructuredTextParser.g:4206:1: ruleString_Type_Name returns [Enumerator current=null] : ( (enumLiteral_0= STRING ) | (enumLiteral_1= WSTRING ) | (enumLiteral_2= CHAR ) | (enumLiteral_3= WCHAR ) ) ;
     public final Enumerator ruleString_Type_Name() throws RecognitionException {
         Enumerator current = null;
 
@@ -11540,45 +11673,45 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:4176:2: ( ( (enumLiteral_0= STRING ) | (enumLiteral_1= WSTRING ) | (enumLiteral_2= CHAR ) | (enumLiteral_3= WCHAR ) ) )
-            // InternalStructuredTextParser.g:4177:2: ( (enumLiteral_0= STRING ) | (enumLiteral_1= WSTRING ) | (enumLiteral_2= CHAR ) | (enumLiteral_3= WCHAR ) )
+            // InternalStructuredTextParser.g:4212:2: ( ( (enumLiteral_0= STRING ) | (enumLiteral_1= WSTRING ) | (enumLiteral_2= CHAR ) | (enumLiteral_3= WCHAR ) ) )
+            // InternalStructuredTextParser.g:4213:2: ( (enumLiteral_0= STRING ) | (enumLiteral_1= WSTRING ) | (enumLiteral_2= CHAR ) | (enumLiteral_3= WCHAR ) )
             {
-            // InternalStructuredTextParser.g:4177:2: ( (enumLiteral_0= STRING ) | (enumLiteral_1= WSTRING ) | (enumLiteral_2= CHAR ) | (enumLiteral_3= WCHAR ) )
-            int alt64=4;
+            // InternalStructuredTextParser.g:4213:2: ( (enumLiteral_0= STRING ) | (enumLiteral_1= WSTRING ) | (enumLiteral_2= CHAR ) | (enumLiteral_3= WCHAR ) )
+            int alt65=4;
             switch ( input.LA(1) ) {
             case STRING:
                 {
-                alt64=1;
+                alt65=1;
                 }
                 break;
             case WSTRING:
                 {
-                alt64=2;
+                alt65=2;
                 }
                 break;
             case CHAR:
                 {
-                alt64=3;
+                alt65=3;
                 }
                 break;
             case WCHAR:
                 {
-                alt64=4;
+                alt65=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 64, 0, input);
+                    new NoViableAltException("", 65, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt64) {
+            switch (alt65) {
                 case 1 :
-                    // InternalStructuredTextParser.g:4178:3: (enumLiteral_0= STRING )
+                    // InternalStructuredTextParser.g:4214:3: (enumLiteral_0= STRING )
                     {
-                    // InternalStructuredTextParser.g:4178:3: (enumLiteral_0= STRING )
-                    // InternalStructuredTextParser.g:4179:4: enumLiteral_0= STRING
+                    // InternalStructuredTextParser.g:4214:3: (enumLiteral_0= STRING )
+                    // InternalStructuredTextParser.g:4215:4: enumLiteral_0= STRING
                     {
                     enumLiteral_0=(Token)match(input,STRING,FOLLOW_2); 
 
@@ -11592,10 +11725,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:4186:3: (enumLiteral_1= WSTRING )
+                    // InternalStructuredTextParser.g:4222:3: (enumLiteral_1= WSTRING )
                     {
-                    // InternalStructuredTextParser.g:4186:3: (enumLiteral_1= WSTRING )
-                    // InternalStructuredTextParser.g:4187:4: enumLiteral_1= WSTRING
+                    // InternalStructuredTextParser.g:4222:3: (enumLiteral_1= WSTRING )
+                    // InternalStructuredTextParser.g:4223:4: enumLiteral_1= WSTRING
                     {
                     enumLiteral_1=(Token)match(input,WSTRING,FOLLOW_2); 
 
@@ -11609,10 +11742,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalStructuredTextParser.g:4194:3: (enumLiteral_2= CHAR )
+                    // InternalStructuredTextParser.g:4230:3: (enumLiteral_2= CHAR )
                     {
-                    // InternalStructuredTextParser.g:4194:3: (enumLiteral_2= CHAR )
-                    // InternalStructuredTextParser.g:4195:4: enumLiteral_2= CHAR
+                    // InternalStructuredTextParser.g:4230:3: (enumLiteral_2= CHAR )
+                    // InternalStructuredTextParser.g:4231:4: enumLiteral_2= CHAR
                     {
                     enumLiteral_2=(Token)match(input,CHAR,FOLLOW_2); 
 
@@ -11626,10 +11759,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalStructuredTextParser.g:4202:3: (enumLiteral_3= WCHAR )
+                    // InternalStructuredTextParser.g:4238:3: (enumLiteral_3= WCHAR )
                     {
-                    // InternalStructuredTextParser.g:4202:3: (enumLiteral_3= WCHAR )
-                    // InternalStructuredTextParser.g:4203:4: enumLiteral_3= WCHAR
+                    // InternalStructuredTextParser.g:4238:3: (enumLiteral_3= WCHAR )
+                    // InternalStructuredTextParser.g:4239:4: enumLiteral_3= WCHAR
                     {
                     enumLiteral_3=(Token)match(input,WCHAR,FOLLOW_2); 
 
@@ -11665,7 +11798,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleBool_Type_Name"
-    // InternalStructuredTextParser.g:4213:1: ruleBool_Type_Name returns [Enumerator current=null] : (enumLiteral_0= BOOL ) ;
+    // InternalStructuredTextParser.g:4249:1: ruleBool_Type_Name returns [Enumerator current=null] : (enumLiteral_0= BOOL ) ;
     public final Enumerator ruleBool_Type_Name() throws RecognitionException {
         Enumerator current = null;
 
@@ -11675,11 +11808,11 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:4219:2: ( (enumLiteral_0= BOOL ) )
-            // InternalStructuredTextParser.g:4220:2: (enumLiteral_0= BOOL )
+            // InternalStructuredTextParser.g:4255:2: ( (enumLiteral_0= BOOL ) )
+            // InternalStructuredTextParser.g:4256:2: (enumLiteral_0= BOOL )
             {
-            // InternalStructuredTextParser.g:4220:2: (enumLiteral_0= BOOL )
-            // InternalStructuredTextParser.g:4221:3: enumLiteral_0= BOOL
+            // InternalStructuredTextParser.g:4256:2: (enumLiteral_0= BOOL )
+            // InternalStructuredTextParser.g:4257:3: enumLiteral_0= BOOL
             {
             enumLiteral_0=(Token)match(input,BOOL,FOLLOW_2); 
 
@@ -11767,12 +11900,13 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_53 = new BitSet(new long[]{0x0000000000000002L,0x0000000200000000L});
     public static final BitSet FOLLOW_54 = new BitSet(new long[]{0x0000000000000000L,0x0000000400400000L});
     public static final BitSet FOLLOW_55 = new BitSet(new long[]{0x0000000000000000L,0x0000000001000000L});
-    public static final BitSet FOLLOW_56 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_57 = new BitSet(new long[]{0x0000000000000000L,0x0001C10000A00000L});
-    public static final BitSet FOLLOW_58 = new BitSet(new long[]{0x0404690162000000L,0x0001C10000A00000L});
-    public static final BitSet FOLLOW_59 = new BitSet(new long[]{0x0000000000000002L,0x0000000080000000L});
-    public static final BitSet FOLLOW_60 = new BitSet(new long[]{0x0000000000000000L,0x0000010000A00000L});
-    public static final BitSet FOLLOW_61 = new BitSet(new long[]{0x0000000000000000L,0x0000010000010000L});
-    public static final BitSet FOLLOW_62 = new BitSet(new long[]{0x0000000000000000L,0x0014000000000000L});
+    public static final BitSet FOLLOW_56 = new BitSet(new long[]{0x0000000000000002L,0x0000000001000000L});
+    public static final BitSet FOLLOW_57 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_58 = new BitSet(new long[]{0x0000000000000000L,0x0001C10000A00000L});
+    public static final BitSet FOLLOW_59 = new BitSet(new long[]{0x0404690162000000L,0x0001C10000A00000L});
+    public static final BitSet FOLLOW_60 = new BitSet(new long[]{0x0000000000000002L,0x0000000080000000L});
+    public static final BitSet FOLLOW_61 = new BitSet(new long[]{0x0000000000000000L,0x0000010000A00000L});
+    public static final BitSet FOLLOW_62 = new BitSet(new long[]{0x0000000000000000L,0x0000010000010000L});
+    public static final BitSet FOLLOW_63 = new BitSet(new long[]{0x0000000000000000L,0x0014000000000000L});
 
 }

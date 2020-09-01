@@ -114,6 +114,8 @@ public class StructuredTextParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getVariable_SubscriptAccess().getGroup_1(), "rule__Variable_Subscript__Group_1__0");
 			builder.put(grammarAccess.getVariable_SubscriptAccess().getGroup_1_3(), "rule__Variable_Subscript__Group_1_3__0");
 			builder.put(grammarAccess.getVariable_AdapterAccess().getGroup(), "rule__Variable_Adapter__Group__0");
+			builder.put(grammarAccess.getVariable_AdapterAccess().getGroup_1(), "rule__Variable_Adapter__Group_1__0");
+			builder.put(grammarAccess.getAdapterRootAccess().getGroup(), "rule__AdapterRoot__Group__0");
 			builder.put(grammarAccess.getMultibit_Part_AccessAccess().getGroup_0(), "rule__Multibit_Part_Access__Group_0__0");
 			builder.put(grammarAccess.getMultibit_Part_AccessAccess().getGroup_1(), "rule__Multibit_Part_Access__Group_1__0");
 			builder.put(grammarAccess.getMultibit_Part_AccessAccess().getGroup_2(), "rule__Multibit_Part_Access__Group_2__0");
@@ -196,8 +198,8 @@ public class StructuredTextParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getVariableAccess().getPartAssignment_1(), "rule__Variable__PartAssignment_1");
 			builder.put(grammarAccess.getVariable_SubscriptAccess().getIndexAssignment_1_2(), "rule__Variable_Subscript__IndexAssignment_1_2");
 			builder.put(grammarAccess.getVariable_SubscriptAccess().getIndexAssignment_1_3_1(), "rule__Variable_Subscript__IndexAssignment_1_3_1");
-			builder.put(grammarAccess.getVariable_AdapterAccess().getAdapterAssignment_1(), "rule__Variable_Adapter__AdapterAssignment_1");
-			builder.put(grammarAccess.getVariable_AdapterAccess().getVarAssignment_3(), "rule__Variable_Adapter__VarAssignment_3");
+			builder.put(grammarAccess.getVariable_AdapterAccess().getVarAssignment_1_2(), "rule__Variable_Adapter__VarAssignment_1_2");
+			builder.put(grammarAccess.getAdapterRootAccess().getAdapterAssignment_1(), "rule__AdapterRoot__AdapterAssignment_1");
 			builder.put(grammarAccess.getMultibit_Part_AccessAccess().getDwordaccessAssignment_0_0(), "rule__Multibit_Part_Access__DwordaccessAssignment_0_0");
 			builder.put(grammarAccess.getMultibit_Part_AccessAccess().getIndexAssignment_0_1(), "rule__Multibit_Part_Access__IndexAssignment_0_1");
 			builder.put(grammarAccess.getMultibit_Part_AccessAccess().getWordaccessAssignment_1_0(), "rule__Multibit_Part_Access__WordaccessAssignment_1_0");

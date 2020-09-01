@@ -718,6 +718,52 @@ public interface StructuredTextPackage extends EPackage
   int VARIABLE_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl <em>Adapter Variable</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getAdapterVariable()
+   * @generated
+   */
+  int ADAPTER_VARIABLE = 18;
+
+  /**
+   * The feature id for the '<em><b>Part</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ADAPTER_VARIABLE__PART = VARIABLE__PART;
+
+  /**
+   * The feature id for the '<em><b>Curr</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ADAPTER_VARIABLE__CURR = VARIABLE_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Var</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ADAPTER_VARIABLE__VAR = VARIABLE_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Adapter Variable</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ADAPTER_VARIABLE_FEATURE_COUNT = VARIABLE_FEATURE_COUNT + 2;
+
+  /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.PartialAccessImpl <em>Partial Access</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -725,7 +771,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getPartialAccess()
    * @generated
    */
-  int PARTIAL_ACCESS = 18;
+  int PARTIAL_ACCESS = 19;
 
   /**
    * The feature id for the '<em><b>Dwordaccess</b></em>' attribute.
@@ -789,7 +835,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getPrimaryVariable()
    * @generated
    */
-  int PRIMARY_VARIABLE = 19;
+  int PRIMARY_VARIABLE = 20;
 
   /**
    * The feature id for the '<em><b>Part</b></em>' containment reference.
@@ -826,7 +872,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getConstant()
    * @generated
    */
-  int CONSTANT = 20;
+  int CONSTANT = 21;
 
   /**
    * The number of structural features of the '<em>Constant</em>' class.
@@ -845,7 +891,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getNumericLiteral()
    * @generated
    */
-  int NUMERIC_LITERAL = 21;
+  int NUMERIC_LITERAL = 22;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -873,7 +919,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getIntLiteral()
    * @generated
    */
-  int INT_LITERAL = 22;
+  int INT_LITERAL = 23;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -910,7 +956,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getRealLiteral()
    * @generated
    */
-  int REAL_LITERAL = 23;
+  int REAL_LITERAL = 24;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -947,7 +993,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getBoolLiteral()
    * @generated
    */
-  int BOOL_LITERAL = 24;
+  int BOOL_LITERAL = 25;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -984,7 +1030,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getStringLiteral()
    * @generated
    */
-  int STRING_LITERAL = 25;
+  int STRING_LITERAL = 26;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -1030,7 +1076,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getTimeLiteral()
    * @generated
    */
-  int TIME_LITERAL = 26;
+  int TIME_LITERAL = 27;
 
   /**
    * The feature id for the '<em><b>Literal</b></em>' attribute.
@@ -1058,7 +1104,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getLocalVariable()
    * @generated
    */
-  int LOCAL_VARIABLE = 27;
+  int LOCAL_VARIABLE = 28;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1239,7 +1285,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getSuperStatement()
    * @generated
    */
-  int SUPER_STATEMENT = 28;
+  int SUPER_STATEMENT = 29;
 
   /**
    * The number of structural features of the '<em>Super Statement</em>' class.
@@ -1258,7 +1304,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getReturnStatement()
    * @generated
    */
-  int RETURN_STATEMENT = 29;
+  int RETURN_STATEMENT = 30;
 
   /**
    * The number of structural features of the '<em>Return Statement</em>' class.
@@ -1277,7 +1323,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getExitStatement()
    * @generated
    */
-  int EXIT_STATEMENT = 30;
+  int EXIT_STATEMENT = 31;
 
   /**
    * The number of structural features of the '<em>Exit Statement</em>' class.
@@ -1296,7 +1342,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getContinueStatement()
    * @generated
    */
-  int CONTINUE_STATEMENT = 31;
+  int CONTINUE_STATEMENT = 32;
 
   /**
    * The number of structural features of the '<em>Continue Statement</em>' class.
@@ -1315,7 +1361,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getBinaryExpression()
    * @generated
    */
-  int BINARY_EXPRESSION = 32;
+  int BINARY_EXPRESSION = 33;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1361,7 +1407,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getUnaryExpression()
    * @generated
    */
-  int UNARY_EXPRESSION = 33;
+  int UNARY_EXPRESSION = 34;
 
   /**
    * The feature id for the '<em><b>Operator</b></em>' attribute.
@@ -1398,7 +1444,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getArrayVariable()
    * @generated
    */
-  int ARRAY_VARIABLE = 34;
+  int ARRAY_VARIABLE = 35;
 
   /**
    * The feature id for the '<em><b>Part</b></em>' containment reference.
@@ -1437,14 +1483,14 @@ public interface StructuredTextPackage extends EPackage
   int ARRAY_VARIABLE_FEATURE_COUNT = VARIABLE_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl <em>Adapter Variable</em>}' class.
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterRootImpl <em>Adapter Root</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getAdapterVariable()
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterRootImpl
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getAdapterRoot()
    * @generated
    */
-  int ADAPTER_VARIABLE = 35;
+  int ADAPTER_ROOT = 36;
 
   /**
    * The feature id for the '<em><b>Part</b></em>' containment reference.
@@ -1453,16 +1499,16 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ADAPTER_VARIABLE__PART = VARIABLE__PART;
+  int ADAPTER_ROOT__PART = ADAPTER_VARIABLE__PART;
 
   /**
-   * The feature id for the '<em><b>Adapter</b></em>' reference.
+   * The feature id for the '<em><b>Curr</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ADAPTER_VARIABLE__ADAPTER = VARIABLE_FEATURE_COUNT + 0;
+  int ADAPTER_ROOT__CURR = ADAPTER_VARIABLE__CURR;
 
   /**
    * The feature id for the '<em><b>Var</b></em>' reference.
@@ -1471,16 +1517,25 @@ public interface StructuredTextPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ADAPTER_VARIABLE__VAR = VARIABLE_FEATURE_COUNT + 1;
+  int ADAPTER_ROOT__VAR = ADAPTER_VARIABLE__VAR;
 
   /**
-   * The number of structural features of the '<em>Adapter Variable</em>' class.
+   * The feature id for the '<em><b>Adapter</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ADAPTER_VARIABLE_FEATURE_COUNT = VARIABLE_FEATURE_COUNT + 2;
+  int ADAPTER_ROOT__ADAPTER = ADAPTER_VARIABLE_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Adapter Root</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ADAPTER_ROOT_FEATURE_COUNT = ADAPTER_VARIABLE_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.BinaryOperator <em>Binary Operator</em>}' enum.
@@ -1490,7 +1545,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getBinaryOperator()
    * @generated
    */
-  int BINARY_OPERATOR = 36;
+  int BINARY_OPERATOR = 37;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator <em>Unary Operator</em>}' enum.
@@ -1500,7 +1555,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getUnaryOperator()
    * @generated
    */
-  int UNARY_OPERATOR = 37;
+  int UNARY_OPERATOR = 38;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Type <em>Type</em>}' enum.
@@ -1510,7 +1565,7 @@ public interface StructuredTextPackage extends EPackage
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getType()
    * @generated
    */
-  int TYPE = 38;
+  int TYPE = 39;
 
 
   /**
@@ -2057,6 +2112,38 @@ public interface StructuredTextPackage extends EPackage
   EReference getVariable_Part();
 
   /**
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable <em>Adapter Variable</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Adapter Variable</em>'.
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
+   * @generated
+   */
+  EClass getAdapterVariable();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getCurr <em>Curr</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Curr</em>'.
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getCurr()
+   * @see #getAdapterVariable()
+   * @generated
+   */
+  EReference getAdapterVariable_Curr();
+
+  /**
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getVar <em>Var</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Var</em>'.
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getVar()
+   * @see #getAdapterVariable()
+   * @generated
+   */
+  EReference getAdapterVariable_Var();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess <em>Partial Access</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2535,36 +2622,25 @@ public interface StructuredTextPackage extends EPackage
   EReference getArrayVariable_Index();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable <em>Adapter Variable</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot <em>Adapter Root</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Adapter Variable</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
+   * @return the meta object for class '<em>Adapter Root</em>'.
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
    * @generated
    */
-  EClass getAdapterVariable();
+  EClass getAdapterRoot();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getAdapter <em>Adapter</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot#getAdapter <em>Adapter</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Adapter</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getAdapter()
-   * @see #getAdapterVariable()
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot#getAdapter()
+   * @see #getAdapterRoot()
    * @generated
    */
-  EReference getAdapterVariable_Adapter();
-
-  /**
-   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getVar <em>Var</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Var</em>'.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable#getVar()
-   * @see #getAdapterVariable()
-   * @generated
-   */
-  EReference getAdapterVariable_Var();
+  EReference getAdapterRoot_Adapter();
 
   /**
    * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.BinaryOperator <em>Binary Operator</em>}'.
@@ -3064,6 +3140,32 @@ public interface StructuredTextPackage extends EPackage
     EReference VARIABLE__PART = eINSTANCE.getVariable_Part();
 
     /**
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl <em>Adapter Variable</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl
+     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getAdapterVariable()
+     * @generated
+     */
+    EClass ADAPTER_VARIABLE = eINSTANCE.getAdapterVariable();
+
+    /**
+     * The meta object literal for the '<em><b>Curr</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ADAPTER_VARIABLE__CURR = eINSTANCE.getAdapterVariable_Curr();
+
+    /**
+     * The meta object literal for the '<em><b>Var</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ADAPTER_VARIABLE__VAR = eINSTANCE.getAdapterVariable_Var();
+
+    /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.PartialAccessImpl <em>Partial Access</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3458,14 +3560,14 @@ public interface StructuredTextPackage extends EPackage
     EReference ARRAY_VARIABLE__INDEX = eINSTANCE.getArrayVariable_Index();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl <em>Adapter Variable</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterRootImpl <em>Adapter Root</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl
-     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getAdapterVariable()
+     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterRootImpl
+     * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.StructuredTextPackageImpl#getAdapterRoot()
      * @generated
      */
-    EClass ADAPTER_VARIABLE = eINSTANCE.getAdapterVariable();
+    EClass ADAPTER_ROOT = eINSTANCE.getAdapterRoot();
 
     /**
      * The meta object literal for the '<em><b>Adapter</b></em>' reference feature.
@@ -3473,15 +3575,7 @@ public interface StructuredTextPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ADAPTER_VARIABLE__ADAPTER = eINSTANCE.getAdapterVariable_Adapter();
-
-    /**
-     * The meta object literal for the '<em><b>Var</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ADAPTER_VARIABLE__VAR = eINSTANCE.getAdapterVariable_Var();
+    EReference ADAPTER_ROOT__ADAPTER = eINSTANCE.getAdapterRoot_Adapter();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.BinaryOperator <em>Binary Operator</em>}' enum.

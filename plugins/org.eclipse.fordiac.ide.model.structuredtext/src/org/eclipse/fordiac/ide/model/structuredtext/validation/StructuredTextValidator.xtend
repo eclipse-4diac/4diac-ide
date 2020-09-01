@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral
 import org.eclipse.fordiac.ide.model.FordiacKeywords
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
 
 /**
  * This class contains custom validation rules.
@@ -92,7 +93,14 @@ class StructuredTextValidator extends AbstractStructuredTextValidator {
 
 	def protected dispatch String extractTypeInformation(VarDeclaration variable) {	variable.type.name }
 	
-	def protected dispatch String extractTypeInformation(AdapterVariable variable) { variable.^var.type.name }
+	def protected dispatch String extractTypeInformation(AdapterVariable variable) { 
+		val head = variable.curr;
+        switch (head) {
+        	AdapterRoot: head.adapter.type.name
+        	AdapterVariable: head.^var.type.name
+        	default: ""
+        }
+	}
 
 	@Check
 	def checkLocalVariable(LocalVariable v) {

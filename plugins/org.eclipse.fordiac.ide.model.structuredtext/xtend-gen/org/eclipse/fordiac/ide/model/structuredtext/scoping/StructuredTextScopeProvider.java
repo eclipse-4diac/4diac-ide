@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
@@ -64,18 +65,13 @@ public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvide
     }
     final List<DataType> candidates = ((FBType) _get_1).getTypeLibrary().getDataTypeLibrary().getDataTypes();
     Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
-    return new SimpleScope(_scopedElementsFor, true);
+    return new SimpleScope(_scopedElementsFor, false);
   }
   
   public IScope scope_AdapterVariable_var(final AdapterVariable context, final EReference ref) {
     SimpleScope _xblockexpression = null;
     {
-      VarDeclaration _adapter = context.getAdapter();
-      DataType _type = null;
-      if (_adapter!=null) {
-        _type=_adapter.getType();
-      }
-      final DataType type = _type;
+      final DataType type = this.getType(context);
       if ((type == null)) {
         return IScope.NULLSCOPE;
       }
@@ -85,7 +81,31 @@ public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvide
         return IScope.NULLSCOPE;
       }
       Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
-      _xblockexpression = new SimpleScope(_scopedElementsFor, true);
+      _xblockexpression = new SimpleScope(_scopedElementsFor, false);
+    }
+    return _xblockexpression;
+  }
+  
+  public DataType getType(final AdapterVariable variable) {
+    DataType _xblockexpression = null;
+    {
+      final AdapterVariable head = variable.getCurr();
+      DataType _switchResult = null;
+      boolean _matched = false;
+      if (head instanceof AdapterRoot) {
+        _matched=true;
+        _switchResult = ((AdapterRoot)head).getAdapter().getType();
+      }
+      if (!_matched) {
+        if (head instanceof AdapterVariable) {
+          _matched=true;
+          _switchResult = head.getVar().getType();
+        }
+      }
+      if (!_matched) {
+        _switchResult = null;
+      }
+      _xblockexpression = _switchResult;
     }
     return _xblockexpression;
   }

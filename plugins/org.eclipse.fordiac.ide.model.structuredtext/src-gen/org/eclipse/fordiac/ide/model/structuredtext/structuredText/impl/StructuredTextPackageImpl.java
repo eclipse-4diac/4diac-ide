@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ArrayVariable;
@@ -198,6 +199,13 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass adapterVariableEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass partialAccessEClass = null;
 
   /**
@@ -317,7 +325,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass adapterVariableEClass = null;
+  private EClass adapterRootEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -975,6 +983,39 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
+  public EClass getAdapterVariable()
+  {
+    return adapterVariableEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getAdapterVariable_Curr()
+  {
+    return (EReference)adapterVariableEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getAdapterVariable_Var()
+  {
+    return (EReference)adapterVariableEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getPartialAccess()
   {
     return partialAccessEClass;
@@ -1470,9 +1511,9 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
-  public EClass getAdapterVariable()
+  public EClass getAdapterRoot()
   {
-    return adapterVariableEClass;
+    return adapterRootEClass;
   }
 
   /**
@@ -1481,20 +1522,9 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
-  public EReference getAdapterVariable_Adapter()
+  public EReference getAdapterRoot_Adapter()
   {
-    return (EReference)adapterVariableEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getAdapterVariable_Var()
-  {
-    return (EReference)adapterVariableEClass.getEStructuralFeatures().get(1);
+    return (EReference)adapterRootEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1630,6 +1660,10 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     variableEClass = createEClass(VARIABLE);
     createEReference(variableEClass, VARIABLE__PART);
 
+    adapterVariableEClass = createEClass(ADAPTER_VARIABLE);
+    createEReference(adapterVariableEClass, ADAPTER_VARIABLE__CURR);
+    createEReference(adapterVariableEClass, ADAPTER_VARIABLE__VAR);
+
     partialAccessEClass = createEClass(PARTIAL_ACCESS);
     createEAttribute(partialAccessEClass, PARTIAL_ACCESS__DWORDACCESS);
     createEAttribute(partialAccessEClass, PARTIAL_ACCESS__INDEX);
@@ -1692,9 +1726,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     createEReference(arrayVariableEClass, ARRAY_VARIABLE__ARRAY);
     createEReference(arrayVariableEClass, ARRAY_VARIABLE__INDEX);
 
-    adapterVariableEClass = createEClass(ADAPTER_VARIABLE);
-    createEReference(adapterVariableEClass, ADAPTER_VARIABLE__ADAPTER);
-    createEReference(adapterVariableEClass, ADAPTER_VARIABLE__VAR);
+    adapterRootEClass = createEClass(ADAPTER_ROOT);
+    createEReference(adapterRootEClass, ADAPTER_ROOT__ADAPTER);
 
     // Create enums
     binaryOperatorEEnum = createEEnum(BINARY_OPERATOR);
@@ -1745,6 +1778,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     inArgumentEClass.getESuperTypes().add(this.getArgument());
     outArgumentEClass.getESuperTypes().add(this.getArgument());
     variableEClass.getESuperTypes().add(this.getExpression());
+    adapterVariableEClass.getESuperTypes().add(this.getVariable());
     primaryVariableEClass.getESuperTypes().add(this.getVariable());
     constantEClass.getESuperTypes().add(this.getExpression());
     numericLiteralEClass.getESuperTypes().add(this.getConstant());
@@ -1761,7 +1795,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     binaryExpressionEClass.getESuperTypes().add(this.getExpression());
     unaryExpressionEClass.getESuperTypes().add(this.getExpression());
     arrayVariableEClass.getESuperTypes().add(this.getVariable());
-    adapterVariableEClass.getESuperTypes().add(this.getVariable());
+    adapterRootEClass.getESuperTypes().add(this.getAdapterVariable());
 
     // Initialize classes and features; add operations and parameters
     initEClass(structuredTextAlgorithmEClass, StructuredTextAlgorithm.class, "StructuredTextAlgorithm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1833,6 +1867,10 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     initEClass(variableEClass, Variable.class, "Variable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getVariable_Part(), this.getPartialAccess(), null, "part", null, 0, 1, Variable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(adapterVariableEClass, AdapterVariable.class, "AdapterVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getAdapterVariable_Curr(), this.getAdapterVariable(), null, "curr", null, 0, 1, AdapterVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAdapterVariable_Var(), theLibraryElementPackage.getVarDeclaration(), null, "var", null, 0, 1, AdapterVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(partialAccessEClass, PartialAccess.class, "PartialAccess", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getPartialAccess_Dwordaccess(), ecorePackage.getEBoolean(), "dwordaccess", null, 0, 1, PartialAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getPartialAccess_Index(), ecorePackage.getEInt(), "index", null, 0, 1, PartialAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1895,9 +1933,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     initEReference(getArrayVariable_Array(), this.getVariable(), null, "array", null, 0, 1, ArrayVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getArrayVariable_Index(), this.getExpression(), null, "index", null, 0, -1, ArrayVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(adapterVariableEClass, AdapterVariable.class, "AdapterVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getAdapterVariable_Adapter(), theLibraryElementPackage.getVarDeclaration(), null, "adapter", null, 0, 1, AdapterVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getAdapterVariable_Var(), theLibraryElementPackage.getVarDeclaration(), null, "var", null, 0, 1, AdapterVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(adapterRootEClass, AdapterRoot.class, "AdapterRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getAdapterRoot_Adapter(), theLibraryElementPackage.getVarDeclaration(), null, "adapter", null, 0, 1, AdapterRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
     initEEnum(binaryOperatorEEnum, BinaryOperator.class, "BinaryOperator");

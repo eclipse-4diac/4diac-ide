@@ -4,6 +4,7 @@
 package org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -23,7 +24,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl#getAdapter <em>Adapter</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl#getCurr <em>Curr</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl#getVar <em>Var</em>}</li>
  * </ul>
  *
@@ -32,14 +33,14 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class AdapterVariableImpl extends VariableImpl implements AdapterVariable
 {
   /**
-   * The cached value of the '{@link #getAdapter() <em>Adapter</em>}' reference.
+   * The cached value of the '{@link #getCurr() <em>Curr</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getAdapter()
+   * @see #getCurr()
    * @generated
    * @ordered
    */
-  protected VarDeclaration adapter;
+  protected AdapterVariable curr;
 
   /**
    * The cached value of the '{@link #getVar() <em>Var</em>}' reference.
@@ -78,19 +79,9 @@ public class AdapterVariableImpl extends VariableImpl implements AdapterVariable
    * @generated
    */
   @Override
-  public VarDeclaration getAdapter()
+  public AdapterVariable getCurr()
   {
-    if (adapter != null && adapter.eIsProxy())
-    {
-      InternalEObject oldAdapter = (InternalEObject)adapter;
-      adapter = (VarDeclaration)eResolveProxy(oldAdapter);
-      if (adapter != oldAdapter)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, StructuredTextPackage.ADAPTER_VARIABLE__ADAPTER, oldAdapter, adapter));
-      }
-    }
-    return adapter;
+    return curr;
   }
 
   /**
@@ -98,9 +89,16 @@ public class AdapterVariableImpl extends VariableImpl implements AdapterVariable
    * <!-- end-user-doc -->
    * @generated
    */
-  public VarDeclaration basicGetAdapter()
+  public NotificationChain basicSetCurr(AdapterVariable newCurr, NotificationChain msgs)
   {
-    return adapter;
+    AdapterVariable oldCurr = curr;
+    curr = newCurr;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.ADAPTER_VARIABLE__CURR, oldCurr, newCurr);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
   }
 
   /**
@@ -109,12 +107,20 @@ public class AdapterVariableImpl extends VariableImpl implements AdapterVariable
    * @generated
    */
   @Override
-  public void setAdapter(VarDeclaration newAdapter)
+  public void setCurr(AdapterVariable newCurr)
   {
-    VarDeclaration oldAdapter = adapter;
-    adapter = newAdapter;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.ADAPTER_VARIABLE__ADAPTER, oldAdapter, adapter));
+    if (newCurr != curr)
+    {
+      NotificationChain msgs = null;
+      if (curr != null)
+        msgs = ((InternalEObject)curr).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.ADAPTER_VARIABLE__CURR, null, msgs);
+      if (newCurr != null)
+        msgs = ((InternalEObject)newCurr).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.ADAPTER_VARIABLE__CURR, null, msgs);
+      msgs = basicSetCurr(newCurr, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.ADAPTER_VARIABLE__CURR, newCurr, newCurr));
   }
 
   /**
@@ -168,13 +174,28 @@ public class AdapterVariableImpl extends VariableImpl implements AdapterVariable
    * @generated
    */
   @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case StructuredTextPackage.ADAPTER_VARIABLE__CURR:
+        return basicSetCurr(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
     {
-      case StructuredTextPackage.ADAPTER_VARIABLE__ADAPTER:
-        if (resolve) return getAdapter();
-        return basicGetAdapter();
+      case StructuredTextPackage.ADAPTER_VARIABLE__CURR:
+        return getCurr();
       case StructuredTextPackage.ADAPTER_VARIABLE__VAR:
         if (resolve) return getVar();
         return basicGetVar();
@@ -192,8 +213,8 @@ public class AdapterVariableImpl extends VariableImpl implements AdapterVariable
   {
     switch (featureID)
     {
-      case StructuredTextPackage.ADAPTER_VARIABLE__ADAPTER:
-        setAdapter((VarDeclaration)newValue);
+      case StructuredTextPackage.ADAPTER_VARIABLE__CURR:
+        setCurr((AdapterVariable)newValue);
         return;
       case StructuredTextPackage.ADAPTER_VARIABLE__VAR:
         setVar((VarDeclaration)newValue);
@@ -212,8 +233,8 @@ public class AdapterVariableImpl extends VariableImpl implements AdapterVariable
   {
     switch (featureID)
     {
-      case StructuredTextPackage.ADAPTER_VARIABLE__ADAPTER:
-        setAdapter((VarDeclaration)null);
+      case StructuredTextPackage.ADAPTER_VARIABLE__CURR:
+        setCurr((AdapterVariable)null);
         return;
       case StructuredTextPackage.ADAPTER_VARIABLE__VAR:
         setVar((VarDeclaration)null);
@@ -232,8 +253,8 @@ public class AdapterVariableImpl extends VariableImpl implements AdapterVariable
   {
     switch (featureID)
     {
-      case StructuredTextPackage.ADAPTER_VARIABLE__ADAPTER:
-        return adapter != null;
+      case StructuredTextPackage.ADAPTER_VARIABLE__CURR:
+        return curr != null;
       case StructuredTextPackage.ADAPTER_VARIABLE__VAR:
         return var != null;
     }

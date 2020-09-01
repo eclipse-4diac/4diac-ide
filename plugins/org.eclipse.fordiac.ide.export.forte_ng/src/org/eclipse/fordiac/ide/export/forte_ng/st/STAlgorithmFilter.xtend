@@ -70,6 +70,8 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 import org.eclipse.fordiac.ide.model.FordiacKeywords
+import org.eclipse.emf.common.util.EList
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
 
 class STAlgorithmFilter {
 
@@ -86,23 +88,24 @@ class STAlgorithmFilter {
 		// create resource for function block and add copy
 		val fbResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION))
 		fbResource.contents.add(fbType)
-		fbType.getInterfaceList().getSockets().forEach[adp | createAdapterResource(resourceSet, adp)];
-		fbType.getInterfaceList().getPlugs().forEach[adp | createAdapterResource(resourceSet, adp)];
-		fbType.getInterfaceList().getPlugs().forEach[adp | createAdapterResource(resourceSet, adp)];
-		fbType.getInterfaceList().inputVars.forEach[adp | createStructResource(resourceSet, adp)];
-		fbType.getInterfaceList().outputVars.forEach[adp | createStructResource(resourceSet, adp)];
-		fbType.internalVars.forEach[adp | createStructResource(resourceSet, adp)];
+		fbType.interfaceList.sockets.forEach[adp | createAdapterResource(resourceSet, adp)];
+		fbType.interfaceList.plugs.forEach[adp | createAdapterResource(resourceSet, adp)];
+		fbType.interfaceList.inputVars.forEach[v | createStructResource(resourceSet, v)];
+		fbType.interfaceList.outputVars.forEach[v | createStructResource(resourceSet, v)];
+		fbType.internalVars.forEach[v | createStructResource(resourceSet, v)];
 	}
 
-	def createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
+	def void createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
 		val adapterResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
-		adapterResource.getContents().add(adapter.getType().getAdapterFBType());
+		adapterResource.contents.add(adapter.type.adapterFBType);
 	}
 	
-	def createStructResource(XtextResourceSet resourceSet, VarDeclaration variable) {
-		if (variable.getType() instanceof StructuredType) {
+	def void createStructResource(XtextResourceSet resourceSet, VarDeclaration variable) {
+		if (variable.type instanceof StructuredType) {
 			val structResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
-			structResource.getContents().add(variable.getType());
+			val type = variable.type as StructuredType;
+			structResource.contents.add(type);
+			type.memberVariables.forEach[v | createStructResource(resourceSet, v)];
 		}
 	}
 
@@ -369,8 +372,15 @@ class STAlgorithmFilter {
 		ArrayVariable expr) '''«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»«index.generateExpression»«ENDFOR»'''
 
 	def protected dispatch CharSequence generateExpression(AdapterVariable expr) {
-		'''«EXPORT_PREFIX»«expr.adapter.name»().«expr.^var.generateVarAccess»«expr.generateBitaccess»'''
+		'''«expr.curr.generateExpression».«expr.^var.name»()«if(!(expr.eContainer instanceof AdapterVariable))expr.generateBitaccess»'''
 	}
+
+	def protected dispatch CharSequence generateExpression(AdapterRoot expr) {
+		'''«EXPORT_PREFIX»«expr.adapter.name»()'''
+	}
+
+	def generateStructAdapterVarAccess(EList<VarDeclaration> list)
+		'''«FOR variable : list BEFORE '.' SEPARATOR '.' »«variable.name»()«ENDFOR»'''
 
 	def protected dispatch CharSequence generateExpression(
 		PrimaryVariable expr) '''«expr.^var.generateVarAccess»«expr.generateBitaccess»'''
@@ -393,7 +403,8 @@ class STAlgorithmFilter {
 
 	def protected generateBitaccess(AdapterVariable variable) {
 		if (null !== variable.part) {
-			generateBitaccess(variable.^var, variable.^var.type.name, variable.extractTypeInformation,
+			val lastvar = variable.^var
+			generateBitaccess(lastvar, lastvar.type.name, variable.extractTypeInformation,
 				variable.part.index)
 		}
 	}

@@ -186,6 +186,15 @@ public interface StructuredTextFactory extends EFactory
   Variable createVariable();
 
   /**
+   * Returns a new object of class '<em>Adapter Variable</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Adapter Variable</em>'.
+   * @generated
+   */
+  AdapterVariable createAdapterVariable();
+
+  /**
    * Returns a new object of class '<em>Partial Access</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -339,13 +348,13 @@ public interface StructuredTextFactory extends EFactory
   ArrayVariable createArrayVariable();
 
   /**
-   * Returns a new object of class '<em>Adapter Variable</em>'.
+   * Returns a new object of class '<em>Adapter Root</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Adapter Variable</em>'.
+   * @return a new object of class '<em>Adapter Root</em>'.
    * @generated
    */
-  AdapterVariable createAdapterVariable();
+  AdapterRoot createAdapterRoot();
 
   /**
    * Returns the package supported by this factory.

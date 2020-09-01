@@ -35,6 +35,7 @@ import org.eclipse.xtext.scoping.Scopes
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
 import org.eclipse.xtext.scoping.impl.SimpleScope
 import org.eclipse.xtext.util.SimpleAttributeResolver
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
 
 /**
  * This class contains custom scoping description.
@@ -50,11 +51,12 @@ class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvider {
 	    val res = rootElement.eResource as XtextResource;
         val candidates = (res.resourceSet.resources.get(0)?.contents?.get(0) as FBType).typeLibrary.dataTypeLibrary.dataTypes
 		// create scope explicitly since Scopes.scopedElementsFor passes ignoreCase as false
-        return new SimpleScope(Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), true)
+        return new SimpleScope(Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), false)
 	}
 
 	def scope_AdapterVariable_var(AdapterVariable context, EReference ref) {
-		val type = context.adapter?.type 
+		val type = context.type
+		
 		if(type === null) {
 			return IScope.NULLSCOPE
 		}
@@ -65,7 +67,16 @@ class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvider {
 		}
 		
 		// create scope explicitly since Scopes.scopedElementsFor passes ignoreCase as false
-		new SimpleScope(Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), true)		
+		new SimpleScope(Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), false)
+	}
+		
+	def getType(AdapterVariable variable){
+		val head = variable.curr;
+        switch (head) {
+        	AdapterRoot: head.adapter.type
+        	AdapterVariable: head.^var.type
+        	default: null
+        }
 	}
 	
 	def dispatch List<VarDeclaration> getScopeCandidates(AdapterType context){

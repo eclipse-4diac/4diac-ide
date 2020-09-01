@@ -170,6 +170,11 @@ public class StructuredTextAdapterFactory extends AdapterFactoryImpl
         return createVariableAdapter();
       }
       @Override
+      public Adapter caseAdapterVariable(AdapterVariable object)
+      {
+        return createAdapterVariableAdapter();
+      }
+      @Override
       public Adapter casePartialAccess(PartialAccess object)
       {
         return createPartialAccessAdapter();
@@ -255,9 +260,9 @@ public class StructuredTextAdapterFactory extends AdapterFactoryImpl
         return createArrayVariableAdapter();
       }
       @Override
-      public Adapter caseAdapterVariable(AdapterVariable object)
+      public Adapter caseAdapterRoot(AdapterRoot object)
       {
-        return createAdapterVariableAdapter();
+        return createAdapterRootAdapter();
       }
       @Override
       public Adapter caseINamedElement(INamedElement object)
@@ -572,6 +577,21 @@ public class StructuredTextAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable <em>Adapter Variable</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
+   * @generated
+   */
+  public Adapter createAdapterVariableAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess <em>Partial Access</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -827,16 +847,16 @@ public class StructuredTextAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable <em>Adapter Variable</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot <em>Adapter Root</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
+   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
    * @generated
    */
-  public Adapter createAdapterVariableAdapter()
+  public Adapter createAdapterRootAdapter()
   {
     return null;
   }

@@ -123,6 +123,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="part" eType="#//PartialAccess"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdapterVariable" eSuperTypes="#//Variable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="curr" eType="#//AdapterVariable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PartialAccess">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dwordaccess" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -208,8 +213,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="index" upperBound="-1"
         eType="#//Expression" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AdapterVariable" eSuperTypes="#//Variable">
+  <eClassifiers xsi:type="ecore:EClass" name="AdapterRoot" eSuperTypes="#//AdapterVariable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapter" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="var" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>
   </eClassifiers>
 </ecore:EPackage>
