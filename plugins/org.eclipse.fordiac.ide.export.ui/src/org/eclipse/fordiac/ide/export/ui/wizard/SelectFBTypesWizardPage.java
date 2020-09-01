@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 -2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ * * 		     2020 Johannes Kepler University Linz
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +10,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *   Virendra Ashiwal, Alois Zoitl
+ *     - added code for remembering Checkbox (Overwrite) value for the next time
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.ui.wizard;
 
@@ -57,6 +59,8 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	private static final String STORE_DIRECTORY_NAMES_ID = "SelectFBTypesWizardPage.STORE_DIRECTORY_NAMES_ID"; //$NON-NLS-1$
 
 	private static final String STORE_CURRENT_FILTER_SELECTION_ID = "SelectFBTypesWizardPage.STORE_CURRENT_FILTER_SELECTION_ID"; //$NON-NLS-1$
+	
+	private static final String STORE_OVERWRITE_CHECKBOX = "SelectFBTypesWizardPage.STORE_OVERWRITE_CHECKBOX"; //$NON-NLS-1$
 
 	/**
 	 * Instantiates a new SelectFBTypesWizardPage.
@@ -190,6 +194,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	protected void restoreWidgetValues() {
 		loadTargetDirctories();
 		loadLastSelectedFilter();
+		overwrite.setSelection(getDialogSettings().getBoolean(STORE_OVERWRITE_CHECKBOX));
 	}
 
 	/**
@@ -243,6 +248,8 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 			// Saves current export filter for next session.
 			getDialogSettings().put(STORE_CURRENT_FILTER_SELECTION_ID, getSelectedExportFilter().getAttribute(NAME));
+			
+			getDialogSettings().put(STORE_OVERWRITE_CHECKBOX, overwrite.getSelection());
 		}
 	}
 
