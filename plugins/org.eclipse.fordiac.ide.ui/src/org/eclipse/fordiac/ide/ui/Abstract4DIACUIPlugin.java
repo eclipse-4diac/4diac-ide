@@ -69,14 +69,9 @@ public abstract class Abstract4DIACUIPlugin extends AbstractUIPlugin {
 	}
 
 	public static void statusLineErrorMessage(final String errorMsg) {
-		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		if (null != workbenchWindow) {
-			statusLineErrorMessage(workbenchWindow.getActivePage().getActivePart(), errorMsg);
-		} else {
-			final Display display = Display.getDefault();
-			display.asyncExec(() -> statusLineErrorMessage(
-					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart(), errorMsg));
-		}
+		final Display display = Display.getDefault();
+		display.asyncExec(() -> statusLineErrorMessage(
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart(), errorMsg));
 	}
 
 	private static Display getDisplay() {
