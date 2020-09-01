@@ -488,6 +488,12 @@
              id="org.eclipse.fordiac.ide.application.unmapAll"
              name="Unmap All">
        </command>
+       <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            description="Move FBs to the subapps parent"
+            id="org.eclipse.fordiac.ide.application.commands.moveToParent"
+            name="Move to Parent">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -564,6 +570,24 @@
             <activeWhen>
                 <reference definitionId="org.eclipse.fordiac.ide.application.SubAppSelection" />
             </activeWhen>
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.application.handlers.MoveToParentHandler"
+            commandId="org.eclipse.fordiac.ide.application.commands.moveToParent">
+            <activeWhen>
+			    <with variable="selection">
+	               <iterate ifEmpty="false">
+	                  <or>
+	                    <instanceof
+	                          value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
+	                    </instanceof>
+	                    <instanceof
+	                          value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+	                    </instanceof>
+	                  </or>
+	               </iterate>
+         		</with>  
+			</activeWhen>
       </handler>
       <handler
             class="org.eclipse.fordiac.ide.application.handlers.ToggleSubAppFolding"
@@ -662,6 +686,7 @@
             <command commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
              <command
@@ -753,6 +778,16 @@
                         <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
                     </with>
                     <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                </and>
+            </visibleWhen>
+         </command>
+         <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent">
+          <visibleWhen checkEnabled="true">
+                <and> 
+                	<with variable="activeEditorId">
+                    	<equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
+                	</with>
+                    <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection" />
                 </and>
             </visibleWhen>
          </command>
@@ -1067,6 +1102,16 @@
           id="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection">
             <with variable="selection">
                     <count value="1" />
+                <iterate operator="and" ifEmpty="false">
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+                    </instanceof>
+                </iterate>
+             </with> 
+          </definition>
+       <definition
+          id="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection">
+            <with variable="selection">
                 <iterate operator="and" ifEmpty="false">
                     <instanceof
                           value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
