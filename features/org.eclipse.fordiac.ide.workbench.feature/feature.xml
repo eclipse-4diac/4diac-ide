@@ -228,6 +228,7 @@ United States, other countries, or both.\n
       <import plugin="org.eclipse.jface" version="3.3.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jdt.core" match="compatible"/>
       <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="org.eclipse.ocl.ecore"/>
    </requires>
 
    <plugin
