@@ -54,7 +54,7 @@ public class NameCellEditorLocator implements CellEditorLocator {
 			Text text = (Text) celleditor.getControl();
 			Dimension singleChar = FigureUtilities.getStringExtents("M", text.getFont()); //$NON-NLS-1$
 			Point pref = text.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-			Rectangle rect = label.getTextBounds().getCopy();
+			Rectangle rect = label.getBounds().getCopy();
 			label.translateToAbsolute(rect);
 			text.setBounds(rect.x - 1, rect.y - 1, pref.x + singleChar.width, pref.y + 1);
 		}
