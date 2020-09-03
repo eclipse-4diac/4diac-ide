@@ -738,11 +738,16 @@
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
          <command commandId="org.eclipse.fordiac.ide.application.commands.insertFB" >
              <visibleWhen>
-                <or> 
+                <and> 
                     <with variable="activeEditor">
                         <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
                     </with>
-                </or>
+                    <with variable="selection">
+                         <iterate ifEmpty="true">
+            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+            			</iterate>	
+                    </with>
+                </and>
              </visibleWhen>
          </command>
          <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType">
@@ -761,17 +766,23 @@
                tooltip="Create a new subapplication">
             <visibleWhen
                   checkEnabled="false">
-               <with
-               variable="activeEditorId">
-               	<or>
-		            <equals
-		                  value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
-		            </equals>
-		            <equals
-		                  value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor">
-		            </equals>
-		            </or>
-		         </with>
+                <and> 
+                	<with variable="activeEditorId">
+               			<or>
+		            		<equals value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor" />
+		            		<equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
+		            	</or>
+	            	</with>
+	            	<with variable="selection">
+	            		<iterate ifEmpty="true">
+	            			<or>
+	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart" />
+	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+            				</or>
+            			</iterate>
+        			</with>
+    			</and>
             </visibleWhen>
          </command>
          <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp">
