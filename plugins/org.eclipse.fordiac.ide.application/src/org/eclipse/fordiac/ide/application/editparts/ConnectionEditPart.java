@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.application.policies.ConnectionGraphicalNodeEditP
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DisableConnectionHandleRoleEditPolicy;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
+import org.eclipse.fordiac.ide.gef.policies.ConnectionHoverEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.gef.router.RouterUtil;
@@ -100,6 +101,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		}
 
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new ConnectionGraphicalNodeEditPolicy());
+
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new ConnectionHoverEditPolicy());
 	}
 
 	@Override
