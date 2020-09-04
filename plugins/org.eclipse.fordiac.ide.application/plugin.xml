@@ -659,7 +659,6 @@
       </menuContribution>            
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">
             <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp" />
-            <command commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
@@ -776,14 +775,6 @@
             </visibleWhen>
          </command>
          <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp">
-            <visibleWhen
-                  checkEnabled="false">
-               <reference
-                     definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
-               </reference>
-            </visibleWhen>
-         </command>
-         <command commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp">
             <visibleWhen
                   checkEnabled="false">
                <reference
