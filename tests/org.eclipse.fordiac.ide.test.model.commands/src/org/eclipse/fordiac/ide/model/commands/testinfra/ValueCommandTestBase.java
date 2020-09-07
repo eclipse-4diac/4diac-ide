@@ -32,7 +32,7 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 	public static class State implements CommandTestBase.StateBase {
 		private final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
-		State() {
+		public State() {
 			super();
 			var.setValue(LibraryElementFactory.eINSTANCE.createValue());
 		}
