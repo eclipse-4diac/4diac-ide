@@ -18,6 +18,7 @@
  *                 direct editing of instance names
  *               - added update support for removing or readding subapp type
  *   Bianca Wiesmayr, Alois Zoitl - unfolded subapp
+ *   Daniel Lindhuber - instance comment
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -41,6 +42,7 @@ import org.eclipse.gef.RequestConstants;
 
 public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	private UnfoldedSubappContentNetwork subappContents;
+	private InstanceComment instanceComment;
 
 	private Adapter subAppInterfaceAdapter = new EContentAdapter() {
 		@Override
@@ -64,6 +66,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		List<Object> children = super.getModelChildren();
 		if (getModel().isUnfolded()) {
 			children.add(getSubappContents());
+			children.add(getInstanceComment());
 		}
 		return children;
 	}
@@ -73,6 +76,13 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 			subappContents = new UnfoldedSubappContentNetwork(getModel());
 		}
 		return subappContents;
+	}
+
+	private InstanceComment getInstanceComment() {
+		if (null == instanceComment) {
+			instanceComment = new InstanceComment(getModel());
+		}
+		return instanceComment;
 	}
 
 	public SubAppForFBNetworkEditPart() {
@@ -187,6 +197,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	protected void addChildVisual(EditPart childEditPart, int index) {
 		if (childEditPart instanceof UnfoldedSubappContentEditPart) {
 			getFigure().getBottom().add(((UnfoldedSubappContentEditPart) childEditPart).getFigure(), 1);
+		} else if (childEditPart instanceof InstanceCommentEditPart) {
+			getFigure().getTop().add(((InstanceCommentEditPart) childEditPart).getFigure(), 1);
 		} else {
 			super.addChildVisual(childEditPart, index);
 		}
@@ -196,6 +208,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	protected void removeChildVisual(EditPart childEditPart) {
 		if (childEditPart instanceof UnfoldedSubappContentEditPart) {
 			getFigure().getBottom().remove(((UnfoldedSubappContentEditPart) childEditPart).getFigure());
+		} else if (childEditPart instanceof InstanceCommentEditPart) {
+			getFigure().getTop().remove(((InstanceCommentEditPart) childEditPart).getFigure());
 		} else {
 			super.removeChildVisual(childEditPart);
 		}

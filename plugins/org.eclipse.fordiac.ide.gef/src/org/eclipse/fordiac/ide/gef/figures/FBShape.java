@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2019 - 2020 Johannes Kepler University Linz
+ * 				 2020        Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +18,7 @@
  *                 direct editing of instance names
  *               - extracted common FB shape for interface and fbn editors
  *   Bianca Wiesmayr - edited appearance of FBs
+ *   Daniel Lindhuber - changed layout of top part
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
@@ -136,7 +138,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		return typeLabel;
 	}
 
-	protected RoundedRectangle getTop() {
+	public RoundedRectangle getTop() {
 		return top;
 	}
 
@@ -244,7 +246,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 				borderColor);
 		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 
-		GridLayout topLayout = new GridLayout(2, false);
+		GridLayout topLayout = new GridLayout(3, false);
 		topLayout.marginHeight = 4;
 		topLayout.marginWidth = 0;
 		topLayout.horizontalSpacing = 0;
