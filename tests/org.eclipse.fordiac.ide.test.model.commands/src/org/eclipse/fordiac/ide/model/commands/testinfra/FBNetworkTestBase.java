@@ -40,7 +40,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 
 		private Command cmd;
 
-		private static final String FUNCTIONBLOCK_NAME = "functionblock"; //$NON-NLS-1$
+		public static final String FUNCTIONBLOCK_NAME = "functionblock"; //$NON-NLS-1$
 
 		private FBTypePaletteEntry createFBType() {
 			final FBTypePaletteEntry pe = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
