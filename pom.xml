@@ -153,13 +153,13 @@
 							<property name="severity" value="error"/>
 							<property name="fileExtensions" value="java,xtend"/>
 							<module name="BeforeExecutionExclusionFileFilter">
-								<property name="fileNamePattern" value="-gen/"/>
+								<property name="fileNamePattern" value="-gen[\\/]"/>
 							</module>
 							<module name="BeforeExecutionExclusionFileFilter">
-								<property name="fileNamePattern" value="/model/xtext/"/>
+								<property name="fileNamePattern" value="[\\/]model[\\/]xtext[\\/]"/>
 							</module>
 							<module name="BeforeExecutionExclusionFileFilter">
-								<property name="fileNamePattern" value="/model/structuredtext/"/>
+								<property name="fileNamePattern" value="[\\/]model[\\/]structuredtext[\\/]"/>
 							</module>
 							<module name="RegexpHeader">
 								<property name="header" value="^(?!package)(?! \* SPDX.*$).*\n^ \* ?SPDX-License-Identifier: EPL-2\.0.*$" />
