@@ -25,10 +25,8 @@ public class ChangeValueCommandTest extends ValueCommandTestBase {
 
 	private static State executeCommand(State state) {
 		state.setCommand(new ChangeValueCommand(state.getVar(), NEW_VALUE));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	private static void verifyState(State state, State oldState, TestFunction t) {
@@ -37,10 +35,8 @@ public class ChangeValueCommandTest extends ValueCommandTestBase {
 
 	private static State executeCommandToNull(State state) {
 		state.setCommand(new ChangeValueCommand(state.getVar(), null));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	private static void verifyStateNull(State state, State oldState, TestFunction t) {

@@ -76,20 +76,6 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 		}
 	}
 
-	protected static State undoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeTrue(state.getCommand().canUndo());
-		state.getCommand().undo();
-		return (state);
-	}
-
-	protected static State redoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeTrue(state.getCommand().canRedo());
-		state.getCommand().redo();
-		return (state);
-	}
-
 	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
 		final Collection<Arguments> commands = new ArrayList<>();
 
@@ -105,7 +91,7 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands,
-				InsertVariableCommandTestBase::undoCommand, InsertVariableCommandTestBase::redoCommand);
+				CommandTestBase::defaultUndoCommand, CommandTestBase::defaultRedoCommand);
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {

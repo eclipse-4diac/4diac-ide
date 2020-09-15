@@ -49,11 +49,8 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		final BasicFBType fb = (BasicFBType) pe.getType();
 
 		state.setCommand(new InsertAlgorithmCommand(fb, stAlg, index));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateWithAlgorithmIndex(State state, State oldState, TestFunction t, int index,

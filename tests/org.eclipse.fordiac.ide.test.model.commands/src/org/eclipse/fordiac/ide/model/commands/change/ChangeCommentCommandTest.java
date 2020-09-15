@@ -27,10 +27,8 @@ public class ChangeCommentCommandTest extends FBNetworkTestBase {
 
 	public static State executeCommand(State state, String comment) {
 		state.setCommand(new ChangeCommentCommand(state.getFbNetwork().getNetworkElements().get(0).getType(), comment));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyStateBefore(State state, State oldState, TestFunction t) {

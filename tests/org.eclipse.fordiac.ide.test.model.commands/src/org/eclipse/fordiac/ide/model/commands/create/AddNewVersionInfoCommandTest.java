@@ -38,12 +38,8 @@ public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 		}
 
 		state.setCommand(new AddNewVersionInfoCommand(state.getFbNetwork().getNetworkElements().get(0).getType()));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
 
-		state.getCommand().execute();
-
-		return state;
+		return commandExecution(state);
 	}
 
 	public static void verifyStateBefore(State state, State oldState, TestFunction t) {

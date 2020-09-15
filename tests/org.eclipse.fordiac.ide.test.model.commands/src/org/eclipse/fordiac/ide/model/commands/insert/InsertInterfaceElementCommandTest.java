@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
+import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -54,13 +55,6 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 		return commandExecution(state);
 	}
 
-	private static State commandExecution(State state) {
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
-	}
-
 	public static State executeCommandWithoutType(State state, boolean isInput) {
 		IInterfaceElement element = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		element.setName(INTERFACE_ELEMENT);
@@ -69,9 +63,7 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 		state.setCommand(new InsertInterfaceElementCommand(element, type,
 				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), isInput, 0));
 
-		assumeNotNull(state.getCommand());
-		assumeFalse(state.getCommand().canExecute());
-		return state;
+		return disabledCommandExecution(state);
 	}
 
 	public static State executeCommandWithoutInterfaceList(State state, String typeName, boolean isInput) {
@@ -81,9 +73,7 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 
 		state.setCommand(new InsertInterfaceElementCommand(element, type, null, isInput, 0));
 
-		assumeNotNull(state.getCommand());
-		assumeFalse(state.getCommand().canExecute());
-		return state;
+		return disabledCommandExecution(state);
 	}
 
 	public static void verifyStateNoDataInput(State state, State oldState, TestFunction t) {
@@ -116,22 +106,6 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 
 	public static void verifyStateHasEventOutput(State state, State oldState, TestFunction t) {
 		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getEventOutputs().size() == 1);
-	}
-
-	public static void verifyNothing(State state, State oldState, TestFunction t) {
-		//
-	}
-
-	protected static State disabledUndoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeFalse(state.getCommand().canExecute() && state.getCommand().canUndo());
-		return (state);
-	}
-
-	protected static State disabledRedoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeFalse(state.getCommand().canExecute() && state.getCommand().canRedo());
-		return (state);
 	}
 
 	// parameter creation function
@@ -188,19 +162,19 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 		final List<ExecutionDescription<?>> unexecutableDescriptions = List.of( //
 				new ExecutionDescription<State>("Add Interface Element without type", //$NON-NLS-1$
 						(State s) -> executeCommandWithoutType(s, true), //
-						InsertInterfaceElementCommandTest::verifyNothing //
+						CommandTestBase::verifyNothing //
 				), //
 				new ExecutionDescription<State>("Add Interface Element without interface list", //$NON-NLS-1$
 						(State s) -> executeCommandWithoutInterfaceList(s, FordiacKeywords.DWORD, true), //
-						InsertInterfaceElementCommandTest::verifyNothing //
+						CommandTestBase::verifyNothing //
 				), //
 				new ExecutionDescription<State>("Add Interface Element without type", //$NON-NLS-1$
 						(State s) -> executeCommandWithoutType(s, false), //
-						InsertInterfaceElementCommandTest::verifyNothing //
+						CommandTestBase::verifyNothing //
 				), //
 				new ExecutionDescription<State>("Add Interface Element without interface list", //$NON-NLS-1$
 						(State s) -> executeCommandWithoutInterfaceList(s, FordiacKeywords.DWORD, false), //
-						InsertInterfaceElementCommandTest::verifyNothing //
+						CommandTestBase::verifyNothing //
 				) //
 		);
 
@@ -208,8 +182,8 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 				() -> FBCreateCommandTest.executeCommand(new State()), //
 				(State s, State o, TestFunction t) -> FBCreateCommandTest.verifyState(s, o, t), //
 				unexecutableDescriptions, //
-				InsertInterfaceElementCommandTest::disabledUndoCommand, //
-				InsertInterfaceElementCommandTest::disabledRedoCommand //
+				CommandTestBase::disabledUndoCommand, //
+				CommandTestBase::disabledRedoCommand //
 		));
 
 		return commands;

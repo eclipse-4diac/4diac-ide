@@ -28,11 +28,8 @@ public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfa
 	private static State executeCommandOutputWithoutName(State state) {
 		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null),
 				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ false, /* index */ 0));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateOutputWithoutName(State state, State oldState, TestFunction t) {
@@ -51,11 +48,8 @@ public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfa
 	private static State executeCommandOutputWithName(State state) {
 		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), "MyOutput", //$NON-NLS-1$
 				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ false, /* index */ 1));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateOutputWithName(State state, State oldState, TestFunction t) {
@@ -74,11 +68,8 @@ public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfa
 	private static State executeCommandOutputWithNameNull(State state) {
 		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), null,
 				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ false, /* index */ 1));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateOutputWithNameNull(State state, State oldState, TestFunction t) {

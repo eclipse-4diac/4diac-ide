@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.ValueCommandTestBase;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -23,38 +24,19 @@ public class ChangeArraySizeCommandTest extends ValueCommandTestBase {
 
 	private static State executeCommand(State state, String newSize) {
 		state.setCommand(new ChangeArraySizeCommand(state.getVar(), newSize));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	private static State executeCommandOnNull(State state) {
 		state.setCommand(new ChangeArraySizeCommand(null, "123"));
-		assumeNotNull(state.getCommand());
-		assumeFalse(state.getCommand().canExecute());
-		return state;
+
+		return disabledCommandExecution(state);
 	}
 
 	private static void verifyState(State state, State oldState, TestFunction t, int newSize) {
 		t.test(state.getVar().getArraySize() == newSize);
 		t.test(state.getVar().isArray() == (newSize > 0));
-	}
-
-	protected static void verifyNothing(State state, State oldState, TestFunction t) {
-		//
-	}
-
-	protected static State disabledUndoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeFalse(state.getCommand().canExecute() && state.getCommand().canUndo());
-		return (state);
-	}
-
-	protected static State disabledRedoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeFalse(state.getCommand().canExecute() && state.getCommand().canRedo());
-		return (state);
 	}
 
 	// parameter creation function
@@ -86,11 +68,11 @@ public class ChangeArraySizeCommandTest extends ValueCommandTestBase {
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				List.of(new ExecutionDescription<>("Unexecutable case: variable is null", // //$NON-NLS-1$
 						ChangeArraySizeCommandTest::executeCommandOnNull, //
-						ChangeArraySizeCommandTest::verifyNothing //
+						CommandTestBase::verifyNothing //
 				) //
 				), //
-				ChangeArraySizeCommandTest::disabledUndoCommand, //
-				ChangeArraySizeCommandTest::disabledRedoCommand //
+				CommandTestBase::disabledUndoCommand, //
+				CommandTestBase::disabledRedoCommand //
 		);
 
 		Collection<Arguments> commands = createCommands(executionDescriptions);

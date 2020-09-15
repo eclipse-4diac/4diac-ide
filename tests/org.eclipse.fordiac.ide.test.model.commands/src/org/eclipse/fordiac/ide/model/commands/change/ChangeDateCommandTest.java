@@ -27,10 +27,8 @@ public class ChangeDateCommandTest extends VersionInfoTestBase {
 
 	private static State executeCommand(State state) {
 		state.setCommand(new ChangeDateCommand(state.getVersionInfo(), NEW_DATE));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	private static void verifyState(State state, State oldState, TestFunction t) {
@@ -43,10 +41,8 @@ public class ChangeDateCommandTest extends VersionInfoTestBase {
 
 	private static State executeCommandToNull(State state) {
 		state.setCommand(new ChangeDateCommand(state.getVersionInfo(), null));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	private static void verifyStateNull(State state, State oldState, TestFunction t) {

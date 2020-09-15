@@ -27,10 +27,8 @@ public class DeleteMemberVariableCommandTest extends DeleteMemberVariableCommand
 
 	private static State executeDeletion(State state, VarDeclaration var) {
 		state.setCommand(new DeleteMemberVariableCommand(state.getStructuredType(), var));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	private static void verifyDeletion(State state, State oldState, TestFunction t, VarDeclaration var) {

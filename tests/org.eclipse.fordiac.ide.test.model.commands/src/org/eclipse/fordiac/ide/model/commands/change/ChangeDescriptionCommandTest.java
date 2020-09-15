@@ -27,10 +27,8 @@ public class ChangeDescriptionCommandTest extends FBNetworkTestBase {
 	public static State executeCommand(State state, String setValue) {
 		state.setCommand(
 				new ChangeDescriptionCommand(state.getFbNetwork().getNetworkElements().get(0).getType(), setValue));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyStateBefore(State state, State oldState, TestFunction t) {

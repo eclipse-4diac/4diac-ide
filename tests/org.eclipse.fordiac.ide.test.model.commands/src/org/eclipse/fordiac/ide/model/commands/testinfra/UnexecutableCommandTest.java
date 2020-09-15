@@ -50,33 +50,15 @@ public class UnexecutableCommandTest extends CommandTestBase<CommandTestBase.Sta
 
 	}
 
-	protected static State undoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeFalse(state.getCommand().canUndo());
-		return (state);
-	}
-
-	protected static State redoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeFalse(state.getCommand().canRedo());
-		return (state);
-	}
-
 	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands,
-				UnexecutableCommandTest::undoCommand, UnexecutableCommandTest::redoCommand);
-	}
-
-	protected static void verifyNothing(State state, State oldState, TestFunction t) {
-		//
+				CommandTestBase::disabledUndoCommand, CommandTestBase::disabledRedoCommand);
 	}
 
 	private static State executeCommand(State state) {
 		state.setCommand(UnexecutableCommand.INSTANCE);
-		assumeNotNull(state.getCommand());
-		assumeFalse(state.getCommand().canExecute());
-		return state;
+		return disabledCommandExecution(state);
 	}
 
 	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
@@ -84,7 +66,7 @@ public class UnexecutableCommandTest extends CommandTestBase<CommandTestBase.Sta
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> verifyNothing(state, oldState, t), //
+				(State state, State oldState, TestFunction t) -> CommandTestBase.verifyNothing(state, oldState, t), //
 				executionDescriptions //
 		));
 
@@ -96,7 +78,7 @@ public class UnexecutableCommandTest extends CommandTestBase<CommandTestBase.Sta
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Check if unexecutable command is not executable", //$NON-NLS-1$
 						UnexecutableCommandTest::executeCommand, //
-						UnexecutableCommandTest::verifyNothing //
+						CommandTestBase::verifyNothing //
 				) //
 		);
 

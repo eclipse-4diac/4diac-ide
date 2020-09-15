@@ -60,13 +60,6 @@ public class DeleteInterfaceElementCommandTest extends FBNetworkTestBase {
 		return commandExecution(state);
 	}
 
-	private static State commandExecution(State state) {
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
-	}
-
 	private static State fbInitializer() {
 		State s = new State();
 		s = FBCreateCommandTest.executeCommand(s);

@@ -93,24 +93,10 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 		}
 	}
 
-	protected static State undoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeTrue(state.getCommand().canUndo());
-		state.getCommand().undo();
-		return (state);
-	}
-
-	protected static State redoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeTrue(state.getCommand().canRedo());
-		state.getCommand().redo();
-		return (state);
-	}
-
 	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
-		return describeCommand(description, initializer, initialVerifier, commands, FBNetworkTestBase::undoCommand,
-				FBNetworkTestBase::redoCommand);
+		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand, 
+				CommandTestBase::defaultRedoCommand);
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {

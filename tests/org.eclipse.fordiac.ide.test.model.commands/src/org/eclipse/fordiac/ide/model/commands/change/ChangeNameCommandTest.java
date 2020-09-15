@@ -81,10 +81,9 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 	protected static State undoCommand(Object stateObj) {
 		final State state = (State) stateObj;
 		if (state.isNameValid()) {
-			assumeTrue(state.getCommand().canExecute() && state.getCommand().canUndo());
-			state.getCommand().undo();
+			defaultUndoCommand(state);
 		} else {
-			assumeFalse(state.getCommand().canExecute() && state.getCommand().canUndo());
+			disabledUndoCommand(state);
 		}
 		return (state);
 	}
@@ -92,10 +91,9 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 	protected static State redoCommand(Object stateObj) {
 		final State state = (State) stateObj;
 		if (state.isNameValid()) {
-			assumeTrue(state.getCommand().canExecute() && state.getCommand().canRedo());
-			state.getCommand().redo();
+			defaultRedoCommand(state);
 		} else {
-			assumeFalse(state.getCommand().canExecute() && state.getCommand().canRedo());
+			disabledRedoCommand(state);
 		}
 		return (state);
 	}
@@ -106,22 +104,15 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 				ChangeNameCommandTest::redoCommand);
 	}
 
-	protected static void verifyNothing(State state, State oldState, TestFunction t) {
-		//
-	}
-
 	private static State executeCommand(State state, String newName, boolean isValid) {
 		state.setCommand(new ChangeNameCommand(state.getElement(), newName));
-		assumeNotNull(state.getCommand());
 		if (isValid) {
 			state.setNameValid();
-			assumeTrue(state.getCommand().canExecute());
-			state.getCommand().execute();
+			return commandExecution(state);
 		} else {
 			state.setNameInvalid();
-			assumeFalse(state.getCommand().canExecute());
+			return disabledCommandExecution(state);
 		}
-		return state;
 	}
 
 	protected static List<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
@@ -141,10 +132,10 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Try setting to invalid name", //$NON-NLS-1$
 						(State s) -> executeCommand(s, "1bla", false), //
-						ChangeNameCommandTest::verifyNothing //
+						CommandTestBase::verifyNothing //
 				), new ExecutionDescription<>("Try setting to valid name", //$NON-NLS-1$
 						(State s) -> executeCommand(s, "bla", true), //
-						ChangeNameCommandTest::verifyNothing //
+						CommandTestBase::verifyNothing //
 				)//
 		);
 

@@ -13,8 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.insert;
 
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -39,11 +37,8 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 		final VarDeclaration varDec = createTestVarDec("first"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 0));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	// insert at the beginning
@@ -51,11 +46,8 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 		final VarDeclaration varDec = createTestVarDec("second"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 0));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	// insert in the middle
@@ -63,11 +55,8 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 		final VarDeclaration varDec = createTestVarDec("third"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 1));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	// insert at the end
@@ -75,11 +64,8 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 		final VarDeclaration varDec = createTestVarDec("fourth"); //$NON-NLS-1$
 		state.setVarDec(varDec);
 		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 3));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateVarWithIndex(State state, State oldState, TestFunction t, int index) {

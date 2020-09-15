@@ -31,11 +31,8 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 
 		state.setCommand(new CreateInternalVariableCommand(baseFBType, 0, FordiacKeywords.VARIABLE_INTERNAL,
 				getDatatypelib().getType(FordiacKeywords.BOOL)));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateVar1(State state, State oldState, TestFunction t) {
@@ -51,11 +48,8 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 		state.setCommand(new CreateInternalVariableCommand(baseFBType, 1, FordiacKeywords.VARIABLE_INTERNAL,
 				getDatatypelib().getType(FordiacKeywords.DWORD)));
 		// Name will be InternalVar2 because of automatic renaming
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateVar2(State state, State oldState, TestFunction t) {
@@ -70,11 +64,8 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 
 		state.setCommand(new CreateInternalVariableCommand(baseFBType));
 		// Name will be INTERNALVAR1 because of automatic naming
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateVar3(State state, State oldState, TestFunction t) {

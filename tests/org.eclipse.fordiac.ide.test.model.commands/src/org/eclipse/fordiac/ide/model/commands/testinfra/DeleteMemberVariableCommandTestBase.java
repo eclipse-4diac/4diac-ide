@@ -102,24 +102,10 @@ public abstract class DeleteMemberVariableCommandTestBase
 		}
 	}
 
-	protected static State undoCommand(Object stateObj) {
-		State state = (State) stateObj;
-		assumeTrue(state.getCommand().canUndo());
-		state.getCommand().undo();
-		return (state);
-	}
-
-	protected static State redoCommand(Object stateObj) {
-		State state = (State) stateObj;
-		assumeTrue(state.getCommand().canRedo());
-		state.getCommand().redo();
-		return (state);
-	}
-
 	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands,
-				DeleteMemberVariableCommandTestBase::undoCommand, DeleteMemberVariableCommandTestBase::redoCommand);
+				CommandTestBase::defaultUndoCommand, CommandTestBase::defaultRedoCommand);
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {

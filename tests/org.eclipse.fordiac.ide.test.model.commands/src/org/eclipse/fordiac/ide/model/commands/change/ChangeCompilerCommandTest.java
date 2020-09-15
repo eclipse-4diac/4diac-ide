@@ -35,10 +35,8 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 
 	public static State executeAddCommand(final State state) {
 		state.setCommand(new AddNewCompilerCommand(state.getFbNetwork().getNetworkElements().get(0).getType()));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyDefaultState(final State state, final State oldState, final TestFunction t,
@@ -71,19 +69,15 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
 		final org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler = compilerInfo.getCompiler().get(0);
 		state.setCommand(new DeleteCompilerCommand(compilerInfo, compiler));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static State executeChangeHeaderCommand(final State state) {
 		state.setCommand(new ChangeCompilerInfoHeaderCommand(state.getFbNetwork().getNetworkElements().get(0).getType(),
 				HEADER_STRING));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyChangedHeaderState(final State state, final State oldState, final TestFunction t,
@@ -103,10 +97,8 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 	public static State executeChangeClassdefCommand(final State state) {
 		state.setCommand(new ChangeCompilerInfoClassdefCommand(
 				state.getFbNetwork().getNetworkElements().get(0).getType(), CLASSDEF_STRING));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyChangedClassdefState(final State state, final State oldState, final TestFunction t,
@@ -127,10 +119,8 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		state.setCommand(new ChangeCompilerLanguageCommand(
 				state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo().getCompiler().get(0),
 				Language.CPP));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyChangedLanguageState(final State state, final State oldState, final TestFunction t,
@@ -151,10 +141,8 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		state.setCommand(new ChangeCompilerVendorCommand(
 				state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo().getCompiler().get(0),
 				VENDOR_STRING));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyChangedVendorState(final State state, final State oldState, final TestFunction t,
@@ -175,10 +163,8 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		state.setCommand(new ChangeCompilerProductCommand(
 				state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo().getCompiler().get(0),
 				PRODUCT_STRING));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyChangedProductState(final State state, final State oldState, final TestFunction t,
@@ -199,10 +185,8 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		state.setCommand(new ChangeCompilerVersionCommand(
 				state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo().getCompiler().get(0),
 				VERSION_STRING));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyChangedVersionState(final State state, final State oldState, final TestFunction t,
@@ -222,10 +206,8 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 	public static State executeChangeHeaderToNullCommand(final State state) {
 		state.setCommand(
 				new ChangeCompilerInfoHeaderCommand(state.getFbNetwork().getNetworkElements().get(0).getType(), null));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyChangedHeaderToNullState(final State state, final State oldState, final TestFunction t,
@@ -245,10 +227,8 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 	public static State executeChangeClassdefToNullCommand(final State state) {
 		state.setCommand(new ChangeCompilerInfoClassdefCommand(
 				state.getFbNetwork().getNetworkElements().get(0).getType(), null));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyChangedClassdefToNullState(final State state, final State oldState, final TestFunction t,
@@ -269,10 +249,8 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		state.setCommand(new ChangeCompilerVendorCommand(
 				state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo().getCompiler().get(0),
 				null));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyChangedVendorToNullState(final State state, final State oldState, final TestFunction t,
@@ -293,10 +271,8 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		state.setCommand(new ChangeCompilerProductCommand(
 				state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo().getCompiler().get(0),
 				null));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyChangedProductToNullState(final State state, final State oldState, final TestFunction t,
@@ -317,10 +293,8 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		state.setCommand(new ChangeCompilerVersionCommand(
 				state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo().getCompiler().get(0),
 				null));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static void verifyChangedVersionToNullState(final State state, final State oldState, final TestFunction t,

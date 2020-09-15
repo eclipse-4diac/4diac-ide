@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
-import static org.hamcrest.CoreMatchers.is;
+import org.hamcrest.CoreMatchers;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -64,6 +64,14 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		assumeThat(obj, org.hamcrest.CoreMatchers.notNullValue());
 	}
 
+	protected static <T> Matcher<T> is(Matcher<T> matcher)  {
+		return CoreMatchers.is(matcher);
+	}
+
+	protected static <T> Matcher<T> is(T matcher)  {
+		return CoreMatchers.is(matcher);
+	}
+
 	protected static void assumeTrue(boolean value) {
 		assumeThat(value, is(true));
 	}
@@ -72,6 +80,49 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		assumeThat(value, is(false));
 	}
 
+	protected static void verifyNothing(StateBase s, StateBase o, TestFunction t) {
+		// Nothing to do
+	}
+	
+	protected static StateBase defaultUndoCommand(Object stateObj) {
+		final StateBase state = (StateBase) stateObj;
+		assumeTrue(state.getCommand().canExecute() && state.getCommand().canUndo());
+		state.getCommand().undo();
+		return (state);
+	}
+
+	protected static StateBase defaultRedoCommand(Object stateObj) {
+		final StateBase state = (StateBase) stateObj;
+		assumeTrue(state.getCommand().canExecute() && state.getCommand().canRedo());
+		state.getCommand().redo();
+		return (state);
+	}
+	
+	protected static StateBase disabledUndoCommand(Object stateObj) {
+		final StateBase state = (StateBase) stateObj;
+		assumeFalse(state.getCommand().canExecute() && state.getCommand().canUndo());
+		return (state);
+	}
+
+	protected static StateBase disabledRedoCommand(Object stateObj) {
+		final StateBase state = (StateBase) stateObj;
+		assumeFalse(state.getCommand().canExecute() && state.getCommand().canRedo());
+		return (state);
+	}
+
+	protected static <T extends StateBase> T disabledCommandExecution(T state) {
+		assumeNotNull(state.getCommand());
+		assumeFalse(state.getCommand().canExecute());
+		return state;
+	}
+
+	protected static <T extends StateBase> T commandExecution(T state) {
+		assumeNotNull(state.getCommand());
+		assumeTrue(state.getCommand().canExecute());
+		state.getCommand().execute();
+		return state;
+	}
+	
 	/**
 	 * Base type for state descriptions, used to structure class hierarchy
 	 *

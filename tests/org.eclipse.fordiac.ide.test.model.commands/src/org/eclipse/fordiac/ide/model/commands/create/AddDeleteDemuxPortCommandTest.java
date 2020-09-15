@@ -144,24 +144,11 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		}
 	}
 
-	protected static State undoCommand(Object stateObj) {
-		State state = (State) stateObj;
-		assumeTrue(state.getCommand().canUndo());
-		state.getCommand().undo();
-		return (state);
-	}
-
-	protected static State redoCommand(Object stateObj) {
-		State state = (State) stateObj;
-		assumeTrue(state.getCommand().canRedo());
-		state.getCommand().redo();
-		return (state);
-	}
 
 	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands,
-				AddDeleteDemuxPortCommandTest::undoCommand, AddDeleteDemuxPortCommandTest::redoCommand);
+				CommandTestBase::defaultUndoCommand, CommandTestBase::defaultRedoCommand);
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
@@ -192,18 +179,14 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 
 	private static State executeDeleteCommand(State state, String name) {
 		state.setCommand(new DeleteDemuxPortCommand(state.getDemultiplexer(), name));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	private static State executeAddCommand(State state, String name) {
 		state.setCommand(new AddDemuxPortCommand(state.getDemultiplexer(), name));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	// define here the list of test sequences

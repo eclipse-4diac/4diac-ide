@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
+import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.RequestConstants;
@@ -31,15 +32,14 @@ public class SetPositionCommandTest extends FBNetworkTestBase {
 
 	public static State executeCommand(State state, int x, int y, String request) {
 		prepareCommand(state, x, y, request);
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	public static State unexecutableCommand(State state) {
 		prepareCommand(state, 10, 15, RequestConstants.REQ_RESIZE);
-		assumeFalse(state.getCommand().canExecute());
-		return state;
+
+		return disabledCommandExecution(state);
 	}
 
 	private static void prepareCommand(State state, int x, int y, String request) {
@@ -51,25 +51,11 @@ public class SetPositionCommandTest extends FBNetworkTestBase {
 		state.setCommand(new SetPositionCommand(
 				(PositionableElement) state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME), req,
 				new Rectangle(x, y, INVALID, INVALID)));
-
-		assumeNotNull(state.getCommand());
 	}
 
 	public static void verifyState(State state, State oldState, TestFunction t, int x, int y) {
 		t.test(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getX() == x);
 		t.test(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getY() == y);
-	}
-
-	protected static State disabledUndoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeFalse(state.getCommand().canExecute() && state.getCommand().canUndo());
-		return (state);
-	}
-
-	protected static State disabledRedoCommand(Object stateObj) {
-		final State state = (State) stateObj;
-		assumeFalse(state.getCommand().canExecute() && state.getCommand().canRedo());
-		return (state);
 	}
 
 	// parameter creation function
@@ -108,8 +94,8 @@ public class SetPositionCommandTest extends FBNetworkTestBase {
 						(State s, State o, TestFunction t) -> verifyState(s, o, t, 0, 0) //
 				) //
 				), //
-				SetPositionCommandTest::disabledUndoCommand, //
-				SetPositionCommandTest::disabledRedoCommand //
+				CommandTestBase::disabledUndoCommand, //
+				CommandTestBase::disabledRedoCommand //
 		);
 
 		Collection<Arguments> commands = createCommands(executionDescriptions);

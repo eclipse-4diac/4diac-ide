@@ -60,24 +60,10 @@ public class ToggleSubappRepresentationTest extends CommandTestBase<State> {
 		}
 	}
 
-	protected static State undoCommand(Object stateObj) {
-		State state = (State) stateObj;
-		assumeTrue(state.getCommand().canUndo());
-		state.getCommand().undo();
-		return (state);
-	}
-
-	protected static State redoCommand(Object stateObj) {
-		State state = (State) stateObj;
-		assumeTrue(state.getCommand().canRedo());
-		state.getCommand().redo();
-		return (state);
-	}
-
 	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands,
-				ToggleSubappRepresentationTest::undoCommand, ToggleSubappRepresentationTest::redoCommand);
+				CommandTestBase::defaultUndoCommand, CommandTestBase::defaultRedoCommand);
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
@@ -92,10 +78,8 @@ public class ToggleSubappRepresentationTest extends CommandTestBase<State> {
 
 	private static State toggleFolding(State state) {
 		state.setCommand(new ToggleSubAppRepresentationCommand(state.getSubApp()));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
-		return state;
+
+		return commandExecution(state);
 	}
 
 	// define here the list of test sequences

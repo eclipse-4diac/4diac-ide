@@ -28,11 +28,8 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 	private static State executeCommandInputWithoutName(State state) {
 		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.BOOL),
 				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ true, /* index */ 0));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateInputWithoutName(State state, State oldState, TestFunction t) {
@@ -52,11 +49,8 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 	private static State executeCommandInputWithName(State state) {
 		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.DWORD), "MyInput", //$NON-NLS-1$
 				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ true, /* index */ 1));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateInputWithName(State state, State oldState, TestFunction t) {
@@ -75,11 +69,8 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 	private static State executeCommandInputWithNameNull(State state) {
 		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.DWORD), null,
 				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ true, /* index */ 1));
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
-		state.getCommand().execute();
 
-		return state;
+		return commandExecution(state);
 	}
 
 	private static void verifyStateInputWithNameNull(State state, State oldState, TestFunction t) {
