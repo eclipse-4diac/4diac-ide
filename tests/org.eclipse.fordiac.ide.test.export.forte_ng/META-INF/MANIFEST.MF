@@ -7,4 +7,7 @@ Fragment-Host: org.eclipse.fordiac.ide.export.forte_ng
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.export.forte_ng
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: Eclipse 4diac
-Require-Bundle: org.junit
+Import-Package: org.junit.jupiter.api,
+ org.opentest4j,
+ org.junit.jupiter.params,
+ org.junit.jupiter.params.provider

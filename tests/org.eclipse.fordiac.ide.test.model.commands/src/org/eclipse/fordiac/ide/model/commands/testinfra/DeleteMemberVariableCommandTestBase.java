@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,9 +28,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.gef.commands.Command;
+import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class DeleteMemberVariableCommandTestBase
-extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
+		extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
 	protected static DataTypeLibrary datatypeLib = new DataTypeLibrary();
 	protected static List<VarDeclaration> varList = new ArrayList<>();
 
@@ -117,8 +118,8 @@ extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
 		return (state);
 	}
 
-	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<Object> commands) {
+	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
+			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands,
 				DeleteMemberVariableCommandTestBase::undoCommand, DeleteMemberVariableCommandTestBase::redoCommand);
 	}
@@ -130,14 +131,14 @@ extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
 
 	// define here the list of test sequences
 	// multiple execution descriptions are possible -> define in test class
-	protected static List<Object[]> createCommands(List<Object> deletionExecutionDescriptions) {
-		List<Object[]> commands = new ArrayList<>();
+	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> deletionExecutionDescriptions) {
+		Collection<Arguments> commands = new ArrayList<>();
 		// test series 1
 		commands.addAll(describeCommand("Autofilled Command", // //$NON-NLS-1$
 				State::new, //
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				deletionExecutionDescriptions //
-				));
+		));
 		return commands;
 	}
 

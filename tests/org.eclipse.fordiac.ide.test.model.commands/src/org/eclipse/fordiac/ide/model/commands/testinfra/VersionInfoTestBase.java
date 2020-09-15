@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +22,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.gef.commands.Command;
+import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTestBase.State> {
 
@@ -81,8 +82,8 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 		return (state);
 	}
 
-	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<Object> commands) {
+	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
+			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, VersionInfoTestBase::undoCommand,
 				VersionInfoTestBase::redoCommand);
 	}
@@ -121,8 +122,8 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 		t.test(state.getVersionInfo().getVersion().equals(SET_VERSION));
 	}
 
-	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
-		final List<Object[]> commands = new ArrayList<>();
+	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+		final Collection<Arguments> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //

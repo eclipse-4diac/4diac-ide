@@ -13,8 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.insert;
 
-import static org.junit.Assume.assumeNotNull;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,8 +25,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
-import org.junit.Assume;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.params.provider.Arguments;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -40,7 +39,7 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 	private static final String ALGORITHM_COMMENT = "Magic!"; //$NON-NLS-1$
 
 	private static State executeCommandWithIndex(State state, int index) {
-		getBaseFBType(state, Assume::assumeTrue);
+		getBaseFBType(state, Assumptions::assumeTrue);
 
 		final STAlgorithm stAlg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		stAlg.setName(ALGORITHM_NAME); // Algorithm name changes based on what is already in the list
@@ -98,11 +97,9 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		verifyStateWithAlgorithmIndex(state, oldState, t, 2, ALGORITHM3_NAME);
 	}
 
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Add a ST algorithm", //$NON-NLS-1$
 						InsertAlgorithmCommandTest::executeCommand1, //
 						InsertAlgorithmCommandTest::verifyState1 //

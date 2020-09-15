@@ -13,8 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import static org.junit.Assume.assumeNotNull;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateInterfaceElementCommandTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.provider.Arguments;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -98,11 +97,9 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 		t.test(interfacelist.getInterfaceElement("DO2").getTypeName().equals(FordiacKeywords.BYTE)); //$NON-NLS-1$
 	}
 
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Add Output without name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandOutputsTest::executeCommandOutputWithoutName, //
 						CreateInterfaceElementCommandOutputsTest::verifyStateOutputWithoutName //

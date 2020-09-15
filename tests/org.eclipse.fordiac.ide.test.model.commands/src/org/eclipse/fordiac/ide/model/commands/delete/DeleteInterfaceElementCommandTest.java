@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
-import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
 
 import java.util.ArrayList;
@@ -25,40 +24,44 @@ import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommandTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.provider.Arguments;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
 public class DeleteInterfaceElementCommandTest extends FBNetworkTestBase {
 
 	public static State executeCommandDeleteInput(State state) {
-		IInterfaceElement interfaceElement = state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface().getInputVars().get(0);
-		state.setCommand(new DeleteInterfaceCommand(interfaceElement ));
-		
+		IInterfaceElement interfaceElement = state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME)
+				.getInterface().getInputVars().get(0);
+		state.setCommand(new DeleteInterfaceCommand(interfaceElement));
+
 		return commandExecution(state);
 	}
-	
+
 	public static State executeCommandDeleteOutput(State state) {
-		IInterfaceElement interfaceElement = state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface().getOutputVars().get(0);
+		IInterfaceElement interfaceElement = state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME)
+				.getInterface().getOutputVars().get(0);
 		state.setCommand(new DeleteInterfaceCommand(interfaceElement));
-		
+
 		return commandExecution(state);
 	}
 
 	public static State executeCommandDeleteEventInput(State state) {
-		IInterfaceElement interfaceElement = state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface().getEventInputs().get(0);
-		state.setCommand(new DeleteInterfaceCommand(interfaceElement ));
-		
-		return commandExecution(state);
-	}
-	
-	public static State executeCommandDeleteEventOutput(State state) {
-		IInterfaceElement interfaceElement = state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface().getEventOutputs().get(0);
+		IInterfaceElement interfaceElement = state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME)
+				.getInterface().getEventInputs().get(0);
 		state.setCommand(new DeleteInterfaceCommand(interfaceElement));
-		
+
 		return commandExecution(state);
 	}
-	
+
+	public static State executeCommandDeleteEventOutput(State state) {
+		IInterfaceElement interfaceElement = state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME)
+				.getInterface().getEventOutputs().get(0);
+		state.setCommand(new DeleteInterfaceCommand(interfaceElement));
+
+		return commandExecution(state);
+	}
+
 	private static State commandExecution(State state) {
 		assumeNotNull(state.getCommand());
 		assumeTrue(state.getCommand().canExecute());
@@ -74,54 +77,46 @@ public class DeleteInterfaceElementCommandTest extends FBNetworkTestBase {
 		s = InsertInterfaceElementCommandTest.executeEventCommand(s, true);
 		return InsertInterfaceElementCommandTest.executeEventCommand(s, false);
 	}
-	
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
+
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<State>("Delete Input", //$NON-NLS-1$
-						DeleteInterfaceElementCommandTest::executeCommandDeleteInput, // //$NON-NLS-1$
+						DeleteInterfaceElementCommandTest::executeCommandDeleteInput, //
 						(State s, State o, TestFunction t) -> {
 							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, o, t);
 							InsertInterfaceElementCommandTest.verifyStateHasDataOutput(s, o, t);
 							InsertInterfaceElementCommandTest.verifyStateHasEventInput(s, o, t);
 							InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, o, t);
-						}
-				), //
+						}), //
 				new ExecutionDescription<State>("Delete Output", //$NON-NLS-1$
-						DeleteInterfaceElementCommandTest::executeCommandDeleteOutput, // //$NON-NLS-1$
+						DeleteInterfaceElementCommandTest::executeCommandDeleteOutput, //
 						(State s, State o, TestFunction t) -> {
 							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, o, t);
 							InsertInterfaceElementCommandTest.verifyStateNoDataOutput(s, o, t);
 							InsertInterfaceElementCommandTest.verifyStateHasEventInput(s, o, t);
 							InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, o, t);
-						}
-				), //
+						}), //
 				new ExecutionDescription<State>("Delete Event Input", //$NON-NLS-1$
-						DeleteInterfaceElementCommandTest::executeCommandDeleteEventInput, // //$NON-NLS-1$
+						DeleteInterfaceElementCommandTest::executeCommandDeleteEventInput, //
 						(State s, State o, TestFunction t) -> {
 							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, o, t);
 							InsertInterfaceElementCommandTest.verifyStateNoDataOutput(s, o, t);
 							InsertInterfaceElementCommandTest.verifyStateNoEventInput(s, o, t);
 							InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, o, t);
-						}
-				), //
+						}), //
 				new ExecutionDescription<State>("Delete Event Output", //$NON-NLS-1$
-						DeleteInterfaceElementCommandTest::executeCommandDeleteEventOutput, // //$NON-NLS-1$
+						DeleteInterfaceElementCommandTest::executeCommandDeleteEventOutput, //
 						(State s, State o, TestFunction t) -> {
 							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, o, t);
 							InsertInterfaceElementCommandTest.verifyStateNoDataOutput(s, o, t);
 							InsertInterfaceElementCommandTest.verifyStateNoEventInput(s, o, t);
 							InsertInterfaceElementCommandTest.verifyStateNoEventOutput(s, o, t);
-						}
-				) //
+						}) //
 		);
 
-		final List<Object[]> commands = new ArrayList<>();
+		final Collection<Arguments> commands = new ArrayList<>();
 
-
-		
 		commands.addAll(describeCommand("Start with Functionblock", // //$NON-NLS-1$
 				() -> fbInitializer(), //
 				(State s, State o, TestFunction t) -> {

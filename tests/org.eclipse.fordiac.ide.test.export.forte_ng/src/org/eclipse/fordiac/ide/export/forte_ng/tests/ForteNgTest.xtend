@@ -13,12 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.tests
 
-import org.junit.Test
-import static org.junit.Assert.assertNull
-import static org.junit.Assert.assertNotNull
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.fail
-import static org.junit.Assert.assertTrue
+import org.junit.jupiter.api.Test
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.fail
+import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.eclipse.fordiac.ide.model.FordiacKeywords.*
 
 class ForteNgTest extends ForteNgTestBasicFBTypeBase {
@@ -318,8 +318,8 @@ class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 					fail("unexpected export file")
 			}
 		}
-		assertTrue("Header-File missing", headerfileFound)
-		assertTrue("CPP-File missing", cppfileFound)
+		assertTrue(headerfileFound, "Header-File missing")
+		assertTrue(cppfileFound, "CPP-File missing")
 	}
 
 }

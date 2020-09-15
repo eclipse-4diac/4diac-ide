@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,9 +24,10 @@ import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.gef.commands.Command;
+import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class CreateMemberVariableCommandTestBase
-extends CommandTestBase<CreateMemberVariableCommandTestBase.State> {
+		extends CommandTestBase<CreateMemberVariableCommandTestBase.State> {
 	protected static DataTypeLibrary datatypeLib = new DataTypeLibrary();
 
 	// create a state description that holds the struct and the command
@@ -58,6 +59,7 @@ extends CommandTestBase<CreateMemberVariableCommandTestBase.State> {
 		public State(State s) {
 			struct = EcoreUtil.copy(s.struct);
 		}
+
 		@Override
 		public Object getClone() {
 			return new State(this);
@@ -78,8 +80,8 @@ extends CommandTestBase<CreateMemberVariableCommandTestBase.State> {
 		return (state);
 	}
 
-	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<Object> commands) {
+	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
+			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands,
 				CreateMemberVariableCommandTestBase::undoCommand, CreateMemberVariableCommandTestBase::redoCommand);
 	}
@@ -91,21 +93,21 @@ extends CommandTestBase<CreateMemberVariableCommandTestBase.State> {
 
 	// define here the list of test sequences
 	// multiple execution descriptions are possible -> define in test class
-	protected static List<Object[]> createCommands(List<Object> autofilledExecutionDescriptions,
-			List<Object> configuredExecutionDescriptions) {
-		List<Object[]> commands = new ArrayList<>();
+	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> autofilledExecutionDescriptions,
+			List<ExecutionDescription<?>> configuredExecutionDescriptions) {
+		Collection<Arguments> commands = new ArrayList<>();
 		// test series 1
 		commands.addAll(describeCommand("Autofilled Command", // //$NON-NLS-1$
 				State::new, //
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				autofilledExecutionDescriptions //
-				));
+		));
 		// test series 2
 		commands.addAll(describeCommand("Configured Command", // //$NON-NLS-1$
 				State::new, //
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				configuredExecutionDescriptions //
-				));
+		));
 		return commands;
 	}
 

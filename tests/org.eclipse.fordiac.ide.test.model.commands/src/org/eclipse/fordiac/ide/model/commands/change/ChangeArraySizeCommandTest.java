@@ -14,14 +14,13 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.commands.testinfra.ValueCommandTestBase;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.provider.Arguments;
 
 public class ChangeArraySizeCommandTest extends ValueCommandTestBase {
 
@@ -54,57 +53,53 @@ public class ChangeArraySizeCommandTest extends ValueCommandTestBase {
 		assumeFalse(state.getCommand().canExecute() && state.getCommand().canUndo());
 		return (state);
 	}
+
 	protected static State disabledRedoCommand(Object stateObj) {
 		final State state = (State) stateObj;
 		assumeFalse(state.getCommand().canExecute() && state.getCommand().canRedo());
 		return (state);
 	}
-	
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		List<Object> executionDescriptions = ExecutionDescription.commandList( //
+
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Change Array Size to empty String", // //$NON-NLS-1$
-						(State s) -> executeCommand(s,""), //
-						(State s, State o, TestFunction t) -> verifyState(s,o,t,0) //
+						(State s) -> executeCommand(s, ""), //
+						(State s, State o, TestFunction t) -> verifyState(s, o, t, 0) //
 				), //
 				new ExecutionDescription<>("Change Array Size to 2", // //$NON-NLS-1$
-						(State s) -> executeCommand(s,"2"), //
-						(State s, State o, TestFunction t) -> verifyState(s,o,t,2) //
+						(State s) -> executeCommand(s, "2"), //
+						(State s, State o, TestFunction t) -> verifyState(s, o, t, 2) //
 				), //
 				new ExecutionDescription<>("Change Array Size to 0", // //$NON-NLS-1$
-						(State s) -> executeCommand(s,"0"), //
-						(State s, State o, TestFunction t) -> verifyState(s,o,t,0) //
+						(State s) -> executeCommand(s, "0"), //
+						(State s, State o, TestFunction t) -> verifyState(s, o, t, 0) //
 				), //
 				new ExecutionDescription<>("Change Array Size to -1", // //$NON-NLS-1$
-						(State s) -> executeCommand(s,"-1"), //
-						(State s, State o, TestFunction t) -> verifyState(s,o,t,0) //
+						(State s) -> executeCommand(s, "-1"), //
+						(State s, State o, TestFunction t) -> verifyState(s, o, t, 0) //
 				), //
 				new ExecutionDescription<>("Change Array Size to abc", // //$NON-NLS-1$
-						(State s) -> executeCommand(s,"abc"), //
-						(State s, State o, TestFunction t) -> verifyState(s,o,t,0) //
-				)
+						(State s) -> executeCommand(s, "abc"), //
+						(State s, State o, TestFunction t) -> verifyState(s, o, t, 0) //
+				));
+
+		Collection<Arguments> unexecutable = describeCommand("Start from default values", // //$NON-NLS-1$
+				State::new, //
+				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
+				List.of(new ExecutionDescription<>("Unexecutable case: variable is null", // //$NON-NLS-1$
+						ChangeArraySizeCommandTest::executeCommandOnNull, //
+						ChangeArraySizeCommandTest::verifyNothing //
+				) //
+				), //
+				ChangeArraySizeCommandTest::disabledUndoCommand, //
+				ChangeArraySizeCommandTest::disabledRedoCommand //
 		);
 
-		Collection<Object[]> unexecutable = describeCommand("Start from default values", // //$NON-NLS-1$
-			State::new, //
-			(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
-			ExecutionDescription.commandList(
-				new ExecutionDescription<>(
-					"Unexecutable case: variable is null", // //$NON-NLS-1$
-					ChangeArraySizeCommandTest::executeCommandOnNull, //
-					ChangeArraySizeCommandTest::verifyNothing //
-				) //
-			), //
-			ChangeArraySizeCommandTest::disabledUndoCommand, //
-			ChangeArraySizeCommandTest::disabledRedoCommand //
-		);
-		
-		List<Object[]> commands = createCommands(executionDescriptions);
-		
+		Collection<Arguments> commands = createCommands(executionDescriptions);
+
 		commands.addAll(unexecutable);
-				
+
 		return commands;
 	}
 

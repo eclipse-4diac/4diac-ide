@@ -13,8 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import static org.junit.Assume.assumeNotNull;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -25,8 +24,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.junit.Assume;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.params.provider.Arguments;
 
 public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 
@@ -68,7 +67,7 @@ public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 
 		// if this test skips here, this single test had a runtime (walltime) of more
 		// than one day. please fix the development system
-		Assume.assumeTrue((System.currentTimeMillis() - millisBeforeFirstExecute) < DAY_IN_MILLISECONDS);
+		Assumptions.assumeTrue((System.currentTimeMillis() - millisBeforeFirstExecute) < DAY_IN_MILLISECONDS);
 
 		t.test(vinfo.get(index).getDate().equals(dateBeforeFirstExecute) || // this may skip across midnight, so we
 																			// allow both days around midnight
@@ -83,11 +82,9 @@ public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 		verifyState(state, oldState, t, 1, 2);
 	}
 
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<State>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						AddNewVersionInfoCommandTest::verifyStateBefore //
