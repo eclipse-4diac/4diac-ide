@@ -13,8 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
-import static org.junit.Assume.assumeFalse;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

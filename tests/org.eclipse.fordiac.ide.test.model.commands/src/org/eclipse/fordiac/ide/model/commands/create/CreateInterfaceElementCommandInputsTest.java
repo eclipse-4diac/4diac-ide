@@ -13,8 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
 import java.util.Collection;
 import java.util.List;
 

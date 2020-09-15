@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.hamcrest.CoreMatchers.is;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -23,11 +23,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assumptions;
+import org.hamcrest.Matcher;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.opentest4j.TestAbortedException;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -39,6 +39,38 @@ import org.junit.jupiter.params.provider.MethodSource;
  *            CommandTestBase.StateBase
  */
 public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
+
+	public static <T> void assertThat(String reason, T actual, Matcher<T> matcher) {
+		org.hamcrest.MatcherAssert.assertThat(reason, actual, matcher);
+	}
+
+	public static <T> void assertThat(T actual, Matcher<T> matcher) {
+		assertThat("", actual, matcher);
+	}
+
+	public static <T> void assumeThat(String reason, T actual, Matcher<T> matcher) {
+		try {
+			assertThat(reason, actual, matcher);
+		} catch (AssertionError e) {
+			throw new TestAbortedException(e.getMessage(), e.getCause());
+		}
+	}
+
+	public static <T> void assumeThat(T actual, Matcher<T> matcher) {
+		assumeThat("", actual, matcher);
+	}
+
+	protected static void assumeNotNull(Object obj) {
+		assumeThat(obj, org.hamcrest.CoreMatchers.notNullValue());
+	}
+
+	protected static void assumeTrue(boolean value) {
+		assumeThat(value, is(true));
+	}
+
+	protected static void assumeFalse(boolean value) {
+		assumeThat(value, is(false));
+	}
 
 	/**
 	 * Base type for state descriptions, used to structure class hierarchy
@@ -75,7 +107,20 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 *
 	 */
 	protected interface TestFunction {
-		void test(boolean condition);
+		<T> void test(String message, T actual, Matcher<T> matcher);
+
+		default <T> void test(T actual, Matcher<T> matcher) {
+			test("", actual, matcher);
+		}
+
+		default <T> void test(T actual, T expected) {
+			test("", actual, is(expected));
+		}
+
+		default void test(boolean equals) {
+			test("", equals, is(true));
+		}
+
 	}
 
 	/**
@@ -325,9 +370,9 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		final Iterator<ExecutionDescription<T>> iterator = commands.iterator();
 		TestFunction t;
 		if (iterator.hasNext()) {
-			t = Assumptions::assumeTrue;
+			t = CommandTestBase::assumeThat;
 		} else {
-			t = Assertions::assertTrue;
+			t = CommandTestBase::assertThat;
 		}
 
 		initialVerifier.verifyState(current.getState(), current.getBefore().getState(), t);
@@ -338,9 +383,9 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			// if there are more commands to be executed use assume instead of assert
 			// same reason as for initial state verifier
 			if (iterator.hasNext()) {
-				t = Assumptions::assumeTrue;
+				t = CommandTestBase::assumeThat;
 			} else {
-				t = Assertions::assertTrue;
+				t = CommandTestBase::assertThat;
 			}
 
 			StateNode<T> clone = new StateNode<>(current);
@@ -370,10 +415,6 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 				break;
 			}
 		}
-	}
-
-	protected static void assumeNotNull(Object obj) {
-		assumeTrue(obj != null);
 	}
 
 }

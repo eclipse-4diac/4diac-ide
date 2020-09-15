@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.params.provider.Arguments;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
@@ -32,7 +31,8 @@ public abstract class CreateInternalVariableCommandTestBase extends FBNetworkTes
 	}
 
 	private static void verifyInitialState(State state, State oldState, TestFunction t) {
-		FBCreateCommandTest.verifyState(state, oldState, Assumptions::assumeTrue); // skip further tests if FB creation
+		FBCreateCommandTest.verifyState(state, oldState, CommandTestBase::assumeThat); // skip further tests if FB
+																						// creation
 		// failed
 
 	}

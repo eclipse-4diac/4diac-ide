@@ -13,8 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
-import static org.junit.Assume.assumeTrue;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

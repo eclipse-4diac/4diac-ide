@@ -13,19 +13,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.insert;
 
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateInternalVariableCommandTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.params.provider.Arguments;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
@@ -39,7 +37,7 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 	private static final String ALGORITHM_COMMENT = "Magic!"; //$NON-NLS-1$
 
 	private static State executeCommandWithIndex(State state, int index) {
-		getBaseFBType(state, Assumptions::assumeTrue);
+		getBaseFBType(state, CommandTestBase::assumeThat);
 
 		final STAlgorithm stAlg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		stAlg.setName(ALGORITHM_NAME); // Algorithm name changes based on what is already in the list

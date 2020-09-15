@@ -13,9 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeTrue;
-
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
