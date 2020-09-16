@@ -31,13 +31,8 @@ public class ChangeDescriptionCommandTest extends FBNetworkTestBase {
 		return commandExecution(state);
 	}
 
-	public static void verifyStateBefore(State state, State oldState, TestFunction t) {
-		FBCreateCommandTest.verifyState(state, oldState, t);
-	}
-
 	public static void verifyState(State state, State oldState, TestFunction t, String expectedValue) {
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getIdentification().getDescription()
-				.equals(expectedValue));
+		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getIdentification().getDescription(), expectedValue);
 	}
 
 	// parameter creation function
@@ -45,7 +40,7 @@ public class ChangeDescriptionCommandTest extends FBNetworkTestBase {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
-						ChangeDescriptionCommandTest::verifyStateBefore //
+						FBCreateCommandTest::verifyState //
 				), //
 				new ExecutionDescription<>("Change Description", //$NON-NLS-1$
 						(State state) -> executeCommand(state, DESCRIPTION_STRING), //

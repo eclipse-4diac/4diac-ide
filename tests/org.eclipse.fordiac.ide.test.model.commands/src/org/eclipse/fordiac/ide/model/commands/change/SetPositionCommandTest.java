@@ -54,8 +54,8 @@ public class SetPositionCommandTest extends FBNetworkTestBase {
 	}
 
 	public static void verifyState(State state, State oldState, TestFunction t, int x, int y) {
-		t.test(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getX() == x);
-		t.test(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getY() == y);
+		t.test(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getX(), x);
+		t.test(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getY(), y);
 	}
 
 	// parameter creation function

@@ -93,19 +93,19 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 	}
 
 	public static void verifyStateHasDataInput(State state, State oldState, TestFunction t) {
-		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getInputVars().size() == 1);
+		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getInputVars().size(), 1);
 	}
 
 	public static void verifyStateHasDataOutput(State state, State oldState, TestFunction t) {
-		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getOutputVars().size() == 1);
+		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getOutputVars().size(), 1);
 	}
 
 	public static void verifyStateHasEventInput(State state, State oldState, TestFunction t) {
-		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getEventInputs().size() == 1);
+		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getEventInputs().size(), 1);
 	}
 
 	public static void verifyStateHasEventOutput(State state, State oldState, TestFunction t) {
-		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getEventOutputs().size() == 1);
+		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getEventOutputs().size(), 1);
 	}
 
 	// parameter creation function

@@ -30,7 +30,7 @@ public class ChangeValueCommandTest extends ValueCommandTestBase {
 	}
 
 	private static void verifyState(State state, State oldState, TestFunction t) {
-		t.test(state.getVar().getValue().getValue().equals(NEW_VALUE));
+		t.test(state.getVar().getValue().getValue(), NEW_VALUE);
 	}
 
 	private static State executeCommandToNull(State state) {

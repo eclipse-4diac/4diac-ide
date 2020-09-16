@@ -153,7 +153,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
 		t.test(null != state.getDemultiplexer());
-		t.test(state.getStruct().getMemberVariables().size() == state.getDemultiplexer().getInterface().getOutputVars()
+		t.test(state.getStruct().getMemberVariables().size(), state.getDemultiplexer().getInterface().getOutputVars()
 				.size());
 	}
 

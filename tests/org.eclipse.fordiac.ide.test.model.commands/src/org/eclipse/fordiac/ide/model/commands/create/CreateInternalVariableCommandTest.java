@@ -38,8 +38,8 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 	private static void verifyStateVar1(State state, State oldState, TestFunction t) {
 		BaseFBType baseFBType = getBaseFBType(state, t);
 		t.test(!baseFBType.getInternalVars().isEmpty());
-		t.test(baseFBType.getInternalVars().get(0).getName().equals(FordiacKeywords.VARIABLE_INTERNAL));
-		t.test(baseFBType.getInternalVars().get(0).getTypeName().equals(FordiacKeywords.BOOL));
+		t.test(baseFBType.getInternalVars().get(0).getName(), FordiacKeywords.VARIABLE_INTERNAL);
+		t.test(baseFBType.getInternalVars().get(0).getTypeName(), FordiacKeywords.BOOL);
 	}
 
 	private static State executeCommandVar2(State state) {
@@ -55,8 +55,8 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 	private static void verifyStateVar2(State state, State oldState, TestFunction t) {
 		verifyStateVar1(state, oldState, t);
 		BaseFBType baseFBType = getBaseFBType(state, t);
-		t.test(baseFBType.getInternalVars().get(1).getName().equals("InternalVar2")); //$NON-NLS-1$
-		t.test(baseFBType.getInternalVars().get(1).getTypeName().equals(FordiacKeywords.DWORD));
+		t.test(baseFBType.getInternalVars().get(1).getName(), "InternalVar2"); //$NON-NLS-1$
+		t.test(baseFBType.getInternalVars().get(1).getTypeName(), FordiacKeywords.DWORD);
 	}
 
 	private static State executeCommandVar3(State state) {
@@ -71,8 +71,8 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 	private static void verifyStateVar3(State state, State oldState, TestFunction t) {
 		verifyStateVar2(state, oldState, t);
 		BaseFBType baseFBType = getBaseFBType(state, t);
-		t.test(baseFBType.getInternalVars().get(2).getName().equals("INTERNALVAR1")); //$NON-NLS-1$
-		t.test(baseFBType.getInternalVars().get(2).getTypeName().equals(FordiacKeywords.BOOL));
+		t.test(baseFBType.getInternalVars().get(2).getName(), "INTERNALVAR1"); //$NON-NLS-1$
+		t.test(baseFBType.getInternalVars().get(2).getTypeName(), FordiacKeywords.BOOL);
 	}
 
 	// parameter creation function

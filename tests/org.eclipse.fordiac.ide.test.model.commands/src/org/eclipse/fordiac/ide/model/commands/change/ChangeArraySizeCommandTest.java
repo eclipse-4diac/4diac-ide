@@ -35,8 +35,8 @@ public class ChangeArraySizeCommandTest extends ValueCommandTestBase {
 	}
 
 	private static void verifyState(State state, State oldState, TestFunction t, int newSize) {
-		t.test(state.getVar().getArraySize() == newSize);
-		t.test(state.getVar().isArray() == (newSize > 0));
+		t.test(state.getVar().getArraySize(), newSize);
+		t.test(state.getVar().isArray(), (newSize > 0));
 	}
 
 	// parameter creation function

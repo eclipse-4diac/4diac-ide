@@ -31,14 +31,9 @@ public class ChangeIdentificationTypeCommandTest extends FBNetworkTestBase {
 		return commandExecution(state);
 	}
 
-	public static void verifyStateBefore(State state, State oldState, TestFunction t) {
-		FBCreateCommandTest.verifyState(state, oldState, t);
-	}
-
 	@SuppressWarnings("unused")
 	public static void verifyState(State state, State oldState, TestFunction t, String expectedValue) {
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getIdentification().getType()
-				.equals(expectedValue));
+		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getIdentification().getType(), expectedValue);
 	}
 
 	// parameter creation function
@@ -46,7 +41,7 @@ public class ChangeIdentificationTypeCommandTest extends FBNetworkTestBase {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
-						ChangeIdentificationTypeCommandTest::verifyStateBefore //
+						FBCreateCommandTest::verifyState //
 				), //
 				new ExecutionDescription<>("Change Identification Type", //$NON-NLS-1$
 						(State state) -> executeCommand(state, IDENTIFICATION_TYPE_STRING), //

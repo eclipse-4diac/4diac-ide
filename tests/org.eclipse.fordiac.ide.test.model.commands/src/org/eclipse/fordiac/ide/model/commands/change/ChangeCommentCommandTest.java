@@ -37,7 +37,7 @@ public class ChangeCommentCommandTest extends FBNetworkTestBase {
 	}
 
 	public static void verifyState(State state, State oldState, TestFunction t, String comment) {
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getComment().equals(comment));
+		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getComment(), comment);
 	}
 
 	// parameter creation function

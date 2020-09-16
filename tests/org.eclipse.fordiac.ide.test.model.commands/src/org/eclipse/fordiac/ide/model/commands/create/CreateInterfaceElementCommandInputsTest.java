@@ -37,13 +37,12 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		InterfaceList oldInterfacelist = oldState.getFbNetwork().getNetworkElements().get(0).getInterface();
 
 		t.test(!interfacelist.getInputVars().isEmpty());
-		t.test(interfacelist.getInputVars().size() == oldInterfacelist.getInputVars().size() + 1);
+		t.test(interfacelist.getInputVars().size(), oldInterfacelist.getInputVars().size() + 1);
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
 		t.test(null != interfacelist.getInterfaceElement(FordiacKeywords.DATA_INPUT));
-		t.test(interfacelist.getInterfaceElement(FordiacKeywords.DATA_INPUT).getTypeName()
-				.equals(FordiacKeywords.BOOL));
+		t.test(interfacelist.getInterfaceElement(FordiacKeywords.DATA_INPUT).getTypeName(), FordiacKeywords.BOOL);
 	}
 
 	private static State executeCommandInputWithName(State state) {
@@ -58,12 +57,12 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		InterfaceList oldInterfacelist = oldState.getFbNetwork().getNetworkElements().get(0).getInterface();
 
 		t.test(!interfacelist.getInputVars().isEmpty());
-		t.test(interfacelist.getInputVars().size() == oldInterfacelist.getInputVars().size() + 1);
+		t.test(interfacelist.getInputVars().size(), oldInterfacelist.getInputVars().size() + 1);
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
 		t.test(null != interfacelist.getInterfaceElement("MyInput")); //$NON-NLS-1$
-		t.test(interfacelist.getInterfaceElement("MyInput").getTypeName().equals(FordiacKeywords.DWORD)); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement("MyInput").getTypeName(), FordiacKeywords.DWORD); //$NON-NLS-1$
 	}
 
 	private static State executeCommandInputWithNameNull(State state) {
@@ -78,12 +77,12 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		InterfaceList oldInterfacelist = oldState.getFbNetwork().getNetworkElements().get(0).getInterface();
 
 		t.test(!interfacelist.getInputVars().isEmpty());
-		t.test(interfacelist.getInputVars().size() == oldInterfacelist.getInputVars().size() + 1);
+		t.test(interfacelist.getInputVars().size(), oldInterfacelist.getInputVars().size() + 1);
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
 		t.test(null != interfacelist.getInterfaceElement("DI2")); //$NON-NLS-1$
-		t.test(interfacelist.getInterfaceElement("DI2").getTypeName().equals(FordiacKeywords.DWORD)); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement("DI2").getTypeName(),FordiacKeywords.DWORD); //$NON-NLS-1$
 	}
 
 	// parameter creation function

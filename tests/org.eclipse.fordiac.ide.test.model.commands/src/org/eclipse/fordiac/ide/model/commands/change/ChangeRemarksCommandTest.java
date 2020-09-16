@@ -32,11 +32,11 @@ public class ChangeRemarksCommandTest extends VersionInfoTestBase {
 	}
 
 	private static void verifyState(State state, State oldState, TestFunction t) {
-		t.test(state.getVersionInfo().getRemarks().equals(NEW_REMARK));
-		t.test(state.getVersionInfo().getDate().equals(oldState.getVersionInfo().getDate()));
-		t.test(state.getVersionInfo().getOrganization().equals(oldState.getVersionInfo().getOrganization()));
-		t.test(state.getVersionInfo().getAuthor().equals(oldState.getVersionInfo().getAuthor()));
-		t.test(state.getVersionInfo().getVersion().equals(oldState.getVersionInfo().getVersion()));
+		t.test(state.getVersionInfo().getRemarks(), NEW_REMARK);
+		t.test(state.getVersionInfo().getDate(), oldState.getVersionInfo().getDate());
+		t.test(state.getVersionInfo().getOrganization(), oldState.getVersionInfo().getOrganization());
+		t.test(state.getVersionInfo().getAuthor(), oldState.getVersionInfo().getAuthor());
+		t.test(state.getVersionInfo().getVersion(), oldState.getVersionInfo().getVersion());
 	}
 
 	private static State executeCommandToNull(State state) {
@@ -46,11 +46,11 @@ public class ChangeRemarksCommandTest extends VersionInfoTestBase {
 	}
 
 	private static void verifyStateNull(State state, State oldState, TestFunction t) {
-		t.test(state.getVersionInfo().getRemarks().equals(EMPTY));
-		t.test(state.getVersionInfo().getDate().equals(oldState.getVersionInfo().getDate()));
-		t.test(state.getVersionInfo().getOrganization().equals(oldState.getVersionInfo().getOrganization()));
-		t.test(state.getVersionInfo().getAuthor().equals(oldState.getVersionInfo().getAuthor()));
-		t.test(state.getVersionInfo().getVersion().equals(oldState.getVersionInfo().getVersion()));
+		t.test(state.getVersionInfo().getRemarks(), EMPTY);
+		t.test(state.getVersionInfo().getDate(), oldState.getVersionInfo().getDate());
+		t.test(state.getVersionInfo().getOrganization(), oldState.getVersionInfo().getOrganization());
+		t.test(state.getVersionInfo().getAuthor(), oldState.getVersionInfo().getAuthor());
+		t.test(state.getVersionInfo().getVersion(), oldState.getVersionInfo().getVersion());
 	}
 
 	// parameter creation function

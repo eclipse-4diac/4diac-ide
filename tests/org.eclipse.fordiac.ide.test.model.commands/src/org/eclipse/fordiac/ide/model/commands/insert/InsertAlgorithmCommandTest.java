@@ -61,9 +61,9 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getType() instanceof BasicFBType);
 		t.test(!algorithmList.isEmpty());
 		t.test(algorithmList.get(index) instanceof STAlgorithm);
-		t.test(((STAlgorithm) algorithmList.get(index)).getComment().contentEquals(ALGORITHM_COMMENT));
-		t.test(((STAlgorithm) algorithmList.get(index)).getText().equals(ALGORITHM_TEXT));
-		t.test(algorithmList.get(index).getName().equals(algorithmName));
+		t.test(((STAlgorithm) algorithmList.get(index)).getComment(), ALGORITHM_COMMENT);
+		t.test(((STAlgorithm) algorithmList.get(index)).getText(), ALGORITHM_TEXT);
+		t.test(algorithmList.get(index).getName(), algorithmName);
 	}
 
 	private static State executeCommand1(State state) {

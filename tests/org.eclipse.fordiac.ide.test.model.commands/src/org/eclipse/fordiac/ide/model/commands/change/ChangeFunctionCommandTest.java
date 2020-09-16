@@ -36,8 +36,7 @@ public class ChangeFunctionCommandTest extends FBNetworkTestBase {
 	}
 
 	public static void verifyState(State state, State oldState, TestFunction t, String expectedValue) {
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getIdentification().getFunction()
-				.equals(expectedValue));
+		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getIdentification().getFunction(), expectedValue);
 	}
 
 	// parameter creation function

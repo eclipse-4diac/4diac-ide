@@ -33,7 +33,7 @@ public class DeleteMemberVariableCommandTest extends DeleteMemberVariableCommand
 
 	private static void verifyDeletion(State state, State oldState, TestFunction t, VarDeclaration var) {
 		// verify that old variables are still there
-		t.test((oldState.getStructuredType().getMemberVariables().size() - 1) == state.getStructuredType()
+		t.test((oldState.getStructuredType().getMemberVariables().size() - 1), state.getStructuredType()
 				.getMemberVariables().size());
 		// verify that new variable is not in member variables anymore
 		for (final VarDeclaration member : state.getStructuredType().getMemberVariables()) {

@@ -70,7 +70,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 
 	private static void verifyStateVarWithIndex(State state, State oldState, TestFunction t, int index) {
 		t.test(!state.getList().isEmpty());
-		t.test(state.getList().size() == (oldState.getList().size() + 1));
+		t.test(state.getList().size(), (oldState.getList().size() + 1));
 		t.test(validateVarDeclaration(state.getList().get(index), state.getVarDec()));
 	}
 

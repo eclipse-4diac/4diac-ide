@@ -22,7 +22,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
@@ -50,18 +49,18 @@ public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 	public static void verifyState(State state, State oldState, TestFunction t, int index, int expectedSize) {
 		final EList<VersionInfo> vinfo = state.getFbNetwork().getNetworkElements().get(0).getType().getVersionInfo();
 
-		t.test(vinfo.size() == expectedSize);
-		t.test(vinfo.get(index).getAuthor().equals(FordiacMessages.Unknown));
-		t.test(vinfo.get(index).getOrganization().equals(FordiacMessages.Unknown));
-		t.test(vinfo.get(index).getVersion().equals("1.0")); //$NON-NLS-1$
-		t.test(vinfo.get(index).getRemarks().equals("")); //$NON-NLS-1$
+		t.test(vinfo.size(), expectedSize);
+		t.test(vinfo.get(index).getAuthor(), FordiacMessages.Unknown);
+		t.test(vinfo.get(index).getOrganization(), FordiacMessages.Unknown);
+		t.test(vinfo.get(index).getVersion(), "1.0"); //$NON-NLS-1$
+		t.test(vinfo.get(index).getRemarks(), ""); //$NON-NLS-1$
 
 		String dateBeforeFirstExecute = dateFormat.format(new Date(millisBeforeFirstExecute));
 		String dateDuringVerify = dateFormat.format(new Date());
 
 		// if this test skips here, this single test had a runtime (walltime) of more
 		// than one day. please fix the development system
-		Assumptions.assumeTrue((System.currentTimeMillis() - millisBeforeFirstExecute) < DAY_IN_MILLISECONDS);
+		assumeTrue((System.currentTimeMillis() - millisBeforeFirstExecute) < DAY_IN_MILLISECONDS);
 
 		t.test(vinfo.get(index).getDate().equals(dateBeforeFirstExecute) || // this may skip across midnight, so we
 																			// allow both days around midnight

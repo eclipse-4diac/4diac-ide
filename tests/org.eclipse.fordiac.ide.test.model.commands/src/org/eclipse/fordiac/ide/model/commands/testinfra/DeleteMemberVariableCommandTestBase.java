@@ -110,7 +110,7 @@ public abstract class DeleteMemberVariableCommandTestBase
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
 		t.test(null != state.getStructuredType());
-		t.test(state.getStructuredType().getMemberVariables().size() == varList.size());
+		t.test(state.getStructuredType().getMemberVariables().size(), varList.size());
 	}
 
 	// define here the list of test sequences

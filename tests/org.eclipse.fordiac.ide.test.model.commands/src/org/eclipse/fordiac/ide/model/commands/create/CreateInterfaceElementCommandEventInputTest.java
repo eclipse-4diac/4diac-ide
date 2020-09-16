@@ -39,10 +39,10 @@ public class CreateInterfaceElementCommandEventInputTest extends CreateInterface
 		t.test(interfacelist.getInputVars().isEmpty());
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(!interfacelist.getEventInputs().isEmpty());
-		t.test(interfacelist.getEventInputs().size() == oldInterfacelist.getEventInputs().size() + 1);
+		t.test(interfacelist.getEventInputs().size(), oldInterfacelist.getEventInputs().size() + 1);
 		t.test(interfacelist.getEventOutputs().isEmpty());
 		t.test(null != interfacelist.getInterfaceElement("EI1")); //$NON-NLS-1$
-		t.test(interfacelist.getInterfaceElement("EI1").getTypeName().equals("Event")); //$NON-NLS-1$ //$NON-NLS-2$
+		t.test(interfacelist.getInterfaceElement("EI1").getTypeName(), "Event"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static State executeCommandInputWithName(State state) {
@@ -59,10 +59,10 @@ public class CreateInterfaceElementCommandEventInputTest extends CreateInterface
 		t.test(interfacelist.getInputVars().isEmpty());
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(!interfacelist.getEventInputs().isEmpty());
-		t.test(interfacelist.getEventInputs().size() == oldInterfacelist.getEventInputs().size() + 1);
+		t.test(interfacelist.getEventInputs().size(), oldInterfacelist.getEventInputs().size() + 1);
 		t.test(interfacelist.getEventOutputs().isEmpty());
 		t.test(null != interfacelist.getInterfaceElement("MyInput")); //$NON-NLS-1$
-		t.test(interfacelist.getInterfaceElement("MyInput").getTypeName().equals("Event")); //$NON-NLS-1$ //$NON-NLS-2$
+		t.test(interfacelist.getInterfaceElement("MyInput").getTypeName(), "Event"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static State executeCommandInputWithNameNull(State state) {
@@ -79,10 +79,10 @@ public class CreateInterfaceElementCommandEventInputTest extends CreateInterface
 		t.test(interfacelist.getInputVars().isEmpty());
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(!interfacelist.getEventInputs().isEmpty());
-		t.test(interfacelist.getEventInputs().size() == oldInterfacelist.getEventInputs().size() + 1);
+		t.test(interfacelist.getEventInputs().size(), oldInterfacelist.getEventInputs().size() + 1);
 		t.test(interfacelist.getEventOutputs().isEmpty());
 		t.test(null != interfacelist.getInterfaceElement("EI2")); //$NON-NLS-1$
-		t.test(interfacelist.getInterfaceElement("EI2").getTypeName().equals("Event")); //$NON-NLS-1$ //$NON-NLS-2$
+		t.test(interfacelist.getInterfaceElement("EI2").getTypeName(), "Event"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	// parameter creation function

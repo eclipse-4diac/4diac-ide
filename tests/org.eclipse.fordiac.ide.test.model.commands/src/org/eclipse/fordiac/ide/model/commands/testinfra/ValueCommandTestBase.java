@@ -88,7 +88,7 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 
 		final String DEFAULT_VALUE = varDec.getValue().getValue();
 
-		t.test(state.getVar().getValue().getValue().equals(DEFAULT_VALUE));
+		t.test(state.getVar().getValue().getValue(), DEFAULT_VALUE);
 	}
 
 	protected static State setInitialValues() {
@@ -99,7 +99,7 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 
 	@SuppressWarnings("unused")
 	protected static void verifySetInitialValues(State state, State oldState, TestFunction t) {
-		t.test(state.getVar().getValue().getValue().equals(SET_VALUE));
+		t.test(state.getVar().getValue().getValue(), SET_VALUE);
 
 	}
 
