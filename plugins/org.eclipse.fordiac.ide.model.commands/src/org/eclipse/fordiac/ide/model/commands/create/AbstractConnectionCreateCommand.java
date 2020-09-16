@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
  * 				 2019 Johannes Keppler University Linz
+ * 				 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,13 +14,16 @@
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
  *               - reworked and harmonized source/target checking 551042
+ *   Daniel Lindhuber - adjusted for unfolded subapps
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 
 public abstract class AbstractConnectionCreateCommand extends Command {
@@ -31,7 +35,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	private int connDy;
 
 	/** The parent. */
-	private final FBNetwork parent;
+	private FBNetwork parent;
 
 	/** The connection view. */
 	private Connection connection;
@@ -91,7 +95,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		if (getSource() == null || getDestination() == null) {
+		if ((getSource() == null) || (getDestination() == null)) {
 			return false;
 		}
 		if (getSource() == getDestination()) {
@@ -103,12 +107,47 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		if (!getInterfaceType().isInstance(getDestination())) {
 			return false;
 		}
+		if (checkUnfoldedSubAppConnections()) {
+			return false;
+		}
 
 		return true;
 	}
 
+	private boolean checkUnfoldedSubAppConnections() {
+		// returns false for typed subapps & cfbs
+		if (getSource().getFBNetworkElement() == null
+				|| getDestination().getFBNetworkElement() == null) {
+			return false;
+		}
+		// prevents connections across unfolded subapp borders
+		if (getSource().getFBNetworkElement().getFbNetwork() != getDestination().getFBNetworkElement().getFbNetwork()) {
+			EObject srcContainer = null;
+			EObject destContainer = null;
+			if (getSource().eContainer().eContainer() instanceof SubApp) {
+				srcContainer = getSource().eContainer().eContainer();
+			}
+			if (getDestination().eContainer().eContainer() instanceof SubApp) {
+				destContainer = getDestination().eContainer().eContainer();
+			}
+			if ((srcContainer == null) && (destContainer == null)) {
+				return true;
+			}
+			if ((destContainer == null)
+					&& (srcContainer != getDestination().eContainer().eContainer().eContainer().eContainer())) {
+				return true;
+			}
+			if ((srcContainer == null)
+					&& (destContainer != getSource().eContainer().eContainer().eContainer().eContainer())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public void execute() {
+		checkParent();
 		checkSourceAndTarget();
 
 		connection = createConnectionElement();
@@ -160,6 +199,33 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		}
 	}
 
+	private void checkParent() {
+		// input pin to output pin inside subapp
+		if ((getSource().eContainer().eContainer() instanceof SubApp)
+				&& (getDestination().eContainer().eContainer() instanceof SubApp)
+				&& getSource().isIsInput() && !getDestination().isIsInput()) {
+			parent = ((SubApp) getSource().eContainer().eContainer()).getSubAppNetwork();
+		}
+		// input pin to fb inside unfolded subapp
+		if ((getSource().eContainer().eContainer() instanceof SubApp)
+				&& (getDestination().eContainer().eContainer().eContainer().eContainer() instanceof SubApp)
+				&& getSource().isIsInput()) {
+			parent = getDestination().getFBNetworkElement().getFbNetwork();
+		}
+		// output pin to fb inside unfolded subapp (drawn in reverse)
+		if ((getSource().eContainer().eContainer() instanceof SubApp)
+				&& (getDestination().eContainer().eContainer().eContainer().eContainer() instanceof SubApp)
+				&& !getSource().isIsInput()) {
+			parent = getDestination().getFBNetworkElement().getFbNetwork();
+		}
+		// fb to output pin inside unfolded subapp
+		if ((getDestination().eContainer().eContainer() instanceof SubApp)
+				&& (getSource().eContainer().eContainer().eContainer().eContainer() instanceof SubApp)
+				&& !getSource().isIsInput()) {
+			parent = getSource().getFBNetworkElement().getFbNetwork();
+		}
+	}
+
 	protected abstract Connection createConnectionElement();
 
 	/**
@@ -174,7 +240,8 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		if (null != source.getFBNetworkElement() && null != destination.getFBNetworkElement()) {
 			FBNetworkElement opSource = source.getFBNetworkElement().getOpposite();
 			FBNetworkElement opDestination = destination.getFBNetworkElement().getOpposite();
-			if (null != opSource && null != opDestination && opSource.getFbNetwork() == opDestination.getFbNetwork()) {
+			if (null != opSource && null != opDestination
+					&& opSource.getFbNetwork() == opDestination.getFbNetwork()) {
 				AbstractConnectionCreateCommand cmd = createMirroredConnectionCommand(opSource.getFbNetwork());
 				cmd.setPerformMappingCheck(false); // as this is the command for the mirrored connection we don't want
 													// again to check
