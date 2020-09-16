@@ -37,7 +37,7 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 	private static final String ALGORITHM_COMMENT = "Magic!"; //$NON-NLS-1$
 
 	private static State executeCommandWithIndex(State state, int index) {
-		getBaseFBType(state, CommandTestBase::assumeThat);
+		getBaseFBType(state, assumption);
 
 		final STAlgorithm stAlg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		stAlg.setName(ALGORITHM_NAME); // Algorithm name changes based on what is already in the list
@@ -45,7 +45,7 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		stAlg.setComment(ALGORITHM_COMMENT);
 
 		final PaletteEntry pe = state.getFunctionblock();
-		assumeTrue(pe.getType() instanceof BasicFBType);
+		assumption.test(pe.getType() instanceof BasicFBType);
 		final BasicFBType fb = (BasicFBType) pe.getType();
 
 		state.setCommand(new InsertAlgorithmCommand(fb, stAlg, index));

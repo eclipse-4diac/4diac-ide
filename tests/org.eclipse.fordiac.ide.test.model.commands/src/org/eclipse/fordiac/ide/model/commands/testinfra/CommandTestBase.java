@@ -40,14 +40,35 @@ import org.opentest4j.TestAbortedException;
  */
 public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 
+	/**
+	 * Test Function object that can be used to access assertions
+	 */
+	protected static final TestFunction assertion = CommandTestBase::assertThat;
+	/**
+	 * Test Function object that can be used to access assumptions
+	 */
+	protected static final TestFunction assumption = CommandTestBase::assumeThat;
+
+	/**
+	 * assertThat method to be used to validate the current state
+	 * @throws AssertionError
+	 *
+	 * @param reason     textual description of what is expected
+	 * @param actual     actual value to be compared
+	 * @param matcher    matcher-object that does the comparison
+	 */
 	public static <T> void assertThat(String reason, T actual, Matcher<T> matcher) {
 		org.hamcrest.MatcherAssert.assertThat(reason, actual, matcher);
 	}
 
-	public static <T> void assertThat(T actual, Matcher<T> matcher) {
-		assertThat("", actual, matcher);
-	}
-
+	/**
+	 * assumeThat method to be used to validate the current state
+	 * @throws TestAbortedException
+	 *
+	 * @param reason     textual description of what is expected
+	 * @param actual     actual value to be compared
+	 * @param matcher    matcher-object that does the comparison
+	 */
 	public static <T> void assumeThat(String reason, T actual, Matcher<T> matcher) {
 		try {
 			assertThat(reason, actual, matcher);
@@ -56,69 +77,112 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		}
 	}
 
-	public static <T> void assumeThat(T actual, Matcher<T> matcher) {
-		assumeThat("", actual, matcher);
-	}
-
-	protected static void assumeNotNull(Object obj) {
-		assumeThat(obj, org.hamcrest.CoreMatchers.notNullValue());
-	}
-
+	/**
+	 * forwarding of the "is" hamcrest-core-matcher
+	 *
+	 * @param matcher    matcher-object that does the comparison
+	 * @return matcher object
+	 */
 	protected static <T> Matcher<T> is(Matcher<T> matcher)  {
 		return CoreMatchers.is(matcher);
 	}
-
+	
+	/**
+	 * forwarding of the "is" hamcrest-core-matcher
+	 *
+	 * @param matcher    value to compare against
+	 * @return matcher object
+	 */
 	protected static <T> Matcher<T> is(T matcher)  {
 		return CoreMatchers.is(matcher);
 	}
 
-	protected static void assumeTrue(boolean value) {
-		assumeThat(value, is(true));
-	}
-
-	protected static void assumeFalse(boolean value) {
-		assumeThat(value, is(false));
-	}
-
-	protected static void verifyNothing(StateBase s, StateBase o, TestFunction t) {
+	/**
+	 * empty verification method
+	 *
+	 * @param s    current state description
+	 * @param o    state description before the last state transition
+	 * @param t    TestFunction object that selects either assert or assume
+	 */
+	protected static <T extends StateBase> void verifyNothing(T s, T o, TestFunction t) {
 		// Nothing to do
 	}
-	
-	protected static StateBase defaultUndoCommand(Object stateObj) {
-		final StateBase state = (StateBase) stateObj;
-		assumeTrue(state.getCommand().canExecute() && state.getCommand().canUndo());
+
+	/**
+	 * undo method that expects that undo is possible
+	 *
+	 * @param stateObj    current state description
+	 * @return            new state description
+	 */
+	protected static <T extends StateBase> T defaultUndoCommand(Object stateObj) {
+		@SuppressWarnings("unchecked")
+		final T state = (T) stateObj;
+		assumption.test(state.getCommand().canExecute() && state.getCommand().canUndo());
 		state.getCommand().undo();
 		return (state);
 	}
 
-	protected static StateBase defaultRedoCommand(Object stateObj) {
-		final StateBase state = (StateBase) stateObj;
-		assumeTrue(state.getCommand().canExecute() && state.getCommand().canRedo());
+	/**
+	 * redo method that expects that redo is possible
+	 *
+	 * @param stateObj    current state description
+	 * @return            new state description
+	 */
+	protected static <T extends StateBase> T defaultRedoCommand(Object stateObj) {
+		@SuppressWarnings("unchecked")
+		final T state = (T) stateObj;
+		assumption.test(state.getCommand().canExecute() && state.getCommand().canRedo());
 		state.getCommand().redo();
 		return (state);
 	}
-	
-	protected static StateBase disabledUndoCommand(Object stateObj) {
-		final StateBase state = (StateBase) stateObj;
-		assumeFalse(state.getCommand().canExecute() && state.getCommand().canUndo());
+
+	/**
+	 * undo method that expects that undo is not possible
+	 *
+	 * @param stateObj    current state description
+	 * @return            new state description
+	 */
+	protected static <T extends StateBase> T disabledUndoCommand(Object stateObj) {
+		@SuppressWarnings("unchecked")
+		final T state = (T) stateObj;
+		assumption.test(!(state.getCommand().canExecute() && state.getCommand().canUndo()));
 		return (state);
 	}
 
-	protected static StateBase disabledRedoCommand(Object stateObj) {
-		final StateBase state = (StateBase) stateObj;
-		assumeFalse(state.getCommand().canExecute() && state.getCommand().canRedo());
+	/**
+	 * redo method that expects that redo is not possible
+	 *
+	 * @param stateObj    current state description
+	 * @return            new state description
+	 */
+	protected static <T extends StateBase> T disabledRedoCommand(Object stateObj) {
+		@SuppressWarnings("unchecked")
+		final T state = (T) stateObj;
+		assumption.test(!(state.getCommand().canExecute() && state.getCommand().canRedo()));
 		return (state);
 	}
 
+	/**
+	 * execution method that expects that execution is not possible
+	 *
+	 * @param stateObj    current state description
+	 * @return            new state description
+	 */
 	protected static <T extends StateBase> T disabledCommandExecution(T state) {
-		assumeNotNull(state.getCommand());
-		assumeFalse(state.getCommand().canExecute());
+		assumption.test(state.getCommand());
+		assumption.test(!state.getCommand().canExecute());
 		return state;
 	}
 
+	/**
+	 * execution method that expects that execution is possible
+	 *
+	 * @param stateObj    current state description
+	 * @return            new state description
+	 */
 	protected static <T extends StateBase> T commandExecution(T state) {
-		assumeNotNull(state.getCommand());
-		assumeTrue(state.getCommand().canExecute());
+		assumption.test(state.getCommand());
+		assumption.test(state.getCommand().canExecute());
 		state.getCommand().execute();
 		return state;
 	}
@@ -154,22 +218,56 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	}
 
 	/**
-	 * functional interface for calling either assertTrue or assumeTrue
+	 * functional interface for calling either assert* or assume*
 	 *
 	 */
 	protected interface TestFunction {
+		/**
+		 * assumeThat/assertThat method to be used to validate the current state
+		 *
+		 * @param message    textual description of what is expected
+		 * @param actual     actual value to be compared
+		 * @param matcher    matcher-object that does the comparison
+		 */
 		<T> void test(String message, T actual, Matcher<T> matcher);
 
+		/**
+		 * assumeThat/assertThat method to be used to validate the current state
+		 *
+		 * @param actual     actual value to be compared
+		 * @param matcher    matcher-object that does the comparison
+		 */
 		default <T> void test(T actual, Matcher<T> matcher) {
 			test("", actual, matcher);
 		}
 
+		/**
+		 * assumeEqual/assertEqual method to be used to validate the current state
+		 *
+		 * @param actual     actual value to be compared
+		 * @param expected   expected value for the comparision
+		 */
 		default <T> void test(T actual, T expected) {
 			test("", actual, is(expected));
 		}
 
+		/**
+		 * assumeTrue/assertTrue method to be used to validate the current state
+		 *
+		 * @param equals     boolean value which is expected to be true
+		 */
 		default void test(boolean equals) {
 			test("", equals, is(true));
+		}
+
+		/**
+		 * assumeNotNull/assertNotNull method to check for non-null references
+		 * @throws TestAbortedException
+		 *
+		 * @param notNull     reference that should not be null
+		 */
+		default void test(Object notNull) {
+			test("", notNull, org.hamcrest.CoreMatchers.notNullValue());
 		}
 
 	}
@@ -421,9 +519,9 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		final Iterator<ExecutionDescription<T>> iterator = commands.iterator();
 		TestFunction t;
 		if (iterator.hasNext()) {
-			t = CommandTestBase::assumeThat;
+			t = assumption;
 		} else {
-			t = CommandTestBase::assertThat;
+			t = assertion;
 		}
 
 		initialVerifier.verifyState(current.getState(), current.getBefore().getState(), t);
@@ -434,9 +532,9 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			// if there are more commands to be executed use assume instead of assert
 			// same reason as for initial state verifier
 			if (iterator.hasNext()) {
-				t = CommandTestBase::assumeThat;
+				t = assumption;
 			} else {
-				t = CommandTestBase::assertThat;
+				t = assertion;
 			}
 
 			StateNode<T> clone = new StateNode<>(current);

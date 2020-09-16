@@ -31,9 +31,8 @@ public abstract class CreateInternalVariableCommandTestBase extends FBNetworkTes
 	}
 
 	private static void verifyInitialState(State state, State oldState, TestFunction t) {
-		FBCreateCommandTest.verifyState(state, oldState, CommandTestBase::assumeThat); // skip further tests if FB
-																						// creation
-		// failed
+		FBCreateCommandTest.verifyState(state, oldState, assumption); // skip further tests if FB
+																	// creation failed
 
 	}
 

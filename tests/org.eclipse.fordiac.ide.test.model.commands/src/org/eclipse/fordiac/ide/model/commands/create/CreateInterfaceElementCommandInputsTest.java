@@ -41,7 +41,7 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(null != interfacelist.getInterfaceElement(FordiacKeywords.DATA_INPUT));
+		t.test(interfacelist.getInterfaceElement(FordiacKeywords.DATA_INPUT));
 		t.test(interfacelist.getInterfaceElement(FordiacKeywords.DATA_INPUT).getTypeName(), FordiacKeywords.BOOL);
 	}
 
@@ -61,7 +61,7 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(null != interfacelist.getInterfaceElement("MyInput")); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement("MyInput")); //$NON-NLS-1$
 		t.test(interfacelist.getInterfaceElement("MyInput").getTypeName(), FordiacKeywords.DWORD); //$NON-NLS-1$
 	}
 
@@ -81,7 +81,7 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(null != interfacelist.getInterfaceElement("DI2")); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement("DI2")); //$NON-NLS-1$
 		t.test(interfacelist.getInterfaceElement("DI2").getTypeName(),FordiacKeywords.DWORD); //$NON-NLS-1$
 	}
 

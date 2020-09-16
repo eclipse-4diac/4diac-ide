@@ -67,12 +67,12 @@ public class ToggleSubappRepresentationTest extends CommandTestBase<State> {
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
-		t.test(null != state.getSubApp());
+		t.test(state.getSubApp());
 		t.test(!state.getSubApp().isUnfolded());
 	}
 
 	protected static void verifyUnfolded(State state, State oldState, TestFunction t) {
-		t.test(null != state.getSubApp());
+		t.test(state.getSubApp());
 		t.test(state.getSubApp().isUnfolded());
 	}
 

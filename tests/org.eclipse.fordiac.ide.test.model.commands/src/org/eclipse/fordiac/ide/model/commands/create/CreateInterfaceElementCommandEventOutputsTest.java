@@ -41,7 +41,7 @@ public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfa
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(!interfacelist.getEventOutputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().size(), oldInterfacelist.getEventOutputs().size() + 1);
-		t.test(null != interfacelist.getInterfaceElement("EO1")); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement("EO1")); //$NON-NLS-1$
 		t.test(interfacelist.getInterfaceElement("EO1").getTypeName(),"Event"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -61,7 +61,7 @@ public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfa
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(!interfacelist.getEventOutputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().size(), oldInterfacelist.getEventOutputs().size() + 1);
-		t.test(null != interfacelist.getInterfaceElement("MyOutput")); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement("MyOutput")); //$NON-NLS-1$
 		t.test(interfacelist.getInterfaceElement("MyOutput").getTypeName(), "Event"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -81,7 +81,7 @@ public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfa
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(!interfacelist.getEventOutputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().size(), oldInterfacelist.getEventOutputs().size() + 1);
-		t.test(null != interfacelist.getInterfaceElement("EO2")); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement("EO2")); //$NON-NLS-1$
 		t.test(interfacelist.getInterfaceElement("EO2").getTypeName(), "Event"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 

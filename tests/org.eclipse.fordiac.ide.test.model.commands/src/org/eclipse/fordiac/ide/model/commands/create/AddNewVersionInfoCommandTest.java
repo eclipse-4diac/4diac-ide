@@ -60,7 +60,7 @@ public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 
 		// if this test skips here, this single test had a runtime (walltime) of more
 		// than one day. please fix the development system
-		assumeTrue((System.currentTimeMillis() - millisBeforeFirstExecute) < DAY_IN_MILLISECONDS);
+		assumption.test((System.currentTimeMillis() - millisBeforeFirstExecute) < DAY_IN_MILLISECONDS);
 
 		t.test(vinfo.get(index).getDate().equals(dateBeforeFirstExecute) || // this may skip across midnight, so we
 																			// allow both days around midnight

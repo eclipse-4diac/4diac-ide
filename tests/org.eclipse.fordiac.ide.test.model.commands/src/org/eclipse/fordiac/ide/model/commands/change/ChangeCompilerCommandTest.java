@@ -42,7 +42,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 	public static void verifyDefaultState(final State state, final State oldState, final TestFunction t,
 			final int index, final int size) {
 		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(compilerInfo.getCompiler().size(), size);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage(), Language.OTHER);
@@ -53,14 +53,14 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 
 	public static void verifyStateClassdefHeader(final State state, final State oldState, final TestFunction t) {
 		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(!compilerInfo.getClassdef().isEmpty());
 		t.test(!compilerInfo.getHeader().isEmpty());
 	}
 
 	public static void verifyStateEmptyClassdefHeader(final State state, final State oldState, final TestFunction t) {
 		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(compilerInfo.getClassdef().isEmpty());
 		t.test(compilerInfo.getHeader().isEmpty());
 	}
@@ -86,7 +86,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		t.test(compilerInfo.getCompiler().size(), size);
 		t.test(compilerInfo.getClassdef().isEmpty());
 		t.test(compilerInfo.getHeader(), HEADER_STRING);
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage(), Language.OTHER);
 		t.test(compilerInfo.getCompiler().get(index).getProduct(), FordiacMessages.Unknown);
@@ -107,7 +107,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		t.test(compilerInfo.getCompiler().size(), size);
 		t.test(compilerInfo.getClassdef(), CLASSDEF_STRING);
 		t.test(compilerInfo.getHeader(), HEADER_STRING);
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage(), Language.OTHER);
 		t.test(compilerInfo.getCompiler().get(index).getProduct(), FordiacMessages.Unknown);
@@ -129,7 +129,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		t.test(compilerInfo.getCompiler().size(), size);
 		t.test(compilerInfo.getClassdef(), CLASSDEF_STRING);
 		t.test(compilerInfo.getHeader(), HEADER_STRING);
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage(), Language.CPP);
 		t.test(compilerInfo.getCompiler().get(index).getProduct(), FordiacMessages.Unknown);
@@ -151,7 +151,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		t.test(compilerInfo.getCompiler().size(), size);
 		t.test(compilerInfo.getClassdef(), CLASSDEF_STRING);
 		t.test(compilerInfo.getHeader(), HEADER_STRING);
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage(), Language.CPP);
 		t.test(compilerInfo.getCompiler().get(index).getVendor(), VENDOR_STRING);
@@ -173,7 +173,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		t.test(compilerInfo.getCompiler().size(), size);
 		t.test(compilerInfo.getClassdef(), CLASSDEF_STRING);
 		t.test(compilerInfo.getHeader(), HEADER_STRING);
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage(), Language.CPP);
 		t.test(compilerInfo.getCompiler().get(index).getVendor(), VENDOR_STRING);
@@ -195,7 +195,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		t.test(compilerInfo.getCompiler().size(), size);
 		t.test(compilerInfo.getClassdef(), CLASSDEF_STRING);
 		t.test(compilerInfo.getHeader(), HEADER_STRING);
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage(), Language.CPP);
 		t.test(compilerInfo.getCompiler().get(index).getVendor(), VENDOR_STRING);
@@ -216,7 +216,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		t.test(compilerInfo.getCompiler().size(), size);
 		t.test(compilerInfo.getClassdef(), CLASSDEF_STRING);
 		t.test(compilerInfo.getHeader().isEmpty());
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage(), Language.OTHER);
 		t.test(compilerInfo.getCompiler().get(index).getProduct(), FordiacMessages.Unknown);
@@ -237,7 +237,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		t.test(compilerInfo.getCompiler().size(), size);
 		t.test(compilerInfo.getClassdef().isEmpty());
 		t.test(compilerInfo.getHeader().isEmpty());
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage(), Language.OTHER);
 		t.test(compilerInfo.getCompiler().get(index).getProduct(), FordiacMessages.Unknown);
@@ -259,7 +259,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		t.test(compilerInfo.getCompiler().size(), size);
 		t.test(compilerInfo.getClassdef().isEmpty());
 		t.test(compilerInfo.getHeader().isEmpty());
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage(), Language.OTHER);
 		t.test(compilerInfo.getCompiler().get(index).getVendor().isEmpty());
@@ -281,7 +281,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		t.test(compilerInfo.getCompiler().size(), size);
 		t.test(compilerInfo.getClassdef().isEmpty());
 		t.test(compilerInfo.getHeader().isEmpty());
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage(), Language.OTHER);
 		t.test(compilerInfo.getCompiler().get(index).getVendor().isEmpty());
@@ -303,7 +303,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		t.test(compilerInfo.getCompiler().size(), size);
 		t.test(compilerInfo.getClassdef().isEmpty());
 		t.test(compilerInfo.getHeader().isEmpty());
-		t.test(null != compilerInfo);
+		t.test(compilerInfo);
 		t.test(!compilerInfo.getCompiler().isEmpty());
 		t.test(compilerInfo.getCompiler().get(index).getLanguage(), Language.OTHER);
 		t.test(compilerInfo.getCompiler().get(index).getVendor().isEmpty());

@@ -152,13 +152,13 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
-		t.test(null != state.getDemultiplexer());
+		t.test(state.getDemultiplexer());
 		t.test(state.getStruct().getMemberVariables().size(), state.getDemultiplexer().getInterface().getOutputVars()
 				.size());
 	}
 
 	protected static void verifyAdded(State state, State oldState, TestFunction t, String name) {
-		t.test(null != state.getDemultiplexer());
+		t.test(state.getDemultiplexer());
 		t.test(!state.getDemultiplexer().getInterface().getOutputVars().stream()
 				.filter(out -> out.getName().equals(name)).findAny().isEmpty());
 		t.test(Arrays
@@ -168,7 +168,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 	}
 
 	protected static void verifyDeleted(State state, State oldState, TestFunction t, String name) {
-		t.test(null != state.getDemultiplexer());
+		t.test(state.getDemultiplexer());
 		t.test(state.getDemultiplexer().getInterface().getOutputVars().stream()
 				.filter(out -> out.getName().equals(name)).findAny().isEmpty());
 		t.test(!Arrays

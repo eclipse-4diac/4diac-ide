@@ -27,7 +27,7 @@ import org.junit.jupiter.params.provider.Arguments;
 public class CreateInternalVariableCommandTest extends CreateInternalVariableCommandTestBase {
 
 	private static State executeCommandVar1(State state) {
-		BaseFBType baseFBType = getBaseFBType(state, CommandTestBase::assumeThat);
+		BaseFBType baseFBType = getBaseFBType(state, assumption);
 
 		state.setCommand(new CreateInternalVariableCommand(baseFBType, 0, FordiacKeywords.VARIABLE_INTERNAL,
 				getDatatypelib().getType(FordiacKeywords.BOOL)));
@@ -43,7 +43,7 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 	}
 
 	private static State executeCommandVar2(State state) {
-		BaseFBType baseFBType = getBaseFBType(state, CommandTestBase::assumeThat);
+		BaseFBType baseFBType = getBaseFBType(state, assumption);
 
 		state.setCommand(new CreateInternalVariableCommand(baseFBType, 1, FordiacKeywords.VARIABLE_INTERNAL,
 				getDatatypelib().getType(FordiacKeywords.DWORD)));
@@ -60,7 +60,7 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 	}
 
 	private static State executeCommandVar3(State state) {
-		BaseFBType baseFBType = getBaseFBType(state, CommandTestBase::assumeThat);
+		BaseFBType baseFBType = getBaseFBType(state, assumption);
 
 		state.setCommand(new CreateInternalVariableCommand(baseFBType));
 		// Name will be INTERNALVAR1 because of automatic naming
