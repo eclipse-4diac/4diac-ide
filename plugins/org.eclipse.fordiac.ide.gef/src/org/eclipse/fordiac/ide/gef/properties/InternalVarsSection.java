@@ -18,6 +18,9 @@
  *   Daniel Lindhuber - added copy and paste
  *   Bianca Wiesmayr - extracted super class for simple and basic FB, added context menu
  *   Daniel Lindhuber - changed type selection to search field
+ *   Alexander Lumplecker
+ *     - changed AddDeleteWidget to AddDeleteReorderListWidget
+ *     - added ChangeVariableOrderCommand
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -26,6 +29,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
@@ -37,7 +41,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
@@ -92,7 +96,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final AddDeleteWidget buttons = new AddDeleteWidget();
+		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
 		internalVarsViewer = TableWidgetFactory.createTableViewer(composite);
@@ -105,7 +109,9 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 
 		buttons.bindToTableViewer(internalVarsViewer, this,
 				ref -> new CreateInternalVariableCommand(getType(), getInsertionIndex(), getName(), getDataType()),
-				ref -> new DeleteInternalVariableCommand(getType(), (VarDeclaration) ref));
+				ref -> new DeleteInternalVariableCommand(getType(), (VarDeclaration) ref),
+				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, true),
+				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, false));
 	}
 
 	private DataType getDataType() {

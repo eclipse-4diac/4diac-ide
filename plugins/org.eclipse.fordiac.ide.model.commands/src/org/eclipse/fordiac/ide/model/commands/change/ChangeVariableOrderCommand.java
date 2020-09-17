@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University
+ * 				 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  *
  * Contributors:
  *   Daniel Lindhuber - initial API and implementation and/or initial documentation
+ *   Alexander Lumplecker - changed class and constructor name
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
@@ -16,14 +18,13 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
-public class ChangeMemberVariableOrderCommand extends Command {
-	private VarDeclaration var;
-	private EList<VarDeclaration> type;
-	private int oldIndex;
+public class ChangeVariableOrderCommand extends Command {
+	private final VarDeclaration var;
+	private final EList<VarDeclaration> type;
+	private final int oldIndex;
 	private int newIndex;
 
-	public ChangeMemberVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration var,
-			int indexChanged) {
+	public ChangeVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration var, int indexChanged) {
 		this.type = type;
 		this.var = var;
 
@@ -45,8 +46,7 @@ public class ChangeMemberVariableOrderCommand extends Command {
 		}
 	}
 
-	public ChangeMemberVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration var,
-			boolean moveUp) {
+	public ChangeVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration var, boolean moveUp) {
 		this(type, var, moveUp ? -1 : 1);
 	}
 
