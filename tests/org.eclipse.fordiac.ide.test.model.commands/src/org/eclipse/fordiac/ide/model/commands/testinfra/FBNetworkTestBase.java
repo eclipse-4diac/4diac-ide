@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
+import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBase.State> {
 
@@ -108,8 +109,8 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 		return (state);
 	}
 
-	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<Object> commands) {
+	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
+			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, FBNetworkTestBase::undoCommand,
 				FBNetworkTestBase::redoCommand);
 	}
@@ -121,8 +122,8 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 		t.test(state.getFbNetwork().getNetworkElements().isEmpty());
 	}
 
-	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
-		final List<Object[]> commands = new ArrayList<>();
+	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+		final Collection<Arguments> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //

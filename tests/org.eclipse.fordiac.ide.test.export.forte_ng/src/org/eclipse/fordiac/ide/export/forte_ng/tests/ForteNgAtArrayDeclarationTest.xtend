@@ -13,68 +13,55 @@
 
 package org.eclipse.fordiac.ide.export.forte_ng.tests
 
-import java.util.Collection
-import org.junit.Test
-import org.junit.runners.Parameterized
-import org.junit.runner.RunWith
-import static org.junit.Assert.assertNull
-import static org.junit.Assert.assertNotNull
-import static org.junit.Assert.assertEquals
-import org.junit.runners.Parameterized.Parameter
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.eclipse.fordiac.ide.model.FordiacKeywords.*
+import org.junit.jupiter.params.provider.Arguments
+import java.util.stream.Stream
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-@RunWith(Parameterized)
 class ForteNgAtArrayDeclarationTest extends ForteNgTestBasicFBTypeBase {
 
 	val static VALID_DECLARATION = true
 	val static INVALID_DECLARATION = !VALID_DECLARATION
 
-	@Parameter(0)
-	public String sourceType
-	@Parameter(1)
-	public String accessType
-	@Parameter(2)
-	public int arrayStart
-	@Parameter(3)
-	public int arrayStop
-	@Parameter(4)
-	public boolean isValid
-
-	@Parameterized.Parameters(name = "{index}: {0}->{1}[{2}..{3}]")
-	def static Collection<Object[]> testCases()  {
-		return #[
-				testCase( LWORD, DWORD, INDEX_START, indexStop(LWORD, DWORD), VALID_DECLARATION ), //
-				testCase( LWORD, WORD, INDEX_START, indexStop(LWORD, WORD), VALID_DECLARATION ), //
-				testCase( LWORD, BYTE, INDEX_START, indexStop(LWORD, BYTE), VALID_DECLARATION ), //
-				testCase( LWORD, BOOL, INDEX_START, indexStop(LWORD, BOOL), VALID_DECLARATION ), //
-				testCase( LWORD, DWORD, INDEX_START, indexStop(LWORD, DWORD) + 1, INVALID_DECLARATION ), //
-				testCase( LWORD, WORD, INDEX_START, indexStop(LWORD, WORD) + 1, INVALID_DECLARATION ), //
-				testCase( LWORD, BYTE, INDEX_START, indexStop(LWORD, BYTE) + 1, INVALID_DECLARATION ), //
-				testCase( LWORD, BOOL, INDEX_START, indexStop(LWORD, BOOL) + 1, INVALID_DECLARATION ), //
-				testCase( DWORD, WORD, INDEX_START, indexStop(DWORD, WORD), VALID_DECLARATION ), //
-				testCase( DWORD, BYTE, INDEX_START, indexStop(DWORD, BYTE), VALID_DECLARATION ), //
-				testCase( DWORD, BOOL, INDEX_START, indexStop(DWORD, BOOL), VALID_DECLARATION ), //
-				testCase( DWORD, WORD, INDEX_START, indexStop(DWORD, WORD) + 1, INVALID_DECLARATION ), //
-				testCase( DWORD, BYTE, INDEX_START, indexStop(DWORD, BYTE) + 1, INVALID_DECLARATION ), //
-				testCase( DWORD, BOOL, INDEX_START, indexStop(DWORD, BOOL) + 1, INVALID_DECLARATION ), //
-				testCase( WORD, BYTE, INDEX_START, indexStop(WORD, BYTE), VALID_DECLARATION ), //
-				testCase( WORD, BOOL, INDEX_START, indexStop(WORD, BOOL), VALID_DECLARATION ), //
-				testCase( WORD, BYTE, INDEX_START, indexStop(WORD, BYTE) + 1, INVALID_DECLARATION ), //
-				testCase( WORD, BOOL, INDEX_START, indexStop(WORD, BOOL) + 1, INVALID_DECLARATION ), //
-				testCase( BYTE, BOOL, INDEX_START, indexStop(BYTE, BOOL), VALID_DECLARATION ), //
-				testCase( BYTE, BOOL, INDEX_START, indexStop(BYTE, BOOL) + 1, INVALID_DECLARATION ), //
-				testCase( "LINT", BOOL, INDEX_START, 8, INVALID_DECLARATION ), //$NON-NLS-1$
-				testCase( DINT, BOOL, INDEX_START, 8, INVALID_DECLARATION ), //
-				testCase( "INT", BOOL, INDEX_START, 8, INVALID_DECLARATION ), //$NON-NLS-1$
-				testCase( "SINT", BOOL, INDEX_START, 8, INVALID_DECLARATION ), //$NON-NLS-1$
-				testCase( REAL, BOOL, INDEX_START, 8, INVALID_DECLARATION )
-			]
+	def static Stream<Arguments> testCases()  {
+		return Stream.of(
+				Arguments.of( LWORD, DWORD, INDEX_START, indexStop(LWORD, DWORD), VALID_DECLARATION ), //
+				Arguments.of( LWORD, WORD, INDEX_START, indexStop(LWORD, WORD), VALID_DECLARATION ), //
+				Arguments.of( LWORD, BYTE, INDEX_START, indexStop(LWORD, BYTE), VALID_DECLARATION ), //
+				Arguments.of( LWORD, BOOL, INDEX_START, indexStop(LWORD, BOOL), VALID_DECLARATION ), //
+				Arguments.of( LWORD, DWORD, INDEX_START, indexStop(LWORD, DWORD) + 1, INVALID_DECLARATION ), //
+				Arguments.of( LWORD, WORD, INDEX_START, indexStop(LWORD, WORD) + 1, INVALID_DECLARATION ), //
+				Arguments.of( LWORD, BYTE, INDEX_START, indexStop(LWORD, BYTE) + 1, INVALID_DECLARATION ), //
+				Arguments.of( LWORD, BOOL, INDEX_START, indexStop(LWORD, BOOL) + 1, INVALID_DECLARATION ), //
+				Arguments.of( DWORD, WORD, INDEX_START, indexStop(DWORD, WORD), VALID_DECLARATION ), //
+				Arguments.of( DWORD, BYTE, INDEX_START, indexStop(DWORD, BYTE), VALID_DECLARATION ), //
+				Arguments.of( DWORD, BOOL, INDEX_START, indexStop(DWORD, BOOL), VALID_DECLARATION ), //
+				Arguments.of( DWORD, WORD, INDEX_START, indexStop(DWORD, WORD) + 1, INVALID_DECLARATION ), //
+				Arguments.of( DWORD, BYTE, INDEX_START, indexStop(DWORD, BYTE) + 1, INVALID_DECLARATION ), //
+				Arguments.of( DWORD, BOOL, INDEX_START, indexStop(DWORD, BOOL) + 1, INVALID_DECLARATION ), //
+				Arguments.of( WORD, BYTE, INDEX_START, indexStop(WORD, BYTE), VALID_DECLARATION ), //
+				Arguments.of( WORD, BOOL, INDEX_START, indexStop(WORD, BOOL), VALID_DECLARATION ), //
+				Arguments.of( WORD, BYTE, INDEX_START, indexStop(WORD, BYTE) + 1, INVALID_DECLARATION ), //
+				Arguments.of( WORD, BOOL, INDEX_START, indexStop(WORD, BOOL) + 1, INVALID_DECLARATION ), //
+				Arguments.of( BYTE, BOOL, INDEX_START, indexStop(BYTE, BOOL), VALID_DECLARATION ), //
+				Arguments.of( BYTE, BOOL, INDEX_START, indexStop(BYTE, BOOL) + 1, INVALID_DECLARATION ), //
+				Arguments.of( LINT, BOOL, INDEX_START, 8, INVALID_DECLARATION ), //
+				Arguments.of( DINT, BOOL, INDEX_START, 8, INVALID_DECLARATION ), //
+				Arguments.of( INT, BOOL, INDEX_START, 8, INVALID_DECLARATION ), //
+				Arguments.of( SINT, BOOL, INDEX_START, 8, INVALID_DECLARATION ), //
+				Arguments.of( REAL, BOOL, INDEX_START, 8, INVALID_DECLARATION )
+			)
 		}
 
-	@Test
-	def LocatedArrayDeclaration() {
+	@ParameterizedTest(name = "{index}: {0}->{1}[{2}..{3}]")
+	@MethodSource("testCases")
+	def LocatedArrayDeclaration(String sourceType, String accessType, int arrayStart, int arrayStop, boolean isValid) {
 		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : «sourceType»;

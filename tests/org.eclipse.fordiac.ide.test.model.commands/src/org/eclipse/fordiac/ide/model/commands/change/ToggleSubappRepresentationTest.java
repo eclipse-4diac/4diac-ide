@@ -8,13 +8,12 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Bianca Wiesmayr, Ernst Blecha - initial documentation 
+ *   Bianca Wiesmayr, Ernst Blecha - initial documentation
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import static org.junit.Assume.assumeNotNull;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,7 +25,7 @@ import org.eclipse.fordiac.ide.model.commands.testinfra.CreateMemberVariableComm
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.provider.Arguments;
 
 public class ToggleSubappRepresentationTest extends CommandTestBase<State> {
 	protected static class State implements CommandTestBase.StateBase {
@@ -77,8 +76,8 @@ public class ToggleSubappRepresentationTest extends CommandTestBase<State> {
 		return (state);
 	}
 
-	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<Object> commands) {
+	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
+			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands,
 				ToggleSubappRepresentationTest::undoCommand, ToggleSubappRepresentationTest::redoCommand);
 	}
@@ -103,30 +102,28 @@ public class ToggleSubappRepresentationTest extends CommandTestBase<State> {
 
 	// define here the list of test sequences
 	// multiple execution descriptions are possible -> define in test class
-	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
-		List<Object[]> commands = new ArrayList<>();
+	protected static List<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+		List<Arguments> commands = new ArrayList<>();
 		// test series 1
 		commands.addAll(describeCommand("Toggling Attribute", // //$NON-NLS-1$
 				State::new, //
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				executionDescriptions //
-				));
+		));
 		return commands;
 	}
 
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Unfold", // //$NON-NLS-1$
 						ToggleSubappRepresentationTest::toggleFolding, //
 						ToggleSubappRepresentationTest::verifyUnfolded), //
 				new ExecutionDescription<>("Fold", // //$NON-NLS-1$
 						ToggleSubappRepresentationTest::toggleFolding, //
 						ToggleSubappRepresentationTest::verifyDefaultInitialValues //
-						) //
-				);
+				) //
+		);
 		return createCommands(executionDescriptions);
 	}
 }

@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
 import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeNotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +21,7 @@ import java.util.List;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.UnexecutableCommand;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.provider.Arguments;
 
 public class UnexecutableCommandTest extends CommandTestBase<CommandTestBase.StateBase> {
 
@@ -65,8 +64,8 @@ public class UnexecutableCommandTest extends CommandTestBase<CommandTestBase.Sta
 		return (state);
 	}
 
-	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<Object> commands) {
+	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
+			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands,
 				UnexecutableCommandTest::undoCommand, UnexecutableCommandTest::redoCommand);
 	}
@@ -82,8 +81,8 @@ public class UnexecutableCommandTest extends CommandTestBase<CommandTestBase.Sta
 		return state;
 	}
 
-	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
-		final List<Object[]> commands = new ArrayList<>();
+	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+		final List<Arguments> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
@@ -94,11 +93,9 @@ public class UnexecutableCommandTest extends CommandTestBase<CommandTestBase.Sta
 		return commands;
 	}
 
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Check if unexecutable command is not executable", //$NON-NLS-1$
 						UnexecutableCommandTest::executeCommand, //
 						UnexecutableCommandTest::verifyNothing //

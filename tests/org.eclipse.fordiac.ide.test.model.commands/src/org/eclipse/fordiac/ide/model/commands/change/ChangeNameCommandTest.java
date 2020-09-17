@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.gef.commands.Command;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.provider.Arguments;
 
 public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.StateBase> {
 
@@ -104,8 +103,8 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 		return (state);
 	}
 
-	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<Object> commands) {
+	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
+			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, ChangeNameCommandTest::undoCommand,
 				ChangeNameCommandTest::redoCommand);
 	}
@@ -128,8 +127,8 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 		return state;
 	}
 
-	protected static List<Object[]> createCommands(List<Object> executionDescriptions) {
-		final List<Object[]> commands = new ArrayList<>();
+	protected static List<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+		final List<Arguments> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
@@ -140,16 +139,13 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 		return commands;
 	}
 
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		final List<Object> executionDescriptions = ExecutionDescription.commandList( //
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Try setting to invalid name", //$NON-NLS-1$
 						(State s) -> executeCommand(s, "1bla", false), //
 						ChangeNameCommandTest::verifyNothing //
-				),
-				new ExecutionDescription<>("Try setting to valid name", //$NON-NLS-1$
+				), new ExecutionDescription<>("Try setting to valid name", //$NON-NLS-1$
 						(State s) -> executeCommand(s, "bla", true), //
 						ChangeNameCommandTest::verifyNothing //
 				)//

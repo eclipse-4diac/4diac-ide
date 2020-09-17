@@ -13,14 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import static org.junit.Assume.assumeNotNull;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.commands.testinfra.ValueCommandTestBase;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.provider.Arguments;
 
 public class ChangeValueCommandTest extends ValueCommandTestBase {
 
@@ -50,11 +49,9 @@ public class ChangeValueCommandTest extends ValueCommandTestBase {
 		t.test(state.getVar().getValue().getValue().isEmpty());
 	}
 
-	// parameter creation function, also contains description of how the textual
-	// description will be used
-	@Parameters(name = "{index}: {0}")
-	public static Collection<Object[]> data() {
-		List<Object> executionDescriptions = ExecutionDescription.commandList( //
+	// parameter creation function
+	public static Collection<Arguments> data() {
+		List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Change Value", // //$NON-NLS-1$
 						ChangeValueCommandTest::executeCommand, //
 						ChangeValueCommandTest::verifyState //

@@ -13,21 +13,21 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -38,7 +38,6 @@ import org.junit.runners.Parameterized.Parameter;
  * @param <T> type of the state description, has to be derived from
  *            CommandTestBase.StateBase
  */
-@RunWith(Parameterized.class)
 public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 
 	/**
@@ -150,15 +149,6 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			return new ExecutionDescription<>("undo", ExecutionType.UNDO, null, null); //$NON-NLS-1$
 		}
 
-		/**
-		 * Helper function to pack Objects into a Object[]
-		 *
-		 * @param vararg Objects
-		 * @return Object[] with all Objects from varargs
-		 */
-		public static List<Object> commandList(Object... a) {
-			return Arrays.asList(a);
-		}
 	}
 
 	/**
@@ -237,32 +227,6 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	}
 
 	/**
-	 * list of parameters for JUnit test case
-	 */
-	@Parameter(0)
-	public String description;
-	@Parameter(1)
-	public StateInitializer<T> initializer;
-	@Parameter(2)
-	public StateVerifier<T> initialVerifier;
-	@Parameter(3)
-	public Iterable<ExecutionDescription<T>> commands;
-	@Parameter(4)
-	public CommandExecutor<T> undo;
-	@Parameter(5)
-	public CommandExecutor<T> redo;
-
-	/**
-	 * Helper function to pack Objects into a Object[]
-	 *
-	 * @param vararg Objects
-	 * @return Object[] with all Objects from varargs
-	 */
-	private static Object[] convert(Object... a) {
-		return a;
-	}
-
-	/**
 	 * method to describe a command to the class
 	 *
 	 * @param description     textual description of the command
@@ -275,9 +239,10 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 * @param redo            state transition that redoes a command
 	 * @return
 	 */
-	protected static Collection<Object[]> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<Object> commands, CommandExecutor<?> undo, CommandExecutor<?> redo) {
-		final List<Object[]> descriptions = new ArrayList<>();
+	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
+			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands, CommandExecutor<?> undo,
+			CommandExecutor<?> redo) {
+		final Collection<Arguments> descriptions = new ArrayList<>();
 
 		final String MESSAGE_MAIN = "{0} : {1}"; //$NON-NLS-1$
 		final String MESSAGE_NO_MAIN = "{1}"; //$NON-NLS-1$
@@ -289,13 +254,13 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO = "Execute until Command {0}: {1}, run Undo, run Redo"; //$NON-NLS-1$
 		final String MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO_ALL = "Execute all Commands interspersed with Undo and Redo"; //$NON-NLS-1$
 
-		descriptions.add(convert(
+		descriptions.add(Arguments.of(
 				MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
 						MESSAGE_VERIFY_INITIAL_STATE),
 				initializer, initialVerifier, Collections.emptyList(), undo, redo));
 
 		if (commands.size() > 1) {
-			descriptions.add(convert(MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN,
+			descriptions.add(Arguments.of(MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN,
 					description, MESSAGE_EXECUTE_ALL_COMMANDS), initializer, initialVerifier, commands, undo, redo));
 		}
 
@@ -310,21 +275,21 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			commandsWithUndoRedoAll.add(command);
 			commandsWithUndoRedo = new ArrayList<>();
 			commandsWithUndoRedo.addAll(commandsUntil);
-			descriptions.add(convert(
+			descriptions.add(Arguments.of(
 					MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
 							MessageFormat.format(MESSAGE_EXECUTE_UNTIL_COMMAND_I, index, command.description)),
 					initializer, initialVerifier, commandsWithUndoRedo.clone(), undo, redo));
 			commandsWithUndoRedo.add(ExecutionDescription.undo());
 			commandsWithUndoRedoAll.add(ExecutionDescription.undo());
 			descriptions
-					.add(convert(
+					.add(Arguments.of(
 							MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
 									MessageFormat.format(MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO, index,
 											command.description)),
 							initializer, initialVerifier, commandsWithUndoRedo.clone(), undo, redo));
 			commandsWithUndoRedo.add(ExecutionDescription.redo());
 			commandsWithUndoRedoAll.add(ExecutionDescription.redo());
-			descriptions.add(convert(
+			descriptions.add(Arguments.of(
 					MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
 							MessageFormat.format(MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO, index,
 									command.description)),
@@ -332,7 +297,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		}
 
 		if (commands.size() > 1) {
-			descriptions.add(convert(
+			descriptions.add(Arguments.of(
 					MessageFormat.format(null != description ? MESSAGE_MAIN : MESSAGE_NO_MAIN, description,
 							MESSAGE_EXECUTE_UNTIL_COMMAND_I_UNDO_REDO_ALL),
 					initializer, initialVerifier, commandsWithUndoRedoAll, undo, redo));
@@ -346,8 +311,10 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 *
 	 * executes commands and adds redo/undo steps and adds a meaningful description
 	 */
-	@Test
-	public void testCommand() {
+	@ParameterizedTest(name = "{index}: {0}")
+	@MethodSource("data")
+	public void testCommand(String description, StateInitializer<T> initializer, StateVerifier<T> initialVerifier,
+			Iterable<ExecutionDescription<T>> commands, CommandExecutor<T> undo, CommandExecutor<T> redo) {
 		// prepare initial state and verify
 		StateNode<T> current = new StateNode<>(initializer.initializeState(), initialVerifier, null);
 
@@ -358,9 +325,9 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		final Iterator<ExecutionDescription<T>> iterator = commands.iterator();
 		TestFunction t;
 		if (iterator.hasNext()) {
-			t = Assume::assumeTrue;
+			t = Assumptions::assumeTrue;
 		} else {
-			t = Assert::assertTrue;
+			t = Assertions::assertTrue;
 		}
 
 		initialVerifier.verifyState(current.getState(), current.getBefore().getState(), t);
@@ -371,9 +338,9 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			// if there are more commands to be executed use assume instead of assert
 			// same reason as for initial state verifier
 			if (iterator.hasNext()) {
-				t = Assume::assumeTrue;
+				t = Assumptions::assumeTrue;
 			} else {
-				t = Assert::assertTrue;
+				t = Assertions::assertTrue;
 			}
 
 			StateNode<T> clone = new StateNode<>(current);
@@ -403,6 +370,10 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 				break;
 			}
 		}
+	}
+
+	protected static void assumeNotNull(Object obj) {
+		assumeTrue(obj != null);
 	}
 
 }

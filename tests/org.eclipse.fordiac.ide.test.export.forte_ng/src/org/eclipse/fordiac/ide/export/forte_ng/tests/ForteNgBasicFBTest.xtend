@@ -14,11 +14,11 @@
 
 package org.eclipse.fordiac.ide.export.forte_ng.tests
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
-import static org.junit.Assert.fail
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertTrue
+import static org.junit.jupiter.api.Assertions.fail
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -158,8 +158,8 @@ class ForteNgBasicFBTest extends ForteNgTestBasicFBTypeBase {
 					fail("unexpected export file")
 			}
 		}
-		assertTrue("Header-File missing", headerfileFound)
-		assertTrue("CPP-File missing", cppfileFound)
+		assertTrue(headerfileFound, "Header-File missing")
+		assertTrue(cppfileFound, "CPP-File missing")
 	}
 
 }

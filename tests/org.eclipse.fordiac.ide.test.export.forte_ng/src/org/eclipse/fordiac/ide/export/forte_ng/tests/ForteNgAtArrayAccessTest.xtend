@@ -13,19 +13,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.tests
 
-import java.util.Collection
-import org.junit.Test
-import org.junit.runners.Parameterized
-import org.junit.runner.RunWith
-import static org.junit.Assert.assertNull
-import static org.junit.Assert.assertNotNull
-import static org.junit.Assert.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.eclipse.fordiac.ide.model.FordiacKeywords.*
-import org.junit.runners.Parameterized.Parameter
+import org.junit.jupiter.params.ParameterizedTest
+import java.util.stream.Stream
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-@RunWith(Parameterized)
 class ForteNgAtArrayAccessTest extends ForteNgTestBasicFBTypeBase {
 
 	protected static final boolean VALID_ACCESS = true
@@ -42,87 +40,70 @@ class ForteNgAtArrayAccessTest extends ForteNgTestBasicFBTypeBase {
 
 	static final String VALUE_42 = "42" //$NON-NLS-1$
 
-	@Parameter(0)
-	public String sourceType
-	@Parameter(1)
-	public String accessType
-	@Parameter(2)
-	public String accessor
-	@Parameter(3)
-	public int arrayStart
-	@Parameter(4)
-	public int arrayStop
-	@Parameter(5)
-	public int index
-	@Parameter(6)
-	public String value
-	@Parameter(7)
-	public boolean isValid
-
-	@Parameterized.Parameters(name = "{index}: {0}.{2}{5}={6}")
-	def static Collection<Object[]> testCases()  {
-		return #[
-				testCase( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(DWORD, BOOL), 0, VALUE_TRUE, VALID_ACCESS ), //
-				testCase( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, 1, 0, VALUE_TRUE, VALID_ACCESS ), //
-				testCase( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(DWORD, BOOL), indexStop(DWORD, BOOL) + 1,
+	def static Stream<Arguments> testCases()  {
+		return Stream.of(
+				Arguments.of( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(DWORD, BOOL), 0, VALUE_TRUE, VALID_ACCESS ), //
+				Arguments.of( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, 1, 0, VALUE_TRUE, VALID_ACCESS ), //
+				Arguments.of( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(DWORD, BOOL), indexStop(DWORD, BOOL) + 1,
 						VALUE_TRUE, INVALID_ACCESS ), //
-				testCase( DWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(DWORD, BOOL), 0, VALUE_TRUE, VALID_ACCESS ), //
-				testCase( DWORD, BOOL, BOOLACCESS, INDEX_START, 1, 0, VALUE_TRUE, VALID_ACCESS ), //
-				testCase( DWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(DWORD, BOOL), indexStop(DWORD, BOOL) + 1, VALUE_TRUE,
+				Arguments.of( DWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(DWORD, BOOL), 0, VALUE_TRUE, VALID_ACCESS ), //
+				Arguments.of( DWORD, BOOL, BOOLACCESS, INDEX_START, 1, 0, VALUE_TRUE, VALID_ACCESS ), //
+				Arguments.of( DWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(DWORD, BOOL), indexStop(DWORD, BOOL) + 1, VALUE_TRUE,
 						INVALID_ACCESS ), //
 
-				testCase( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(DWORD, BOOL), 0, VALUE_FALSE, VALID_ACCESS ), //
-				testCase( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, 1, 0, VALUE_FALSE, VALID_ACCESS ), //
-				testCase( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(DWORD, BOOL), indexStop(DWORD, BOOL) + 1,
+				Arguments.of( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(DWORD, BOOL), 0, VALUE_FALSE, VALID_ACCESS ), //
+				Arguments.of( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, 1, 0, VALUE_FALSE, VALID_ACCESS ), //
+				Arguments.of( DWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(DWORD, BOOL), indexStop(DWORD, BOOL) + 1,
 						VALUE_FALSE, INVALID_ACCESS ), //
-				testCase( DWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(DWORD, BOOL), 0, VALUE_FALSE, VALID_ACCESS ), //
-				testCase( DWORD, BOOL, BOOLACCESS, INDEX_START, 1, 0, VALUE_FALSE, VALID_ACCESS ), //
-				testCase( DWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(DWORD, BOOL), indexStop(DWORD, BOOL) + 1, VALUE_FALSE,
+				Arguments.of( DWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(DWORD, BOOL), 0, VALUE_FALSE, VALID_ACCESS ), //
+				Arguments.of( DWORD, BOOL, BOOLACCESS, INDEX_START, 1, 0, VALUE_FALSE, VALID_ACCESS ), //
+				Arguments.of( DWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(DWORD, BOOL), indexStop(DWORD, BOOL) + 1, VALUE_FALSE,
 						INVALID_ACCESS ), //
 
-				testCase( DWORD, BYTE, BYTEACCESS, INDEX_START, indexStop(DWORD, BYTE), 0, VALUE_42, VALID_ACCESS ), //
-				testCase( DWORD, BYTE, BYTEACCESS, INDEX_START, 1, 2, VALUE_42, INVALID_ACCESS ), //
-				testCase( DWORD, BYTE, BYTEACCESS, INDEX_START, indexStop(DWORD, BYTE), indexStop(DWORD, BYTE) + 1, VALUE_42,
+				Arguments.of( DWORD, BYTE, BYTEACCESS, INDEX_START, indexStop(DWORD, BYTE), 0, VALUE_42, VALID_ACCESS ), //
+				Arguments.of( DWORD, BYTE, BYTEACCESS, INDEX_START, 1, 2, VALUE_42, INVALID_ACCESS ), //
+				Arguments.of( DWORD, BYTE, BYTEACCESS, INDEX_START, indexStop(DWORD, BYTE), indexStop(DWORD, BYTE) + 1, VALUE_42,
 						INVALID_ACCESS ), //
 
-				testCase( DWORD, WORD, WORDACCESS, INDEX_START, indexStop(DWORD, WORD), 0, VALUE_42, VALID_ACCESS ), //
-				testCase( DWORD, WORD, WORDACCESS, INDEX_START, indexStop(DWORD, WORD), 2, VALUE_42, INVALID_ACCESS ), //
+				Arguments.of( DWORD, WORD, WORDACCESS, INDEX_START, indexStop(DWORD, WORD), 0, VALUE_42, VALID_ACCESS ), //
+				Arguments.of( DWORD, WORD, WORDACCESS, INDEX_START, indexStop(DWORD, WORD), 2, VALUE_42, INVALID_ACCESS ), //
 
-				testCase( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(LWORD, BOOL), 0, VALUE_TRUE, VALID_ACCESS ), //
-				testCase( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, 1, 0, VALUE_TRUE, VALID_ACCESS ), //
-				testCase( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(LWORD, BOOL), indexStop(LWORD, BOOL) + 1,
+				Arguments.of( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(LWORD, BOOL), 0, VALUE_TRUE, VALID_ACCESS ), //
+				Arguments.of( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, 1, 0, VALUE_TRUE, VALID_ACCESS ), //
+				Arguments.of( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(LWORD, BOOL), indexStop(LWORD, BOOL) + 1,
 						VALUE_TRUE, INVALID_ACCESS ), //
-				testCase( LWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(LWORD, BOOL), 0, VALUE_TRUE, VALID_ACCESS ), //
-				testCase( LWORD, BOOL, BOOLACCESS, INDEX_START, 1, 0, VALUE_TRUE, VALID_ACCESS ), //
-				testCase( LWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(LWORD, BOOL), indexStop(LWORD, BOOL) + 1, VALUE_TRUE,
+				Arguments.of( LWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(LWORD, BOOL), 0, VALUE_TRUE, VALID_ACCESS ), //
+				Arguments.of( LWORD, BOOL, BOOLACCESS, INDEX_START, 1, 0, VALUE_TRUE, VALID_ACCESS ), //
+				Arguments.of( LWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(LWORD, BOOL), indexStop(LWORD, BOOL) + 1, VALUE_TRUE,
 						INVALID_ACCESS ), //
 
-				testCase( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(LWORD, BOOL), 0, VALUE_FALSE, VALID_ACCESS ), //
-				testCase( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, 1, 0, VALUE_FALSE, VALID_ACCESS ), //
-				testCase( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(LWORD, BOOL), indexStop(LWORD, BOOL) + 1,
+				Arguments.of( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(LWORD, BOOL), 0, VALUE_FALSE, VALID_ACCESS ), //
+				Arguments.of( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, 1, 0, VALUE_FALSE, VALID_ACCESS ), //
+				Arguments.of( LWORD, BOOL, BOOLACCESS_SHORT, INDEX_START, indexStop(LWORD, BOOL), indexStop(LWORD, BOOL) + 1,
 						VALUE_FALSE, INVALID_ACCESS ), //
-				testCase( LWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(LWORD, BOOL), 0, VALUE_FALSE, VALID_ACCESS ), //
-				testCase( LWORD, BOOL, BOOLACCESS, INDEX_START, 1, 0, VALUE_FALSE, VALID_ACCESS ), //
-				testCase( LWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(LWORD, BOOL), indexStop(LWORD, BOOL) + 1, VALUE_FALSE,
+				Arguments.of( LWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(LWORD, BOOL), 0, VALUE_FALSE, VALID_ACCESS ), //
+				Arguments.of( LWORD, BOOL, BOOLACCESS, INDEX_START, 1, 0, VALUE_FALSE, VALID_ACCESS ), //
+				Arguments.of( LWORD, BOOL, BOOLACCESS, INDEX_START, indexStop(LWORD, BOOL), indexStop(LWORD, BOOL) + 1, VALUE_FALSE,
 						INVALID_ACCESS ), //
 
-				testCase( LWORD, BYTE, BYTEACCESS, INDEX_START, indexStop(LWORD, BYTE), 0, VALUE_42, VALID_ACCESS ), //
-				testCase( LWORD, BYTE, BYTEACCESS, INDEX_START, 1, 2, VALUE_42, INVALID_ACCESS ), //
-				testCase( LWORD, BYTE, BYTEACCESS, INDEX_START, indexStop(LWORD, BYTE), indexStop(LWORD, BYTE) + 1, VALUE_42,
+				Arguments.of( LWORD, BYTE, BYTEACCESS, INDEX_START, indexStop(LWORD, BYTE), 0, VALUE_42, VALID_ACCESS ), //
+				Arguments.of( LWORD, BYTE, BYTEACCESS, INDEX_START, 1, 2, VALUE_42, INVALID_ACCESS ), //
+				Arguments.of( LWORD, BYTE, BYTEACCESS, INDEX_START, indexStop(LWORD, BYTE), indexStop(LWORD, BYTE) + 1, VALUE_42,
 						INVALID_ACCESS ), //
 
-				testCase( LWORD, WORD, WORDACCESS, INDEX_START, indexStop(LWORD, WORD), 0, VALUE_42, VALID_ACCESS ), //
-				testCase( LWORD, WORD, WORDACCESS, INDEX_START, indexStop(LWORD, WORD), indexStop(LWORD, WORD) + 1, VALUE_42,
+				Arguments.of( LWORD, WORD, WORDACCESS, INDEX_START, indexStop(LWORD, WORD), 0, VALUE_42, VALID_ACCESS ), //
+				Arguments.of( LWORD, WORD, WORDACCESS, INDEX_START, indexStop(LWORD, WORD), indexStop(LWORD, WORD) + 1, VALUE_42,
 						INVALID_ACCESS ), //
 
-				testCase( LWORD, DWORD, DWORDACCESS, INDEX_START, indexStop(LWORD, DWORD), 0, VALUE_42, VALID_ACCESS ), //
-				testCase( LWORD, DWORD, DWORDACCESS, INDEX_START, indexStop(LWORD, DWORD), indexStop(LWORD, DWORD) + 1,
+				Arguments.of( LWORD, DWORD, DWORDACCESS, INDEX_START, indexStop(LWORD, DWORD), 0, VALUE_42, VALID_ACCESS ), //
+				Arguments.of( LWORD, DWORD, DWORDACCESS, INDEX_START, indexStop(LWORD, DWORD), indexStop(LWORD, DWORD) + 1,
 						VALUE_42, INVALID_ACCESS ) //
-			]
+			)
 		}
 
-	@Test
-	def locatedArrayAtAccess() {
+	@ParameterizedTest(name = "{index}: {0}.{2}{5}={6}")
+	@MethodSource("testCases")
+	def locatedArrayAtAccess(String sourceType, String accessType, String accessor, int arrayStart, int arrayStop, int index, String value, boolean isValid) {
 		getFunctionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR
 		  «VARIABLE_NAME» : «sourceType»;

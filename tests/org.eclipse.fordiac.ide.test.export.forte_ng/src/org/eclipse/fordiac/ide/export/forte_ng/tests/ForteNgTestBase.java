@@ -14,8 +14,8 @@
 
 package org.eclipse.fordiac.ide.export.forte_ng.tests;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -43,8 +43,8 @@ import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetu
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -186,7 +186,7 @@ public abstract class ForteNgTestBase<T extends FBType> {
 		return errors;
 	}
 
-	@BeforeClass
+	@BeforeAll
 	/**
 	 * initialize the Equinox extension registry substitute
 	 *
@@ -196,7 +196,7 @@ public abstract class ForteNgTestBase<T extends FBType> {
 		StructuredTextStandaloneSetup.doSetup();
 	}
 
-	@Before
+	@BeforeEach
 	/**
 	 * clear all the variables that are specific to a single test
 	 *
@@ -239,9 +239,10 @@ public abstract class ForteNgTestBase<T extends FBType> {
 	 * @param errors list of errormessages
 	 */
 	protected static void assertNoErrors(List<String> errors) {
-		assertTrue(MessageFormat.format("No error messages expected. First error message received: {0}.", //$NON-NLS-1$
-				(!errors.isEmpty() ? errors.get(0) : "")), //$NON-NLS-1$
-				errors.isEmpty());
+		assertTrue(errors.isEmpty(),
+				(MessageFormat.format("No error messages expected. First error message received: {0}.", //$NON-NLS-1$
+						(!errors.isEmpty() ? errors.get(0) : "")) //$NON-NLS-1$
+				));
 	}
 
 	/**
@@ -250,7 +251,7 @@ public abstract class ForteNgTestBase<T extends FBType> {
 	 * @param errors list of errormessages
 	 */
 	protected static void assertErrors(List<String> errors) {
-		assertFalse("Error messages expected.", errors.isEmpty()); //$NON-NLS-1$
+		assertFalse(errors.isEmpty(), "Error messages expected."); //$NON-NLS-1$
 	}
 
 	/**
@@ -312,7 +313,7 @@ public abstract class ForteNgTestBase<T extends FBType> {
 			for (String error : errors) {
 				contained = contained || error.contains(message);
 			}
-			assertTrue(MessageFormat.format("Missing error message: {0}", message), contained); //$NON-NLS-1$
+			assertTrue(contained, MessageFormat.format("Missing error message: {0}", message)); //$NON-NLS-1$
 		}
 	}
 
@@ -324,16 +325,6 @@ public abstract class ForteNgTestBase<T extends FBType> {
 	 */
 	protected static String addExportPrefix(String name) {
 		return ForteLibraryElementTemplate.EXPORT_PREFIX + name;
-	}
-
-	/**
-	 * syntactic sugar: create a Object[] for a test case
-	 *
-	 * @param obj... vararg to create a Object[]
-	 * @return the created Object[]
-	 */
-	protected static Object[] testCase(Object... a) {
-		return a;
 	}
 
 	/**
