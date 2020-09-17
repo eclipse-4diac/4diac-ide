@@ -13,8 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import java.util.Iterator;
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -95,14 +93,12 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#refresh()
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void refresh() {
 		super.refresh();
-		for (Iterator iterator = getChildren().iterator(); iterator.hasNext();) {
-			EditPart ep = (EditPart) iterator.next();
+		for (Object ep : getChildren()) {
 			if (ep instanceof SubAppForFBNetworkEditPart) {
-				ep.refresh();
+				((EditPart) ep).refresh();
 			}
 		}
 	}
@@ -134,7 +130,7 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 		}
 		// as some of the children are in a different layer we can not use the index
 		// given.
-		// Currently -1 seams to be the best option
+		// Currently -1 seems to be the best option
 		super.addChildVisual(childEditPart, -1);
 	}
 

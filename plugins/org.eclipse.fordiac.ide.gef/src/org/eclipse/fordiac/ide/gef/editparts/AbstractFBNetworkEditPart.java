@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -30,6 +31,10 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 
 	/** The child providers. */
 	private List<IChildrenProvider> childProviders = null;
+
+	protected EList<FBNetworkElement> getNetworkElements() {
+		return getModel().getNetworkElements();
+	}
 
 	@Override
 	public FBNetwork getModel() {
@@ -47,7 +52,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 
 	@Override
 	protected List<?> getModelChildren() {
-		List<Object> children = new ArrayList<>(getModel().getNetworkElements());
+		List<Object> children = new ArrayList<>(getNetworkElements());
 		children.addAll(getFBValues());
 
 		for (IChildrenProvider provider : getChildrenProviders()) {
@@ -59,19 +64,19 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 	}
 
 	/**
-	 * go through all fb network elements and find inputs with paramters to be
+	 * go through all fb network elements and find inputs with parameters to be
 	 * shown.
 	 */
 	private Collection<? extends Object> getFBValues() {
-		ArrayList<Object> valueElenents = new ArrayList<>();
-		for (FBNetworkElement element : getModel().getNetworkElements()) {
+		ArrayList<Object> valueElements = new ArrayList<>();
+		for (FBNetworkElement element : getNetworkElements()) {
 			for (VarDeclaration interfaceElement : element.getInterface().getInputVars()) {
 				if (null != interfaceElement.getValue()) {
-					valueElenents.add(interfaceElement.getValue());
+					valueElements.add(interfaceElement.getValue());
 				}
 			}
 		}
-		return valueElenents;
+		return valueElements;
 	}
 
 	private List<IChildrenProvider> getChildrenProviders() {
@@ -86,8 +91,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elems = registry.getConfigurationElementsFor("org.eclipse.fordiac.ide.gef", //$NON-NLS-1$
 				"ChildrenProvider"); //$NON-NLS-1$
-		for (int i = 0; i < elems.length; i++) {
-			IConfigurationElement element = elems[i];
+		for (IConfigurationElement element : elems) {
 			try {
 				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof IChildrenProvider) {
@@ -96,7 +100,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 				}
 			} catch (CoreException corex) {
 				Activator.getDefault()
-						.logError("Error loading ChildrenProvider Extensions in org.eclipse.fordiac.ide.gef", corex); //$NON-NLS-1$
+				.logError("Error loading ChildrenProvider Extensions in org.eclipse.fordiac.ide.gef", corex); //$NON-NLS-1$
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
  * 				 2019 - 2020 Johannes Kepler University
+ *               2020        Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,8 +15,11 @@
  *   Alois Zoitl - separated FBNetworkElement from instance name for better
  *                 direct editing of instance names
  *   Bianca Wiesmayr - added struct
+ *   Alois Zoitl, Bianca Wiesmayr - unfolded subapp
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
+
+import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
@@ -49,8 +53,9 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		EditPart part = null;
-
-		if (modelElement instanceof FBNetwork) {
+		if (modelElement instanceof UnfoldedSubappContentNetwork) {
+			part = new UnfoldedSubappContentEditPart();
+		} else if (modelElement instanceof FBNetwork) {
 			if (((FBNetwork) modelElement).eContainer() instanceof SubApp) {
 				part = new UISubAppNetworkEditPart();
 			} else {
@@ -73,7 +78,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		} else if (modelElement instanceof SubApp) {
 			part = new SubAppForFBNetworkEditPart();
 		} else if (modelElement instanceof IInterfaceElement) {
-			part = createInterfaceEditPart(modelElement);
+			part = createInterfaceEditPart(modelElement, context);
 		} else if (modelElement instanceof Value) {
 			part = new ValueEditPart();
 		} else {
@@ -82,8 +87,25 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		return part;
 	}
 
-	private static EditPart createInterfaceEditPart(final Object modelElement) {
+	private static EditPart createInterfaceEditPart(final Object modelElement, final EditPart context) {
 		EditPart part;
+		if (context.getModel() instanceof SubApp) { // TODO check for untyped subapp
+			SubApp subapp = (SubApp) context.getModel();
+			if (subapp.isUnfolded()) {
+				return new InterfaceEditPartForFBNetwork() {
+					@Override
+					protected List<?> getModelSourceConnections() {
+						return getModel().getOutputConnections();
+					}
+
+					@Override
+					protected List<?> getModelTargetConnections() {
+						return getModel().getInputConnections();
+					}
+				};
+			}
+
+		}
 		IInterfaceElement element = (IInterfaceElement) modelElement;
 		if ((element.getFBNetworkElement() instanceof StructManipulator)
 				&& (element.getType() instanceof StructuredType)) {

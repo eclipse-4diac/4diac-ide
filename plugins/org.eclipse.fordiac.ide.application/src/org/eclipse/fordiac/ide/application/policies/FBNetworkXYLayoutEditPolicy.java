@@ -61,7 +61,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
 		// return a command that can move a "ViewEditPart"
-		if (child.getModel() instanceof PositionableElement && constraint instanceof Rectangle) {
+		if ((child.getModel() instanceof PositionableElement) && (constraint instanceof Rectangle)) {
 			return new SetPositionCommand((PositionableElement) child.getModel(), request, (Rectangle) constraint);
 		}
 		return null;
