@@ -17,7 +17,9 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -100,11 +102,18 @@ public class DataTypeDropdown extends TextCellEditor {
 		}
 	}
 
-	// is called with every opening of the content proposal popup, may lead to
-	// performance issues
+	/*
+	 * is called with every opening of the content proposal popup, may lead to
+	 * performance issues
+	 */
 	private void loadContent() {
-		types = library.getDataTypesSorted(); // get sorted types for convenient order in dialog
+		types = getDataTypesSorted(); // get sorted types for convenient order in dialog
 		provider.setProposals(getTypesAsStringArray());
+	}
+
+	// can be overridden to filter the list differently
+	protected List<DataType> getDataTypesSorted() {
+		return library.getDataTypesSorted().stream().filter(Objects::nonNull).collect(Collectors.toList());
 	}
 
 	@Override

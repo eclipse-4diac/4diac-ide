@@ -53,8 +53,8 @@
     <h2 id="createSystem">Create a new IEC&nbsp;61499 System</h2>
 
      <ol>
-       <li>In the upper left corner of the system perspective there is the main menu. Create a new system by selecting
-       <br><span class="menu4diac">File &rarr; New &rarr; New System</span></li>
+       <li>In the upper left corner of the system perspective there is the main menu. Create a new project by selecting
+       <br><span class="menu4diac">File &rarr; New &rarr; New Project &rarr; 4diac IDE &rarr; 4diac IDE Project</span></li>
        <li>Follow the instructions in the creation wizard. For this tutorial we name our new system <i>BlinkTest</i>.
        <div><img src="../../html/4diacIDE/img/Step1/newSystemWizard.png" alt="Create a new IEC 61499 System" /></div></li>
     </ol>
@@ -116,7 +116,7 @@
         </li>
       </ol>
     <p>Now the application is done. You should try to understand how the application works. Something missing is the starting event. 
-    This would be done later when the hardware is configured. For now, imagine an event arrives to E_CYCLE.START. Every 1 second, and event output will be triggered in E_CYCLE.EO. The E_SWITCH will trigger an event output EO0 when G is zero, and EO1 when G is one. The value Q of E_SR will be 1 when an event at S arrive and 0 when an event at R arrive. Try to follow the flow of events and understand why this application makes Q toggle, considering it starts at 0.</p>
+    This would be done later when the hardware is configured. For now, imagine an event arrives to E_CYCLE.START. Every 1 second, an event output will be triggered in E_CYCLE.EO. The E_SWITCH will trigger an event output EO0 when G is zero, and EO1 when G is one. The value Q of E_SR will be 1 when an event at S arrive and 0 when an event at R arrive. Try to follow the flow of events and understand why this application makes Q toggle, considering it starts at 0.</p>
 
 <!--********************************************************************************************-->
     <h2 id="configureHardware">Configuration of the Automation Hardware</h2>

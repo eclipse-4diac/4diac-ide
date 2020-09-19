@@ -16,6 +16,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -157,7 +161,15 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private CellEditor[] createCellEditors(final Table table) {
-		typeDropDown = new DataTypeDropdown(dataTypeLibrary, structViewer);
+		typeDropDown = new DataTypeDropdown(dataTypeLibrary, structViewer) {
+			@Override
+			protected List<DataType> getDataTypesSorted() {
+				return super.getDataTypesSorted().stream()
+						.filter(Objects::nonNull)
+						.filter(type -> !type.getName().equals(StructViewingComposite.this.getType().getName()))
+						.collect(Collectors.toList());
+			}
+		};
 		return new CellEditor[] { new TextCellEditor(table), typeDropDown, new TextCellEditor(table),
 				new TextCellEditor(table), new TextCellEditor(table) };
 	}

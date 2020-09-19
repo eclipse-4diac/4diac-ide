@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 		 2019 Johannes Kepler University Linz 
+ * 		 2019 Johannes Kepler University Linz
  *               2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
+import org.eclipse.fordiac.ide.gef.policies.DragHighlightEditPolicy;
 import org.eclipse.fordiac.ide.gef.tools.ScrollingDragEditPartsTracker;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
@@ -202,6 +203,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			}
 
 		});
+
+		// show cross mouse cursor on hover to indicate that an FB can be draged around
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new DragHighlightEditPolicy());
 	}
 
 	/** The listener. */
@@ -350,7 +354,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			@SuppressWarnings("unchecked")
 			List<EditPart> children = getChildren();
 			children.stream().filter(e -> e instanceof InstanceNameEditPart)
-			.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
+					.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
 		}
 		super.performRequest(request);

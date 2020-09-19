@@ -36,16 +36,16 @@ import org.eclipse.swt.widgets.Display;
  */
 public class ModifiedMoveHandle extends MoveHandle {
 
-	private static final int SELECTION_FILL_ALPHA = 50;
+	public static final int SELECTION_FILL_ALPHA = 50;
 	private static final int SELECTION_BORDER_WIDTH = 2;
-	private static Color borderColor = null;
+	private static Color selectionColor = null;
 
-	private static Color getBorderColor() {
-		if (null == borderColor) {
+	public static Color getSelectionColor() {
+		if (null == selectionColor) {
 			Display display = Display.getCurrent();
-			borderColor = display.getSystemColor(SWT.COLOR_LIST_SELECTION);
+			selectionColor = display.getSystemColor(SWT.COLOR_LIST_SELECTION);
 		}
-		return borderColor;
+		return selectionColor;
 	}
 
 	private final Insets insets;
@@ -77,8 +77,8 @@ public class ModifiedMoveHandle extends MoveHandle {
 				g.setLineStyle(Graphics.LINE_SOLID);
 				g.setLineWidth(SELECTION_BORDER_WIDTH);
 				g.setXORMode(false);
-				g.setForegroundColor(getBorderColor());
-				g.setBackgroundColor(getBorderColor());
+				g.setForegroundColor(getSelectionColor());
+				g.setBackgroundColor(getSelectionColor());
 				rect = rect.getShrinked(1, 1);
 				g.drawRoundRectangle(rect, arc, arc);
 				g.setAlpha(SELECTION_FILL_ALPHA);
