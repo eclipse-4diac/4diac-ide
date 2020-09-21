@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.ErrorMessenger;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.Messages;
@@ -39,7 +40,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -62,13 +62,14 @@ public class MapToCommand extends Command {
 			return false;
 		}
 		if ((srcElement.isMapped()) && (srcElement.getOpposite().getFbNetwork().equals(resource.getFBNetwork()))) {
-			Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.MapToCommand_STATUSMessage_AlreadyMapped);
+			ErrorMessenger.popUpErrorMessage(Messages.MapToCommand_STATUSMessage_AlreadyMapped);
 			return false; // already mapped to this resource -> nothing to do -> mapping not possible!
 		}
 
 		boolean supports = deviceSupportsType();
-		Abstract4DIACUIPlugin
-				.statusLineErrorMessage(supports ? null : Messages.MapToCommand_STATUSMessage_TypeNotSupported);
+		if (!supports) {
+			ErrorMessenger.popUpErrorMessage(Messages.MapToCommand_STATUSMessage_TypeNotSupported);
+		}
 		return supports;
 	}
 

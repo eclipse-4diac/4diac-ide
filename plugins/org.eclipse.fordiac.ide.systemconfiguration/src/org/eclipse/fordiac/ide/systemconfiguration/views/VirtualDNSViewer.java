@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterValueTemplateTransfer;
+import org.eclipse.fordiac.ide.model.ErrorMessenger;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -37,7 +38,6 @@ import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEdi
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.VirtualDNSTagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
@@ -257,7 +257,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 				if (element instanceof VirtualDNSEntry) {
 
 					if (variableNameAlreadyExists((VirtualDNSEntry) element, value.toString())) {
-						Abstract4DIACUIPlugin.statusLineErrorMessage(
+						ErrorMessenger.popUpErrorMessage(
 								MessageFormat.format(Messages.virtualDNSSameVariableNameError, value.toString()));
 					} else {
 						((VirtualDNSEntry) element).setName(value.toString());

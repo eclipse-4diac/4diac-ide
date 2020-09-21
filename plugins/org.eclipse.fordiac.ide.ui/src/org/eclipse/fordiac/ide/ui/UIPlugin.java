@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui;
 
+import org.eclipse.fordiac.ide.ui.handlers.ErrorMessageHandler;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -41,6 +42,7 @@ public class UIPlugin extends Abstract4DIACUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		setPlugin(this);
+		ErrorMessageHandler.initPopUpErrorMessage();
 	}
 
 	private static synchronized void setPlugin(UIPlugin uiPlugin) {
@@ -56,6 +58,7 @@ public class UIPlugin extends Abstract4DIACUIPlugin {
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
+		ErrorMessageHandler.stopPopUpErrorMessage();
 		super.stop(context);
 		setPlugin(null);
 	}

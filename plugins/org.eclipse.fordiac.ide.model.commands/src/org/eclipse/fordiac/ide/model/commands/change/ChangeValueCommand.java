@@ -15,12 +15,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.ErrorMessenger;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeValueCommand extends Command {
@@ -41,7 +41,7 @@ public class ChangeValueCommand extends Command {
 		if ((null != var) && (null != var.getType()) && ("ANY".equals(var.getTypeName())) //$NON-NLS-1$
 				&& (null != newValue)) {
 			if ((!newValue.equals("")) && (!newValue.contains("#"))) { //$NON-NLS-1$ //$NON-NLS-2$
-				Abstract4DIACUIPlugin.statusLineErrorMessage("Constant Values are not allowed on ANY Input!"); //$NON-NLS-1$
+				ErrorMessenger.popUpErrorMessage("Constant Values are not allowed on ANY Input!"); //$NON-NLS-1$
 				return false;
 			}
 		}

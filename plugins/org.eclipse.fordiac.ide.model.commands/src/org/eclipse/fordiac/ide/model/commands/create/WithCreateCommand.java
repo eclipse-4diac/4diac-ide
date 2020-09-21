@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import org.eclipse.fordiac.ide.model.ErrorMessenger;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -58,17 +59,16 @@ public class WithCreateCommand extends Command {
 			return false;
 		}
 		if (varDeclaration.getType() instanceof AdapterType) {
-			Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.AdapterConnectionNotAllowed);
+			ErrorMessenger.popUpErrorMessage(Messages.AdapterConnectionNotAllowed);
 			return false;
 		}
 		for (With w : varDeclaration.getWiths()) {
 			if (w.eContainer().equals(event)) {
-				Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.WithExists);
+				ErrorMessenger.popUpErrorMessage(Messages.WithExists);
 				return false;
 			}
 		}
 		if ((varDeclaration.isIsInput() && event.isIsInput()) || (!varDeclaration.isIsInput() && !event.isIsInput())) {
-			Abstract4DIACUIPlugin.statusLineErrorMessage(null);
 			return true;
 		}
 		return false;

@@ -51,6 +51,7 @@ import static org.eclipse.fordiac.ide.model.FordiacKeywords.WSTRING;
 import java.text.MessageFormat;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.ErrorMessenger;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.ModelCommandsPlugin;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
@@ -63,7 +64,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 /**
@@ -125,26 +125,23 @@ public final class LinkConstraints {
 			}
 
 			if (!sourceAndDestCheck(source, target)) {
-				Abstract4DIACUIPlugin
-						.statusLineErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
+				ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
 				return false;
 			}
 
 			if (!hasAlreadyInputConnectionsCheck(source, target, con)) {
-				Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat
+				ErrorMessenger.popUpErrorMessage(MessageFormat
 						.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, target.getName()));
 				return false;
 			}
 
 			if (!typeCheck(source, target)) {
-				Abstract4DIACUIPlugin.statusLineErrorMessage(
-						MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
+				ErrorMessenger
+						.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
 								(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
 								(null != target.getType()) ? target.getType().getName() : FordiacMessages.NA));
 				return false;
 			}
-
-			Abstract4DIACUIPlugin.statusLineErrorMessage(null);
 
 			return isWithConstraintOK(source) && isWithConstraintOK(target);
 		}
@@ -168,16 +165,14 @@ public final class LinkConstraints {
 				if ((obj instanceof CompositeFBType) || (obj instanceof SubApp)) {
 					// data connections from and to interface data ports from composits should also
 					// be allowed from unwithed composite inputs (e.g., parameters for the FB)
-					Abstract4DIACUIPlugin.statusLineErrorMessage(null);
 					return true;
 				}
 			}
 
-			Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat
+			ErrorMessenger.popUpErrorMessage(MessageFormat
 					.format(Messages.LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct, varDecl.getName()));
 			return false;
 		}
-		Abstract4DIACUIPlugin.statusLineErrorMessage(null);
 		return true;
 	}
 
@@ -387,32 +382,30 @@ public final class LinkConstraints {
 			}
 
 			if (!sourceAndDestCheck(source, target)) {
-				Abstract4DIACUIPlugin
-						.statusLineErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
+				ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
 				return false;
 			}
 
 			if (!hasAlreadyInputConnectionsCheck(source, target, con)) {
-				Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat
+				ErrorMessenger.popUpErrorMessage(MessageFormat
 						.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, target.getName()));
 				return false;
 			}
 
 			if (hasAlreadyOutputConnectionsCheck(source, con)) {
-				Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat
+				ErrorMessenger.popUpErrorMessage(MessageFormat
 						.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyOutputConnection, source.getName()));
 				return false;
 			}
 
 			if (!adapaterTypeCompatibilityCheck(source, target)) {
-				Abstract4DIACUIPlugin.statusLineErrorMessage(
-						MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
+				ErrorMessenger
+						.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
 								(null != source.getType()) ? source.getType().getName() : FordiacMessages.ND,
 								(null != target.getType()) ? target.getType().getName() : FordiacMessages.ND));
 				return false;
 			}
 
-			Abstract4DIACUIPlugin.statusLineErrorMessage(null);
 			return true;
 		}
 		return false;

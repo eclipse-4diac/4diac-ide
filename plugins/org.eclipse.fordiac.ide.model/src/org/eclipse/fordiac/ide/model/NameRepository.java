@@ -42,7 +42,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 
 public final class NameRepository {
 
@@ -90,21 +89,20 @@ public final class NameRepository {
 	public static boolean isValidName(final INamedElement element, final String nameProposal) {
 		Assert.isNotNull(element.eContainer(),
 				"For a correct operation createuniqueName expects that the model element is already added in its containing model!"); //$NON-NLS-1$
-		Abstract4DIACUIPlugin.statusLineErrorMessage(null);
 
 		if (!IdentifierVerifyer.isValidIdentifier(nameProposal)) {
-			Abstract4DIACUIPlugin.statusLineErrorMessage(
+			ErrorMessenger.popUpErrorMessage(
 					MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, nameProposal));
 			return false;
 		}
 		if (element instanceof IInterfaceElement && RESERVED_KEYWORDS.contains(nameProposal)) {
-			Abstract4DIACUIPlugin.statusLineErrorMessage(
+			ErrorMessenger.popUpErrorMessage(
 					MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, nameProposal));
 			return false;
 		}
 
 		if (getRefNames(element).contains(nameProposal)) {
-			Abstract4DIACUIPlugin.statusLineErrorMessage(
+			ErrorMessenger.popUpErrorMessage(
 					MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal));
 			return false;
 		}
