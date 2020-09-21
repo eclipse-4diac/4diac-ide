@@ -16,6 +16,7 @@
  *                 direct editing of instance names
  *   Bianca Wiesmayr - added struct
  *   Alois Zoitl, Bianca Wiesmayr - unfolded subapp
+ *   Daniel Lindhuber - InstanceComment
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -73,6 +74,8 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			}
 		} else if (modelElement instanceof InstanceName) {
 			part = new InstanceNameEditPart();
+		} else if (modelElement instanceof InstanceComment) {
+			part = new InstanceCommentEditPart();
 		} else if (modelElement instanceof Connection) {
 			part = new ConnectionEditPart();
 		} else if (modelElement instanceof SubApp) {
