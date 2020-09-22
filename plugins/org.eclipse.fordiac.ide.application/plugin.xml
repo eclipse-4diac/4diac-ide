@@ -744,7 +744,10 @@
                     </with>
                     <with variable="selection">
                          <iterate ifEmpty="true">
-            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+                         	<or>
+            					<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+            					<instanceof value="org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart"/>
+        					</or>
             			</iterate>	
                     </with>
                 </and>
@@ -778,6 +781,7 @@
 	            			<or>
 	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart" />
 	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
 	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
             				</or>
             			</iterate>
