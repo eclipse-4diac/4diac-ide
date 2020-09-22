@@ -13,6 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -22,6 +25,7 @@ import org.eclipse.jface.util.Policy;
 import org.eclipse.jface.util.StatusHandler;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Version;
 
 /**
  * The activator class controls the plug-in life cycle.
@@ -57,6 +61,8 @@ public class Activator extends AbstractUIPlugin {
 
 		super.start(context);
 		setPluginInstance(this);
+
+		setVersionAndBuildID(context);
 
 		if (isDebugging()) {
 			addLogListener();
@@ -118,6 +124,27 @@ public class Activator extends AbstractUIPlugin {
 			Platform.removeLogListener(listener);
 			listener = null;
 		}
+	}
+
+	// this is somehow needed so that version and build ID are correctly shown in
+	// About dialog
+	private static void setVersionAndBuildID(final BundleContext context) {
+		Version v = context.getBundle().getVersion();
+		String version = v.getMajor() + "." + v.getMinor() + "." + v.getMicro(); //$NON-NLS-1$ //$NON-NLS-2$
+		System.setProperty("org.eclipse.fordiac.ide.version", version); //$NON-NLS-1$
+
+		String qualifier = v.getQualifier();
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm"); //$NON-NLS-1$
+			Date d = sdf.parse(qualifier);
+			SimpleDateFormat sdfVisu = new SimpleDateFormat("yyyy-MM-dd_HHmm"); //$NON-NLS-1$
+			qualifier = sdfVisu.format(d);
+		} catch (Exception ex) {
+			// can be ignored
+		}
+
+		System.setProperty("org.eclipse.fordiac.ide.buildid", qualifier); //$NON-NLS-1$
+
 	}
 
 }
