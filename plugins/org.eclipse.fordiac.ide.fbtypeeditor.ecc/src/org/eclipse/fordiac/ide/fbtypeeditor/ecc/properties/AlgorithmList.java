@@ -17,6 +17,7 @@
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *   Bianca Wiesmayr - improve element insertion
  *   Daniel Lindhuber - added copy and paste
+ *   Alexander Lumplecker - allowed to reorder algorithms
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -25,12 +26,13 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTypeComm
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.AlgorithmsLabelProvider;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeAlgorithmOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -78,7 +80,7 @@ public class AlgorithmList implements CommandExecutor {
 
 		@Override
 		public void modify(final Object element, final String property, final Object value) {
-			TableItem tableItem = (TableItem) element;
+			final TableItem tableItem = (TableItem) element;
 			Algorithm data = (Algorithm) tableItem.getData();
 			Command cmd = null;
 			if (A_NAME.equals(property)) {
@@ -107,7 +109,7 @@ public class AlgorithmList implements CommandExecutor {
 	private static final String A_COMMENT = "Comment"; //$NON-NLS-1$
 
 	private TableViewer algorithmViewer;
-	private Composite composite;
+	private final Composite composite;
 
 	private BasicFBType type;
 
@@ -116,19 +118,21 @@ public class AlgorithmList implements CommandExecutor {
 	public AlgorithmList(Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
 		composite = widgetFactory.createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
-		GridData gridDataVersionViewer = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final GridData gridDataVersionViewer = new GridData(GridData.FILL, GridData.FILL, true, true);
 		composite.setLayoutData(gridDataVersionViewer);
-		AddDeleteWidget buttons = new AddDeleteWidget();
+		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, widgetFactory);
 
 		createAlgorithmViewer(composite);
 		buttons.bindToTableViewer(algorithmViewer, this,
 				ref -> new CreateAlgorithmCommand(type, getInsertingIndex(), getName()),
-				ref -> new DeleteAlgorithmCommand(type, (Algorithm) ref));
+				ref -> new DeleteAlgorithmCommand(type, (Algorithm) ref),
+				ref -> new ChangeAlgorithmOrderCommand(type.getAlgorithm(), (Algorithm) ref, true),
+				ref -> new ChangeAlgorithmOrderCommand(type.getAlgorithm(), (Algorithm) ref, false));
 	}
 
 	private Algorithm getLastSelectedAlgorithm() {
-		IStructuredSelection selection = algorithmViewer.getStructuredSelection();
+		final IStructuredSelection selection = algorithmViewer.getStructuredSelection();
 		if (selection.isEmpty()) {
 			return null;
 		}
@@ -136,7 +140,7 @@ public class AlgorithmList implements CommandExecutor {
 	}
 
 	private int getInsertingIndex() {
-		Algorithm alg = getLastSelectedAlgorithm();
+		final Algorithm alg = getLastSelectedAlgorithm();
 		if (null == alg) {
 			return type.getAlgorithm().size();
 		}
@@ -170,14 +174,14 @@ public class AlgorithmList implements CommandExecutor {
 	}
 
 	private static void configureTableLayout(TableViewer tableViewer) {
-		Table table = tableViewer.getTable();
-		TableColumn column1 = new TableColumn(table, SWT.LEFT);
+		final Table table = tableViewer.getTable();
+		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText(Messages.AlgorithmList_ConfigureTableLayout_Name);
-		TableColumn column2 = new TableColumn(table, SWT.CENTER);
+		final TableColumn column2 = new TableColumn(table, SWT.CENTER);
 		column2.setText(Messages.AlgorithmList_ConfigureTableLayout_Language);
-		TableColumn column3 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column3 = new TableColumn(table, SWT.LEFT);
 		column3.setText(Messages.AlgorithmList_ConfigureTableLayout_Comment);
-		TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(2, 50));
 		layout.addColumnData(new ColumnWeightData(1, 20));
 		layout.addColumnData(new ColumnWeightData(3, 50));
@@ -192,16 +196,14 @@ public class AlgorithmList implements CommandExecutor {
 	}
 
 	private static CellEditor[] createAlgorithmCellEditors(final Table table) {
-		TextCellEditor algorithmNameEditor = new TextCellEditor(table);
+		final TextCellEditor algorithmNameEditor = new TextCellEditor(table);
 		((Text) algorithmNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		return new CellEditor[] { algorithmNameEditor,
-				ComboBoxWidgetFactory.createComboBoxCellEditor(table,
-						ECCSection.getLanguages().toArray(new String[0]), SWT.READ_ONLY),
-				new TextCellEditor(table) };
+		return new CellEditor[] { algorithmNameEditor, ComboBoxWidgetFactory.createComboBoxCellEditor(table,
+				ECCSection.getLanguages().toArray(new String[0]), SWT.READ_ONLY), new TextCellEditor(table) };
 	}
 
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			algorithmViewer.setInput(type.getAlgorithm());
