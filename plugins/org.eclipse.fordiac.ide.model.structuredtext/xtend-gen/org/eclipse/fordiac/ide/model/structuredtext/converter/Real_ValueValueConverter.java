@@ -21,10 +21,12 @@ import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 @SuppressWarnings("all")
 public class Real_ValueValueConverter extends AbstractNullSafeConverter<Double> {
+  @Override
   protected String internalToString(final Double value) {
     return value.toString();
   }
   
+  @Override
   protected Double internalToValue(final String string, final INode node) throws ValueConverterException {
     Double _xblockexpression = null;
     {

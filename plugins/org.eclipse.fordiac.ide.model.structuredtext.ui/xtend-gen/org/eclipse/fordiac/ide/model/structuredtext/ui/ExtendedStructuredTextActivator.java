@@ -25,11 +25,13 @@ public class ExtendedStructuredTextActivator extends StructuredtextActivator {
   
   private static StructuredtextActivator INSTANCE;
   
+  @Override
   public void start(final BundleContext context) throws Exception {
     super.start(context);
     ExtendedStructuredTextActivator.INSTANCE = this;
   }
   
+  @Override
   public void stop(final BundleContext context) throws Exception {
     ExtendedStructuredTextActivator.INSTANCE = null;
     super.stop(context);
@@ -39,6 +41,7 @@ public class ExtendedStructuredTextActivator extends StructuredtextActivator {
     return ExtendedStructuredTextActivator.INSTANCE;
   }
   
+  @Override
   public com.google.inject.Module getRuntimeModule(final String grammar) {
     boolean _equals = ExtendedStructuredTextActivator.ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION.equals(grammar);
     if (_equals) {
@@ -47,6 +50,7 @@ public class ExtendedStructuredTextActivator extends StructuredtextActivator {
     return super.getRuntimeModule(grammar);
   }
   
+  @Override
   public com.google.inject.Module getUiModule(final String grammar) {
     boolean _equals = ExtendedStructuredTextActivator.ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION.equals(grammar);
     if (_equals) {

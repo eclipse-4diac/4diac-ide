@@ -146,6 +146,7 @@ public class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
   }
   
   @Pure
+  @Override
   protected ServiceInterfaceFBType getType() {
     return this.type;
   }

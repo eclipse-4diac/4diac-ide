@@ -24,6 +24,7 @@ import org.eclipse.xtext.xbase.lib.IntegerRange;
 
 @SuppressWarnings("all")
 public abstract class StringValueConverter extends AbstractNullSafeConverter<String> {
+  @Override
   protected String internalToString(final String value) {
     try {
       String _xblockexpression = null;
@@ -32,6 +33,7 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
         final StringBuilder result = new StringBuilder();
         result.append(this.getQuote());
         for (int i = new Function0<Integer>() {
+          @Override
           public Integer apply() {
             try {
               return reader.read();
@@ -183,6 +185,7 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
     }
   }
   
+  @Override
   protected String internalToValue(final String string, final INode node) {
     try {
       String _xblockexpression = null;
@@ -199,6 +202,7 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
         final StringReader reader = new StringReader(value);
         final StringBuilder result = new StringBuilder();
         for (int i = new Function0<Integer>() {
+          @Override
           public Integer apply() {
             try {
               return reader.read();

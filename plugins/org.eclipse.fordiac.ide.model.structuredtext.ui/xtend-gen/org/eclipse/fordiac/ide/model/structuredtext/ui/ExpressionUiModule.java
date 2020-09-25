@@ -29,6 +29,7 @@ import org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage;
 @SuppressWarnings("all")
 public class ExpressionUiModule extends StructuredTextUiModule {
   public static class ExpresionSourceViewerFactory extends XtextSourceViewer.DefaultFactory {
+    @Override
     public XtextSourceViewer createSourceViewer(final Composite parent, final IVerticalRuler ruler, final IOverviewRuler overviewRuler, final boolean showsAnnotationOverview, final int styles) {
       return super.createSourceViewer(parent, null, null, false, (SWT.BORDER | SWT.SINGLE));
     }
@@ -38,6 +39,7 @@ public class ExpressionUiModule extends StructuredTextUiModule {
     super(plugin);
   }
   
+  @Override
   public Class<? extends IContentAssistParser> bindIContentAssistParser() {
     return ExpressionParser.class;
   }
@@ -46,19 +48,23 @@ public class ExpressionUiModule extends StructuredTextUiModule {
     return ExpressionUiModule.ExpresionSourceViewerFactory.class;
   }
   
+  @Override
   public Provider<? extends TemplatesLanguageConfiguration> provideTemplatesLanguageConfiguration() {
     return null;
   }
   
+  @Override
   public Provider<? extends LanguageRegistry> provideLanguageRegistry() {
     return null;
   }
   
   @SingletonBinding(eager = true)
+  @Override
   public Class<? extends LanguageRegistrar> bindLanguageRegistrar() {
     return null;
   }
   
+  @Override
   public Class<? extends XtextTemplatePreferencePage> bindXtextTemplatePreferencePage() {
     return null;
   }

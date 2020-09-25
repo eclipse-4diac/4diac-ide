@@ -21,10 +21,12 @@ import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 @SuppressWarnings("all")
 public abstract class LongValueConverter extends AbstractLexerBasedConverter<Long> {
+  @Override
   protected String toEscapedString(final Long value) {
     return Long.toString((value).longValue(), this.getRadix());
   }
   
+  @Override
   protected void assertValidValue(final Long value) {
     super.assertValidValue(value);
     if (((value).longValue() < 0)) {
@@ -37,6 +39,7 @@ public abstract class LongValueConverter extends AbstractLexerBasedConverter<Lon
     }
   }
   
+  @Override
   public Long toValue(final String string, final INode node) {
     Long _xblockexpression = null;
     {

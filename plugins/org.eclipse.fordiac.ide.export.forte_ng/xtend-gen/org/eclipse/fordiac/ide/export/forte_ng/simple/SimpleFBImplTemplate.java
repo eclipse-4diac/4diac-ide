@@ -169,6 +169,7 @@ public class SimpleFBImplTemplate extends ForteFBTemplate {
   }
   
   @Pure
+  @Override
   protected SimpleFBType getType() {
     return this.type;
   }

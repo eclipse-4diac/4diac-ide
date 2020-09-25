@@ -61,15 +61,14 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
   public CompositeFBImplTemplate(final CompositeFBType type, final String name, final Path prefix) {
     super(name, prefix);
     this.type = type;
-    final Function1<FBNetworkElement, Boolean> _function = new Function1<FBNetworkElement, Boolean>() {
-      public Boolean apply(final FBNetworkElement it) {
-        FBType _type = it.getType();
-        return Boolean.valueOf((!(_type instanceof AdapterFBType)));
-      }
+    final Function1<FBNetworkElement, Boolean> _function = (FBNetworkElement it) -> {
+      FBType _type = it.getType();
+      return Boolean.valueOf((!(_type instanceof AdapterFBType)));
     };
     Iterables.<FBNetworkElement>addAll(this.fbs, IterableExtensions.<FBNetworkElement>filter(type.getFBNetwork().getNetworkElements(), _function));
   }
   
+  @Override
   public CharSequence generate() {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateHeader = this.generateHeader();
@@ -102,11 +101,9 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
   protected CharSequence generateFBNetwork() {
     StringConcatenation _builder = new StringConcatenation();
     {
-      final Function1<FBNetworkElement, Boolean> _function = new Function1<FBNetworkElement, Boolean>() {
-        public Boolean apply(final FBNetworkElement it) {
-          FBType _type = it.getType();
-          return Boolean.valueOf((!(_type instanceof AdapterFBType)));
-        }
+      final Function1<FBNetworkElement, Boolean> _function = (FBNetworkElement it) -> {
+        FBType _type = it.getType();
+        return Boolean.valueOf((!(_type instanceof AdapterFBType)));
       };
       boolean _exists = IterableExtensions.<FBNetworkElement>exists(this.type.getFBNetwork().getNetworkElements(), _function);
       if (_exists) {
@@ -330,11 +327,9 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
           int _size = eConn.getSource().getOutputConnections().size();
           boolean _greaterThan = (_size > 1);
           if (_greaterThan) {
-            final Function1<Connection, Boolean> _function = new Function1<Connection, Boolean>() {
-              public Boolean apply(final Connection it) {
-                boolean _equals = Objects.equal(it, eConn);
-                return Boolean.valueOf((!_equals));
-              }
+            final Function1<Connection, Boolean> _function = (Connection it) -> {
+              boolean _equals = Objects.equal(it, eConn);
+              return Boolean.valueOf((!_equals));
             };
             Iterable<Connection> _filter = IterableExtensions.<Connection>filter(eConn.getSource().getOutputConnections(), _function);
             for (final Connection fannedConn : _filter) {
@@ -381,11 +376,9 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
           int _size = primConn.getSource().getOutputConnections().size();
           boolean _greaterThan = (_size > 1);
           if (_greaterThan) {
-            final Function1<Connection, Boolean> _function = new Function1<Connection, Boolean>() {
-              public Boolean apply(final Connection it) {
-                boolean _equals = Objects.equal(it, primConn);
-                return Boolean.valueOf((!_equals));
-              }
+            final Function1<Connection, Boolean> _function = (Connection it) -> {
+              boolean _equals = Objects.equal(it, primConn);
+              return Boolean.valueOf((!_equals));
             };
             Iterable<Connection> _filter = IterableExtensions.<Connection>filter(primConn.getSource().getOutputConnections(), _function);
             for (final Connection fannedConn : _filter) {
@@ -479,10 +472,8 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
     {
       StringBuilder retVal = new StringBuilder();
       for (final FBNetworkElement fb : fbs) {
-        final Function1<VarDeclaration, Boolean> _function = new Function1<VarDeclaration, Boolean>() {
-          public Boolean apply(final VarDeclaration it) {
-            return Boolean.valueOf(((it.getValue() != null) && (!it.getValue().getValue().isEmpty())));
-          }
+        final Function1<VarDeclaration, Boolean> _function = (VarDeclaration it) -> {
+          return Boolean.valueOf(((it.getValue() != null) && (!it.getValue().getValue().isEmpty())));
         };
         Iterable<VarDeclaration> _filter = IterableExtensions.<VarDeclaration>filter(fb.getInterface().getInputVars(), _function);
         for (final VarDeclaration v : _filter) {
@@ -540,6 +531,7 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
   }
   
   @Pure
+  @Override
   protected CompositeFBType getType() {
     return this.type;
   }

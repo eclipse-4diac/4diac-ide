@@ -19,12 +19,14 @@ import org.eclipse.xtext.parser.IParser;
 
 @SuppressWarnings("all")
 public class ExpressionRuntimeModule extends StructuredTextRuntimeModule {
+  @Override
   public void configureFileExtensions(final Binder binder) {
     if (((this.properties == null) || (this.properties.getProperty(Constants.FILE_EXTENSIONS) == null))) {
       binder.<String>bind(String.class).annotatedWith(Names.named(Constants.FILE_EXTENSIONS)).toInstance("expr");
     }
   }
   
+  @Override
   public Class<? extends IParser> bindIParser() {
     return ExpressionParser.class;
   }
