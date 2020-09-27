@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
@@ -45,6 +46,16 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	public void installEditPolicy(Object key, EditPolicy editPolicy) {
 		if (!(editPolicy instanceof ModifiedNonResizeableEditPolicy)) {
 			super.installEditPolicy(key, editPolicy);
+		} else {
+			// install an selection editpolicy which is forwarding selection requests to
+			// parents
+			super.installEditPolicy(key, new ModifiedNonResizeableEditPolicy() {
+
+				@Override
+				public EditPart getTargetEditPart(Request request) {
+					return getParent().getTargetEditPart(request);
+				}
+			});
 		}
 	}
 
@@ -83,6 +94,8 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 			}
 
 		};
+
+		figure.setOpaque(false);
 
 		figure.setLayoutManager(new XYLayout() {
 			@Override
