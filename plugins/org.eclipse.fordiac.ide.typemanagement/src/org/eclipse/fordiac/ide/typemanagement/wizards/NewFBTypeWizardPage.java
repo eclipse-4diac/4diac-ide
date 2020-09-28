@@ -15,6 +15,9 @@
  *   Bianca Wiesmayr - extracted TableViewer creation
  *   Daniel Lindhuber - added Data Type
  *   Lisa Sonnleithner - added duplicate check
+ *   Martin Melik Merkumians - fixed Comment regex to accept score and underscore,
+ *                         added case when description is null
+ *                         replaced magic strings with constants for file endings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
@@ -59,7 +62,7 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private static final Pattern NAME_PATTERN = Pattern.compile("Name=\"\\w+\""); //$NON-NLS-1$
-	private static final Pattern COMMENT_PATTERN = Pattern.compile("Comment=\"[\\w\\s]+\""); //$NON-NLS-1$
+	private static final Pattern COMMENT_PATTERN = Pattern.compile("Comment=\"[\\w\\s-_]+\""); //$NON-NLS-1$
 
 	private Button openTypeCheckbox;
 	private int openTypeParentHeight = -1;
@@ -278,14 +281,14 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	@SuppressWarnings("static-method") // this method is need to allow sub-classes to override it with specific filters
 	protected FileFilter createTemplatesFileFilter() {
-		return pathname -> pathname.getName().toUpperCase().endsWith(".FBT") //$NON-NLS-1$
-				|| pathname.getName().toUpperCase().endsWith(".ADP") //$NON-NLS-1$
-				|| pathname.getName().toUpperCase().endsWith(".DTP") //$NON-NLS-1$
+		return pathname -> pathname.getName().toUpperCase().endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)
+				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING_WITH_DOT)
+				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT)
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
 	}
 
 	private static TemplateInfo createTemplateFileInfo(File f) {
-		Scanner scanner;
+		Scanner scanner = null;
 		String name = f.getName();
 		String description = ""; //$NON-NLS-1$
 		try {
@@ -297,9 +300,17 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			// we need a new scanner as name and comment may be in arbitrary order
 			scanner = new Scanner(f);
 			description = scanner.findWithinHorizon(COMMENT_PATTERN, 0);
-			description = description.substring(9, description.length() - 1);
+			if (null == description) {
+				description = Messages.NewFBTypeWizardPage_InvalidOrNoComment;
+			} else {
+				description = description.substring(9, description.length() - 1);
+			}
 		} catch (FileNotFoundException e) {
 			Activator.getDefault().logError(Messages.NewFBTypeWizardPage_CouldNotFindTemplateFiles, e);
+		} finally {
+			if (null != scanner) {
+				scanner.close();
+			}
 		}
 		return new TemplateInfo(f, name, description);
 	}
