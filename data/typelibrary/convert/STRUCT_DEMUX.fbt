@@ -15,9 +15,6 @@
 			<VarDeclaration Name="IN" Type="ANY_STRUCT" Comment=""/>
 		</InputVars>
 	</InterfaceList>
-	<SimpleFB>
-		<Algorithm Name="REQ" Comment="">
-			<Other Language="AnyText"><![CDATA[]]></Other>
-		</Algorithm>
-	</SimpleFB>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
+	</Service>
 </FBType>

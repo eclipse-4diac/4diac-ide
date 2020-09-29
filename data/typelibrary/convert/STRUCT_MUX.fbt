@@ -15,9 +15,6 @@
 			<VarDeclaration Name="OUT" Type="ANY_STRUCT" Comment="Output"/>
 		</OutputVars>
 	</InterfaceList>
-	<SimpleFB>
-		<Algorithm Name="REQ" Comment="Normally executed algorithm">
-			<ST><![CDATA[]]></ST>
-		</Algorithm>
-	</SimpleFB>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
+	</Service>
 </FBType>
