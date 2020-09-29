@@ -14,6 +14,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextP
 
 @SuppressWarnings("all")
 public class ExpressionParser extends StructuredTextParser {
+  @Override
   protected String getDefaultRuleName() {
     return "Expression";
   }

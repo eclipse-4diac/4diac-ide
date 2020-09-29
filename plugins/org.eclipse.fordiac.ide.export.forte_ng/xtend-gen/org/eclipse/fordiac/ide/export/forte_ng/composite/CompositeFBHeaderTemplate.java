@@ -196,6 +196,7 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
   }
   
   @Pure
+  @Override
   protected CompositeFBType getType() {
     return this.type;
   }

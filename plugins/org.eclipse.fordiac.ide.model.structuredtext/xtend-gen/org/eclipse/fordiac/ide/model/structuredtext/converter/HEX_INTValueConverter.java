@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.converter.LongValueConverter
 
 @SuppressWarnings("all")
 public class HEX_INTValueConverter extends LongValueConverter {
+  @Override
   public int getRadix() {
     return 16;
   }

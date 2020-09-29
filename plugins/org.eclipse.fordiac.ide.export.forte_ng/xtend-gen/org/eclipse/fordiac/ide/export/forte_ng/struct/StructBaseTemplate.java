@@ -53,6 +53,7 @@ public abstract class StructBaseTemplate extends ForteLibraryElementTemplate {
   }
   
   @Pure
+  @Override
   protected StructuredType getType() {
     return this.type;
   }

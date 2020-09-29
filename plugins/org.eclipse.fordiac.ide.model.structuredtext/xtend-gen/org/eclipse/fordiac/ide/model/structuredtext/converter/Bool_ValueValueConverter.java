@@ -20,10 +20,12 @@ import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 @SuppressWarnings("all")
 public class Bool_ValueValueConverter extends AbstractNullSafeConverter<Boolean> {
+  @Override
   protected String internalToString(final Boolean value) {
     return value.toString().toUpperCase();
   }
   
+  @Override
   protected Boolean internalToValue(final String string, final INode node) throws ValueConverterException {
     Boolean _xblockexpression = null;
     {

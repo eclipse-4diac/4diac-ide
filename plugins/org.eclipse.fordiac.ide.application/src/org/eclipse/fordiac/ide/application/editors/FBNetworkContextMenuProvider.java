@@ -200,7 +200,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 	private static void setActionIcon(Action action, PaletteEntry entry) {
 		ImageDescriptor image = null;
 		if (entry.getType() instanceof SubAppType) {
-			image = FordiacImage.ICON_SUB_APP.getImageDescriptor();
+			image = FordiacImage.ICON_SUB_APP_TYPE.getImageDescriptor();
 		} else if (entry.getType() instanceof BasicFBType) {
 			image = FordiacImage.ICON_BASIC_FB.getImageDescriptor();
 		} else if (entry.getType() instanceof SimpleFBType) {

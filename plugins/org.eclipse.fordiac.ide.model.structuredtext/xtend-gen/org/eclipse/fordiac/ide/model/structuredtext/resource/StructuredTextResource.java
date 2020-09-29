@@ -26,6 +26,7 @@ import org.eclipse.xtext.resource.XtextResource;
 public class StructuredTextResource extends LazyLinkingResource {
   public static final String OPTION_PARSER_RULE = "PARSER_RULE";
   
+  @Override
   protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
     this.setEncodingFromOptions(options);
     ParserRule _xifexpression = null;

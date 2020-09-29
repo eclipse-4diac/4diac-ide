@@ -19,8 +19,7 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
@@ -42,53 +41,22 @@ import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.tools.MarqueeDragTracker;
 import org.eclipse.gef.tools.MarqueeSelectionTool;
 import org.eclipse.gef.ui.actions.ActionRegistry;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPartSite;
 
 public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 
 	private class FBNetworkMarqueeDragTracker extends AdvancedMarqueeDragTracker {
-		// redefined from MarqueeSelectionTool
-		static final int DEFAULT_MODE = 0;
-		static final int TOGGLE_MODE = 1;
 
 		@SuppressWarnings("unchecked")
 		@Override
-		protected void performMarqueeSelect() {
-			// determine which edit parts are affected by the current marquee
-			// selection
-			Collection<EditPart> marqueeSelectedEditParts = calculateMarqueeSelectedEditParts();
-
-			// calculate nodes/connections that are to be selected/deselected,
-			// dependent on the current mode of the tool
-			Collection<EditPart> editPartsToSelect = new LinkedHashSet<>();
-			Collection<EditPart> editPartsToDeselect = new HashSet<>();
-			for (EditPart affectedEditPart : marqueeSelectedEditParts) {
-				if ((affectedEditPart instanceof ConnectionEditPart) && (!affectedEditPart.isSelectable())) {
-					// the connection is hidden don't add it
-					continue;
-				}
-
-				if ((affectedEditPart.getSelected() == EditPart.SELECTED_NONE)
-						|| (getCurrentSelectionMode() != TOGGLE_MODE)) {
-					// only add connections and FBs
-					if ((affectedEditPart instanceof AbstractFBNElementEditPart)
-							|| (affectedEditPart instanceof ConnectionEditPart)) {
-						editPartsToSelect.add(affectedEditPart);
-					}
-				} else {
-					editPartsToDeselect.add(affectedEditPart);
-				}
-			}
-
-			// include the current viewer selection, if not in DEFAULT mode.
-			if (getCurrentSelectionMode() != DEFAULT_MODE) {
-				editPartsToSelect.addAll(getCurrentViewer().getSelectedEditParts());
-				editPartsToSelect.removeAll(editPartsToDeselect);
-			}
-
-			getCurrentViewer().setSelection(new StructuredSelection(editPartsToSelect.toArray()));
+		protected Collection<Object> calculateMarqueeSelectedEditParts() {
+			Collection<Object> marqueeSelectedEditParts = super.calculateMarqueeSelectedEditParts();
+			// only report connections and fbelements, isMarqueeslectable can not be used
+			// for that as it affects connection selection in the wrong way
+			return marqueeSelectedEditParts.stream()
+					.filter(ep -> (ep instanceof ConnectionEditPart) || (ep instanceof AbstractFBNElementEditPart))
+					.collect(Collectors.toSet());
 		}
 
 	}

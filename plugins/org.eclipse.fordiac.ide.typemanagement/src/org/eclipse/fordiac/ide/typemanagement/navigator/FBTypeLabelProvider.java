@@ -58,7 +58,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
 			image = FordiacImage.ICON_ADAPTER.getImage();
 		} else if (TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			image = FordiacImage.ICON_SUB_APP.getImage();
+			image = FordiacImage.ICON_SUB_APP_TYPE.getImage();
 		} else if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
 			image = getImageForFBTypeFile(element);
 		}

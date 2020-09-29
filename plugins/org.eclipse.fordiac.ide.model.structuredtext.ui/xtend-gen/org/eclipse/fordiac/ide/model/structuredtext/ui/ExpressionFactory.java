@@ -20,10 +20,12 @@ import org.osgi.framework.Bundle;
  */
 @SuppressWarnings("all")
 public class ExpressionFactory extends AbstractGuiceAwareExecutableExtensionFactory {
+  @Override
   protected Bundle getBundle() {
     return ExtendedStructuredTextActivator.getInstance().getBundle();
   }
   
+  @Override
   protected Injector getInjector() {
     return ExtendedStructuredTextActivator.getInstance().getInjector(
       ExtendedStructuredTextActivator.ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION);

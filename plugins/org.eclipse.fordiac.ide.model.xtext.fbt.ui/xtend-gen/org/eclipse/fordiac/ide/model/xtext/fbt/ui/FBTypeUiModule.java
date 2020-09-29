@@ -20,14 +20,17 @@ import org.eclipse.xtext.ui.shared.Access;
 @FinalFieldsConstructor
 @SuppressWarnings("all")
 public class FBTypeUiModule extends AbstractFBTypeUiModule {
+  @Override
   public Provider<? extends IAllContainersState> provideIAllContainersState() {
     return Access.getWorkspaceProjectsState();
   }
   
+  @Override
   public Class<? extends IResourceForEditorInputFactory> bindIResourceForEditorInputFactory() {
     return ResourceForIEditorInputFactory.class;
   }
   
+  @Override
   public Class<? extends IResourceSetProvider> bindIResourceSetProvider() {
     return SimpleResourceSetProvider.class;
   }

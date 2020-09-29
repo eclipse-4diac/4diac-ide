@@ -295,6 +295,7 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
   }
   
   @Pure
+  @Override
   protected BasicFBType getType() {
     return this.type;
   }

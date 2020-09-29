@@ -292,6 +292,7 @@ public class AdapterFBHeaderTemplate extends ForteFBTemplate {
   }
   
   @Pure
+  @Override
   protected AdapterFBType getType() {
     return this.type;
   }
