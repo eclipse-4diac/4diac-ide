@@ -18,14 +18,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 
 public class ECTransitionToolTipFigure extends ECCToolTip {
 
 	public void setECTransition(ECTransition transition) {
-		final String sourDes = transition.getSource().getName() + " - " + transition.getDestination().getName();
+		final ECState des = transition.getDestination();
+		final String desName = (des == null) ? null : des.getName();
 
-		setLabel(sourDes, transition.getComment());
+		setLabel(transition.getSource().getName() + " -> " + desName, transition.getComment());
 	}
 
 }
