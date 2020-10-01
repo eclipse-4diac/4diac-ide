@@ -196,7 +196,9 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 					Object feature = notification.getFeature();
 					refreshVisuals();
 
-					if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
+					if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
+							|| LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)
+							|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
 						refreshComment();
 					}
 				}
@@ -221,9 +223,9 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 	public void setTransparency(int value) {
 		if (getFigure() instanceof PolylineConnection) {
-			PolylineConnection connection = ((PolylineConnection) getFigure());
+			final PolylineConnection connection = ((PolylineConnection) getFigure());
 			connection.setAlpha(value);
-			for (Object fig : connection.getChildren()) {
+			for (final Object fig : connection.getChildren()) {
 				if (fig instanceof Shape) {
 					((Shape) fig).setAlpha(value);
 				}
