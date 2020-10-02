@@ -235,6 +235,8 @@
       </topic>
       <topic href="html/parameters/parameters.html#mlpi" label="Bosch Rexroth PLC (MLPI)">
       </topic>
+      <topic href="html/parameters/plc01a1.html" label="PLC01A1">
+      </topic>
       <topic href="html/parameters/parameters.html#ev3" label="Lego Mindstorms EV3">
 		<topic href="html/parameters/parameters.html#ev3_standard_parameters" label="Standard Access">
 		</topic>
