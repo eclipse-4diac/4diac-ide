@@ -226,7 +226,6 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		setBottomIOs(bottom);
 	}
 
-
 	private void configureFBMiddle(final FBType fbType, Figure fbFigureContainer, Color borderColor) {
 		Figure middleContainer = new Figure();
 		BorderLayout borderLayout = new BorderLayout();
@@ -318,19 +317,15 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		GridData bottomOutputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		parent.add(bottomOutputArea);
-				parent.setConstraint(bottomOutputArea, bottomOutputsLayoutData);
+		parent.setConstraint(bottomOutputArea, bottomOutputsLayoutData);
 
-				dataOutputs.setLayoutManager(new ToolbarLayout(false));
-				((ToolbarLayout) dataOutputs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-				bottomOutputArea.add(dataOutputs);
+		dataOutputs.setLayoutManager(new ToolbarLayout(false));
+		((ToolbarLayout) dataOutputs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		bottomOutputArea.add(dataOutputs);
 
-				plugs.setLayoutManager(new ToolbarLayout(false));
-				((ToolbarLayout) plugs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-				bottomOutputArea.add(plugs);
-	}
-
-	protected void createContainedFigure(IFigure parent) {
-		// potential hook for Figure representing FB contents
+		plugs.setLayoutManager(new ToolbarLayout(false));
+		((ToolbarLayout) plugs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		bottomOutputArea.add(plugs);
 	}
 
 	protected void setupTypeNameAndVersion(final FBType type, Figure container, Color borderColor) {
