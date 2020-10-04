@@ -513,7 +513,7 @@
          point="org.eclipse.ui.decorators">
       <decorator
             class="org.eclipse.fordiac.ide.typemanagement.navigator.TypeDecorator"
-            icon="fordiacimage://ICON_FB"
+            icon="fordiacimage://ICON_FB_TYPE"
             id="org.eclipse.fordiac.ide.typemanagement.TypeDecorator"
             label="4diac Type Decoration"
             lightweight="true"

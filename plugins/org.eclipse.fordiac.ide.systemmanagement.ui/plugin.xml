@@ -279,7 +279,7 @@
             <propertyTab
                   category="systemInfo"
                   id="property.tab.system.fbtypeinfo"
-                  image="fordiacimage://ICON_FB"
+                  image="fordiacimage://ICON_FB_TYPE"
                   label="Type Info">
             </propertyTab>
             <propertyTab
