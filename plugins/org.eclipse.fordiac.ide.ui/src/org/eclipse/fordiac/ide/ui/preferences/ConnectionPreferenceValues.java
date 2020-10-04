@@ -20,7 +20,9 @@ public final class ConnectionPreferenceValues {
 
 	public static final int SELECTED_LINE_WIDTH = 5;
 
-	public static final int HANDLE_SIZE = 9;
+	public static final int HANDLE_SIZE = 13;
+
+	public static final int MIN_HANDLE_SIZE = 5;
 
 	private ConnectionPreferenceValues() {
 		throw new UnsupportedOperationException("ConnectionPreferenceValues utility class should not be instantiated!"); //$NON-NLS-1$

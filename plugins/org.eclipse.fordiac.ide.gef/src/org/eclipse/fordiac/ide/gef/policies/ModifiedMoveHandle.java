@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Display;
 public class ModifiedMoveHandle extends MoveHandle {
 
 	public static final int SELECTION_FILL_ALPHA = 50;
-	private static final int SELECTION_BORDER_WIDTH = 2;
+	public static final int SELECTION_BORDER_WIDTH = 2;
 	private static Color selectionColor = null;
 
 	public static Color getSelectionColor() {

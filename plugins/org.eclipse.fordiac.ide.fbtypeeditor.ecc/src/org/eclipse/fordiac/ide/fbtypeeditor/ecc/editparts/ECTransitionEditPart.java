@@ -28,12 +28,12 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCom
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.MoveBendpointCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECTransitionFigure;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECTransitionFeedbackEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
@@ -156,8 +156,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	protected void createEditPolicies() {
 		// // Selection handle edit policy.
 		// // Makes the connection show a feedback, when selected by the user.
-		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE,
-				new FeedbackConnectionEndpointEditPolicy(NORMAL_WIDTH, ConnectionPreferenceValues.SELECTED_LINE_WIDTH));
+		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new ECTransitionFeedbackEditPolicy());
 
 		installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE, new TransitionBendPointEditPolicy(getModel()));
 

@@ -27,6 +27,7 @@ import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.LayeredPane;
 import org.eclipse.draw2d.ScalableFigure;
+import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -38,6 +39,7 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.GridLayer;
+import org.eclipse.gef.editparts.GuideLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.SelectionRequest;
@@ -212,6 +214,28 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	@Override
 	protected GridLayer createGridLayer() {
 		return new MajorMinorGridLayer();
+	}
+
+	// Duplicated and adjusted this method from base class to allow moving the
+	// handle_layer to scaled layers for correct zooming
+	@Override
+	protected void createLayers(LayeredPane layeredPane) {
+		layeredPane.add(getScaledLayers(), SCALABLE_LAYERS);
+		layeredPane.add(new FeedbackLayer(), FEEDBACK_LAYER);
+		layeredPane.add(new GuideLayer(), GUIDE_LAYER);
+	}
+
+	class FeedbackLayer extends FreeformLayer {
+		FeedbackLayer() {
+			setEnabled(false);
+		}
+	}
+
+	@Override
+	protected ScalableFreeformLayeredPane createScaledLayers() {
+		ScalableFreeformLayeredPane pane = super.createScaledLayers();
+		pane.add(new FreeformLayer(), HANDLE_LAYER);
+		return pane;
 	}
 
 	private void configureZoomManger() {
