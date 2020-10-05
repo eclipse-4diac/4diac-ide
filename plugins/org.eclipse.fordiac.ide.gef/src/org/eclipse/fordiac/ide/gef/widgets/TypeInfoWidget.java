@@ -16,6 +16,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.widgets;
 
+import java.util.function.Consumer;
+
 import org.eclipse.fordiac.ide.gef.provider.VersionContentProvider;
 import org.eclipse.fordiac.ide.gef.provider.VersionLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeApplicationDomainCommand;
@@ -39,7 +41,6 @@ import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -62,7 +63,8 @@ public class TypeInfoWidget implements CommandExecutor {
 
 	private FormToolkit widgetFactory;
 
-	private CommandStack commandStack;
+	private Consumer<Command> commandExecutor;
+
 	private LibraryElement type;
 
 	private Text standardText;
@@ -244,14 +246,12 @@ public class TypeInfoWidget implements CommandExecutor {
 		return text;
 	}
 
-	public void initialize(LibraryElement type, CommandStack commandStack) {
-		this.commandStack = commandStack;
+	public void initialize(LibraryElement type, Consumer<Command> commandExecutor) {
+		this.commandExecutor = commandExecutor;
 		this.type = type;
 	}
 
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
 		if (null != type) {
 			if (null != type.getIdentification()) {
 				Identification id = type.getIdentification();
@@ -266,14 +266,11 @@ public class TypeInfoWidget implements CommandExecutor {
 				versionViewer.setInput(type);
 			}
 		}
-		commandStack = commandStackBuffer;
 	}
 
 	@Override
 	public void executeCommand(Command cmd) {
-		if (null != type && null != commandStack && cmd.canExecute()) {
-			commandStack.execute(cmd);
-		}
+		commandExecutor.accept(cmd);
 	}
 
 	private Group createGroup(Composite parent, String text) {
