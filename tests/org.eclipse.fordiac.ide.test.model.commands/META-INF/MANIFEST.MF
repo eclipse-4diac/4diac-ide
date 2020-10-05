@@ -7,8 +7,13 @@ Fragment-Host: org.eclipse.fordiac.ide.model.commands
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.model.commands
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: Eclipse 4diac
-Require-Bundle: org.eclipse.core.resources, org.junit
-Import-Package: org.junit.jupiter.api,
- org.opentest4j,
+Require-Bundle: org.eclipse.core.resources,
+ org.junit,
+ org.eclipse.e4.core.services,
+ org.eclipse.osgi.services,
+ org.eclipse.e4.core.contexts
+Import-Package: 
+ org.junit.jupiter.api,
  org.junit.jupiter.params,
- org.junit.jupiter.params.provider
+ org.junit.jupiter.params.provider,
+ org.opentest4j

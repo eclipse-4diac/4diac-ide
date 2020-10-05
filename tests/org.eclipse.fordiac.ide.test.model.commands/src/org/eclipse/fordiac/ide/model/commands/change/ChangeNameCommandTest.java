@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
+import org.eclipse.fordiac.ide.model.commands.testinfra.ErrorMessageTestReceiver;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -32,8 +33,26 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 
 		private Command cmd;
 		private boolean isCurrentNameValid = false;
+		private boolean viaUndo = false;
 
 		private INamedElement element;
+		private List<String> messages;
+
+		public List<String> getMessages() {
+			return messages;
+		}
+
+		public void setMessages(List<String> messages) {
+			this.messages = messages;
+		}
+
+		public boolean viaUndo() {
+			return viaUndo;
+		}
+
+		public void setViaUndo() {
+			this.viaUndo = true;
+		}
 
 		public void setNameValid() {
 			isCurrentNameValid = true;
@@ -74,29 +93,39 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 
 		private State(State s) {
 			element = EcoreUtil.copy(s.element);
+			messages = s.messages;
 		}
 
 	}
 
 	protected static State undoCommand(Object stateObj) {
 		final State state = (State) stateObj;
+		emh.start();
 		if (state.isNameValid()) {
 			defaultUndoCommand(state);
 		} else {
 			disabledUndoCommand(state);
 		}
+		state.setViaUndo();
+		state.setMessages(emh.getMessages());
+		emh.stop();
 		return (state);
 	}
 
 	protected static State redoCommand(Object stateObj) {
 		final State state = (State) stateObj;
+		emh.start();
 		if (state.isNameValid()) {
 			defaultRedoCommand(state);
 		} else {
 			disabledRedoCommand(state);
 		}
+		state.setMessages(emh.getMessages());
+		emh.stop();
 		return (state);
 	}
+
+	private static ErrorMessageTestReceiver emh = new ErrorMessageTestReceiver();
 
 	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
@@ -106,12 +135,23 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 
 	private static State executeCommand(State state, String newName, boolean isValid) {
 		state.setCommand(new ChangeNameCommand(state.getElement(), newName));
+		emh.start();
+		State s;
 		if (isValid) {
 			state.setNameValid();
-			return commandExecution(state);
+			s = commandExecution(state);
 		} else {
 			state.setNameInvalid();
-			return disabledCommandExecution(state);
+			s = disabledCommandExecution(state);
+		}
+		s.setMessages(emh.getMessages());
+		emh.stop();
+		return s;
+	}
+
+	private static void verifyMessages(State s, State o, TestFunction t) {
+		if (!s.viaUndo()) {
+			t.test(s.getMessages().size(), 1);
 		}
 	}
 
@@ -120,7 +160,7 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> verifyNothing(state, oldState, t), //
+				(State state, State oldState, TestFunction t) -> CommandTestBase.verifyNothing(state, oldState, t), //
 				executionDescriptions //
 		));
 
@@ -132,7 +172,7 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Try setting to invalid name", //$NON-NLS-1$
 						(State s) -> executeCommand(s, "1bla", false), //
-						CommandTestBase::verifyNothing //
+						ChangeNameCommandTest::verifyMessages //
 				), new ExecutionDescription<>("Try setting to valid name", //$NON-NLS-1$
 						(State s) -> executeCommand(s, "bla", true), //
 						CommandTestBase::verifyNothing //

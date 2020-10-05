@@ -13,6 +13,7 @@ package org.eclipse.fordiac.ide.ui.handlers;
 
 import java.util.LinkedList;
 
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.swt.SWT;
@@ -30,40 +31,46 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
 public class ErrorMessageHandler {
 
-	public static void initPopUpErrorMessage() {
-		if (!eventsRegistered) {
-			eventsRegistered = eventBroker.subscribe(TOPIC_ERRORMESSAGES, receiver);
-		}
+	public ErrorMessageHandler(final BundleContext context) {
+		initEventBroker(context);
 	}
 
-	public static void stopPopUpErrorMessage() {
+	public void stop() {
 		if (eventsRegistered) {
 			eventsRegistered = !(eventBroker.unsubscribe(receiver));
 		}
 	}
 
-	private ErrorMessageHandler() {
-		throw new UnsupportedOperationException();
+	public void start() {
+		if (!eventsRegistered) {
+			eventsRegistered = eventBroker.subscribe(TOPIC_ERRORMESSAGES, receiver);
+		}
+	}
+
+	private synchronized void initEventBroker(final BundleContext context) {
+		if (null == eventBroker) {
+			eventBroker = EclipseContextFactory.getServiceContext(context).get(IEventBroker.class);
+		}
 	}
 
 	private static final int DEFAULT_DISABLE_AFTER_MS = 1500;
 
 	private static final String TOPIC_ERRORMESSAGES = "ORG/ECLIPSE/FORDIAC/IDE/ERRORMESSAGES"; //$NON-NLS-1$
 
-	private static final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+	private IEventBroker eventBroker;
 
-	private static boolean eventsRegistered = false;
+	private boolean eventsRegistered = false;
 
-	private static Integer errorMessageHash;
-	private static Integer titleHash;
+	private Integer errorMessageHash;
+	private Integer titleHash;
 
-	private static LinkedList<Composite> windows = new LinkedList<>();
+	private LinkedList<Composite> windows = new LinkedList<>();
 
 	private static class ErrorMessageDialog extends PopupDialog {
 
@@ -73,6 +80,8 @@ public class ErrorMessageHandler {
 		private final String errorMsg;
 		private final String title;
 		private final int timeout;
+
+		private final ErrorMessageHandler container;
 
 		@Override
 		protected Color getBackground() {
@@ -84,11 +93,12 @@ public class ErrorMessageHandler {
 			return Display.getCurrent().getSystemColor(SWT.COLOR_INFO_FOREGROUND);
 		}
 
-		private ErrorMessageDialog(String errorMsg, String title, int timeout) {
+		private ErrorMessageDialog(ErrorMessageHandler container, String errorMsg, String title, int timeout) {
 			super(null, HOVER_SHELLSTYLE, false, false, false, false, false, null, null);
 			this.errorMsg = errorMsg;
 			this.title = title;
 			this.timeout = timeout > 0 ? timeout : DEFAULT_DISABLE_AFTER_MS;
+			this.container = container;
 		}
 
 		@Override
@@ -143,14 +153,14 @@ public class ErrorMessageHandler {
 		}
 
 		private void clearPopupAfterTimeout(int t) {
-			getShell().getDisplay().timerExec(t, () -> clearDialog(getShell()));
+			getShell().getDisplay().timerExec(t, () -> container.clearDialog(getShell()));
 		}
 
 		private void clearPopupOnLostFocus(final Control focused) {
 			focused.addFocusListener(new FocusListener() {
 				@Override
 				public void focusLost(FocusEvent e) {
-					clearDialog(getShell());
+					container.clearDialog(getShell());
 				}
 
 				@Override
@@ -169,14 +179,14 @@ public class ErrorMessageHandler {
 
 				@Override
 				public void keyPressed(KeyEvent e) {
-					clearDialog(getShell());
+					container.clearDialog(getShell());
 				}
 			});
 		}
 
 	}
 
-	private static synchronized void clearDialog(Composite dialogArea) {
+	private synchronized void clearDialog(Composite dialogArea) {
 		// This method is not inside ErrorMessageDialog because this would use a
 		// different synchronization reference than used in closeDialog
 		// calling close on a disposed element will fail; must not be reentrant
@@ -186,7 +196,7 @@ public class ErrorMessageHandler {
 		}
 	}
 
-	private static synchronized void closeDialog(Composite dialogArea) {
+	private synchronized void closeDialog(Composite dialogArea) {
 		// calling close on a disposed element will fail; must not be reentrant
 		if (null != dialogArea && !dialogArea.isDisposed()) {
 			windows.remove(dialogArea.getShell());
@@ -194,14 +204,14 @@ public class ErrorMessageHandler {
 		}
 	}
 
-	protected static synchronized void setHashes(Integer pErrorMessageHash, Integer pTitleHash) {
+	protected synchronized void setHashes(Integer pErrorMessageHash, Integer pTitleHash) {
 		// Hash values can be changed from two threads (GUI and EventBroker)
 		// must not be reentrant
 		errorMessageHash = pErrorMessageHash;
 		titleHash = pTitleHash;
 	}
 
-	protected static synchronized boolean isNewMessage(String errorMsg, String title) {
+	protected synchronized boolean isNewMessage(String errorMsg, String title) {
 		// the hash values may change at any point
 		// must not be interrupted by setHashes
 		final int errorMessageHashValue = errorMsg.hashCode();
@@ -217,20 +227,22 @@ public class ErrorMessageHandler {
 		return isNewMessage;
 	}
 
-	private static void showErrorMessageDialog(String errorMsg, String title, int timeout) {
-		if (isNewMessage(errorMsg, title)) {
+	private void showErrorMessageDialog(String errorMsg, String title, int timeout) {
+		Display.getDefault().asyncExec(() -> {
+			if (isNewMessage(errorMsg, title)) {
 
-			for (Composite w = windows.pollFirst(); null != w; w = windows.pollFirst()) {
-				closeDialog(w);
+				for (Composite w = windows.pollFirst(); null != w; w = windows.pollFirst()) {
+					closeDialog(w);
+				}
+
+				final ErrorMessageDialog dialog = new ErrorMessageDialog(this, errorMsg, title, timeout);
+				dialog.open();
+				windows.push(dialog.getShell());
 			}
-
-			final ErrorMessageDialog dialog = new ErrorMessageDialog(errorMsg, title, timeout);
-			dialog.open();
-			windows.push(dialog.getShell());
-		}
+		});
 	}
 
-	private static EventHandler receiver = (Event event) -> {
+	private EventHandler receiver = (Event event) -> {
 		Object message = event.getProperty("message"); //$NON-NLS-1$
 		Object title = event.getProperty("title"); //$NON-NLS-1$
 		Object timeout = event.getProperty("timeout"); //$NON-NLS-1$

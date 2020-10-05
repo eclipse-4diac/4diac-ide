@@ -15,8 +15,8 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
-import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.fordiac.ide.model.helpers.JUnitDetector;
 
 public class ErrorMessenger {
 
@@ -28,7 +28,7 @@ public class ErrorMessenger {
 	 *
 	 */
 	public static void popUpErrorMessage(final String errorMsg) {
-		popUpErrorMessage(errorMsg, "Operation not possible", 1500);
+		popUpErrorMessage(errorMsg, DIALOG_TITLE, USE_DEFAULT_TIMEOUT);
 	}
 
 	public static void popUpErrorMessage(final String errorMsg, final String title, final int timeout) {
@@ -36,14 +36,26 @@ public class ErrorMessenger {
 		d.put("message", errorMsg); //$NON-NLS-1$
 		d.put("title", title); //$NON-NLS-1$
 		d.put("timeout", timeout); //$NON-NLS-1$
-		eventBroker.post(TOPIC_ERRORMESSAGES, d);
+		if (null != eventBroker) {
+			if (IS_PRODUCTION) {
+				// production: decouple through asynchronous process - keeps the UI responsive
+				eventBroker.post(TOPIC_ERRORMESSAGES, d);
+			} else {
+				// testing: allow the receiver to catch the message
+				eventBroker.send(TOPIC_ERRORMESSAGES, d);
+			}
+		}
 	}
 
 	private static final String TOPIC_ERRORMESSAGES = "ORG/ECLIPSE/FORDIAC/IDE/ERRORMESSAGES"; //$NON-NLS-1$
+	private static final int USE_DEFAULT_TIMEOUT = -1;
+	private static final String DIALOG_TITLE = "Operation not possible";
 
 	private static IEventBroker initEventBroker() {
-		IEclipseContext eclipseCtx = EclipseContextFactory.getServiceContext(Activator.getContext());
-		return (IEventBroker) eclipseCtx.get(IEventBroker.class.getName());
+		// This initialization can fail if this is run as a simple JUnit-Test instead of
+		// a JUnit-Plug-in-Test
+		return EclipseContextFactory.getServiceContext(Activator.getDefault().getBundle().getBundleContext())
+				.get(IEventBroker.class);
 	}
 
 	private static final IEventBroker eventBroker = initEventBroker();
@@ -51,4 +63,6 @@ public class ErrorMessenger {
 	private ErrorMessenger() {
 		throw new UnsupportedOperationException();
 	}
+
+	private static final boolean IS_PRODUCTION = !JUnitDetector.detect();
 }
