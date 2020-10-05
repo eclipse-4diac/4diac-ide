@@ -1,6 +1,7 @@
 /**
  * Copyright (c) 2019 fortiss GmbH
  * 				 2020 Johannes Kepler Unviersity Linz
+ * 				 2020 TU Wien
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +12,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Alois Zoitl  - extracted base class for all types from fbtemplate
+ *   Martin Melik Merkumians - adds clause to prevent generation of zero size arrays
  */
 package org.eclipse.fordiac.ide.export.forte_ng;
 
@@ -196,6 +198,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           }
         }
         _builder.newLine();
+        _builder.append("\t");
         _builder.append("static const SAdapterInstanceDef scm_astAdapterInstances[];");
         _builder.newLine();
       }
@@ -317,12 +320,13 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder.append("};");
           _builder.newLineIfNotEmpty();
           _builder.newLine();
+          _builder.append("\t");
           _builder.append("const CStringDictionary::TStringId ");
           CharSequence _fBClassName_1 = this.getFBClassName();
-          _builder.append(_fBClassName_1);
+          _builder.append(_fBClassName_1, "\t");
           _builder.append("::scm_anDataInputTypeIds[] = {");
           String _fORTETypeList = this.getFORTETypeList(this.getType().getInterfaceList().getInputVars());
-          _builder.append(_fORTETypeList);
+          _builder.append(_fORTETypeList, "\t");
           _builder.append("};");
           _builder.newLineIfNotEmpty();
         }
@@ -341,12 +345,13 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder.append("};");
           _builder.newLineIfNotEmpty();
           _builder.newLine();
+          _builder.append("\t");
           _builder.append("const CStringDictionary::TStringId ");
           CharSequence _fBClassName_3 = this.getFBClassName();
-          _builder.append(_fBClassName_3);
+          _builder.append(_fBClassName_3, "\t");
           _builder.append("::scm_anDataOutputTypeIds[] = {");
           String _fORTETypeList_1 = this.getFORTETypeList(this.getType().getInterfaceList().getOutputVars());
-          _builder.append(_fORTETypeList_1);
+          _builder.append(_fORTETypeList_1, "\t");
           _builder.append("};");
           _builder.newLineIfNotEmpty();
         }
@@ -356,14 +361,20 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
         boolean _isEmpty_2 = this.getType().getInterfaceList().getEventInputs().isEmpty();
         boolean _not_2 = (!_isEmpty_2);
         if (_not_2) {
-          _builder.append("const TDataIOID ");
-          CharSequence _fBClassName_4 = this.getFBClassName();
-          _builder.append(_fBClassName_4);
-          _builder.append("::scm_anEIWith[] = {");
-          String _join = IterableExtensions.join(inputWith, ", ");
-          _builder.append(_join);
-          _builder.append("};");
-          _builder.newLineIfNotEmpty();
+          {
+            boolean _isEmpty_3 = inputWith.isEmpty();
+            boolean _not_3 = (!_isEmpty_3);
+            if (_not_3) {
+              _builder.append("const TDataIOID ");
+              CharSequence _fBClassName_4 = this.getFBClassName();
+              _builder.append(_fBClassName_4);
+              _builder.append("::scm_anEIWith[] = {");
+              String _join = IterableExtensions.join(inputWith, ", ");
+              _builder.append(_join);
+              _builder.append("};");
+              _builder.newLineIfNotEmpty();
+            }
+          }
           _builder.append("const TForteInt16 ");
           CharSequence _fBClassName_5 = this.getFBClassName();
           _builder.append(_fBClassName_5);
@@ -384,17 +395,23 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
       }
       _builder.newLine();
       {
-        boolean _isEmpty_3 = this.getType().getInterfaceList().getEventOutputs().isEmpty();
-        boolean _not_3 = (!_isEmpty_3);
-        if (_not_3) {
-          _builder.append("const TDataIOID ");
-          CharSequence _fBClassName_7 = this.getFBClassName();
-          _builder.append(_fBClassName_7);
-          _builder.append("::scm_anEOWith[] = {");
-          String _join_2 = IterableExtensions.join(outputWith, ", ");
-          _builder.append(_join_2);
-          _builder.append("};");
-          _builder.newLineIfNotEmpty();
+        boolean _isEmpty_4 = this.getType().getInterfaceList().getEventOutputs().isEmpty();
+        boolean _not_4 = (!_isEmpty_4);
+        if (_not_4) {
+          {
+            boolean _isEmpty_5 = outputWith.isEmpty();
+            boolean _not_5 = (!_isEmpty_5);
+            if (_not_5) {
+              _builder.append("const TDataIOID ");
+              CharSequence _fBClassName_7 = this.getFBClassName();
+              _builder.append(_fBClassName_7);
+              _builder.append("::scm_anEOWith[] = {");
+              String _join_2 = IterableExtensions.join(outputWith, ", ");
+              _builder.append(_join_2);
+              _builder.append("};");
+              _builder.newLineIfNotEmpty();
+            }
+          }
           _builder.append("const TForteInt16 ");
           CharSequence _fBClassName_8 = this.getFBClassName();
           _builder.append(_fBClassName_8);
@@ -441,8 +458,8 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
               _builder.append(_fORTEString_1, "  ");
               _builder.append(", ");
               boolean _isIsInput = adapter.isIsInput();
-              boolean _not_4 = (!_isIsInput);
-              _builder.append(_not_4, "  ");
+              boolean _not_6 = (!_isIsInput);
+              _builder.append(_not_6, "  ");
               _builder.append("}");
             }
           }
@@ -463,6 +480,22 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     return _builder;
   }
   
+  protected boolean hasInputWith() {
+    final Function1<Event, Boolean> _function = (Event it) -> {
+      boolean _isEmpty = it.getWith().isEmpty();
+      return Boolean.valueOf((!_isEmpty));
+    };
+    return IterableExtensions.<Event>exists(this.getType().getInterfaceList().getEventInputs(), _function);
+  }
+  
+  protected boolean hasOutputWith() {
+    final Function1<Event, Boolean> _function = (Event it) -> {
+      boolean _isEmpty = it.getWith().isEmpty();
+      return Boolean.valueOf((!_isEmpty));
+    };
+    return IterableExtensions.<Event>exists(this.getType().getInterfaceList().getEventOutputs(), _function);
+  }
+  
   protected CharSequence generateFBInterfaceSpecDefinition() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("const SFBInterfaceSpec ");
@@ -479,7 +512,16 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
       if (_isEmpty) {
         _builder.append("nullptr, nullptr, nullptr");
       } else {
-        _builder.append("scm_anEventInputNames, scm_anEIWith, scm_anEIWithIndexes");
+        _builder.append("scm_anEventInputNames, ");
+        {
+          boolean _hasInputWith = this.hasInputWith();
+          if (_hasInputWith) {
+            _builder.append("scm_anEIWith");
+          } else {
+            _builder.append("nullptr");
+          }
+        }
+        _builder.append(", scm_anEIWithIndexes");
       }
     }
     _builder.append(",");
@@ -493,7 +535,16 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
       if (_isEmpty_1) {
         _builder.append("nullptr, nullptr, nullptr");
       } else {
-        _builder.append("scm_anEventOutputNames, scm_anEOWith, scm_anEOWithIndexes");
+        _builder.append("scm_anEventOutputNames, ");
+        {
+          boolean _hasOutputWith = this.hasOutputWith();
+          if (_hasOutputWith) {
+            _builder.append("scm_anEOWith");
+          } else {
+            _builder.append("nullptr");
+          }
+        }
+        _builder.append(", scm_anEOWithIndexes");
       }
     }
     _builder.append(",");
