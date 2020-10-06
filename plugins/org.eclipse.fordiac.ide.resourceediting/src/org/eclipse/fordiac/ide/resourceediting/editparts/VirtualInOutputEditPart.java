@@ -19,6 +19,8 @@
  *     - code extracted from class FBNetworkElementTooltipFigure
  *     - and from class OpenConnectionOppositeResource
  *     - changed getConnectionOpposite
+ *     - use class ConnectionsHelper
+ *     - removed getConnections and getOppositeInterfaceElement
  *******************************************************************************/
 package org.eclipse.fordiac.ide.resourceediting.editparts;
 
@@ -41,6 +43,7 @@ import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwo
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.figures.VerticalLineCompartmentFigure;
+import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -204,7 +207,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 			setLayoutManager(new GridLayout());
 
 			boolean drawLine = false;
-			final EList<Connection> connections = getConnections(getIInterfaceElement());
+			final EList<Connection> connections = ConnectionsHelper.getConnections(getIInterfaceElement());
 
 			if (connections == null) {
 				return;
@@ -214,8 +217,8 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 				final TextFlow connectionTo = new TextFlow();
 				final FlowPage fp = new FlowPage();
 				final Figure line = new VerticalLineCompartmentFigure();
-				final IInterfaceElement oppositeIE = getOppositeInterfaceelement(getIInterfaceElement(), connections,
-						i);
+				final IInterfaceElement oppositeIE = ConnectionsHelper
+						.getOppositeInterfaceElement(getIInterfaceElement(), connections, i);
 				final FBNetworkElement oppositefbNetElement = oppositeIE.getFBNetworkElement();
 
 				if (i >= 1) {
@@ -260,41 +263,6 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 							new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 				}
 			}
-		}
-
-		private EList<Connection> getConnections(IInterfaceElement oppositeIE) {
-			final IInterfaceElement fbOppostiteIE = oppositeIE.getFBNetworkElement().getOpposite()
-					.getInterfaceElement(oppositeIE.getName());
-
-			if (null != fbOppostiteIE) {
-				final EList<Connection> connections = (fbOppostiteIE.isIsInput()) ? fbOppostiteIE.getInputConnections()
-						: fbOppostiteIE.getOutputConnections();
-
-				if (!connections.isEmpty()) {
-					return connections;
-				}
-			}
-			return null;
-		}
-
-		private IInterfaceElement getOppositeInterfaceelement(IInterfaceElement ie, EList<Connection> connections,
-				int elementID) {
-			final IInterfaceElement fbOppostiteIE = ie.getFBNetworkElement().getOpposite()
-					.getInterfaceElement(ie.getName());
-
-			if (null != fbOppostiteIE) {
-				final IInterfaceElement connectionOpposite = (fbOppostiteIE.isIsInput())
-						? connections.get(elementID).getSource()
-						: connections.get(elementID).getDestination();
-
-				if ((null != connectionOpposite) && connectionOpposite.getFBNetworkElement().isMapped()) {
-					final FBNetworkElement mappedOppositeElement = connectionOpposite.getFBNetworkElement()
-							.getOpposite();
-					return mappedOppositeElement.getInterfaceElement(connectionOpposite.getName());
-				}
-
-			}
-			return null;
 		}
 	}
 
