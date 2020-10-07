@@ -13,6 +13,7 @@
  *               - added check if subapp interface is selected and mark that in 
  *                 parent
  *   Daniel Lindhuber - MoveElementsFromSubappCommand integration
+ *   				  - adjusted for unfolded subapps
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -39,32 +40,44 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class MoveToParentHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		SubAppNetworkEditor subappEditor = (SubAppNetworkEditor) HandlerUtil.getActiveEditor(event);
-		FBNetworkEditor editor = openParentEditor(subappEditor);
+		FBNetworkEditor editor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
+		SubAppNetworkEditor subEditor = null;
+		if (editor instanceof SubAppNetworkEditor) {
+			subEditor = (SubAppNetworkEditor) editor;
+			editor = openParentEditor(subEditor);
+		}
 		if (null != editor) {
-			StructuredSelection selection = (StructuredSelection) subappEditor.getViewer().getSelection();
+			StructuredSelection selection = getEditorSelection((subEditor == null) ? editor : subEditor);
 			CompoundCommand cmd = new CompoundCommand();
 			for (Object ne : selection) {
 				if ((ne instanceof EditPart) && (((EditPart) ne).getModel() instanceof FBNetworkElement)) {
 					FBNetworkElement element = (FBNetworkElement) ((EditPart) ne).getModel();
-					SubApp subapp = (SubApp) subappEditor.getModel().eContainer();
+					SubApp subapp = (subEditor == null) ? (SubApp) element.eContainer().eContainer()
+							: (SubApp) subEditor.getModel().eContainer();
 					GraphicalEditPart ep = (GraphicalEditPart) editor.getViewer().getEditPartRegistry().get(subapp);
 					MoveElementFromSubappCommand moveCmd = new MoveElementFromSubappCommand(subapp, element,
 							ep.getFigure().getBounds());
 					cmd.add(moveCmd);
 				}
 			}
-			((IEditorPart) subappEditor).getAdapter(CommandStack.class).execute(cmd);
+			getCommandStack((subEditor == null) ? editor : subEditor).execute(cmd);
 			preventFBPiling(cmd.getCommands());
 		}
 		return Status.OK_STATUS;
+	}
+
+	private CommandStack getCommandStack(FBNetworkEditor editor) {
+		return ((IEditorPart) editor).getAdapter(CommandStack.class);
+	}
+
+	private StructuredSelection getEditorSelection(FBNetworkEditor editor) {
+		return (StructuredSelection) editor.getViewer().getSelection();
 	}
 
 	private FBNetworkEditor openParentEditor(SubAppNetworkEditor editor) {
@@ -93,12 +106,6 @@ public class MoveToParentHandler extends AbstractHandler {
 				below++;
 			}
 		}
-	}
-
-	@Override
-	public void setEnabled(Object evaluationContext) {
-		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_EDITOR_ID_NAME);
-		setBaseEnabled(SubAppNetworkEditor.class.getName().equals(selection));
 	}
 
 	private static IEditorInput getEditorInput(EObject model) {

@@ -313,6 +313,15 @@
          </propertySection>
       </propertySections>
    </extension>
+   <extension point="org.eclipse.core.expressions.propertyTesters">
+    	<propertyTester
+          class="org.eclipse.fordiac.ide.application.properties.UnfoldedSubAppFilter"
+          id="org.eclipse.fordiac.ide.application.properties.unfoldedSubAppFilter"
+          namespace="org.eclipse.fordiac.ide.application.properties"
+          properties="parentIsSubApp"
+          type="java.lang.Object">
+    	</propertyTester>
+ 	</extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -574,20 +583,6 @@
       <handler
             class="org.eclipse.fordiac.ide.application.handlers.MoveToParentHandler"
             commandId="org.eclipse.fordiac.ide.application.commands.moveToParent">
-            <activeWhen>
-			    <with variable="selection">
-	               <iterate ifEmpty="false">
-	                  <or>
-	                    <instanceof
-	                          value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
-	                    </instanceof>
-	                    <instanceof
-	                          value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
-	                    </instanceof>
-	                  </or>
-	               </iterate>
-         		</with>  
-			</activeWhen>
       </handler>
       <handler
             class="org.eclipse.fordiac.ide.application.handlers.ToggleSubAppRepresentation"
@@ -791,12 +786,17 @@
          </command>
          <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent">
           <visibleWhen checkEnabled="true">
-                <and> 
-                	<with variable="activeEditorId">
-                    	<equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
-                	</with>
-                    <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection" />
-                </and>
+          		<or>
+                	<and> 
+                		<with variable="activeEditorId">
+                    		<equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
+                		</with>
+                    	<reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection" />
+                	</and>
+                	<test
+                		property="org.eclipse.fordiac.ide.application.properties.parentIsSubApp">
+                	</test>
+                </or>
             </visibleWhen>
          </command>
          <command
