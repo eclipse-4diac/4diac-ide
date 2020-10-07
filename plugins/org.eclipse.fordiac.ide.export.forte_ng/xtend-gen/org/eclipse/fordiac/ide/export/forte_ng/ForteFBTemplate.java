@@ -198,7 +198,6 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           }
         }
         _builder.newLine();
-        _builder.append("\t");
         _builder.append("static const SAdapterInstanceDef scm_astAdapterInstances[];");
         _builder.newLine();
       }
@@ -217,8 +216,13 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
         _builder.append(_generateEventConstants);
         _builder.newLineIfNotEmpty();
         _builder.newLine();
-        _builder.append("static const TDataIOID scm_anEOWith[];");
-        _builder.newLine();
+        {
+          boolean _hasOutputWith = this.hasOutputWith();
+          if (_hasOutputWith) {
+            _builder.append(" static const TDataIOID scm_anEOWith[]; ");
+          }
+        }
+        _builder.newLineIfNotEmpty();
         _builder.append("static const TForteInt16 scm_anEOWithIndexes[];");
         _builder.newLine();
         _builder.append("static const CStringDictionary::TStringId scm_anEventOutputNames[];");
@@ -240,8 +244,13 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
         _builder.append(_generateEventConstants);
         _builder.newLineIfNotEmpty();
         _builder.newLine();
-        _builder.append("static const TDataIOID scm_anEIWith[];");
-        _builder.newLine();
+        {
+          boolean _hasInputWith = this.hasInputWith();
+          if (_hasInputWith) {
+            _builder.append(" static const TDataIOID scm_anEIWith[];");
+          }
+        }
+        _builder.newLineIfNotEmpty();
         _builder.append("static const TForteInt16 scm_anEIWithIndexes[];");
         _builder.newLine();
         _builder.append("static const CStringDictionary::TStringId scm_anEventInputNames[];");
@@ -320,13 +329,12 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder.append("};");
           _builder.newLineIfNotEmpty();
           _builder.newLine();
-          _builder.append("\t");
           _builder.append("const CStringDictionary::TStringId ");
           CharSequence _fBClassName_1 = this.getFBClassName();
-          _builder.append(_fBClassName_1, "\t");
+          _builder.append(_fBClassName_1);
           _builder.append("::scm_anDataInputTypeIds[] = {");
           String _fORTETypeList = this.getFORTETypeList(this.getType().getInterfaceList().getInputVars());
-          _builder.append(_fORTETypeList, "\t");
+          _builder.append(_fORTETypeList);
           _builder.append("};");
           _builder.newLineIfNotEmpty();
         }
@@ -345,13 +353,12 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder.append("};");
           _builder.newLineIfNotEmpty();
           _builder.newLine();
-          _builder.append("\t");
           _builder.append("const CStringDictionary::TStringId ");
           CharSequence _fBClassName_3 = this.getFBClassName();
-          _builder.append(_fBClassName_3, "\t");
+          _builder.append(_fBClassName_3);
           _builder.append("::scm_anDataOutputTypeIds[] = {");
           String _fORTETypeList_1 = this.getFORTETypeList(this.getType().getInterfaceList().getOutputVars());
-          _builder.append(_fORTETypeList_1, "\t");
+          _builder.append(_fORTETypeList_1);
           _builder.append("};");
           _builder.newLineIfNotEmpty();
         }

@@ -85,14 +85,14 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 				static const int scm_n«adapter.name»AdpNum = «type.interfaceList.sockets.size + type.interfaceList.plugs.indexOf(adapter)»;
 			«ENDFOR»
 			
-				static const SAdapterInstanceDef scm_astAdapterInstances[];
+			static const SAdapterInstanceDef scm_astAdapterInstances[];
 		«ENDIF»
 	'''
 
 	def protected generateFBEventOutputInterfaceDecl() '''«IF !type.interfaceList.eventOutputs.empty»
 			«type.interfaceList.eventOutputs.generateEventConstants»
 			
-			static const TDataIOID scm_anEOWith[];
+			«IF hasOutputWith» static const TDataIOID scm_anEOWith[]; «ENDIF»
 			static const TForteInt16 scm_anEOWithIndexes[];
 			static const CStringDictionary::TStringId scm_anEventOutputNames[];
 		«ENDIF»'''
@@ -100,7 +100,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 	def protected generateFBEventInputInterfaceDecl() '''«IF !type.interfaceList.eventInputs.empty»
 			«type.interfaceList.eventInputs.generateEventConstants»
 			
-			static const TDataIOID scm_anEIWith[];
+			«IF hasInputWith» static const TDataIOID scm_anEIWith[];«ENDIF»
 			static const TForteInt16 scm_anEIWithIndexes[];
 			static const CStringDictionary::TStringId scm_anEventInputNames[];
 		«ENDIF»'''
@@ -144,13 +144,13 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 			«IF !type.interfaceList.inputVars.empty»
 				const CStringDictionary::TStringId «FBClassName»::scm_anDataInputNames[] = {«type.interfaceList.inputVars.FORTENameList»};
 				
-					const CStringDictionary::TStringId «FBClassName»::scm_anDataInputTypeIds[] = {«type.interfaceList.inputVars.FORTETypeList»};
+				const CStringDictionary::TStringId «FBClassName»::scm_anDataInputTypeIds[] = {«type.interfaceList.inputVars.FORTETypeList»};
 			«ENDIF»
 			
 			«IF !type.interfaceList.outputVars.empty»
 				const CStringDictionary::TStringId «FBClassName»::scm_anDataOutputNames[] = {«type.interfaceList.outputVars.FORTENameList»};
 				
-					const CStringDictionary::TStringId «FBClassName»::scm_anDataOutputTypeIds[] = {«type.interfaceList.outputVars.FORTETypeList»};
+				const CStringDictionary::TStringId «FBClassName»::scm_anDataOutputTypeIds[] = {«type.interfaceList.outputVars.FORTETypeList»};
 			«ENDIF»
 			
 			«IF !type.interfaceList.eventInputs.empty»
