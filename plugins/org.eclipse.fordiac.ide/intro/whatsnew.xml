@@ -14,71 +14,14 @@
 -->
 <introContent>
 	<extensionContent id="whatsnew-top-left" name="Whats New Current Version" path="whatsnew/@">
-  	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.12.0">   
-  	 		<text>
-     Apart from many bug fixes and improvements, we also modernized the design of Applications and the
-     System Configuration. 
-     The main changes and new features in 4diac 1.12.0 are:
-	&lt;ul&gt;
-	    &lt;li&gt;&lt;b&gt;4diac IDE:&lt;/b&gt;
-	        &lt;ul&gt;
-	            &lt;li&gt;The main usability improvement in 1.12.0 is the &lt;b&gt;in-place instance creation&lt;/b&gt;. 
-	            This allows searching for FBs in the library quickly and inserting them. 
-	            Try the feature: the window opens immediately when you double-click on the background 
-	            of the Application editor.&lt;/li&gt;
-	            &lt;li&gt;We implemented key codes to improve your &lt;b&gt;navigation through large applications&lt;/b&gt;. 
-	            With CTRL+arrow keys you may now navigate through your Application. 
-	            Additionally, the Page up/down key is now handled correctly. 
-	            To improve horizontal scrolling, we offer Alt+Page Up/down. 
-				Did you know that drag and drop with the middle mouse button can be used to navigate through the application?
-				&lt;/li&gt;
-	            &lt;li&gt;After viewing the contents of a subapplication, one commonly needs to jump back to the application. 
-	            For this use case, we implemented “Go to parent”, accessible via the context menu.&lt;/li&gt;
-	            &lt;li&gt;Working with subapplications is now more convenient. 
-	            An untyped subapplication can be saved as Type via the context menu. 
-	            Additionally, you may want to include variations to a Type. 
-	            For this use case, we implemented the “Detach from subapplication Type”-feature, 
-	            which converts a type to an untyped subapplication.&lt;/li&gt;
-	            &lt;li&gt;Many usability improvements:
-	                &lt;ul&gt;
-	                    &lt;li&gt;Bypass FB&lt;/li&gt;
-	                    &lt;li&gt;Follow Connection&lt;/li&gt;
-	                    &lt;li&gt;Reorganized context menu:
-	                    The context menu was shortened and grouped logically.&lt;/li&gt;
-	                    &lt;li&gt;Follow Connection&lt;/li&gt;
-	                    &lt;li&gt;The positioning of elements was greatly improved. 
-	                    Previously, scrolling and zooming was often handled incorrectly. 
-	                    Creating a new subapp from existing FBs will now correctly place them in the top-left corner of the subapp. 
-	                    Additionally, undo/redo of subapp creation correctly inserts the blocks at their previous position.
-	                    &lt;/li&gt;
-	                &lt;/ul&gt;
-	            &lt;/li&gt;
-	        &lt;/ul&gt;
-	    &lt;/li&gt;
-	    &lt;li&gt;&lt;b&gt;4diac FORTE:&lt;/b&gt;
-	        &lt;ul&gt;
-	            &lt;li&gt;Bit-wise access of ANY_BIT data types  (e.g., myWord.%X3)&lt;/li&gt;
-	            &lt;li&gt;Fixed memory leak in Lua integration when using variables of type STRING and WSTRING&lt;/li&gt;
-	            &lt;li&gt;Fixed several build issues with CMake&lt;/li&gt;
-	            &lt;li&gt;Fixed boolean IOs on Wago PLCs&lt;/li&gt;
-	            &lt;li&gt;Improved Arrowhead support&lt;/li&gt;
-	        &lt;/ul&gt;
-	        &lt;/li&gt;
-	&lt;/ul&gt;
-
-    A full list of all bugs addressed in this release can be found on the &lt;a href="https://projects.eclipse.org/projects/iot.4diac/releases/1.12.0/bugs"&gt;1.12.0 release page&lt;/a&gt;
-             </text>  	 	 		
-       	</group>   
-       	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.12.1">   
-            <text>
-            For the first maintenance release of 4diac IDE 1.12 11 issues were fixed. 
-            </text>
-        </group>      
-       	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.12.1">   
-            <text>
-            For the second maintenance release of 4diac IDE 1.12 8 issues were fixed. 
-            </text>
-        </group>      
+  	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.13.0">
+	    <link label="New and Noteworthy in 1.13.0" style-id="content-link" url="https://www.eclipse.org/4diac/newandnoteworthy/1.13/index.php" id="orgfordiacide-webLink">
+  	 		<text>An overview on the new and noteworthy features of Eclipse 4diac.</text>
+  	 	</link>
+  	 	<link label="Issues Addressed in 1.13.0" style-id="content-link" url="https://projects.eclipse.org/projects/iot.4diac/releases/1.13.0/bugs" id="orgfordiacide-webLink">
+  	 		<text>A list of all issues and bugs addressed for Eclipse 4diac 1.13.0.</text>
+  	 	</link>
+  	 	</group>
    	</extensionContent>
    	
    	<extensionContent id="fordiac-news" style="css/style.css" name="Whats New Extension" path="whatsnew/@">
