@@ -16,8 +16,10 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
@@ -86,16 +88,19 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 
 	@Override
 	protected IFigure createFigure() {
+		final int BORDER_WIDTH = 10;
+		final Insets BORDER_INSET = new Insets(BORDER_WIDTH);
+
 		IFigure figure = new Figure() {
 			@Override
 			public Dimension getPreferredSize(int wHint, int hHint) {
 				Dimension dim = super.getPreferredSize(wHint, hHint);
 				return dim;
 			}
-
 		};
 
 		figure.setOpaque(false);
+		figure.setBorder(new MarginBorder(BORDER_INSET));
 
 		figure.setLayoutManager(new XYLayout() {
 			@Override

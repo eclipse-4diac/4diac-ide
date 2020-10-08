@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -61,6 +62,43 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		}
 	};
 
+	@Override
+	public Adapter createContentAdapter() {
+		return new AdapterImpl() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				switch (notification.getEventType()) {
+				case Notification.ADD:
+				case Notification.ADD_MANY:
+				case Notification.MOVE:
+					if (notification.getNewValue() instanceof IInterfaceElement) {
+						refreshChildren();
+					}
+					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(notification.getFeature())) { 
+						refreshChildren();
+					}
+					break;
+				case Notification.REMOVE:
+				case Notification.REMOVE_MANY:
+					if (notification.getOldValue() instanceof IInterfaceElement) {
+						refreshChildren();
+					}
+					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(notification.getFeature())) { 
+						refreshChildren();
+					}
+					break;
+				case Notification.SET:
+					refreshVisuals();
+					break;
+				default:
+					break;
+				}
+				refreshToolTip();
+				backgroundColorChanged(getFigure());
+			}
+		};
+	}
 	@Override
 	protected List<Object> getModelChildren() {
 		List<Object> children = super.getModelChildren();
@@ -94,7 +132,6 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		super.activate();
 		if ((null != getModel()) && !getModel().getInterface().eAdapters().contains(subAppInterfaceAdapter)) {
 			getModel().getInterface().eAdapters().add(subAppInterfaceAdapter);
-			getModel().eAdapters().add(unfoldedAdapter);
 		}
 	}
 
@@ -121,44 +158,6 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		return (SubApp) super.getModel();
 	}
 
-	@Override
-	public Adapter createContentAdapter() {
-		return new AdapterImpl() {
-			@Override
-			public void notifyChanged(final Notification notification) {
-				super.notifyChanged(notification);
-				switch (notification.getEventType()) {
-				case Notification.ADD:
-				case Notification.ADD_MANY:
-				case Notification.MOVE:
-					if (notification.getNewValue() instanceof IInterfaceElement) {
-						refreshChildren();
-					}
-					break;
-				case Notification.REMOVE:
-				case Notification.REMOVE_MANY:
-					if (notification.getOldValue() instanceof IInterfaceElement) {
-						refreshChildren();
-					}
-					break;
-				case Notification.SET:
-					refreshVisuals();
-					break;
-				default:
-					break;
-				}
-				refreshToolTip();
-				backgroundColorChanged(getFigure());
-			}
-		};
-	}
-
-	EContentAdapter unfoldedAdapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(Notification notification) {
-			refreshChildren();
-		}
-	};
 
 	@Override
 	protected void createEditPolicies() {
