@@ -23,7 +23,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class ToggleSubAppFolding extends AbstractHandler {
+public class ToggleSubAppRepresentation extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {

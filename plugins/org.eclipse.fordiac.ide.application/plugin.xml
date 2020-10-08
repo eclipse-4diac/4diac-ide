@@ -590,7 +590,7 @@
 			</activeWhen>
       </handler>
       <handler
-            class="org.eclipse.fordiac.ide.application.handlers.ToggleSubAppFolding"
+            class="org.eclipse.fordiac.ide.application.handlers.ToggleSubAppRepresentation"
             commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp">
             <activeWhen>
                 <reference definitionId="org.eclipse.fordiac.ide.application.SubAppSelection" />
