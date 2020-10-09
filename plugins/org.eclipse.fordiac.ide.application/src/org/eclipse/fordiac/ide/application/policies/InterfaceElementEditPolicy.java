@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2018 fortiss GmbH, Johannes Kepler Universtiy
- * 
+ * 				 2020 Primetals Technologies Germany GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,14 +11,17 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber
+ *     - reworked getParentNetwork()
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.gef.EditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.CreateConnectionRequest;
@@ -43,12 +47,15 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 	}
 
 	protected FBNetwork getParentNetwork() {
-		EditPart parent = getHost().getParent();
-		while (parent != null && !(parent instanceof AbstractFBNetworkEditPart)) {
-			parent = parent.getParent();
+		EObject obj = (EObject) getHost().getModel();
+		while ((obj != null) && !(obj instanceof FBNetworkElement || obj instanceof CompositeFBType)) {
+			obj = obj.eContainer();
 		}
-		if (null != parent) { // if none null it is an AbstractFBNetworkEditPart
-			return ((AbstractFBNetworkEditPart) parent).getModel();
+		if (obj instanceof CompositeFBType) {
+			return ((CompositeFBType) obj).getFBNetwork();
+		}
+		if (obj instanceof FBNetworkElement) {
+			return ((FBNetworkElement) obj).getFbNetwork();
 		}
 		return null;
 	}
