@@ -20,12 +20,12 @@ import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
 public class InstanceCommentFigure extends Label implements IFontUpdateListener {
 
-	private static final int BORDER_WIDTH = 6;
+	private static final int BORDER_WIDTH = 3;
 	private static final Insets BORDER_INSET = new Insets(BORDER_WIDTH);
 
 	public InstanceCommentFigure() {
@@ -33,7 +33,7 @@ public class InstanceCommentFigure extends Label implements IFontUpdateListener 
 		setTextAlignment(PositionConstants.CENTER);
 		setLabelAlignment(PositionConstants.CENTER);
 		setText("[empty comment]");
-		setBorder(new LineBorder(new Color(Display.getCurrent(), 0, 0, 0)) {
+		setBorder(new LineBorder(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY)) {
 			@Override
 			public Insets getInsets(final IFigure figure) {
 				return BORDER_INSET;
@@ -44,7 +44,7 @@ public class InstanceCommentFigure extends Label implements IFontUpdateListener 
 
 	@Override
 	public void setText(String s) {
-		if (s != null && !"".equals(s)) {
+		if ((s != null) && !"".equals(s)) { //$NON-NLS-1$
 			super.setText(s);
 		} else {
 			super.setText("[empty comment]");

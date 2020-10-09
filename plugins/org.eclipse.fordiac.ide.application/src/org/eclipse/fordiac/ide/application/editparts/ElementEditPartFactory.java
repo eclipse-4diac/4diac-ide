@@ -92,20 +92,34 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 
 	private static EditPart createInterfaceEditPart(final Object modelElement, final EditPart context) {
 		EditPart part;
-		if (context.getModel() instanceof SubApp) { // TODO check for untyped subapp
+		if (context.getModel() instanceof SubApp) {
 			SubApp subapp = (SubApp) context.getModel();
 			if (subapp.isUnfolded()) {
-				return new InterfaceEditPartForFBNetwork() {
-					@Override
-					protected List<?> getModelSourceConnections() {
-						return getModel().getOutputConnections();
-					}
+				if (null != subapp.getType()) {
+					return new InterfaceEditPartForFBNetwork() {
+						@Override
+						protected List<?> getModelSourceConnections() {
+							return getModel().getOutputConnections();
+						}
 
-					@Override
-					protected List<?> getModelTargetConnections() {
-						return getModel().getInputConnections();
-					}
-				};
+						@Override
+						protected List<?> getModelTargetConnections() {
+							return getModel().getInputConnections();
+						}
+					};
+				} else {
+					return new UntypedSubAppInterfaceElementEditPart() {
+						@Override
+						protected List<?> getModelSourceConnections() {
+							return getModel().getOutputConnections();
+						}
+
+						@Override
+						protected List<?> getModelTargetConnections() {
+							return getModel().getInputConnections();
+						}
+					};
+				}
 			}
 
 		}
