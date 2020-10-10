@@ -60,6 +60,12 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	}
 
 	@Override
+	public void deactivate() {
+		super.deactivate();
+		removeSelectionFeedbackFigure();
+	}
+
+	@Override
 	protected List<? extends IFigure> createSelectionHandles() {
 		List<ModifiedMoveHandle> list = new ArrayList<>(1);
 		list.add(new ModifiedMoveHandle((GraphicalEditPart) getHost(), insets, arc));
