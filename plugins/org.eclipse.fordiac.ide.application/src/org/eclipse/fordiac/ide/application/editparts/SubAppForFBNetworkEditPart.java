@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorActio
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
+import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -77,6 +78,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 					}
 					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(notification.getFeature())) { 
 						refreshChildren();
+						refreshInterfaceEditParts();
 					}
 					break;
 				case Notification.REMOVE:
@@ -86,6 +88,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 					}
 					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(notification.getFeature())) { 
 						refreshChildren();
+						refreshInterfaceEditParts();
 					}
 					break;
 				case Notification.SET:
@@ -96,6 +99,15 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 				}
 				refreshToolTip();
 				backgroundColorChanged(getFigure());
+			}
+
+			@SuppressWarnings("unchecked")
+			private void refreshInterfaceEditParts() {
+				getChildren().forEach(ep -> {
+					if (ep instanceof InterfaceEditPart) {
+						((InterfaceEditPart) ep).refresh();
+					}
+				});
 			}
 		};
 	}
