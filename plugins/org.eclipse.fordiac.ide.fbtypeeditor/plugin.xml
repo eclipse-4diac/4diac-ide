@@ -10,7 +10,7 @@
             class="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor"
             contributorClass="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditorContributor"
             extensions="fbt, adp"
-            icon="fordiacimage://ICON_FB"
+            icon="fordiacimage://ICON_FB_TYPE"
             id="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor"
             name="FB Type Editor">
       </editor>
@@ -49,7 +49,7 @@
          <propertyTab
                category="fb"
                id="property.tab.fbtypeinfo"
-               image="fordiacimage://ICON_FB"
+               image="fordiacimage://ICON_FB_TYPE"
                label="Type Info">
          </propertyTab>
          <propertyTab
@@ -74,6 +74,7 @@
                afterTab="property.tab.fbtypeinfo"
                category="fb"
                id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditEvents"
+               image="fordiacimage://ICON_EVENT"
                indented="true"
                label="Edit Events">
          </propertyTab>
@@ -81,6 +82,7 @@
                afterTab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData"
                category="fb"
                id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditAdapters"
+               image="fordiacimage://ICON_ADAPTER"
                indented="true"
                label="Edit Adapters">
          </propertyTab>
@@ -88,6 +90,7 @@
                afterTab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditEvents"
                category="fb"
                id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData"
+               image="fordiacimage://ICON_DATA"
                indented="true"
                label="Edit Data">
          </propertyTab>

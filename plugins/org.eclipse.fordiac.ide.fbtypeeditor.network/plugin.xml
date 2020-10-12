@@ -42,7 +42,7 @@
                afterTab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab"
                category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.propertyFBTypeInfoTab"
-               image="fordiacimage://ICON_FB"
+               image="fordiacimage://ICON_FB_TYPE"
                label="Type Info">
          </propertyTab>
          <propertyTab

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008- 2010 Profactor GmbH
- * 				 2018 Johannes Kepler University 
- * 
+ * 				 2018 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,7 +20,6 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.gef.ConnectionEditPart;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.handles.BendpointCreationHandle;
 import org.eclipse.swt.graphics.Color;
 
@@ -54,12 +53,8 @@ public class LineSegmentHandle extends BendpointCreationHandle {
 		return super.getFillColor();
 	}
 
-	private int getHandleLenght(int len) {
-		double zoom = 1.0;
-		if (getOwner().getRoot() instanceof ScalableFreeformRootEditPart) {
-			zoom = ((ScalableFreeformRootEditPart) (getOwner().getRoot())).getZoomManager().getZoom();
-		}
-		return (int) Math.floor((len - 2 * HideableConnection.BEND_POINT_BEVEL_SIZE) * zoom);
+	private static int getHandleLenght(int len) {
+		return len - 2 * HideableConnection.BEND_POINT_BEVEL_SIZE;
 	}
 
 }

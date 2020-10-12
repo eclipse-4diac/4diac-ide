@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactor
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemElementItemProviderAdapterFactory;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -187,6 +188,13 @@ public class SystemEditor extends EditorPart
 		return false;
 	}
 
+	public void executeCommand(Command cmd) {
+		CommandStack commandStack = getCommandStack();
+		if (null != commandStack && cmd.canExecute()) {
+			commandStack.execute(cmd);
+		}
+	}
+
 	@Override
 	public void createPartControl(Composite parent) {
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
@@ -209,7 +217,7 @@ public class SystemEditor extends EditorPart
 		createSysconfSection(toolkit, bottomComp);
 
 		if (null != system) {
-			typeInfo.initialize(system, getCommandStack());
+			typeInfo.initialize(system, this::executeCommand);
 			typeInfo.refresh();
 			appTreeViewer.setInput(system.getApplication());
 			sysConfTreeViewer.setInput(system.getSystemConfiguration());

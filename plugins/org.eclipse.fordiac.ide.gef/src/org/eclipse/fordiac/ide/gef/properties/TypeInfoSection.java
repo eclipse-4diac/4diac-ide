@@ -46,7 +46,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
-		typeInfo.initialize(getType(), commandStack);
+		typeInfo.initialize(getType(), this::executeCommand);
 	}
 
 	@Override

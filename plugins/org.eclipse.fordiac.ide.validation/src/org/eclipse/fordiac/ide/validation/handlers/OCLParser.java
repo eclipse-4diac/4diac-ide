@@ -18,6 +18,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -32,18 +33,21 @@ import org.osgi.framework.Bundle;
 
 public class OCLParser {
 	private static final String CONSTRAINT_DIRECTORY = "constraints"; //$NON-NLS-1$
-	private static final String CONSTRAINT_FILE_FBTYPE = "ECC.ocl";
-	private static final String CONSTRAINT_FILE_APP = "FB.ocl";
+	private static final String CONSTRAINT_FILE_FBTYPE = "ECC.ocl"; //$NON-NLS-1$
+	private static final String CONSTRAINT_FILE_APP = "FB.ocl"; //$NON-NLS-1$
+
+	private OCLParser() {
+	}
 
 	public static List<Constraint> loadOCLConstraints(INamedElement element) {
 		InputStream in = null;
 		String constraintFile;
-		List<Constraint> constraints = new ArrayList<Constraint>();
+		List<Constraint> constraints = new ArrayList<>();
 		Bundle bundle = Activator.getDefault().getBundle();
 		constraintFile = getOCLFile(element);
 		try {
-			URL url = bundle
-					.getResource(new Path(CONSTRAINT_DIRECTORY + IPath.SEPARATOR + constraintFile).toOSString());
+			URL url = FileLocator.find(bundle, new Path(CONSTRAINT_DIRECTORY + IPath.SEPARATOR + constraintFile));
+			url = FileLocator.toFileURL(url);
 			in = url.openStream();
 			OCLInput document = new OCLInput(in);
 			constraints.addAll(Activator.getDefault().getOclInstance().parse(document));
