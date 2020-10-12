@@ -18,7 +18,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeAlgorithmOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateInternalVariableCommandTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -92,6 +92,21 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		verifyStateWithAlgorithmIndex(state, oldState, t, 2, ALGORITHM3_NAME);
 	}
 
+	private static State executeReorder(State state, int index, boolean direction) {
+		final EList<Algorithm> algorithmList = ((BasicFBType) state.getFbNetwork().getNetworkElements().get(0)
+				.getType()).getAlgorithm();
+		state.setCommand(new ChangeAlgorithmOrderCommand(algorithmList, algorithmList.get(index), direction));
+
+		return commandExecution(state);
+	}
+
+	private static void verifyOrder(State state, State oldState, TestFunction t, String name1, String name2,
+			String name3) {
+		verifyStateWithAlgorithmIndex(state, oldState, t, 0, name1);
+		verifyStateWithAlgorithmIndex(state, oldState, t, 1, name2);
+		verifyStateWithAlgorithmIndex(state, oldState, t, 2, name3);
+	}
+
 	// parameter creation function
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
@@ -106,7 +121,23 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 				new ExecutionDescription<>("Add a third ST algorithm at end of list", //$NON-NLS-1$
 						InsertAlgorithmCommandTest::executeCommand3, //
 						InsertAlgorithmCommandTest::verifyState3 //
-				) //
+				), //
+				new ExecutionDescription<>("move second algorithmn to third place", //$NON-NLS-1$
+						(State s) -> executeReorder(s, 1, false), //
+						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, ALGORITHM2_NAME, ALGORITHM3_NAME,
+								ALGORITHM_NAME)), //
+				new ExecutionDescription<>("move second algorithmn to first place", //$NON-NLS-1$
+						(State s) -> executeReorder(s, 1, true), //
+						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, ALGORITHM3_NAME, ALGORITHM2_NAME,
+								ALGORITHM_NAME)), //
+				new ExecutionDescription<>("move first algorithmn past lower bound", //$NON-NLS-1$
+						(State s) -> executeReorder(s, 0, true), //
+						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, ALGORITHM3_NAME, ALGORITHM2_NAME,
+								ALGORITHM_NAME)), //
+				new ExecutionDescription<>("move third algorithmn past upper bound", //$NON-NLS-1$
+						(State s) -> executeReorder(s, 2, false), //
+						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, ALGORITHM3_NAME, ALGORITHM2_NAME,
+								ALGORITHM_NAME)) //
 		);
 
 		return createCommands(executionDescriptions);
