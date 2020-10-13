@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2019 fortiss GmbH
  *               2020 Johannes Kepler University
+ *               2020 TU Wien/ACIN
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +16,7 @@
  *     - Add internal var generation
  *   Ernst Blecha
  *     - Add array-like bitaccess
+ *   Martin Melik Merkumians - adds generation of initial value assignment
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.basic
 
@@ -53,8 +55,10 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 
 		«IF !type.internalVars.isEmpty»
 		  «generateInternalVarDelcaration(type)»
-
         «ENDIF»
+        «IF !(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).empty»
+		  «generateInitialValueAssignmentDeclaration»
+		«ENDIF»
 		  «type.interfaceList.inputVars.generateAccessors("getDI")»
 		  «type.interfaceList.outputVars.generateAccessors("getDO")»
 		  «type.internalVars.generateAccessors("getVarInternal")»

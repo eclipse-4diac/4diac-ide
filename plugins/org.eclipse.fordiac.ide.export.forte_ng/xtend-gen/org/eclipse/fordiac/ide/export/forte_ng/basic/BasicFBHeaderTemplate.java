@@ -1,6 +1,7 @@
 /**
  * Copyright (c) 2019 fortiss GmbH
  *               2020 Johannes Kepler University
+ *               2020 TU Wien/ACIN
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +16,7 @@
  *     - Add internal var generation
  *   Ernst Blecha
  *     - Add array-like bitaccess
+ *   Martin Melik Merkumians - adds generation of initial value assignment
  */
 package org.eclipse.fordiac.ide.export.forte_ng.basic;
 
@@ -92,7 +94,19 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
         CharSequence _generateInternalVarDelcaration = this.generateInternalVarDelcaration(this.type);
         _builder.append(_generateInternalVarDelcaration);
         _builder.newLineIfNotEmpty();
-        _builder.newLine();
+      }
+    }
+    {
+      EList<VarDeclaration> _inputVars = this.type.getInterfaceList().getInputVars();
+      EList<VarDeclaration> _outputVars = this.type.getInterfaceList().getOutputVars();
+      Iterable<VarDeclaration> _plus = Iterables.<VarDeclaration>concat(_inputVars, _outputVars);
+      EList<VarDeclaration> _internalVars = this.type.getInternalVars();
+      boolean _isEmpty_1 = IterableExtensions.isEmpty(Iterables.<VarDeclaration>concat(_plus, _internalVars));
+      boolean _not_1 = (!_isEmpty_1);
+      if (_not_1) {
+        CharSequence _generateInitialValueAssignmentDeclaration = this.generateInitialValueAssignmentDeclaration();
+        _builder.append(_generateInitialValueAssignmentDeclaration);
+        _builder.newLineIfNotEmpty();
       }
     }
     _builder.append("  ");
@@ -143,9 +157,9 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     _builder.append("       ");
     _builder.append("CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
     {
-      boolean _isEmpty_1 = this.type.getInternalVars().isEmpty();
-      boolean _not_1 = (!_isEmpty_1);
-      if (_not_1) {
+      boolean _isEmpty_2 = this.type.getInternalVars().isEmpty();
+      boolean _not_2 = (!_isEmpty_2);
+      if (_not_2) {
         _builder.append("&scm_stInternalVars");
       } else {
         _builder.append("nullptr");
