@@ -1,6 +1,7 @@
 /**
  * Copyright (c) 2019 fortiss GmbH
  *               2020 Johannes Kepler University
+ *               2020 TU Wien/ACIN
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,9 +14,11 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl
  *     - Add internal var generation, fix adapter generation
+ *   Martin Melik Merkumians - adds generation of initial value assignment
  */
 package org.eclipse.fordiac.ide.export.forte_ng.basic;
 
+import com.google.common.collect.Iterables;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -32,10 +35,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.StringExtensions;
 
@@ -81,6 +86,25 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
       if (_not) {
         CharSequence _generateInternalVarDefinition = this.generateInternalVarDefinition(this.type);
         _builder.append(_generateInternalVarDefinition);
+        _builder.newLineIfNotEmpty();
+        _builder.newLine();
+      }
+    }
+    {
+      EList<VarDeclaration> _inputVars = this.type.getInterfaceList().getInputVars();
+      EList<VarDeclaration> _outputVars = this.type.getInterfaceList().getOutputVars();
+      Iterable<VarDeclaration> _plus = Iterables.<VarDeclaration>concat(_inputVars, _outputVars);
+      EList<VarDeclaration> _internalVars = this.type.getInternalVars();
+      boolean _isEmpty_1 = IterableExtensions.isEmpty(Iterables.<VarDeclaration>concat(_plus, _internalVars));
+      boolean _not_1 = (!_isEmpty_1);
+      if (_not_1) {
+        EList<VarDeclaration> _inputVars_1 = this.type.getInterfaceList().getInputVars();
+        EList<VarDeclaration> _outputVars_1 = this.type.getInterfaceList().getOutputVars();
+        Iterable<VarDeclaration> _plus_1 = Iterables.<VarDeclaration>concat(_inputVars_1, _outputVars_1);
+        EList<VarDeclaration> _internalVars_1 = this.type.getInternalVars();
+        Iterable<VarDeclaration> _plus_2 = Iterables.<VarDeclaration>concat(_plus_1, _internalVars_1);
+        CharSequence _generateInitialValueAssignmentDefinition = this.generateInitialValueAssignmentDefinition(_plus_2);
+        _builder.append(_generateInitialValueAssignmentDefinition);
         _builder.newLineIfNotEmpty();
         _builder.newLine();
       }

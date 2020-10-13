@@ -13,6 +13,7 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Alois Zoitl  - extracted base class for all types from fbtemplate
  *   Martin Melik Merkumians - adds clause to prevent generation of zero size arrays
+ *   Martin Melik Merkumians - adds generation of initial value assignment
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
@@ -23,6 +24,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.With
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.emf.common.util.EList
 
 abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 
@@ -206,6 +209,34 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 			static const SInternalVarsInformation scm_stInternalVars;
 		«ENDIF»
 	'''
+	
+	def protected generateInitialValueAssignmentDeclaration() '''
+	virtual void setInitialValues();
+	'''
+	
+	def protected generateInitialValueAssignmentDefinition(Iterable<VarDeclaration> declarationList) '''
+	void FORTE_«type.name»::setInitialValues() {
+	  «FOR variable : declarationList»
+	  «IF null !== variable.value && !variable.value.value.isEmpty »
+	  «EXPORT_PREFIX»«generateInitialAssignment(variable)»
+	  «ENDIF»
+	  «ENDFOR»
+	}
+	'''
+	
+	def protected generateInitialAssignment(VarDeclaration variable) {
+		switch variable.typeName {
+			case "STRING":  '''«variable.name»() = "«variable.value.value»";'''
+			case "WSTRING":  '''«variable.name»() = "«variable.value.value»";'''
+			case "ARRAY":  '''«variable.name»().fromString("«variable.value.value»");'''
+			case "TIME":  '''«variable.name»().fromString("«variable.value.value»");'''
+			case "DATE":  '''«variable.name»().fromString("«variable.value.value»");'''
+			case "TIME:OF_DAY":  '''«variable.name»().fromString("«variable.value.value»");'''
+			case "DATE_AND_TIME":  '''«variable.name»().fromString("«variable.value.value»");'''
+			case "BOOL":  '''«variable.name»() = "«variable.value.value.toLowerCase»";'''
+			default: '''«variable.name»() = «variable.value.value»;'''
+		}
+	}
 
 	def protected generateInternalVarDefinition(BaseFBType baseFBType) '''
 		«IF !baseFBType.internalVars.isEmpty»
