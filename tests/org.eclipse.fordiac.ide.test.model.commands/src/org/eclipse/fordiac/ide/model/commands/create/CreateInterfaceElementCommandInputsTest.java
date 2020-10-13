@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.model.commands.create;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateInterfaceElementCommandTestBase;
@@ -24,6 +26,10 @@ import org.junit.jupiter.params.provider.Arguments;
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
 public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElementCommandTestBase {
+
+	private static final String ELEMENT1_NAME = FordiacKeywords.DATA_INPUT;
+	private static final String ELEMENT2_NAME = "MyInput"; //$NON-NLS-1$
+	private static final String ELEMENT3_NAME = "DI2"; //$NON-NLS-1$
 
 	private static State executeCommandInputWithoutName(State state) {
 		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.BOOL),
@@ -41,13 +47,14 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(interfacelist.getInterfaceElement(FordiacKeywords.DATA_INPUT));
-		t.test(interfacelist.getInterfaceElement(FordiacKeywords.DATA_INPUT).getTypeName(), FordiacKeywords.BOOL);
+		t.test(interfacelist.getInterfaceElement(ELEMENT1_NAME));
+		t.test(interfacelist.getInterfaceElement(ELEMENT1_NAME).getTypeName(), FordiacKeywords.BOOL);
 	}
 
 	private static State executeCommandInputWithName(State state) {
-		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.DWORD), "MyInput", //$NON-NLS-1$
-				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ true, /* index */ 1));
+		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.DWORD),
+				ELEMENT2_NAME, state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ true,
+				/* index */ 1));
 
 		return commandExecution(state);
 	}
@@ -61,8 +68,8 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(interfacelist.getInterfaceElement("MyInput")); //$NON-NLS-1$
-		t.test(interfacelist.getInterfaceElement("MyInput").getTypeName(), FordiacKeywords.DWORD); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement(ELEMENT2_NAME));
+		t.test(interfacelist.getInterfaceElement(ELEMENT2_NAME).getTypeName(), FordiacKeywords.DWORD);
 	}
 
 	private static State executeCommandInputWithNameNull(State state) {
@@ -81,8 +88,8 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(interfacelist.getInterfaceElement("DI2")); //$NON-NLS-1$
-		t.test(interfacelist.getInterfaceElement("DI2").getTypeName(),FordiacKeywords.DWORD); //$NON-NLS-1$
+		t.test(interfacelist.getInterfaceElement(ELEMENT3_NAME));
+		t.test(interfacelist.getInterfaceElement(ELEMENT3_NAME).getTypeName(), FordiacKeywords.DWORD);
 	}
 
 	// parameter creation function
@@ -92,7 +99,7 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 						CreateInterfaceElementCommandInputsTest::executeCommandInputWithoutName, //
 						CreateInterfaceElementCommandInputsTest::verifyStateInputWithoutName //
 				), //
-				new ExecutionDescription<>("Add Input with name \"MyInput\"", // //$NON-NLS-1$
+				new ExecutionDescription<>("Add Input with name \"" + ELEMENT2_NAME + "\"", // //$NON-NLS-1$ //$NON-NLS-2$
 						CreateInterfaceElementCommandInputsTest::executeCommandInputWithName, //
 						CreateInterfaceElementCommandInputsTest::verifyStateInputWithName //
 				), //
@@ -102,7 +109,12 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 				) //
 		);
 
-		return createCommands(executionDescriptions);
+		final Collection<ExecutionDescription<State>> reordering = createReordering(
+				(State s) -> s.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars(), ELEMENT1_NAME,
+				ELEMENT3_NAME, ELEMENT2_NAME);
+
+		return createCommands(
+				Stream.concat(executionDescriptions.stream(), reordering.stream()).collect(Collectors.toList()));
 	}
 
 }
