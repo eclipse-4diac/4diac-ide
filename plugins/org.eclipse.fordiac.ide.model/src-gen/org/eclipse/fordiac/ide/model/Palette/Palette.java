@@ -17,7 +17,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object
@@ -27,10 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject
- * <em>Project</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem
- * <em>Automation System</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary
+ * <em>Type Library</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAdapterTypes
  * <em>Adapter Types</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.Palette.Palette#getDeviceTypes
@@ -68,47 +66,27 @@ public interface Palette extends EObject {
 	IProject getProject();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject
-	 * <em>Project</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the value of the '<em><b>Type Library</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @param value the new value of the '<em>Project</em>' attribute.
-	 * @see #getProject()
+	 * @return the value of the '<em>Type Library</em>' attribute.
+	 * @see #setTypeLibrary(TypeLibrary)
+	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_TypeLibrary()
+	 * @model dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary"
 	 * @generated
 	 */
-	void setProject(IProject value);
-
-	/**
-	 * Returns the value of the '<em><b>Automation System</b></em>' reference. It is
-	 * bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette
-	 * <em>Palette</em>}'. <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Automation System</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * 
-	 * @return the value of the '<em>Automation System</em>' reference.
-	 * @see #setAutomationSystem(AutomationSystem)
-	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_AutomationSystem()
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getPalette
-	 * @model opposite="palette"
-	 * @generated
-	 */
-	AutomationSystem getAutomationSystem();
+	TypeLibrary getTypeLibrary();
 
 	/**
 	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem
-	 * <em>Automation System</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary <em>Type
+	 * Library</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @param value the new value of the '<em>Automation System</em>' reference.
-	 * @see #getAutomationSystem()
+	 * @param value the new value of the '<em>Type Library</em>' attribute.
+	 * @see #getTypeLibrary()
 	 * @generated
 	 */
-	void setAutomationSystem(AutomationSystem value);
+	void setTypeLibrary(TypeLibrary value);
 
 	/**
 	 * Returns the value of the '<em><b>Fb Types</b></em>' map. The key is of type

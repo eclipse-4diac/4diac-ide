@@ -93,8 +93,9 @@ public class SegmentTypeImpl extends CompilableTypeImpl implements SegmentType {
 		switch (featureID) {
 		case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
 			return ((InternalEList<?>) getVarDeclaration()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -107,8 +108,9 @@ public class SegmentTypeImpl extends CompilableTypeImpl implements SegmentType {
 		switch (featureID) {
 		case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
 			return getVarDeclaration();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -124,8 +126,10 @@ public class SegmentTypeImpl extends CompilableTypeImpl implements SegmentType {
 			getVarDeclaration().clear();
 			getVarDeclaration().addAll((Collection<? extends VarDeclaration>) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -139,8 +143,10 @@ public class SegmentTypeImpl extends CompilableTypeImpl implements SegmentType {
 		case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
 			getVarDeclaration().clear();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -153,8 +159,9 @@ public class SegmentTypeImpl extends CompilableTypeImpl implements SegmentType {
 		switch (featureID) {
 		case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
 			return varDeclaration != null && !varDeclaration.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // SegmentTypeImpl

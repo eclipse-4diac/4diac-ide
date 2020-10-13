@@ -1,3 +1,19 @@
+/**
+ * Copyright (c) 2019 fortiss GmbH
+ *               2020 Johannes Kepler University
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *   Martin Jobst
+ *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl
+ *     - Add internal var generation
+ */
 package org.eclipse.fordiac.ide.export.forte_ng.simple;
 
 import com.google.common.collect.Iterables;
@@ -61,9 +77,20 @@ public class SimpleFBHeaderTemplate extends ForteFBTemplate {
     _builder.append(_generateFBInterfaceSpecDeclaration, "  ");
     _builder.newLineIfNotEmpty();
     _builder.newLine();
-    _builder.append("  ");
+    {
+      boolean _isEmpty = this.type.getInternalVars().isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        _builder.append("        ");
+        CharSequence _generateInternalVarDelcaration = this.generateInternalVarDelcaration(this.type);
+        _builder.append(_generateInternalVarDelcaration, "        ");
+        _builder.newLineIfNotEmpty();
+        _builder.newLine();
+      }
+    }
+    _builder.append("          ");
     CharSequence _generateAccessors = this.generateAccessors(this.type.getInterfaceList().getInputVars(), "getDI");
-    _builder.append(_generateAccessors, "  ");
+    _builder.append(_generateAccessors, "          ");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
     CharSequence _generateAccessors_1 = this.generateAccessors(this.type.getInterfaceList().getOutputVars(), "getDO");
@@ -86,21 +113,8 @@ public class SimpleFBHeaderTemplate extends ForteFBTemplate {
     _builder.newLineIfNotEmpty();
     _builder.newLine();
     _builder.append("  ");
-    _builder.append("FORTE_FB_DATA_ARRAY(");
-    int _size = this.type.getInterfaceList().getEventOutputs().size();
-    _builder.append(_size, "  ");
-    _builder.append(", ");
-    int _size_1 = this.type.getInterfaceList().getInputVars().size();
-    _builder.append(_size_1, "  ");
-    _builder.append(", ");
-    int _size_2 = this.type.getInterfaceList().getOutputVars().size();
-    _builder.append(_size_2, "  ");
-    _builder.append(", ");
-    int _size_3 = this.type.getInterfaceList().getSockets().size();
-    int _size_4 = this.type.getInterfaceList().getPlugs().size();
-    int _plus = (_size_3 + _size_4);
-    _builder.append(_plus, "  ");
-    _builder.append(");");
+    CharSequence _generateBasicFBDataArray = this.generateBasicFBDataArray(this.type);
+    _builder.append(_generateBasicFBDataArray, "  ");
     _builder.newLineIfNotEmpty();
     _builder.newLine();
     _builder.append("public:");
@@ -113,9 +127,9 @@ public class SimpleFBHeaderTemplate extends ForteFBTemplate {
     _builder.append("       ");
     _builder.append("CSimpleFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
     {
-      boolean _isEmpty = this.type.getInternalVars().isEmpty();
-      boolean _not = (!_isEmpty);
-      if (_not) {
+      boolean _isEmpty_1 = this.type.getInternalVars().isEmpty();
+      boolean _not_1 = (!_isEmpty_1);
+      if (_not_1) {
         _builder.append("&scm_stInternalVars");
       } else {
         _builder.append("nullptr");
@@ -179,6 +193,7 @@ public class SimpleFBHeaderTemplate extends ForteFBTemplate {
   }
   
   @Pure
+  @Override
   protected SimpleFBType getType() {
     return this.type;
   }

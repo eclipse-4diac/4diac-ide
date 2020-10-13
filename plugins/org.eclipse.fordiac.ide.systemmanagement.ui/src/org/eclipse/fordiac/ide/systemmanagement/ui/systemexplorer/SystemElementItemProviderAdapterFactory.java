@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015, 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBItemProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 
-class SystemElementItemProviderAdapterFactory extends LibraryElementItemProviderAdapterFactory {
+public class SystemElementItemProviderAdapterFactory extends LibraryElementItemProviderAdapterFactory {
 
 	@Override
 	public Adapter createApplicationAdapter() {

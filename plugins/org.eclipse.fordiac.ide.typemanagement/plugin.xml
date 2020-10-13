@@ -43,7 +43,7 @@
          point="org.eclipse.ui.newWizards">
       <wizard
             category="org.eclipse.fordiac.ide.newWizard.category"
-            class="org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard"
+            class="org.eclipse.fordiac.ide.typemanagement.wizards.NewTypeWizard"
             icon="fordiacimage://ICON_NEW_FUNCTIONBLOCK"
             id="org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard"
             name="Type...">
@@ -87,6 +87,27 @@
             viewerId="org.eclipse.fordiac.ide.typemanagement.navigator.view">
       </dragAssistant>
    </extension>
+   <extension point="org.eclipse.ui.commands">
+    	<command
+        	id="org.eclipse.fordiac.ide.typemanagement.openType"
+        	name="Open Type">
+    	</command>
+	</extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.eclipse.fordiac.ide.typemanagement.openType"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="CTRL+SHIFT+T">
+      </key>
+   </extension>
+   <extension point="org.eclipse.ui.handlers">
+    	<handler
+        	class="org.eclipse.fordiac.ide.typemanagement.handlers.OpenTypeHandler"
+        	commandId="org.eclipse.fordiac.ide.typemanagement.openType">
+    	</handler>
+	</extension>
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
       <commonFilter
@@ -104,6 +125,15 @@
                            <instanceof
                                  value="org.eclipse.core.resources.IFolder">
                            </instanceof>
+                           <and>
+                              <instanceof
+                                    value="org.eclipse.core.resources.IFile">
+                              </instanceof>
+                              <test
+                                    property="org.eclipse.core.resources.extension"
+                                    value="dtp">
+                              </test>
+                           </and>
                            <and>
                               <instanceof
                                     value="org.eclipse.core.resources.IFile">
@@ -373,7 +403,7 @@
       </commonWizard>
       <commonWizard
             type="new"
-            wizardId="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard">
+            wizardId="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard">
          <enablement></enablement>
       </commonWizard>      
    </extension>
@@ -465,26 +495,6 @@
       </dragAssistant>
    </extension>
    <extension
-         point="org.eclipse.ui.navigator.navigatorContent">
-      <navigatorContent
-            activeByDefault="true"
-            contentProvider="org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootContentProvider"
-            id="org.eclipse.fordiac.ide.typemanagement.typelib.systemexplorer"
-            labelProvider="org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootContentLabelProvider"
-            name="Type Library Content">
-            <possibleChildren>
-            	<or>
-	              <instanceof value="org.eclipse.core.resources.IResource" />
-	              <instanceof value="org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootElement" />
-	            </or>
-	        </possibleChildren> 
-            <triggerPoints>
-               <instanceof 
-	                     value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem"/>
-             </triggerPoints>             
-      </navigatorContent>
-      </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
@@ -498,5 +508,22 @@
       <initializer
             class="org.eclipse.fordiac.ide.typemanagement.preferences.PreferenceInitializer">
       </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            class="org.eclipse.fordiac.ide.typemanagement.navigator.TypeDecorator"
+            icon="fordiacimage://ICON_FB_TYPE"
+            id="org.eclipse.fordiac.ide.typemanagement.TypeDecorator"
+            label="4diac Type Decoration"
+            lightweight="true"
+            state="true">
+            <enablement>
+                <objectClass name="org.eclipse.core.resources.IFile" />
+            </enablement>
+            <description>
+               Show type comment beside the type name.
+            </description>
+      </decorator>
    </extension>
 </plugin>

@@ -1,5 +1,8 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GmbH, fortiss GmbH
+ * 						2017 fortiss GmbH
+ * 						2019 Johannes Kepler University
+ * 				 		2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,24 +13,35 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alexander Lumplecker
+ *     - changed VirtualIOTooltipFigure
+ *     - added getConnections
+ *     - code extracted from class FBNetworkElementTooltipFigure
+ *     - and from class OpenConnectionOppositeResource
+ *     - changed getConnectionOpposite
  *******************************************************************************/
 package org.eclipse.fordiac.ide.resourceediting.editparts;
 
-import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FigureUtilities;
+import org.eclipse.draw2d.GridData;
+import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.text.FlowPage;
+import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
+import org.eclipse.fordiac.ide.gef.figures.VerticalLineCompartmentFigure;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -79,8 +93,8 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 
 	private void updatePos() {
 		if (getParent() instanceof FBNetworkContainerEditPart) {
-			IInterfaceElement element = getIInterfaceElement();
-			Object o = getViewer().getEditPartRegistry().get(element);
+			final IInterfaceElement element = getIInterfaceElement();
+			final Object o = getViewer().getEditPartRegistry().get(element);
 			if (o instanceof InterfaceEditPartForResourceFBs) {
 				updatePos((InterfaceEditPartForResourceFBs) o);
 			}
@@ -88,9 +102,9 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 	}
 
 	void updatePos(InterfaceEditPartForFBNetwork referencedEditPart) {
-		String label = ((Label) getFigure()).getText();
+		final String label = ((Label) getFigure()).getText();
 
-		Rectangle bounds = referencedEditPart.getFigure().getBounds();
+		final Rectangle bounds = referencedEditPart.getFigure().getBounds();
 		int x;
 		if (isInput()) {
 			x = bounds.x - 20 - FigureUtilities.getTextWidth(label, getFigure().getFont());
@@ -142,7 +156,8 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 		if (request.getType() == RequestConstants.REQ_MOVE) {
 			return false;
 		}
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
+				|| (request.getType() == RequestConstants.REQ_OPEN)) {
 			return false;
 		}
 		return super.understandsRequest(request);
@@ -150,7 +165,8 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 
 	@Override
 	public void performRequest(Request request) {
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
+				|| (request.getType() == RequestConstants.REQ_OPEN)) {
 			return;
 		}
 		super.performRequest(request);
@@ -185,35 +201,100 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 	private class VirtualIOTooltipFigure extends Figure {
 		public VirtualIOTooltipFigure() {
 
-			setLayoutManager(new BorderLayout());
-			IFigure leftCol = new Figure();
-			IFigure rightCol = new Figure();
-			leftCol.setLayoutManager(new ToolbarLayout());
-			rightCol.setLayoutManager(new ToolbarLayout());
-			add(leftCol, BorderLayout.LEFT);
-			add(rightCol, BorderLayout.CENTER);
-			add(new Label(getIInterfaceElement().getName()), BorderLayout.TOP);
+			setLayoutManager(new GridLayout());
 
-			FBNetworkElement fbNetElement = getIInterfaceElement().getFBNetworkElement();
-			if (fbNetElement == null) {
-				return;
-			}
-			if (fbNetElement.getResource() == null) {
+			boolean drawLine = false;
+			final EList<Connection> connections = getConnections(getIInterfaceElement());
+
+			if (connections == null) {
 				return;
 			}
 
-			Resource res = fbNetElement.getResource();
-			if (res == null) {
-				return;
-			}
-			Device dev = res.getDevice();
-			if (dev == null) {
-				return;
-			}
+			for (int i = 0; i <= (connections.size() - 1); i++) {
+				final TextFlow connectionTo = new TextFlow();
+				final FlowPage fp = new FlowPage();
+				final Figure line = new VerticalLineCompartmentFigure();
+				final IInterfaceElement oppositeIE = getOppositeInterfaceelement(getIInterfaceElement(), connections,
+						i);
+				final FBNetworkElement oppositefbNetElement = oppositeIE.getFBNetworkElement();
 
-			add(new Label(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
-					+ fbNetElement.getName() + "." + getIInterfaceElement().getName()), BorderLayout.TOP); //$NON-NLS-1$
+				if (i >= 1) {
+					drawLine = true;
+				}
 
+				if (drawLine) {
+					add(line);
+					setConstraint(line, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
+				}
+
+				if (oppositefbNetElement == null) {
+					return;
+				}
+				if (oppositefbNetElement.getResource() == null) {
+					return;
+				}
+
+				final Resource res = oppositefbNetElement.getResource();
+				if (res == null) {
+					return;
+				}
+				final Device dev = res.getDevice();
+				if (dev == null) {
+					return;
+				}
+
+				if (drawLine) {
+					connectionTo.setText(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
+							+ oppositefbNetElement.getName() + "." //$NON-NLS-1$
+							+ oppositeIE.getName());
+					fp.add(connectionTo);
+					line.add(fp);
+					line.setConstraint(fp,
+							new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, false, true));
+				} else {
+					final Label nameLabel = new Label(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
+							+ oppositefbNetElement.getName() + "." //$NON-NLS-1$
+							+ oppositeIE.getName());
+					add(nameLabel);
+					setConstraint(nameLabel,
+							new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
+				}
+			}
+		}
+
+		private EList<Connection> getConnections(IInterfaceElement oppositeIE) {
+			final IInterfaceElement fbOppostiteIE = oppositeIE.getFBNetworkElement().getOpposite()
+					.getInterfaceElement(oppositeIE.getName());
+
+			if (null != fbOppostiteIE) {
+				final EList<Connection> connections = (fbOppostiteIE.isIsInput()) ? fbOppostiteIE.getInputConnections()
+						: fbOppostiteIE.getOutputConnections();
+
+				if (!connections.isEmpty()) {
+					return connections;
+				}
+			}
+			return null;
+		}
+
+		private IInterfaceElement getOppositeInterfaceelement(IInterfaceElement ie, EList<Connection> connections,
+				int elementID) {
+			final IInterfaceElement fbOppostiteIE = ie.getFBNetworkElement().getOpposite()
+					.getInterfaceElement(ie.getName());
+
+			if (null != fbOppostiteIE) {
+				final IInterfaceElement connectionOpposite = (fbOppostiteIE.isIsInput())
+						? connections.get(elementID).getSource()
+						: connections.get(elementID).getDestination();
+
+				if ((null != connectionOpposite) && connectionOpposite.getFBNetworkElement().isMapped()) {
+					final FBNetworkElement mappedOppositeElement = connectionOpposite.getFBNetworkElement()
+							.getOpposite();
+					return mappedOppositeElement.getInterfaceElement(connectionOpposite.getName());
+				}
+
+			}
+			return null;
 		}
 	}
 

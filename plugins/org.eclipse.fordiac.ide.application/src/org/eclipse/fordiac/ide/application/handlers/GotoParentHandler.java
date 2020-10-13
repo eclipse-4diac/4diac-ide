@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,8 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *               - added check if subapp interface is selected and mark that in 
+                   parent
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -22,8 +24,13 @@ import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.EditPart;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -35,8 +42,11 @@ public class GotoParentHandler extends AbstractHandler {
 		SubAppNetworkEditor editor = (SubAppNetworkEditor) HandlerUtil.getActiveEditor(event);
 
 		EObject model = editor.getModel().eContainer().eContainer().eContainer();
+
 		FBNetworkEditor newEditor = (FBNetworkEditor) EditorUtils.openEditor(getEditorInput(model), getEditorId(model));
-		newEditor.selectElement(editor.getModel().eContainer());
+		if (null != newEditor) {
+			handleSelection(newEditor, editor.getModel(), editor.getViewer().getSelection());
+		}
 		return Status.OK_STATUS;
 	}
 
@@ -62,6 +72,33 @@ public class GotoParentHandler extends AbstractHandler {
 		}
 		if (model instanceof Application) {
 			return FBNetworkEditor.class.getName();
+		}
+		return null;
+	}
+
+	private static void handleSelection(FBNetworkEditor newEditor, FBNetwork model, ISelection selection) {
+		IInterfaceElement selIElement = getSelectedSubappInterfaceElement(selection);
+
+		if ((null != selIElement) && (((SubApp) selIElement.getFBNetworkElement()).getSubAppNetwork().equals(model))) {
+			newEditor.selectElement(selIElement);
+		} else {
+			newEditor.selectElement(model.eContainer());
+		}
+	}
+
+	/**
+	 * check if the current selection is a single subapp interface element
+	 */
+	private static IInterfaceElement getSelectedSubappInterfaceElement(ISelection selection) {
+		if ((selection instanceof StructuredSelection) && (((StructuredSelection) selection).size() == 1)) {
+			// only one element is selected
+			Object selObj = ((StructuredSelection) selection).getFirstElement();
+			if ((selObj instanceof EditPart) && (((EditPart) selObj).getModel() instanceof IInterfaceElement)) {
+				IInterfaceElement elem = (IInterfaceElement) ((EditPart) selObj).getModel();
+				if (elem.getFBNetworkElement() instanceof SubApp) {
+					return elem;
+				}
+			}
 		}
 		return null;
 	}

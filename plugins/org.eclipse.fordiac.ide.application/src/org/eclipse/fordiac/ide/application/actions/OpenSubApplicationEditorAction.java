@@ -13,10 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.OpenListener;
@@ -85,7 +85,7 @@ public class OpenSubApplicationEditorAction extends OpenListener {
 	}
 
 	@Override
-	public Class<? extends I4DIACElement> getHandledClass() {
+	public Class<? extends EObject> getHandledClass() {
 		return SubApp.class;
 	}
 

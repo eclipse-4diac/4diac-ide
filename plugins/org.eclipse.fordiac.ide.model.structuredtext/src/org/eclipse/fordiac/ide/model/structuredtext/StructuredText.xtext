@@ -32,20 +32,14 @@ StructuredTextAlgorithm: {StructuredTextAlgorithm}
 ;
 
 Var_Decl_Init returns libraryElement::VarDeclaration:
-	Var_Decl_Local | Var_Decl_Located
+	Var_Decl_Local
 ;
 
-Var_Decl_Local returns LocalVariable:
-	{LocalVariable} (constant ?= 'CONSTANT')? name=ID ':'
+Var_Decl_Local returns libraryElement::LocalVariable:
+	{LocalVariable} (constant ?= 'CONSTANT')? name=ID (located?='AT' location=Variable)? ':'
+	( array?='ARRAY' '[' arrayStart=Array_Size '..' arrayStop=Array_Size ']' 'OF')?
 	type=[datatype::DataType|Type_Name]
-	(array?='[' arraySize=Array_Size ']')?
-	(':=' initialValue=Constant)?
-;
-
-Var_Decl_Located returns LocatedVariable:
-	{LocatedVariable} name=ID ('AT' location=Variable) ':'
-	type=[datatype::DataType|Type_Name]
-	(array?='[' arraySize=Array_Size ']')?
+	( initalized?=':=' initialValue=Constant)?
 ;
 
 /************************************************************************
@@ -151,7 +145,7 @@ Xor_Expr returns Expression:
 	And_Expr ({BinaryExpression.left=current} operator=Xor_Operator right=And_Expr)*
 ;
 
-enum And_Operator returns BinaryOperator: AND | AND='&';
+enum And_Operator returns BinaryOperator: AND | AMPERSAND='&';
 And_Expr returns Expression:
 	Compare_Expr ({BinaryExpression.left=current} operator=And_Operator right=Compare_Expr)*
 ;
@@ -217,8 +211,12 @@ Variable_Subscript returns Variable:
 	(Variable_Primary | Variable_Adapter) ({ArrayVariable.array=current} '[' index += Expression (',' index += Expression)* ']')?
 ;
 
-Variable_Adapter returns Variable:
-	{AdapterVariable} adapter=[libraryElement::AdapterDeclaration|Adapter_Name] '.' var=[libraryElement::VarDeclaration|Variable_Name]
+Variable_Adapter returns AdapterVariable:
+	AdapterRoot ({AdapterVariable.curr=current}'.' var = [libraryElement::VarDeclaration|Variable_Name])+
+;
+
+AdapterRoot returns AdapterVariable:
+	{AdapterRoot} adapter=[libraryElement::VarDeclaration|Adapter_Name]
 ;
 
 Multibit_Part_Access returns PartialAccess:
@@ -293,63 +291,8 @@ Char_Literal returns StringLiteral:
 ;
 
 Time_Literal returns TimeLiteral:
-	Duration | Time_Of_Day | Date | Date_And_Time
+	literal=(TIME | DATE | TIMEOFDAY | DATETIME)
 ;
-
-Duration returns DurationLiteral:
-	type=Time_Type_Name '#'
-	( '+' | negative?='-' )?
-	value+=Duration_Value ('_' value+=Duration_Value)*
-;
-
-Duration_Value returns DurationValue:
-	value=Fix_Point
-	unit=Duration_Unit
-;
-
-enum Duration_Unit:
-	DAYS='d' | HOURS='h' | MINUTES='m' | SECONDS='s' | MILLIS='ms' | MICROS='us' | NANOS='ns'
-;
-
-Fix_Point:
-	UNSIGNED_INT ('.' UNSIGNED_INT)?
-;
-
-Time_Of_Day returns DateLiteral:
-	type=Tod_Type_Name '#'
-	value=Daytime
-;
-
-Daytime returns ecore::EDate:
-	Day_Hour ':' Day_Minute ':' Day_Second
-;
-
-Day_Hour: UNSIGNED_INT;
-Day_Minute: UNSIGNED_INT;
-Day_Second: Fix_Point;
-
-Date returns DateLiteral:
-	type=Date_Type_Name '#'
-	value=Date_Literal
-;
-
-Date_Literal returns ecore::EDate:
-	Year '-' Month '-' Day
-;
-
-Year: UNSIGNED_INT;
-Month: UNSIGNED_INT;
-Day: UNSIGNED_INT;
-
-Date_And_Time returns DateLiteral:
-	type=DT_Type_Name '#'
-	value=Date_And_Time_Value
-;
-
-Date_And_Time_Value returns ecore::EDate:
-	Date_Literal '-' Daytime
-;
-
 
 /************************************************************************
 								type names
@@ -382,22 +325,6 @@ enum String_Type_Name returns Type:
 	STRING | WSTRING | CHAR | WCHAR
 ;
 
-enum Time_Type_Name returns Type:
-	TIME | LTIME | T | LT // also allow short type names
-;
-
-enum Tod_Type_Name returns Type:
-	TIME_OF_DAY | LTIME_OF_DAY | TOD | LTOD // also allow 'LTIME_OF_DAY'
-;
-
-enum Date_Type_Name returns Type:
-	DATE | LDATE | D | LD // also allow short type names
-;
-
-enum DT_Type_Name returns Type:
-	DATE_AND_TIME | LDATE_AND_TIME | DT | LDT // also allow 'LDATE_AND_TIME'
-;
-
 enum Bool_Type_Name returns Type:
 	BOOL
 ;
@@ -416,6 +343,53 @@ terminal fragment DIGIT: '0'..'9';
 terminal fragment BIT: '0'..'1';
 terminal fragment OCTAL_DIGIT: '0'..'7';
 terminal fragment HEX_DIGIT: '0'..'9' | 'a'..'f' | 'A'..'F';
+
+terminal TIMEOFDAY:
+	('L'|'l')?
+	('T' | 't')
+	(('I'|'i')('M'|'m')('E'|'e') '_')?
+	('O' | 'o')
+	(('F' | 'f') '_')?
+	('D' | 'd')
+	(('A'|'a')('Y'|'y'))?
+	'#'
+	UNSIGNED_INT ':' UNSIGNED_INT ':' UNSIGNED_INT('.' UNSIGNED_INT)?
+;
+
+terminal TIME:
+	('L'|'l')?
+	('T' | 't')
+	(('I'|'i')('M'|'m')('E'|'e'))?
+	'#'
+	('+' | '-')?
+	(UNSIGNED_INT ('.' UNSIGNED_INT)?
+		(('D'|'d') | ('H'|'h') | ('M'|'m') | ('S'|'s') | (('M'|'m') ('S'|'s')) | (('U'|'u') ('S'|'s')) | (('N'|'n') ('S'|'s')))
+	)
+	('_'? UNSIGNED_INT ('.' UNSIGNED_INT)?
+		(('D'|'d') | ('H'|'h') | ('M'|'m') | ('S'|'s') | (('M'|'m') ('S'|'s')) | (('U'|'u') ('S'|'s')) | (('N'|'n') ('S'|'s')))
+	)*
+;
+
+terminal DATETIME:
+	('L'|'l')?
+	('D' | 'd')
+	(
+		('A'|'a')('T'|'t')('E'|'e')
+		'_' ('A'|'a')('N'|'n')('D'|'d') '_'
+	)?
+	('T' | 't')
+	(('I'|'i')('M'|'m')('E'|'e'))?
+	'#'
+	UNSIGNED_INT '-' UNSIGNED_INT '-' UNSIGNED_INT '-' UNSIGNED_INT ':' UNSIGNED_INT ':' UNSIGNED_INT('.' UNSIGNED_INT)?
+;
+
+terminal DATE:
+	('L'|'l')?
+	('D' | 'd')
+	(('A'|'a')('T'|'t')('E'|'e'))?
+	'#'
+	UNSIGNED_INT '-' UNSIGNED_INT '-' UNSIGNED_INT('.' UNSIGNED_INT)?
+;
 
 terminal ID:
 	LETTER (LETTER | DIGIT)*

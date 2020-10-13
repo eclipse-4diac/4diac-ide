@@ -25,12 +25,16 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
@@ -48,7 +52,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class InterfaceElementSection extends AbstractSection {
 	private Text nameText;
 	private Text commentText;
-	private CCombo typeCombo;
+	protected CCombo typeCombo;
 	private Text parameterText;
 	private CLabel valueCLabel;
 
@@ -81,8 +85,13 @@ public class InterfaceElementSection extends AbstractSection {
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();
 		});
+
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Type + ":"); //$NON-NLS-1$
-		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
+		Composite typeComp = getWidgetFactory().createComposite(composite);
+		typeComp.setLayout(new GridLayout(2, false));
+		typeComp.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), typeComp);
+		typeCombo.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		typeCombo.addListener(SWT.Selection, event -> {
 			Command cmd = null;
 			if (getType() instanceof AdapterDeclaration) {
@@ -91,7 +100,7 @@ public class InterfaceElementSection extends AbstractSection {
 			} else {
 				if (getType() instanceof VarDeclaration) {
 					cmd = newChangeTypeCommand((VarDeclaration) getType(),
-							DataTypeLibrary.getInstance().getType(typeCombo.getText()));
+							getDataTypeLib().getType(typeCombo.getText()));
 				}
 			}
 			executeCommand(cmd);
@@ -114,20 +123,41 @@ public class InterfaceElementSection extends AbstractSection {
 				getPalette().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getType().getName()));
 			}
 		} else if (getType() instanceof VarDeclaration) {
-			DataTypeLibrary.getInstance().getDataTypesSorted().forEach(dataType -> typeCombo.add(dataType.getName()));
+			getDataTypeLib().getDataTypesSorted().forEach(dataType -> typeCombo.add(dataType.getName()));
 		}
 
 		if (typeCombo.getItems().length > 0) {
-			int i = typeCombo.getItems().length - 1;
-			while (!text.equals(typeCombo.getItems()[i]) && i > 0) {
-				--i;
-			}
-			typeCombo.select(i);
+			typeCombo.setText(text);
 		}
 	}
 
+	private TypeLibrary getTypeLib() {
+		if (getType().eContainer().eContainer() instanceof FBType) {
+			return ((FBType) getType().eContainer().eContainer()).getTypeLibrary();
+		}
+
+		if (getType().eContainer() instanceof Device) {
+			return ((Device) getType().eContainer()).getTypeLibrary();
+		}
+
+		if (getType().getFBNetworkElement().getFbNetwork().eContainer() instanceof FBType) {
+			return ((FBType) getType().getFBNetworkElement().getFbNetwork().eContainer()).getTypeLibrary();
+		}
+
+		if (getType().getFBNetworkElement().getFbNetwork().eContainer() instanceof Resource) {
+			return ((Resource) getType().getFBNetworkElement().getFbNetwork().eContainer()).getTypeLibrary();
+		}
+
+		return getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette()
+				.getTypeLibrary();
+	}
+
+	private DataTypeLibrary getDataTypeLib() {
+		return getTypeLib().getDataTypeLibrary();
+	}
+
 	private Palette getPalette() {
-		return getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette();
+		return getTypeLib().getBlockTypeLib();
 	}
 
 	@Override
@@ -135,7 +165,7 @@ public class InterfaceElementSection extends AbstractSection {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
-			setEditabelFields(getType().getFBNetworkElement() instanceof SubApp);
+			setEditableFields(getType().getFBNetworkElement() instanceof SubApp);
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			String itype = ""; //$NON-NLS-1$
@@ -145,9 +175,7 @@ public class InterfaceElementSection extends AbstractSection {
 				if (getType().isIsInput()) {
 					parameterText.setVisible(true);
 					valueCLabel.setVisible(true);
-					parameterText.setText(
-							var.getValue() != null && var.getValue().getValue() != null ? var.getValue().getValue()
-									: ""); //$NON-NLS-1$
+					parameterText.setText((var.getValue() != null) ? var.getValue().getValue() : ""); //$NON-NLS-1$
 				} else {
 					valueCLabel.setVisible(false);
 					parameterText.setVisible(false);
@@ -167,7 +195,7 @@ public class InterfaceElementSection extends AbstractSection {
 	 *
 	 * @param editAble flag indicating if the fields should be editable
 	 */
-	private void setEditabelFields(boolean editAble) {
+	private void setEditableFields(boolean editAble) {
 		nameText.setEditable(editAble);
 		nameText.setEnabled(editAble);
 		commentText.setEditable(editAble);

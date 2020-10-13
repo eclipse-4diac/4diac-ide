@@ -165,8 +165,9 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 		switch (featureID) {
 		case LibraryElementPackage.APPLICATION__FB_NETWORK:
 			return basicSetFBNetwork(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -181,8 +182,9 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 			if (resolve)
 				return getFBNetwork();
 			return basicGetFBNetwork();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -196,8 +198,10 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 		case LibraryElementPackage.APPLICATION__FB_NETWORK:
 			setFBNetwork((FBNetwork) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -211,8 +215,10 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 		case LibraryElementPackage.APPLICATION__FB_NETWORK:
 			setFBNetwork((FBNetwork) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -225,8 +231,9 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 		switch (featureID) {
 		case LibraryElementPackage.APPLICATION__FB_NETWORK:
 			return fBNetwork != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // ApplicationImpl

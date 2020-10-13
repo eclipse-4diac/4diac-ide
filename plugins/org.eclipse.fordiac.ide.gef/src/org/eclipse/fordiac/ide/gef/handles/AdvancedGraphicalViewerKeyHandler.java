@@ -26,36 +26,50 @@ public class AdvancedGraphicalViewerKeyHandler extends GraphicalViewerKeyHandler
 
 	@Override
 	public boolean keyPressed(KeyEvent event) {
+		boolean modifierPressed = (event.stateMask & SWT.MODIFIER_MASK) == 0;
 		switch (event.keyCode) {
 		case SWT.ARROW_DOWN:
-			getViewer().scrollByOffset(0, SCROLL_SPEED);
-			return true;
+			if (!modifierPressed) {
+				getViewer().scrollByOffset(0, SCROLL_SPEED);
+				return true;
+			}
+			break;
 		case SWT.ARROW_UP:
-			getViewer().scrollByOffset(0, -SCROLL_SPEED);
-			return true;
+			if (!modifierPressed) {
+				getViewer().scrollByOffset(0, -SCROLL_SPEED);
+				return true;
+			}
+			break;
 		case SWT.ARROW_RIGHT:
-			getViewer().scrollByOffset(SCROLL_SPEED, 0);
-			return true;
+			if (!modifierPressed) {
+				getViewer().scrollByOffset(SCROLL_SPEED, 0);
+				return true;
+			}
+			break;
 		case SWT.ARROW_LEFT:
-			getViewer().scrollByOffset(-SCROLL_SPEED, 0);
-			return true;
+			if (!modifierPressed) {
+				getViewer().scrollByOffset(-SCROLL_SPEED, 0);
+				return true;
+			}
+			break;
 		case SWT.PAGE_DOWN:
-			if ((event.stateMask & SWT.MODIFIER_MASK) == 0) {
-				getViewer().scrollByOffset(0, getViewer().getFigureCanvasSize().y);
-			} else {
+			if ((event.stateMask & SWT.SHIFT) != 0) {
 				getViewer().scrollByOffset(getViewer().getFigureCanvasSize().x, 0);
+			} else {
+				getViewer().scrollByOffset(0, getViewer().getFigureCanvasSize().y);
 			}
 			return true;
 		case SWT.PAGE_UP:
-			if ((event.stateMask & SWT.MODIFIER_MASK) == 0) {
-				getViewer().scrollByOffset(0, -getViewer().getFigureCanvasSize().y);
-			} else {
+			if ((event.stateMask & SWT.SHIFT) != 0) {
 				getViewer().scrollByOffset(-getViewer().getFigureCanvasSize().x, 0);
+			} else {
+				getViewer().scrollByOffset(0, -getViewer().getFigureCanvasSize().y);
 			}
 			return true;
 		default:
 			return super.keyPressed(event);
 		}
+		return false;
 	}
 
 	@Override

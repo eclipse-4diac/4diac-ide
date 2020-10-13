@@ -172,8 +172,9 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 				msgs = ((InternalEObject) eCC).eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.BASIC_FB_TYPE__ECC, null, msgs);
 			return basicSetECC((ECC) otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -188,8 +189,9 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 			return basicSetECC(null, msgs);
 		case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
 			return ((InternalEList<?>) getAlgorithm()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -204,8 +206,9 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 			return getECC();
 		case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
 			return getAlgorithm();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -224,8 +227,10 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 			getAlgorithm().clear();
 			getAlgorithm().addAll((Collection<? extends Algorithm>) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -242,8 +247,10 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 		case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
 			getAlgorithm().clear();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -258,8 +265,9 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 			return eCC != null;
 		case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
 			return algorithm != null && !algorithm.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // BasicFBTypeImpl

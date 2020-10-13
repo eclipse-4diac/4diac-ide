@@ -132,8 +132,10 @@ public class FBTypeItemProvider extends CompilableTypeItemProvider {
 		case LibraryElementPackage.FB_TYPE__SERVICE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**

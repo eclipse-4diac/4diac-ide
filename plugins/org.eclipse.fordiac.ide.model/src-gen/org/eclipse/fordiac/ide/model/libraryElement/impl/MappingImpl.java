@@ -186,8 +186,9 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 			if (resolve)
 				return getTo();
 			return basicGetTo();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -204,8 +205,10 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 		case LibraryElementPackage.MAPPING__TO:
 			setTo((FBNetworkElement) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -222,8 +225,10 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 		case LibraryElementPackage.MAPPING__TO:
 			setTo((FBNetworkElement) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -238,8 +243,9 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 			return from != null;
 		case LibraryElementPackage.MAPPING__TO:
 			return to != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // MappingImpl

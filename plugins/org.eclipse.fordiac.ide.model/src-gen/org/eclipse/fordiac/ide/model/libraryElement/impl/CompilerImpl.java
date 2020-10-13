@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -77,7 +77,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String PRODUCT_EDEFAULT = null;
+	protected static final String PRODUCT_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getProduct() <em>Product</em>}' attribute.
@@ -97,7 +97,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VENDOR_EDEFAULT = null;
+	protected static final String VENDOR_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getVendor() <em>Vendor</em>}' attribute.
@@ -117,7 +117,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VERSION_EDEFAULT = null;
+	protected static final String VERSION_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
@@ -288,8 +288,9 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 			return getVendor();
 		case LibraryElementPackage.COMPILER__VERSION:
 			return getVersion();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -312,8 +313,10 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 		case LibraryElementPackage.COMPILER__VERSION:
 			setVersion((String) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -336,8 +339,10 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 		case LibraryElementPackage.COMPILER__VERSION:
 			setVersion(VERSION_EDEFAULT);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -356,8 +361,9 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 			return VENDOR_EDEFAULT == null ? vendor != null : !VENDOR_EDEFAULT.equals(vendor);
 		case LibraryElementPackage.COMPILER__VERSION:
 			return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

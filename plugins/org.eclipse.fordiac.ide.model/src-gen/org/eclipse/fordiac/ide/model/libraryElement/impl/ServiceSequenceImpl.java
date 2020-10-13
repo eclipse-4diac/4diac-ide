@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,9 +21,9 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
@@ -47,21 +47,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
  *
  * @generated
  */
-public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSequence {
+public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = "";
+	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -76,7 +76,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = "";
+	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -146,7 +146,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated NOT
 	 */
 	@Override
@@ -154,12 +154,12 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 		return testResult;
 		// TODO: implement this method to return the 'Test Result' attribute
 		// Ensure that you remove @generated or mark it @generated NOT
-//		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated NOT
 	 */
 	@Override
@@ -177,7 +177,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated NOT
 	 */
 	@Override
@@ -190,7 +190,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated NOT
 	 */
 	@Override
@@ -239,13 +239,12 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated not
+	 * @generated
 	 */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
-		NameRepository.checkNameIdentifier(this);
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_SEQUENCE__NAME, oldName,
 					name));
@@ -261,8 +260,9 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 		switch (featureID) {
 		case LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION:
 			return ((InternalEList<?>) getServiceTransaction()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -281,8 +281,9 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 			return getServiceTransaction();
 		case LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT:
 			return getTestResult();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -307,8 +308,10 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 		case LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT:
 			setTestResult((Integer) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -331,8 +334,10 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 		case LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT:
 			unsetTestResult();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -351,8 +356,9 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 			return serviceTransaction != null && !serviceTransaction.isEmpty();
 		case LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT:
 			return isSetTestResult();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

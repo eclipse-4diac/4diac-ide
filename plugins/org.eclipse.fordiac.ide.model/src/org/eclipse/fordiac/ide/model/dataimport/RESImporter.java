@@ -16,8 +16,8 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
@@ -30,19 +30,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class RESImporter extends TypeImporter {
 
-	private final Palette palette;
-
-	public RESImporter(final Palette palette) {
-		this.palette = palette;
+	public RESImporter(IFile typeFile) {
+		super(typeFile);
 	}
 
 	@Override
-	protected ResourceType getType() {
-		return (ResourceType) super.getType();
+	public ResourceType getElement() {
+		return (ResourceType) super.getElement();
 	}
 
 	@Override
-	protected LibraryElement createType() {
+	protected LibraryElement createRootModelElement() {
 		return LibraryElementFactory.eINSTANCE.createResourceType();
 	}
 
@@ -52,28 +50,28 @@ public final class RESImporter extends TypeImporter {
 	}
 
 	@Override
-	protected IChildHandler getTypeChildrenHandler() {
+	protected IChildHandler getBaseChildrenHandler() {
 		return name -> {
 			switch (name) {
 			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getType());
+				parseIdentification(getElement());
 				break;
 			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getType());
+				parseVersionInfo(getElement());
 				break;
 			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				parseCompilerInfo(getType());
+				parseCompilerInfo(getElement());
 				break;
 			case LibraryElementTags.VAR_DECLARATION_ELEMENT:
 				VarDeclaration v = parseVarDeclaration();
 				v.setIsInput(true);
-				getType().getVarDeclaration().add(v);
+				getElement().getVarDeclaration().add(v);
 				break;
 			case LibraryElementTags.FBTYPENAME_ELEMENT:
 				// TODO __gebenh import "supported fbtypes"
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				getType().setFBNetwork(new ResDevFBNetworkImporter(palette, getType().getVarDeclaration(), getReader())
+				getElement().setFBNetwork(new ResDevFBNetworkImporter(this, getElement().getVarDeclaration())
 						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
 				break;
 			default:

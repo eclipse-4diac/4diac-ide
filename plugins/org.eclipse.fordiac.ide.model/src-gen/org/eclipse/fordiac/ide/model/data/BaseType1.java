@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -37,7 +37,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	DATEANDTIME(0, "DATEANDTIME", "DATE_AND_TIME"),
+	DATEANDTIME(0, "DATEANDTIME", "DATE_AND_TIME"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>BYTE</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -47,7 +47,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	BYTE(1, "BYTE", "BYTE"),
+	BYTE(1, "BYTE", "BYTE"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>SINT</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -57,7 +57,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	SINT(2, "SINT", "SINT"),
+	SINT(2, "SINT", "SINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>USINT</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -67,7 +67,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	USINT(3, "USINT", "USINT"),
+	USINT(3, "USINT", "USINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>LWORD</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -77,7 +77,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	LWORD(4, "LWORD", "LWORD"),
+	LWORD(4, "LWORD", "LWORD"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>TIME</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -87,7 +87,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	TIME(5, "TIME", "TIME"),
+	TIME(5, "TIME", "TIME"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>WORD</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -97,7 +97,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	WORD(6, "WORD", "WORD"),
+	WORD(6, "WORD", "WORD"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>STRING</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -107,7 +107,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	STRING(7, "STRING", "STRING"),
+	STRING(7, "STRING", "STRING"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>BOOL</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -117,7 +117,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	BOOL(8, "BOOL", "BOOL"),
+	BOOL(8, "BOOL", "BOOL"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>LREAL</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -127,7 +127,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	LREAL(9, "LREAL", "LREAL"),
+	LREAL(9, "LREAL", "LREAL"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>REAL</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -137,7 +137,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	REAL(10, "REAL", "REAL"),
+	REAL(10, "REAL", "REAL"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>LINT</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -147,7 +147,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	LINT(11, "LINT", "LINT"),
+	LINT(11, "LINT", "LINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>ULINT</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -157,7 +157,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	ULINT(12, "ULINT", "ULINT"),
+	ULINT(12, "ULINT", "ULINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>UINT</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -167,7 +167,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	UINT(13, "UINT", "UINT"),
+	UINT(13, "UINT", "UINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>DATE</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -177,7 +177,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	DATE(14, "DATE", "DATE"),
+	DATE(14, "DATE", "DATE"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>DWORD</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -187,7 +187,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	DWORD(15, "DWORD", "DWORD"),
+	DWORD(15, "DWORD", "DWORD"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>INT</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -197,7 +197,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	INT(16, "INT", "INT"),
+	INT(16, "INT", "INT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>TIMEOFDAY</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -207,7 +207,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	TIMEOFDAY(17, "TIMEOFDAY", "TIME_OF_DAY"),
+	TIMEOFDAY(17, "TIMEOFDAY", "TIME_OF_DAY"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>WSTRING</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -217,7 +217,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	WSTRING(18, "WSTRING", "WSTRING"),
+	WSTRING(18, "WSTRING", "WSTRING"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>DINT</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -227,7 +227,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	DINT(19, "DINT", "DINT"),
+	DINT(19, "DINT", "DINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>UDINT</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -237,7 +237,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	UDINT(20, "UDINT", "UDINT"),
+	UDINT(20, "UDINT", "UDINT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>ANY</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -247,7 +247,7 @@ public enum BaseType1 implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	ANY(21, "ANY", "ANY");
+	ANY(21, "ANY", "ANY"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>DATEANDTIME</b></em>' literal value. <!-- begin-user-doc -->
@@ -582,7 +582,7 @@ public enum BaseType1 implements Enumerator {
 	/**
 	 * An array of all the '<em><b>Base Type1</b></em>' enumerators. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private static final BaseType1[] VALUES_ARRAY = new BaseType1[] { DATEANDTIME, BYTE, SINT, USINT, LWORD, TIME, WORD,
@@ -686,8 +686,9 @@ public enum BaseType1 implements Enumerator {
 			return UDINT;
 		case ANY_VALUE:
 			return ANY;
+		default:
+			return null;
 		}
-		return null;
 	}
 
 	/**

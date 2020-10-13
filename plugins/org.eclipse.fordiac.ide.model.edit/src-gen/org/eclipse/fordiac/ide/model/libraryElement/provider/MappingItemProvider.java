@@ -135,8 +135,10 @@ public class MappingItemProvider extends ItemProviderAdapter implements IEditing
 		case LibraryElementPackage.MAPPING__TO:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**

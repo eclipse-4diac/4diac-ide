@@ -41,6 +41,12 @@
    <extension
          point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
       <PaletteEntryCreator
+            class="org.eclipse.fordiac.ide.model.typelibrary.CreateDataTypePaletteEntry">
+      </PaletteEntryCreator>
+   </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
+      <PaletteEntryCreator
             class="org.eclipse.fordiac.ide.model.typelibrary.CreateFBTypePaletteEntry">
       </PaletteEntryCreator>
    </extension>
@@ -77,7 +83,12 @@
             class="org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage"
             genModel="model/virtualDNS.genmodel"/>
    </extension>
-   
+      <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.model.PreferenceInitializer">
+      </initializer>
+   </extension>
    <!-- this is needed to load old pre eclipse version projects -->
 null
 </plugin>

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2019 fortiss GmbH
+ *               2020 Johannes Kepler University Linz
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,8 +9,8 @@
  * SPDX-License-Identifier: EPL-2.0
  * 
  * Contributors:
- *   Martin Jobst
- *     - initial API and implementation and/or initial documentation
+ *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Alois Zoitl  - added support for structured types
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
@@ -23,19 +24,23 @@ import org.eclipse.fordiac.ide.export.forte_ng.composite.CompositeFBHeaderTempla
 import org.eclipse.fordiac.ide.export.forte_ng.composite.CompositeFBImplTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.service.ServiceInterfaceFBHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.service.ServiceInterfaceFBImplTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBHeaderTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBImplTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.struct.StructBaseTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.struct.StructuredTypeHeaderTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.struct.StructuredTypeImplTemplate
+import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
-import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBHeaderTemplate
-import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBImplTemplate
 
 class ForteNgExportFilter extends TemplateExportFilter {
 
 	override protected getTemplates(LibraryElement type) {
-		return switch (type) {
+		switch (type) {
 			BasicFBType:
 				#{
 					new BasicFBHeaderTemplate(type, '''«type.name».h''', Paths.get("")),
@@ -60,6 +65,11 @@ class ForteNgExportFilter extends TemplateExportFilter {
 				#{
 					new ServiceInterfaceFBHeaderTemplate(type, '''«type.name».h''', Paths.get("")),
 					new ServiceInterfaceFBImplTemplate(type, '''«type.name».cpp''', Paths.get(""))
+				}
+			StructuredType:
+				#{
+					new StructuredTypeHeaderTemplate(type, '''«StructBaseTemplate.structuredTypeFileName(type)».h''', Paths.get("")),
+					new StructuredTypeImplTemplate(type, '''«StructBaseTemplate.structuredTypeFileName(type)».cpp''', Paths.get(""))
 				}
 			default: {
 				errors.add('''Unknown library element type «type.class.name»''')

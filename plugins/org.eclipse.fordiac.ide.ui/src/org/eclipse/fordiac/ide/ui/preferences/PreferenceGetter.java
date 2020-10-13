@@ -87,6 +87,10 @@ public final class PreferenceGetter {
 		if (isAnyString(dataType)) {
 			return getColor(PreferenceConstants.P_ANY_STRING_CONNECTOR_COLOR);
 		}
+		return getDefaultDataColor();
+	}
+
+	public static Color getDefaultDataColor() {
 		return getColor(PreferenceConstants.P_REMAINING_DATA_CONNECTOR_COLOR);
 	}
 

@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,6 +18,8 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -168,12 +170,24 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	 * @generated
 	 */
 	@Override
+	public boolean isUnfolded() {
+		Attribute attr = this.getAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);
+		return (attr != null) && "true".equals(attr.getValue()); //$NON-NLS-1$
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
 			return basicSetSubAppNetwork(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -188,8 +202,9 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 			if (resolve)
 				return getSubAppNetwork();
 			return basicGetSubAppNetwork();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -203,8 +218,10 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 		case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
 			setSubAppNetwork((FBNetwork) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -218,8 +235,10 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 		case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
 			setSubAppNetwork((FBNetwork) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -232,8 +251,9 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 		switch (featureID) {
 		case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
 			return subAppNetwork != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // SubAppImpl

@@ -2,13 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Metrics
 Bundle-SymbolicName: org.eclipse.fordiac.ide.metrics;singleton:=true
-Bundle-Version: 1.12.2.qualifier
+Bundle-Version: 1.13.0.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.metrics.Activator
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.typemanagement,
- org.eclipse.core.resources
+ org.eclipse.core.resources,
+ org.eclipse.gef,
+ org.eclipse.ui.views.properties.tabbed,
+ org.eclipse.fordiac.ide.fbtypeeditor
 Automatic-Module-Name: org.eclipse.fordiac.ide.metrics

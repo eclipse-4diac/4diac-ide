@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2014 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -25,11 +25,12 @@ public class Messages extends NLS {
 
 	public static String OpenEditorProvider_OpenWithMenu_label;
 
-	/** The New application page_ applcation name label. */
-	public static String NewElementPage_ElementNameLabel;
+	public static String NewApplicationWizardTitle;
+
+	public static String NewApplicationPage_NewApplicationDescription;
 
 	/** The New application page_ error message_ empty app name. */
-	public static String NewElementPage_ErrorMessage_EmptyElementName;
+	public static String NewApplicationPage_ErrorMessage_EmptyElementName;
 
 	/** The New application page_ error message invalid app name. */
 	public static String NewApplicationPage_ErrorMessageInvalidAppName;
@@ -37,19 +38,7 @@ public class Messages extends NLS {
 	public static String NewApplicationPage_OpenApplicationForEditing;
 
 	/** The New application page_ error message no system selected. */
-	public static String NewElementPage_ErrorMessageNoSystemSelected;
-
-	/** The New application page_ parent system label. */
-	public static String NewElementPage_ParentSystemLabel;
-
-	/** The New application wizard_ comment. */
-	public static String NewApplicationWizard_Comment;
-
-	/** The New application wizard_ description. */
-	public static String NewApplicationWizard_Description;
-
-	/** The New application wizard_ title. */
-	public static String NewApplicationWizard_Title;
+	public static String NewApplicationPage_ErrorMessageNoSystemSelected;
 
 	public static String NewApplicationCommand_LABEL_NewApplication;
 
@@ -58,19 +47,20 @@ public class Messages extends NLS {
 	public static String NewSystemWizard_HideAdvanced;
 
 	/** The New system wizard_ wizard desc. */
-	public static String NewSystemWizard_WizardDesc;
+	public static String New4diacProjectWizard_WizardDesc;
 
 	/** The New system wizard_ wizard name. */
-	public static String NewSystemWizard_WizardName;
+	public static String New4diacProjectWizard_WizardName;
 
-	public static String NewSystemWizard_InitialApplicationName;
+	public static String New4diacProjectWizard_InitialSystemName;
+	public static String New4diacProjectWizard_InitialApplicationName;
+
+	public static String NewSystemWizardPage_CreateNewSystem;
 
 	/** The Palette management page_ labe l_ default palette. */
 	public static String PaletteManagementPage_LABEL_DefaultTypeLibrary;
 
 	public static String SystemNameNotValid;
-
-	public static String SystemNameAlreadyUsed;
 
 	static {
 		// initialize resource bundle

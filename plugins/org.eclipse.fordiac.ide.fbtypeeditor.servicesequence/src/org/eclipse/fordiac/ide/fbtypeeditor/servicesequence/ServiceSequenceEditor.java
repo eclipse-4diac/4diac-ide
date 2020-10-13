@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH.
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
@@ -133,13 +134,12 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 			updateActions(getSelectionActions());
 			if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
 				IStructuredSelection sel = (IStructuredSelection) selection;
-				Object ob = null;
 				if (sel.getFirstElement() instanceof SequenceRootEditPart) {
-					ob = ((FBType) ((SequenceRootEditPart) sel.getFirstElement()).getModel()).getService();
+					((FBType) ((SequenceRootEditPart) sel.getFirstElement()).getModel()).getService();
 				} else if (sel.getFirstElement() instanceof OutputPrimitiveEditPart) {
-					ob = ((OutputPrimitiveEditPart) sel.getFirstElement()).getModel();
+					((OutputPrimitiveEditPart) sel.getFirstElement()).getModel();
 				} else if (sel.getFirstElement() instanceof InputPrimitiveEditPart) {
-					ob = ((InputPrimitiveEditPart) sel.getFirstElement()).getModel();
+					((InputPrimitiveEditPart) sel.getFirstElement()).getModel();
 				}
 			}
 		}
@@ -175,4 +175,16 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 	public void setCommonCommandStack(CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
+
+	@Override
+	public void gotoMarker(IMarker marker) {
+		// For now we don't handle markers in this editor
+	}
+
+	@Override
+	public boolean isMarkerTarget(IMarker marker) {
+		// For now we don't handle markers in this editor
+		return false;
+	}
+
 }

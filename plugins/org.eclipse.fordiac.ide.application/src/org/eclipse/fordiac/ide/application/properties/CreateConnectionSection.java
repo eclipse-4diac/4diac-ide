@@ -56,6 +56,7 @@ public class CreateConnectionSection extends AbstractSection {
 	private Text sourceText;
 	private Text targetText;
 
+	@SuppressWarnings("unchecked")
 	private List<IInterfaceElement> getSelectionList() {
 		return (type instanceof List<?>) ? (List<IInterfaceElement>) type : Collections.emptyList();
 	}
@@ -130,15 +131,14 @@ public class CreateConnectionSection extends AbstractSection {
 	private static FBNetwork getFBNetwork(IInterfaceElement source, IInterfaceElement dest) {
 		if (source.eContainer().eContainer() instanceof CompositeFBType) {
 			return ((CompositeFBType) source.eContainer().eContainer()).getFBNetwork();
-		} else if (source.getFBNetworkElement().getFbNetwork() != dest.getFBNetworkElement().getFbNetwork()) {
+		} else if ((source.getFBNetworkElement().getFbNetwork() != dest.getFBNetworkElement().getFbNetwork())
+				&& (source.getFBNetworkElement() instanceof SubApp)) {
 			// one of the both is a untyped subapp interface element
-			if (source.getFBNetworkElement() instanceof SubApp) {
-				if (((SubApp) source.getFBNetworkElement()).getSubAppNetwork() == dest.getFBNetworkElement()
-						.getFbNetwork()) {
-					return dest.getFBNetworkElement().getFbNetwork();
-				} else {
-					return source.getFBNetworkElement().getFbNetwork();
-				}
+			if (((SubApp) source.getFBNetworkElement()).getSubAppNetwork() == dest.getFBNetworkElement()
+					.getFbNetwork()) {
+				return dest.getFBNetworkElement().getFbNetwork();
+			} else {
+				return source.getFBNetworkElement().getFbNetwork();
 			}
 		}
 		return source.getFBNetworkElement().getFbNetwork();

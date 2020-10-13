@@ -154,8 +154,9 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 		switch (featureID) {
 		case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
 			return basicSetCompilerInfo(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -170,8 +171,9 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 			if (resolve)
 				return getCompilerInfo();
 			return basicGetCompilerInfo();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -185,8 +187,10 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 		case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
 			setCompilerInfo((CompilerInfo) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -200,8 +204,10 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 		case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
 			setCompilerInfo((CompilerInfo) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -214,8 +220,9 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 		switch (featureID) {
 		case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
 			return compilerInfo != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // CompilableTypeImpl

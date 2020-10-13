@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009 - 2016 Profactor GbmH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl 
+ *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.views;
@@ -157,7 +157,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		PatternFilter patternFilter = new PatternFilter();
 
 		filteredTree = new FilteredTree(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION,
-				patternFilter, true);
+				patternFilter, true, false);
 
 		GridData treeGridData = new GridData();
 		treeGridData.grabExcessHorizontalSpace = true;
@@ -507,7 +507,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.action.Action#run()
 		 */
 		@Override
@@ -548,7 +548,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.action.Action#run()
 		 */
 		@Override

@@ -116,8 +116,10 @@ public class OtherAlgorithmItemProvider extends TextAlgorithmItemProvider {
 		case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**

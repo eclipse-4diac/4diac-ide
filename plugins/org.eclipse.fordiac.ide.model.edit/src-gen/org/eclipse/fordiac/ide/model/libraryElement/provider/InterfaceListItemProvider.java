@@ -148,8 +148,10 @@ public class InterfaceListItemProvider extends ItemProviderAdapter implements IE
 		case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**
@@ -187,11 +189,17 @@ public class InterfaceListItemProvider extends ItemProviderAdapter implements IE
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
 				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
+				LibraryElementFactory.eINSTANCE.createLocalVariable()));
+
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
 				LibraryElementFactory.eINSTANCE.createVarDeclaration()));
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
 				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
+				LibraryElementFactory.eINSTANCE.createLocalVariable()));
 	}
 
 	/**

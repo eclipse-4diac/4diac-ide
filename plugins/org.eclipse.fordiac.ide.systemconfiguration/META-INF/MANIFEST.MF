@@ -17,13 +17,14 @@ Require-Bundle: org.eclipse.ui.views.properties.tabbed,
  org.eclipse.fordiac.ide.resourceediting,
  org.eclipse.ui.navigator,
  org.eclipse.fordiac.ide.model.commands,
- org.eclipse.fordiac.ide.deployment
+ org.eclipse.fordiac.ide.deployment,
+ org.eclipse.core.resources
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.12.2.qualifier
+Bundle-Version: 1.13.0.qualifier
 Bundle-Name: System Configuration (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.systemconfiguration.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.systemconfiguration;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.systemconfiguration

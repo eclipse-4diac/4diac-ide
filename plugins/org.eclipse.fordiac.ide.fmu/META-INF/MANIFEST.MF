@@ -11,11 +11,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.swt
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.12.2.qualifier
+Bundle-Version: 1.13.0.qualifier
 Bundle-Name: FMU exporter
 Bundle-Activator: org.eclipse.fordiac.ide.fmu.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fmu;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Import-Package: org.eclipse.fordiac.ide.systemmanagement
 Automatic-Module-Name: org.eclipse.fordiac.ide.fmu

@@ -123,8 +123,10 @@ public class ValueItemProvider extends ItemProviderAdapter implements IEditingDo
 		case LibraryElementPackage.VALUE__VALUE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**

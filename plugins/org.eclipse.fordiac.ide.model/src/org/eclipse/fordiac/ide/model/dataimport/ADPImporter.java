@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -33,52 +32,12 @@ public final class ADPImporter extends TypeImporter {
 
 	private AdapterFBType adapterFBType;
 
-	@Override
-	public LibraryElement importType(IFile typeFile) throws TypeImportException {
-		try (ImporterStreams streams = createInputStreams(typeFile.getContents())) {
-			setType(createType());
-			proceedToStartElementNamed(getStartElementName());
-			readNameCommentAttributes(getType());
-
-			FBTImporter importer = new FBTImporter(getReader(), null) {
-				@Override
-				public IChildHandler getTypeChildrenHandler() {
-					return name -> {
-						switch (name) {
-						case LibraryElementTags.IDENTIFICATION_ELEMENT:
-							parseIdentification(adapterFBType);
-							break;
-						case LibraryElementTags.VERSION_INFO_ELEMENT:
-							parseVersionInfo(adapterFBType);
-							break;
-						case LibraryElementTags.COMPILER_INFO_ELEMENT:
-							parseCompilerInfo(adapterFBType);
-							break;
-						case LibraryElementTags.INTERFACE_LIST_ELEMENT:
-							adapterFBType
-									.setInterfaceList(parseInterfaceList(LibraryElementTags.INTERFACE_LIST_ELEMENT));
-							break;
-						case LibraryElementTags.SERVICE_ELEMENT:
-							parseService(adapterFBType);
-							break;
-						default:
-							return false;
-						}
-						return true;
-					};
-				}
-			};
-			processChildren(getStartElementName(), importer.getTypeChildrenHandler());
-		} catch (TypeImportException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new TypeImportException(e.getMessage(), e);
-		}
-		return getType();
+	public ADPImporter(IFile typeFile) {
+		super(typeFile);
 	}
 
 	@Override
-	protected LibraryElement createType() {
+	public LibraryElement createRootModelElement() {
 		AdapterType newType = LibraryElementFactory.eINSTANCE.createAdapterType();
 		adapterFBType = LibraryElementFactory.eINSTANCE.createAdapterFBType();
 		newType.setAdapterFBType(adapterFBType);
@@ -93,8 +52,35 @@ public final class ADPImporter extends TypeImporter {
 	}
 
 	@Override
-	protected IChildHandler getTypeChildrenHandler() {
-		return name -> false;
+	protected IChildHandler getBaseChildrenHandler() {
+		FBTImporter importer = new FBTImporter(this) {
+			@Override
+			public IChildHandler getBaseChildrenHandler() {
+				return name -> {
+					switch (name) {
+					case LibraryElementTags.IDENTIFICATION_ELEMENT:
+						parseIdentification(adapterFBType);
+						break;
+					case LibraryElementTags.VERSION_INFO_ELEMENT:
+						parseVersionInfo(adapterFBType);
+						break;
+					case LibraryElementTags.COMPILER_INFO_ELEMENT:
+						parseCompilerInfo(adapterFBType);
+						break;
+					case LibraryElementTags.INTERFACE_LIST_ELEMENT:
+						adapterFBType.setInterfaceList(parseInterfaceList(LibraryElementTags.INTERFACE_LIST_ELEMENT));
+						break;
+					case LibraryElementTags.SERVICE_ELEMENT:
+						parseService(adapterFBType);
+						break;
+					default:
+						return false;
+					}
+					return true;
+				};
+			}
+		};
+		return importer.getBaseChildrenHandler();
 	}
 
 }

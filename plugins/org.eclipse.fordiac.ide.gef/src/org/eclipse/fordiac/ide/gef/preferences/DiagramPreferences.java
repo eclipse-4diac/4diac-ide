@@ -30,7 +30,6 @@ import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.router.IConnectionRouterFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
@@ -48,9 +47,6 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	/** The Constant CONNECTION_ROUTER. */
 	public static final String CONNECTION_ROUTER = "ConnectionRouter"; //$NON-NLS-1$
-
-	/** The Constant SELECTION_COLOR. */
-	public static final String SELECTION_COLOR = "SelectionColor"; //$NON-NLS-1$
 
 	/** The Constant CORNER_DIM. */
 	public static final int CORNER_DIM = 14;
@@ -89,10 +85,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to hold the connection router fields
 		createGroupRouter();
-		
-		// Create a Group to hold selection color field
-		createGroupColor();
-		
+
 		// Create a Group to hold label size field
 		createGroupLabelSize();
 	}
@@ -120,14 +113,6 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		integerFieldEditor.setValidRange(0, 120);
 		addField(integerFieldEditor);
 		configGroup(labelSize);
-	}
-
-	private void createGroupColor() {
-		Group color = createGroup(Messages.DiagramPreferences_Colors);
-		ColorFieldEditor selectionBorderColor = new ColorFieldEditor(SELECTION_COLOR,
-				Messages.DiagramPreferences_SelectionColor, color);
-		addField(selectionBorderColor);
-		configGroup(color);
 	}
 
 	private void createGroupRulerGrid() {

@@ -33,14 +33,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.editparts.ZoomManager;
 
 public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 
 	private Adapter subAppInterfaceAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
 			switch (notification.getEventType()) {
 			case Notification.ADD:
 			case Notification.ADD_MANY:
@@ -55,8 +53,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		}
 	};
 
-	public SubAppForFBNetworkEditPart(final ZoomManager zoomManager) {
-		super(zoomManager);
+	public SubAppForFBNetworkEditPart() {
+		super();
 	}
 
 	@Override

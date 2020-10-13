@@ -21,21 +21,20 @@ import org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.WithEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class FBInterfaceEditPartFactory
 		extends org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory {
 
-	public FBInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette, ZoomManager zoomManager) {
-		super(editor, systemPalette, zoomManager);
+	public FBInterfaceEditPartFactory(GraphicalEditor editor, TypeLibrary typeLib) {
+		super(editor, typeLib);
 	}
 
 	@Override
@@ -44,7 +43,7 @@ public class FBInterfaceEditPartFactory
 			return new FBTypeRootEditPart();
 		}
 		if (modelElement instanceof FB) {
-			return new org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.TesterFBEditPart(getZoomManager());
+			return new org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.TesterFBEditPart();
 		}
 		if (modelElement instanceof InstanceName) {
 			return new InstanceNameEditPart();

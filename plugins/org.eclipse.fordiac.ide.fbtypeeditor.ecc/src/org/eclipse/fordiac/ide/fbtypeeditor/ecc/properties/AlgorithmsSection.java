@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2018 fortiss GmbH, Johannes Kepler University Linz (JKU)
- * 
+ * Copyright (c) 2015 - 2020 fortiss GmbH, Johannes Kepler University Linz (JKU)
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,11 +10,21 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber - added copy and paste
+ *   Bianca Wiesmayr - flattened hierarchy
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteAlgorithmCommand;
+import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.model.commands.insert.InsertAlgorithmCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
@@ -23,14 +33,26 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class AlgorithmsSection extends ECCSection {
+public class AlgorithmsSection extends AbstractSection implements I4diacTableUtil {
 	private final AlgorithmGroup algorithmGroup = new AlgorithmGroup();
 	private AlgorithmList algorithmList;
 
 	@Override
+	protected BasicFBType getType() {
+		return (BasicFBType) type;
+	}
+
+	@Override
+	protected Object getInputType(Object input) {
+		return ECCSection.getECCInputType(input);
+	}
+
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
+		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		createAlgorithmControls(parent);
+		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
 	}
 
 	public void createAlgorithmControls(final Composite parent) {
@@ -39,9 +61,8 @@ public class AlgorithmsSection extends ECCSection {
 		algorithmList = new AlgorithmList(view, getWidgetFactory());
 		setLeftComposite(algorithmList.getComposite());
 
-		getAlgorithmList().getAlgorithmViewer().addSelectionChangedListener(event -> {
-			Object selection = ((IStructuredSelection) getAlgorithmList().getAlgorithmViewer().getSelection())
-					.getFirstElement();
+		getAlgorithmList().getViewer().addSelectionChangedListener(event -> {
+			Object selection = ((IStructuredSelection) getAlgorithmList().getViewer().getSelection()).getFirstElement();
 			algorithmGroup.setAlgorithm((selection instanceof Algorithm) ? (Algorithm) selection : null);
 		});
 
@@ -72,4 +93,35 @@ public class AlgorithmsSection extends ECCSection {
 	public void refresh() {
 		getAlgorithmList().refresh();
 	}
+
+	@Override
+	public TableViewer getViewer() {
+		return algorithmList.getViewer();
+	}
+
+	public Object getEntry(int index) {
+		return getAlgorithmList().getType().getAlgorithm().get(index);
+	}
+
+	@Override
+	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+		if (entry instanceof Algorithm) {
+			cmd.add(new InsertAlgorithmCommand(getAlgorithmList().getType(), (Algorithm) entry, index));
+		}
+	}
+
+	@Override
+	public Object removeEntry(int index, CompoundCommand cmd) {
+		Algorithm entry = (Algorithm) getEntry(index);
+		cmd.add(new DeleteAlgorithmCommand(getAlgorithmList().getType(), entry));
+		return entry;
+	}
+
+	@Override
+	public void executeCompoundCommand(CompoundCommand cmd) {
+		getAlgorithmList().executeCommand(cmd);
+		getViewer().refresh();
+	}
+
+
 }

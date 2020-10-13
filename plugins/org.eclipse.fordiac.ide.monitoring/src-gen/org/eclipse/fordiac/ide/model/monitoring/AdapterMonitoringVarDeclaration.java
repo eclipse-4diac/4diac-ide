@@ -22,8 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  *
  * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getAdapterMonitoringVarDeclaration()
- * @model superTypes="org.eclipse.fordiac.ide.model.monitoring.IEditPartCreator
- *        org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration"
+ * @model superTypes="org.eclipse.fordiac.ide.model.monitoring.IEditPartCreator org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration"
  * @generated
  */
 public interface AdapterMonitoringVarDeclaration extends IEditPartCreator, VarDeclaration {

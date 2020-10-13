@@ -24,6 +24,12 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.application.messages"; //$NON-NLS-1$
 
+	public static String AddFBBookMark_AddBookmark;
+
+	public static String AddFBBookMark_AddBookMarkTitle;
+
+	public static String AddFBBookMark_EnterBookmarkName;
+
 	public static String ConnectionConstraintsPrefernecePage_Description;
 
 	public static String ConnectionConstraintsPrefernecePage_EnableFORTETypeCasts;
@@ -70,6 +76,10 @@ public class Messages extends NLS {
 
 	/** The Map sub app to command_ staus message_ already mapped. */
 	public static String MapSubAppToCommand_STAUSMessage_AlreadyMapped;
+
+	public static String MapToContributionItem_No_Device;
+
+	public static String MapToContributionItem_No_FB_Or_SubApp_Selected;
 
 	public static String NewInstanceCellEditor_SearchForType;
 
@@ -119,17 +129,22 @@ public class Messages extends NLS {
 
 	public static String SaveAsSubApplicationTypeAction_WizardOverrideMessage;
 
+	public static String StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT;
+
+	public static String StructManipulatorSection_MEMBERVAR_COLUMN_NAME;
+
+	public static String StructManipulatorSection_MEMBERVAR_COLUMN_TYPE;
+
+	public static String StructManipulatorSection_STRUCTURED_TYPE;
+
+	public static String StructManipulatorSection_Contained_variables;
+
 	/** The UIFB network context menu provider_ labe l_ hardware mapping. */
 	public static String UIFBNetworkContextMenuProvider_LABEL_HardwareMapping;
 
 	public static String UIFBNetworkContextMenuProvider_InsertFB;
 
 	public static String UIFBNetworkContextMenuProvider_ChangeType;
-
-	/** The Unmap action_ unmap_ label. */
-	public static String UnmapAction_Unmap_Label;
-
-	public static String UnmapAllAction_Text;
 
 	public static String UntypeSubappCommand_Label;
 

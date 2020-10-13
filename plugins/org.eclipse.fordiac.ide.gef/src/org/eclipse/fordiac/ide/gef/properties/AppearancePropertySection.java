@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH 
- * 
+ * Copyright (c) 2008, 2009, 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeBackgroundcolorCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
@@ -150,9 +149,7 @@ public class AppearancePropertySection extends AbstractPropertySection {
 						cmd = new ChangeBackgroundcolorCommand(colorizableElement, rgb);
 					}
 					if (cmd.canExecute()) {
-						SystemManager.INSTANCE
-								.getCommandStack(
-										((SystemConfiguration) colorizableElement.eContainer()).getAutomationSystem())
+						((SystemConfiguration) colorizableElement.eContainer()).getAutomationSystem().getCommandStack()
 								.execute(cmd);
 						color.dispose();
 						color = new Color(null, rgb);

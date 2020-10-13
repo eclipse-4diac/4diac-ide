@@ -16,13 +16,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBInterfacePaletteFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -55,7 +55,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	private FBType fbType;
 
 	private PaletteRoot paletteRoot;
-	private Palette palette;
+	private TypeLibrary typeLib;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -63,10 +63,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 		if (input instanceof FBTypeEditorInput) {
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			fbType = untypedInput.getContent();
-			palette = untypedInput.getPaletteEntry().getPalette();
-			if (null == palette) {
-				palette = TypeLibrary.getInstance().getPalette();
-			}
+			typeLib = untypedInput.getPaletteEntry().getTypeLibrary();
 		}
 		super.init(site, input);
 		setPartName(FordiacMessages.Interface);
@@ -88,7 +85,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		return new FBInterfaceEditPartFactory(this, palette, getZoomManger());
+		return new FBInterfaceEditPartFactory(this, typeLib);
 	}
 
 	@Override
@@ -100,13 +97,13 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	@Override
 	protected PaletteRoot getPaletteRoot() {
 		if (null == paletteRoot) {
-			paletteRoot = FBInterfacePaletteFactory.createPalette(palette);
+			paletteRoot = FBInterfacePaletteFactory.createPalette(typeLib);
 		}
 		return paletteRoot;
 	}
 
-	protected Palette getPalette() {
-		return palette;
+	protected TypeLibrary getTypeLib() {
+		return typeLib;
 	}
 
 	@Override
@@ -157,7 +154,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer, ZoomManager zoomManager) {
-		return new InterfaceContextMenuProvider(viewer, zoomManager, getActionRegistry());
+		return new InterfaceContextMenuProvider(viewer, zoomManager, getActionRegistry(), typeLib.getDataTypeLibrary());
 	}
 
 	@Override
@@ -174,6 +171,17 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	@Override
 	public void doSaveAs() {
 		// nothing to do here
+	}
+
+	@Override
+	public void gotoMarker(IMarker marker) {
+		// For now we don't handle markers in this editor
+	}
+
+	@Override
+	public boolean isMarkerTarget(IMarker marker) {
+		// For now we don't handle markers in this editor
+		return false;
 	}
 
 }

@@ -171,8 +171,9 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 			if (resolve)
 				return getTypedValue();
 			return basicGetTypedValue();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -189,8 +190,10 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE:
 			setTypedValue((SubApplicationTypePaletteEntry) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -207,8 +210,10 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE:
 			setTypedValue((SubApplicationTypePaletteEntry) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -223,8 +228,9 @@ public class StringToSubApplicationTypePaletteEntryMapImpl extends EObjectImpl
 			return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
 		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__VALUE:
 			return value != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

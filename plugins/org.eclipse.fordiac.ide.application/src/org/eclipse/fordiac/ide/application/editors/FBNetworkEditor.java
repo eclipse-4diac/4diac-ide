@@ -26,8 +26,6 @@ import org.eclipse.fordiac.ide.application.actions.CutEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkSelectAllAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
-import org.eclipse.fordiac.ide.application.actions.UnmapAction;
-import org.eclipse.fordiac.ide.application.actions.UnmapAllAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
 import org.eclipse.fordiac.ide.application.editparts.ElementEditPartFactory;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
@@ -102,7 +100,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		return new ElementEditPartFactory(this, getZoomManger());
+		return new ElementEditPartFactory(this);
 	}
 
 	@Override
@@ -135,7 +133,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		// TODO __gebenh error handling if save fails!
-		SystemManager.INSTANCE.saveSystem(getSystem());
+		SystemManager.saveSystem(getSystem());
 		getCommandStack().markSaveLocation();
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
@@ -145,14 +143,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	protected void createActions() {
 		ActionRegistry registry = getActionRegistry();
 		IAction action;
-
-		action = new UnmapAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
-
-		action = new UnmapAllAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
 
 		action = new CopyEditPartsAction(this);
 		registry.registerAction(action);
@@ -206,7 +196,8 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(getSystem().getProject(), getEditDomain(), getPalletNavigatorID());
+		return new FBTypePaletteViewerProvider(getSystem().getSystemFile().getProject(), getEditDomain(),
+				getPaletteNavigatorID());
 	}
 
 	/**
@@ -219,7 +210,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	 * @return the navigator id
 	 */
 	@SuppressWarnings("static-method")
-	protected String getPalletNavigatorID() {
+	protected String getPaletteNavigatorID() {
 		return "org.eclipse.fordiac.ide.fbpaletteviewer"; //$NON-NLS-1$
 	}
 
@@ -232,8 +223,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		EditPart editPart = (EditPart) getGraphicalViewer().getEditPartRegistry().get(element);
 		if (null != editPart) {
 			getGraphicalViewer().flush();
-			getGraphicalViewer().select(editPart);
-			getGraphicalViewer().reveal(editPart);
+			getGraphicalViewer().selectAndRevealEditPart(editPart);
 		}
 	}
 

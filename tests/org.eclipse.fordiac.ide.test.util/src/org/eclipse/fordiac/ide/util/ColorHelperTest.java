@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 ACIN/TU Vienna
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,6 +18,22 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.junit.Test;
+
+/* Important things to note on JUnit-Tests:
+ *
+ * + The name of the class containing the tests needs to conform to one of the following:
+ *     a) start with Test
+ *     b) end with Test
+ *     c) end with TestCase
+ * + The method containing the testcase needs to have the @Test annotation.
+ * + The plugin needs to be set to packaging-type "eclipse-test-plugin" in pom.xml.
+ *
+ * Tests are contained in a separate plugin stored inside the tests directory.
+ *
+ * Please add any additional information to this comment and put the following notice into your test-class:
+ */
+
+// see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
 public class ColorHelperTest {
 

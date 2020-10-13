@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -73,7 +73,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String CLASSIFICATION_EDEFAULT = null;
+	protected static final String CLASSIFICATION_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getClassification()
@@ -94,7 +94,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String DESCRIPTION_EDEFAULT = null;
+	protected static final String DESCRIPTION_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getDescription() <em>Description</em>}'
@@ -114,7 +114,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String FUNCTION_EDEFAULT = null;
+	protected static final String FUNCTION_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getFunction() <em>Function</em>}' attribute.
@@ -134,7 +134,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String STANDARD_EDEFAULT = null;
+	protected static final String STANDARD_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getStandard() <em>Standard</em>}' attribute.
@@ -149,17 +149,17 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	/**
 	 * The default value of the '{@link #getType() <em>Type</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String TYPE_EDEFAULT = null;
+	protected static final String TYPE_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -349,8 +349,9 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 			return getStandard();
 		case LibraryElementPackage.IDENTIFICATION__TYPE:
 			return getType();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -379,8 +380,10 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 		case LibraryElementPackage.IDENTIFICATION__TYPE:
 			setType((String) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -409,8 +412,10 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 		case LibraryElementPackage.IDENTIFICATION__TYPE:
 			setType(TYPE_EDEFAULT);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -435,8 +440,9 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 			return STANDARD_EDEFAULT == null ? standard != null : !STANDARD_EDEFAULT.equals(standard);
 		case LibraryElementPackage.IDENTIFICATION__TYPE:
 			return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

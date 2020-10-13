@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007 - 2018 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
  * 							 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,7 +9,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *  Alois Zoitl, Florian Noack, Gerhard Ebenhofer, Monika Wenger 
+ *  Alois Zoitl, Florian Noack, Gerhard Ebenhofer, Monika Wenger
  *  		- initial API and implementation and/or initial documentation
  *  Alois Zoitl - Harmonized deployment and monitoring communication
  *******************************************************************************/
@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.xml.sax.InputSource;
 
@@ -107,6 +108,11 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	private static String getValidType(final FB fb) {
 		if (fb != null && fb.getPaletteEntry() != null) {
+			if (fb instanceof StructManipulator) {
+				// the _1 is needed for 4diac FORTE to separate type name from configuration
+				// part
+				return fb.getTypeName() + "_1" + ((StructManipulator) fb).getStructType().getName(); //$NON-NLS-1$
+			}
 			return fb.getTypeName();
 		}
 		return null;

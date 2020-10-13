@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
@@ -139,7 +140,9 @@ public class MapToCommand extends Command {
 	}
 
 	protected void createTargetElement() {
-		if (srcElement instanceof FB) {
+		if (srcElement instanceof StructManipulator) {
+			targetElement = createTargetStructManipulator();
+		} else if (srcElement instanceof FB) {
 			targetElement = createTargetFB();
 		} else if (srcElement instanceof SubApp) {
 			if (null != srcElement.getPaletteEntry()) {
@@ -157,6 +160,12 @@ public class MapToCommand extends Command {
 				getTargetFBNetwork(), srcElement.getX(), srcElement.getY());
 		targetCreateFB.execute();
 		return targetCreateFB.getFB();
+	}
+
+	private FBNetworkElement createTargetStructManipulator() {
+		StructManipulator manipulator = (StructManipulator) createTargetFB();
+		manipulator.setStructType(((StructManipulator) srcElement).getStructType());
+		return manipulator;
 	}
 
 	private FBNetworkElement createTargetTypedSubApp() {

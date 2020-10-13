@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+         point="org.eclipse.ui.commands">
+       <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            id="org.eclipse.fordiac.ide.validation.commands.validate"
+            name="Validate">
+      </command>
+    </extension>   
+    <extension
+         point="org.eclipse.ui.handlers">
+         <handler
+            class="org.eclipse.fordiac.ide.validation.handlers.ValidationHandler"
+            commandId="org.eclipse.fordiac.ide.validation.commands.validate">
+      </handler>
+    </extension>
+    <extension
+    point="org.eclipse.ui.editors.annotationTypes">
+    <type
+        markerType="org.eclipse.fordiac.ide.validation.ValidationMarker"
+        name="ValidationMarker"/>
+	</extension>
+	<extension
+	    id="ValidationMarker"
+	    name="Validation Problem"
+	    point="org.eclipse.core.resources.markers">
+	    <super type="org.eclipse.core.resources.problemmarker" /> 
+	    <persistent value="true"/>
+	</extension>  
+    <extension
+         point="org.eclipse.ui.menus">
+        <menuContribution
+                locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <command
+            commandId="org.eclipse.fordiac.ide.validation.commands.validate"
+            label="Validate"
+            style="push">
+             <visibleWhen checkEnabled="false">                
+                <with variable="selection" >
+                    <count value="1" />
+                    <iterate
+                          ifEmpty="false">
+                        <or>      
+                            <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Application" />
+                            <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.SubApp" />
+                            <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBType" />
+                            <adapt type="org.eclipse.core.resources.IResource">
+                                <test property="org.eclipse.core.resources.extension" value="fbt" />
+                            </adapt>
+                        </or>                  
+                    </iterate>
+                </with>  
+             </visibleWhen>
+          </command>                       
+        </menuContribution>
+    </extension>
+    <extension
+          point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorValidation">
+       <client
+             class="org.eclipse.fordiac.ide.validation.handlers.ValidationProvider">
+       </client>
+    </extension>      
+</plugin>

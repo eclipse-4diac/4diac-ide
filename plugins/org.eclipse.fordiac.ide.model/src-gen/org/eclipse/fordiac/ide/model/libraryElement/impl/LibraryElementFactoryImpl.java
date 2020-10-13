@@ -13,6 +13,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -26,7 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -60,7 +61,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
+import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
@@ -86,6 +89,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.gef.commands.CommandStack;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
@@ -235,8 +239,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			return createSegmentType();
 		case LibraryElementPackage.ADAPTER_FB_TYPE:
 			return createAdapterFBType();
-		case LibraryElementPackage.ANNOTATION:
-			return createAnnotation();
 		case LibraryElementPackage.ADAPTER_EVENT:
 			return createAdapterEvent();
 		case LibraryElementPackage.SERVICE:
@@ -259,6 +261,12 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			return createSimpleFBType();
 		case LibraryElementPackage.BASE_FB_TYPE:
 			return createBaseFBType();
+		case LibraryElementPackage.DEMULTIPLEXER:
+			return createDemultiplexer();
+		case LibraryElementPackage.MULTIPLEXER:
+			return createMultiplexer();
+		case LibraryElementPackage.LOCAL_VARIABLE:
+			return createLocalVariable();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -276,6 +284,10 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			return createLanguageFromString(eDataType, initialValue);
 		case LibraryElementPackage.IPROJECT:
 			return createIProjectFromString(eDataType, initialValue);
+		case LibraryElementPackage.IFILE:
+			return createIFileFromString(eDataType, initialValue);
+		case LibraryElementPackage.COMMAND_STACK:
+			return createCommandStackFromString(eDataType, initialValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -293,6 +305,10 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			return convertLanguageToString(eDataType, instanceValue);
 		case LibraryElementPackage.IPROJECT:
 			return convertIProjectToString(eDataType, instanceValue);
+		case LibraryElementPackage.IFILE:
+			return convertIFileToString(eDataType, instanceValue);
+		case LibraryElementPackage.COMMAND_STACK:
+			return convertCommandStackToString(eDataType, instanceValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -865,17 +881,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public Annotation createAnnotation() {
-		AnnotationImpl annotation = new AnnotationImpl();
-		return annotation;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
 	public AdapterEvent createAdapterEvent() {
 		AdapterEventImpl adapterEvent = new AdapterEventImpl();
 		return adapterEvent;
@@ -997,6 +1002,39 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public Demultiplexer createDemultiplexer() {
+		DemultiplexerImpl demultiplexer = new DemultiplexerImpl();
+		return demultiplexer;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public Multiplexer createMultiplexer() {
+		MultiplexerImpl multiplexer = new MultiplexerImpl();
+		return multiplexer;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public LocalVariable createLocalVariable() {
+		LocalVariableImpl localVariable = new LocalVariableImpl();
+		return localVariable;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public Attribute createAttribute() {
 		AttributeImpl attribute = new AttributeImpl();
 		return attribute;
@@ -1039,6 +1077,42 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	public String convertIProjectToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public IFile createIFileFromString(EDataType eDataType, String initialValue) {
+		return (IFile) super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public String convertIFileToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public CommandStack createCommandStackFromString(EDataType eDataType, String initialValue) {
+		return (CommandStack) super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public String convertCommandStackToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

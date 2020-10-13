@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015 fortiss GmbH
+ * Copyright (c) 2015, 2020 fortiss GmbH
  * 				 2019 Jan Holzweber
  * 
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
  *   Jan Holzweber  - fixed adapter socket variable bug
+ *   Kirill Dorofeev - extended support for adapters DI/DOs used in BFB
  */
 package org.eclipse.fordiac.ide.export.forte_lua.filter;
 
@@ -33,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -48,6 +50,10 @@ public class LuaConstants {
   private static final int FB_DO_FLAG = 67108864;
   
   private static final int FB_AD_FLAG = 134217728;
+  
+  private static final int FB_ADI_FLAG = 167772160;
+  
+  private static final int FB_ADO_FLAG = 201326592;
   
   private static final int FB_IN_FLAG = 268435456;
   
@@ -341,7 +347,7 @@ public class LuaConstants {
         CharSequence _luaFBAdapterOutputVarName = LuaConstants.luaFBAdapterOutputVarName(decl_2, adapter.getName());
         _builder.append(_luaFBAdapterOutputVarName);
         _builder.append(" = ");
-        _builder.append((((LuaConstants.FB_AD_FLAG | LuaConstants.FB_DO_FLAG) | (adapterID << 16)) | aifl.getOutputVars().indexOf(decl_2)));
+        _builder.append(((LuaConstants.FB_ADI_FLAG | (adapterID << 16)) | aifl.getOutputVars().indexOf(decl_2)));
         _builder.newLineIfNotEmpty();
       }
     }
@@ -352,7 +358,7 @@ public class LuaConstants {
         CharSequence _luaFBAdapterInputVarName = LuaConstants.luaFBAdapterInputVarName(decl_3, adapter.getName());
         _builder.append(_luaFBAdapterInputVarName);
         _builder.append(" = ");
-        _builder.append((((LuaConstants.FB_AD_FLAG | LuaConstants.FB_DI_FLAG) | (adapterID << 16)) | aifl.getInputVars().indexOf(decl_3)));
+        _builder.append(((LuaConstants.FB_ADO_FLAG | (adapterID << 16)) | aifl.getInputVars().indexOf(decl_3)));
         _builder.newLineIfNotEmpty();
       }
     }
@@ -480,6 +486,44 @@ public class LuaConstants {
     return _builder;
   }
   
+  public static CharSequence luaFBAdapterInECCVariablesPrefix(final VarDeclaration adapterVariable, final String adapterName, final boolean isPlug) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      if (isPlug) {
+        _builder.append("local ");
+        CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(adapterVariable.getName(), adapterName);
+        _builder.append(_luaAdapterVariable);
+        _builder.append(" = fb[");
+        CharSequence _xifexpression = null;
+        boolean _isIsInput = adapterVariable.isIsInput();
+        if (_isIsInput) {
+          _xifexpression = LuaConstants.luaFBAdapterInputVarName(adapterVariable, adapterName);
+        } else {
+          _xifexpression = LuaConstants.luaFBAdapterOutputVarName(adapterVariable, adapterName);
+        }
+        _builder.append(_xifexpression);
+        _builder.append("]");
+        _builder.newLineIfNotEmpty();
+      } else {
+        _builder.append("local ");
+        CharSequence _luaAdapterVariable_1 = LuaConstants.luaAdapterVariable(adapterVariable.getName(), adapterName);
+        _builder.append(_luaAdapterVariable_1);
+        _builder.append(" = fb[");
+        CharSequence _xifexpression_1 = null;
+        boolean _isIsInput_1 = adapterVariable.isIsInput();
+        if (_isIsInput_1) {
+          _xifexpression_1 = LuaConstants.luaFBAdapterOutputVarName(adapterVariable, adapterName);
+        } else {
+          _xifexpression_1 = LuaConstants.luaFBAdapterInputVarName(adapterVariable, adapterName);
+        }
+        _builder.append(_xifexpression_1);
+        _builder.append("]");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    return _builder;
+  }
+  
   public static CharSequence luaFBAdapterVariablesPrefix(final Iterable<AdapterVariable> variables) {
     StringConcatenation _builder = new StringConcatenation();
     {
@@ -491,20 +535,20 @@ public class LuaConstants {
         {
           boolean _not = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
             return it.getVar();
-          })).contains(av.getVar()) && ListExtensions.<AdapterVariable, AdapterDeclaration>map(sublist, ((Function1<AdapterVariable, AdapterDeclaration>) (AdapterVariable it) -> {
-            return it.getAdapter();
-          })).contains(av.getAdapter())));
+          })).contains(av.getVar()) && ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
+            return LuaConstants.getAdapter(it);
+          })).contains(LuaConstants.getAdapter(av))));
           if (_not) {
             _builder.append("local ");
-            CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), av.getAdapter().getName());
+            CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), LuaConstants.getAdapter(av).getName());
             _builder.append(_luaAdapterVariable);
             _builder.append(" = fb[");
             CharSequence _xifexpression = null;
             boolean _isIsInput = av.getVar().isIsInput();
             if (_isIsInput) {
-              _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), av.getAdapter().getName());
+              _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
             } else {
-              _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), av.getAdapter().getName());
+              _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
             }
             _builder.append(_xifexpression);
             _builder.append("]");
@@ -514,6 +558,11 @@ public class LuaConstants {
       }
     }
     return _builder;
+  }
+  
+  protected static VarDeclaration getAdapter(final AdapterVariable adapterVar) {
+    AdapterVariable _curr = adapterVar.getCurr();
+    return ((AdapterRoot) _curr).getAdapter();
   }
   
   public static CharSequence luaFBVariablesSuffix(final Iterable<VarDeclaration> variables) {
@@ -547,21 +596,21 @@ public class LuaConstants {
         {
           boolean _not = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
             return it.getVar();
-          })).contains(av.getVar()) && ListExtensions.<AdapterVariable, AdapterDeclaration>map(sublist, ((Function1<AdapterVariable, AdapterDeclaration>) (AdapterVariable it) -> {
-            return it.getAdapter();
-          })).contains(av.getAdapter())));
+          })).contains(av.getVar()) && ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
+            return LuaConstants.getAdapter(it);
+          })).contains(LuaConstants.getAdapter(av))));
           if (_not) {
             _builder.append("fb[");
             CharSequence _xifexpression = null;
             boolean _isIsInput = av.getVar().isIsInput();
             if (_isIsInput) {
-              _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), av.getAdapter().getName());
+              _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
             } else {
-              _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), av.getAdapter().getName());
+              _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
             }
             _builder.append(_xifexpression);
             _builder.append("] = ");
-            CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), av.getAdapter().getName());
+            CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), LuaConstants.getAdapter(av).getName());
             _builder.append(_luaAdapterVariable);
             _builder.newLineIfNotEmpty();
           }

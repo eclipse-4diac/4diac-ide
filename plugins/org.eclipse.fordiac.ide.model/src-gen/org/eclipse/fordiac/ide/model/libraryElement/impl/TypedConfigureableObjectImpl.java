@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Typed
@@ -134,14 +135,25 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	 * @generated
 	 */
 	@Override
+	public TypeLibrary getTypeLibrary() {
+		return org.eclipse.fordiac.ide.model.Annotations.getTypeLibrary(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
 			if (resolve)
 				return getPaletteEntry();
 			return basicGetPaletteEntry();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -155,8 +167,10 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 		case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
 			setPaletteEntry((PaletteEntry) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -170,8 +184,10 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 		case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
 			setPaletteEntry((PaletteEntry) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -184,8 +200,9 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 		switch (featureID) {
 		case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY:
 			return paletteEntry != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // TypedConfigureableObjectImpl

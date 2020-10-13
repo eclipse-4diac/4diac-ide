@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 /**
@@ -37,9 +36,8 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 	private FB fbInstance;
 	private FBEditPart fbEditPart;
 
-	public CompositeViewerEditPartFactory(GraphicalEditor editor, FB fbInstance, FBEditPart fbEditPart,
-			ZoomManager zoomManager) {
-		super(editor, zoomManager);
+	public CompositeViewerEditPartFactory(GraphicalEditor editor, FB fbInstance, FBEditPart fbEditPart) {
+		super(editor);
 		this.fbInstance = fbInstance;
 		this.fbEditPart = fbEditPart;
 	}
@@ -75,7 +73,7 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 			}
 		}
 		if (modelElement instanceof AdapterFB) {
-			return new AdapterFBEditPart(getZoomManager()) {
+			return new AdapterFBEditPart() {
 				@Override
 				protected void createEditPolicies() {
 					// Highlight In and Outconnections of the selected fb, allow alignment of FBs
@@ -90,7 +88,7 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 			};
 		}
 		if (modelElement instanceof FB) {
-			return new FBEditPartRO(getZoomManager());
+			return new FBEditPartRO();
 		}
 		if (modelElement instanceof Connection) {
 			return new ConnectionEditPartRO();

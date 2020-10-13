@@ -1,21 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2015 fortiss GmbH
+ * Copyright (c) 2015, 2020 fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *   Kirill Dorofeev - extended support for adapters used in BFB
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_lua.filter
 
 import java.util.ArrayList
+import java.util.HashMap
 import java.util.List
-import org.eclipse.xtend.lib.annotations.Accessors
+import java.util.Map
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECC
@@ -23,16 +26,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants.*
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 
 class BasicFBFilter {
 
 	@Accessors(PUBLIC_GETTER)
-	private List<String> errors = new ArrayList<String>;
-	private STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter
+	List<String> errors = new ArrayList<String>;
+	STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter
 
 	def lua(BasicFBType type) '''
 		«type.luaConstants»
@@ -41,19 +45,37 @@ class BasicFBFilter {
 		
 		«type.ECC.luaStates»
 		
-		«type.ECC.luaECC(type.variables)»
+		«type.ECC.luaECC(type.variables, type.adapterSocketsVariables, type.adapterPlugsVariables)»
 		
 		«type.interfaceList.luaInterfaceSpec»
-
+		
 		«type.luaInternalVarsInformation»
 		
 		return {ECC = executeEvent, interfaceSpec = interfaceSpec, internalVarsInformation = internalVarsInformation}
 	'''
-	
-	def private luaECC(ECC ecc, Iterable<VarDeclaration> variables) '''
+
+	def private luaECC(ECC ecc, Iterable<VarDeclaration> variables,
+		Map<AdapterDeclaration, String> adapterSocketsVariables,
+		Map<AdapterDeclaration, String> adapterPlugsVariables) '''
 		local function transition(fb, id)
 		  local «luaStateVariable()» = «luaFBStateVariable()»
 		  «variables.luaFBVariablesPrefix»
+		  «FOR adapter : adapterSocketsVariables.keySet»
+		  	«FOR input: adapter.type.adapterFBType.interfaceList.inputVars» 
+		  		«input.luaFBAdapterInECCVariablesPrefix(adapter.name, false)»
+		  	«ENDFOR»
+		  	«FOR output: adapter.type.adapterFBType.interfaceList.outputVars» 
+		  		«output.luaFBAdapterInECCVariablesPrefix(adapter.name, false)»
+		  	«ENDFOR»
+		  «ENDFOR»
+		  «FOR adapter : adapterPlugsVariables.keySet»
+		  	«FOR input: adapter.type.adapterFBType.interfaceList.inputVars» 
+		  		«input.luaFBAdapterInECCVariablesPrefix(adapter.name, true)»
+		  	«ENDFOR»
+		  	«FOR output: adapter.type.adapterFBType.interfaceList.outputVars» 
+		  		«output.luaFBAdapterInECCVariablesPrefix(adapter.name, true)»
+		  	«ENDFOR»
+		  «ENDFOR»
 		  «ecc.luaTransitions»
 		end
 		
@@ -64,23 +86,38 @@ class BasicFBFilter {
 		  end
 		end
 	'''
-	
-	def private getVariables(BasicFBType type) {
+
+	def private Iterable<VarDeclaration> getVariables(BasicFBType type) {
 		type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars
+	}
+
+	def private Map<AdapterDeclaration, String> getAdapterSocketsVariables(BasicFBType type) {
+		var Map<AdapterDeclaration, String> ret = new HashMap<AdapterDeclaration, String>;
+		for (adapterDecl : type.interfaceList.sockets) {
+			ret.put(adapterDecl, adapterDecl.name)
+		}
+		return ret
+	}
+
+	def private Map<AdapterDeclaration, String> getAdapterPlugsVariables(BasicFBType type) {
+		var Map<AdapterDeclaration, String> ret = new HashMap<AdapterDeclaration, String>;
+		for (adapterDecl : type.interfaceList.plugs) {
+			ret.put(adapterDecl, adapterDecl.name)
+		}
+		return ret
 	}
 
 	def private luaTransitions(ECC ecc) '''
 	«FOR state : ecc.ECState BEFORE 'if ' SEPARATOR '\nelseif ' AFTER '\nelse return false\nend'»
 		«state.luaStateName» == «luaStateVariable» then
-		  «state.luaTransition»«ENDFOR»'''
+		«state.luaTransition»«ENDFOR»'''
 
 	def private luaTransition(ECState state) '''
 	«FOR tran : state.outTransitions BEFORE 'if ' SEPARATOR '\nelseif ' AFTER '\nelse return false\nend'»
 		«tran.luaTransitionCondition» then return enter«tran.destination.luaStateName»(fb)«ENDFOR»'''
 
-	def private luaTransitionCondition(ECTransition tran)
-		'''«IF tran.conditionEvent != null»«tran.conditionEvent.luaInputEventName» == id«ELSE»true«ENDIF
-		» and «IF !tran.conditionExpression.nullOrEmpty»«tran.luaTransitionConditionExpression»«ELSE»true«ENDIF»'''
+	def private luaTransitionCondition(
+		ECTransition tran) '''«IF tran.conditionEvent !== null»«tran.conditionEvent.luaInputEventName» == id«ELSE»true«ENDIF» and «IF !tran.conditionExpression.nullOrEmpty»«tran.luaTransitionConditionExpression»«ELSE»true«ENDIF»'''
 
 	def private luaTransitionConditionExpression(ECTransition tran) {
 		val type = tran.rootContainer as BasicFBType
@@ -98,11 +135,11 @@ class BasicFBFilter {
 		local function enter«state.luaStateName»(fb)
 		  «luaFBStateVariable» = «state.luaStateName»
 		  «FOR action : state.ECAction»
-		  	«IF null != action.algorithm»«action.algorithm.luaAlgorithmName»(fb)«ENDIF»
+		  	«IF null !== action.algorithm»«action.algorithm.luaAlgorithmName»(fb)«ENDIF»
 		  	«IF action.output instanceof AdapterEvent»
-		  	«action.output?.luaSendAdapterOutputEvent»
+		  		«action.output?.luaSendAdapterOutputEvent»
 		  	«ELSE»	
-		  	«action.output?.luaSendOutputEvent»
+		  		«action.output?.luaSendOutputEvent»
 		  	«ENDIF»
 		  «ENDFOR»
 		  return true
@@ -128,7 +165,7 @@ class BasicFBFilter {
 		'''
 		errors.addAll(stAlgorithmFilter.errors.map['''Error in algorithm «alg.name»: «it»'''])
 		stAlgorithmFilter.errors.clear()
-		return result	
+		return result
 	}
 
 }

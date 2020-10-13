@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2011, 2014, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH 
- * 
+ * Copyright (c) 2008 - 2011, 2014, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 /**
  * The Class ToolTipFigure.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class ToolTipFigure extends Figure {
@@ -36,7 +36,7 @@ public class ToolTipFigure extends Figure {
 
 	/**
 	 * Instantiates a new tool tip figure.
-	 * 
+	 *
 	 * @param element the element
 	 */
 	public ToolTipFigure(final INamedElement element) {
@@ -95,7 +95,7 @@ public class ToolTipFigure extends Figure {
 		VarDeclaration typeVar = getTypevariable(var);
 		if (null != typeVar && null != typeVar.getValue()) {
 			String initvalue = FordiacMessages.InitialValue + ": "; //$NON-NLS-1$
-			if (null != typeVar.getValue().getValue() && !typeVar.getValue().getValue().isEmpty()) {
+			if (!typeVar.getValue().getValue().isEmpty()) {
 				initvalue += var.getValue().getValue();
 			}
 			line.add(new Label(initvalue));

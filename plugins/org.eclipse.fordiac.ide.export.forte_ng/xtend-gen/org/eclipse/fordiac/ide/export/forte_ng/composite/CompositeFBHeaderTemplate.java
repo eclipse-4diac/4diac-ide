@@ -1,3 +1,19 @@
+/**
+ * Copyright (c) 2019 fortiss GmbH
+ *               2020 Johannes Kepler University
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *   Martin Jobst
+ *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl
+ *     - Fix connections and parameter generation
+ */
 package org.eclipse.fordiac.ide.export.forte_ng.composite;
 
 import com.google.common.collect.Iterables;
@@ -152,11 +168,15 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
         _builder.newLine();
       }
     }
+    _builder.append("static const SCFB_FBParameter scm_astParamters[];");
+    _builder.newLine();
     {
       boolean _isEmpty = this.type.getFBNetwork().getEventConnections().isEmpty();
       boolean _not = (!_isEmpty);
       if (_not) {
         _builder.append("static const SCFB_FBConnectionData scm_astEventConnections[];");
+        _builder.newLine();
+        _builder.append("static const SCFB_FBFannedOutConnectionData scm_astFannedOutEventConnections[];");
         _builder.newLine();
       }
     }
@@ -166,6 +186,8 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
       if (_not_1) {
         _builder.append("static const SCFB_FBConnectionData scm_astDataConnections[];");
         _builder.newLine();
+        _builder.append("static const SCFB_FBFannedOutConnectionData scm_astFannedOutDataConnections[];");
+        _builder.newLine();
       }
     }
     _builder.append("static const SCFB_FBNData scm_stFBNData;");
@@ -174,6 +196,7 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
   }
   
   @Pure
+  @Override
   protected CompositeFBType getType() {
     return this.type;
   }

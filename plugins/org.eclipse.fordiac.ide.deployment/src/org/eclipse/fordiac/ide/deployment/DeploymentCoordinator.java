@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH, 
+ * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH,
  * 							 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - reworked deployment to detect if monitoring was enabled  
+ *   Alois Zoitl - reworked deployment to detect if monitoring was enabled
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment;
 
@@ -28,13 +28,7 @@ import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -105,42 +99,8 @@ public enum DeploymentCoordinator {
 	}
 
 	/**
-	 * Count work creating f bs.
-	 * 
-	 * @param res     the res
-	 * @param fbs     the fbs
-	 * @param subApps the sub apps
-	 * 
-	 * @return the int
-	 */
-	private int countWorkCreatingFBs(final FBNetwork fbNetwork) {
-		int work = 0;
-
-		for (FBNetworkElement element : fbNetwork.getNetworkElements()) {
-			if (element instanceof SubApp) {
-				work += countWorkCreatingFBs(((SubApp) element).getSubAppNetwork());
-			} else if (element instanceof FB) {
-				work++;
-				FB fb = (FB) element;
-				InterfaceList interfaceList = fb.getInterface();
-				if (interfaceList != null) {
-					for (VarDeclaration varDecl : interfaceList.getInputVars()) {
-						if (varDecl.getInputConnections().isEmpty()) {
-							Value value = varDecl.getValue();
-							if (value != null && value.getValue() != null) {
-								work++;
-							}
-						}
-					}
-				}
-			}
-		}
-		return work;
-	}
-
-	/**
 	 * Perform deployment.
-	 * 
+	 *
 	 * @param selection                 the selection
 	 * @param overrideDevMgmCommHandler if not null this device management
 	 *                                  communication should be used instead the one
@@ -168,7 +128,7 @@ public enum DeploymentCoordinator {
 
 	/**
 	 * Enable output.
-	 * 
+	 *
 	 * @param executor the executor
 	 */
 	public void enableOutput(IDeviceManagementInteractor interactor) {
@@ -180,7 +140,7 @@ public enum DeploymentCoordinator {
 
 	/**
 	 * Disable output.
-	 * 
+	 *
 	 * @param executor the executor
 	 */
 	public void disableOutput(IDeviceManagementInteractor interactor) {

@@ -19,7 +19,7 @@ package org.eclipse.fordiac.ide.model.dataexport;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 
-class AdapterExporter extends AbstractTypeExporter {
+class AdapterExporter extends AbstractBlockTypeExporter {
 
 	public AdapterExporter(AdapterTypePaletteEntry entry) {
 		super(entry.getType().getAdapterFBType());
@@ -31,7 +31,7 @@ class AdapterExporter extends AbstractTypeExporter {
 	}
 
 	@Override
-	protected void createTypeSpecificXMLEntries() {
+	protected void createBlockTypeSpecificXMLEntries() {
 		// for adapters there are no type specific xml entries
 	}
 

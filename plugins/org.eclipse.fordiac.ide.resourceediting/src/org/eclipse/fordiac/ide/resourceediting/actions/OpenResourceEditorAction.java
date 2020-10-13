@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.resourceediting.actions;
 
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.resourceediting.Messages;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
@@ -65,7 +65,7 @@ public class OpenResourceEditorAction extends OpenListener {
 	}
 
 	@Override
-	public Class<? extends I4DIACElement> getHandledClass() {
+	public Class<? extends EObject> getHandledClass() {
 		return Resource.class;
 	}
 

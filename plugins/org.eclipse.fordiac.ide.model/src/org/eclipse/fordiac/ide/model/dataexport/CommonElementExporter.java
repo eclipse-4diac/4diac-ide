@@ -41,6 +41,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
@@ -48,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 
 abstract class CommonElementExporter {
 
@@ -55,8 +57,10 @@ abstract class CommonElementExporter {
 
 		private final Iterator<ByteBuffer> bufferIterator;
 		private ByteBuffer currentDataBuffer;
+		private final List<ByteBuffer> dataBuffers;
 
 		public ByteBufferInputStream(List<ByteBuffer> dataBuffers) {
+			this.dataBuffers = dataBuffers;
 			dataBuffers.forEach(ByteBuffer::flip);
 			bufferIterator = dataBuffers.iterator();
 			currentDataBuffer = bufferIterator.next();
@@ -96,21 +100,31 @@ abstract class CommonElementExporter {
 			return currentDataBuffer.remaining();
 		}
 
+		@Override
+		public void close() throws IOException {
+			dataBuffers.clear();
+			super.close();
+		}
+
 	}
 
 	private static class ByteBufferOutputStream extends OutputStream {
-
-		private static final int SINGLE_DATA_BUFFER_CAPACITY = 500 * 1024 * 1024; //
-		private final List<ByteBuffer> dataBuffers = new ArrayList<>(5); // give it an initial capacity of 5 to reduce
-																			// reallocation
+		private static final int SI_PREFIX_KI = 1024;
+		private static final int SI_PREFIX_MI = SI_PREFIX_KI * SI_PREFIX_KI;
+		private static final int SINGLE_DATA_BUFFER_CAPACITY = Activator.getDefault().getPreferenceStore()
+				.getInt(PreferenceConstants.P_ALLOCATION_SIZE) * SI_PREFIX_MI;
+		private List<ByteBuffer> dataBuffers = new ArrayList<>(5); // give it an initial capacity of 5 to reduce
+		// reallocation
 		private ByteBuffer currentDataBuffer;
 
 		public ByteBufferOutputStream() {
 			addNewDataBuffer();
 		}
 
-		public List<ByteBuffer> getDataBuffers() {
-			return dataBuffers;
+		public List<ByteBuffer> transferDataBuffers() {
+			List<ByteBuffer> tmp = dataBuffers;
+			dataBuffers = null;
+			return tmp;
 		}
 
 		private void addNewDataBuffer() {
@@ -133,6 +147,7 @@ abstract class CommonElementExporter {
 			}
 			currentDataBuffer.put(b, off, len);
 		}
+
 	}
 
 	public static final String LINE_END = "\n"; //$NON-NLS-1$
@@ -148,7 +163,7 @@ abstract class CommonElementExporter {
 	}
 
 	/**
-	 * Constructor for chaing several exporters together (e.g., for the
+	 * Constructor for chaining several exporters together (e.g., for the
 	 * FBNetworkExporter)
 	 *
 	 * @param parent the calling exporter
@@ -198,7 +213,7 @@ abstract class CommonElementExporter {
 		try {
 			XMLStreamWriter newWriter = outputFactory.createXMLStreamWriter(outputStream,
 					StandardCharsets.UTF_8.name());
-			newWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0");
+			newWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0"); //$NON-NLS-1$
 			return newWriter;
 		} catch (XMLStreamException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
@@ -218,7 +233,9 @@ abstract class CommonElementExporter {
 		getWriter().writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
 		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, type);
 		getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
-		getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
+		if ((null != comment) && (!comment.isBlank())) {
+			getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
+		}
 	}
 
 	protected void createNamedElementEntry(final INamedElement namedElement, final String elemName)
@@ -233,14 +250,17 @@ abstract class CommonElementExporter {
 			writer.writeCharacters(LINE_END);
 			writer.writeEndDocument();
 			writer.close();
-			ByteBufferInputStream inputStream = new ByteBufferInputStream(outputStream.getDataBuffers());
-			if (iFile.exists()) {
-				iFile.setContents(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
-			} else {
-				checkAndCreateFolderHierarchy(iFile);
-				iFile.create(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
+			try (ByteBufferInputStream inputStream = new ByteBufferInputStream(outputStream.transferDataBuffers())) {
+				if (iFile.exists()) {
+					iFile.setContents(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
+				} else {
+					checkAndCreateFolderHierarchy(iFile);
+					iFile.create(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
+				}
+			} finally {
+				outputStream.close();
 			}
-		} catch (CoreException | XMLStreamException e) {
+		} catch (CoreException | XMLStreamException | IOException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 		long endTime = System.currentTimeMillis();
@@ -277,22 +297,22 @@ abstract class CommonElementExporter {
 		if (null != libraryelement.getIdentification()) {
 			addStartElement(LibraryElementTags.IDENTIFICATION_ELEMENT);
 			Identification ident = libraryelement.getIdentification();
-			if (null != ident.getStandard() && !ident.getStandard().equals("")) { //$NON-NLS-1$
+			if ((null != ident.getStandard()) && !ident.getStandard().equals("")) { //$NON-NLS-1$
 				writer.writeAttribute(LibraryElementTags.STANDARD_ATTRIBUTE, ident.getStandard());
 			}
-			if (null != ident.getClassification() && !ident.getClassification().equals("")) { //$NON-NLS-1$
+			if ((null != ident.getClassification()) && !ident.getClassification().equals("")) { //$NON-NLS-1$
 				writer.writeAttribute(LibraryElementTags.CLASSIFICATION_ATTRIBUTE, ident.getClassification());
 			}
-			if (null != ident.getApplicationDomain() && !ident.getApplicationDomain().equals("")) { //$NON-NLS-1$
+			if ((null != ident.getApplicationDomain()) && !ident.getApplicationDomain().equals("")) { //$NON-NLS-1$
 				writer.writeAttribute(LibraryElementTags.APPLICATION_DOMAIN_ATTRIBUTE, ident.getApplicationDomain());
 			}
-			if (null != ident.getFunction() && !ident.getFunction().equals("")) { //$NON-NLS-1$
+			if ((null != ident.getFunction()) && !ident.getFunction().equals("")) { //$NON-NLS-1$
 				writer.writeAttribute(LibraryElementTags.FUNCTION_ELEMENT, ident.getFunction());
 			}
-			if (null != ident.getType() && !ident.getType().equals("")) { //$NON-NLS-1$
+			if ((null != ident.getType()) && !ident.getType().equals("")) { //$NON-NLS-1$
 				writer.writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, ident.getType());
 			}
-			if (null != ident.getDescription() && !ident.getDescription().equals("")) { //$NON-NLS-1$
+			if ((null != ident.getDescription()) && !ident.getDescription().equals("")) { //$NON-NLS-1$
 				writeAttributeRaw(LibraryElementTags.DESCRIPTION_ELEMENT, fullyEscapeValue(ident.getDescription()));
 			}
 			addEndElement();
@@ -305,25 +325,25 @@ abstract class CommonElementExporter {
 	 * @param libraryelement the libraryelement
 	 * @throws XMLStreamException
 	 */
-	public void addVersionInfo(final LibraryElement libraryelement) throws XMLStreamException {
+	protected void addVersionInfo(final LibraryElement libraryelement) throws XMLStreamException {
 		if (!libraryelement.getVersionInfo().isEmpty()) {
 			for (VersionInfo info : libraryelement.getVersionInfo()) {
 				addStartElement(LibraryElementTags.VERSION_INFO_ELEMENT);
 
-				if (null != info.getOrganization() && !info.getOrganization().equals("")) { //$NON-NLS-1$
+				if ((null != info.getOrganization()) && !info.getOrganization().equals("")) { //$NON-NLS-1$
 					writer.writeAttribute(LibraryElementTags.ORGANIZATION_ATTRIBUTE, info.getOrganization());
 				}
-				if (null != info.getVersion() && !info.getVersion().equals("")) { //$NON-NLS-1$
+				if ((null != info.getVersion()) && !info.getVersion().equals("")) { //$NON-NLS-1$
 					writer.writeAttribute(LibraryElementTags.VERSION_ATTRIBUTE, info.getVersion());
 				}
-				if (null != info.getAuthor() && !info.getAuthor().equals("")) { //$NON-NLS-1$
+				if ((null != info.getAuthor()) && !info.getAuthor().equals("")) { //$NON-NLS-1$
 					writer.writeAttribute(LibraryElementTags.AUTHOR_ATTRIBUTE, info.getAuthor());
 				}
-				if (null != info.getDate() && !info.getDate().equals("")) { //$NON-NLS-1$
+				if ((null != info.getDate()) && !info.getDate().equals("")) { //$NON-NLS-1$
 					writer.writeAttribute(LibraryElementTags.DATE_ATTRIBUTE, info.getDate());
 
 				}
-				if (null != info.getRemarks() && !info.getRemarks().equals("")) { //$NON-NLS-1$
+				if ((null != info.getRemarks()) && !info.getRemarks().equals("")) { //$NON-NLS-1$
 					writer.writeAttribute(LibraryElementTags.REMARKS_ATTRIBUTE, info.getRemarks());
 				}
 
@@ -351,6 +371,13 @@ abstract class CommonElementExporter {
 		addCommentAttribute(namedElement);
 	}
 
+	protected void addAttributes(EList<Attribute> attributes) throws XMLStreamException {
+		for (Attribute attribute : attributes) {
+			addAttributeElement(attribute.getName(), attribute.getType().getName(), attribute.getValue(),
+					attribute.getComment());
+		}
+	}
+
 	/**
 	 * Writhe an XML attribute directly to the output stream
 	 *
@@ -371,8 +398,8 @@ abstract class CommonElementExporter {
 	}
 
 	/**
-	 * Take the given string and escape all &, <, >, ", ', newlines, and tabs with the
-	 * according XML escaped characters.
+	 * Take the given string and escape all &, <, >, ", ', newlines, and tabs with
+	 * the according XML escaped characters.
 	 *
 	 * @param value the string to escape
 	 * @return the escaped string
@@ -402,7 +429,7 @@ abstract class CommonElementExporter {
 
 	protected void addParamsConfig(EList<VarDeclaration> inputVars) throws XMLStreamException {
 		for (VarDeclaration var : inputVars) {
-			if (null != var.getValue() && null != var.getValue().getValue() && !var.getValue().getValue().equals("")) { //$NON-NLS-1$
+			if ((null != var.getValue()) && !var.getValue().getValue().isEmpty()) {
 				addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
 				addNameAttribute(var.getName());
 				writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, var.getValue().getValue());

@@ -14,9 +14,11 @@
  */
 package org.eclipse.fordiac.ide.export.forte_ng.st;
 
+import com.google.common.base.Objects;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -24,12 +26,21 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser;
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ArrayVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AssignmentStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.BinaryExpression;
@@ -46,9 +57,9 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ExitStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IntLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocatedVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RealLiteral;
@@ -58,16 +69,19 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Statement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StatementList;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StringLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.validation.DatetimeLiteral;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.ParserRule;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.resource.XtextResourceSet;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.util.LazyStringInputStream;
 import org.eclipse.xtext.util.Strings;
@@ -76,51 +90,121 @@ import org.eclipse.xtext.validation.IResourceValidator;
 import org.eclipse.xtext.validation.Issue;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
+import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 @SuppressWarnings("all")
 public class STAlgorithmFilter {
-  private static final URI SYNTHETIC_FB_URI = URI.createFileURI("__synthetic.xtextfbt");
+  private static final String SYNTHETIC_URI_NAME = "__synthetic";
   
-  private static final URI SYNTHETIC_ST_URI = URI.createFileURI("__synthetic.st");
+  private static final String URI_SEPERATOR = ".";
   
-  private static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(STAlgorithmFilter.SYNTHETIC_ST_URI);
+  private static final String FB_URI_EXTENSION = "xtextfbt";
+  
+  private static final String ST_URI_EXTENSION = "st";
+  
+  private static final CharSequence EXPORT_PREFIX = ForteLibraryElementTemplate.EXPORT_PREFIX;
+  
+  private static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI(((STAlgorithmFilter.SYNTHETIC_URI_NAME + STAlgorithmFilter.URI_SEPERATOR) + STAlgorithmFilter.ST_URI_EXTENSION)));
+  
+  public void createFBResource(final XtextResourceSet resourceSet, final BaseFBType fbType) {
+    final Resource fbResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
+    fbResource.getContents().add(fbType);
+    final Consumer<AdapterDeclaration> _function = (AdapterDeclaration adp) -> {
+      this.createAdapterResource(resourceSet, adp);
+    };
+    fbType.getInterfaceList().getSockets().forEach(_function);
+    final Consumer<AdapterDeclaration> _function_1 = (AdapterDeclaration adp) -> {
+      this.createAdapterResource(resourceSet, adp);
+    };
+    fbType.getInterfaceList().getPlugs().forEach(_function_1);
+    final Consumer<VarDeclaration> _function_2 = (VarDeclaration v) -> {
+      this.createStructResource(resourceSet, v);
+    };
+    fbType.getInterfaceList().getInputVars().forEach(_function_2);
+    final Consumer<VarDeclaration> _function_3 = (VarDeclaration v) -> {
+      this.createStructResource(resourceSet, v);
+    };
+    fbType.getInterfaceList().getOutputVars().forEach(_function_3);
+    final Consumer<VarDeclaration> _function_4 = (VarDeclaration v) -> {
+      this.createStructResource(resourceSet, v);
+    };
+    fbType.getInternalVars().forEach(_function_4);
+  }
+  
+  public void createAdapterResource(final XtextResourceSet resourceSet, final AdapterDeclaration adapter) {
+    final Resource adapterResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
+    adapterResource.getContents().add(adapter.getType().getAdapterFBType());
+  }
+  
+  public void createStructResource(final XtextResourceSet resourceSet, final VarDeclaration variable) {
+    DataType _type = variable.getType();
+    if ((_type instanceof StructuredType)) {
+      final Resource structResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
+      DataType _type_1 = variable.getType();
+      final StructuredType type = ((StructuredType) _type_1);
+      structResource.getContents().add(type);
+      final Consumer<VarDeclaration> _function = (VarDeclaration v) -> {
+        this.createStructResource(resourceSet, v);
+      };
+      type.getMemberVariables().forEach(_function);
+    }
+  }
+  
+  protected URI computeUnusedUri(final ResourceSet resourceSet, final String fileExtension) {
+    ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, Integer.MAX_VALUE, true);
+    for (final Integer i : _doubleDotLessThan) {
+      {
+        final URI syntheticUri = URI.createURI((((STAlgorithmFilter.SYNTHETIC_URI_NAME + i) + STAlgorithmFilter.URI_SEPERATOR) + fileExtension));
+        Resource _resource = resourceSet.getResource(syntheticUri, false);
+        boolean _tripleEquals = (_resource == null);
+        if (_tripleEquals) {
+          return syntheticUri;
+        }
+      }
+    }
+    throw new IllegalStateException();
+  }
   
   public CharSequence generate(final STAlgorithm alg, final List<String> errors) {
     try {
-      final ResourceSet resourceSet = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
-      final Resource fbResource = resourceSet.createResource(STAlgorithmFilter.SYNTHETIC_FB_URI);
-      final EObject fbCopy = EcoreUtil.<EObject>copy(EcoreUtil.getRootContainer(alg));
-      fbResource.getContents().add(fbCopy);
-      Resource _createResource = resourceSet.createResource(STAlgorithmFilter.SYNTHETIC_ST_URI);
-      final XtextResource resource = ((XtextResource) _createResource);
-      String _text = alg.getText();
-      LazyStringInputStream _lazyStringInputStream = new LazyStringInputStream(_text);
-      Pair<String, Boolean> _mappedTo = Pair.<String, Boolean>of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
-      resource.load(_lazyStringInputStream, Collections.<String, Boolean>unmodifiableMap(CollectionLiterals.<String, Boolean>newHashMap(_mappedTo)));
-      final IParseResult parseResult = resource.getParseResult();
-      final IResourceValidator validator = resource.getResourceServiceProvider().getResourceValidator();
-      final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
-      boolean _isEmpty = issues.isEmpty();
-      boolean _not = (!_isEmpty);
-      if (_not) {
-        final Function1<Issue, String> _function = (Issue it) -> {
-          String _name = alg.getName();
-          String _plus = (_name + ", Line ");
-          String _string = Long.toString((it.getLineNumber()).intValue());
-          String _plus_1 = (_plus + _string);
-          String _plus_2 = (_plus_1 + ": ");
-          String _message = it.getMessage();
-          return (_plus_2 + _message);
-        };
-        errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
-        return null;
+      CharSequence _xblockexpression = null;
+      {
+        ResourceSet _get = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
+        final XtextResourceSet resourceSet = ((XtextResourceSet) _get);
+        EObject _rootContainer = EcoreUtil.getRootContainer(alg);
+        this.createFBResource(resourceSet, ((BaseFBType) _rootContainer));
+        Resource _createResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.ST_URI_EXTENSION));
+        final XtextResource resource = ((XtextResource) _createResource);
+        String _text = alg.getText();
+        LazyStringInputStream _lazyStringInputStream = new LazyStringInputStream(_text);
+        Pair<String, Boolean> _mappedTo = Pair.<String, Boolean>of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
+        resource.load(_lazyStringInputStream, Collections.<String, Boolean>unmodifiableMap(CollectionLiterals.<String, Boolean>newHashMap(_mappedTo)));
+        final IParseResult parseResult = resource.getParseResult();
+        final IResourceValidator validator = resource.getResourceServiceProvider().getResourceValidator();
+        final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
+        boolean _isEmpty = issues.isEmpty();
+        boolean _not = (!_isEmpty);
+        if (_not) {
+          final Function1<Issue, String> _function = (Issue it) -> {
+            String _name = alg.getName();
+            String _plus = (_name + ", Line ");
+            String _string = Long.toString((it.getLineNumber()).intValue());
+            String _plus_1 = (_plus + _string);
+            String _plus_2 = (_plus_1 + ": ");
+            String _message = it.getMessage();
+            return (_plus_2 + _message);
+          };
+          errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
+          return null;
+        }
+        EObject _rootASTElement = parseResult.getRootASTElement();
+        final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
+        _xblockexpression = this.generateStructuredTextAlgorithm(stalg);
       }
-      EObject _rootASTElement = parseResult.getRootASTElement();
-      final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
-      return this.generateStructuredTextAlgorithm(stalg);
+      return _xblockexpression;
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -128,37 +212,38 @@ public class STAlgorithmFilter {
   
   public CharSequence generate(final String expression, final BasicFBType fb, final List<String> errors) {
     try {
-      final ResourceSet resourceSet = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
-      final Resource fbResource = resourceSet.createResource(STAlgorithmFilter.SYNTHETIC_FB_URI);
-      final BasicFBType fbCopy = EcoreUtil.<BasicFBType>copy(fb);
-      fbResource.getContents().add(fbCopy);
-      Resource _createResource = resourceSet.createResource(STAlgorithmFilter.SYNTHETIC_ST_URI);
-      final XtextResource resource = ((XtextResource) _createResource);
-      IParser _parser = resource.getParser();
-      final StructuredTextParser parser = ((StructuredTextParser) _parser);
-      LazyStringInputStream _lazyStringInputStream = new LazyStringInputStream(expression);
-      ParserRule _expressionRule = parser.getGrammarAccess().getExpressionRule();
-      Pair<String, ParserRule> _mappedTo = Pair.<String, ParserRule>of(StructuredTextResource.OPTION_PARSER_RULE, _expressionRule);
-      resource.load(_lazyStringInputStream, Collections.<String, ParserRule>unmodifiableMap(CollectionLiterals.<String, ParserRule>newHashMap(_mappedTo)));
-      final IParseResult parseResult = resource.getParseResult();
-      final IResourceValidator validator = resource.getResourceServiceProvider().getResourceValidator();
-      final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
-      boolean _isEmpty = issues.isEmpty();
-      boolean _not = (!_isEmpty);
-      if (_not) {
-        final Function1<Issue, String> _function = (Issue it) -> {
-          String _string = Long.toString((it.getLineNumber()).intValue());
-          String _plus = ("Line " + _string);
-          String _plus_1 = (_plus + ": ");
-          String _message = it.getMessage();
-          return (_plus_1 + _message);
-        };
-        errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
-        return null;
+      CharSequence _xblockexpression = null;
+      {
+        ResourceSet _get = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
+        final XtextResourceSet resourceSet = ((XtextResourceSet) _get);
+        BasicFBType _copy = EcoreUtil.<BasicFBType>copy(fb);
+        this.createFBResource(resourceSet, ((BaseFBType) _copy));
+        Resource _createResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.ST_URI_EXTENSION));
+        final XtextResource resource = ((XtextResource) _createResource);
+        IParser _parser = resource.getParser();
+        final StructuredTextParser parser = ((StructuredTextParser) _parser);
+        LazyStringInputStream _lazyStringInputStream = new LazyStringInputStream(expression);
+        ParserRule _expressionRule = parser.getGrammarAccess().getExpressionRule();
+        Pair<String, ParserRule> _mappedTo = Pair.<String, ParserRule>of(StructuredTextResource.OPTION_PARSER_RULE, _expressionRule);
+        resource.load(_lazyStringInputStream, 
+          Collections.<String, ParserRule>unmodifiableMap(CollectionLiterals.<String, ParserRule>newHashMap(_mappedTo)));
+        final IParseResult parseResult = resource.getParseResult();
+        final IResourceValidator validator = resource.getResourceServiceProvider().getResourceValidator();
+        final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
+        boolean _isEmpty = issues.isEmpty();
+        boolean _not = (!_isEmpty);
+        if (_not) {
+          final Function1<Issue, String> _function = (Issue it) -> {
+            return it.getMessage();
+          };
+          errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
+          return null;
+        }
+        EObject _rootASTElement = parseResult.getRootASTElement();
+        final Expression expr = ((Expression) _rootASTElement);
+        _xblockexpression = this.generateExpression(expr);
       }
-      EObject _rootASTElement = parseResult.getRootASTElement();
-      final Expression expr = ((Expression) _rootASTElement);
-      return this.generateExpression(expr);
+      return _xblockexpression;
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
@@ -175,38 +260,33 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
-  private int BitSize(final String str) {
+  private int BitSize(final CharSequence str) {
     int _switchResult = (int) 0;
     boolean _matched = false;
-    boolean _equals = str.equals("LWORD");
-    if (_equals) {
+    if (Objects.equal(str, FordiacKeywords.LWORD)) {
       _matched=true;
       _switchResult = 64;
     }
     if (!_matched) {
-      boolean _equals_1 = str.equals("DWORD");
-      if (_equals_1) {
+      if (Objects.equal(str, FordiacKeywords.DWORD)) {
         _matched=true;
         _switchResult = 32;
       }
     }
     if (!_matched) {
-      boolean _equals_2 = str.equals("WORD");
-      if (_equals_2) {
+      if (Objects.equal(str, FordiacKeywords.WORD)) {
         _matched=true;
         _switchResult = 16;
       }
     }
     if (!_matched) {
-      boolean _equals_3 = str.equals("BYTE");
-      if (_equals_3) {
+      if (Objects.equal(str, FordiacKeywords.BYTE)) {
         _matched=true;
         _switchResult = 8;
       }
     }
     if (!_matched) {
-      boolean _equals_4 = str.equals("BOOL");
-      if (_equals_4) {
+      if (Objects.equal(str, FordiacKeywords.BOOL)) {
         _matched=true;
         _switchResult = 1;
       }
@@ -217,7 +297,24 @@ public class STAlgorithmFilter {
     return _switchResult;
   }
   
-  protected CharSequence generateArrayDecl(final LocatedVariable variable) {
+  protected CharSequence generateArrayDecl(final LocalVariable variable) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      boolean _isLocated = variable.isLocated();
+      if (_isLocated) {
+        _builder.newLineIfNotEmpty();
+        CharSequence _generateArrayDeclLocated = this.generateArrayDeclLocated(variable);
+        _builder.append(_generateArrayDeclLocated);
+      } else {
+        CharSequence _generateArrayDeclLocal = this.generateArrayDeclLocal(variable);
+        _builder.append(_generateArrayDeclLocal);
+      }
+    }
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  protected CharSequence generateArrayDeclLocated(final LocalVariable variable) {
     CharSequence _xblockexpression = null;
     {
       final Variable l = variable.getLocation();
@@ -244,32 +341,32 @@ public class STAlgorithmFilter {
                 int _minus = (_arraySize - 1);
                 _builder.append(_minus);
                 _builder.append("> ");
-                String _name_2 = variable.getName();
-                _builder.append(_name_2);
+                CharSequence _generateVarAccessLocal = this.generateVarAccessLocal(variable);
+                _builder.append(_generateVarAccessLocal);
                 _builder.append("(");
-                String _name_3 = ((PrimaryVariable)l).getVar().getName();
-                _builder.append(_name_3);
+                CharSequence _generateVarAccess = this.generateVarAccess(((PrimaryVariable)l).getVar());
+                _builder.append(_generateVarAccess);
                 _builder.append(");");
                 _builder.newLineIfNotEmpty();
               } else {
                 _builder.append("#error Accessing CIEC_");
-                String _name_4 = ((PrimaryVariable)l).getVar().getType().getName();
-                _builder.append(_name_4);
+                String _name_2 = ((PrimaryVariable)l).getVar().getType().getName();
+                _builder.append(_name_2);
                 _builder.append(" via CIEC_");
-                String _name_5 = variable.getType().getName();
-                _builder.append(_name_5);
+                String _name_3 = variable.getType().getName();
+                _builder.append(_name_3);
                 _builder.append(" would result in undefined behaviour");
                 _builder.newLineIfNotEmpty();
               }
             }
           } else {
             _builder.append("#error Piecewise access is supported only for types with defined bit-representation (e.g. not CIEC_");
-            String _name_6 = ((PrimaryVariable)l).getVar().getType().getName();
-            _builder.append(_name_6);
+            String _name_4 = ((PrimaryVariable)l).getVar().getType().getName();
+            _builder.append(_name_4);
             _builder.append(" via CIEC_");
-            String _name_7 = variable.getType().getName();
-            _builder.append(_name_7);
-            _builder.append(") ");
+            String _name_5 = variable.getType().getName();
+            _builder.append(_name_5);
+            _builder.append(")");
             _builder.newLineIfNotEmpty();
           }
         }
@@ -285,12 +382,13 @@ public class STAlgorithmFilter {
     return _xblockexpression;
   }
   
-  protected CharSequence generateArrayDecl(final LocalVariable variable) {
+  protected CharSequence generateArrayDeclLocal(final LocalVariable variable) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("CIEC_");
     String _name = variable.getType().getName();
     _builder.append(_name);
     _builder.append(" ");
+    _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
     String _name_1 = variable.getName();
     _builder.append(_name_1);
     _builder.append("[");
@@ -304,7 +402,7 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
-  protected CharSequence generateVariableDecl(final LocatedVariable variable) {
+  protected CharSequence generateVariableDeclLocated(final LocalVariable variable) {
     CharSequence _xblockexpression = null;
     {
       final Variable l = variable.getLocation();
@@ -314,11 +412,11 @@ public class STAlgorithmFilter {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("// replacing all instances of ");
-        String _extractTypeInformation = this.extractTypeInformation(variable);
+        CharSequence _extractTypeInformation = this.extractTypeInformation(variable);
         _builder.append(_extractTypeInformation);
         _builder.append(":");
-        String _name = variable.getName();
-        _builder.append(_name);
+        CharSequence _generateVarAccessLocal = this.generateVarAccessLocal(variable);
+        _builder.append(_generateVarAccessLocal);
         _builder.append(" with ");
         CharSequence _generateVarAccess = this.generateVarAccess(variable);
         _builder.append(_generateVarAccess);
@@ -334,14 +432,14 @@ public class STAlgorithmFilter {
     return _xblockexpression;
   }
   
-  protected CharSequence generateVariableDecl(final LocalVariable variable) {
+  protected CharSequence generateVariableDeclLocal(final LocalVariable variable) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("CIEC_");
     String _name = variable.getType().getName();
     _builder.append(_name);
     _builder.append(" ");
-    String _name_1 = variable.getName();
-    _builder.append(_name_1);
+    CharSequence _generateVarAccessLocal = this.generateVarAccessLocal(variable);
+    _builder.append(_generateVarAccessLocal);
     CharSequence _generateLocalVariableInitializer = this.generateLocalVariableInitializer(variable);
     _builder.append(_generateLocalVariableInitializer);
     _builder.append(";");
@@ -356,35 +454,32 @@ public class STAlgorithmFilter {
         CharSequence _switchResult = null;
         boolean _matched = false;
         if (variable instanceof LocalVariable) {
-          boolean _isArray = ((LocalVariable)variable).isArray();
-          boolean _not = (!_isArray);
-          if (_not) {
+          if (((!((LocalVariable)variable).isLocated()) && (!((LocalVariable)variable).isArray()))) {
             _matched=true;
-            _switchResult = this.generateVariableDecl(((LocalVariable)variable));
+            _switchResult = this.generateVariableDeclLocal(((LocalVariable)variable));
           }
         }
         if (!_matched) {
           if (variable instanceof LocalVariable) {
-            boolean _isArray = ((LocalVariable)variable).isArray();
-            if (_isArray) {
+            if (((!((LocalVariable)variable).isLocated()) && ((LocalVariable)variable).isArray())) {
               _matched=true;
-              _switchResult = this.generateArrayDecl(((LocalVariable)variable));
+              _switchResult = this.generateArrayDeclLocal(((LocalVariable)variable));
             }
           }
         }
         if (!_matched) {
-          if (variable instanceof LocatedVariable) {
-            if (((null != ((LocatedVariable)variable).getLocation()) && (!((LocatedVariable)variable).isArray()))) {
+          if (variable instanceof LocalVariable) {
+            if (((((LocalVariable)variable).isLocated() && (null != ((LocalVariable)variable).getLocation())) && (!((LocalVariable)variable).isArray()))) {
               _matched=true;
-              _switchResult = this.generateVariableDecl(((LocatedVariable)variable));
+              _switchResult = this.generateVariableDeclLocated(((LocalVariable)variable));
             }
           }
         }
         if (!_matched) {
-          if (variable instanceof LocatedVariable) {
-            if (((null != ((LocatedVariable)variable).getLocation()) && ((LocatedVariable)variable).isArray())) {
+          if (variable instanceof LocalVariable) {
+            if (((((LocalVariable)variable).isLocated() && (null != ((LocalVariable)variable).getLocation())) && ((LocalVariable)variable).isArray())) {
               _matched=true;
-              _switchResult = this.generateArrayDecl(((LocatedVariable)variable));
+              _switchResult = this.generateArrayDeclLocated(((LocalVariable)variable));
             }
           }
         }
@@ -464,9 +559,9 @@ public class STAlgorithmFilter {
     _builder.append(_generateExpression);
     _builder.append(") {");
     _builder.newLineIfNotEmpty();
-    _builder.append("  ");
+    _builder.append("\t");
     CharSequence _generateStatementList = this.generateStatementList(stmt.getStatments());
-    _builder.append(_generateStatementList, "  ");
+    _builder.append(_generateStatementList, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("}");
     _builder.newLine();
@@ -478,9 +573,9 @@ public class STAlgorithmFilter {
         _builder.append(_generateExpression_1);
         _builder.append(") {");
         _builder.newLineIfNotEmpty();
-        _builder.append("  ");
+        _builder.append("\t");
         CharSequence _generateStatementList_1 = this.generateStatementList(elseif.getStatements());
-        _builder.append(_generateStatementList_1, "  ");
+        _builder.append(_generateStatementList_1, "\t");
         _builder.newLineIfNotEmpty();
         _builder.append("}");
         _builder.newLine();
@@ -492,9 +587,9 @@ public class STAlgorithmFilter {
       if (_tripleNotEquals) {
         _builder.append("else {");
         _builder.newLine();
-        _builder.append("  ");
+        _builder.append("\t");
         CharSequence _generateStatementList_2 = this.generateStatementList(stmt.getElse().getStatements());
-        _builder.append(_generateStatementList_2, "  ");
+        _builder.append(_generateStatementList_2, "\t");
         _builder.newLineIfNotEmpty();
         _builder.append("}");
         _builder.newLine();
@@ -505,21 +600,17 @@ public class STAlgorithmFilter {
   
   protected CharSequence _generateStatement(final CaseStatement stmt) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("local function case(val)");
-    _builder.newLine();
-    _builder.append("  ");
+    _builder.append("switch (");
+    CharSequence _generateExpression = this.generateExpression(stmt.getExpression());
+    _builder.append(_generateExpression);
+    _builder.append(") {");
+    _builder.newLineIfNotEmpty();
+    _builder.append("\t");
     {
       EList<CaseClause> _case = stmt.getCase();
-      boolean _hasElements = false;
       for(final CaseClause clause : _case) {
-        if (!_hasElements) {
-          _hasElements = true;
-          _builder.append("if ", "  ");
-        } else {
-          _builder.appendImmediate("\nelseif ", "  ");
-        }
         CharSequence _generateCaseClause = this.generateCaseClause(clause);
-        _builder.append(_generateCaseClause, "  ");
+        _builder.append(_generateCaseClause, "\t");
       }
     }
     _builder.newLineIfNotEmpty();
@@ -527,31 +618,28 @@ public class STAlgorithmFilter {
       ElseClause _else = stmt.getElse();
       boolean _tripleNotEquals = (_else != null);
       if (_tripleNotEquals) {
-        _builder.append("  ");
-        _builder.append("else");
+        _builder.append("\t");
+        _builder.append("default:");
         _builder.newLine();
-        _builder.append("  ");
-        _builder.append("  ");
+        _builder.append("\t");
+        _builder.append("\t");
         CharSequence _generateStatementList = this.generateStatementList(stmt.getElse().getStatements());
-        _builder.append(_generateStatementList, "    ");
+        _builder.append(_generateStatementList, "\t\t");
         _builder.newLineIfNotEmpty();
+        _builder.append("\t");
+        _builder.append("\t");
+        _builder.append("break;");
+        _builder.newLine();
       }
     }
-    _builder.append("  ");
-    _builder.append("end");
+    _builder.append("}");
     _builder.newLine();
-    _builder.append("end");
-    _builder.newLine();
-    _builder.append("case(");
-    CharSequence _generateExpression = this.generateExpression(stmt.getExpression());
-    _builder.append(_generateExpression);
-    _builder.append(")");
-    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
   protected CharSequence generateCaseClause(final CaseClause clause) {
     StringConcatenation _builder = new StringConcatenation();
+    _builder.append("case ");
     {
       EList<Constant> _case = clause.getCase();
       boolean _hasElements = false;
@@ -559,19 +647,21 @@ public class STAlgorithmFilter {
         if (!_hasElements) {
           _hasElements = true;
         } else {
-          _builder.appendImmediate(" or ", "");
+          _builder.appendImmediate(" case ", "");
         }
-        _builder.append("val == ");
         CharSequence _generateExpression = this.generateExpression(value);
         _builder.append(_generateExpression);
+        _builder.append(":");
       }
     }
-    _builder.append(" then");
     _builder.newLineIfNotEmpty();
-    _builder.append("  ");
+    _builder.append("\t");
     CharSequence _generateStatementList = this.generateStatementList(clause.getStatements());
-    _builder.append(_generateStatementList, "  ");
+    _builder.append(_generateStatementList, "\t");
     _builder.newLineIfNotEmpty();
+    _builder.append("\t");
+    _builder.append("break;");
+    _builder.newLine();
     return _builder;
   }
   
@@ -589,31 +679,59 @@ public class STAlgorithmFilter {
   
   protected CharSequence _generateStatement(final ForStatement stmt) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("for ");
-    CharSequence _generateExpression = this.generateExpression(stmt.getVariable());
-    _builder.append(_generateExpression);
-    _builder.append(" = ");
-    CharSequence _generateExpression_1 = this.generateExpression(stmt.getFrom());
-    _builder.append(_generateExpression_1);
-    _builder.append(", ");
-    CharSequence _generateExpression_2 = this.generateExpression(stmt.getTo());
-    _builder.append(_generateExpression_2);
+    _builder.append("// as it is done in lua: https://www.lua.org/manual/5.1/manual.html#2.4.5");
+    _builder.newLine();
+    _builder.append("auto by = ");
     {
       Expression _by = stmt.getBy();
       boolean _tripleNotEquals = (_by != null);
       if (_tripleNotEquals) {
-        _builder.append(", ");
-        CharSequence _generateExpression_3 = this.generateExpression(stmt.getBy());
-        _builder.append(_generateExpression_3);
+        CharSequence _generateExpression = this.generateExpression(stmt.getBy());
+        _builder.append(_generateExpression);
+      } else {
+        _builder.append("1");
       }
     }
-    _builder.append(" do");
+    _builder.append(";");
     _builder.newLineIfNotEmpty();
-    _builder.append("  ");
+    _builder.append("auto to = ");
+    CharSequence _generateExpression_1 = this.generateExpression(stmt.getTo());
+    _builder.append(_generateExpression_1);
+    _builder.append(";");
+    _builder.newLineIfNotEmpty();
+    _builder.append("for(");
+    CharSequence _generateExpression_2 = this.generateExpression(stmt.getVariable());
+    _builder.append(_generateExpression_2);
+    _builder.append(" = ");
+    CharSequence _generateExpression_3 = this.generateExpression(stmt.getFrom());
+    _builder.append(_generateExpression_3);
+    _builder.append(";");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("(by >  0 && ");
+    CharSequence _generateExpression_4 = this.generateExpression(stmt.getVariable());
+    _builder.append(_generateExpression_4, "    ");
+    _builder.append(" <= to) ||");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("(by <= 0 && ");
+    CharSequence _generateExpression_5 = this.generateExpression(stmt.getVariable());
+    _builder.append(_generateExpression_5, "    ");
+    _builder.append(" >= to);");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    CharSequence _generateExpression_6 = this.generateExpression(stmt.getVariable());
+    _builder.append(_generateExpression_6, "    ");
+    _builder.append(" = ");
+    CharSequence _generateExpression_7 = this.generateExpression(stmt.getVariable());
+    _builder.append(_generateExpression_7, "    ");
+    _builder.append(" + by){");
+    _builder.newLineIfNotEmpty();
+    _builder.append("\t");
     CharSequence _generateStatementList = this.generateStatementList(stmt.getStatements());
-    _builder.append(_generateStatementList, "  ");
+    _builder.append(_generateStatementList, "\t");
     _builder.newLineIfNotEmpty();
-    _builder.append("end");
+    _builder.append("}");
     _builder.newLine();
     return _builder;
   }
@@ -650,88 +768,232 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
-  protected CharSequence _generateExpression(final Expression expr) {
-    EClass _eClass = expr.eClass();
-    String _plus = (_eClass + " not supported");
-    throw new UnsupportedOperationException(_plus);
+  protected CharSequence generateBinaryOperator(final BinaryOperator op) {
+    CharSequence _switchResult = null;
+    if (op != null) {
+      switch (op) {
+        case OR:
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("||");
+          _switchResult = _builder;
+          break;
+        case XOR:
+          StringConcatenation _builder_1 = new StringConcatenation();
+          _builder_1.append("^");
+          _switchResult = _builder_1;
+          break;
+        case AND:
+          StringConcatenation _builder_2 = new StringConcatenation();
+          _builder_2.append("&&");
+          _switchResult = _builder_2;
+          break;
+        case AMPERSAND:
+          StringConcatenation _builder_3 = new StringConcatenation();
+          _builder_3.append("&&");
+          _switchResult = _builder_3;
+          break;
+        case EQ:
+          StringConcatenation _builder_4 = new StringConcatenation();
+          _builder_4.append("==");
+          _switchResult = _builder_4;
+          break;
+        case NE:
+          StringConcatenation _builder_5 = new StringConcatenation();
+          _builder_5.append("!=");
+          _switchResult = _builder_5;
+          break;
+        case LT:
+          StringConcatenation _builder_6 = new StringConcatenation();
+          _builder_6.append("<");
+          _switchResult = _builder_6;
+          break;
+        case LE:
+          StringConcatenation _builder_7 = new StringConcatenation();
+          _builder_7.append("<=");
+          _switchResult = _builder_7;
+          break;
+        case GT:
+          StringConcatenation _builder_8 = new StringConcatenation();
+          _builder_8.append(">");
+          _switchResult = _builder_8;
+          break;
+        case GE:
+          StringConcatenation _builder_9 = new StringConcatenation();
+          _builder_9.append(">=");
+          _switchResult = _builder_9;
+          break;
+        case MOD:
+          StringConcatenation _builder_10 = new StringConcatenation();
+          _builder_10.append("%");
+          _switchResult = _builder_10;
+          break;
+        default:
+          StringConcatenation _builder_11 = new StringConcatenation();
+          _builder_11.append("The operator ");
+          _builder_11.append(op);
+          _builder_11.append(" is not supported");
+          throw new UnsupportedOperationException(_builder_11.toString());
+      }
+    } else {
+      StringConcatenation _builder_11 = new StringConcatenation();
+      _builder_11.append("The operator ");
+      _builder_11.append(op);
+      _builder_11.append(" is not supported");
+      throw new UnsupportedOperationException(_builder_11.toString());
+    }
+    return _switchResult;
   }
   
-  protected CharSequence _generateExpression(final BinaryExpression expr) {
+  protected CharSequence generateUnaryOperator(final UnaryOperator op) {
+    CharSequence _switchResult = null;
+    if (op != null) {
+      switch (op) {
+        case MINUS:
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("-");
+          _switchResult = _builder;
+          break;
+        case PLUS:
+          StringConcatenation _builder_1 = new StringConcatenation();
+          _builder_1.append("+");
+          _switchResult = _builder_1;
+          break;
+        case NOT:
+          StringConcatenation _builder_2 = new StringConcatenation();
+          _builder_2.append("!");
+          _switchResult = _builder_2;
+          break;
+        default:
+          break;
+      }
+    }
+    return _switchResult;
+  }
+  
+  protected CharSequence _generateExpression(final Call expr) {
     StringConcatenation _builder = new StringConcatenation();
+    String _func = expr.getFunc();
+    _builder.append(_func);
     _builder.append("(");
-    CharSequence _generateExpression = this.generateExpression(expr.getLeft());
-    _builder.append(_generateExpression);
-    _builder.append(" ");
-    CharSequence _generateBinaryOperator = this.generateBinaryOperator(expr.getOperator());
-    _builder.append(_generateBinaryOperator);
-    _builder.append(" ");
-    CharSequence _generateExpression_1 = this.generateExpression(expr.getRight());
-    _builder.append(_generateExpression_1);
+    {
+      EList<Argument> _args = expr.getArgs();
+      boolean _hasElements = false;
+      for(final Argument arg : _args) {
+        if (!_hasElements) {
+          _hasElements = true;
+        } else {
+          _builder.appendImmediate(", ", "");
+        }
+        CharSequence _generateExpression = this.generateExpression(arg);
+        _builder.append(_generateExpression);
+      }
+    }
     _builder.append(")");
     return _builder;
   }
   
-  protected CharSequence generateBinaryOperator(final BinaryOperator op) {
-    String _switchResult = null;
-    if (op != null) {
-      switch (op) {
-        case OR:
-          _switchResult = "||";
-          break;
-        case XOR:
-          _switchResult = "^";
-          break;
-        case AND:
-          _switchResult = "&&";
-          break;
-        case EQ:
-          _switchResult = "==";
-          break;
-        case NE:
-          _switchResult = "!=";
-          break;
-        case LT:
-          _switchResult = "<";
-          break;
-        case LE:
-          _switchResult = "<=";
-          break;
-        case GT:
-          _switchResult = ">";
-          break;
-        case GE:
-          _switchResult = ">=";
+  protected CharSequence _generateExpression(final InArgument arg) {
+    return this.generateExpression(arg.getExpr());
+  }
+  
+  protected CharSequence _generateExpression(final BinaryExpression expr) {
+    CharSequence _switchResult = null;
+    BinaryOperator _operator = expr.getOperator();
+    if (_operator != null) {
+      switch (_operator) {
+        case POWER:
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("EXPT(");
+          CharSequence _generateExpression = this.generateExpression(expr.getLeft());
+          _builder.append(_generateExpression);
+          _builder.append(", ");
+          CharSequence _generateExpression_1 = this.generateExpression(expr.getRight());
+          _builder.append(_generateExpression_1);
+          _builder.append(")");
+          _switchResult = _builder;
           break;
         case ADD:
-          _switchResult = "+";
+          StringConcatenation _builder_1 = new StringConcatenation();
+          _builder_1.append("ADD(");
+          CharSequence _generateExpression_2 = this.generateExpression(expr.getLeft());
+          _builder_1.append(_generateExpression_2);
+          _builder_1.append(", ");
+          CharSequence _generateExpression_3 = this.generateExpression(expr.getRight());
+          _builder_1.append(_generateExpression_3);
+          _builder_1.append(")");
+          _switchResult = _builder_1;
           break;
         case SUB:
-          _switchResult = "-";
-          break;
-        case MUL:
-          _switchResult = "*";
+          StringConcatenation _builder_2 = new StringConcatenation();
+          _builder_2.append("SUB(");
+          CharSequence _generateExpression_4 = this.generateExpression(expr.getLeft());
+          _builder_2.append(_generateExpression_4);
+          _builder_2.append(", ");
+          CharSequence _generateExpression_5 = this.generateExpression(expr.getRight());
+          _builder_2.append(_generateExpression_5);
+          _builder_2.append(")");
+          _switchResult = _builder_2;
           break;
         case DIV:
-          _switchResult = "/";
+          StringConcatenation _builder_3 = new StringConcatenation();
+          _builder_3.append("DIV(");
+          CharSequence _generateExpression_6 = this.generateExpression(expr.getLeft());
+          _builder_3.append(_generateExpression_6);
+          _builder_3.append(", ");
+          CharSequence _generateExpression_7 = this.generateExpression(expr.getRight());
+          _builder_3.append(_generateExpression_7);
+          _builder_3.append(")");
+          _switchResult = _builder_3;
           break;
-        case MOD:
-          _switchResult = "%";
+        case MUL:
+          StringConcatenation _builder_4 = new StringConcatenation();
+          _builder_4.append("MUL(");
+          CharSequence _generateExpression_8 = this.generateExpression(expr.getLeft());
+          _builder_4.append(_generateExpression_8);
+          _builder_4.append(", ");
+          CharSequence _generateExpression_9 = this.generateExpression(expr.getRight());
+          _builder_4.append(_generateExpression_9);
+          _builder_4.append(")");
+          _switchResult = _builder_4;
           break;
         default:
-          StringConcatenation _builder = new StringConcatenation();
-          _builder.append("The operator ");
-          _builder.append(op);
-          _builder.append(" is not supported");
-          throw new UnsupportedOperationException(_builder.toString());
+          StringConcatenation _builder_5 = new StringConcatenation();
+          _builder_5.append("(");
+          CharSequence _generateExpression_10 = this.generateExpression(expr.getLeft());
+          _builder_5.append(_generateExpression_10);
+          _builder_5.append(" ");
+          CharSequence _generateBinaryOperator = this.generateBinaryOperator(expr.getOperator());
+          _builder_5.append(_generateBinaryOperator);
+          _builder_5.append(" ");
+          CharSequence _generateExpression_11 = this.generateExpression(expr.getRight());
+          _builder_5.append(_generateExpression_11);
+          _builder_5.append(")");
+          _switchResult = _builder_5;
+          break;
       }
     } else {
-      StringConcatenation _builder = new StringConcatenation();
-      _builder.append("The operator ");
-      _builder.append(op);
-      _builder.append(" is not supported");
-      throw new UnsupportedOperationException(_builder.toString());
+      StringConcatenation _builder_5 = new StringConcatenation();
+      _builder_5.append("(");
+      CharSequence _generateExpression_10 = this.generateExpression(expr.getLeft());
+      _builder_5.append(_generateExpression_10);
+      _builder_5.append(" ");
+      CharSequence _generateBinaryOperator = this.generateBinaryOperator(expr.getOperator());
+      _builder_5.append(_generateBinaryOperator);
+      _builder_5.append(" ");
+      CharSequence _generateExpression_11 = this.generateExpression(expr.getRight());
+      _builder_5.append(_generateExpression_11);
+      _builder_5.append(")");
+      _switchResult = _builder_5;
     }
     return _switchResult;
+  }
+  
+  protected CharSequence _generateExpression(final TimeLiteral expr) {
+    StringConcatenation _builder = new StringConcatenation();
+    String _literal = expr.getLiteral();
+    DatetimeLiteral _datetimeLiteral = new DatetimeLiteral(_literal);
+    _builder.append(_datetimeLiteral);
+    return _builder;
   }
   
   protected CharSequence _generateExpression(final UnaryExpression expr) {
@@ -746,36 +1008,25 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
-  protected CharSequence generateUnaryOperator(final UnaryOperator op) {
-    String _switchResult = null;
-    if (op != null) {
-      switch (op) {
-        case MINUS:
-          _switchResult = "-";
-          break;
-        case PLUS:
-          _switchResult = "+";
-          break;
-        case NOT:
-          _switchResult = "!";
-          break;
-        default:
-          break;
-      }
-    }
-    return _switchResult;
-  }
-  
   protected CharSequence _generateExpression(final BoolLiteral expr) {
-    return Boolean.toString(expr.isValue());
+    StringConcatenation _builder = new StringConcatenation();
+    String _string = Boolean.valueOf(expr.isValue()).toString();
+    _builder.append(_string);
+    return _builder;
   }
   
   protected CharSequence _generateExpression(final IntLiteral expr) {
-    return Long.toString(expr.getValue());
+    StringConcatenation _builder = new StringConcatenation();
+    String _string = Long.valueOf(expr.getValue()).toString();
+    _builder.append(_string);
+    return _builder;
   }
   
   protected CharSequence _generateExpression(final RealLiteral expr) {
-    return Double.toString(expr.getValue());
+    StringConcatenation _builder = new StringConcatenation();
+    String _string = Double.valueOf(expr.getValue()).toString();
+    _builder.append(_string);
+    return _builder;
   }
   
   protected CharSequence _generateExpression(final StringLiteral expr) {
@@ -813,14 +1064,47 @@ public class STAlgorithmFilter {
   
   protected CharSequence _generateExpression(final AdapterVariable expr) {
     StringConcatenation _builder = new StringConcatenation();
+    CharSequence _generateExpression = this.generateExpression(expr.getCurr());
+    _builder.append(_generateExpression);
+    _builder.append(".");
+    String _name = expr.getVar().getName();
+    _builder.append(_name);
+    _builder.append("()");
+    CharSequence _xifexpression = null;
+    EObject _eContainer = expr.eContainer();
+    boolean _not = (!(_eContainer instanceof AdapterVariable));
+    if (_not) {
+      _xifexpression = this.generateBitaccess(expr);
+    }
+    _builder.append(_xifexpression);
+    return _builder;
+  }
+  
+  protected CharSequence _generateExpression(final AdapterRoot expr) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
     String _name = expr.getAdapter().getName();
     _builder.append(_name);
-    _builder.append("().");
-    String _name_1 = expr.getVar().getName();
-    _builder.append(_name_1);
     _builder.append("()");
-    CharSequence _generateBitaccess = this.generateBitaccess(expr);
-    _builder.append(_generateBitaccess);
+    return _builder;
+  }
+  
+  public CharSequence generateStructAdapterVarAccess(final EList<VarDeclaration> list) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      boolean _hasElements = false;
+      for(final VarDeclaration variable : list) {
+        if (!_hasElements) {
+          _hasElements = true;
+          _builder.append(".");
+        } else {
+          _builder.appendImmediate(".", "");
+        }
+        String _name = variable.getName();
+        _builder.append(_name);
+        _builder.append("()");
+      }
+    }
     return _builder;
   }
   
@@ -833,32 +1117,60 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
-  protected CharSequence _generateVarAccess(final LocalVariable variable) {
+  protected CharSequence generateVarAccessLocal(final LocalVariable variable) {
     StringConcatenation _builder = new StringConcatenation();
+    _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
     String _name = variable.getName();
     _builder.append(_name);
     return _builder;
   }
   
   protected CharSequence _generateVarAccess(final VarDeclaration variable) {
+    CharSequence _xifexpression = null;
+    EObject _eContainer = variable.eContainer().eContainer();
+    if ((_eContainer instanceof AdapterFBType)) {
+      StringConcatenation _builder = new StringConcatenation();
+      String _name = variable.getName();
+      _builder.append(_name);
+      _builder.append("()");
+      _xifexpression = _builder;
+    } else {
+      StringConcatenation _builder_1 = new StringConcatenation();
+      _builder_1.append(STAlgorithmFilter.EXPORT_PREFIX);
+      String _name_1 = variable.getName();
+      _builder_1.append(_name_1);
+      _builder_1.append("()");
+      _xifexpression = _builder_1;
+    }
+    return _xifexpression;
+  }
+  
+  protected CharSequence _generateVarAccess(final LocalVariable variable) {
     StringConcatenation _builder = new StringConcatenation();
-    String _name = variable.getName();
-    _builder.append(_name);
-    _builder.append("()");
+    {
+      boolean _isLocated = variable.isLocated();
+      if (_isLocated) {
+        CharSequence _generateVarAccessLocated = this.generateVarAccessLocated(variable);
+        _builder.append(_generateVarAccessLocated);
+      } else {
+        CharSequence _generateVarAccessLocal = this.generateVarAccessLocal(variable);
+        _builder.append(_generateVarAccessLocal);
+      }
+    }
     return _builder;
   }
   
-  protected CharSequence _generateVarAccess(final LocatedVariable variable) {
+  protected CharSequence generateVarAccessLocated(final LocalVariable variable) {
     StringConcatenation _builder = new StringConcatenation();
     {
       boolean _isArray = variable.isArray();
       if (_isArray) {
-        String _name = variable.getName();
-        _builder.append(_name);
+        CharSequence _generateVarAccessLocal = this.generateVarAccessLocal(variable);
+        _builder.append(_generateVarAccessLocal);
       } else {
         CharSequence _generateExpression = this.generateExpression(variable.getLocation());
         _builder.append(_generateExpression);
-        CharSequence _generateBitaccess = this.generateBitaccess(this.extractTypeInformation(variable.getLocation()), this.extractTypeInformation(variable), 0);
+        CharSequence _generateBitaccess = this.generateBitaccess(variable, this.extractTypeInformation(variable.getLocation()), this.extractTypeInformation(variable), 0);
         _builder.append(_generateBitaccess);
       }
     }
@@ -870,7 +1182,13 @@ public class STAlgorithmFilter {
     PartialAccess _part = variable.getPart();
     boolean _tripleNotEquals = (null != _part);
     if (_tripleNotEquals) {
-      _xifexpression = this.generateBitaccess(variable.getVar().getType().getName(), this.extractTypeInformation(variable), variable.getPart().getIndex());
+      CharSequence _xblockexpression = null;
+      {
+        final VarDeclaration lastvar = variable.getVar();
+        _xblockexpression = this.generateBitaccess(lastvar, lastvar.getType().getName(), this.extractTypeInformation(variable), 
+          variable.getPart().getIndex());
+      }
+      _xifexpression = _xblockexpression;
     }
     return _xifexpression;
   }
@@ -880,14 +1198,16 @@ public class STAlgorithmFilter {
     PartialAccess _part = variable.getPart();
     boolean _tripleNotEquals = (null != _part);
     if (_tripleNotEquals) {
-      _xifexpression = this.generateBitaccess(variable.getVar().getType().getName(), this.extractTypeInformation(variable), variable.getPart().getIndex());
+      _xifexpression = this.generateBitaccess(variable.getVar(), variable.getVar().getType().getName(), this.extractTypeInformation(variable), 
+        variable.getPart().getIndex());
     }
     return _xifexpression;
   }
   
-  protected CharSequence generateBitaccess(final String DataType, final String AccessorType, final int Index) {
+  protected CharSequence generateBitaccess(final VarDeclaration variable, final CharSequence DataType, final CharSequence AccessorType, final int Index) {
     CharSequence _xifexpression = null;
-    if (((this.BitSize(AccessorType) > 0) && (this.BitSize(DataType) > this.BitSize(AccessorType)))) {
+    if ((((this.BitSize(AccessorType) > 0) && variable.isArray()) && 
+      ((variable.getArraySize() * this.BitSize(DataType)) > this.BitSize(AccessorType)))) {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append(".partial<CIEC_");
       _builder.append(AccessorType);
@@ -913,28 +1233,28 @@ public class STAlgorithmFilter {
     return _xifexpression;
   }
   
-  private String _extractTypeInformation(final PartialAccess part, final String DataType) {
-    String _xifexpression = null;
+  private CharSequence extractTypeInformationWithPartialAccess(final PartialAccess part, final CharSequence DataType) {
+    CharSequence _xifexpression = null;
     if ((null != part)) {
       String _xifexpression_1 = null;
       boolean _isBitaccess = part.isBitaccess();
       if (_isBitaccess) {
-        _xifexpression_1 = "BOOL";
+        _xifexpression_1 = FordiacKeywords.BOOL;
       } else {
         String _xifexpression_2 = null;
         boolean _isByteaccess = part.isByteaccess();
         if (_isByteaccess) {
-          _xifexpression_2 = "BYTE";
+          _xifexpression_2 = FordiacKeywords.BYTE;
         } else {
           String _xifexpression_3 = null;
           boolean _isWordaccess = part.isWordaccess();
           if (_isWordaccess) {
-            _xifexpression_3 = "WORD";
+            _xifexpression_3 = FordiacKeywords.WORD;
           } else {
             String _xifexpression_4 = null;
             boolean _isDwordaccess = part.isDwordaccess();
             if (_isDwordaccess) {
-              _xifexpression_4 = "DWORD";
+              _xifexpression_4 = FordiacKeywords.DWORD;
             } else {
               _xifexpression_4 = "";
             }
@@ -951,27 +1271,23 @@ public class STAlgorithmFilter {
     return _xifexpression;
   }
   
-  private String _extractTypeInformation(final PrimaryVariable variable, final String DataType) {
-    String _xifexpression = null;
+  private CharSequence extractTypeInformation(final PrimaryVariable variable, final CharSequence DataType) {
+    CharSequence _xifexpression = null;
     PartialAccess _part = variable.getPart();
     boolean _tripleNotEquals = (null != _part);
     if (_tripleNotEquals) {
-      _xifexpression = this.extractTypeInformation(variable.getPart(), DataType);
+      _xifexpression = this.extractTypeInformationWithPartialAccess(variable.getPart(), DataType);
     } else {
       _xifexpression = DataType;
     }
     return _xifexpression;
   }
   
-  protected String _extractTypeInformation(final PrimaryVariable variable) {
+  protected CharSequence _extractTypeInformation(final PrimaryVariable variable) {
     return this.extractTypeInformation(variable, this.extractTypeInformation(variable.getVar()));
   }
   
-  protected String _extractTypeInformation(final LocalVariable variable) {
-    return variable.getType().getName();
-  }
-  
-  protected String _extractTypeInformation(final VarDeclaration variable) {
+  protected CharSequence _extractTypeInformation(final VarDeclaration variable) {
     return variable.getType().getName();
   }
   
@@ -1004,8 +1320,10 @@ public class STAlgorithmFilter {
     }
   }
   
-  protected CharSequence generateExpression(final Expression expr) {
-    if (expr instanceof IntLiteral) {
+  protected CharSequence generateExpression(final EObject expr) {
+    if (expr instanceof AdapterRoot) {
+      return _generateExpression((AdapterRoot)expr);
+    } else if (expr instanceof IntLiteral) {
       return _generateExpression((IntLiteral)expr);
     } else if (expr instanceof RealLiteral) {
       return _generateExpression((RealLiteral)expr);
@@ -1019,12 +1337,16 @@ public class STAlgorithmFilter {
       return _generateExpression((PrimaryVariable)expr);
     } else if (expr instanceof StringLiteral) {
       return _generateExpression((StringLiteral)expr);
+    } else if (expr instanceof TimeLiteral) {
+      return _generateExpression((TimeLiteral)expr);
     } else if (expr instanceof BinaryExpression) {
       return _generateExpression((BinaryExpression)expr);
+    } else if (expr instanceof Call) {
+      return _generateExpression((Call)expr);
+    } else if (expr instanceof InArgument) {
+      return _generateExpression((InArgument)expr);
     } else if (expr instanceof UnaryExpression) {
       return _generateExpression((UnaryExpression)expr);
-    } else if (expr != null) {
-      return _generateExpression(expr);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
         Arrays.<Object>asList(expr).toString());
@@ -1034,8 +1356,6 @@ public class STAlgorithmFilter {
   protected CharSequence generateVarAccess(final VarDeclaration variable) {
     if (variable instanceof LocalVariable) {
       return _generateVarAccess((LocalVariable)variable);
-    } else if (variable instanceof LocatedVariable) {
-      return _generateVarAccess((LocatedVariable)variable);
     } else if (variable != null) {
       return _generateVarAccess(variable);
     } else {
@@ -1044,21 +1364,8 @@ public class STAlgorithmFilter {
     }
   }
   
-  private String extractTypeInformation(final EObject variable, final String DataType) {
-    if (variable instanceof PrimaryVariable) {
-      return _extractTypeInformation((PrimaryVariable)variable, DataType);
-    } else if (variable instanceof PartialAccess) {
-      return _extractTypeInformation((PartialAccess)variable, DataType);
-    } else {
-      throw new IllegalArgumentException("Unhandled parameter types: " +
-        Arrays.<Object>asList(variable, DataType).toString());
-    }
-  }
-  
-  protected String extractTypeInformation(final EObject variable) {
-    if (variable instanceof LocalVariable) {
-      return _extractTypeInformation((LocalVariable)variable);
-    } else if (variable instanceof VarDeclaration) {
+  protected CharSequence extractTypeInformation(final EObject variable) {
+    if (variable instanceof VarDeclaration) {
       return _extractTypeInformation((VarDeclaration)variable);
     } else if (variable instanceof PrimaryVariable) {
       return _extractTypeInformation((PrimaryVariable)variable);

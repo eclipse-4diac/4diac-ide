@@ -19,6 +19,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -31,13 +32,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl#getVarDeclaration
- * <em>Var Declaration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl#getMemberVariables
+ * <em>Member Variables</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class StructuredTypeImpl extends DataTypeImpl implements StructuredType {
+public class StructuredTypeImpl extends AnyDerivedTypeImpl implements StructuredType {
+	/**
+	 * The cached value of the '{@link #getMemberVariables() <em>Member
+	 * Variables</em>}' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @see #getMemberVariables()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VarDeclaration> memberVariables;
+
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -63,15 +75,12 @@ public class StructuredTypeImpl extends DataTypeImpl implements StructuredType {
 	 * @generated
 	 */
 	@Override
-	public EList<VarDeclaration> getVarDeclaration() {
-		// TODO: implement this method to return the 'Var Declaration' containment
-		// reference list
-		// Ensure that you remove @generated or mark it @generated NOT
-		// The list is expected to implement org.eclipse.emf.ecore.util.InternalEList
-		// and org.eclipse.emf.ecore.EStructuralFeature.Setting
-		// so it's likely that an appropriate subclass of
-		// org.eclipse.emf.ecore.util.EcoreEList should be used.
-		throw new UnsupportedOperationException();
+	public EList<VarDeclaration> getMemberVariables() {
+		if (memberVariables == null) {
+			memberVariables = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this,
+					DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES);
+		}
+		return memberVariables;
 	}
 
 	/**
@@ -82,10 +91,11 @@ public class StructuredTypeImpl extends DataTypeImpl implements StructuredType {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-			return ((InternalEList<?>) getVarDeclaration()).basicRemove(otherEnd, msgs);
+		case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+			return ((InternalEList<?>) getMemberVariables()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -96,10 +106,11 @@ public class StructuredTypeImpl extends DataTypeImpl implements StructuredType {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-			return getVarDeclaration();
+		case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+			return getMemberVariables();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -111,12 +122,14 @@ public class StructuredTypeImpl extends DataTypeImpl implements StructuredType {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-			getVarDeclaration().clear();
-			getVarDeclaration().addAll((Collection<? extends VarDeclaration>) newValue);
+		case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+			getMemberVariables().clear();
+			getMemberVariables().addAll((Collection<? extends VarDeclaration>) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
 			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -127,11 +140,13 @@ public class StructuredTypeImpl extends DataTypeImpl implements StructuredType {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-			getVarDeclaration().clear();
+		case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+			getMemberVariables().clear();
+			return;
+		default:
+			super.eUnset(featureID);
 			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -142,10 +157,11 @@ public class StructuredTypeImpl extends DataTypeImpl implements StructuredType {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-			return !getVarDeclaration().isEmpty();
+		case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+			return memberVariables != null && !memberVariables.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // StructuredTypeImpl

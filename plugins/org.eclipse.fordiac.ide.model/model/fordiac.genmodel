@@ -4,8 +4,8 @@
     modelDirectory="/org.eclipse.fordiac.ide.model/src-gen" creationSubmenus="true"
     editDirectory="/org.eclipse.fordiac.ide.model.edit/src-gen" modelPluginID="org.eclipse.fordiac.ide.model"
     templateDirectory="" modelName="fordiac" editPluginClass="org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin"
-    nonNLSMarkers="true" importerID="org.eclipse.emf.importer.ecore" containmentProxies="true"
-    complianceLevel="8.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.model.edit"
+    nonNLSMarkers="true" codeFormatting="true" commentFormatting="true" importerID="org.eclipse.emf.importer.ecore"
+    containmentProxies="true" complianceLevel="11.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.model.edit"
     language="" importOrganizing="true" cleanup="true">
   <foreignModel>palette.ecore</foreignModel>
   <genPackages prefix="Palette" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
@@ -15,9 +15,9 @@
     <genDataTypes ecoreDataType="palette.ecore#//TypeImporter"/>
     <genDataTypes ecoreDataType="palette.ecore#//XMLStreamException"/>
     <genDataTypes ecoreDataType="palette.ecore#//CoreException"/>
+    <genDataTypes ecoreDataType="palette.ecore#//TypeLibrary"/>
     <genClasses ecoreClass="palette.ecore#//Palette">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute palette.ecore#//Palette/project"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference palette.ecore#//Palette/automationSystem"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute palette.ecore#//Palette/typeLibrary"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference palette.ecore#//Palette/adapterTypes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference palette.ecore#//Palette/deviceTypes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference palette.ecore#//Palette/fbTypes"/>
@@ -53,6 +53,7 @@
       <genOperations ecoreOperation="palette.ecore#//Palette/removePaletteEntry" body="org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.removeTypeEntry(this, entry);">
         <genParameters ecoreParameter="palette.ecore#//Palette/removePaletteEntry/entry"/>
       </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//Palette/getProject" body="return getTypeLibrary().getProject();"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//StringToAdapterTypePaletteEntryMap">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute palette.ecore#//StringToAdapterTypePaletteEntryMap/key"/>
@@ -87,9 +88,9 @@
       <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getProjectRelativeTypePath"
           body="return getFile().getProjectRelativePath().toOSString();"/>
       <genOperations ecoreOperation="palette.ecore#//PaletteEntry/loadType" body="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.loadType(this);"/>
-      <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getTypeImporter">
-        <genParameters ecoreParameter="palette.ecore#//PaletteEntry/getTypeImporter/palette"/>
-      </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getTypeImporter"/>
+      <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getTypeLibrary"
+          body="return getPalette().getTypeLibrary();"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//AdapterTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//AdapterTypePaletteEntry/getType"
@@ -99,9 +100,17 @@
         <genParameters ecoreParameter="palette.ecore#//AdapterTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//AdapterTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter();">
-        <genParameters ecoreParameter="palette.ecore#//AdapterTypePaletteEntry/getTypeImporter/palette"/>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter(getFile());"/>
+    </genClasses>
+    <genClasses ecoreClass="palette.ecore#//DataTypePaletteEntry">
+      <genOperations ecoreOperation="palette.ecore#//DataTypePaletteEntry/getType"
+          body="LibraryElement type = super.getType();&#xA;if (type instanceof AnyDerivedType) {&#xA;&#x9;return (AnyDerivedType) type;&#xA;}&#xA;return null;"/>
+      <genOperations ecoreOperation="palette.ecore#//DataTypePaletteEntry/setType"
+          body="if (type instanceof AnyDerivedType) {&#xA;&#x9;super.setType(type);&#xA;} else {&#xA;&#x9;super.setType(null);&#xA;&#x9;if (null != type) {&#xA;&#x9;&#x9;Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,&#xA;&#x9;&#x9;&#x9;&#x9;&quot;tried to set no AnyDerivedType as type entry for DataTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
+        <genParameters ecoreParameter="palette.ecore#//DataTypePaletteEntry/setType/type"/>
       </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//DataTypePaletteEntry/getTypeImporter"
+          body="return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//DeviceTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//DeviceTypePaletteEntry/getDeviceType"
@@ -111,9 +120,7 @@
         <genParameters ecoreParameter="palette.ecore#//DeviceTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//DeviceTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(palette);">
-        <genParameters ecoreParameter="palette.ecore#//DeviceTypePaletteEntry/getTypeImporter/palette"/>
-      </genOperations>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//FBTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/getFBType"
@@ -122,9 +129,7 @@
         <genParameters ecoreParameter="palette.ecore#//FBTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(palette);">
-        <genParameters ecoreParameter="palette.ecore#//FBTypePaletteEntry/getTypeImporter/palette"/>
-      </genOperations>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//ResourceTypeEntry">
       <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/getResourceType"
@@ -133,9 +138,7 @@
         <genParameters ecoreParameter="palette.ecore#//ResourceTypeEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(palette);">
-        <genParameters ecoreParameter="palette.ecore#//ResourceTypeEntry/getTypeImporter/palette"/>
-      </genOperations>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//SegmentTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//SegmentTypePaletteEntry/getSegmentType"
@@ -145,9 +148,7 @@
         <genParameters ecoreParameter="palette.ecore#//SegmentTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//SegmentTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter();">
-        <genParameters ecoreParameter="palette.ecore#//SegmentTypePaletteEntry/getTypeImporter/palette"/>
-      </genOperations>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter(getFile());"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//SubApplicationTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//SubApplicationTypePaletteEntry/getSubApplicationType"
@@ -157,9 +158,7 @@
         <genParameters ecoreParameter="palette.ecore#//SubApplicationTypePaletteEntry/setType/type"/>
       </genOperations>
       <genOperations ecoreOperation="palette.ecore#//SubApplicationTypePaletteEntry/getTypeImporter"
-          body="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(palette);">
-        <genParameters ecoreParameter="palette.ecore#//SubApplicationTypePaletteEntry/getTypeImporter/palette"/>
-      </genOperations>
+          body="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(getFile());"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="LibraryElement" basePackage="org.eclipse.fordiac.ide.model"
@@ -171,6 +170,8 @@
       <genEnumLiterals ecoreEnumLiteral="lib.ecore#//Language/Cpp"/>
     </genEnums>
     <genDataTypes ecoreDataType="lib.ecore#//IProject"/>
+    <genDataTypes ecoreDataType="lib.ecore#//IFile"/>
+    <genDataTypes ecoreDataType="lib.ecore#//CommandStack"/>
     <genClasses ecoreClass="lib.ecore#//AdapterDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/paletteEntry"/>
@@ -269,6 +270,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECTransition/conditionEvent"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//ECTransition/eCC"/>
       <genOperations ecoreOperation="lib.ecore#//ECTransition/getConditionText" body="return org.eclipse.fordiac.ide.model.Annotations.getConditionText(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//ECTransition/getPriority" body="return getSource().getOutTransitions().indexOf(this) + 1;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Event">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>
@@ -296,6 +298,7 @@
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
           ecoreFeature="ecore:EReference lib.ecore#//SubApp/subAppNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xD;&#xA;if(type instanceof SubAppType){&#xD;&#xA;   return (SubAppType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/isUnfolded" body="Attribute attr = this.getAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);&#xA;return (attr != null) &amp;&amp; &quot;true&quot;.equals(attr.getValue()); //$NON-NLS-1$"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/interfaceList"/>
@@ -334,6 +337,7 @@
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAdapter" body="return org.eclipse.fordiac.ide.model.Annotations.getAdapter(this, name);">
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getAdapter/name"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/copy" body="return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Link">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Link/segment"/>
@@ -423,7 +427,8 @@
       <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/mapping"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/palette"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/systemConfiguration"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AutomationSystem/project"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AutomationSystem/systemFile"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AutomationSystem/commandStack"/>
       <genOperations ecoreOperation="lib.ecore#//AutomationSystem/getDeviceNamed"
           body="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);">
         <genParameters ecoreParameter="lib.ecore#//AutomationSystem/getDeviceNamed/name"/>
@@ -453,6 +458,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/versionInfo"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/identification"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/paletteEntry"/>
+      <genOperations ecoreOperation="lib.ecore#//LibraryElement/getTypeLibrary" body="if (null != getPaletteEntry()) {&#xA;&#x9;return getPaletteEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CompilableType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilableType/compilerInfo"/>
@@ -473,6 +479,10 @@
       <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/getAttributeValue"
           body="return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);">
         <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/getAttributeValue/attributeName"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/deleteAttribute"
+          body="return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/deleteAttribute/attributeName"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CompositeFBType">
@@ -534,25 +544,11 @@
       <genOperations ecoreOperation="lib.ecore#//ResourceTypeFB/isResourceTypeFB"
           body="return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB();"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="lib.ecore#//I4DIACElement">
-      <genFeatures property="None" notify="false" createChild="false" propertySortChoices="true"
-          ecoreFeature="ecore:EReference lib.ecore#//I4DIACElement/annotations"/>
-      <genOperations ecoreOperation="lib.ecore#//I4DIACElement/createAnnotation" body="return org.eclipse.fordiac.ide.model.Annotations.createAnnotation(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//I4DIACElement/createAnnotation/name"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//I4DIACElement/removeAnnotation" body="org.eclipse.fordiac.ide.model.Annotations.removeAnnotation(this, annotation);">
-        <genParameters ecoreParameter="lib.ecore#//I4DIACElement/removeAnnotation/annotation"/>
-      </genOperations>
-    </genClasses>
     <genClasses ecoreClass="lib.ecore#//SegmentType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SegmentType/varDeclaration"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterFBType">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterFBType/adapterType"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Annotation">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Annotation/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Annotation/servity"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterEvent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterEvent/adapterDeclaration"/>
@@ -568,6 +564,8 @@
           body="return org.eclipse.fordiac.ide.model.Annotations.getTypeName(this);"/>
       <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getType"
           body="return org.eclipse.fordiac.ide.model.Annotations.getType(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getTypeLibrary"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getTypeLibrary(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterFB">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterFB/adapterDecl"/>
@@ -607,6 +605,16 @@
     <genClasses ecoreClass="lib.ecore#//BaseFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalVars"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//StructManipulator">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Demultiplexer"/>
+    <genClasses ecoreClass="lib.ecore#//Multiplexer"/>
+    <genClasses ecoreClass="lib.ecore#//LocalVariable">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStart"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStop"/>
+      <genOperations ecoreOperation="lib.ecore#//LocalVariable/getArraySize" body="return arrayStop-arrayStart+1;"/>
+    </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">
@@ -634,6 +642,9 @@
       <genEnumLiterals ecoreEnumLiteral="data.ecore#//BaseType1/UDINT"/>
       <genEnumLiterals ecoreEnumLiteral="data.ecore#//BaseType1/ANY"/>
     </genEnums>
+    <genClasses ecoreClass="data.ecore#//AnyDerivedType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//AnyDerivedType/compilerInfo"/>
+    </genClasses>
     <genClasses ecoreClass="data.ecore#//ArrayType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//ArrayType/subranges"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//ArrayType/initialValues"/>
@@ -649,7 +660,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//EnumeratedValue/name"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//StructuredType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//StructuredType/varDeclaration"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//StructuredType/memberVariables"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//Subrange">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//Subrange/lowerLimit"/>

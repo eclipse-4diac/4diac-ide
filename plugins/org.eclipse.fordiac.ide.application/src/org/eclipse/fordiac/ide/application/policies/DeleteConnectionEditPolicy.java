@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2016, 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,8 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.GroupRequest;
 
@@ -25,14 +25,14 @@ public class DeleteConnectionEditPolicy extends org.eclipse.gef.editpolicies.Con
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editpolicies.ConnectionEditPolicy#getDeleteCommand(org.
 	 * eclipse.gef.requests.GroupRequest)
 	 */
 	@Override
 	protected Command getDeleteCommand(final GroupRequest request) {
-		if (getHost() instanceof ConnectionEditPart) {
-			return new DeleteConnectionCommand(((ConnectionEditPart) getHost()).getModel());
+		if (getHost().getModel() instanceof Connection) {
+			return new DeleteConnectionCommand((Connection) getHost().getModel());
 		}
 		return null;
 	}

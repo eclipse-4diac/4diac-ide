@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -40,21 +40,21 @@ public interface PalettePackage extends EPackage {
 	 * 
 	 * @generated
 	 */
-	String eNAME = "Palette";
+	String eNAME = "Palette"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace URI. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
-	String eNS_URI = "org.eclipse.fordiac.ide.model.Palette";
+	String eNS_URI = "org.eclipse.fordiac.ide.model.Palette"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace name. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
-	String eNS_PREFIX = "Palette";
+	String eNS_PREFIX = "Palette"; //$NON-NLS-1$
 
 	/**
 	 * The singleton instance of the package. <!-- begin-user-doc --> <!--
@@ -76,40 +76,31 @@ public interface PalettePackage extends EPackage {
 	int PALETTE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Project</b></em>' attribute. <!--
+	 * The feature id for the '<em><b>Type Library</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__PROJECT = 0;
-
-	/**
-	 * The feature id for the '<em><b>Automation System</b></em>' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int PALETTE__AUTOMATION_SYSTEM = 1;
+	int PALETTE__TYPE_LIBRARY = 0;
 
 	/**
 	 * The feature id for the '<em><b>Adapter Types</b></em>' map. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__ADAPTER_TYPES = 2;
+	int PALETTE__ADAPTER_TYPES = 1;
 
 	/**
 	 * The feature id for the '<em><b>Device Types</b></em>' map. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__DEVICE_TYPES = 3;
+	int PALETTE__DEVICE_TYPES = 2;
 
 	/**
 	 * The feature id for the '<em><b>Fb Types</b></em>' map. <!-- begin-user-doc
@@ -118,43 +109,43 @@ public interface PalettePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__FB_TYPES = 4;
+	int PALETTE__FB_TYPES = 3;
 
 	/**
 	 * The feature id for the '<em><b>Resource Types</b></em>' map. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__RESOURCE_TYPES = 5;
+	int PALETTE__RESOURCE_TYPES = 4;
 
 	/**
 	 * The feature id for the '<em><b>Segment Types</b></em>' map. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__SEGMENT_TYPES = 6;
+	int PALETTE__SEGMENT_TYPES = 5;
 
 	/**
 	 * The feature id for the '<em><b>Sub App Types</b></em>' map. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE__SUB_APP_TYPES = 7;
+	int PALETTE__SUB_APP_TYPES = 6;
 
 	/**
 	 * The number of structural features of the '<em>Palette</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int PALETTE_FEATURE_COUNT = 8;
+	int PALETTE_FEATURE_COUNT = 7;
 
 	/**
 	 * The meta object id for the
@@ -173,7 +164,7 @@ public interface PalettePackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToFDeviceTypePaletteEntryMapImpl
 	 * <em>String To FDevice Type Palette Entry Map</em>}' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.StringToFDeviceTypePaletteEntryMapImpl
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getStringToFDeviceTypePaletteEntryMap()
 	 * @generated
@@ -197,7 +188,7 @@ public interface PalettePackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToSegmentTypePaletteEntryMapImpl
 	 * <em>String To Segment Type Palette Entry Map</em>}' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.StringToSegmentTypePaletteEntryMapImpl
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getStringToSegmentTypePaletteEntryMap()
 	 * @generated
@@ -209,7 +200,7 @@ public interface PalettePackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToSubApplicationTypePaletteEntryMapImpl
 	 * <em>String To Sub Application Type Palette Entry Map</em>}' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.StringToSubApplicationTypePaletteEntryMapImpl
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getStringToSubApplicationTypePaletteEntryMap()
 	 * @generated
@@ -221,7 +212,7 @@ public interface PalettePackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToAdapterTypePaletteEntryMapImpl
 	 * <em>String To Adapter Type Palette Entry Map</em>}' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.StringToAdapterTypePaletteEntryMapImpl
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getStringToAdapterTypePaletteEntryMap()
 	 * @generated
@@ -440,7 +431,7 @@ public interface PalettePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -449,7 +440,7 @@ public interface PalettePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Entry</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -465,7 +456,7 @@ public interface PalettePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getFBTypePaletteEntry()
 	 * @generated
 	 */
-	int FB_TYPE_PALETTE_ENTRY = 10;
+	int FB_TYPE_PALETTE_ENTRY = 11;
 
 	/**
 	 * The meta object id for the
@@ -477,7 +468,7 @@ public interface PalettePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getDeviceTypePaletteEntry()
 	 * @generated
 	 */
-	int DEVICE_TYPE_PALETTE_ENTRY = 9;
+	int DEVICE_TYPE_PALETTE_ENTRY = 10;
 
 	/**
 	 * The meta object id for the
@@ -489,7 +480,7 @@ public interface PalettePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getResourceTypeEntry()
 	 * @generated
 	 */
-	int RESOURCE_TYPE_ENTRY = 11;
+	int RESOURCE_TYPE_ENTRY = 12;
 
 	/**
 	 * The meta object id for the
@@ -501,7 +492,7 @@ public interface PalettePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getSegmentTypePaletteEntry()
 	 * @generated
 	 */
-	int SEGMENT_TYPE_PALETTE_ENTRY = 12;
+	int SEGMENT_TYPE_PALETTE_ENTRY = 13;
 
 	/**
 	 * The meta object id for the
@@ -554,7 +545,7 @@ public interface PalettePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -568,6 +559,72 @@ public interface PalettePackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_TYPE_PALETTE_ENTRY_FEATURE_COUNT = PALETTE_ENTRY_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.impl.DataTypePaletteEntryImpl
+	 * <em>Data Type Palette Entry</em>}' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @see org.eclipse.fordiac.ide.model.Palette.impl.DataTypePaletteEntryImpl
+	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getDataTypePaletteEntry()
+	 * @generated
+	 */
+	int DATA_TYPE_PALETTE_ENTRY = 9;
+
+	/**
+	 * The feature id for the '<em><b>Label</b></em>' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_TYPE_PALETTE_ENTRY__LABEL = PALETTE_ENTRY__LABEL;
+
+	/**
+	 * The feature id for the '<em><b>File</b></em>' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_TYPE_PALETTE_ENTRY__FILE = PALETTE_ENTRY__FILE;
+
+	/**
+	 * The feature id for the '<em><b>Last Modification Timestamp</b></em>'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_TYPE_PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP = PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_TYPE_PALETTE_ENTRY__TYPE = PALETTE_ENTRY__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Palette</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
+
+	/**
+	 * The number of structural features of the '<em>Data Type Palette Entry</em>'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_TYPE_PALETTE_ENTRY_FEATURE_COUNT = PALETTE_ENTRY_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Label</b></em>' attribute. <!-- begin-user-doc
@@ -608,7 +665,7 @@ public interface PalettePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -662,7 +719,7 @@ public interface PalettePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -716,7 +773,7 @@ public interface PalettePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -770,7 +827,7 @@ public interface PalettePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -795,7 +852,7 @@ public interface PalettePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getSubApplicationTypePaletteEntry()
 	 * @generated
 	 */
-	int SUB_APPLICATION_TYPE_PALETTE_ENTRY = 13;
+	int SUB_APPLICATION_TYPE_PALETTE_ENTRY = 14;
 
 	/**
 	 * The feature id for the '<em><b>Label</b></em>' attribute. <!-- begin-user-doc
@@ -836,7 +893,7 @@ public interface PalettePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Palette</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -859,7 +916,7 @@ public interface PalettePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 14;
+	int IFILE = 15;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type. <!-- begin-user-doc
@@ -869,37 +926,47 @@ public interface PalettePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 15;
+	int IPROJECT = 16;
 
 	/**
 	 * The meta object id for the '<em>Type Importer</em>' data type. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.dataimport.TypeImporter
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getTypeImporter()
 	 * @generated
 	 */
-	int TYPE_IMPORTER = 16;
+	int TYPE_IMPORTER = 17;
 
 	/**
 	 * The meta object id for the '<em>XML Stream Exception</em>' data type. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see javax.xml.stream.XMLStreamException
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getXMLStreamException()
 	 * @generated
 	 */
-	int XML_STREAM_EXCEPTION = 17;
+	int XML_STREAM_EXCEPTION = 18;
 
 	/**
 	 * The meta object id for the '<em>Core Exception</em>' data type. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.core.runtime.CoreException
 	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getCoreException()
 	 * @generated
 	 */
-	int CORE_EXCEPTION = 18;
+	int CORE_EXCEPTION = 19;
+
+	/**
+	 * The meta object id for the '<em>Type Library</em>' data type. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
+	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getTypeLibrary()
+	 * @generated
+	 */
+	int TYPE_LIBRARY = 20;
 
 	/**
 	 * Returns the meta object for class
@@ -914,27 +981,15 @@ public interface PalettePackage extends EPackage {
 
 	/**
 	 * Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject
-	 * <em>Project</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary <em>Type
+	 * Library</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @return the meta object for the attribute '<em>Project</em>'.
-	 * @see org.eclipse.fordiac.ide.model.Palette.Palette#getProject()
+	 * @return the meta object for the attribute '<em>Type Library</em>'.
+	 * @see org.eclipse.fordiac.ide.model.Palette.Palette#getTypeLibrary()
 	 * @see #getPalette()
 	 * @generated
 	 */
-	EAttribute getPalette_Project();
-
-	/**
-	 * Returns the meta object for the reference
-	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem
-	 * <em>Automation System</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return the meta object for the reference '<em>Automation System</em>'.
-	 * @see org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem()
-	 * @see #getPalette()
-	 * @generated
-	 */
-	EReference getPalette_AutomationSystem();
+	EAttribute getPalette_TypeLibrary();
 
 	/**
 	 * Returns the meta object for the map
@@ -1012,7 +1067,7 @@ public interface PalettePackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>String To
 	 * FB Type Palette Entry Map</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for class '<em>String To FB Type Palette Entry
 	 *         Map</em>'.
 	 * @see java.util.Map.Entry
@@ -1356,6 +1411,17 @@ public interface PalettePackage extends EPackage {
 
 	/**
 	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry <em>Data
+	 * Type Palette Entry</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for class '<em>Data Type Palette Entry</em>'.
+	 * @see org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry
+	 * @generated
+	 */
+	EClass getDataTypePaletteEntry();
+
+	/**
+	 * Returns the meta object for class
 	 * '{@link org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry
 	 * <em>Sub Application Type Palette Entry</em>}'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -1371,7 +1437,7 @@ public interface PalettePackage extends EPackage {
 	 * Returns the meta object for data type
 	 * '{@link org.eclipse.core.resources.IFile <em>IFile</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for data type '<em>IFile</em>'.
 	 * @see org.eclipse.core.resources.IFile
 	 * @model instanceClass="org.eclipse.core.resources.IFile"
@@ -1383,7 +1449,7 @@ public interface PalettePackage extends EPackage {
 	 * Returns the meta object for data type
 	 * '{@link org.eclipse.core.resources.IProject <em>IProject</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for data type '<em>IProject</em>'.
 	 * @see org.eclipse.core.resources.IProject
 	 * @model instanceClass="org.eclipse.core.resources.IProject"
@@ -1428,9 +1494,21 @@ public interface PalettePackage extends EPackage {
 	EDataType getCoreException();
 
 	/**
+	 * Returns the meta object for data type
+	 * '{@link org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary <em>Type
+	 * Library</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for data type '<em>Type Library</em>'.
+	 * @see org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
+	 * @model instanceClass="org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary"
+	 * @generated
+	 */
+	EDataType getTypeLibrary();
+
+	/**
 	 * Returns the factory that creates the instances of the model. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
@@ -1461,25 +1539,17 @@ public interface PalettePackage extends EPackage {
 		EClass PALETTE = eINSTANCE.getPalette();
 
 		/**
-		 * The meta object literal for the '<em><b>Project</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
-		 * @generated
-		 */
-		EAttribute PALETTE__PROJECT = eINSTANCE.getPalette_Project();
-
-		/**
-		 * The meta object literal for the '<em><b>Automation System</b></em>' reference
+		 * The meta object literal for the '<em><b>Type Library</b></em>' attribute
 		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * 
 		 * @generated
 		 */
-		EReference PALETTE__AUTOMATION_SYSTEM = eINSTANCE.getPalette_AutomationSystem();
+		EAttribute PALETTE__TYPE_LIBRARY = eINSTANCE.getPalette_TypeLibrary();
 
 		/**
 		 * The meta object literal for the '<em><b>Fb Types</b></em>' map feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference PALETTE__FB_TYPES = eINSTANCE.getPalette_FbTypes();
@@ -1539,7 +1609,7 @@ public interface PalettePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP__KEY = eINSTANCE.getStringToFBTypePaletteEntryMap_Key();
@@ -1557,7 +1627,7 @@ public interface PalettePackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToFDeviceTypePaletteEntryMapImpl
 		 * <em>String To FDevice Type Palette Entry Map</em>}' class. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.Palette.impl.StringToFDeviceTypePaletteEntryMapImpl
 		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getStringToFDeviceTypePaletteEntryMap()
 		 * @generated
@@ -1567,7 +1637,7 @@ public interface PalettePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP__KEY = eINSTANCE
@@ -1597,7 +1667,7 @@ public interface PalettePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute STRING_TO_RESOURCE_TYPE_ENTRY_MAP__KEY = eINSTANCE.getStringToResourceTypeEntryMap_Key();
@@ -1615,7 +1685,7 @@ public interface PalettePackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToSegmentTypePaletteEntryMapImpl
 		 * <em>String To Segment Type Palette Entry Map</em>}' class. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.Palette.impl.StringToSegmentTypePaletteEntryMapImpl
 		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getStringToSegmentTypePaletteEntryMap()
 		 * @generated
@@ -1625,7 +1695,7 @@ public interface PalettePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute STRING_TO_SEGMENT_TYPE_PALETTE_ENTRY_MAP__KEY = eINSTANCE
@@ -1645,7 +1715,7 @@ public interface PalettePackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToSubApplicationTypePaletteEntryMapImpl
 		 * <em>String To Sub Application Type Palette Entry Map</em>}' class. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.Palette.impl.StringToSubApplicationTypePaletteEntryMapImpl
 		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getStringToSubApplicationTypePaletteEntryMap()
 		 * @generated
@@ -1656,7 +1726,7 @@ public interface PalettePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP__KEY = eINSTANCE
@@ -1676,7 +1746,7 @@ public interface PalettePackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.Palette.impl.StringToAdapterTypePaletteEntryMapImpl
 		 * <em>String To Adapter Type Palette Entry Map</em>}' class. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.Palette.impl.StringToAdapterTypePaletteEntryMapImpl
 		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getStringToAdapterTypePaletteEntryMap()
 		 * @generated
@@ -1686,7 +1756,7 @@ public interface PalettePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute STRING_TO_ADAPTER_TYPE_PALETTE_ENTRY_MAP__KEY = eINSTANCE
@@ -1814,6 +1884,18 @@ public interface PalettePackage extends EPackage {
 
 		/**
 		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.Palette.impl.DataTypePaletteEntryImpl
+		 * <em>Data Type Palette Entry</em>}' class. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
+		 * 
+		 * @see org.eclipse.fordiac.ide.model.Palette.impl.DataTypePaletteEntryImpl
+		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getDataTypePaletteEntry()
+		 * @generated
+		 */
+		EClass DATA_TYPE_PALETTE_ENTRY = eINSTANCE.getDataTypePaletteEntry();
+
+		/**
+		 * The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.model.Palette.impl.SubApplicationTypePaletteEntryImpl
 		 * <em>Sub Application Type Palette Entry</em>}' class. <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1827,7 +1909,7 @@ public interface PalettePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em>IFile</em>' data type. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.core.resources.IFile
 		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getIFile()
 		 * @generated
@@ -1837,7 +1919,7 @@ public interface PalettePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em>IProject</em>' data type. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.core.resources.IProject
 		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getIProject()
 		 * @generated
@@ -1847,7 +1929,7 @@ public interface PalettePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em>Type Importer</em>' data type. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.dataimport.TypeImporter
 		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getTypeImporter()
 		 * @generated
@@ -1867,12 +1949,22 @@ public interface PalettePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em>Core Exception</em>' data type. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.core.runtime.CoreException
 		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getCoreException()
 		 * @generated
 		 */
 		EDataType CORE_EXCEPTION = eINSTANCE.getCoreException();
+
+		/**
+		 * The meta object literal for the '<em>Type Library</em>' data type. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @see org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
+		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getTypeLibrary()
+		 * @generated
+		 */
+		EDataType TYPE_LIBRARY = eINSTANCE.getTypeLibrary();
 
 	}
 

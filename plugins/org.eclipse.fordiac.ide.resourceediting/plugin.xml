@@ -5,7 +5,7 @@
          point="org.eclipse.ui.editors">
       <editor
             class="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor"
-            contributorClass="org.eclipse.fordiac.ide.util.ZoomUndoRedoActionBarContributor"
+            contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             icon="fordiacimage://ICON_RESOURCE"
             id="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor"
             name="ResourceEditor">
@@ -38,20 +38,6 @@
       <handler
             class="org.eclipse.fordiac.ide.resourceediting.handlers.ShowFBInApp"
             commandId="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand">
-         <activeWhen>
-            <and>
-               <with
-                     variable="activeEditor">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
-                  </instanceof>
-               </with>
-               <iterate ifEmpty="false">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.resourceediting.editparts.ResFBEditPart">
-                  </instanceof>
-               </iterate>
-            </and></activeWhen>
       </handler>
       <handler
             class="org.eclipse.fordiac.ide.resourceediting.handlers.OpenConnectionOppositeResource"
@@ -102,13 +88,19 @@
                commandId="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
                icon="fordiacimage://ICON_APPLICATION"
                tooltip="Show in Application Editor">
-            <visibleWhen
-                  checkEnabled="true">
-               <iterate>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.resourceediting.editparts.ResFBEditPart">
-                  </instanceof>
-               </iterate>
+            <visibleWhen checkEnabled="true">
+            	<and>
+	               <with variable="activeEditor">
+	                  <instanceof
+	                        value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
+	                  </instanceof>
+	               </with>
+	               <iterate ifEmpty="false">
+	                  <instanceof
+	                        value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+	                  </instanceof>
+	               </iterate>
+	            </and>
             </visibleWhen>
          </command>
       </menuContribution>

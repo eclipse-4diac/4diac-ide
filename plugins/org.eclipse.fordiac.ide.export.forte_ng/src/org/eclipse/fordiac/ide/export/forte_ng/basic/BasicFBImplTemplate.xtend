@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2019 fortiss GmbH
+ *               2020 Johannes Kepler University
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Martin Jobst
+ *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl
+ *     - Add internal var generation, fix adapter generation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.basic
 
 import java.nio.file.Path
@@ -10,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
 
 class BasicFBImplTemplate extends ForteFBTemplate {
 
@@ -23,49 +40,61 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 
 	override generate() '''
 		«generateHeader»
-		
+
 		«generateImplIncludes»
-		
+
 		«generateFBDefinition»
-		
+
 		«generateFBInterfaceDefinition»
-		
+
 		«generateFBInterfaceSpecDefinition»
-		
+
+		«IF !type.internalVars.isEmpty»
+		  «generateInternalVarDefinition(type)»
+
+        «ENDIF»
 		«generateAlgorithms»
-		
+
 		«generateStates»
-		
+
 		«generateECC»
-		
+
 	'''
 
-	def protected CharSequence generateAlgorithms() '''
+	def protected generateAlgorithms() '''
 		«FOR alg : type.algorithm»
 			«alg.generateAlgorithm»
 			
 		«ENDFOR»
 	'''
 
-	def protected dispatch CharSequence generateAlgorithm(Algorithm alg) {
+	def protected dispatch generateAlgorithm(Algorithm alg) {
 		errors.add('''Cannot export algorithm «alg.class»''')
 		return ""
 	}
 
-	def protected dispatch CharSequence generateAlgorithm(STAlgorithm alg) '''
+	def protected dispatch generateAlgorithm(OtherAlgorithm alg) '''
+		void «FBClassName»::alg_«alg.name»(void) {
+		  #pragma GCC warning "Algorithm of type: '«alg.language»' may lead to unexpected results!"
+		  #pragma message ("warning Algorithm of type: '«alg.language»' may lead to unexpected results!")
+		  «alg.text»
+		}
+	'''
+
+	def protected dispatch generateAlgorithm(STAlgorithm alg) '''
 		void «FBClassName»::alg_«alg.name»(void) {
 		  «alg.generate(errors)»
 		}
 	'''
 
-	def protected CharSequence generateStates() '''
+	def protected generateStates() '''
 		«FOR state : type.ECC.ECState»
 			«state.generateState»
 			
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateState(ECState state) '''
+	def protected generateState(ECState state) '''
 		void «FBClassName»::enterState«state.name»(void) {
 		  m_nECCState = scm_nState«state.name»;
 		  «FOR action : state.ECAction»
@@ -79,15 +108,19 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 		}
 	'''
 
-	def protected dispatch CharSequence generateSendEvent(Event event) '''
+	def protected dispatch generateSendEvent(Event event) '''
 		sendOutputEvent(scm_nEvent«event.name»ID);
 	'''
+	
+	def protected getAdapterEventName(AdapterEvent event) {
+		event.name.split("\\.").get(1);
+	}
 
-	def protected dispatch CharSequence generateSendEvent(AdapterEvent event) '''
-		sendAdapterEvent(scm_n«event.adapterDeclaration.name»AdpNum, FORTE_«event.adapterDeclaration.adapterFB.name»::scm_nEvent«event.name»ID);
+	def protected dispatch generateSendEvent(AdapterEvent event) '''
+		sendAdapterEvent(scm_n«event.adapterDeclaration.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«event.adapterEventName»ID);
 	'''
 	
-	def protected CharSequence generateECC() '''
+	def protected generateECC() '''
 		void «FBClassName»::executeEvent(int pa_nEIID){
 		  bool bTransitionCleared;
 		  do {
@@ -97,17 +130,17 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 		      	case scm_nState«state.name»:
 		      	  «FOR transition : state.outTransitions SEPARATOR "\nelse"»
 		      	  	«IF transition.conditionEvent !== null && !transition.conditionExpression.nullOrEmpty»
-		      	  		if((scm_nEvent«transition.conditionEvent.name»ID == pa_nEIID) && («transition.conditionExpression.generate(type, errors)»))
+		      	  		if((«generateTransitionEvent(transition.conditionEvent)» == pa_nEIID) && («transition.conditionExpression.generate(type, errors)»))
 		      	  	«ELSEIF transition.conditionEvent !== null»
-		      	  		if(scm_nEvent«transition.conditionEvent.name»ID == pa_nEIID)
+		      	  		if(«generateTransitionEvent(transition.conditionEvent)» == pa_nEIID)
 		      	  	«ELSEIF !transition.conditionExpression.nullOrEmpty»
 		      	  		if(«transition.conditionExpression.generate(type, errors)»)
 		      	  	«ELSE»
-		      	  		if(1) {
+		      	  		if(1)
 		      	  	«ENDIF»
 		      	  	  enterState«transition.destination.name»();
 		      	  «ENDFOR»
-		      	  else
+		      	  «IF !state.outTransitions.empty»else«ENDIF»
 		      	    bTransitionCleared  = false; //no transition cleared
 		      	  break;
 		      «ENDFOR»
@@ -120,4 +153,11 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 		  } while(bTransitionCleared);
 		}
 	'''
+	
+	def protected dispatch generateTransitionEvent(Event event) '''
+	    scm_nEvent«event.name»ID'''
+
+    def protected dispatch generateTransitionEvent(AdapterEvent event) '''
+        «EXPORT_PREFIX»«event.adapterDeclaration.name»().«event.adapterEventName»()'''
+	
 }

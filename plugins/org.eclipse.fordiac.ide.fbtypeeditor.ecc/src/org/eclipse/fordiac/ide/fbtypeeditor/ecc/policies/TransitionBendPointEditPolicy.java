@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013 fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * 				 2019-2020 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *               - increased size of middle bendpoint
+ *               - changed middle bendpoint color to default selection color
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies;
 
@@ -18,9 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.Bendpoint;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.MoveBendpointCommand;
+import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.ConnectionEditPart;
@@ -29,6 +32,7 @@ import org.eclipse.gef.editpolicies.BendpointEditPolicy;
 import org.eclipse.gef.editpolicies.SelectionHandlesEditPolicy;
 import org.eclipse.gef.handles.BendpointMoveHandle;
 import org.eclipse.gef.requests.BendpointRequest;
+import org.eclipse.swt.graphics.Color;
 
 public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 
@@ -97,7 +101,18 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 	}
 
 	private static BendpointMoveHandle createBendPointMoveHandle(ConnectionEditPart connEP, int bendPointIndex, int i) {
-		BendpointMoveHandle handle = new BendpointMoveHandle(connEP, bendPointIndex, i + 1);
+		BendpointMoveHandle handle = new BendpointMoveHandle(connEP, bendPointIndex, i + 1) {
+
+			@Override
+			protected Color getBorderColor() {
+				return (isPrimary()) ? ColorConstants.white : ModifiedMoveHandle.getSelectionColor();
+			}
+
+			@Override
+			protected Color getFillColor() {
+				return (isPrimary()) ? ModifiedMoveHandle.getSelectionColor() : ColorConstants.white;
+			}
+		};
 		handle.setPreferredSize(ConnectionPreferenceValues.HANDLE_SIZE, ConnectionPreferenceValues.HANDLE_SIZE);
 		return handle;
 	}

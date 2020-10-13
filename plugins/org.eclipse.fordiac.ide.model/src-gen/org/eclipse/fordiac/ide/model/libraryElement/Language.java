@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -37,7 +37,7 @@ public enum Language implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	C(0, "C", "C"),
+	C(0, "C", "C"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>Other</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -47,7 +47,7 @@ public enum Language implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	OTHER(1, "Other", "Other"),
+	OTHER(1, "Other", "Other"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>Java</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -57,7 +57,7 @@ public enum Language implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	JAVA(2, "Java", "Java"),
+	JAVA(2, "Java", "Java"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>Cpp</b></em>' literal object. <!-- begin-user-doc --> <!--
@@ -67,7 +67,7 @@ public enum Language implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	CPP(3, "Cpp", "Cpp");
+	CPP(3, "Cpp", "Cpp"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>C</b></em>' literal value. <!-- begin-user-doc -->
@@ -132,7 +132,7 @@ public enum Language implements Enumerator {
 	/**
 	 * An array of all the '<em><b>Language</b></em>' enumerators. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private static final Language[] VALUES_ARRAY = new Language[] { C, OTHER, JAVA, CPP, };
@@ -166,7 +166,7 @@ public enum Language implements Enumerator {
 	/**
 	 * Returns the '<em><b>Language</b></em>' literal with the specified name. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param name the name.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
@@ -199,8 +199,9 @@ public enum Language implements Enumerator {
 			return JAVA;
 		case CPP_VALUE:
 			return CPP;
+		default:
+			return null;
 		}
-		return null;
 	}
 
 	/**

@@ -25,11 +25,9 @@ import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.ui.Activator;
 import org.eclipse.fordiac.ide.export.ui.Messages;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -109,10 +107,8 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 			@SuppressWarnings("rawtypes")
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
 				List resources = page.getSelectedResources();
 				String outputDirectory = page.getDirectory();
-				SystemManager systemManager = SystemManager.INSTANCE;
 
 				monitor.beginTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingSelectedTypesUsingExporter,
 						conf.getAttribute("name")), resources.size()); //$NON-NLS-1$
@@ -121,8 +117,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 					if (object instanceof IFile) {
 						IFile file = (IFile) object;
 
-						Palette palette = systemManager.getPalette(file.getProject());
-						PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file, palette);
+						PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 						LibraryElement type = entry.getType();
 
 						monitor.subTask(

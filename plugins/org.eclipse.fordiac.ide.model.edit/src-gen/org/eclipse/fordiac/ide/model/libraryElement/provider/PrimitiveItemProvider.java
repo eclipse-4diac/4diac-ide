@@ -158,8 +158,10 @@ public class PrimitiveItemProvider extends ItemProviderAdapter implements IEditi
 		case LibraryElementPackage.PRIMITIVE__PARAMETERS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**

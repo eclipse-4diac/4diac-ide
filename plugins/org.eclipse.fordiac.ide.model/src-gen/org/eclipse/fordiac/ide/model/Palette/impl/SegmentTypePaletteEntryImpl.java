@@ -17,7 +17,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.Activator;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
@@ -89,8 +88,8 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 	 * @generated
 	 */
 	@Override
-	public TypeImporter getTypeImporter(final Palette palette) {
-		return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter();
+	public TypeImporter getTypeImporter() {
+		return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter(getFile());
 	}
 
 } // SegmentTypePaletteEntryImpl

@@ -52,6 +52,7 @@ public class DelayedFiles {
 			return path;
 		}
 
+		@SuppressWarnings("unchecked")
 		public Iterable<CharSequence> getData() {
 			return (Iterable<CharSequence>) data;
 		}
@@ -82,7 +83,7 @@ public class DelayedFiles {
 		}
 	}
 
-	private List<FileObject> storage;
+	private final List<FileObject> storage;
 
 	/**
 	 * constructor for class DelayedFiles
@@ -120,11 +121,11 @@ public class DelayedFiles {
 	 *         old-File-Object will be null
 	 */
 	public Iterable<StoredFiles> write(boolean forceOverwrite) throws IOException {
-		ArrayList<StoredFiles> ret = new ArrayList<>(storage.size());
+		final ArrayList<StoredFiles> ret = new ArrayList<>(storage.size());
 
-		for (FileObject fo : storage) {
+		for (final FileObject fo : storage) {
 			File o = null;
-			File f = fo.getPath().toFile();
+			final File f = fo.getPath().toFile();
 			if (!forceOverwrite && f.exists()) {
 				o = Utils.createBakFile(f);
 			}
@@ -142,7 +143,7 @@ public class DelayedFiles {
 	 * @return true if any of the files already exist, false otherwise
 	 */
 	public boolean exist() {
-		for (FileObject fo : storage) {
+		for (final FileObject fo : storage) {
 			if (fo.getPath().toFile().exists()) {
 				return true;
 			}

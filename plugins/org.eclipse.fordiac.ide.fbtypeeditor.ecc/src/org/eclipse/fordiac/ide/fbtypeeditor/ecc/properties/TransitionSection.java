@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCom
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeECTransitionCommentCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
+import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
@@ -63,7 +64,7 @@ import com.google.inject.name.Named;
  *
  */
 @SuppressWarnings("restriction")
-public class TransitionSection extends AbstractECSection {
+public class TransitionSection extends AbstractSection {
 	private static final String LINKING_FILE_EXTENSION = "xtextfbt"; //$NON-NLS-1$
 	private Text commentText;
 	private CCombo eventCombo;
@@ -207,11 +208,13 @@ public class TransitionSection extends AbstractECSection {
 
 			private void createAdapterResource(XtextResourceSet resourceSet, EcoreUtil.Copier copier,
 					AdapterDeclaration adapter) {
-				Resource adapterResource = resourceSet
-						.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
-				copier.copy(adapter.getType());
-				adapterResource.getContents()
-				.add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
+				if ((null != adapter.getType()) && (null != adapter.getType().getAdapterFBType())) {
+					Resource adapterResource = resourceSet
+							.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
+					copier.copy(adapter.getType());
+					adapterResource.getContents()
+							.add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
+				}
 			}
 
 			protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
@@ -250,7 +253,7 @@ public class TransitionSection extends AbstractECSection {
 			} else {
 				eventCombo.select(getType().getConditionEvent() != null
 						? eventCombo.indexOf(getType().getConditionEvent().getName())
-								: (eventCombo.getItemCount() - 1));
+						: (eventCombo.getItemCount() - 1));
 			}
 			setExpressionTextboxEnablement();
 		}
@@ -279,6 +282,6 @@ public class TransitionSection extends AbstractECSection {
 	public void fillEventConditionDropdown() {
 		eventCombo.removeAll();
 		ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType()).stream()
-		.forEach(name -> eventCombo.add(name));
+				.forEach(name -> eventCombo.add(name));
 	}
 }

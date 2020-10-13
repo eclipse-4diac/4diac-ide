@@ -103,7 +103,7 @@
             </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.InternalVarsSection"
+               class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.InternalVarsSectionBasic"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECCFilter"
                id="property.section.ivars"
                tab="property.tab.ivars">

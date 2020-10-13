@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,19 +21,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 public class ChangeIdentifcationTypeCommand extends ChangeIdentificationCommand {
 
 	/** The new Type value. */
-	private String newType;
+	private final String newType;
 
 	/** The old Type value. */
 	private String oldType;
 
 	public ChangeIdentifcationTypeCommand(LibraryElement type, final String newType) {
 		super(type);
-		this.newType = newType;
+		this.newType = (null == newType) ? "" : newType; //$NON-NLS-1$
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -44,7 +44,7 @@ public class ChangeIdentifcationTypeCommand extends ChangeIdentificationCommand 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -54,7 +54,7 @@ public class ChangeIdentifcationTypeCommand extends ChangeIdentificationCommand 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override

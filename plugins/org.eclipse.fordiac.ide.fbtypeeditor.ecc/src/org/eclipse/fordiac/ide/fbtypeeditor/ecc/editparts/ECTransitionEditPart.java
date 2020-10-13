@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - extracted TransitionFigure code and changed to cubic spline
  *   Alois Zoitl - reworked transition and handle widths
+ *   Bianca Wiesmayr, Ernst Blecha - added tooltip
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -22,14 +23,17 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.MoveBendpointCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECTransitionFigure;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECTransitionFeedbackEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEditPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
@@ -48,6 +52,7 @@ import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
@@ -57,21 +62,32 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
+			refreshTransitionTooltip();
 			refresh();
+		}
+	};
+
+	/** The property change listener. */
+	private final IPropertyChangeListener propertyChangeListener = event -> {
+		if (event.getProperty().equals(PreferenceConstants.P_ECC_TRANSITION_COLOR)) {
+			getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_TRANSITION_COLOR));
 		}
 	};
 
 	private void updateOrderLabel() {
 		ECTransition transition = getModel();
 		if (null != transition.getSource()) {
-			if (1 < transition.getSource().getOutTransitions().size()) {
-				int i = 1 + transition.getSource().getOutTransitions().indexOf(transition);
-				getConnectionFigure().setTransitionOrder(Integer.toString(i));
+			if (transition.getSource().getOutTransitions().size() > 1) {
+				getConnectionFigure().setTransitionOrder(Integer.toString(transition.getPriority()));
 			} else {
 				// if we are the only transition we don't need to enumerate it
 				getConnectionFigure().setTransitionOrder(""); //$NON-NLS-1$
 			}
 		}
+	}
+
+	private void refreshTransitionTooltip() {
+		getFigure().getToolTip().setECTransition(this.getModel());
 	}
 
 	/** The adapter. */
@@ -93,7 +109,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 				}
 
 				if (notification.getNotifier() instanceof VarDeclaration) {
-					checkConditionExpresion(notification);
+					checkConditionExpression(notification);
 				}
 			}
 		}
@@ -111,7 +127,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 		}
 
-		private void checkConditionExpresion(Notification notification) {
+		private void checkConditionExpression(Notification notification) {
 			if (notification.getNewValue() instanceof String) {
 				Object feature = notification.getFeature();
 				if ((LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature))
@@ -140,8 +156,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	protected void createEditPolicies() {
 		// // Selection handle edit policy.
 		// // Makes the connection show a feedback, when selected by the user.
-		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE,
-				new FeedbackConnectionEndpointEditPolicy(NORMAL_WIDTH, ConnectionPreferenceValues.SELECTED_LINE_WIDTH));
+		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new ECTransitionFeedbackEditPolicy());
 
 		installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE, new TransitionBendPointEditPolicy(getModel()));
 
@@ -159,7 +174,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 			@Override
 			public Command getCommand(Request request) {
-				if (RequestConstants.REQ_MOVE.equals(request.getType()) && request instanceof ChangeBoundsRequest) {
+				if (RequestConstants.REQ_MOVE.equals(request.getType()) && (request instanceof ChangeBoundsRequest)) {
 					return getTransitionMoveCommand((ChangeBoundsRequest) request);
 				}
 				return null;
@@ -206,6 +221,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		getConnectionFigure().setConditionText(getModel().getConditionText());
 		getConnectionFigure().updateBendPoints(getModel());
 		updateOrderLabel();
+		refreshTransitionTooltip();
 	}
 
 	@Override
@@ -224,6 +240,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 			// Adapt to the fbtype so that we get informed on interface changes
 			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().add(interfaceAdapter);
+
+			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		}
 	}
 
@@ -234,6 +252,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			getModel().eAdapters().remove(adapter);
 			getModel().getECC().eAdapters().remove(adapter);
 			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().remove(interfaceAdapter);
+
+			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		}
 	}
 
@@ -259,4 +279,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		};
 	}
 
+	@Override
+	public ECTransitionFigure getFigure() {
+		return (ECTransitionFigure) super.getFigure();
+	}
 }

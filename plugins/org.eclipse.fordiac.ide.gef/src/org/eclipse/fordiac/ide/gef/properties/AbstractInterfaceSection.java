@@ -109,6 +109,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();
 		});
+
 	}
 
 	private void createInputInfoGroup(Composite parent) {
@@ -142,7 +143,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 	}
 
 	private static String getVarDeclarationValue(VarDeclaration v) {
-		return (v.getValue() != null) && (v.getValue().getValue() != null) ? v.getValue().getValue() : ""; //$NON-NLS-1$
+		return (v.getValue() != null) ? v.getValue().getValue() : ""; //$NON-NLS-1$
 	}
 
 	@Override

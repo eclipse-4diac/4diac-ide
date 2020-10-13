@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -47,8 +47,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 
 	@Override
 	protected List<?> getModelChildren() {
-		List<Object> children = new ArrayList<>();
-		children.addAll(getModel().getNetworkElements());
+		List<Object> children = new ArrayList<>(getModel().getNetworkElements());
 		children.addAll(getFBValues());
 
 		for (IChildrenProvider provider : getChildrenProviders()) {

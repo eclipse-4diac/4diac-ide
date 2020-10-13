@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -33,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -51,7 +51,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -64,6 +63,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public final class Annotations {
 
@@ -127,7 +127,7 @@ public final class Annotations {
 
 	public static boolean isResourceConnection(Connection c) {
 		// if source element is null it is a connection from a CFB interface element
-		return (null != c.getSourceElement() && null != c.getSourceElement().getFbNetwork())
+		return ((null != c.getSourceElement()) && (null != c.getSourceElement().getFbNetwork()))
 				? (c.getSourceElement().getFbNetwork().eContainer() instanceof Resource)
 				: false;
 	}
@@ -391,8 +391,6 @@ public final class Annotations {
 		}
 		if (fbn.isResourceNetwork()) {
 			return ((Resource) fbn.eContainer()).getAutomationSystem();
-		} else if (fbn.isCFBTypeNetwork()) {
-			return ((CompositeFBType) fbn.eContainer()).getPaletteEntry().getPalette().getAutomationSystem();
 		}
 		return null;
 	}
@@ -401,7 +399,7 @@ public final class Annotations {
 		if (fbn.isApplicationNetwork()) {
 			// no null check is need as this is already done in isApplicationNetwork
 			return (Application) fbn.eContainer();
-		} else if (fbn.isSubApplicationNetwork() && null != ((SubApp) fbn.eContainer()).getFbNetwork()) {
+		} else if (fbn.isSubApplicationNetwork() && (null != ((SubApp) fbn.eContainer()).getFbNetwork())) {
 			return ((SubApp) fbn.eContainer()).getFbNetwork().getApplication();
 		}
 		return null;
@@ -418,7 +416,7 @@ public final class Annotations {
 
 	public static SubApp getSubAppNamed(FBNetwork fbn, String name) {
 		for (FBNetworkElement element : fbn.getNetworkElements()) {
-			if (element instanceof SubApp && element.getName().equals(name)) {
+			if ((element instanceof SubApp) && element.getName().equals(name)) {
 				return (SubApp) element;
 			}
 		}
@@ -456,7 +454,7 @@ public final class Annotations {
 		return vd.getArraySize() > 0;
 	}
 
-	// *** ConfigurabeleObject ***//
+	// *** ConfigurableObject ***//
 	public static void setAttribute(ConfigurableObject object, final String attributeName, final String type,
 			final String value, final String comment) {
 		Attribute attribute = getAttribute(object, attributeName);
@@ -465,11 +463,27 @@ public final class Annotations {
 			attribute.setName(attributeName);
 			attribute.setValue(value);
 			attribute.setType(BaseType1.getByName(type));
-			attribute.setComment(comment);
+			if (null != comment) {
+				attribute.setComment(comment);
+			}
 			object.getAttributes().add(attribute);
 		} else {
 			attribute.setValue(value);
 		}
+	}
+
+	public static boolean deleteAttribute(ConfigurableObject object, final String attributeName) {
+		if ((object != null) && (attributeName != null)) {
+			List<Attribute> toDelete = object.getAttributes().stream()
+					.filter(attr -> attributeName.equals(attr.getName())).collect(Collectors.toList());
+			if (toDelete.isEmpty()) {
+				return false;
+			} else {
+				toDelete.forEach(attr -> object.getAttributes().remove(attr));
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static String getAttributeValue(ConfigurableObject object, final String attributeName) {
@@ -558,18 +572,6 @@ public final class Annotations {
 		return true;
 	}
 
-	// *** I4DIACElement ***//
-	public static Annotation createAnnotation(I4DIACElement i4e, String name) {
-		Annotation annotation = LibraryElementFactory.eINSTANCE.createAnnotation();
-		annotation.setName(name);
-		i4e.getAnnotations().add(annotation);
-		return annotation;
-	}
-
-	public static void removeAnnotation(I4DIACElement i4e, Annotation a) {
-		i4e.getAnnotations().remove(a);
-	}
-
 	// *** TypedConfigureableObject ***//
 	public static String getTypeName(TypedConfigureableObject tco) {
 		return (null != tco.getPaletteEntry()) ? tco.getPaletteEntry().getLabel() : null;
@@ -578,6 +580,13 @@ public final class Annotations {
 	public static LibraryElement getType(TypedConfigureableObject tco) {
 		if (null != tco.getPaletteEntry()) {
 			return tco.getPaletteEntry().getType();
+		}
+		return null;
+	}
+
+	public static TypeLibrary getTypeLibrary(TypedConfigureableObject tco) {
+		if (null != tco.getPaletteEntry()) {
+			return tco.getPaletteEntry().getTypeLibrary();
 		}
 		return null;
 	}
@@ -604,7 +613,7 @@ public final class Annotations {
 	}
 
 	private Annotations() {
-		throw new UnsupportedOperationException("The utility class Annotations should not be instatiated");
+		throw new UnsupportedOperationException("The utility class Annotations should not be instatiated"); //$NON-NLS-1$
 	}
 
 }

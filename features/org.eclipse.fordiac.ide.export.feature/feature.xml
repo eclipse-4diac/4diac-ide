@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.export.feature"
       label="Export Function Block Types"
-      version="1.12.2.qualifier"
+      version="1.13.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
@@ -198,13 +198,6 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.export.compare"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.fordiac.ide.export.forte_1.0.x"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -21,13 +21,14 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.commands.ConnectThroughCommand;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -35,7 +36,7 @@ public class ConnectThroughHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		FBNetworkEditor editor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
+		IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 
 		List<IInterfaceElement> ies = checkSelection(selection);
@@ -43,7 +44,7 @@ public class ConnectThroughHandler extends AbstractHandler {
 		if (!ies.isEmpty()) {
 			ConnectThroughCommand cmd = new ConnectThroughCommand(ies.get(0), ies.get(1));
 			if (cmd.canExecute()) {
-				editor.getCommandStack().execute(cmd);
+				editor.getAdapter(CommandStack.class).execute(cmd);
 			}
 		}
 		return Status.OK_STATUS;

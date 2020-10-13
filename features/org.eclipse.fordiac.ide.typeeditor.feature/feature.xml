@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.typeeditor.feature"
       label="Function Block Type Editor"
-      version="1.12.2.qualifier"
+      version="1.13.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
@@ -262,6 +262,13 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.fbtypeeditor.simplefb"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.datatypeeditor"
          download-size="0"
          install-size="0"
          version="0.0.0"

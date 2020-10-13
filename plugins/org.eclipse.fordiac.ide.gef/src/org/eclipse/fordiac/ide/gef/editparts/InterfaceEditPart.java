@@ -42,8 +42,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -152,22 +150,13 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	@SuppressWarnings("unchecked")
 	public void setInOutConnectionsWidth(int width) {
-		boolean hide = isEvent()
-				? UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON)
-				: UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON);
-
-		getSourceConnections().forEach(cep -> checkConnection(width, hide, (ConnectionEditPart) cep));
-		getTargetConnections().forEach(cep -> checkConnection(width, hide, (ConnectionEditPart) cep));
+		getSourceConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
+		getTargetConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
 	}
 
-	private static void checkConnection(int width, boolean hide, ConnectionEditPart cep) {
+	private static void checkConnection(int width, ConnectionEditPart cep) {
 		if (cep.getFigure() instanceof PolylineConnection) {
 			((PolylineConnection) cep.getFigure()).setLineWidth(width);
-			if (width > 1 && hide) {
-				((PolylineConnection) cep.getFigure()).setVisible(true);
-			} else if (width < 2) {
-				((PolylineConnection) cep.getFigure()).setVisible(!hide);
-			}
 		}
 	}
 

@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.gef.commands.Command;
 
@@ -39,8 +38,8 @@ public class ChangeValueCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		if (var != null && var.getType() != null && var.getType().equals(DataTypeLibrary.getInstance().getType("ANY")) //$NON-NLS-1$
-				&& null != newValue) {
+		if ((null != var) && (null != var.getType()) && ("ANY".equals(var.getTypeName())) //$NON-NLS-1$
+				&& (null != newValue)) {
 			if ((!newValue.equals("")) && (!newValue.contains("#"))) { //$NON-NLS-1$ //$NON-NLS-2$
 				Abstract4DIACUIPlugin.statusLineErrorMessage("Constant Values are not allowed on ANY Input!"); //$NON-NLS-1$
 				return false;
@@ -63,7 +62,7 @@ public class ChangeValueCommand extends Command {
 			}
 			oldValue = ""; //$NON-NLS-1$
 		} else {
-			oldValue = var.getValue().getValue() != null ? var.getValue().getValue() : ""; //$NON-NLS-1$
+			oldValue = var.getValue().getValue();
 		}
 		var.getValue().setValue(newValue);
 		setMirroredVar(newValue);

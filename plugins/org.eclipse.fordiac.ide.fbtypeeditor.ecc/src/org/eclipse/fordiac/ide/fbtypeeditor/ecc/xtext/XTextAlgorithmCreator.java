@@ -13,11 +13,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.xtext;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditorCreator;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.swt.widgets.Composite;
@@ -56,19 +59,28 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 				XtextResourceSet resourceSet = resourceSetProvider.get();
 				Resource fbResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
 				fbResource.getContents().add(fbType);
-				for (AdapterDeclaration adapter : fbType.getInterfaceList().getSockets()) {
-					createAdapterResource(resourceSet, adapter);
-				}
-				for (AdapterDeclaration adapter : fbType.getInterfaceList().getPlugs()) {
-					createAdapterResource(resourceSet, adapter);
-				}
+
+				fbType.getInterfaceList().getSockets().forEach(adp -> createAdapterResource(resourceSet, adp));
+				fbType.getInterfaceList().getPlugs().forEach(adp -> createAdapterResource(resourceSet, adp));
+				createStructResources(resourceSet, fbType.getTypeLibrary().getDataTypeLibrary().getStructuredTypes());
+
 				return (XtextResource) resourceSet.createResource(computeUnusedUri(resourceSet, fileExtension));
 			}
 
+			private void createStructResources(XtextResourceSet resourceSet, List<StructuredType> structuredTypes) {
+				structuredTypes.forEach(struct -> {
+					Resource structResource = resourceSet
+							.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
+					structResource.getContents().add(struct);
+				});
+			}
+
 			private void createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
-				Resource adapterResource = resourceSet
-						.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
-				adapterResource.getContents().add(adapter.getType().getAdapterFBType());
+				if (null != adapter.getType() && null != adapter.getType().getAdapterFBType()) {
+					Resource adapterResource = resourceSet
+							.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
+					adapterResource.getContents().add(adapter.getType().getAdapterFBType());
+				}
 			}
 
 			protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {

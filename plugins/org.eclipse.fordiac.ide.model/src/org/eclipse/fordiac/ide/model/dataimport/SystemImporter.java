@@ -17,7 +17,6 @@
 *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
@@ -27,12 +26,12 @@ import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -49,6 +48,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
@@ -61,59 +61,66 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.gef.commands.CommandStack;
 
 public class SystemImporter extends CommonElementImporter {
-	private final AutomationSystem system;
 
-	private Palette getPalette() {
-		return system.getPalette();
+	public SystemImporter(IFile systemfile) {
+		super(systemfile);
+	}
+
+	@Override
+	public AutomationSystem getElement() {
+		return (AutomationSystem) super.getElement();
+	}
+
+	@Override
+	protected LibraryElement createRootModelElement() {
+		return createAutomationSystem(getFile());
 	}
 
 	/**
-	 * create a new system file importer for a system input stream and an automation
-	 * system to populate
+	 * Create an empty automation system model for a given file.
 	 *
-	 * @param system AutomationSystem with an initialized Palette
+	 * this can either be used for the importer or for creating a new system
+	 *
+	 * @param systemFile the file where the system should be stored
+	 * @return the automation system model with its basic setup
 	 */
-	public SystemImporter(AutomationSystem system) {
-		super();
-		this.system = system;
+	public static AutomationSystem createAutomationSystem(IFile systemFile) {
+		AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
+		system.setName(TypeLibrary.getTypeNameFromFile(systemFile));
+		system.setSystemFile(systemFile);
+
+		system.setCommandStack(new CommandStack());
+
+		// create PhysicalConfiguration
+		SystemConfiguration sysConf = LibraryElementFactory.eINSTANCE.createSystemConfiguration();
+		system.setSystemConfiguration(sysConf);
+
+		system.setPalette(TypeLibrary.getTypeLibrary(systemFile.getProject()).getBlockTypeLib());
+		return system;
 	}
 
-	/**
-	 * This method populates the AutomationSystem with all elements from the system
-	 * file.
-	 *
-	 * @param systemStream input stream providing an IEC 61499 compliant system XML
-	 * @throws TypeImportException
-	 *
-	 */
-	public void importSystem(final InputStream systemStream) throws TypeImportException {
-		try (ImporterStreams streams = createInputStreams(systemStream)) {
-			proceedToStartElementNamed(LibraryElementTags.SYSTEM);
-			readNameCommentAttributes(system);
-			parseSystemContent();
-		} catch (TypeImportException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new TypeImportException(e.getMessage(), e);
-		}
-
+	@Override
+	protected String getStartElementName() {
+		return LibraryElementTags.SYSTEM;
 	}
 
-	private void parseSystemContent() throws XMLStreamException, TypeImportException {
-		SystemConfiguration sysConf = system.getSystemConfiguration();
-
-		processChildren(LibraryElementTags.SYSTEM, name -> {
+	@Override
+	protected IChildHandler getBaseChildrenHandler() {
+		SystemConfiguration sysConf = getElement().getSystemConfiguration();
+		return name -> {
 			switch (name) {
 			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(system);
+				parseVersionInfo(getElement());
 				break;
 			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(system);
+				parseIdentification(getElement());
 				break;
 			case LibraryElementTags.APPLICATION_ELEMENT:
-				system.getApplication().add(parseApplication());
+				getElement().getApplication().add(parseApplication());
 				break;
 			case LibraryElementTags.DEVICE_ELEMENT:
 				sysConf.getDevices().add(parseDevice());
@@ -131,7 +138,7 @@ public class SystemImporter extends CommonElementImporter {
 				return false;
 			}
 			return true;
-		});
+		};
 	}
 
 	private Segment parseSegment() throws TypeImportException, XMLStreamException {
@@ -222,7 +229,7 @@ public class SystemImporter extends CommonElementImporter {
 		FBNetworkElement fromElement = findMappingTargetFromName(fromValue);
 		FBNetworkElement toElement = findMappingTargetFromName(toValue);
 		if (null != fromElement && null != toElement) {
-			system.getMapping().add(createMappingEntry(toElement, fromElement));
+			getElement().getMapping().add(createMappingEntry(toElement, fromElement));
 		}
 		// TODO perform some notificatin to the user that the mapping has an issue
 		proceedToEndElementNamed(LibraryElementTags.MAPPING_ELEMENT);
@@ -243,10 +250,10 @@ public class SystemImporter extends CommonElementImporter {
 			Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); ////$NON-NLS-1$
 			if (parts.size() >= 2) {
 				FBNetwork nw = null;
-				// first find out if the mapping points to a device/resoruce or application and
-				// get the approprate starting fbnetwork
-				Device dev = system.getDeviceNamed(parts.getFirst());
-				Application application = system.getApplicationNamed(parts.getFirst());
+				// first find out if the mapping points to a device/resource or application and
+				// get the appropriate starting fbnetwork
+				Device dev = getElement().getDeviceNamed(parts.getFirst());
+				Application application = getElement().getApplicationNamed(parts.getFirst());
 				if (null != dev) {
 					parts.pollFirst();
 					Resource res = dev.getResourceNamed(parts.pollFirst());
@@ -357,7 +364,7 @@ public class SystemImporter extends CommonElementImporter {
 			Value value = LibraryElementFactory.eINSTANCE.createValue();
 			varDecl.setValue(value);
 			VarDeclaration typeVar = getTypeVariable(varDecl);
-			if (null != typeVar && null != typeVar.getValue() && null != typeVar.getValue().getValue()) {
+			if (null != typeVar && null != typeVar.getValue()) {
 				value.setValue(typeVar.getValue().getValue());
 			}
 		}
@@ -409,9 +416,8 @@ public class SystemImporter extends CommonElementImporter {
 		processChildren(LibraryElementTags.RESOURCE_ELEMENT, name -> {
 			switch (name) {
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				resource.setFBNetwork(
-						new ResDevFBNetworkImporter(getPalette(), fbNetwork, resource.getVarDeclarations(), getReader())
-								.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
+				resource.setFBNetwork(new ResDevFBNetworkImporter(this, fbNetwork, resource.getVarDeclarations())
+						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
 				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseGenericAttributeNode(resource);
@@ -459,8 +465,8 @@ public class SystemImporter extends CommonElementImporter {
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
 				break;
 			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
-				application.setFBNetwork(new SubAppNetworkImporter(getPalette(), getReader())
-						.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT));
+				application.setFBNetwork(
+						new SubAppNetworkImporter(this).parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT));
 				break;
 			default:
 				return false;

@@ -62,7 +62,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class TransitionEditingComposite {
-	private class TransitionListLabelProvider extends LabelProvider implements ITableLabelProvider {
+	private static class TransitionListLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -74,7 +74,7 @@ public class TransitionEditingComposite {
 			if (element instanceof ECTransition) {
 				switch (columnIndex) {
 				case TRANSITION_COLUMN_PRIORITY:
-					return Integer.toString(type.getOutTransitions().indexOf(element) + 1);
+					return Integer.toString(((ECTransition) element).getPriority());
 
 				case TRANSITION_COLUMN_DESTINATION:
 					if (null != ((ECTransition) element).getDestination()) {

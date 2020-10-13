@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -34,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 /**
  * Helper functions need by the action and transition edit parts.
@@ -42,17 +42,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
  */
 public final class ECCContentAndLabelProvider {
 
-	public static final String EMPTY_FIELD = Messages.ECCContentAndLabelProvider_EmptyField; // drop-down menu entry for
-																								// selecting nothing
+	public static final String EMPTY_FIELD = FordiacMessages.EmptyField; // drop-down menu entry for
+																			// selecting nothing
 	public static final String ONE_CONDITION = "1"; //$NON-NLS-1$
 
 	public static List<Event> getOutputEvents(BasicFBType type) {
 		List<Event> events = new ArrayList<>();
 		if (null != type) {
 			events.addAll(type.getInterfaceList().getEventOutputs());
-			type.getInterfaceList().getSockets().forEach(socket -> events
-					.addAll(createAdapterEventList(socket.getType().getInterfaceList().getEventInputs(), socket)));
-			type.getInterfaceList().getPlugs().forEach(plug -> events
+			type.getInterfaceList().getSockets().stream().filter(socket -> (null != socket.getType()))
+					.forEach(socket -> events.addAll(
+							createAdapterEventList(socket.getType().getInterfaceList().getEventInputs(), socket)));
+			type.getInterfaceList().getPlugs().stream().filter(plug -> (null != plug.getType())).forEach(plug -> events
 					.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventOutputs(), plug)));
 			Collections.sort(events, NamedElementComparator.INSTANCE);
 		}
@@ -70,10 +71,12 @@ public final class ECCContentAndLabelProvider {
 		List<Event> transitionConditions = new ArrayList<>();
 		if (null != type) {
 			transitionConditions.addAll(type.getInterfaceList().getEventInputs());
-			type.getInterfaceList().getSockets().forEach(socket -> transitionConditions
-					.addAll(createAdapterEventList(socket.getType().getInterfaceList().getEventOutputs(), socket)));
-			type.getInterfaceList().getPlugs().forEach(plug -> transitionConditions
-					.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventInputs(), plug)));
+			type.getInterfaceList().getSockets().stream().filter(socket -> (null != socket.getType()))
+					.forEach(socket -> transitionConditions.addAll(
+							createAdapterEventList(socket.getType().getInterfaceList().getEventOutputs(), socket)));
+			type.getInterfaceList().getPlugs().stream().filter(plug -> (null != plug.getType()))
+					.forEach(plug -> transitionConditions
+							.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventInputs(), plug)));
 			Collections.sort(transitionConditions, NamedElementComparator.INSTANCE);
 		}
 		return transitionConditions;

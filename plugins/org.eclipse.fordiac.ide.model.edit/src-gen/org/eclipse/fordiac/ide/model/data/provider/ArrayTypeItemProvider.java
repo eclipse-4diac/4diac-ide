@@ -36,7 +36,7 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
  * 
  * @generated
  */
-public class ArrayTypeItemProvider extends DataTypeItemProvider {
+public class ArrayTypeItemProvider extends AnyDerivedTypeItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -168,8 +168,10 @@ public class ArrayTypeItemProvider extends DataTypeItemProvider {
 		case DataPackage.ARRAY_TYPE__SUBRANGES:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**

@@ -16,6 +16,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -29,13 +30,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class SEGImporter extends TypeImporter {
 
-	@Override
-	protected SegmentType getType() {
-		return (SegmentType) super.getType();
+	public SEGImporter(IFile typeFile) {
+		super(typeFile);
 	}
 
 	@Override
-	protected LibraryElement createType() {
+	public SegmentType getElement() {
+		return (SegmentType) super.getElement();
+	}
+
+	@Override
+	protected LibraryElement createRootModelElement() {
 		return LibraryElementFactory.eINSTANCE.createSegmentType();
 	}
 
@@ -45,22 +50,22 @@ public final class SEGImporter extends TypeImporter {
 	}
 
 	@Override
-	protected IChildHandler getTypeChildrenHandler() {
+	protected IChildHandler getBaseChildrenHandler() {
 		return name -> {
 			switch (name) {
 			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getType());
+				parseIdentification(getElement());
 				break;
 			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getType());
+				parseVersionInfo(getElement());
 				break;
 			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				parseCompilerInfo(getType());
+				parseCompilerInfo(getElement());
 				break;
 			case LibraryElementTags.VAR_DECLARATION_ELEMENT:
 				VarDeclaration v = parseVarDeclaration();
 				v.setIsInput(true);
-				getType().getVarDeclaration().add(v);
+				getElement().getVarDeclaration().add(v);
 				break;
 			default:
 				return false;

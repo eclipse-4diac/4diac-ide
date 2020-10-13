@@ -25,11 +25,9 @@ import java.util.Map;
 
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
@@ -98,32 +96,21 @@ public class FBTImporter extends TypeImporter {
 
 	private Map<Event, List<String>> withList = new HashMap<>();
 
-	private Palette palette;
-
 	@Override
-	protected FBType getType() {
-		return (FBType) super.getType();
+	public FBType getElement() {
+		return (FBType) super.getElement();
 	}
 
-	protected Palette getPalette() {
-		return palette;
+	public FBTImporter(IFile typeFile) {
+		super(typeFile);
 	}
 
-	protected void setPalette(Palette palette) {
-		this.palette = palette;
-	}
-
-	public FBTImporter(final Palette palette) {
-		this.palette = palette;
-	}
-
-	protected FBTImporter(final XMLStreamReader reader, final Palette palette) {
-		super(reader);
-		this.palette = palette;
+	protected FBTImporter(final CommonElementImporter importer) {
+		super(importer);
 	}
 
 	@Override
-	protected LibraryElement createType() {
+	protected LibraryElement createRootModelElement() {
 		FBType newType = LibraryElementFactory.eINSTANCE.createFBType();
 		newType.setService(LibraryElementFactory.eINSTANCE.createService());
 		return newType;
@@ -135,36 +122,36 @@ public class FBTImporter extends TypeImporter {
 	}
 
 	@Override
-	protected IChildHandler getTypeChildrenHandler() {
+	protected IChildHandler getBaseChildrenHandler() {
 		return name -> {
 			switch (name) {
 			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getType());
+				parseIdentification(getElement());
 				break;
 			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getType());
+				parseVersionInfo(getElement());
 				break;
 			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				parseCompilerInfo(getType());
+				parseCompilerInfo(getElement());
 				break;
 			case LibraryElementTags.INTERFACE_LIST_ELEMENT:
-				getType().setInterfaceList(parseInterfaceList(LibraryElementTags.INTERFACE_LIST_ELEMENT));
+				getElement().setInterfaceList(parseInterfaceList(LibraryElementTags.INTERFACE_LIST_ELEMENT));
 				break;
 			case LibraryElementTags.BASIC_F_B_ELEMENT:
-				setType(convertToBasicType(getType()));
-				parseBasicFB((BasicFBType) getType());
+				setElement(convertToBasicType(getElement()));
+				parseBasicFB((BasicFBType) getElement());
 				break;
 			case LibraryElementTags.SIMPLE_F_B_ELEMENT:
-				setType(convertToSimpleType(getType()));
-				parseSimpleFB((SimpleFBType) getType());
+				setElement(convertToSimpleType(getElement()));
+				parseSimpleFB((SimpleFBType) getElement());
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
 				// parse the composite FBs as last
-				setType(convertToCompositeType(getType()));
-				parseFBNetwork((CompositeFBType) getType());
+				setElement(convertToCompositeType(getElement()));
+				parseFBNetwork((CompositeFBType) getElement());
 				break;
 			case LibraryElementTags.SERVICE_ELEMENT:
-				parseService(getType());
+				parseService(getElement());
 				break;
 			default:
 				return false;
@@ -174,15 +161,17 @@ public class FBTImporter extends TypeImporter {
 	}
 
 	@Override
-	public LibraryElement importType(IFile typeFile) throws TypeImportException {
-		LibraryElement newType = super.importType(typeFile);
+	public void loadElement() {
+		super.loadElement();
+
+		FBType newType = getElement();
 
 		if ((newType instanceof BasicFBType) || (newType instanceof CompositeFBType)
 				|| (newType instanceof ServiceInterfaceFBType) || (newType instanceof SimpleFBType)
 				|| (newType instanceof SubAppType)) {
-			return newType;
+			return;
 		}
-		return convertToServiceInterfaceType((FBType) newType);
+		setElement(convertToServiceInterfaceType(newType));
 	}
 
 	/**
@@ -376,9 +365,8 @@ public class FBTImporter extends TypeImporter {
 	 */
 	private void parseFBNetwork(final CompositeFBType type) throws TypeImportException, XMLStreamException {
 		FBNetwork fbNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
-		adapters.values().forEach(adapter -> addAdapterFB(fbNetwork, adapter, palette));
-		FBNetworkImporter fbnInmporter = new FBNetworkImporter(palette, fbNetwork, type.getInterfaceList(),
-				getReader());
+		adapters.values().forEach(adapter -> addAdapterFB(fbNetwork, adapter, getPalette()));
+		FBNetworkImporter fbnInmporter = new FBNetworkImporter(this, fbNetwork, type.getInterfaceList());
 		type.setFBNetwork(fbnInmporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
 	}
 
@@ -397,7 +385,7 @@ public class FBTImporter extends TypeImporter {
 			aFB.setY(position.getY());
 		}
 		if (null != aFB.getType() && null != aFB.getType().getInterfaceList()) {
-			aFB.setInterface(EcoreUtil.copy(aFB.getType().getInterfaceList()));
+			aFB.setInterface(aFB.getType().getInterfaceList().copy());
 		} else {
 			// if we don't have a type or interface list set an empty interface list to
 			// adapter
@@ -911,7 +899,7 @@ public class FBTImporter extends TypeImporter {
 		readNameCommentAttributes(a);
 		String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
-			AdapterTypePaletteEntry entry = palette.getAdapterTypeEntry(typeName);
+			AdapterTypePaletteEntry entry = getPalette().getAdapterTypeEntry(typeName);
 			a.setPaletteEntry(entry);
 			AdapterType dataType = null;
 			if (null != entry) {

@@ -205,4 +205,12 @@ public interface InterfaceList extends EObject {
 	 */
 	AdapterDeclaration getAdapter(String name);
 
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model required="true"
+	 * @generated
+	 */
+	InterfaceList copy();
+
 } // InterfaceList

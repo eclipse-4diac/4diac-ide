@@ -127,8 +127,9 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 		switch (featureID) {
 		case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
 			return basicSetFBNetwork(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -141,8 +142,9 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 		switch (featureID) {
 		case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
 			return getFBNetwork();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -156,8 +158,10 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 		case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
 			setFBNetwork((FBNetwork) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -171,8 +175,10 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 		case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
 			setFBNetwork((FBNetwork) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -185,8 +191,9 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 		switch (featureID) {
 		case LibraryElementPackage.COMPOSITE_FB_TYPE__FB_NETWORK:
 			return fBNetwork != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // CompositeFBTypeImpl

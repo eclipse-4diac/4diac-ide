@@ -19,15 +19,9 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartFactory;
-import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 
 public class SubAppNetworkEditor extends FBNetworkEditor {
 
@@ -58,19 +52,6 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 	}
 
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
-			final ZoomManager zoomManager) {
-		ContextMenuProvider cmp = new FBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager,
-				getSystem().getPalette()) {
-			@Override
-			protected IAction getMapAction(IEditorPart activeEditor, Resource res) {
-				return null;
-			}
-		};
-		return cmp;
-	}
-
-	@Override
 	protected void setModel(final IEditorInput input) {
 		if (input instanceof SubApplicationEditorInput) {
 			SubApplicationEditorInput subAppInput = (SubApplicationEditorInput) input;
@@ -83,7 +64,7 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		return new UntypedSubAppEditPartFactory(this, getZoomManger());
+		return new UntypedSubAppEditPartFactory(this);
 	}
 
 	private SubApp getSubApp() {

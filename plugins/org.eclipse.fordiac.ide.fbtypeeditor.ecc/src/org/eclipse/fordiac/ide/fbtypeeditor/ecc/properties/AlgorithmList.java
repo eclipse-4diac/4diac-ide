@@ -16,6 +16,7 @@
  *   	- Shifted Grid heightHint and Width Hint to WidgetFactory.java
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *   Bianca Wiesmayr - improve element insertion
+ *   Daniel Lindhuber - added copy and paste
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -83,7 +84,7 @@ public class AlgorithmList implements CommandExecutor {
 			if (A_NAME.equals(property)) {
 				cmd = new ChangeNameCommand(data, value.toString());
 			} else if (A_LANGUAGE.equals(property)) {
-				cmd = new ChangeAlgorithmTypeCommand(type, data, AbstractECSection.getLanguages().get((int) value));
+				cmd = new ChangeAlgorithmTypeCommand(type, data, ECCSection.getLanguages().get((int) value));
 			} else {
 				cmd = new ChangeCommentCommand(data, value.toString());
 			}
@@ -107,10 +108,6 @@ public class AlgorithmList implements CommandExecutor {
 
 	private TableViewer algorithmViewer;
 	private Composite composite;
-
-	TableViewer getAlgorithmViewer() {
-		return algorithmViewer;
-	}
 
 	private BasicFBType type;
 
@@ -199,7 +196,7 @@ public class AlgorithmList implements CommandExecutor {
 		((Text) algorithmNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
 		return new CellEditor[] { algorithmNameEditor,
 				ComboBoxWidgetFactory.createComboBoxCellEditor(table,
-						AbstractECSection.getLanguages().toArray(new String[0]), SWT.READ_ONLY),
+						ECCSection.getLanguages().toArray(new String[0]), SWT.READ_ONLY),
 				new TextCellEditor(table) };
 	}
 
@@ -212,4 +209,11 @@ public class AlgorithmList implements CommandExecutor {
 		commandStack = commandStackBuffer;
 	}
 
+	public TableViewer getViewer() {
+		return algorithmViewer;
+	}
+
+	public BasicFBType getType() {
+		return type;
+	}
 }

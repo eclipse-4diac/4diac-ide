@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ * 				 2020 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,11 +9,15 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *   - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber
+ *   - added possibility to free interface elements for layouting
+ *   Alois Zoitl - Integrated code from child classes to reduce code duplication
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,6 +31,10 @@ import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.events.ControlEvent;
@@ -121,13 +130,39 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		return rightAdapterContainer;
 	}
 
-	protected List<?> getInterfaceChildren() {
-		return Collections.EMPTY_LIST;
+	protected abstract InterfaceList getInterfaceList();
+
+	@Override
+	protected List<?> getModelChildren() {
+		if (getModel() != null) {
+			ArrayList<Object> children = new ArrayList<>(super.getModelChildren());
+			InterfaceList ifList = getInterfaceList();
+			children.addAll(ifList.getEventInputs());
+			children.addAll(ifList.getEventOutputs());
+			children.addAll(ifList.getInputVars());
+			children.addAll(ifList.getOutputVars());
+			if (showAdapterPorts()) {
+				children.addAll(ifList.getPlugs());
+				children.addAll(ifList.getSockets());
+			}
+			return children;
+		}
+		return Collections.emptyList();
+	}
+
+	private boolean showAdapterPorts() {
+		// show adapters if it is not a cfb type
+		return !((getModel().eContainer() instanceof CompositeFBType)
+				&& (!(getModel().eContainer() instanceof SubAppType)));
 	}
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		super.addChildVisual(childEditPart, index);
+		if (childEditPart instanceof InterfaceEditPart) {
+			addChildVisualInterfaceElement((InterfaceEditPart) childEditPart);
+		} else {
+			super.addChildVisual(childEditPart, index);
+		}
 	}
 
 	protected void updateInterfacePosition() {
@@ -179,4 +214,88 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 			getParent().getViewer().getControl().removeControlListener(controlListener);
 		}
 	}
+
+	public void enableElkLayouting(InterfaceEditPart part) {
+		removeChildVisual(part);
+		getCastedFigure().add(part.getFigure());
+	}
+
+	/**
+	 * Removes the childEditParts figures from the correct container.
+	 *
+	 * @param childEditPart the child edit part
+	 */
+	@Override
+	protected void removeChildVisual(final EditPart childEditPart) {
+		if (childEditPart instanceof InterfaceEditPart) {
+			removeChildVisualInterfaceElement((InterfaceEditPart) childEditPart);
+		} else {
+			super.removeChildVisual(childEditPart);
+		}
+	}
+
+	public void removeChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
+		IFigure child = childEditPart.getFigure();
+		IFigure container = getChildVisualContainer(childEditPart);
+		if (child.getParent() == container) {
+			container.remove(child);
+		} else {
+			getCastedFigure().remove(child);
+		}
+	}
+
+	protected Figure getChildVisualContainer(final InterfaceEditPart childEditPart) {
+		if (childEditPart.getModel().isIsInput()) {
+			if (childEditPart.isEvent()) {
+				return getLeftEventInterfaceContainer();
+			} else if (childEditPart.isAdapter()) {
+				return (showAdapterPorts()) ? getLeftAdapterInterfaceContainer() : getLeftInterfaceContainer();
+			} else {
+				return getLeftVarInterfaceContainer();
+			}
+		} else {
+			if (childEditPart.isEvent()) {
+				return getRightEventInterfaceContainer();
+			} else if (childEditPart.isAdapter()) {
+				return (showAdapterPorts()) ? getRightAdapterInterfaceContainer() : getRightInterfaceContainer();
+			} else {
+				return getRightVarInterfaceContainer();
+			}
+		}
+	}
+
+	public void addChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
+		IFigure child = childEditPart.getFigure();
+		InterfaceList ifList = getInterfaceList();
+		Figure targetFigure = getChildVisualContainer(childEditPart);
+		int index = 0;
+		if (childEditPart.getModel().isIsInput()) { // use model isInput! because EditPart.isInput treats inputs as
+													// outputs for visual appearance
+			if (childEditPart.isEvent()) {
+				index = ifList.getEventInputs().indexOf(childEditPart.getModel());
+			} else if (childEditPart.isAdapter()) {
+				index = ifList.getSockets().indexOf(childEditPart.getModel());
+			} else {
+				index = ifList.getInputVars().indexOf(childEditPart.getModel());
+			}
+		} else {
+			if (childEditPart.isEvent()) {
+				index = ifList.getEventOutputs().indexOf(childEditPart.getModel());
+			} else if (childEditPart.isAdapter()) {
+				index = ifList.getPlugs().indexOf(childEditPart.getModel());
+			} else {
+				index = ifList.getOutputVars().indexOf(childEditPart.getModel());
+			}
+		}
+		int containerSize = targetFigure.getChildren().size();
+		targetFigure.add(child, (index >= containerSize) ? containerSize : index);
+		child.setVisible(isVarVisible(childEditPart));
+	}
+
+	@SuppressWarnings("static-method") // this method can be overridden so that editors can hide certain interface
+										// elements (e.g., adapters in CFBs)
+	protected Boolean isVarVisible(final EditPart childEditPart) {
+		return true;
+	}
+
 }

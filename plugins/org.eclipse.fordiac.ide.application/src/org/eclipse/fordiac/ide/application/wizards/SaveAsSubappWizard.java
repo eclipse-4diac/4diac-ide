@@ -32,10 +32,9 @@ import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.CommandUtil;
 import org.eclipse.fordiac.ide.gef.Activator;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -45,9 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
-import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -89,7 +86,7 @@ public class SaveAsSubappWizard extends Wizard {
 
 	@Override
 	public void addPages() {
-		IProject project = getSystem().getProject();
+		IProject project = getSystem().getSystemFile().getProject();
 		StructuredSelection selection = new StructuredSelection(project); // select the current project
 		newFilePage = new SaveAsSubappWizardPage(Messages.SaveAsSubApplicationTypeAction_WizardPageName, selection);
 		newFilePage.setFileName(subApp.getName());
@@ -120,7 +117,7 @@ public class SaveAsSubappWizard extends Wizard {
 				TypeManagementPreferencesHelper.setupIdentification(type);
 				TypeManagementPreferencesHelper.setupVersionInfo(type);
 				performTypeSetup((SubAppType) type);
-				AbstractTypeExporter.saveType(entry);
+				AbstractBlockTypeExporter.saveType(entry);
 				entry.setType(type);
 
 				if (newFilePage.getOpenType()) {
@@ -171,13 +168,12 @@ public class SaveAsSubappWizard extends Wizard {
 	}
 
 	private PaletteEntry getPalletEntry() {
-		Palette palette = getSystem().getPalette();
 		IFile targetTypeFile = getTargetTypeFile();
-		PaletteEntry newEntry = FBTypeUtils.getPaletteEntryForFile(targetTypeFile);
+		PaletteEntry newEntry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
 		if (null == newEntry) {
 			// refresh the palette and retry to fetch the entry
-			TypeLibrary.refreshPalette(palette);
-			newEntry = FBTypeUtils.getPaletteEntryForFile(targetTypeFile);
+			TypeLibrary.refreshTypeLib(targetTypeFile);
+			newEntry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
 		}
 
 		return newEntry;
@@ -191,7 +187,7 @@ public class SaveAsSubappWizard extends Wizard {
 
 	private void replaceWithType(PaletteEntry entry) {
 		CommandUtil.closeOpenedSubApp(subApp.getSubAppNetwork());
-		SystemManager.INSTANCE.getCommandStack(getSystem()).execute(new UpdateFBTypeCommand(subApp, entry));
+		getSystem().getCommandStack().execute(new UpdateFBTypeCommand(subApp, entry));
 	}
 
 	private void performTypeSetup(SubAppType type) {

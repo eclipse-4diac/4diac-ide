@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019, 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - create command now has enhanced guess
+ *   Daniel Lindhuber - added insert command method
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -24,9 +25,12 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceEventSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.insert.InsertSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
@@ -35,6 +39,14 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 		int pos = getInsertingIndex(interfaceElement, isInput);
 		return new CreateSubAppInterfaceElementCommand(last, getCreationName(interfaceElement),
 				getType().getInterface(), isInput, pos);
+	}
+
+	@Override
+	protected InsertInterfaceElementCommand newInsertCommand(IInterfaceElement interfaceElement, boolean isInput,
+			int index) {
+		DataType last = getLastUsedEventType(getType().getInterface(), isInput, interfaceElement);
+		return new InsertSubAppInterfaceElementCommand(interfaceElement, last, getType().getInterface(), isInput,
+				index);
 	}
 
 	@Override
@@ -57,13 +69,17 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 	}
 
 	@Override
-	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput,
-			boolean moveUp) {
-		return new ChangeSubAppInterfaceOrderCommand(selection, isInput, moveUp);
+	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean moveUp) {
+		return new ChangeSubAppInterfaceOrderCommand(selection, moveUp);
 	}
 
 	@Override
 	protected SubApp getType() {
 		return (SubApp) type;
+	}
+
+	@Override
+	protected TypeLibrary getTypeLibrary() {
+		return getType().getFbNetwork().getAutomationSystem().getPalette().getTypeLibrary();
 	}
 }

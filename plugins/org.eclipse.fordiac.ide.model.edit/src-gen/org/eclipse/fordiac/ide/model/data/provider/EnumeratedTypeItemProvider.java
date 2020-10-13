@@ -131,8 +131,10 @@ public class EnumeratedTypeItemProvider extends ValueTypeItemProvider {
 		case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**

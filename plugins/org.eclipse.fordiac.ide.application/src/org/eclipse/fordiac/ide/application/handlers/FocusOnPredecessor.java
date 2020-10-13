@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - migrated Focus on predecessor into an handler   
+ *   Alois Zoitl - migrated Focus on predecessor into an handler
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -24,7 +24,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -32,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -87,10 +87,12 @@ public class FocusOnPredecessor extends AbstractHandler {
 	private static FBNetworkElement getSelectedFBElement(ExecutionEvent event) {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof StructuredSelection) {
-			if (((StructuredSelection) selection).getFirstElement() instanceof FBNetworkElement) {
-				return (FBNetworkElement) ((StructuredSelection) selection).getFirstElement();
-			} else if (((StructuredSelection) selection).getFirstElement() instanceof AbstractFBNElementEditPart) {
-				return ((AbstractFBNElementEditPart) ((StructuredSelection) selection).getFirstElement()).getModel();
+			Object selObj = ((StructuredSelection) selection).getFirstElement();
+			if (selObj instanceof EditPart) {
+				selObj = ((EditPart) selObj).getModel();
+			}
+			if (selObj instanceof FBNetworkElement) {
+				return (FBNetworkElement) selObj;
 			}
 		}
 		return null;

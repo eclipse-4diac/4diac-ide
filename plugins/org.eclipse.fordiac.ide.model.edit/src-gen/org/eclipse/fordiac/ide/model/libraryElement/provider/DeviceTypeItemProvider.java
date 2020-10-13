@@ -66,7 +66,7 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	/**
 	 * This adds a property descriptor for the Profile feature. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void addProfilePropertyDescriptor(Object object) {
@@ -85,7 +85,7 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -102,7 +102,7 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -127,7 +127,7 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	/**
 	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -141,7 +141,7 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	 * This handles model notifications by calling {@link #updateChildren} to update
 	 * any cached children and by creating a viewer notification, which it passes to
 	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -159,15 +159,17 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 		case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**
 	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
 	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -179,6 +181,9 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__VAR_DECLARATION,
 				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__VAR_DECLARATION,
+				LibraryElementFactory.eINSTANCE.createLocalVariable()));
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__RESOURCE_TYPE_NAME,
 				LibraryElementFactory.eINSTANCE.createResourceTypeName()));

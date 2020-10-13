@@ -118,9 +118,9 @@
    <extension
          point="org.eclipse.ui.intro.quicklinks">
        <command
-            id="org.eclipse.ui.newWizard(newWizardId=org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard)"
-            description="Create a new IEC 61499 system"
-            label="Create New System"
+            id="org.eclipse.ui.newWizard(newWizardId=org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard)"
+            description="Create a new 4diac IDE project with an Automation System"
+            label="Create New Project"
             importance="medium"
             resolution="launchbar">
       </command>
@@ -146,7 +146,7 @@
        <url
             location="http://org.eclipse.ui.intro/close"
             label="Continue to 4diac IDE"
-            description="Close welcome page and work on your system"
+            description="Close welcome page and work on your projects"
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/workbench.png"
             importance="medium">
        </url>  

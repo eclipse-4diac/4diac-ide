@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,8 +9,11 @@
  *
  * Alois Zoitl - initial implementation
  * Bianca Wiesmayr - enhanced add functionality
+ * Daniel Lindhuber - added separate delete listener
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
+
+import java.util.List;
 
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
@@ -28,14 +31,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class AddDeleteWidget {
 	private Button createButton;
 	private Button deleteButton;
+	private Composite container;
 
-	public void createControls(Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
-		Composite container = createContainer(parent);
+	public void createControls(Composite parent, FormToolkit widgetFactory) {
+		container = createContainer(parent);
 
 		createAddButton(widgetFactory, container);
 
@@ -45,13 +49,19 @@ public class AddDeleteWidget {
 		setButtonEnablement(false);
 	}
 
-	protected void createDeleteButton(TabbedPropertySheetWidgetFactory widgetFactory, Composite container) {
+	public void setVisible(boolean visible) {
+		container.setVisible(visible);
+		((GridData) container.getLayoutData()).exclude = !visible;
+		container.getParent().pack();
+	}
+
+	protected void createDeleteButton(FormToolkit widgetFactory, Composite container) {
 		deleteButton = widgetFactory.createButton(container, "", SWT.PUSH); //$NON-NLS-1$
 		deleteButton.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
 		deleteButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 	}
 
-	protected void createAddButton(TabbedPropertySheetWidgetFactory widgetFactory, Composite container) {
+	protected void createAddButton(FormToolkit widgetFactory, Composite container) {
 		createButton = widgetFactory.createButton(container, "", SWT.PUSH); //$NON-NLS-1$
 		createButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createButton.setToolTipText("Create element");
@@ -89,7 +99,7 @@ public class AddDeleteWidget {
 
 		Listener createListener = getAddListener(viewer, executor, addCommand);
 
-		Listener deleteListener = getSelectionListener(viewer, executor, deleteCommand);
+		Listener deleteListener = getDeleteListener(viewer, executor, deleteCommand);
 
 		bindToTableViewer(viewer, createListener, deleteListener);
 	}
@@ -124,11 +134,39 @@ public class AddDeleteWidget {
 			CommandProvider commandProvider) {
 		return ev -> {
 			if (!viewer.getStructuredSelection().isEmpty()) {
-				CompoundCommand cmd = new CompoundCommand();
-				viewer.getStructuredSelection().toList().stream()
-						.forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
-				executor.executeCommand(cmd);
-				viewer.refresh();
+				executeCompoundCommandForList(viewer, viewer.getStructuredSelection().toList(), executor,
+						commandProvider);
+			}
+		};
+	}
+
+	protected static void executeCompoundCommandForList(TableViewer viewer, List<Object> selection,
+			CommandExecutor executor, CommandProvider commandProvider) {
+		CompoundCommand cmd = new CompoundCommand();
+		selection.stream().forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
+		executor.executeCommand(cmd);
+		viewer.refresh();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Listener getDeleteListener(TableViewer viewer, CommandExecutor executor,
+			CommandProvider commandProvider) {
+		return ev -> {
+			if (!viewer.getStructuredSelection().isEmpty()) {
+				int pos = viewer.getTable().getSelectionIndices()[0];
+				executeCompoundCommandForList(viewer, viewer.getStructuredSelection().toList(), executor,
+						commandProvider);
+				int itemCnt = viewer.getTable().getItemCount();
+				if (pos <= itemCnt) {
+					if (pos == itemCnt) {
+						pos--;
+					}
+					viewer.getTable().forceFocus();
+					// the selection has to be set again via the table viewer for the widgets to
+					// recognize it
+					viewer.getTable().setSelection(pos);
+					viewer.setSelection(viewer.getSelection());
+				}
 			}
 		};
 	}

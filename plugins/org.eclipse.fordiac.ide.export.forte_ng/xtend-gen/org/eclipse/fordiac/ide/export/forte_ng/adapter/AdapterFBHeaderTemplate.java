@@ -1,3 +1,19 @@
+/**
+ * Copyright (c) 2019 fortiss GmbH
+ *               2020 Johannes Kepler University
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *   Martin Jobst
+ *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl
+ *     - Fix issues in adapter code generation
+ */
 package org.eclipse.fordiac.ide.export.forte_ng.adapter;
 
 import com.google.common.collect.Iterables;
@@ -171,6 +187,21 @@ public class AdapterFBHeaderTemplate extends ForteFBTemplate {
     return _builder;
   }
   
+  @Override
+  protected CharSequence generateEventConstants(final List<Event> events) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("public:");
+    _builder.newLine();
+    _builder.append("\t");
+    CharSequence _generateEventConstants = super.generateEventConstants(events);
+    _builder.append(_generateEventConstants, "\t");
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("private:");
+    _builder.newLine();
+    return _builder;
+  }
+  
   protected CharSequence generateAccessors(final List<VarDeclaration> vars, final String socketFunction, final String plugFunction) {
     StringConcatenation _builder = new StringConcatenation();
     {
@@ -261,6 +292,7 @@ public class AdapterFBHeaderTemplate extends ForteFBTemplate {
   }
   
   @Pure
+  @Override
   protected AdapterFBType getType() {
     return this.type;
   }

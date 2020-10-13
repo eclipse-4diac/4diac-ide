@@ -5,7 +5,7 @@
          point="org.eclipse.ui.editors">
       <editor
             class="org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor"
-            contributorClass="org.eclipse.fordiac.ide.util.ZoomUndoRedoActionBarContributor"
+            contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             icon="fordiacimage://ICON_SYSTEM_CONFIGURATION"
             id="org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor"
             name="System Configuration">

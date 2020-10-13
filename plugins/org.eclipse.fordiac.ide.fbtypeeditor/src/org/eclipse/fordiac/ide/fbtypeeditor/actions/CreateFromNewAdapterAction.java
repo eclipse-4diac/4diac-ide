@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard;
+import org.eclipse.fordiac.ide.typemanagement.wizards.NewTypeWizard;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizardPage;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
@@ -51,7 +51,7 @@ public abstract class CreateFromNewAdapterAction extends WorkbenchPartAction {
 
 	@Override
 	public void run() {
-		NewFBTypeWizard wizard = new NewFBTypeWizard() {
+		NewTypeWizard wizard = new NewTypeWizard() {
 			@Override
 			protected NewFBTypeWizardPage createNewFBTypeWizardPage() {
 				return new NewFBTypeWizardPage(getSelection()) {

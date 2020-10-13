@@ -13,12 +13,11 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette;
 
-import javax.xml.stream.XMLStreamException;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object
@@ -206,9 +205,19 @@ public interface PaletteEntry extends EObject {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @model dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
+	 * @model kind="operation"
+	 *        dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
 	 * @generated
 	 */
-	TypeImporter getTypeImporter(Palette palette) throws XMLStreamException, CoreException;
+	TypeImporter getTypeImporter();
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation"
+	 *        dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary"
+	 * @generated
+	 */
+	TypeLibrary getTypeLibrary();
 
 } // PaletteEntry

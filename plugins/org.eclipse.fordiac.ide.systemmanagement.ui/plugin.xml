@@ -5,13 +5,26 @@
          point="org.eclipse.ui.newWizards">
       <wizard
             category="org.eclipse.fordiac.ide.newWizard.category"
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"
-            icon="fordiacimage://ICON_NEW_SYSTEM"
-            id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard"
+            finalPerspective="org.eclipse.fordiac.ide.SystemPerspective"
+            icon="fordiacimage://ICON_NEW_4DIAC_PROJECT"
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard"
             name="%wizard.name.0"
+            preferredPerspectives="org.eclipse.fordiac.ide.SystemPerspective, org.eclipse.fordiac.ide.deployment.ui.perspectives.DeploymentPerspective, org.eclipse.fordiac.ide.monitoring.MonitoringPerspective"
             project="true">
          <description>
             %wizard.description.0
+         </description>
+      </wizard>
+      <wizard
+            category="org.eclipse.fordiac.ide.newWizard.category"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"
+            icon="fordiacimage://ICON_NEW_SYSTEM"
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"
+            name="%newsystemwizard.name"
+            project="false">
+         <description>
+            %newsystemwizard.description
          </description>
       </wizard>
       <wizard
@@ -43,7 +56,19 @@
             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"
             name="%SystemExplorer.name">
       </view>
-   </extension>   
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="%SystemEditor.name"
+            extensions="sys"
+            contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
+            default="true"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.SystemEditor"
+            icon="fordiacimage://ICON_SYSTEM_PERSPECTIVE"
+            id="org.eclipse.fordiac.ide.editors.SystemEditor">
+      </editor>
+   </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler 
@@ -254,7 +279,7 @@
             <propertyTab
                   category="systemInfo"
                   id="property.tab.system.fbtypeinfo"
-                  image="fordiacimage://ICON_FB"
+                  image="fordiacimage://ICON_FB_TYPE"
                   label="Type Info">
             </propertyTab>
             <propertyTab
@@ -350,17 +375,17 @@
          <viewerContentBinding
                viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
             <includes>
-               <contentExtension
-                     isRoot="true"
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent">
+               <contentExtension isRoot="true"
+                    pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent">
                	</contentExtension> 
                <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
-               <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.navigator.filters.showonly61499Types"/>
+              <!-- <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.navigator.filters.showonly61499Types"/> -->
                <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.fbTypeContent">
                		</contentExtension> 
                <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.typelib.systemexplorer">
               		</contentExtension> 
-      		   <contentExtension pattern="org.eclipse.ui.navigator.resourceContent"/>             
+      		   <contentExtension
+                     pattern="org.eclipse.ui.navigator.resourceContent"/>             
                <contentExtension
                      pattern="org.eclipse.ui.navigator.resources.filters.*">
                </contentExtension>
@@ -390,7 +415,7 @@
       </extension>
       <extension
          point="org.eclipse.ui.navigator.navigatorContent">
-      <navigatorContent
+        <navigatorContent
             activeByDefault="true"
             contentProvider="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentProvider"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent"
@@ -399,28 +424,53 @@
             priority="highest">
             <possibleChildren>
 	           <or>         
+                 <instanceof value="org.eclipse.core.resources.IProject"/>
+                  <instanceof value="org.eclipse.core.resources.IResource"/>
 	              <instanceof value="org.eclipse.emf.ecore.EObject"/>
 	              <instanceof value="org.eclipse.emf.edit.provider.ItemProviderAdapter"/>
 	           </or>
 	        </possibleChildren> 
             <triggerPoints>
-            <or>
-               <instanceof 
-	                     value="org.eclipse.emf.ecore.EObject"/>
-               <instanceof 
-                     value="org.eclipse.core.resources.IResource">
-               </instanceof>
-            </or>
+                <or>
+                    <instanceof value="org.eclipse.emf.ecore.EObject"/>
+                    <instanceof value="org.eclipse.core.resources.IFolder"/>
+                    <adapt type="org.eclipse.core.resources.IProject" >
+                        <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature"/>
+                    </adapt>
+                    <instanceof value="org.eclipse.core.resources.IWorkspaceRoot" />
+                    <and>
+                        <instanceof value="org.eclipse.core.resources.IFile" />
+                        <test
+                            forcePluginActivation="true"   
+                            property="org.eclipse.core.resources.extension"
+                            value="sys">
+                        </test>                   
+                    </and>
+                </or>
             </triggerPoints>
+            <commonSorter
+                class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FordiacProjectSorter"
+                id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FordiacProjectSorter">
+                <parentExpression>
+                    <adapt type="org.eclipse.core.resources.IProject" >
+                        <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature"/>
+                    </adapt>
+                </parentExpression>
+            </commonSorter>
             <commonSorter
                   class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentSorter"
                   id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentSorter">
                <parentExpression>
-                  <or>
-                     <instanceof
-                           value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-                     </instanceof>
-                  </or>
+                  <and>
+                   <instanceof 
+                         value="org.eclipse.core.resources.IFile">
+                   </instanceof>
+                   <test
+                         forcePluginActivation="true"   
+                         property="org.eclipse.core.resources.extension"
+                         value="sys">
+                   </test>
+               </and>
                </parentExpression>
             </commonSorter>  
             <commonSorter
@@ -445,12 +495,17 @@
                   </or>
                </parentExpression>
             </commonSorter>          
-      </navigatorContent>
+       </navigatorContent>          
       <commonWizard
             type="new"
             wizardId="org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard">
          <enablement></enablement>
       </commonWizard>
+      <commonWizard
+            type="new"
+            wizardId="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard">
+         <enablement></enablement>
+      </commonWizard> 
       <commonWizard
             type="new"
             wizardId="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard">
@@ -459,7 +514,11 @@
       <commonWizard
             type="new"
             wizardId="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard">
-         <enablement></enablement>
+         <enablement>
+            <adapt type="org.eclipse.core.resources.IFile" >
+                <test property="org.eclipse.core.resources.extension" value="sys"/>
+            </adapt>
+         </enablement>
       </commonWizard>
       <actionProvider
             class="org.eclipse.fordiac.ide.systemmanagement.ui.actions.SystemExplorerNewActionProvider"
@@ -476,18 +535,31 @@
             id="org.eclipse.fordiac.ide.systemmanagement.OpenActionProvider">
             <enablement>
             <or>
-               <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement"> </instanceof>               
+               <instanceof value="org.eclipse.emf.ecore.EObject"> </instanceof>               
             </or>
          </enablement>
       </actionProvider>
       <actionProvider
             class="org.eclipse.ui.navigator.resources.GoIntoActionProvider"
             id="org.eclipse.fordiac.ide.systemmanagement.GoIntoActions">
-			<enablement>
-				<or>
-               <instanceof value="org.eclipse.emf.ecore.EObject"> </instanceof>
-            </or>
-			</enablement>
+        <enablement>
+		  <or>
+            <instanceof value="org.eclipse.emf.ecore.EObject"> </instanceof>
+            <and>
+                <instanceof value="org.eclipse.core.resources.IFile" />
+                <or>
+                    <test forcePluginActivation="true"
+                        property="org.eclipse.core.resources.extension"
+                        value="sys">
+                    </test>                   
+                    <test forcePluginActivation="true"
+                        property="org.eclipse.core.resources.extension"
+                        value="fbt">
+                    </test>
+                </or>                   
+            </and>
+          </or>
+		</enablement>
       </actionProvider>
       <actionProvider
             class="org.eclipse.fordiac.ide.systemmanagement.ui.actions.CloseSystemActionProvider"

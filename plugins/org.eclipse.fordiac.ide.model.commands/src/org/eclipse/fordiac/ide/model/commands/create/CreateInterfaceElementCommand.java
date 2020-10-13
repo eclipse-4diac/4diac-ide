@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
@@ -40,11 +41,7 @@ public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 	private String name;
 
 	public CreateInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput, int index) {
-		this.isInput = isInput;
-		this.dataType = dataType;
-		this.index = index;
-		this.interfaceList = interfaceList;
-		this.name = dataType.getName();
+		this(dataType, getNameProposal(dataType, isInput), interfaceList, isInput, index);
 	}
 
 	public CreateInterfaceElementCommand(DataType dataType, String name, InterfaceList interfaceList, boolean isInput,
@@ -53,7 +50,20 @@ public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 		this.dataType = dataType;
 		this.index = index;
 		this.interfaceList = interfaceList;
-		this.name = (null != name) ? name : dataType.getName();
+		this.name = (null != name) ? name : getNameProposal(dataType, isInput);
+	}
+
+	private static String getNameProposal(DataType dataType, boolean isInput) {
+		if (dataType instanceof EventType) {
+			return isInput ? FordiacKeywords.EVENT_INPUT : FordiacKeywords.EVENT_OUTPUT;
+		}
+		if (dataType instanceof AdapterType) {
+			return isInput ? FordiacKeywords.ADAPTER_SOCKET : FordiacKeywords.ADAPTER_PLUG;
+		}
+		if (dataType instanceof DataType) {
+			return isInput ? FordiacKeywords.DATA_INPUT : FordiacKeywords.DATA_OUTPUT;
+		}
+		return ""; //$NON-NLS-1$
 	}
 
 	protected boolean isInput() {

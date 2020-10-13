@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.Palette.impl;
 
 import java.util.Map;
 import javax.xml.stream.XMLStreamException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -24,7 +25,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
+import org.eclipse.fordiac.ide.model.Palette.*;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -34,6 +35,8 @@ import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
@@ -95,6 +98,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 			return (EObject) createStringToSubApplicationTypePaletteEntryMap();
 		case PalettePackage.ADAPTER_TYPE_PALETTE_ENTRY:
 			return createAdapterTypePaletteEntry();
+		case PalettePackage.DATA_TYPE_PALETTE_ENTRY:
+			return createDataTypePaletteEntry();
 		case PalettePackage.DEVICE_TYPE_PALETTE_ENTRY:
 			return createDeviceTypePaletteEntry();
 		case PalettePackage.FB_TYPE_PALETTE_ENTRY:
@@ -128,6 +133,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 			return createXMLStreamExceptionFromString(eDataType, initialValue);
 		case PalettePackage.CORE_EXCEPTION:
 			return createCoreExceptionFromString(eDataType, initialValue);
+		case PalettePackage.TYPE_LIBRARY:
+			return createTypeLibraryFromString(eDataType, initialValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -151,6 +158,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 			return convertXMLStreamExceptionToString(eDataType, instanceValue);
 		case PalettePackage.CORE_EXCEPTION:
 			return convertCoreExceptionToString(eDataType, instanceValue);
+		case PalettePackage.TYPE_LIBRARY:
+			return convertTypeLibraryToString(eDataType, instanceValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -288,6 +297,17 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * @generated
 	 */
 	@Override
+	public DataTypePaletteEntry createDataTypePaletteEntry() {
+		DataTypePaletteEntryImpl dataTypePaletteEntry = new DataTypePaletteEntryImpl();
+		return dataTypePaletteEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public SubApplicationTypePaletteEntry createSubApplicationTypePaletteEntry() {
 		SubApplicationTypePaletteEntryImpl subApplicationTypePaletteEntry = new SubApplicationTypePaletteEntryImpl();
 		return subApplicationTypePaletteEntry;
@@ -380,6 +400,24 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * @generated
 	 */
 	public String convertCoreExceptionToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public TypeLibrary createTypeLibraryFromString(EDataType eDataType, String initialValue) {
+		return (TypeLibrary) super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public String convertTypeLibraryToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

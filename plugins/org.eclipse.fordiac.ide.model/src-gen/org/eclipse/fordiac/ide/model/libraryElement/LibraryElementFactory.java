@@ -492,15 +492,6 @@ public interface LibraryElementFactory extends EFactory {
 	AdapterFBType createAdapterFBType();
 
 	/**
-	 * Returns a new object of class '<em>Annotation</em>'. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @return a new object of class '<em>Annotation</em>'.
-	 * @generated
-	 */
-	Annotation createAnnotation();
-
-	/**
 	 * Returns a new object of class '<em>Adapter Event</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
 	 * 
@@ -598,6 +589,33 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	BaseFBType createBaseFBType();
+
+	/**
+	 * Returns a new object of class '<em>Demultiplexer</em>'. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
+	 * @return a new object of class '<em>Demultiplexer</em>'.
+	 * @generated
+	 */
+	Demultiplexer createDemultiplexer();
+
+	/**
+	 * Returns a new object of class '<em>Multiplexer</em>'. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @return a new object of class '<em>Multiplexer</em>'.
+	 * @generated
+	 */
+	Multiplexer createMultiplexer();
+
+	/**
+	 * Returns a new object of class '<em>Local Variable</em>'. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
+	 * @return a new object of class '<em>Local Variable</em>'.
+	 * @generated
+	 */
+	LocalVariable createLocalVariable();
 
 	/**
 	 * Returns a new object of class '<em>Attribute</em>'. <!-- begin-user-doc -->

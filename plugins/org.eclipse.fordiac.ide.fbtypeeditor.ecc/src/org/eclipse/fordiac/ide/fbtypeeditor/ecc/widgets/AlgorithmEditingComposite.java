@@ -32,7 +32,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.AbstractChangeAlgorithm
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTextCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditorCreator;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.AbstractECSection;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECCSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
@@ -243,7 +243,7 @@ public abstract class AlgorithmEditingComposite {
 
 	protected void fillLanguageDropDown() {
 		languageCombo.removeAll();
-		for (String alg : AbstractECSection.getLanguages()) {
+		for (String alg : ECCSection.getLanguages()) {
 			languageCombo.add(alg);
 		}
 	}

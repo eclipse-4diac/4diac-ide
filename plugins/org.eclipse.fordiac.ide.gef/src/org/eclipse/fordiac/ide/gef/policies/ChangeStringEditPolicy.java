@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2015 Profactor GbmH, fortiss GmbH 
- * 
+ * Copyright (c) 2008, 2015 Profactor GbmH, fortiss GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.policies;
 
-import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.commands.Command;
@@ -36,8 +35,8 @@ public class ChangeStringEditPolicy extends DirectEditPolicy {
 	protected void showCurrentEditValue(final DirectEditRequest request) {
 		String value = (String) request.getCellEditor().getValue();
 		if (getHost() instanceof IChangeStringEditPart) {
-			AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
-			viewEditPart.getNameLabel().setText(value);
+			IChangeStringEditPart editPart = (IChangeStringEditPart) getHost();
+			editPart.getLabel().setText(value);
 		}
 	}
 }

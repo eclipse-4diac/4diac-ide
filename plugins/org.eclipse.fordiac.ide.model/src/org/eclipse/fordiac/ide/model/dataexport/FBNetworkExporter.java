@@ -54,7 +54,7 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private static String getMainElementName(final FBNetwork fbNetwork) {
 		String elementName = LibraryElementTags.SUBAPPNETWORK_ELEMENT;
-		if ((fbNetwork.eContainer() instanceof FBType && !(fbNetwork.eContainer() instanceof SubAppType))
+		if (((fbNetwork.eContainer() instanceof FBType) && !(fbNetwork.eContainer() instanceof SubAppType))
 				|| (fbNetwork.eContainer() instanceof Resource) || (fbNetwork.eContainer() instanceof ResourceType)) {
 			elementName = LibraryElementTags.FBNETWORK_ELEMENT;
 		}
@@ -78,6 +78,7 @@ class FBNetworkExporter extends CommonElementExporter {
 					createUntypedSubAppcontents((SubApp) fbnElement);
 				}
 
+				addAttributes(fbnElement.getAttributes());
 				addParamsConfig(fbnElement.getInterface().getInputVars());
 				addEndElement();
 			}
@@ -117,12 +118,13 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private void addConnection(final Connection connection, FBNetwork fbNetwork) throws XMLStreamException {
 		addEmptyStartElement(LibraryElementTags.CONNECTION_ELEMENT);
-		if (connection.getSource() != null && connection.getSource().eContainer() instanceof InterfaceList) {
+		if ((connection.getSource() != null) && (connection.getSource().eContainer() instanceof InterfaceList)) {
 			getWriter().writeAttribute(LibraryElementTags.SOURCE_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getSource(), fbNetwork));
 		}
 
-		if (connection.getDestination() != null && connection.getDestination().eContainer() instanceof InterfaceList) {
+		if ((connection.getDestination() != null)
+				&& (connection.getDestination().eContainer() instanceof InterfaceList)) {
 			getWriter().writeAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getDestination(), fbNetwork));
 		}
@@ -132,8 +134,8 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private static String getConnectionEndpointIdentifier(IInterfaceElement interfaceElement, FBNetwork fbNetwork) {
 		String retVal = ""; //$NON-NLS-1$
-		if (null != interfaceElement.getFBNetworkElement()
-				&& interfaceElement.getFBNetworkElement().getFbNetwork() == fbNetwork) {
+		if ((null != interfaceElement.getFBNetworkElement())
+				&& (interfaceElement.getFBNetworkElement().getFbNetwork() == fbNetwork)) {
 			// this is here to detect that interface elements of subapps
 			retVal = interfaceElement.getFBNetworkElement().getName() + "."; ////$NON-NLS-1$
 		}

@@ -7,7 +7,7 @@
       <editor
             name="Subapplication Type Editor"
             extensions="sub"
-            icon="fordiacimage://ICON_SUB_APP"
+            icon="fordiacimage://ICON_SUB_APP_TYPE"
             contributorClass="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditorContributor"
             class="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor"
             id="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor">

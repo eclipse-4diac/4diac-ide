@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2019 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2011 - 2020 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
  * 								Johannes Kepler University Linz (JKU)
  *
  * This program and the accompanying materials are made available under the
@@ -12,15 +12,18 @@
  *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
- *     -  consistent dropdown menu edit
+ *     -  consistent dropdown menu edit, redesign ECC
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
+
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.MARGIN_HORIZONTAL;
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.MARGIN_VERTICAL;
 
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.common.notify.Adapter;
@@ -38,8 +41,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
-import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.gef.figures.GradientLabel;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -58,10 +59,11 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
 public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
+	private static final Insets ALG_INSETS = new Insets(MARGIN_VERTICAL, MARGIN_HORIZONTAL, MARGIN_VERTICAL,
+			MARGIN_HORIZONTAL);
 
 	// the tooltip to be shown when we have an algorithm
 	private ECAlgorithmToolTipFigure algToolTip;
@@ -83,7 +85,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
-			if (notification.getEventType() == Notification.SET && null != getAction().getAlgorithm()
+			if ((notification.getEventType() == Notification.SET) && (null != getAction().getAlgorithm())
 					&& getAction().getAlgorithm().getName().equals(notification.getNewValue())) {
 				refreshAlgLabel();
 			}
@@ -91,16 +93,12 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	};
 
 	/** The property change listener. */
-	private final IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
-		@Override
-		public void propertyChange(PropertyChangeEvent event) {
-			if (event.getProperty().equals(PreferenceConstants.P_ECC_ALGORITHM_COLOR)) {
-				getFigure().setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_ALGORITHM_COLOR));
-			}
-			if (event.getProperty().equals(PreferenceConstants.P_ECC_ALGORITHM_BORDER_COLOR)) {
-				getFigure().setForegroundColor(
-						PreferenceGetter.getColor(PreferenceConstants.P_ECC_ALGORITHM_BORDER_COLOR));
-			}
+	private final IPropertyChangeListener propertyChangeListener = event -> {
+		if (event.getProperty().equals(PreferenceConstants.P_ECC_ALGORITHM_COLOR)) {
+			getFigure().setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_ALGORITHM_COLOR));
+		}
+		if (event.getProperty().equals(PreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR)) {
+			getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR));
 		}
 	};
 
@@ -180,7 +178,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy() {
 			@Override
 			protected Command getCreateCommand(final CreateRequest request) {
-				if (request != null && null != request.getNewObject()) {
+				if ((request != null) && (null != request.getNewObject())) {
 					Object object = request.getNewObject();
 					if (getHost() instanceof ECActionAlgorithmEditPart) {
 						ECActionAlgorithmEditPart editPart = (ECActionAlgorithmEditPart) getHost();
@@ -259,17 +257,12 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		Label algorithmLabel = new GradientLabel(((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager());
+		Label algorithmLabel = new Label();
 		algorithmLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_ALGORITHM_COLOR));
-		algorithmLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_ALGORITHM_BORDER_COLOR));
+		algorithmLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR));
 		algorithmLabel.setOpaque(true);
 		algorithmLabel.setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm().getName() : ""); //$NON-NLS-1$
-		algorithmLabel.setBorder(new LineBorder() {
-			@Override
-			public Insets getInsets(final IFigure figure) {
-				return new Insets(3, 6, 3, 6);
-			}
-		});
+		algorithmLabel.setBorder(new MarginBorder(ALG_INSETS));
 		algorithmLabel.setTextAlignment(PositionConstants.LEFT);
 		algorithmLabel.setLabelAlignment(PositionConstants.LEFT);
 

@@ -1,7 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2020 Johannes Kepler University Linz
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Alois Zoitl, Muddasir Shakil - initial API and implementation and/or initial documentation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.actions.MapAction;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
@@ -18,19 +30,18 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 public class MapToContributionItem extends ContributionItem {
-	public IMenuListener mapToListener = new IMenuListener() {
-		@Override
-		public void menuAboutToShow(IMenuManager manager) {
-			createDeviceMenu(manager);
-		}
-	};
+
+	private IMenuListener mapToListener = this::createDeviceMenu;
 
 	public MapToContributionItem() {
+		super();
 	}
 
 	public MapToContributionItem(String id) {
@@ -51,15 +62,20 @@ public class MapToContributionItem extends ContributionItem {
 		IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
-
+		
 		if (isFBorSubAppSelected(selection) && (activeEditor instanceof FBNetworkEditor)) {
+			maptoMenu.removeAll();
 			FBNetworkEditor fbEditor = (FBNetworkEditor) activeEditor;
 			List<Device> devices = fbEditor.getSystem().getSystemConfiguration().getDevices();
 			if (!devices.isEmpty()) {
 				for (Device device : devices) {
 					createDeviceMenuEntry(maptoMenu, device);
 				}
+			}else {
+				createEmptyMenuEntry(maptoMenu, Messages.MapToContributionItem_No_Device);	
 			}
+		}else {
+			createEmptyMenuEntry(maptoMenu, Messages.MapToContributionItem_No_FB_Or_SubApp_Selected);		
 		}
 	}
 
@@ -103,4 +119,16 @@ public class MapToContributionItem extends ContributionItem {
 		parentMenuManager.addMenuListener(listener);
 	}
 
+	private void createEmptyMenuEntry(IMenuManager maptoMenu, String message) {
+		ContributionItem emptyMenu = new ContributionItem() {
+			@Override
+			public void fill(Menu menu, int index) {
+				MenuItem item = (index == -1) ? new MenuItem(menu, SWT.None) : new MenuItem(menu, SWT.None, index);
+				item.setText(message);
+				item.setEnabled(false);
+			}
+		};
+		maptoMenu.add(emptyMenu);
+		emptyMenu.fill(((MenuManager) maptoMenu).getMenu(),-1);
+	}
 }

@@ -20,21 +20,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
-import java.util.List;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.FigureCanvas;
-import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkElementInsertAction;
-import org.eclipse.fordiac.ide.application.actions.MapAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.model.Activator;
@@ -44,7 +38,6 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -59,7 +52,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
@@ -72,7 +64,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 
 	private Palette palette;
 	private DiagramEditorWithFlyoutPalette editor;
-	private Point pt;
+	private Point invocationLocation;
 
 	/**
 	 * Instantiates a new FB network context menu provider.
@@ -87,15 +79,27 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		this.palette = palette;
 		this.editor = editor;
 
-		editor.getViewer().getControl().addMenuDetectListener(e -> pt = getViewer().getControl().toControl(e.x, e.y));
+		editor.getViewer().getControl()
+				.addMenuDetectListener(e -> invocationLocation = getViewer().getControl().toControl(e.x, e.y));
 
 	}
 
-	public org.eclipse.draw2d.geometry.Point getPoint() {
+	/**
+	 * Retrieve the location of the context menu relative to the view canvas with
+	 * scroll and zoom correction.
+	 *
+	 * @return the zoom and scroll corrected position where the pop-up menu was
+	 *         invoked (i.e. where the right click happened)
+	 */
+	public org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint() {
 		FigureCanvas viewerControl = (FigureCanvas) editor.getViewer().getControl();
 		org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
-		return new org.eclipse.draw2d.geometry.Point(pt.x + location.x, pt.y + location.y)
-				.scale(1.0 / getZoomManager().getZoom());
+		return new org.eclipse.draw2d.geometry.Point(invocationLocation.x + location.x,
+				invocationLocation.y + location.y).scale(1.0 / getZoomManager().getZoom());
+	}
+
+	public Point getPoint() {
+		return invocationLocation;
 	}
 
 	/*
@@ -116,14 +120,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, new Separator());
 
-		action = getRegistry().getAction(UpdateFBTypeAction.ID);
-		if ((action != null) && action.isEnabled()) {
-			menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, action);
-		}
-
 		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-
-		createFBMenus(menu);
 
 		action = getRegistry().getAction(ActionFactory.CUT.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
@@ -133,7 +130,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 
 		action = getRegistry().getAction(ActionFactory.PASTE.getId());
 		if (action instanceof PasteEditPartsAction) {
-			((PasteEditPartsAction) action).setPastRefPosition(getPoint());
+			((PasteEditPartsAction) action).setPastRefPosition(getTranslatedAndZoomedPoint());
 		}
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
@@ -143,28 +140,9 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 
 	private boolean useChangeFBType;
 
-	@SuppressWarnings("rawtypes")
-	private void createFBMenus(final IMenuManager menu) {
-		useChangeFBType = false;
-		String text = Messages.UIFBNetworkContextMenuProvider_InsertFB;
-		List eps = editor.getViewer().getSelectedEditParts();
-		for (Object ep : eps) {
-			if ((ep instanceof FBEditPart) || (ep instanceof SubAppForFBNetworkEditPart)) {
-				text = Messages.UIFBNetworkContextMenuProvider_ChangeType;
-				useChangeFBType = true;
-				break;
-			}
-		}
-		if (useChangeFBType) {
-			MenuManager submenu = new MenuManager(text);
-			menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
-			fillMenuForFolder(submenu, palette.getProject());
-		}
-	}
-
-	public void buildFBInsertMenu(final IMenuManager menu, Point point) {
-		pt = point;
-		useChangeFBType = false;
+	public void buildFBInsertMenu(final IMenuManager menu, Point point, boolean useChangeFBType) {
+		invocationLocation = point;
+		this.useChangeFBType = useChangeFBType;
 		fillMenuForFolder(menu, palette.getProject());
 	}
 
@@ -193,7 +171,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 	}
 
 	private void createFBMenuEntry(IMenuManager submenu, IFile typeFile) {
-		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(typeFile, palette);
+		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(typeFile);
 		if ((entry instanceof FBTypePaletteEntry) || (entry instanceof SubApplicationTypePaletteEntry)) {
 			Action action = getActionForPaletteEntry(entry);
 			setActionIcon(action, entry);
@@ -222,7 +200,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 	private static void setActionIcon(Action action, PaletteEntry entry) {
 		ImageDescriptor image = null;
 		if (entry.getType() instanceof SubAppType) {
-			image = FordiacImage.ICON_SUB_APP.getImageDescriptor();
+			image = FordiacImage.ICON_SUB_APP_TYPE.getImageDescriptor();
 		} else if (entry.getType() instanceof BasicFBType) {
 			image = FordiacImage.ICON_BASIC_FB.getImageDescriptor();
 		} else if (entry.getType() instanceof SimpleFBType) {
@@ -251,14 +229,4 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		return action;
 	}
 
-	@SuppressWarnings("static-method") // currently needed to be overrideable by SubAppNetworkEditor
-	protected IAction getMapAction(IEditorPart activeEditor, Resource res) {
-		if (res != null) {
-			IAction action;
-			action = new MapAction(activeEditor, res);
-			action.setImageDescriptor(FordiacImage.ICON_RESOURCE.getImageDescriptor());
-			return action;
-		}
-		return null;
-	}
 }

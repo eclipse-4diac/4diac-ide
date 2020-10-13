@@ -16,6 +16,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
+import java.util.Map;
+
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
@@ -94,7 +97,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
+		ScrollingGraphicalViewer viewer = getGraphicalViewer();
 
 		// set the control for the new state action so that it can get the correct
 		// position for state creation
@@ -283,4 +286,29 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		// nothing to do here
 	}
 
+	@Override
+	public void gotoMarker(IMarker marker) {
+		Map<?, ?> map = getGraphicalViewer().getEditPartRegistry();
+		String lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, "Unknown");
+		if (!lineNumber.equals("Unknown")) {
+			int hashCode = Integer.parseInt(lineNumber);
+			for (Object key : map.keySet()) {
+				if (key.hashCode() == hashCode) {
+					Object obj = getGraphicalViewer().getEditPartRegistry().get(key);
+					if (obj instanceof EditPart) {
+						getGraphicalViewer().select((EditPart) obj);
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean isMarkerTarget(IMarker marker) {
+		if (marker.getAttribute(IMarker.LOCATION, "Unknown").startsWith("ECC")) {
+			return true;
+		}
+		return false;
+	}
 }

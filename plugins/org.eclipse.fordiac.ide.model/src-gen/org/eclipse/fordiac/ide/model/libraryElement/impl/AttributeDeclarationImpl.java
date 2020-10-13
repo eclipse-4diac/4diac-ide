@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -42,21 +43,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedElement;
  *
  * @generated
  */
-public class AttributeDeclarationImpl extends I4DIACElementImpl implements AttributeDeclaration {
+public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDeclaration {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = "";
+	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -71,7 +72,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = "";
+	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -86,7 +87,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	/**
 	 * The default value of the '{@link #getType() <em>Type</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -96,7 +97,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	/**
 	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -254,8 +255,9 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 			return getType();
 		case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 			return getInitialValue();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -278,8 +280,10 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 		case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 			setInitialValue((String) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -302,8 +306,10 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 		case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 			setInitialValue(INITIAL_VALUE_EDEFAULT);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -322,8 +328,9 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 			return type != TYPE_EDEFAULT;
 		case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 			return INITIAL_VALUE_EDEFAULT == null ? initialValue != null : !INITIAL_VALUE_EDEFAULT.equals(initialValue);
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

@@ -196,8 +196,10 @@ public class VersionInfoItemProvider extends ItemProviderAdapter implements IEdi
 		case LibraryElementPackage.VERSION_INFO__VERSION:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**

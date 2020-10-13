@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,19 +21,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 public class ChangeDescriptionCommand extends ChangeIdentificationCommand {
 
 	/** The new Description value. */
-	private String newDescription;
+	private final String newDescription;
 
 	/** The old Description value. */
 	private String oldDescription;
 
 	public ChangeDescriptionCommand(LibraryElement type, final String newDescription) {
 		super(type);
-		this.newDescription = newDescription;
+		this.newDescription = (null == newDescription) ? "" : newDescription; //$NON-NLS-1$
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -44,7 +44,7 @@ public class ChangeDescriptionCommand extends ChangeIdentificationCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -54,7 +54,7 @@ public class ChangeDescriptionCommand extends ChangeIdentificationCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override

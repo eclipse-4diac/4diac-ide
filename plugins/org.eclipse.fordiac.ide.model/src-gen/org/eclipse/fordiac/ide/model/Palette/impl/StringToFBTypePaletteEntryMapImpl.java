@@ -172,8 +172,9 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 			if (resolve)
 				return getTypedValue();
 			return basicGetTypedValue();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -190,8 +191,10 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 		case PalettePackage.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP__VALUE:
 			setTypedValue((FBTypePaletteEntry) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -208,8 +211,10 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 		case PalettePackage.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP__VALUE:
 			setTypedValue((FBTypePaletteEntry) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -224,8 +229,9 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 			return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
 		case PalettePackage.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP__VALUE:
 			return value != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

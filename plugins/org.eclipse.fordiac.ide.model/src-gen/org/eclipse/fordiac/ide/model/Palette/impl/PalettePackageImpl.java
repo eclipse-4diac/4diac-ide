@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.Palette.impl;
 
 import java.util.Map;
 import javax.xml.stream.XMLStreamException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -27,6 +28,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -41,6 +43,7 @@ import org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!--
@@ -145,6 +148,13 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * 
 	 * @generated
 	 */
+	private EClass dataTypePaletteEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	private EClass subApplicationTypePaletteEntryEClass = null;
 
 	/**
@@ -181,6 +191,13 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * @generated
 	 */
 	private EDataType coreExceptionEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	private EDataType typeLibraryEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -282,7 +299,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getPalette_Project() {
+	public EAttribute getPalette_TypeLibrary() {
 		return (EAttribute) paletteEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -292,37 +309,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPalette_AutomationSystem() {
-		return (EReference) paletteEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
 	public EReference getPalette_FbTypes() {
-		return (EReference) paletteEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
-	public EReference getPalette_ResourceTypes() {
-		return (EReference) paletteEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
-	public EReference getPalette_DeviceTypes() {
 		return (EReference) paletteEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -332,8 +319,28 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getPalette_ResourceTypes() {
+		return (EReference) paletteEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public EReference getPalette_DeviceTypes() {
+		return (EReference) paletteEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public EReference getPalette_SegmentTypes() {
-		return (EReference) paletteEClass.getEStructuralFeatures().get(6);
+		return (EReference) paletteEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -343,7 +350,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 */
 	@Override
 	public EReference getPalette_SubAppTypes() {
-		return (EReference) paletteEClass.getEStructuralFeatures().get(7);
+		return (EReference) paletteEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -353,7 +360,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 */
 	@Override
 	public EReference getPalette_AdapterTypes() {
-		return (EReference) paletteEClass.getEStructuralFeatures().get(2);
+		return (EReference) paletteEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -652,6 +659,16 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getDataTypePaletteEntry() {
+		return dataTypePaletteEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public EClass getSubApplicationTypePaletteEntry() {
 		return subApplicationTypePaletteEntryEClass;
 	}
@@ -712,6 +729,16 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * @generated
 	 */
 	@Override
+	public EDataType getTypeLibrary() {
+		return typeLibraryEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public PaletteFactory getPaletteFactory() {
 		return (PaletteFactory) getEFactoryInstance();
 	}
@@ -737,8 +764,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		// Create classes and their features
 		paletteEClass = createEClass(PALETTE);
-		createEAttribute(paletteEClass, PALETTE__PROJECT);
-		createEReference(paletteEClass, PALETTE__AUTOMATION_SYSTEM);
+		createEAttribute(paletteEClass, PALETTE__TYPE_LIBRARY);
 		createEReference(paletteEClass, PALETTE__ADAPTER_TYPES);
 		createEReference(paletteEClass, PALETTE__DEVICE_TYPES);
 		createEReference(paletteEClass, PALETTE__FB_TYPES);
@@ -782,6 +808,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		adapterTypePaletteEntryEClass = createEClass(ADAPTER_TYPE_PALETTE_ENTRY);
 
+		dataTypePaletteEntryEClass = createEClass(DATA_TYPE_PALETTE_ENTRY);
+
 		deviceTypePaletteEntryEClass = createEClass(DEVICE_TYPE_PALETTE_ENTRY);
 
 		fbTypePaletteEntryEClass = createEClass(FB_TYPE_PALETTE_ENTRY);
@@ -798,6 +826,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		typeImporterEDataType = createEDataType(TYPE_IMPORTER);
 		xmlStreamExceptionEDataType = createEDataType(XML_STREAM_EXCEPTION);
 		coreExceptionEDataType = createEDataType(CORE_EXCEPTION);
+		typeLibraryEDataType = createEDataType(TYPE_LIBRARY);
 	}
 
 	/**
@@ -825,10 +854,11 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage) EPackage.Registry.INSTANCE
-				.getEPackage(LibraryElementPackage.eNS_URI);
 		XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
 				.getEPackage(XMLTypePackage.eNS_URI);
+		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage) EPackage.Registry.INSTANCE
+				.getEPackage(LibraryElementPackage.eNS_URI);
+		DataPackage theDataPackage = (DataPackage) EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -836,6 +866,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		// Add supertypes to classes
 		adapterTypePaletteEntryEClass.getESuperTypes().add(this.getPaletteEntry());
+		dataTypePaletteEntryEClass.getESuperTypes().add(this.getPaletteEntry());
 		deviceTypePaletteEntryEClass.getESuperTypes().add(this.getPaletteEntry());
 		fbTypePaletteEntryEClass.getESuperTypes().add(this.getPaletteEntry());
 		resourceTypeEntryEClass.getESuperTypes().add(this.getPaletteEntry());
@@ -844,12 +875,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(paletteEClass, Palette.class, "Palette", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getPalette_Project(), this.getIProject(), "project", null, 0, 1, Palette.class, !IS_TRANSIENT, //$NON-NLS-1$
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPalette_AutomationSystem(), theLibraryElementPackage.getAutomationSystem(),
-				theLibraryElementPackage.getAutomationSystem_Palette(), "automationSystem", null, 0, 1, Palette.class, //$NON-NLS-1$
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPalette_TypeLibrary(), this.getTypeLibrary(), "typeLibrary", null, 0, 1, Palette.class, //$NON-NLS-1$
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPalette_AdapterTypes(), this.getStringToAdapterTypePaletteEntryMap(), null, "adapterTypes", //$NON-NLS-1$
 				null, 0, -1, Palette.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -900,6 +927,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		op = addEOperation(paletteEClass, null, "removePaletteEntry", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getPaletteEntry(), "entry", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(paletteEClass, this.getIProject(), "getProject", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stringToAdapterTypePaletteEntryMapEClass, Map.Entry.class, "StringToAdapterTypePaletteEntryMap", //$NON-NLS-1$
 				!IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -978,8 +1007,9 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		addEOperation(paletteEntryEClass, theLibraryElementPackage.getLibraryElement(), "loadType", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
 
-		op = addEOperation(paletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(paletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(paletteEntryEClass, this.getTypeLibrary(), "getTypeLibrary", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(adapterTypePaletteEntryEClass, AdapterTypePaletteEntry.class, "AdapterTypePaletteEntry", //$NON-NLS-1$
 				!IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -990,9 +1020,20 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(adapterTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(adapterTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+		addEOperation(adapterTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(dataTypePaletteEntryEClass, DataTypePaletteEntry.class, "DataTypePaletteEntry", !IS_ABSTRACT, //$NON-NLS-1$
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		addEOperation(dataTypePaletteEntryEClass, theDataPackage.getAnyDerivedType(), "getType", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
+
+		op = addEOperation(dataTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(dataTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
 
 		initEClass(deviceTypePaletteEntryEClass, DeviceTypePaletteEntry.class, "DeviceTypePaletteEntry", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1003,9 +1044,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(deviceTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(deviceTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+		addEOperation(deviceTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(fbTypePaletteEntryEClass, FBTypePaletteEntry.class, "FBTypePaletteEntry", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1016,9 +1056,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(fbTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(fbTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
-				IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(fbTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(resourceTypeEntryEClass, ResourceTypeEntry.class, "ResourceTypeEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -1029,9 +1067,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(resourceTypeEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(resourceTypeEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
-				IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(resourceTypeEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(segmentTypePaletteEntryEClass, SegmentTypePaletteEntry.class, "SegmentTypePaletteEntry", //$NON-NLS-1$
 				!IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1042,9 +1078,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(segmentTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(segmentTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+		addEOperation(segmentTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(subApplicationTypePaletteEntryEClass, SubApplicationTypePaletteEntry.class,
 				"SubApplicationTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -1055,9 +1090,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(subApplicationTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(subApplicationTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, //$NON-NLS-1$
-				IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(subApplicationTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(iFileEDataType, IFile.class, "IFile", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -1067,6 +1101,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		initEDataType(xmlStreamExceptionEDataType, XMLStreamException.class, "XMLStreamException", IS_SERIALIZABLE, //$NON-NLS-1$
 				!IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(coreExceptionEDataType, CoreException.class, "CoreException", IS_SERIALIZABLE, //$NON-NLS-1$
+				!IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(typeLibraryEDataType, TypeLibrary.class, "TypeLibrary", IS_SERIALIZABLE, //$NON-NLS-1$
 				!IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource

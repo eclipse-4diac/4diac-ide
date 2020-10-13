@@ -155,8 +155,9 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 			return getX();
 		case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
 			return getY();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -173,8 +174,10 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 		case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
 			setY((Integer) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -191,8 +194,10 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 		case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
 			setY(Y_EDEFAULT);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -207,8 +212,9 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 			return x != X_EDEFAULT;
 		case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
 			return y != Y_EDEFAULT;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

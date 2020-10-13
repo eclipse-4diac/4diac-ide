@@ -34,8 +34,7 @@ import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '
@@ -44,10 +43,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getProject
- * <em>Project</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getAutomationSystem
- * <em>Automation System</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getTypeLibrary
+ * <em>Type Library</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getAdapterTypes
  * <em>Adapter Types</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getDeviceTypes
@@ -66,34 +63,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  */
 public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
-	 * The default value of the '{@link #getProject() <em>Project</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #getTypeLibrary() <em>Type Library</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @see #getProject()
+	 * @see #getTypeLibrary()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final IProject PROJECT_EDEFAULT = null;
+	protected static final TypeLibrary TYPE_LIBRARY_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getProject() <em>Project</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getTypeLibrary() <em>Type Library</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @see #getProject()
+	 * @see #getTypeLibrary()
 	 * @generated
 	 * @ordered
 	 */
-	protected IProject project = PROJECT_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getAutomationSystem() <em>Automation
-	 * System</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @see #getAutomationSystem()
-	 * @generated
-	 * @ordered
-	 */
-	protected AutomationSystem automationSystem;
+	protected TypeLibrary typeLibrary = TYPE_LIBRARY_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getAdapterTypes() <em>Adapter Types</em>}'
@@ -181,7 +168,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 */
 	@Override
 	public IProject getProject() {
-		return project;
+		return getTypeLibrary().getProject();
 	}
 
 	/**
@@ -190,82 +177,22 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * @generated
 	 */
 	@Override
-	public void setProject(IProject newProject) {
-		IProject oldProject = project;
-		project = newProject;
+	public TypeLibrary getTypeLibrary() {
+		return typeLibrary;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public void setTypeLibrary(TypeLibrary newTypeLibrary) {
+		TypeLibrary oldTypeLibrary = typeLibrary;
+		typeLibrary = newTypeLibrary;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__PROJECT, oldProject,
-					project));
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
-	public AutomationSystem getAutomationSystem() {
-		if (automationSystem != null && automationSystem.eIsProxy()) {
-			InternalEObject oldAutomationSystem = (InternalEObject) automationSystem;
-			automationSystem = (AutomationSystem) eResolveProxy(oldAutomationSystem);
-			if (automationSystem != oldAutomationSystem) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PalettePackage.PALETTE__AUTOMATION_SYSTEM,
-							oldAutomationSystem, automationSystem));
-			}
-		}
-		return automationSystem;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	public AutomationSystem basicGetAutomationSystem() {
-		return automationSystem;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	public NotificationChain basicSetAutomationSystem(AutomationSystem newAutomationSystem, NotificationChain msgs) {
-		AutomationSystem oldAutomationSystem = automationSystem;
-		automationSystem = newAutomationSystem;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-					PalettePackage.PALETTE__AUTOMATION_SYSTEM, oldAutomationSystem, newAutomationSystem);
-			if (msgs == null)
-				msgs = notification;
-			else
-				msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
-	public void setAutomationSystem(AutomationSystem newAutomationSystem) {
-		if (newAutomationSystem != automationSystem) {
-			NotificationChain msgs = null;
-			if (automationSystem != null)
-				msgs = ((InternalEObject) automationSystem).eInverseRemove(this,
-						LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
-			if (newAutomationSystem != null)
-				msgs = ((InternalEObject) newAutomationSystem).eInverseAdd(this,
-						LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
-			msgs = basicSetAutomationSystem(newAutomationSystem, msgs);
-			if (msgs != null)
-				msgs.dispatch();
-		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__AUTOMATION_SYSTEM,
-					newAutomationSystem, newAutomationSystem));
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__TYPE_LIBRARY, oldTypeLibrary,
+					typeLibrary));
 	}
 
 	/**
@@ -454,27 +381,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-			if (automationSystem != null)
-				msgs = ((InternalEObject) automationSystem).eInverseRemove(this,
-						LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
-			return basicSetAutomationSystem((AutomationSystem) otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-			return basicSetAutomationSystem(null, msgs);
 		case PalettePackage.PALETTE__ADAPTER_TYPES:
 			return ((InternalEList<?>) getAdapterTypes()).basicRemove(otherEnd, msgs);
 		case PalettePackage.PALETTE__DEVICE_TYPES:
@@ -487,8 +395,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 			return ((InternalEList<?>) getSegmentTypes()).basicRemove(otherEnd, msgs);
 		case PalettePackage.PALETTE__SUB_APP_TYPES:
 			return ((InternalEList<?>) getSubAppTypes()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -499,12 +408,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case PalettePackage.PALETTE__PROJECT:
-			return getProject();
-		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-			if (resolve)
-				return getAutomationSystem();
-			return basicGetAutomationSystem();
+		case PalettePackage.PALETTE__TYPE_LIBRARY:
+			return getTypeLibrary();
 		case PalettePackage.PALETTE__ADAPTER_TYPES:
 			if (coreType)
 				return getAdapterTypes();
@@ -535,8 +440,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 				return getSubAppTypes();
 			else
 				return getSubAppTypes().map();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -547,11 +453,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case PalettePackage.PALETTE__PROJECT:
-			setProject((IProject) newValue);
-			return;
-		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-			setAutomationSystem((AutomationSystem) newValue);
+		case PalettePackage.PALETTE__TYPE_LIBRARY:
+			setTypeLibrary((TypeLibrary) newValue);
 			return;
 		case PalettePackage.PALETTE__ADAPTER_TYPES:
 			((EStructuralFeature.Setting) getAdapterTypes()).set(newValue);
@@ -571,8 +474,10 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		case PalettePackage.PALETTE__SUB_APP_TYPES:
 			((EStructuralFeature.Setting) getSubAppTypes()).set(newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -583,11 +488,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case PalettePackage.PALETTE__PROJECT:
-			setProject(PROJECT_EDEFAULT);
-			return;
-		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-			setAutomationSystem((AutomationSystem) null);
+		case PalettePackage.PALETTE__TYPE_LIBRARY:
+			setTypeLibrary(TYPE_LIBRARY_EDEFAULT);
 			return;
 		case PalettePackage.PALETTE__ADAPTER_TYPES:
 			getAdapterTypes().clear();
@@ -607,8 +509,10 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		case PalettePackage.PALETTE__SUB_APP_TYPES:
 			getSubAppTypes().clear();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -619,10 +523,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case PalettePackage.PALETTE__PROJECT:
-			return PROJECT_EDEFAULT == null ? project != null : !PROJECT_EDEFAULT.equals(project);
-		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-			return automationSystem != null;
+		case PalettePackage.PALETTE__TYPE_LIBRARY:
+			return TYPE_LIBRARY_EDEFAULT == null ? typeLibrary != null : !TYPE_LIBRARY_EDEFAULT.equals(typeLibrary);
 		case PalettePackage.PALETTE__ADAPTER_TYPES:
 			return adapterTypes != null && !adapterTypes.isEmpty();
 		case PalettePackage.PALETTE__DEVICE_TYPES:
@@ -635,8 +537,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 			return segmentTypes != null && !segmentTypes.isEmpty();
 		case PalettePackage.PALETTE__SUB_APP_TYPES:
 			return subAppTypes != null && !subAppTypes.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**
@@ -650,8 +553,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (project: "); //$NON-NLS-1$
-		result.append(project);
+		result.append(" (typeLibrary: "); //$NON-NLS-1$
+		result.append(typeLibrary);
 		result.append(')');
 		return result.toString();
 	}

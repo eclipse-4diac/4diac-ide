@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,9 +15,11 @@ package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.ListFBCreateCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
@@ -103,8 +105,8 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
 	protected Command getCloneCommand(ChangeBoundsRequest request) {
-		List elements = (List) request.getEditParts().stream().map(n -> ((EditPart) n).getModel())
-				.collect(Collectors.toList());
+		List<EObject> elements = ((Stream<?>) (request.getEditParts()).stream())
+				.map(n -> (EObject) (((EditPart) n).getModel())).collect(Collectors.toList());
 		Point scaledPoint = request.getMoveDelta().getScaled(1.0 / zoomManager.getZoom());
 		return new PasteCommand(elements, (FBNetwork) getHost().getModel(), scaledPoint.x, scaledPoint.y);
 	}

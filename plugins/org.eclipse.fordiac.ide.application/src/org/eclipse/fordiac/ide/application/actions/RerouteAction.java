@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009, 2011, 2013 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.application.actions;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.draw2d.Connection;
@@ -41,14 +40,12 @@ public class RerouteAction implements IObjectActionDelegate {
 
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		connections.clear();
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			for (Iterator iterator = structuredSelection.iterator(); iterator.hasNext();) {
-				Object obj = iterator.next();
+			for (Object obj : structuredSelection) {
 				if (obj instanceof ConnectionEditPart) {
 					connections.add((Connection) ((ConnectionEditPart) obj).getFigure());
 				}

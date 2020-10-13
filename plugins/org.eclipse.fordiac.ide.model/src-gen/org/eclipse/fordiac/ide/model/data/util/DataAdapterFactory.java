@@ -17,6 +17,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.data.*;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -30,7 +31,6 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.data.SubrangeType;
 import org.eclipse.fordiac.ide.model.data.ValueType;
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
@@ -89,6 +89,11 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	protected DataSwitch<Adapter> modelSwitch = new DataSwitch<Adapter>() {
+		@Override
+		public Adapter caseAnyDerivedType(AnyDerivedType object) {
+			return createAnyDerivedTypeAdapter();
+		}
+
 		@Override
 		public Adapter caseArrayType(ArrayType object) {
 			return createArrayTypeAdapter();
@@ -150,11 +155,6 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
-		public Adapter caseI4DIACElement(I4DIACElement object) {
-			return createI4DIACElementAdapter();
-		}
-
-		@Override
 		public Adapter caseINamedElement(INamedElement object) {
 			return createINamedElementAdapter();
 		}
@@ -181,6 +181,21 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	@Override
 	public Adapter createAdapter(Notifier target) {
 		return modelSwitch.doSwitch((EObject) target);
+	}
+
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.data.AnyDerivedType <em>Any Derived
+	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
+	 * so that we can easily ignore cases; it's useful to ignore a case when
+	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.data.AnyDerivedType
+	 * @generated
+	 */
+	public Adapter createAnyDerivedTypeAdapter() {
+		return null;
 	}
 
 	/**
@@ -360,21 +375,6 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEventTypeAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement <em>I4DIAC
-	 * Element</em>}'. <!-- begin-user-doc --> This default implementation returns
-	 * null so that we can easily ignore cases; it's useful to ignore a case when
-	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement
-	 * @generated
-	 */
-	public Adapter createI4DIACElementAdapter() {
 		return null;
 	}
 

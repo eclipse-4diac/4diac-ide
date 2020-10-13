@@ -68,14 +68,12 @@ public class PasteEditPartsAction extends SelectionAction {
 		return new CompoundCommand();
 	}
 
-	@SuppressWarnings("rawtypes")
-	private List getClipboardContents() {
-		List list = Collections.emptyList();
+	private List<? extends Object> getClipboardContents() {
 		Object obj = Clipboard.getDefault().getContents();
 		if (obj instanceof List) {
-			list = (List) obj;
+			return (List<?>)obj;
 		}
-		return list;
+		return Collections.emptyList();
 	}
 
 	@Override

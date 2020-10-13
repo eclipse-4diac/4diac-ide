@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -40,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -52,7 +52,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
@@ -62,7 +61,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
+import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
@@ -80,6 +81,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -422,11 +424,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
-		public Adapter caseI4DIACElement(I4DIACElement object) {
-			return createI4DIACElementAdapter();
-		}
-
-		@Override
 		public Adapter caseSegmentType(SegmentType object) {
 			return createSegmentTypeAdapter();
 		}
@@ -434,11 +431,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseAdapterFBType(AdapterFBType object) {
 			return createAdapterFBTypeAdapter();
-		}
-
-		@Override
-		public Adapter caseAnnotation(Annotation object) {
-			return createAnnotationAdapter();
 		}
 
 		@Override
@@ -504,6 +496,26 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseBaseFBType(BaseFBType object) {
 			return createBaseFBTypeAdapter();
+		}
+
+		@Override
+		public Adapter caseStructManipulator(StructManipulator object) {
+			return createStructManipulatorAdapter();
+		}
+
+		@Override
+		public Adapter caseDemultiplexer(Demultiplexer object) {
+			return createDemultiplexerAdapter();
+		}
+
+		@Override
+		public Adapter caseMultiplexer(Multiplexer object) {
+			return createMultiplexerAdapter();
+		}
+
+		@Override
+		public Adapter caseLocalVariable(LocalVariable object) {
+			return createLocalVariableAdapter();
 		}
 
 		@Override
@@ -1361,21 +1373,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 
 	/**
 	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement <em>I4DIAC
-	 * Element</em>}'. <!-- begin-user-doc --> This default implementation returns
-	 * null so that we can easily ignore cases; it's useful to ignore a case when
-	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement
-	 * @generated
-	 */
-	public Adapter createI4DIACElementAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SegmentType <em>Segment
 	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
@@ -1402,21 +1399,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAdapterFBTypeAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Annotation
-	 * <em>Annotation</em>}'. <!-- begin-user-doc --> This default implementation
-	 * returns null so that we can easily ignore cases; it's useful to ignore a case
-	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.Annotation
-	 * @generated
-	 */
-	public Adapter createAnnotationAdapter() {
 		return null;
 	}
 
@@ -1616,6 +1598,67 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createBaseFBTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator
+	 * <em>Struct Manipulator</em>}'. <!-- begin-user-doc --> This default
+	 * implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway. <!--
+	 * end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.StructManipulator
+	 * @generated
+	 */
+	public Adapter createStructManipulatorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer
+	 * <em>Demultiplexer</em>}'. <!-- begin-user-doc --> This default implementation
+	 * returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer
+	 * @generated
+	 */
+	public Adapter createDemultiplexerAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Multiplexer
+	 * <em>Multiplexer</em>}'. <!-- begin-user-doc --> This default implementation
+	 * returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Multiplexer
+	 * @generated
+	 */
+	public Adapter createMultiplexerAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable <em>Local
+	 * Variable</em>}'. <!-- begin-user-doc --> This default implementation returns
+	 * null so that we can easily ignore cases; it's useful to ignore a case when
+	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LocalVariable
+	 * @generated
+	 */
+	public Adapter createLocalVariableAdapter() {
 		return null;
 	}
 

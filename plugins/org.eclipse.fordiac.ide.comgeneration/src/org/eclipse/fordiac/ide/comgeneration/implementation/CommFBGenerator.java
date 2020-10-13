@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 Luka Lednicki, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -65,7 +65,7 @@ public class CommFBGenerator {
 	}
 
 	public void generate(CommunicationModel communicationModel) {
-		generatedFBs = new HashSet<GeneratedFBInfo>();
+		generatedFBs = new HashSet<>();
 		generatedFBIndex = 0;
 		for (CommunicationChannel channel : communicationModel.getChannels().values()) {
 			generate(channel);
@@ -88,7 +88,7 @@ public class CommFBGenerator {
 		switch (transferedData) {
 		case ALL:
 			numberDataPorts = destination.getCommunicationChannel().getNumberOfDataPorts();
-			HashSet<Integer> allWithPorts = new HashSet<Integer>();
+			HashSet<Integer> allWithPorts = new HashSet<>();
 			for (int i = 0; i < destination.getCommunicationChannel().getSourceEvent().getWith().size(); i++) {
 				allWithPorts.add(i);
 			}
@@ -247,7 +247,7 @@ public class CommFBGenerator {
 				break;
 			}
 		}
-		if (sourceEvents.size() == 0) {
+		if (sourceEvents.isEmpty()) {
 			FB startFB = resource.getFBNetwork().getFBNamed("START"); //$NON-NLS-1$
 			if (startFB == null) {
 				Activator.getDefault().logError(
@@ -279,7 +279,7 @@ public class CommFBGenerator {
 		return null;
 	}
 
-	public static enum TransferedData {
+	public enum TransferedData {
 		ALL, EXACT
 	}
 
@@ -293,7 +293,7 @@ public class CommFBGenerator {
 		public GeneratedFBInfo(ChannelEnd end, Segment segment) {
 			super();
 			this.end = end;
-			destinations = new HashSet<CommunicationChannelDestination>();
+			destinations = new HashSet<>();
 			this.segment = segment;
 		}
 
@@ -345,7 +345,7 @@ public class CommFBGenerator {
 	}
 
 	public void removeGeneratedElements(Application application) {
-		HashSet<FBNetwork> usedResources = new HashSet<FBNetwork>();
+		HashSet<FBNetwork> usedResources = new HashSet<>();
 		for (FBNetworkElement fb : application.getFBNetwork().getNetworkElements()) {
 			if (fb.getResource() != null) {
 				usedResources.add(fb.getResource().getFBNetwork());
@@ -357,7 +357,7 @@ public class CommFBGenerator {
 	}
 
 	public void removeGeneratedElements(FBNetwork network) {
-		HashSet<FBNetworkElement> fbsToRemove = new HashSet<FBNetworkElement>();
+		HashSet<FBNetworkElement> fbsToRemove = new HashSet<>();
 		for (FBNetworkElement fb : network.getNetworkElements()) {
 			if (fb.getComment() != null && fb.getComment().contains(GENERATED_ANNOTATION)) {
 				fbsToRemove.add(fb);

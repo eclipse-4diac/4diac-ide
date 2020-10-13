@@ -299,8 +299,9 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 			return ((InternalEList<?>) getEventConnections()).basicRemove(otherEnd, msgs);
 		case LibraryElementPackage.FB_NETWORK__ADAPTER_CONNECTIONS:
 			return ((InternalEList<?>) getAdapterConnections()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -319,8 +320,9 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 			return getEventConnections();
 		case LibraryElementPackage.FB_NETWORK__ADAPTER_CONNECTIONS:
 			return getAdapterConnections();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -348,8 +350,10 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 			getAdapterConnections().clear();
 			getAdapterConnections().addAll((Collection<? extends AdapterConnection>) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -372,8 +376,10 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 		case LibraryElementPackage.FB_NETWORK__ADAPTER_CONNECTIONS:
 			getAdapterConnections().clear();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -392,8 +398,9 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 			return eventConnections != null && !eventConnections.isEmpty();
 		case LibraryElementPackage.FB_NETWORK__ADAPTER_CONNECTIONS:
 			return adapterConnections != null && !adapterConnections.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // FBNetworkImpl

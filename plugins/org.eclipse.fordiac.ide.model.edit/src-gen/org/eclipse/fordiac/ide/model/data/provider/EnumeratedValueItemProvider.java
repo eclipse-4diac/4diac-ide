@@ -142,8 +142,10 @@ public class EnumeratedValueItemProvider extends ItemProviderAdapter implements 
 		case DataPackage.ENUMERATED_VALUE__NAME:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**

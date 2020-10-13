@@ -119,17 +119,20 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		if (createSuperControls) {
 			parent.setLayout(new GridLayout(2, true));
 			parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-			leftComposite = getWidgetFactory().createComposite(parent);
-			leftComposite.setLayout(new GridLayout());
-			leftComposite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-			rightComposite = getWidgetFactory().createComposite(parent);
-			rightComposite.setLayout(new GridLayout());
-			rightComposite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+			leftComposite = createComposite(parent);
+			rightComposite = createComposite(parent);
 		} else {
 			leftComposite = parent; // store the parent to be used in the content adapter
 			parent.setLayout(new GridLayout(1, true));
 			parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		}
+	}
+
+	private Composite createComposite(final Composite parent) {
+		Composite composite = getWidgetFactory().createComposite(parent);
+		composite.setLayout(new GridLayout());
+		composite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+		return composite;
 	}
 
 	@Override

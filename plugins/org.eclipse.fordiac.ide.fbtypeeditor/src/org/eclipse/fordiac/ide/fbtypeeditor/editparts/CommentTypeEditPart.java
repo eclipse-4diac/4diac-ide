@@ -37,7 +37,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart 
 	private static final int WITH_SIZE = 10;
 	private static final int DISTANCE_TO_FB_BORDER = 15;
 
-	InterfaceEditPart referencedInterface;
+	private InterfaceEditPart referencedInterface;
 
 	private Adapter contentAdapter = new AdapterImpl() {
 		@Override

@@ -200,8 +200,9 @@ public class ColorImpl extends EObjectImpl implements Color {
 			return getGreen();
 		case LibraryElementPackage.COLOR__BLUE:
 			return getBlue();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -221,8 +222,10 @@ public class ColorImpl extends EObjectImpl implements Color {
 		case LibraryElementPackage.COLOR__BLUE:
 			setBlue((Integer) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -242,8 +245,10 @@ public class ColorImpl extends EObjectImpl implements Color {
 		case LibraryElementPackage.COLOR__BLUE:
 			setBlue(BLUE_EDEFAULT);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -260,8 +265,9 @@ public class ColorImpl extends EObjectImpl implements Color {
 			return green != GREEN_EDEFAULT;
 		case LibraryElementPackage.COLOR__BLUE:
 			return blue != BLUE_EDEFAULT;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

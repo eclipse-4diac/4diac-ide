@@ -28,11 +28,11 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.handles.AdvancedGraphicalViewerKeyHandler;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.FigureFontUpdateListener;
+import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.UntypedEditorInput;
@@ -83,7 +83,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWithFlyoutPalette
-		implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
+implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
@@ -133,20 +133,22 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 		AdvancedScrollingGraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
 		viewer.createControl(rulerComp);
+
 		setGraphicalViewer(viewer);
 		configureGraphicalViewer();
 		hookGraphicalViewer();
 		initializeGraphicalViewer();
 
-		viewer.getControl().setFont(JFaceResources.getFont(PreferenceConstants.DIAGRAM_FONT));
+		final IFontUpdateListener rootFigureListener = new FigureFontUpdateListener(
+				((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getFigure(),
+				PreferenceConstants.DIAGRAM_FONT);
+		final IPropertyChangeListener fontChangeListener = new DiagramFontChangeListener(rootFigureListener);
 
-		final IPropertyChangeListener fontChangeListener = new DiagramFontChangeListener(
-				new FigureFontUpdateListener(((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getFigure(),
-						PreferenceConstants.DIAGRAM_FONT));
+		rootFigureListener.updateFonts(); // ensure that root figure has the right font set
 
 		JFaceResources.getFontRegistry().addListener(fontChangeListener);
 		viewer.getControl()
-				.addDisposeListener(e -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
+		.addDisposeListener(e -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
 
 		rulerComp.setGraphicalViewer(getGraphicalViewer());
 	}
@@ -248,9 +250,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setModel(input);
 		super.init(site, input);
-		if (input.getName() != null) {
-			setPartName(input.getName());
-		}
+		setEditorPartName(input);
 		ActionRegistry registry = getActionRegistry();
 		IActionBars bars = site.getActionBars();
 		String id = ActionFactory.UNDO.getId();
@@ -262,10 +262,16 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		bars.updateActionBars();
 	}
 
-	protected void updateEditorTitle(String newTitel) {
-		((UntypedEditorInput) getEditorInput()).setName(newTitel); // update the editor input so that the tooltip and
-																	// header bars are correct as well
-		setPartName(newTitel);
+	protected void setEditorPartName(final IEditorInput input) {
+		if (input.getName() != null) {
+			setPartName(input.getName());
+		}
+	}
+
+	protected void updateEditorTitle(String newTitle) {
+		((UntypedEditorInput) getEditorInput()).setName(newTitle); // update the editor input so that the tooltip and
+		// header bars are correct as well
+		setPartName(newTitle);
 	}
 
 	/**
@@ -278,9 +284,11 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		setEditDomain(new DefaultEditDomain(this));
 		getEditDomain().setDefaultTool(createDefaultTool());
 		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
-		// use one "System - Wide" command stack to avoid incositensies due to
+		// use one "System - Wide" command stack to avoid inconsistencies due to
 		// undo redo
-		getEditDomain().setCommandStack(SystemManager.INSTANCE.getCommandStack(getSystem()));
+		if (null != getSystem()) {
+			getEditDomain().setCommandStack(getSystem().getCommandStack());
+		}
 	}
 
 	@SuppressWarnings("static-method")
@@ -455,7 +463,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	 *
 	 * @return the GraphicalViewer
 	 */
-	public GraphicalViewer getViewer() {
+	public AdvancedScrollingGraphicalViewer getViewer() {
 		return getGraphicalViewer();
 	}
 

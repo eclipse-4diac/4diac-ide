@@ -1,54 +1,45 @@
+/*******************************************************************************
+ * Copyright (c) 2019 fortiss GmbH
+ * 				 2020 Johannes Kepler Unviersity Linz
+ * 				 2020 TU Wien
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Alois Zoitl  - extracted base class for all types from fbtemplate
+ *   Martin Melik Merkumians - adds clause to prevent generation of zero size arrays
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import java.util.List
-import org.eclipse.fordiac.ide.export.ExportTemplate
-import org.eclipse.fordiac.ide.model.libraryElement.FBType
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.model.libraryElement.With
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.With
 
-abstract class ForteFBTemplate extends ExportTemplate {
+abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 
 	new(String name, Path prefix) {
-		super(name, prefix) 
+		super(name, prefix)
 	}
 
-	def protected FBType getType()
+	override protected FBType getType()
 
-	def protected CharSequence generateHeader() '''
-		/*************************************************************************
-		 *** FORTE Library Element
-		 ***
-		 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
-		 ***
-		 *** Name: «type.name»
-		 *** Description: «type.comment»
-		 *** Version:
-		«FOR info : type.versionInfo»
-			***     «info.version»: «info.date»/«info.author» - «info.organization» - «info.remarks»
-		«ENDFOR»
-		 *************************************************************************/
-	'''
-
-	def protected CharSequence generateIncludeGuardStart() '''
-		#ifndef _«type.name.toUpperCase»_H_
-		#define _«type.name.toUpperCase»_H_
-	'''
-
-	def protected CharSequence generateIncludeGuardEnd() '''
-		#endif // _«type.name.toUpperCase»_H_
-	'''
-
-	def protected CharSequence generateHeaderIncludes() '''
+	def protected generateHeaderIncludes() '''
 		«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateTypeIncludes»
 		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
 		
 		«type.compilerInfo?.header»
 	'''
 
-	def protected CharSequence generateImplIncludes() '''
+	def protected generateImplIncludes() '''
 		#include "«type.name».h"
 		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
 		#include "«type.name»_gen.cpp"
@@ -57,33 +48,21 @@ abstract class ForteFBTemplate extends ExportTemplate {
 		«type.compilerInfo?.header»
 	'''
 
-	def protected CharSequence generateTypeIncludes(Iterable<VarDeclaration> vars) '''
-		«FOR include : vars.map[it.typeName].sort.toSet»
-			#include "forte_«include.toLowerCase».h"
-			«IF include.startsWith("ANY")»
-				#ERROR type contains variables of type ANY. Please check the usage of these variables as we can not gurantee correct usage on export!
-			«ENDIF»
-		«ENDFOR»
-		«IF vars.exists[array]»
-			#include "forte_array.h"
-		«ENDIF»
-	'''
-
-	def protected CharSequence generateAdapterIncludes(Iterable<AdapterDeclaration> vars) '''
+	def protected generateAdapterIncludes(Iterable<AdapterDeclaration> vars) '''
 		«FOR include : vars.map[it.typeName].sort.toSet»
 			#include "«include».h"
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateFBDeclaration() '''
+	def protected generateFBDeclaration() '''
 		DECLARE_FIRMWARE_FB(«FBClassName»)
 	'''
 
-	def protected CharSequence generateFBDefinition() '''
+	def protected generateFBDefinition() '''
 		DEFINE_FIRMWARE_FB(«FBClassName», «type.name.FORTEString»)
 	'''
 
-	def protected CharSequence generateFBInterfaceDeclaration() '''
+	def protected generateFBInterfaceDeclaration() '''
 		«IF !type.interfaceList.inputVars.empty»
 			static const CStringDictionary::TStringId scm_anDataInputNames[];
 			static const CStringDictionary::TStringId scm_anDataInputTypeIds[];
@@ -94,25 +73,9 @@ abstract class ForteFBTemplate extends ExportTemplate {
 			static const CStringDictionary::TStringId scm_anDataOutputTypeIds[];
 		«ENDIF»
 		
-		«IF !type.interfaceList.eventInputs.empty»
-			«FOR event : type.interfaceList.eventInputs»
-				static const TEventID scm_nEvent«event.name»ID = «type.interfaceList.eventInputs.indexOf(event)»;
-			«ENDFOR»
-			
-			static const TDataIOID scm_anEIWith[];
-			static const TForteInt16 scm_anEIWithIndexes[];
-			static const CStringDictionary::TStringId scm_anEventInputNames[];
-		«ENDIF»
+		«generateFBEventInputInterfaceDecl()»
 		
-		«IF !type.interfaceList.eventOutputs.empty»
-			«FOR event : type.interfaceList.eventOutputs»
-				static const TEventID scm_nEvent«event.name»ID = «type.interfaceList.eventOutputs.indexOf(event)»;
-			«ENDFOR»
-			
-			static const TDataIOID scm_anEOWith[];
-			static const TForteInt16 scm_anEOWithIndexes[];
-			static const CStringDictionary::TStringId scm_anEventOutputNames[];
-		«ENDIF»
+		«generateFBEventOutputInterfaceDecl()»
 		
 		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
 			«FOR adapter : type.interfaceList.sockets»
@@ -122,38 +85,62 @@ abstract class ForteFBTemplate extends ExportTemplate {
 				static const int scm_n«adapter.name»AdpNum = «type.interfaceList.sockets.size + type.interfaceList.plugs.indexOf(adapter)»;
 			«ENDFOR»
 			
-			const SAdapterInstanceDef scm_astAdapterInstances[];
+			static const SAdapterInstanceDef scm_astAdapterInstances[];
 		«ENDIF»
 	'''
 
-	def protected CharSequence generateFBInterfaceDefinition() {
+	def protected generateFBEventOutputInterfaceDecl() '''«IF !type.interfaceList.eventOutputs.empty»
+			«type.interfaceList.eventOutputs.generateEventConstants»
+			
+			«IF hasOutputWith» static const TDataIOID scm_anEOWith[]; «ENDIF»
+			static const TForteInt16 scm_anEOWithIndexes[];
+			static const CStringDictionary::TStringId scm_anEventOutputNames[];
+		«ENDIF»'''
+
+	def protected generateFBEventInputInterfaceDecl() '''«IF !type.interfaceList.eventInputs.empty»
+			«type.interfaceList.eventInputs.generateEventConstants»
+			
+			«IF hasInputWith» static const TDataIOID scm_anEIWith[];«ENDIF»
+			static const TForteInt16 scm_anEIWithIndexes[];
+			static const CStringDictionary::TStringId scm_anEventInputNames[];
+		«ENDIF»'''
+
+	def protected generateEventConstants(List<Event> events) '''«FOR event : events»
+			static const TEventID scm_nEvent«event.name»ID = «events.indexOf(event)»;
+		«ENDFOR»'''
+
+	def protected generateFBInterfaceDefinition() {
 		val inputWith = newArrayList
 		val inputWithIndexes = newArrayList
-		type.interfaceList.eventInputs.forEach[event | {
-			if(event.with.empty) {
-				inputWithIndexes.add(-1)
-			} else {
-				inputWithIndexes.add(inputWith.size)
-				for (With with : event.with) {
-					inputWith.add(type.interfaceList.inputVars.indexOf(with.variables))
+		type.interfaceList.eventInputs.forEach [ event |
+			{
+				if (event.with.empty) {
+					inputWithIndexes.add(-1)
+				} else {
+					inputWithIndexes.add(inputWith.size)
+					for (With with : event.with) {
+						inputWith.add(type.interfaceList.inputVars.indexOf(with.variables))
+					}
+					inputWith.add(255)
 				}
-				inputWith.add(255)
 			}
-		}]
+		]
 		val outputWith = newArrayList
 		val outputWithIndexes = newArrayList
-		type.interfaceList.eventOutputs.forEach[event | {
-			if(event.with.empty) {
-				outputWithIndexes.add(-1)
-			} else {
-				outputWithIndexes.add(outputWith.size)
-				for (With with : event.with) {
-					outputWith.add(type.interfaceList.outputVars.indexOf(with.variables))
+		type.interfaceList.eventOutputs.forEach [ event |
+			{
+				if (event.with.empty) {
+					outputWithIndexes.add(-1)
+				} else {
+					outputWithIndexes.add(outputWith.size)
+					for (With with : event.with) {
+						outputWith.add(type.interfaceList.outputVars.indexOf(with.variables))
+					}
+					outputWith.add(255)
 				}
-				outputWith.add(255)
 			}
-		}]
-		return '''
+		]
+		'''
 			«IF !type.interfaceList.inputVars.empty»
 				const CStringDictionary::TStringId «FBClassName»::scm_anDataInputNames[] = {«type.interfaceList.inputVars.FORTENameList»};
 				
@@ -167,13 +154,17 @@ abstract class ForteFBTemplate extends ExportTemplate {
 			«ENDIF»
 			
 			«IF !type.interfaceList.eventInputs.empty»
-				const TDataIOID «FBClassName»::scm_anEIWith[] = {«inputWith.join(", ")»};
+				«IF !inputWith.empty»
+					const TDataIOID «FBClassName»::scm_anEIWith[] = {«inputWith.join(", ")»};
+				«ENDIF»
 				const TForteInt16 «FBClassName»::scm_anEIWithIndexes[] = {«inputWithIndexes.join(", ")»};
 				const CStringDictionary::TStringId «FBClassName»::scm_anEventInputNames[] = {«type.interfaceList.eventInputs.FORTENameList»};
 			«ENDIF»
 			
 			«IF !type.interfaceList.eventOutputs.empty»
-				const TDataIOID «FBClassName»::scm_anEOWith[] = {«outputWith.join(", ")»};
+				«IF !outputWith.empty»
+					const TDataIOID «FBClassName»::scm_anEOWith[] = {«outputWith.join(", ")»};
+				«ENDIF»
 				const TForteInt16 «FBClassName»::scm_anEOWithIndexes[] = {«outputWithIndexes.join(", ")»};
 				const CStringDictionary::TStringId «FBClassName»::scm_anEventOutputNames[] = {«type.interfaceList.eventOutputs.FORTENameList»};
 			«ENDIF»
@@ -186,51 +177,56 @@ abstract class ForteFBTemplate extends ExportTemplate {
 		'''
 	}
 
-	def protected CharSequence generateFBInterfaceSpecDeclaration() '''
+	def protected generateFBInterfaceSpecDeclaration() '''
 		static const SFBInterfaceSpec scm_stFBInterfaceSpec;
 	'''
 
-	def protected CharSequence generateFBInterfaceSpecDefinition() '''
+	def protected hasInputWith() {
+		type.interfaceList.eventInputs.exists[!it.with.empty]
+	}
+
+	def protected hasOutputWith() {
+		type.interfaceList.eventOutputs.exists[!it.with.empty]
+	}
+
+	def protected generateFBInterfaceSpecDefinition() '''
 		const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpec = {
-		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr«ELSE»scm_anEventInputNames, scm_anEIWith, scm_anEIWithIndexes«ENDIF»,
-		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr«ELSE»scm_anEventOutputNames, scm_anEOWith, scm_anEOWithIndexes«ENDIF»,
+		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventInputNames, «IF hasInputWith»scm_anEIWith«ELSE»nullptr«ENDIF», scm_anEIWithIndexes«ENDIF»,
+		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventOutputNames, «IF hasOutputWith»scm_anEOWith«ELSE»nullptr«ENDIF», scm_anEOWithIndexes«ENDIF»,
 		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scm_anDataInputNames, scm_anDataInputTypeIds«ENDIF»,
-		  «type.interfaceList.outputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scm_anDataOutputNames, scm_anDataOutputTypeIds«ENDIF»,
+		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scm_anDataOutputNames, scm_anDataOutputTypeIds«ENDIF»,
 		  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», «IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»scm_astAdapterInstances«ELSE»nullptr«ENDIF»
 		};
 	'''
 
-	def protected CharSequence generateAccessors(List<VarDeclaration> vars, String function) '''
-		«FOR v : vars»
-			CIEC_«v.typeName» «IF v.array»*«ELSE»&«ENDIF»«v.name»() {
-			  «IF v.array»
-			  	return static_cast<CIEC_«v.typeName»*>(static_cast<CIEC_ARRAY *>(«function»(«vars.indexOf(v)»))[0]); //the first element marks the start of the array
-			  «ELSE»
-			  	return *static_cast<CIEC_«v.typeName»*>(«function»(«vars.indexOf(v)»));
-			  «ENDIF»
-			}
-			
-		«ENDFOR»
+	def protected generateInternalVarDelcaration(BaseFBType baseFBType) '''
+		«IF !baseFBType.internalVars.isEmpty»
+			static const CStringDictionary::TStringId scm_anInternalsNames[];
+			static const CStringDictionary::TStringId scm_anInternalsTypeIds[];
+			static const SInternalVarsInformation scm_stInternalVars;
+		«ENDIF»
 	'''
 
-	def protected CharSequence generateAccessors(List<AdapterDeclaration> adapters) '''
+	def protected generateInternalVarDefinition(BaseFBType baseFBType) '''
+		«IF !baseFBType.internalVars.isEmpty»
+			const CStringDictionary::TStringId «FBClassName»::scm_anInternalsNames[] = {«baseFBType.internalVars.FORTENameList»};
+			const CStringDictionary::TStringId «FBClassName»::scm_anInternalsTypeIds[] = {«baseFBType.internalVars.FORTETypeList»};
+			const SInternalVarsInformation «FBClassName»::scm_stInternalVars = {«baseFBType.internalVars.size», scm_anInternalsNames, scm_anInternalsTypeIds};
+		«ENDIF»
+	'''
+
+	def protected generateAccessors(List<AdapterDeclaration> adapters) '''
 		«FOR adapter : adapters»
-			FORTE_«adapter.typeName»& «adapter.name»() {
+			FORTE_«adapter.typeName»& «EXPORT_PREFIX»«adapter.name»() {
 			  return (*static_cast<FORTE_«adapter.typeName»*>(m_apoAdapters[«adapters.indexOf(adapter)»]));
 			};
 			
 		«ENDFOR»
 	'''
 
-	def protected CharSequence getFORTENameList(List<? extends INamedElement> elements) {
-		return elements.map[name.FORTEString].join(", ")
-	}
+	def protected getFBClassName() '''FORTE_«type.name»'''
 
-	def protected CharSequence getFORTETypeList(List<? extends VarDeclaration> elements) {
-		return elements.map['''«IF it.array»«"ARRAY".FORTEString», «it.arraySize», «ENDIF»«it.type.name.FORTEString»'''].join(", ")
-	}
+	def protected generateBasicFBDataArray(
+		BaseFBType baseType) '''FORTE_BASIC_FB_DATA_ARRAY(«baseType.interfaceList.eventOutputs.size», «baseType.interfaceList.inputVars.size», «baseType.interfaceList.outputVars.size», «baseType.internalVars.size», «type.interfaceList.sockets.size + baseType.interfaceList.plugs.size»);'''
 
-	def protected CharSequence getFBClassName() '''FORTE_«type.name»'''
-
-	def protected CharSequence getFORTEString(String s) '''g_nStringId«s»'''
 }

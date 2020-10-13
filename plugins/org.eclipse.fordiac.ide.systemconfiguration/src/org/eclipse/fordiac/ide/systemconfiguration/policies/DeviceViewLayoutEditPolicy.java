@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012, 2013, 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH, 
+ * Copyright (c) 2008, 2012, 2013, 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - allowed resource drop on on whole interfaces   
+ *   Alois Zoitl - allowed resource drop on on whole interfaces
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.policies;
 
@@ -25,8 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceMoveCommand;
-import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
-import org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -40,15 +38,15 @@ import org.eclipse.gef.requests.CreateRequest;
  * The Class DeviceViewLayoutEditPolicy.
  */
 public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
+
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
-
 		return new ModifiedNonResizeableEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy#getConstraintFor
 	 * (org.eclipse.draw2d.geometry.Point)
@@ -60,7 +58,7 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy#getConstraintFor
 	 * (org.eclipse.draw2d.geometry.Rectangle)
@@ -75,8 +73,8 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		Object childClass = request.getNewObjectType();
 		if (childClass instanceof ResourceTypeEntry) {
 			ResourceTypeEntry type = (ResourceTypeEntry) request.getNewObjectType();
-			if (getHost() instanceof DeviceEditPart) {
-				return new ResourceCreateCommand(type, ((DeviceEditPart) getHost()).getModel(), false);
+			if (getHost().getModel() instanceof Device) {
+				return new ResourceCreateCommand(type, (Device) getHost().getModel(), false);
 			}
 		}
 		return null;
@@ -97,8 +95,8 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	@Override
 	protected Command createAddCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
-		if (child instanceof ResourceEditPart) {
-			Device targetDevice = ((DeviceEditPart) getHost()).getModel();
+		if (child.getModel() instanceof Resource) {
+			Device targetDevice = (Device) getHost().getModel();
 			return new ResourceMoveCommand((Resource) child.getModel(), targetDevice,
 					targetDevice.getResource().size());
 		}
@@ -107,7 +105,7 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	/**
 	 * Returns the command contribution to an alignment request
-	 * 
+	 *
 	 * @param request the alignment request
 	 * @return the contribution to the alignment
 	 */

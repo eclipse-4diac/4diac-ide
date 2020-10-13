@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2015 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -46,10 +46,10 @@ public class MonitoringPerspective implements IPerspectiveFactory {
 		factory.addShowViewShortcut(IPageLayout.ID_OUTLINE);
 		factory.addShowViewShortcut(IPageLayout.ID_PROP_SHEET);
 
+		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard"); //$NON-NLS-1$
 		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"); //$NON-NLS-1$
 		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"); //$NON-NLS-1$
 		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.fbtypeeditor.wizard.NewFBTypeWizard"); //$NON-NLS-1$
-		factory.addPerspectiveShortcut("org.eclipse.fordiac.ide.deployment.ui.perspectives.DeploymentPerspective"); //$NON-NLS-1$
 	}
 
 }

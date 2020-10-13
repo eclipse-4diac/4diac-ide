@@ -16,11 +16,8 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -32,16 +29,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 class SubAppNetworkImporter extends FBNetworkImporter {
 
-	public SubAppNetworkImporter(Palette palette, XMLStreamReader reader) {
-		super(palette, reader);
+	public SubAppNetworkImporter(CommonElementImporter importer) {
+		super(importer);
 	}
 
-	public SubAppNetworkImporter(Palette palette, InterfaceList interfaceList, XMLStreamReader reader) {
-		super(palette, LibraryElementFactory.eINSTANCE.createFBNetwork(), interfaceList, reader);
+	public SubAppNetworkImporter(CommonElementImporter importer, InterfaceList interfaceList) {
+		super(importer, LibraryElementFactory.eINSTANCE.createFBNetwork(), interfaceList);
 	}
 
-	protected SubAppNetworkImporter(Palette palette, FBNetwork fbNetwork, XMLStreamReader reader) {
-		super(palette, fbNetwork, reader);
+	protected SubAppNetworkImporter(CommonElementImporter importer, FBNetwork fbNetwork) {
+		super(importer, fbNetwork);
 	}
 
 	@Override
@@ -96,38 +93,41 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 		if (null != subEntry) {
 			subApp.setPaletteEntry(subEntry);
-			subApp.setInterface(EcoreUtil.copy(subEntry.getSubApplicationType().getInterfaceList()));
+			subApp.setInterface(subEntry.getSubApplicationType().getInterfaceList().copy());
 		} else {
 			// TODO add error marker
 			// put an empty interface list so that the system can load
 			subApp.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		}
-		configureParameters(subApp.getInterface(), LibraryElementTags.SUBAPP_ELEMENT);
+		parseFBChildren(subApp, LibraryElementTags.SUBAPP_ELEMENT);
 	}
 
 	private void parseUntypedSubapp(SubApp subApp) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.SUBAPP_ELEMENT, name -> {
 			switch (name) {
 			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT:
-				SubAppTImporter interfaceImporter = new SubAppTImporter(getReader(), getPalette());
+				SubAppTImporter interfaceImporter = new SubAppTImporter(this);
 				subApp.setInterface(
 						interfaceImporter.parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
-				break;
+				return true;
 			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
-				subApp.setSubAppNetwork(new SubAppNetworkImporter(getPalette(), subApp.getInterface(), getReader())
+				subApp.setSubAppNetwork(new SubAppNetworkImporter(this, subApp.getInterface())
 						.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT));
-				break;
+				return true;
 			case LibraryElementTags.PARAMETER_ELEMENT:
-				VarDeclaration paramter = parseParameter();
-				VarDeclaration vInput = getVarNamed(subApp.getInterface(), paramter.getName(), true);
+				VarDeclaration parameter = parseParameter();
+				VarDeclaration vInput = getVarNamed(subApp.getInterface(), parameter.getName(), true);
 				if (null != vInput) {
-					vInput.setValue(paramter.getValue());
+					vInput.setValue(parameter.getValue());
 				}
-				break;
+				return true;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(subApp);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
 			default:
 				return false;
 			}
-			return true;
 		});
 	}
 

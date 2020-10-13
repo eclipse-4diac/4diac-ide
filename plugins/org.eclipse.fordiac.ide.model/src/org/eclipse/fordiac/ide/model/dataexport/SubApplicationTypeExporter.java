@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
-class SubApplicationTypeExporter extends AbstractTypeExporter {
+class SubApplicationTypeExporter extends AbstractBlockTypeExporter {
 
 	SubApplicationTypeExporter(SubApplicationTypePaletteEntry entry) {
 		super(entry.getSubApplicationType());
@@ -46,7 +46,7 @@ class SubApplicationTypeExporter extends AbstractTypeExporter {
 	}
 
 	@Override
-	protected void createTypeSpecificXMLEntries() throws XMLStreamException {
+	protected void createBlockTypeSpecificXMLEntries() throws XMLStreamException {
 		new FBNetworkExporter(this).createFBNetworkElement(getType().getFBNetwork());
 	}
 

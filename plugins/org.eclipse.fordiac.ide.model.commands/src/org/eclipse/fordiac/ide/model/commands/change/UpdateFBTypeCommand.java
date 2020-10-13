@@ -79,7 +79,7 @@ public class UpdateFBTypeCommand extends Command {
 
 	public UpdateFBTypeCommand(FBNetworkElement fbnElement, PaletteEntry entry) {
 		this.fbnElement = fbnElement;
-		network = (FBNetwork) fbnElement.eContainer();
+		network = fbnElement.getFbNetwork();
 		if ((entry instanceof FBTypePaletteEntry) || (entry instanceof SubApplicationTypePaletteEntry)) {
 			this.entry = entry;
 		} else {
@@ -307,7 +307,7 @@ public class UpdateFBTypeCommand extends Command {
 
 	private void checkSourceParam(VarDeclaration var) {
 		VarDeclaration srcVar = fbnElement.getInterface().getVariable(var.getName());
-		if ((null != srcVar) && (null != srcVar.getValue()) && (null != srcVar.getValue().getValue())) {
+		if ((null != srcVar) && (null != srcVar.getValue())) {
 			var.getValue().setValue(srcVar.getValue().getValue());
 		}
 	}

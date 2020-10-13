@@ -143,8 +143,10 @@ public class FBNetworkItemProvider extends ItemProviderAdapter implements IEditi
 		case LibraryElementPackage.FB_NETWORK__NETWORK_ELEMENTS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**
@@ -172,6 +174,12 @@ public class FBNetworkItemProvider extends ItemProviderAdapter implements IEditi
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.FB_NETWORK__NETWORK_ELEMENTS,
 				LibraryElementFactory.eINSTANCE.createAdapterFB()));
+
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.FB_NETWORK__NETWORK_ELEMENTS,
+				LibraryElementFactory.eINSTANCE.createDemultiplexer()));
+
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.FB_NETWORK__NETWORK_ELEMENTS,
+				LibraryElementFactory.eINSTANCE.createMultiplexer()));
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.FB_NETWORK__DATA_CONNECTIONS,
 				LibraryElementFactory.eINSTANCE.createDataConnection()));

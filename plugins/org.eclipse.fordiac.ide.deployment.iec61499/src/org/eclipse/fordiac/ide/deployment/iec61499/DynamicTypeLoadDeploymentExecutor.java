@@ -46,7 +46,6 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
 import org.eclipse.fordiac.ide.model.Annotations;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -267,19 +266,18 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private void queryParameter(Resource res, FBNetworkElement fb, VarDeclaration inVar) {
-		@SuppressWarnings("nls")
-		String request = MessageFormat.format(QUERY_PARAMETER, getNextId(), fb.getName() + "." + inVar.getName());
+		String request = MessageFormat.format(QUERY_PARAMETER, getNextId(), fb.getName() + "." + inVar.getName()); //$NON-NLS-1$
 		try {
 			String result = sendREQ(res.getName(), request);
 			if (result != null) {
-				createParameter(res, inVar, parseResponse(result));
+				createParameter(inVar, parseResponse(result));
 			}
 		} catch (Exception e) {
 			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Parameter")); //$NON-NLS-1$
 		}
 	}
 
-	private static void createParameter(Resource res, VarDeclaration inVar, Response response) {
+	private static void createParameter(VarDeclaration inVar, Response response) {
 		if (null != response.getConnection()) {
 			Value value = LibraryElementFactory.eINSTANCE.createValue();
 			value.setValue(response.getConnection().getDestination());
@@ -394,13 +392,12 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				result = result.replaceFirst("</Response>", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				if (!result.contains("Reason=\"UNSUPPORTED_TYPE\"") && !result.contains("Reason=\"UNSUPPORTED_CMD\"")) { //$NON-NLS-1$ //$NON-NLS-2$
 					AutomationSystem system = res.getDevice().getAutomationSystem();
-					Path path = Paths.get(system.getProject().getLocation() + File.separator + "generated" //$NON-NLS-1$
+					Path path = Paths.get(system.getSystemFile().getLocation() + File.separator + "generated" //$NON-NLS-1$
 							+ File.separator + typeName + "." + extension); //$NON-NLS-1$
 					File file = new File(path.toString());
 					file.getParentFile().mkdirs();
 					Files.write(path, result.getBytes(), StandardOpenOption.CREATE);
-					Palette palette = system.getPalette();
-					TypeLibrary.refreshPalette(palette);
+					TypeLibrary.refreshTypeLib(system.getSystemFile());
 				}
 			}
 		} catch (Exception e) {

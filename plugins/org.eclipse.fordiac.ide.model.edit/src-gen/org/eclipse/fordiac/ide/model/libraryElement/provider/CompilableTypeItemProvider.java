@@ -131,8 +131,10 @@ public class CompilableTypeItemProvider extends LibraryElementItemProvider {
 		case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**

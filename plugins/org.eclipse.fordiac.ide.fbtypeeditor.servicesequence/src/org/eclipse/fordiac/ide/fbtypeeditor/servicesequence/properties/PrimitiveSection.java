@@ -58,7 +58,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 	private Button buttonFalse;
 	private Group qiGroup;
 
-	protected PrimitiveEditPart editPart;
+	private PrimitiveEditPart editPart;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {

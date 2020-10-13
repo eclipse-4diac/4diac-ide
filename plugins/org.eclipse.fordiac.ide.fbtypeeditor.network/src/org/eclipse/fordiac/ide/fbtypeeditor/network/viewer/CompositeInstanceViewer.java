@@ -50,7 +50,7 @@ public class CompositeInstanceViewer extends DiagramEditor {
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		return new CompositeViewerEditPartFactory(this, fb, fbEditPart, getZoomManger());
+		return new CompositeViewerEditPartFactory(this, fb, fbEditPart);
 	}
 
 	@Override

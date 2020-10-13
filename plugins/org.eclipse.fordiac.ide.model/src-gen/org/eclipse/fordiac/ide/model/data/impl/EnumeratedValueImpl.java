@@ -154,8 +154,9 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 			return getComment();
 		case DataPackage.ENUMERATED_VALUE__NAME:
 			return getName();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -172,8 +173,10 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 		case DataPackage.ENUMERATED_VALUE__NAME:
 			setName((String) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -190,8 +193,10 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 		case DataPackage.ENUMERATED_VALUE__NAME:
 			setName(NAME_EDEFAULT);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -206,8 +211,9 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 		case DataPackage.ENUMERATED_VALUE__NAME:
 			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

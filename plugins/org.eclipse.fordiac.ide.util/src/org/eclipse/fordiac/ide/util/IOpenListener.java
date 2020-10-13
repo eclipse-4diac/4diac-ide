@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.util;
 
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorPart;
@@ -47,7 +47,7 @@ public interface IOpenListener extends IObjectActionDelegate {
 	/**
 	 * Get the class this open listner handles
 	 */
-	Class<? extends I4DIACElement> getHandledClass();
+	Class<? extends EObject> getHandledClass();
 
 	/**
 	 * Get the id of the open listener as it is registered in the plugin's extension

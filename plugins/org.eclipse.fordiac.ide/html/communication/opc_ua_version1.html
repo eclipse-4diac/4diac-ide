@@ -22,11 +22,11 @@
 <h1 id="topOfPage">OPC UA with IEC 61499 Tutorial (from v 1.11.0)</h1>
 <p>This tutorial shows how you can use <a href="https://en.wikipedia.org/wiki/OPC_Unified_Architecture" target="_blank">OPC UA</a> in an IEC 61499 Application using available FBs. You should first complete the <a href="../../html/4diacIDE/use4diacLocally.html" target="_blank">First Steps in 4DIAC Tutorial</a> to get familiar with the 4diac IDE. FORTE uses the <a href="http://open62541.org/" target="_blank">open62541</a> OPC UA stack which is open source and can also be used in commercial projects free of charge.</p>
 
-<p>After version 1.11.0 of 4diac, the OPC UA module has changed its API, so applications developed before this version won't be compatible. The changes give more stability to 4diac FORTE and also brings new features. The OPC UA module can be used with v0.3.0 or v1.0 of open62541.</p>
+<p>After version 1.11.0 of 4diac, the OPC UA module has changed its API, so applications developed before this version won't be compatible. The changes give more stability to 4diac FORTE and also brings new features. The OPC UA module can be used with v1.0 of open62541.</p>
 
 <p>Tasks in this tutorial:</p>
 <ol>
-	<li><a href="#build">Build FORTE with open62541 (Release: v0.3.0)</a></li>
+	<li><a href="#build">Build FORTE with open62541</a></li>
 	<li><a href="#variables">Provide OPC UA variables to clients</a></li>
 	<li><a href="#methods">Offer an OPC UA method to be called by clients</a></li>
 	<li><a href="#client">Call a remote method from a IEC 61499 Application</a></li>
@@ -45,9 +45,9 @@
 $ git clone -b develop https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte forte
 $ cd forte &amp;&amp; mkdir build</div>
 	</li>
-	<li>Download the source for open62541 from <a href="https://github.com/open62541/open62541" target="_blank">https://github.com/open62541/open62541</a>. The last command depends on the version of open62541 you want to use. You either can have --branch=v0.3.0  or --branch=v1.0: 
+	<li>Download the source for open62541 from <a href="https://github.com/open62541/open62541" target="_blank">https://github.com/open62541/open62541</a>: 
 		<div class="code">$ cd ~/4diac
-$ git clone https://github.com/open62541/open62541.git --branch=v0.3.0  open62541</div>
+$ git clone https://github.com/open62541/open62541.git --branch=v1.0  open62541</div>
 	</li>
 	<li>Build open62541. If you are running the code on production devices we suggest setting the build type to <span class="specificText">Release</span>.
 		<div class="code">$ cd ~/4diac/open62541 &amp;&amp; mkdir build &amp;&amp; cd $_
@@ -55,8 +55,7 @@ $ cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Debug -DUA_ENABLE_AMALGAMATION
 $ make -j</div>
 	</li>
 	<li>Set FORTE to include open62541. If you are running the code on production devices we suggesst setting the build type to <span class="specificText">Release</span>.
-	    If you are using the v1.0 branch of open62541 make sure that you set the correct value for <span class="specificText">FORTE_COM_OPC_UA_MASTER_BRANCH=ON</span>
-		<div class="code">$ cd ~/4diac/forte/build
+	    <div class="code">$ cd ~/4diac/forte/build
 $ cmake -DCMAKE_BUILD_TYPE=Debug \
 -DFORTE_ARCHITECTURE=Posix \
 -DFORTE_MODULE_CONVERT=ON \
@@ -72,9 +71,9 @@ $ make -j</div>
 
 <h3>Windows with Visual Studio</h3>
 <ol>
-	<li>Use a Git tool under Windows and download the FORTE source from <a href="http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git" target="_blank">http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git</a> and use the develop branch. The following steps show the commands for <a href="https://git-for-windows.github.io/" target="_blank">Git Bash</a>. The second command depends on the version of open62541 you want to use. You either can have --branch=v0.3.0  or --branch=v1.0:
+	<li>Use a Git tool under Windows and download the FORTE source from <a href="http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git" target="_blank">http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git</a> and use the develop branch. The following steps show the commands for <a href="https://git-for-windows.github.io/" target="_blank">Git Bash</a>. 
 		<div class="code">$ mkdir "$HOME/4diac" &amp;&amp; cd "$HOME/4diac"
-$ git clone https://github.com/open62541/open62541.git --branch=v0.3.0 open62541
+$ git clone https://github.com/open62541/open62541.git --branch=v1.0 open62541
 $ mkdir build &amp;&amp; cd "build"</div>
 	</li>
 	<li>Use CMake to generate all the build files. Download and install: <a href="https://cmake.org/download/" target="_blank">https://cmake.org/download/</a>
@@ -92,7 +91,7 @@ $ mkdir build &amp;&amp; cd "build"</div>
 	<li>Press <span class="button4diac">Configure</span>, then <span class="button4diac">Generate</span> and then <span class="button4diac">Open Project</span></li>
 	<li>Go to <span class="menu4diac">Build &rarr; Build Solution</span>. You may need to execute the command multiple times until all projects are build successfully. This will create the open62541 library under <span class="folderLocation">$HOME/4diac/open62541/build/bin/Release</span> and the amalgamated header file <span class="fileLocation">open62541.h</span> in <span class="folderLocation">$HOME/4diac/open62541/build/</span>
 	</li>
-	<li>Switch to the FORTE CMake window to include open62541. If you want to use v1.0 of the open62541 library, you should also add FORTE_COM_OPC_UA_MASTER_BRANCH=ON:
+	<li>Switch to the FORTE CMake window to include open62541:
 		<ul>
 			<li>FORTE_COM_OPC_UA=ON</li>
 			<li>FORTE_COM_OPC_UA_INCLUDE_DIR=C:\Users\USER\4diac\open62541\build</li>
@@ -121,7 +120,9 @@ $ mkdir build &amp;&amp; cd "build"</div>
 		  <li>CALL_METHOD</li>
 		  <li>SUBSCRIBE</li>
 		  <li>CREATE_OBJECT</li>
-		  <li>DELETE_OBJECT</li> 
+		  <li>DELETE_OBJECT</li>
+		  <li>CREATE_VARIABLE</li>
+		  <li>DELETE_VARIABLE</li> 
 		</ul>
 	</li>
 
@@ -248,6 +249,18 @@ $ mkdir build &amp;&amp; cd "build"</div>
 		<td>PUBLISH_0</td>
 		<td>Number of Pairs should be 1. Browsepath MUST be provided. NodeId is optional</td>
 	</tr>
+	 <tr>
+	 	<td>Local</td>
+		<td>CREATE_VARIABLE</td>
+		<td>PUBLISH_0</td>
+		<td>Number of Pairs should be 3. The first one is for the variable type (Browsename and/or NodeId must be provided. If both are provided they should match). The second one is for data value type of the created variable (Browsename and/or NodeId must be provided. If both are provided they should match). The third one is the path of instance to create (Browsepath MUST be provided. NodeId is optional)</td>
+	</tr>
+	<tr>
+		<td>Local</td>
+		<td>DELETE_VARIABLE</td>
+		<td>PUBLISH_0</td>
+		<td>Number of Pairs should be 1. Browsepath MUST be provided. NodeId is optional</td>
+	</tr>
 	<tr>	
 		<td>Remote</td>
 		<td>READ</td>
@@ -289,6 +302,18 @@ $ mkdir build &amp;&amp; cd "build"</div>
 		<td>DELETE_OBJECT</td>
 		<td>X</td>
 		<td>Not allowed to delete objects remotely</td>
+	</tr>
+	<tr>
+		<td>Remote</td>
+		<td>CREATE_VARIABLE</td>
+		<td>X</td>
+		<td>Not allowed to create variables remotely</td>
+	</tr>
+	<tr>
+		<td>Remote</td>
+		<td>DELETE_OBJECT</td>
+		<td>X</td>
+		<td>Not allowed to delete variables remotely</td>
 	</tr>
 </table>
 

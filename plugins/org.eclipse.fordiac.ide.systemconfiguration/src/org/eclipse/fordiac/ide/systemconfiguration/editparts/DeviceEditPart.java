@@ -59,21 +59,17 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Color;
 
 public class DeviceEditPart extends AbstractPositionableElementEditPart implements NodeEditPart {
-	/** necessary that the gradient pattern can be scaled accordingly */
-	private ZoomManager zoomManager;
 	private ResourceContainer resContainer;
 	private DiagramFontChangeListener fontChangeListener;
 
-	DeviceEditPart(ZoomManager zoomManager) {
+	DeviceEditPart() {
 		super();
 		setConnectable(true);
-		this.zoomManager = zoomManager;
 	}
 
 	@Override
@@ -231,7 +227,6 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		private Label typeLabel;
 		private Figure dataInputs = new Figure();
 		private Figure contentPane;
-		private Color deviceColor;
 		private AdvancedLineBorder upperSeparator;
 		private AdvancedLineBorder lowerSeparator;
 
@@ -243,28 +238,14 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			return InteractionStyleFigure.REGION_CONNECTION; // connection
 		}
 
-		private RoundedRectangle deviceRectangle = new RoundedRectangle() {
-			@Override
-			protected void fillShape(Graphics graphics) {
-				Rectangle boundingRect = getBounds().getCopy();
-				boundingRect.scale(zoomManager.getZoom());
-				graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
-			}
-
-			@Override
-			protected void outlineShape(Graphics graphics) {
-				Color color = graphics.getForegroundColor();
-				graphics.setForegroundColor(deviceColor);
-				super.outlineShape(graphics);
-				graphics.setForegroundColor(color);
-			}
-		};
+		private RoundedRectangle deviceRectangle = new RoundedRectangle();
 
 		public DeviceFigure() {
 			setLayoutManager(new ToolbarLayout());
 			createInstanceNameLabel(this);
 
-			deviceRectangle.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+			deviceRectangle
+					.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 			ToolbarLayout bottomLayout = new ToolbarLayout();
 			bottomLayout.setStretchMinorAxis(true);
 			deviceRectangle.setLayoutManager(bottomLayout);
@@ -294,7 +275,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 
 		@Override
 		public void setBackgroundColor(Color bg) {
-			deviceColor = ColorHelper.darker(bg);
+			Color deviceColor = ColorHelper.darker(bg);
 			upperSeparator.setColor(deviceColor);
 			lowerSeparator.setColor(deviceColor);
 			super.setBackgroundColor(bg);

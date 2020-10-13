@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
@@ -44,21 +43,18 @@ public class ECCSelectAllAction extends SelectAllAction {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private List getSelectableEditParts(GraphicalViewer viewer) {
-		List selectableChildren = new ArrayList();
-		List children = viewer.getContents().getChildren();
-		for (Iterator iter = children.iterator(); iter.hasNext();) {
-			Object child = iter.next();
-			if (child instanceof ECStateEditPart) {
-				EditPart childPart = (EditPart) child;
-				if (childPart.isSelectable() == true) {
-					selectableChildren.add(childPart);
-					selectableChildren.addAll(((ECStateEditPart) childPart).getSourceConnections());
-				}
+	@SuppressWarnings("unchecked") // GEF methods return children editparts
+	private static List<EditPart> getSelectableEditParts(GraphicalViewer viewer) {
+		List<EditPart> selectableChildren = new ArrayList<>();
+
+		List<EditPart> children = viewer.getContents().getChildren();
+
+		for (EditPart child : children) {
+			if ((child instanceof ECStateEditPart) && child.isSelectable()) {
+				selectableChildren.add(child);
+				selectableChildren.addAll(((ECStateEditPart) child).getSourceConnections());
 			}
 		}
-
 		return selectableChildren;
 	}
 

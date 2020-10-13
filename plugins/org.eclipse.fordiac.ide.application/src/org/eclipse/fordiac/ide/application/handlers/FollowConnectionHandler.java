@@ -21,11 +21,13 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
+import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -40,6 +42,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -48,13 +51,13 @@ public class FollowConnectionHandler extends AbstractHandler {
 	private static class OppositeSelectionDialog extends PopupDialog {
 
 		private final List<IInterfaceElement> opposites;
-		private final FBNetworkEditor editor;
+		private final GraphicalViewer viewer;
 
-		public OppositeSelectionDialog(Shell parent, List<IInterfaceElement> opposites, FBNetworkEditor editor) {
+		public OppositeSelectionDialog(Shell parent, List<IInterfaceElement> opposites, GraphicalViewer viewer) {
 			super(parent, INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false,
 					Messages.FBPaletteViewer_SelectConnectionEnd, null);
 			this.opposites = opposites;
-			this.editor = editor;
+			this.viewer = viewer;
 		}
 
 		@Override
@@ -90,7 +93,7 @@ public class FollowConnectionHandler extends AbstractHandler {
 			listViewer.setInput(opposites.toArray());
 
 			listViewer.addSelectionChangedListener(
-					event -> editor.selectElement(event.getStructuredSelection().getFirstElement()));
+					event -> selectElement(event.getStructuredSelection().getFirstElement(), viewer));
 
 			// on enter close the view
 			listViewer.getControl().addKeyListener(new KeyListener() {
@@ -110,19 +113,33 @@ public class FollowConnectionHandler extends AbstractHandler {
 
 			return dialogArea;
 		}
+
+	}
+
+	private static void selectElement(Object element, GraphicalViewer viewer) {
+		EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
+		if (null != editPart) {
+			if (viewer instanceof AdvancedScrollingGraphicalViewer) {
+				((AdvancedScrollingGraphicalViewer) viewer).selectAndRevealEditPart(editPart);
+			} else {
+				viewer.select(editPart);
+				viewer.reveal(editPart);
+			}
+		}
 	}
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		FBNetworkEditor editor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
+		IEditorPart editor = HandlerUtil.getActiveEditor(event);
+		GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 
 		List<IInterfaceElement> opposites = getConnectionOposites(HandlerUtil.getCurrentSelection(event));
 
 		if (!opposites.isEmpty()) {
 			if (opposites.size() == 1) {
-				editor.selectElement(opposites.get(0));
+				selectElement(opposites.get(0), viewer);
 			} else {
-				showOppositeSelectionDialog(opposites, event, editor);
+				showOppositeSelectionDialog(opposites, event, viewer);
 			}
 		}
 		return Status.OK_STATUS;
@@ -162,10 +179,10 @@ public class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	private static void showOppositeSelectionDialog(List<IInterfaceElement> opposites, ExecutionEvent event,
-			FBNetworkEditor editor) throws ExecutionException {
+			GraphicalViewer viewer) throws ExecutionException {
 
 		OppositeSelectionDialog dialog = new OppositeSelectionDialog(HandlerUtil.getActiveShellChecked(event),
-				opposites, editor);
+				opposites, viewer);
 
 		dialog.open();
 	}

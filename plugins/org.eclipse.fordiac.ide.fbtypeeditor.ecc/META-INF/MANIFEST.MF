@@ -15,17 +15,19 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.text,
  org.eclipse.xtext.ui,
  org.eclipse.fordiac.ide.model.commands,
- org.eclipse.fordiac.ide.typemanagement
+ org.eclipse.fordiac.ide.typemanagement,
+ org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.12.2.qualifier
+Bundle-Version: 1.13.0.qualifier
 Bundle-Name: ECC Editor (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.ecc;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.ecc,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands,
+ org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.xtext

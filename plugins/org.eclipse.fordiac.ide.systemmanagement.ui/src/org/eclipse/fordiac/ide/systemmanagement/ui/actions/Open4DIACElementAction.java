@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2018 fortiss GmbH, Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -86,7 +85,7 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 				obj = ((Segment) refObject).eContainer();
 			}
 
-			IEditorPart editor = OpenListenerManager.openEditor((I4DIACElement) obj);
+			IEditorPart editor = OpenListenerManager.openEditor((EObject) obj);
 			AbstractEditorLinkHelper.selectObject(editor, refObject);
 		}
 	}

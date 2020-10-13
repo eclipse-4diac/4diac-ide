@@ -24,10 +24,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -46,20 +46,17 @@ import org.w3c.dom.NodeList;
 
 public final class DEVImporter extends TypeImporter {
 
-	private final Palette palette;
-
-	public DEVImporter(final Palette palette) {
-		super();
-		this.palette = palette;
+	public DEVImporter(IFile typeFile) {
+		super(typeFile);
 	}
 
 	@Override
-	protected DeviceType getType() {
-		return (DeviceType) super.getType();
+	public DeviceType getElement() {
+		return (DeviceType) super.getElement();
 	}
 
 	@Override
-	protected LibraryElement createType() {
+	protected LibraryElement createRootModelElement() {
 		return LibraryElementFactory.eINSTANCE.createDeviceType();
 	}
 
@@ -69,31 +66,31 @@ public final class DEVImporter extends TypeImporter {
 	}
 
 	@Override
-	protected IChildHandler getTypeChildrenHandler() {
+	protected IChildHandler getBaseChildrenHandler() {
 		return name -> {
 			switch (name) {
 			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getType());
+				parseIdentification(getElement());
 				break;
 			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getType());
+				parseVersionInfo(getElement());
 				break;
 			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				parseCompilerInfo(getType());
+				parseCompilerInfo(getElement());
 				break;
 			case LibraryElementTags.VAR_DECLARATION_ELEMENT:
 				VarDeclaration v = parseVarDeclaration();
 				v.setIsInput(true);
-				getType().getVarDeclaration().add(v);
+				getElement().getVarDeclaration().add(v);
 				break;
 			case LibraryElementTags.RESOURCETYPE_NAME_ELEMENT:
 				// TODO __gebenh import "supported Resourcetypes"
 				break;
 			case LibraryElementTags.RESOURCE_ELEMENT:
-				getType().getResource().add(parseResource());
+				getElement().getResource().add(parseResource());
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				getType().setFBNetwork(new ResDevFBNetworkImporter(palette, getType().getVarDeclaration(), getReader())
+				getElement().setFBNetwork(new ResDevFBNetworkImporter(this, getElement().getVarDeclaration())
 						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
 				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
@@ -124,7 +121,7 @@ public final class DEVImporter extends TypeImporter {
 
 		String resType = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != resType) {
-			res.setPaletteEntry(palette.getResourceTypeEntry(resType));
+			res.setPaletteEntry(getPalette().getResourceTypeEntry(resType));
 		} else {
 			throw new TypeImportException(Messages.DEVImporter_ERROR_ResourceTypeHasToBeSet);
 		}
@@ -144,7 +141,7 @@ public final class DEVImporter extends TypeImporter {
 				res.getVarDeclarations().add(parseParameter());
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				res.setFBNetwork(new ResDevFBNetworkImporter(palette, res.getVarDeclarations(), getReader())
+				res.setFBNetwork(new ResDevFBNetworkImporter(this, res.getVarDeclarations())
 						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
 				break;
 			default:
@@ -202,7 +199,7 @@ public final class DEVImporter extends TypeImporter {
 		attributeDeclaration.setComment(getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE));
 		attributeDeclaration.setInitialValue(getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE));
 		attributeDeclaration.setType(BaseType1.getByName(getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE)));
-		getType().getAttributeDeclarations().add(attributeDeclaration);
+		getElement().getAttributeDeclarations().add(attributeDeclaration);
 	}
 
 	private void parseDeviceTypeAttribute() {
@@ -214,7 +211,7 @@ public final class DEVImporter extends TypeImporter {
 	private void parseProfile() {
 		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (null != value) {
-			getType().setProfile(value);
+			getElement().setProfile(value);
 		}
 	}
 

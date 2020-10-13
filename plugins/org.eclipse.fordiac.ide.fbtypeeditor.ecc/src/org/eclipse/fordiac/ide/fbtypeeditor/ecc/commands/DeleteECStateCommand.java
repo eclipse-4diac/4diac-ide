@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2013, 2015 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,12 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
-import java.util.Iterator;
-
-import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
-import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -44,7 +40,7 @@ public class DeleteECStateCommand extends Command {
 
 	/**
 	 * Instantiates a new delete ec state command.
-	 * 
+	 *
 	 * @param state the state
 	 */
 	public DeleteECStateCommand(final ECState state) {
@@ -61,37 +57,28 @@ public class DeleteECStateCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
 	public void execute() {
 
 		deleteActions = new CompoundCommand();
-		for (Iterator<?> iterator = state.getECAction().iterator(); iterator.hasNext();) {
-			ECAction ecAction = (ECAction) iterator.next();
-			deleteActions.add(new DeleteECActionCommand(ecAction));
-		}
-
+		state.getECAction().forEach(action -> deleteActions.add(new DeleteECActionCommand(action)));
 		if (deleteActions.canExecute()) {
 			deleteActions.execute();
 		}
 
 		deleteInTransitions = new CompoundCommand();
-		for (Iterator<?> iterator = state.getInTransitions().iterator(); iterator.hasNext();) {
-			ECTransition transition = (ECTransition) iterator.next();
-			DeleteTransitionCommand cmd = new DeleteTransitionCommand(transition);
-			deleteInTransitions.add(cmd);
-		}
+		state.getInTransitions()
+				.forEach(transition -> deleteInTransitions.add(new DeleteTransitionCommand(transition)));
 		if (deleteInTransitions.canExecute()) {
 			deleteInTransitions.execute();
 		}
+
 		deleteOutTransitions = new CompoundCommand();
-		for (Iterator<?> iterator = state.getOutTransitions().iterator(); iterator.hasNext();) {
-			ECTransition transition = (ECTransition) iterator.next();
-			DeleteTransitionCommand cmd = new DeleteTransitionCommand(transition);
-			deleteOutTransitions.add(cmd);
-		}
+		state.getOutTransitions()
+				.forEach(transition -> deleteOutTransitions.add(new DeleteTransitionCommand(transition)));
 		if (deleteOutTransitions.canExecute()) {
 			deleteOutTransitions.execute();
 		}
@@ -106,7 +93,7 @@ public class DeleteECStateCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -125,7 +112,7 @@ public class DeleteECStateCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override

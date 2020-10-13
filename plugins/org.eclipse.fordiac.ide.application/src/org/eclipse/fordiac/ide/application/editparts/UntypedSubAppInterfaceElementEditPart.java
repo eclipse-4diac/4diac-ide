@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017, 2018 fortiss GmbH
- * 				 2018 - 2019 Johannes Kepler University
+ * 				 2018 - 2020 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,20 +10,28 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
- *   Alois Zoitl - fixed untyped subapp interface updates and according code cleanup
+ *               - fixed untyped subapp interface updates and according code 
+ *                 cleanup
+ *               - allow navigation to parent by double-clicking on subapp 
+ *                 interface element
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction;
+import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
+import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -53,13 +61,27 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 	@Override
 	public void performRequest(final Request request) {
-		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
-		// REQ_OPEN -> doubleclick
-		if ((request.getType() == RequestConstants.REQ_OPEN)
-				|| (request.getType() == RequestConstants.REQ_DIRECT_EDIT)) {
+		if (request.getType() == RequestConstants.REQ_OPEN) {
+			// REQ_OPEN -> doubleclick
+			goIntoSubapp();
+		} else if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
+			// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 			getManager().show();
+		} else {
+			super.performRequest(request);
 		}
-		super.performRequest(request);
+	}
+
+	private void goIntoSubapp() {
+		SubApp subApp = (SubApp) getModel().getFBNetworkElement();
+		if ((null == subApp.getSubAppNetwork()) && subApp.isMapped()) {
+			// we are mapped and the mirrored subapp located in the resource, get the one
+			// from the application
+			subApp = (SubApp) subApp.getOpposite();
+		}
+		OpenSubApplicationEditorAction openAction = new OpenSubApplicationEditorAction(subApp);
+		openAction.run();
+		((FBNetworkEditor) openAction.getOpenedEditor()).selectElement(getModel());
 	}
 
 	private DirectEditManager getManager() {
@@ -81,11 +103,21 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 				Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
 					refresh();
+				} else if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
+					updateConnectorBorderColor();
 				}
 				super.notifyChanged(notification);
+			}
+
+			private void updateConnectorBorderColor() {
+				Border border = getFigure().getBorder();
+				if (border instanceof ConnectorBorder) {
+					((ConnectorBorder) border).updateColor();
+					getFigure().repaint();
+				}
+
 			}
 		};
 	}

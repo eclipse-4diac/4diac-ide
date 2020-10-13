@@ -15,12 +15,12 @@ package org.eclipse.fordiac.ide.fbtypeeditor.network;
 
 import java.util.Map;
 
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.application.actions.UnmapAction;
-import org.eclipse.fordiac.ide.application.actions.UnmapAllAction;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.FBTypePaletteViewerProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
@@ -28,22 +28,24 @@ import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenu
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
-import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
@@ -52,7 +54,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	private CompositeFBType fbType;
 	private CommandStack commandStack;
-	private Palette palette;
+	private TypeLibrary typeLib;
 	private Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -60,7 +62,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 			// only refresh propertypage (page) if the event is not an
 			// REMOVING_ADAPTER event - otherwise, the remove adapter in the
 			// dispose method (called when closing the editor) will fail
-			if (notification.getEventType() != Notification.REMOVING_ADAPTER && (((notification.getNewValue() == null)
+			if ((notification.getEventType() != Notification.REMOVING_ADAPTER) && (((notification.getNewValue() == null)
 					&& (notification.getNewValue() != notification.getOldValue()))
 					|| ((notification.getNewValue() != null)
 							&& !(notification.getNewValue().equals(notification.getOldValue()))))) {
@@ -77,7 +79,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
-		return new CompositeNetworkEditPartFactory(this, getZoomManger());
+		return new CompositeNetworkEditPartFactory(this);
 	}
 
 	@Override
@@ -99,20 +101,8 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected void createActions() {
-		ActionRegistry registry = getActionRegistry();
-		IAction action;
-
 		super.createActions();
-
-		action = registry.getAction(UnmapAction.ID);
-		registry.removeAction(action);
-
-		action = registry.getAction(UnmapAllAction.ID);
-		registry.removeAction(action);
-
-		InterfaceContextMenuProvider.createInterfaceEditingActions(this, registry, fbType);
-
-		super.createActions();
+		InterfaceContextMenuProvider.createInterfaceEditingActions(this, getActionRegistry(), fbType);
 	}
 
 	@Override
@@ -131,11 +121,11 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 		Map map = getGraphicalViewer().getEditPartRegistry();
 
 		for (Object key : map.keySet()) {
-			if (key instanceof FB && ((FB) key) == selectedElement) {
+			if ((key instanceof FB) && (((FB) key) == selectedElement)) {
 				selectedElement = key;
 				break;
 			}
-			if (key instanceof Connection && ((Connection) key) == selectedElement) {
+			if ((key instanceof Connection) && (((Connection) key) == selectedElement)) {
 				selectedElement = key;
 				break;
 			}
@@ -150,12 +140,12 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected Palette getPalette() {
-		return palette;
+		return typeLib.getBlockTypeLib();
 	}
 
 	@Override
 	public AutomationSystem getSystem() {
-		return palette.getAutomationSystem();
+		return null;
 	}
 
 	@Override
@@ -170,38 +160,67 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 			}
 		}
 
-		setPartName(Messages.CompositeNetworkEditor_LABEL_CompositeEditor);
 		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
-
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
 	}
 
+	@Override
+	protected void setEditorPartName(IEditorInput input) {
+		setPartName(FordiacMessages.FBNetwork);
+	}
+
 	protected void configurePalette(FBTypeEditorInput fbTypeEditorInput) {
-		Palette fbPalette = fbTypeEditorInput.getPaletteEntry().getPalette();
-		if (null != fbPalette) {
-			palette = fbPalette;
-		}
+		typeLib = fbTypeEditorInput.getPaletteEntry().getTypeLibrary();
 	}
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-		return null; // we are filling a the palete directly in the viewer so we don't need it here
+		return null; // we are filling the palette directly in the viewer so we don't need it here
 	}
 
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
 		return new FBTypePaletteViewerProvider(fbType.getPaletteEntry().getFile().getProject(), getEditDomain(),
-				getPalletNavigatorID());
+				getPaletteNavigatorID());
 	}
 
 	@Override
-	protected String getPalletNavigatorID() {
+	protected String getPaletteNavigatorID() {
 		return "org.eclipse.fordiac.ide.compositefbpaletteviewer"; //$NON-NLS-1$
 	}
 
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
-		return new CFBNetworkcontextMenuProvider(this, getActionRegistry(), zoomManager, getPalette());
+		return new CFBNetworkcontextMenuProvider(this, getActionRegistry(), zoomManager, typeLib);
 	}
+
+	@Override
+	public void gotoMarker(IMarker marker) {
+		try {
+			Map<String, Object> attributes = marker.getAttributes();
+			if (FordiacMarkerHelper.markerTargetsFBNetworkElement(attributes)) {
+				Object location = attributes.get(IMarker.LOCATION);
+				if (location instanceof String) {
+					FBNetworkElement fbne = getModel().getElementNamed((String) location);
+					if (null != fbne) {
+						selectElement(fbne);
+					}
+				}
+			}
+		} catch (CoreException e) {
+			Activator.getDefault().logError("Could not get marker attributes", e); //$NON-NLS-1$
+		}
+	}
+
+	@Override
+	public boolean isMarkerTarget(IMarker marker) {
+		try {
+			return FordiacMarkerHelper.markerTargetsFBNetworkElement(marker.getAttributes());
+		} catch (CoreException e) {
+			Activator.getDefault().logError("Could not get marker attributes", e); //$NON-NLS-1$
+		}
+		return false;
+	}
+
 }

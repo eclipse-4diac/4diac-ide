@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -120,8 +120,9 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 			if (resolve)
 				return getAdapterDeclaration();
 			return basicGetAdapterDeclaration();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -135,8 +136,10 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 		case LibraryElementPackage.ADAPTER_EVENT__ADAPTER_DECLARATION:
 			setAdapterDeclaration((AdapterDeclaration) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -150,8 +153,10 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 		case LibraryElementPackage.ADAPTER_EVENT__ADAPTER_DECLARATION:
 			setAdapterDeclaration((AdapterDeclaration) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -164,8 +169,9 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 		switch (featureID) {
 		case LibraryElementPackage.ADAPTER_EVENT__ADAPTER_DECLARATION:
 			return adapterDeclaration != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	@Override
@@ -173,7 +179,7 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 		if (getAdapterDeclaration() == null) {
 			return super.getName();
 		}
-		return getAdapterDeclaration().getName() + "." + super.getName();
+		return getAdapterDeclaration().getName() + "." + super.getName(); //$NON-NLS-1$
 	}
 
 } // AdapterEventImpl

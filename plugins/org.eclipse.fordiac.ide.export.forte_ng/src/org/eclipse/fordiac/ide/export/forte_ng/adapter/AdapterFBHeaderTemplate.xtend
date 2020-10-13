@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2019 fortiss GmbH
+ *               2020 Johannes Kepler University
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Martin Jobst
+ *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl
+ *     - Fix issues in adapter code generation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.adapter
 
 import java.nio.file.Path
@@ -53,23 +69,30 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate {
 		
 	'''
 
-	override protected CharSequence generateHeaderIncludes() '''
+	override protected generateHeaderIncludes() '''
 		#include "adapter.h"
 		#include "typelib.h"
 		«super.generateHeaderIncludes»
 	'''
 
-	override protected CharSequence generateFBDeclaration() '''
+	override protected generateFBDeclaration() '''
 		DECLARE_ADAPTER_TYPE(«FBClassName»)
 	'''
 
-	override protected CharSequence generateFBInterfaceSpecDeclaration() '''
+	override protected generateFBInterfaceSpecDeclaration() '''
 		static const SFBInterfaceSpec scm_stFBInterfaceSpecSocket;
 		
 		static const SFBInterfaceSpec scm_stFBInterfaceSpecPlug;
 	'''
 
-	def protected CharSequence generateAccessors(List<VarDeclaration> vars, String socketFunction, String plugFunction) '''
+	override protected generateEventConstants(List<Event> events) '''
+	public:
+		«super.generateEventConstants(events)»
+	
+	private:
+	'''
+
+	def protected generateAccessors(List<VarDeclaration> vars, String socketFunction, String plugFunction) '''
 		«FOR v : vars»
 			CIEC_«v.typeName» «IF v.array»*«ELSE»&«ENDIF»«v.name»() {
 			  «IF v.array»
@@ -82,7 +105,7 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate {
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateEventAccessors(List<Event> events) '''
+	def protected generateEventAccessors(List<Event> events) '''
 		«FOR event : events»
 			int «event.name»() {
 			  return m_nParentAdapterListEventID + scm_nEvent«event.name»ID;

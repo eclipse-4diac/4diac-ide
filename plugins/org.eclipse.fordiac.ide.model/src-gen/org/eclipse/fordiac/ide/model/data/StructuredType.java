@@ -24,34 +24,28 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.StructuredType#getVarDeclaration
- * <em>Var Declaration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.StructuredType#getMemberVariables
+ * <em>Member Variables</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getStructuredType()
  * @model
  * @generated
  */
-public interface StructuredType extends DataType {
+public interface StructuredType extends AnyDerivedType {
 	/**
-	 * Returns the value of the '<em><b>Var Declaration</b></em>' containment
+	 * Returns the value of the '<em><b>Member Variables</b></em>' containment
 	 * reference list. The list contents are of type
 	 * {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}. <!--
-	 * begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Var Declaration</em>' containment reference list
-	 * isn't clear, there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @return the value of the '<em>Var Declaration</em>' containment reference
+	 * @return the value of the '<em>Member Variables</em>' containment reference
 	 *         list.
-	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getStructuredType_VarDeclaration()
-	 * @model containment="true" transient="true" volatile="true" derived="true"
-	 *        extendedMetaData="kind='element' name='VarDeclaration'
-	 *        namespace='http://www.fordiac.org/61499/lib'"
+	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getStructuredType_MemberVariables()
+	 * @model containment="true" extendedMetaData="kind='element'
+	 *        name='VarDeclaration' namespace='http://www.fordiac.org/61499/lib'"
 	 * @generated
 	 */
-	EList<VarDeclaration> getVarDeclaration();
+	EList<VarDeclaration> getMemberVariables();
 
 } // StructuredType

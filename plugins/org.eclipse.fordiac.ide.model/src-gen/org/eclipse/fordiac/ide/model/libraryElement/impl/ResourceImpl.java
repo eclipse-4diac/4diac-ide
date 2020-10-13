@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -24,7 +24,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -82,7 +81,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	/**
 	 * The default value of the '{@link #getX() <em>X</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getX()
 	 * @generated
 	 * @ordered
@@ -92,7 +91,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	/**
 	 * The cached value of the '{@link #getX() <em>X</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getX()
 	 * @generated
 	 * @ordered
@@ -102,7 +101,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	/**
 	 * The default value of the '{@link #getY() <em>Y</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getY()
 	 * @generated
 	 * @ordered
@@ -112,7 +111,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	/**
 	 * The cached value of the '{@link #getY() <em>Y</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getY()
 	 * @generated
 	 * @ordered
@@ -390,8 +389,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
 			return basicSetDevice((Device) otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -408,8 +408,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 			return basicSetFBNetwork(null, msgs);
 		case LibraryElementPackage.RESOURCE__DEVICE:
 			return basicSetDevice(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -423,8 +424,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		case LibraryElementPackage.RESOURCE__DEVICE:
 			return eInternalContainer().eInverseRemove(this, LibraryElementPackage.DEVICE__RESOURCE, Device.class,
 					msgs);
+		default:
+			return super.eBasicRemoveFromContainerFeature(msgs);
 		}
-		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -449,8 +451,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 			return basicGetDevice();
 		case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
 			return isDeviceTypeResource();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -481,8 +484,10 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
 			setDeviceTypeResource((Boolean) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -511,8 +516,10 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
 			setDeviceTypeResource(DEVICE_TYPE_RESOURCE_EDEFAULT);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -535,8 +542,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 			return basicGetDevice() != null;
 		case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
 			return deviceTypeResource != DEVICE_TYPE_RESOURCE_EDEFAULT;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**
@@ -594,23 +602,6 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		result.append(deviceTypeResource);
 		result.append(')');
 		return result.toString();
-	}
-
-	@Override
-	public void setName(final String newName) {
-		if (newName.equals(name)) {
-			return;
-		}
-		String oldName = name;
-
-		name = newName;
-
-		NameRepository.checkNameIdentifier(this);
-
-		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONFIGURABLE_OBJECT__NAME,
-					oldName, name));
-		}
 	}
 
 } // ResourceImpl

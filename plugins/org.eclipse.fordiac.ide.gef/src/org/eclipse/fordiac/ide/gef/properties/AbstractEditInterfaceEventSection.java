@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- *               2019 Johannes Kepler Univeristy Linz
+ *               2019, 2020 Johannes Kepler Univeristy Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,7 +11,8 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
-  *   Bianca Wiesmayr - create command now has enhanced guess
+ *   Bianca Wiesmayr - create command now has enhanced guess
+ *   Daniel Lindhuber - added addEntry method
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -24,18 +25,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.IContentProvider;
 
 public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection {
 
 	@Override
 	protected IContentProvider getOutputsContentProvider() {
-		return new InterfaceContentProvider(false, InterfaceContentProviderType.EVENT);
+		return new EventInterfaceContentProvider(false) {
+
+		};
 	}
 
 	@Override
 	protected IContentProvider getInputsContentProvider() {
-		return new InterfaceContentProvider(true, InterfaceContentProviderType.EVENT);
+		return new EventInterfaceContentProvider(true);
 	}
 
 	@Override
@@ -59,6 +63,7 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		return EventTypeLibrary.getInstance().getType(fillTypeCombo()[0]);
 	}
 
+	@Override
 	protected int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput) {
 		if (null != interfaceElement) {
 			InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
@@ -69,5 +74,36 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 
 	private static EList<Event> getEventList(InterfaceList interfaceList, boolean isInput) {
 		return isInput ? interfaceList.getEventInputs() : interfaceList.getEventOutputs();
+	}
+
+	@Override
+	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+		if (entry instanceof Event) {
+			cmd.add(newInsertCommand((Event) entry, getIsInputsViewer(), index));
+		}
+	}
+
+	protected static class EventInterfaceContentProvider extends InterfaceContentProvider {
+		public EventInterfaceContentProvider(boolean inputs) {
+			super(inputs);
+		}
+
+		@Override
+		protected Object[] getInputs(Object inputElement) {
+			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+			if (null != interfaceList) {
+				return interfaceList.getEventInputs().toArray();
+			}
+			return new Object[0];
+		}
+
+		@Override
+		protected Object[] getOutputs(Object inputElement) {
+			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+			if (null != interfaceList) {
+				return interfaceList.getEventOutputs().toArray();
+			}
+			return new Object[0];
+		}
 	}
 }

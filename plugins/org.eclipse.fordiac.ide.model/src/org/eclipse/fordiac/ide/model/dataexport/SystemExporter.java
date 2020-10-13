@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -72,7 +71,8 @@ public class SystemExporter extends CommonElementExporter {
 			writeToFile(targetFile);
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println("Overall Saving time for System (" + system.getName() + ": " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$
+		System.out
+				.println("Overall saving time for System (" + system.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	private void addApplications() throws XMLStreamException {
@@ -180,16 +180,9 @@ public class SystemExporter extends CommonElementExporter {
 		addAttributes(device.getAttributes());
 	}
 
-	private void addAttributes(EList<Attribute> attributes) throws XMLStreamException {
-		for (Attribute attribute : attributes) {
-			addAttributeElement(attribute.getName(), attribute.getType().getName(), attribute.getValue(),
-					attribute.getComment());
-		}
-	}
-
 	private void addDeviceProfile(Device device) throws XMLStreamException {
 		String profileName = device.getProfile();
-		if (null != profileName && !"".equals(profileName)) { //$NON-NLS-1$
+		if ((null != profileName) && !"".equals(profileName)) { //$NON-NLS-1$
 			addAttributeElement(LibraryElementTags.DEVICE_PROFILE, "STRING", profileName, //$NON-NLS-1$
 					"device profile"); //$NON-NLS-1$
 		}

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017, 2018 fortiss GmbH
- * 				 2018, 2019 Johannes Kepler University Linz
+ * 				 2018, 2019, 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,9 +12,11 @@
  *   Monika Wenger, Alois Zoitl - initial implementation
  *   Alois Zoitl - moved group buttons to the top left, multi-line selection in lists,
  *               code clean-up
- *   Bianca Wiesmayr - extract table creation
+ *   Bianca Wiesmayr - extract table creation, cleanup, new read-only derived sections
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *               - cleaned command stack handling for property sections
+ *   Daniel Lindhuber - added copy/paste and the context menu
+ *   				  - made typedropdown methods overrideable
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -29,35 +31,40 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.edit.providers.InterfaceElementLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
+import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -67,7 +74,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class AbstractEditInterfaceSection extends AbstractSection {
+public abstract class AbstractEditInterfaceSection extends AbstractSection implements I4diacTableUtil {
 	private static final int TYPE_AND_COMMENT_COLUMN_WIDTH = 100;
 	private static final int NAME_COLUMN_WIDTH = 200;
 	private static final String NAME = "name"; //$NON-NLS-1$
@@ -76,19 +83,21 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 	private TableViewer inputsViewer;
 	private TableViewer outputsViewer;
-
-	protected enum InterfaceContentProviderType {
-		EVENT, DATA, ADAPTER
-	}
+	public boolean isInputsViewer;
+	protected boolean createButtons = true;
 
 	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
+	protected abstract InsertInterfaceElementCommand newInsertCommand(IInterfaceElement selection, boolean isInput,
+			int index);
+
 	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);
 
-	protected abstract ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput,
-			boolean moveUp);
+	protected abstract ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean moveUp);
 
 	protected abstract String[] fillTypeCombo();
+
+	protected abstract TypeLibrary getTypeLibrary();
 
 	@Override
 	protected abstract INamedElement getInputType(Object input);
@@ -103,6 +112,14 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		return inputsViewer;
 	}
 
+	public TableViewer getOutputsViewer() {
+		return outputsViewer;
+	}
+
+	public boolean getIsInputsViewer() {
+		return isInputsViewer;
+	}
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
@@ -114,26 +131,60 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 		inputsViewer.setContentProvider(getInputsContentProvider());
 		outputsViewer.setContentProvider(getOutputsContentProvider());
+
+		setFocusListeners();
+		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
+
+		createContextMenu(getInputsViewer());
+		createContextMenu(getOutputsViewer());
+	}
+
+	private void setFocusListeners() {
+		getOutputsViewer().getTable().addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				isInputsViewer = false;
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				// Nothing to do
+			}
+
+		});
+		getInputsViewer().getTable().addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				isInputsViewer = true;
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				// Nothing to do
+			}
+
+		});
+
 	}
 
 	protected abstract IContentProvider getOutputsContentProvider();
 
 	protected abstract IContentProvider getInputsContentProvider();
 
-	private static void createTableLayout(Table table) {
+	protected TableLayout createTableLayout(Table table) {
 		TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText(NAME);
+		column1.setText(FordiacMessages.Name);
 		TableColumn column2 = new TableColumn(table, SWT.LEFT);
-		column2.setText(TYPE);
+		column2.setText(FordiacMessages.Type);
 		TableColumn column3 = new TableColumn(table, SWT.LEFT);
-		column3.setText(COMMENT);
-		table.setLinesVisible(true);
-		table.setHeaderVisible(true);
+		column3.setText(FordiacMessages.Comment);
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(NAME_COLUMN_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
-		table.setLayout(layout);
+		return layout;
 	}
 
 	private void createInputEdit(Composite parent) {
@@ -141,32 +192,14 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		inputsGroup.setLayout(new GridLayout(2, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
-		buttons.createControls(inputsGroup, getWidgetFactory());
-		inputsViewer = createTypeTableView(inputsGroup);
-		configureButtonList(buttons, inputsViewer, true);
-	}
-
-	private TableViewer createTypeTableView(Group parent) {
-		TableViewer viewer = TableWidgetFactory.createTableViewer(parent);
-		createTableLayout(viewer.getTable());
-		viewer.setColumnProperties(new String[] { NAME, TYPE, COMMENT });
-		viewer.setCellModifier(new InterfaceCellModifier(viewer));
-		viewer.setLabelProvider(new InterfaceLabelProvider());
-		return viewer;
-	}
-
-	private void configureButtonList(AddDeleteReorderListWidget buttons, TableViewer viewer, boolean inputs) {
-		buttons.bindToTableViewer(viewer, this, ref -> newCreateCommand((IInterfaceElement) ref, inputs),
-				ref -> newDeleteCommand((IInterfaceElement) ref),
-				ref -> newOrderCommand((IInterfaceElement) ref, inputs, true),
-				ref -> newOrderCommand((IInterfaceElement) ref, inputs, false));
-	}
-
-	private void setCellEditors(TableViewer viewer) {
-		viewer.setCellEditors(new CellEditor[] { new CustomTextCellEditor(viewer.getTable()),
-				ComboBoxWidgetFactory.createComboBoxCellEditor(viewer.getTable(), fillTypeCombo(), SWT.READ_ONLY),
-				new CustomTextCellEditor(viewer.getTable()) });
+		if (createButtons) {
+			AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+			buttons.createControls(inputsGroup, getWidgetFactory());
+			inputsViewer = createTypeTableView(inputsGroup);
+			configureButtonList(buttons, inputsViewer, true);
+		} else {
+			inputsViewer = createTypeTableView(inputsGroup);
+		}
 	}
 
 	private void createOutputEdit(Composite parent) {
@@ -174,10 +207,68 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		outputsGroup.setLayout(new GridLayout(2, false));
 		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
-		buttons.createControls(outputsGroup, getWidgetFactory());
-		outputsViewer = createTypeTableView(outputsGroup);
-		configureButtonList(buttons, outputsViewer, false);
+		if (createButtons) {
+			AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+			buttons.createControls(outputsGroup, getWidgetFactory());
+			outputsViewer = createTypeTableView(outputsGroup);
+			configureButtonList(buttons, outputsViewer, false);
+		} else {
+			outputsViewer = createTypeTableView(outputsGroup);
+
+		}
+	}
+
+	private TableViewer createTypeTableView(Group parent) {
+		TableViewer viewer = TableWidgetFactory.createTableViewer(parent);
+		viewer.getTable().setLayout(createTableLayout(viewer.getTable()));
+		viewer.getTable().setHeaderVisible(true);
+		viewer.getTable().setLinesVisible(true);
+		viewer.setColumnProperties(getColumnProperties());
+		viewer.setCellModifier(getCellModifier(viewer));
+		viewer.setLabelProvider(getLabelProvider());
+		return viewer;
+	}
+
+	protected String[] getColumnProperties() {
+		return new String[] { NAME, TYPE, COMMENT };
+	}
+
+	protected LabelProvider getLabelProvider() {
+		return new InterfaceElementLabelProvider();
+	}
+
+	protected InterfaceCellModifier getCellModifier(TableViewer viewer) {
+		return new InterfaceCellModifier(viewer);
+	}
+
+	private void configureButtonList(AddDeleteReorderListWidget buttons, TableViewer viewer, boolean inputs) {
+		buttons.bindToTableViewer(viewer, this, ref -> newCreateCommand((IInterfaceElement) ref, inputs),
+				ref -> newDeleteCommand((IInterfaceElement) ref), ref -> newOrderCommand((IInterfaceElement) ref, true),
+				ref -> newOrderCommand((IInterfaceElement) ref, false));
+	}
+
+	// can be overridden by subclasses to use a different type dropdown
+	protected CellEditor createTypeCellEditor(TableViewer viewer) {
+		return ComboBoxWidgetFactory.createComboBoxCellEditor(viewer.getTable(), fillTypeCombo(), SWT.READ_ONLY);
+	}
+
+	// subclasses need to override this method if they use a different type dropdown
+	protected Object getTypeValue(Object element, TableViewer viewer, final int TYPE_COLUMN_INDEX) {
+		String type = ((IInterfaceElement) element).getTypeName();
+		List<String> items = Arrays
+				.asList(((ComboBoxCellEditor) viewer.getCellEditors()[TYPE_COLUMN_INDEX]).getItems());
+		return items.indexOf(type);
+	}
+
+	// subclasses need to override this method if they use a different type dropdown
+	protected Command createChangeDataTypeCommand(VarDeclaration data, Object value, TableViewer viewer) {
+		String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
+		return newChangeTypeCommand(data, getDataTypeLib().getType(dataTypeName));
+	}
+
+	protected void setCellEditors(TableViewer viewer) {
+		viewer.setCellEditors(new CellEditor[] { new CustomTextCellEditor(viewer.getTable()),
+				createTypeCellEditor(viewer), new CustomTextCellEditor(viewer.getTable()) });
 	}
 
 	@Override
@@ -203,54 +294,20 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		commandStack = commandStackBuffer;
 	}
 
-	protected static class InterfaceContentProvider implements IStructuredContentProvider {
+	protected abstract static class InterfaceContentProvider implements IStructuredContentProvider {
 		private boolean inputs;
-		private InterfaceContentProviderType type;
 
-		public InterfaceContentProvider(boolean inputs, InterfaceContentProviderType type) {
+		public InterfaceContentProvider(boolean inputs) {
 			this.inputs = inputs;
-			this.type = type;
 		}
 
-		private Object[] getInputs(Object inputElement) {
-			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+		protected abstract Object[] getInputs(Object inputElement);
 
-			if (null != interfaceList) {
-				switch (type) {
-				case EVENT:
-					return interfaceList.getEventInputs().toArray();
-				case ADAPTER:
-					return interfaceList.getSockets().toArray();
-				case DATA:
-					return interfaceList.getInputVars().toArray();
-				default:
-					break;
-				}
-			}
-			return new Object[0];
-		}
-
-		private Object[] getOutputs(Object inputElement) {
-			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
-
-			if (null != interfaceList) {
-				switch (type) {
-				case EVENT:
-					return interfaceList.getEventOutputs().toArray();
-				case ADAPTER:
-					return interfaceList.getPlugs().toArray();
-				case DATA:
-					return interfaceList.getOutputVars().toArray();
-				default:
-					break;
-				}
-			}
-			return new Object[0];
-		}
+		protected abstract Object[] getOutputs(Object inputElement);
 
 		@Override
 		public Object[] getElements(final Object inputElement) {
-			if ((inputElement instanceof SubApp) || (inputElement instanceof FBType)) {
+			if ((inputElement instanceof FBNetworkElement) || (inputElement instanceof FBType)) {
 				if (inputs) {
 					return getInputs(inputElement);
 				} else {
@@ -260,10 +317,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			return new Object[0];
 		}
 
-		private static InterfaceList getInterfaceListFromInput(Object inputElement) {
+		static InterfaceList getInterfaceListFromInput(Object inputElement) {
 			InterfaceList interfaceList = null;
-			if (inputElement instanceof SubApp) {
-				interfaceList = ((SubApp) inputElement).getInterface();
+			if (inputElement instanceof FBNetworkElement) {
+				interfaceList = ((FBNetworkElement) inputElement).getInterface();
 			} else if (inputElement instanceof FBType) {
 				interfaceList = ((FBType) inputElement).getInterfaceList();
 			}
@@ -271,50 +328,17 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		}
 	}
 
-	protected static class InterfaceLabelProvider extends LabelProvider implements ITableLabelProvider {
-
-		@Override
-		public Image getColumnImage(final Object element, final int columnIndex) {
-			return null;
-		}
-
-		@Override
-		public String getColumnText(final Object element, final int columnIndex) {
-			String result = null;
-			if (element instanceof IInterfaceElement) {
-				switch (columnIndex) {
-				case 0:
-					result = ((IInterfaceElement) element).getName();
-					break;
-				case 1:
-					result = element instanceof Event ? FordiacMessages.Event
-							: ((IInterfaceElement) element).getTypeName();
-					break;
-				case 2:
-					result = ((IInterfaceElement) element).getComment() != null
-							? ((IInterfaceElement) element).getComment()
-							: ""; //$NON-NLS-1$
-					break;
-				}
-			} else {
-				result = element.toString();
-			}
-			return result;
-		}
-	}
-
 	protected Palette getPalette() {
-		if (getType() instanceof SubApp) {
-			return ((SubApp) getType()).getFbNetwork().getApplication().getAutomationSystem().getPalette();
-		} else if (getType() instanceof FBType) {
-			return ((FBType) getType()).getPaletteEntry().getPalette();
-		}
-		return null;
+		return getTypeLibrary().getBlockTypeLib();
 	}
 
-	private class InterfaceCellModifier implements ICellModifier {
+	protected DataTypeLibrary getDataTypeLib() {
+		return getTypeLibrary().getDataTypeLibrary();
+	}
+
+	protected class InterfaceCellModifier implements ICellModifier {
 		private static final int TYPE_COLUMN_INDEX = 1;
-		private TableViewer viewer;
+		protected TableViewer viewer;
 
 		public InterfaceCellModifier(TableViewer viewer) {
 			this.viewer = viewer;
@@ -333,10 +357,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			case NAME:
 				return ((INamedElement) element).getName();
 			case TYPE:
-				String type = ((IInterfaceElement) element).getTypeName();
-				List<String> items = Arrays
-						.asList(((ComboBoxCellEditor) viewer.getCellEditors()[TYPE_COLUMN_INDEX]).getItems());
-				return items.indexOf(type);
+				return getTypeValue(element, viewer, TYPE_COLUMN_INDEX);
 			case COMMENT:
 				return ((INamedElement) element).getComment() != null ? ((INamedElement) element).getComment() : ""; //$NON-NLS-1$
 			default:
@@ -358,14 +379,13 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 				cmd = new ChangeCommentCommand((INamedElement) data, value.toString());
 				break;
 			case TYPE:
-				String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
 				if (data instanceof AdapterDeclaration) {
+					String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
 					DataType newType = getPalette().getAdapterTypeEntry(dataTypeName).getType();
 					cmd = newChangeTypeCommand((VarDeclaration) data, newType);
 				} else {
 					if (data instanceof VarDeclaration) {
-						cmd = newChangeTypeCommand((VarDeclaration) data,
-								DataTypeLibrary.getInstance().getType(dataTypeName));
+						cmd = createChangeDataTypeCommand((VarDeclaration) data, value, viewer);
 					}
 				}
 				break;
@@ -380,7 +400,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		}
 	}
 
-	protected int getInsertingIndex(IInterfaceElement interfaceElement, EList interfaceList) {
+	protected int getInsertingIndex(IInterfaceElement interfaceElement,
+			EList<? extends IInterfaceElement> interfaceList) {
 		return interfaceList.indexOf(interfaceElement) + 1;
 	}
 
@@ -388,5 +409,32 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 	protected String getCreationName(IInterfaceElement interfaceElement) {
 		return (null != interfaceElement) ? interfaceElement.getName() : null;
+	}
+
+	@Override
+	public TableViewer getViewer() {
+		return getIsInputsViewer() ? getInputsViewer() : getOutputsViewer();
+	}
+
+	@Override
+	public Object removeEntry(int index, CompoundCommand cmd) {
+		IInterfaceElement entry = getEntry(index);
+		cmd.add(newDeleteCommand(entry));
+		return entry;
+	}
+
+	@Override
+	public void executeCompoundCommand(CompoundCommand cmd) {
+		executeCommand(cmd);
+		getViewer().refresh();
+	}
+
+	private IInterfaceElement getEntry(int index) {
+		Object obj = getViewer().getElementAt(index);
+		return (IInterfaceElement) obj;
+	}
+
+	private static void createContextMenu(TableViewer viewer) {
+		OpenStructMenu.addTo(viewer);
 	}
 }

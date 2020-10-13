@@ -16,10 +16,9 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.RESERVED_KEYWORDS;
+
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,10 +27,10 @@ import java.util.stream.Collectors;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
@@ -40,11 +39,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 
 public final class NameRepository {
@@ -52,44 +49,8 @@ public final class NameRepository {
 	private static final Pattern END_IN_NUMBER_PATTERN = Pattern.compile("^.*\\d$"); //$NON-NLS-1$
 	private static final Pattern GET_LAST_NUMBER_PATTERN = Pattern.compile("\\d+$"); //$NON-NLS-1$
 
-	private static final Set<String> RESERVED_KEYWORDS = Collections
-			.unmodifiableSet(new HashSet<>(Arrays.asList(new String[] { "VAR", "END_VAR", "CONSTANT", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					"SUPER", "RETURN", //$NON-NLS-1$ //$NON-NLS-2$
-					"IF", "THEN", "END_IF", "ELSIF", "ELSE", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-					"CASE", "OF", "END_CASE", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					"EXIT", "CONTINUE", //$NON-NLS-1$ //$NON-NLS-2$
-					"FOR", "TO", "BY", "DO", "END_FOR", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-					"WHILE", "END_WHILE", //$NON-NLS-1$ //$NON-NLS-2$
-					"REPEAT", "UNTIL", "END_REPEAT", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					"OR", "XOR", "AND", "MOD", "NOT", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-					"E", "D", "H", "M", "S", "MS", "US", "NS", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-					"DINT", "INT", "SINT", "LINT", "UINT", "USINT", "UDINT", "ULINT", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-					"REAL", "LREAL", //$NON-NLS-1$ //$NON-NLS-2$
-					"STRING", "WSTRING", //$NON-NLS-1$ //$NON-NLS-2$
-					"CHAR", "WCHAR", //$NON-NLS-1$ //$NON-NLS-2$
-					"TIME", "LTIME", //$NON-NLS-1$ //$NON-NLS-2$
-					"TIME_OF_DAY", "LTIME_OF_DAY", "TOD", "LTOD", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					"DATE", "LDATE", //$NON-NLS-1$ //$NON-NLS-2$
-					"DATE_AND_TIME", "LDATE_AND_TIME", //$NON-NLS-1$ //$NON-NLS-2$
-					"BOOL" //$NON-NLS-1$
-			})));
-
 	private NameRepository() {
 		// empty private constructor
-	}
-
-	public static void checkNameIdentifier(INamedElement element) {
-		// check if an annotation list is present, as getAnnotations will create one
-		// this saves quite some memory
-		if (element.eIsSet(LibraryElementPackage.eINSTANCE.getI4DIACElement_Annotations())) {
-			// we have annotations set clear them
-			element.getAnnotations().clear();
-		}
-		if (!IdentifierVerifyer.isValidIdentifier(element.getName())) {
-			Annotation ano = element.createAnnotation(
-					MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, element.getName()));
-			ano.setServity(2); // 2 means error!
-		}
 	}
 
 	/**
@@ -136,7 +97,7 @@ public final class NameRepository {
 					MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, nameProposal));
 			return false;
 		}
-		if ((element instanceof IInterfaceElement) && RESERVED_KEYWORDS.contains(nameProposal)) {
+		if (element instanceof IInterfaceElement && RESERVED_KEYWORDS.contains(nameProposal)) {
 			Abstract4DIACUIPlugin.statusLineErrorMessage(
 					MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, nameProposal));
 			return false;
@@ -144,7 +105,7 @@ public final class NameRepository {
 
 		if (getRefNames(element).contains(nameProposal)) {
 			Abstract4DIACUIPlugin.statusLineErrorMessage(
-					(MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal)));
+					MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal));
 			return false;
 		}
 
@@ -171,19 +132,23 @@ public final class NameRepository {
 		} else if (refElement instanceof ECState) {
 			elementsList = ((ECC) ((ECState) refElement).eContainer()).getECState();
 		} else if (refElement instanceof IInterfaceElement) {
-			EList<INamedElement> elements = new BasicEList<>();
-			InterfaceList interfaceList = null;
-			if (((IInterfaceElement) refElement).eContainer() instanceof InterfaceList) {
-				interfaceList = (InterfaceList) ((IInterfaceElement) refElement).eContainer();
+			if (((IInterfaceElement) refElement).eContainer() instanceof StructuredType) {
+				elementsList = ((StructuredType) ((IInterfaceElement) refElement).eContainer()).getMemberVariables();
 			} else {
-				// this is an internal variable
-				interfaceList = ((BasicFBType) ((IInterfaceElement) refElement).eContainer()).getInterfaceList();
+				final EList<INamedElement> elements = new BasicEList<>();
+				InterfaceList interfaceList = null;
+				if (((IInterfaceElement) refElement).eContainer() instanceof InterfaceList) {
+					interfaceList = (InterfaceList) ((IInterfaceElement) refElement).eContainer();
+				} else {
+					// this is an internal variable
+					interfaceList = ((BaseFBType) ((IInterfaceElement) refElement).eContainer()).getInterfaceList();
+				}
+				elements.addAll(interfaceList.getAllInterfaceElements());
+				if (interfaceList.eContainer() instanceof BaseFBType) { // has internal variables
+					elements.addAll(((BaseFBType) interfaceList.eContainer()).getInternalVars());
+				}
+				elementsList = elements;
 			}
-			elements.addAll(interfaceList.getAllInterfaceElements());
-			if (interfaceList.eContainer() instanceof BasicFBType) {
-				elements.addAll(((BasicFBType) interfaceList.eContainer()).getInternalVars());
-			}
-			elementsList = elements;
 		} else {
 			throw new IllegalArgumentException(
 					"Refenrence list for given class not available: " + refElement.getClass().toString()); //$NON-NLS-1$
@@ -209,9 +174,9 @@ public final class NameRepository {
 		String temp = nameProposal;
 		while (existingNameList.contains(temp)) {
 			if (END_IN_NUMBER_PATTERN.matcher(temp).matches()) {
-				Matcher matchNumber = GET_LAST_NUMBER_PATTERN.matcher(temp);
+				final Matcher matchNumber = GET_LAST_NUMBER_PATTERN.matcher(temp);
 				matchNumber.find();
-				int number = Integer.parseInt(temp.substring(matchNumber.start(), matchNumber.end())) + 1;
+				final int number = Integer.parseInt(temp.substring(matchNumber.start(), matchNumber.end())) + 1;
 				temp = temp.substring(0, matchNumber.start()) + number; // $NON-NLS-1$
 			} else {
 				temp = nameProposal + "_" + 1; //$NON-NLS-1$
@@ -223,11 +188,6 @@ public final class NameRepository {
 	private static String checkReservedKeyWords(String name) {
 		if (RESERVED_KEYWORDS.contains(name.toUpperCase())) {
 			return name + "1"; //$NON-NLS-1$
-		}
-		for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
-			if (dataType.getName().equalsIgnoreCase(name)) {
-				return name + "1"; //$NON-NLS-1$
-			}
 		}
 		return name;
 	}

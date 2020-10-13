@@ -105,8 +105,9 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 		switch (featureID) {
 		case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
 			return getText();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -120,8 +121,10 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 		case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
 			setText((String) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -135,8 +138,10 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 		case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
 			setText(TEXT_EDEFAULT);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -149,8 +154,9 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 		switch (featureID) {
 		case LibraryElementPackage.TEXT_ALGORITHM__TEXT:
 			return TEXT_EDEFAULT == null ? text != null : !TEXT_EDEFAULT.equals(text);
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

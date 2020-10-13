@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,10 +21,10 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -59,21 +59,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  *
  * @generated
  */
-public class EventImpl extends I4DIACElementImpl implements Event {
+public class EventImpl extends EObjectImpl implements Event {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = "";
+	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -88,7 +88,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = "";
+	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -124,7 +124,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * The cached value of the '{@link #getInputConnections() <em>Input
 	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getInputConnections()
 	 * @generated
 	 * @ordered
@@ -135,7 +135,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * The cached value of the '{@link #getOutputConnections() <em>Output
 	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getOutputConnections()
 	 * @generated
 	 * @ordered
@@ -145,7 +145,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	/**
 	 * The cached value of the '{@link #getType() <em>Type</em>}' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -261,15 +261,12 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated not
+	 * @generated
 	 */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
-
-		NameRepository.checkNameIdentifier(this);
-
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__NAME, oldName, name));
 	}
@@ -405,8 +402,9 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 		case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
 			return ((InternalEList<InternalEObject>) (InternalEList<?>) getOutputConnections()).basicAdd(otherEnd,
 					msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -423,8 +421,9 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 			return ((InternalEList<?>) getOutputConnections()).basicRemove(otherEnd, msgs);
 		case LibraryElementPackage.EVENT__WITH:
 			return ((InternalEList<?>) getWith()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -453,8 +452,9 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 			return getTypeName();
 		case LibraryElementPackage.EVENT__WITH:
 			return getWith();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -493,8 +493,10 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 			getWith().clear();
 			getWith().addAll((Collection<? extends With>) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -529,8 +531,10 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 		case LibraryElementPackage.EVENT__WITH:
 			getWith().clear();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -557,8 +561,9 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 			return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 		case LibraryElementPackage.EVENT__WITH:
 			return with != null && !with.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

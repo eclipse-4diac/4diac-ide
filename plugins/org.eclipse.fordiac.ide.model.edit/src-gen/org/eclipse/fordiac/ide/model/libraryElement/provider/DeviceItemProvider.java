@@ -206,8 +206,10 @@ public class DeviceItemProvider extends TypedConfigureableObjectItemProvider {
 		case LibraryElementPackage.DEVICE__RESOURCE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**
@@ -229,6 +231,9 @@ public class DeviceItemProvider extends TypedConfigureableObjectItemProvider {
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.IVAR_ELEMENT__VAR_DECLARATIONS,
 				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.IVAR_ELEMENT__VAR_DECLARATIONS,
+				LibraryElementFactory.eINSTANCE.createLocalVariable()));
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE__RESOURCE,
 				LibraryElementFactory.eINSTANCE.createResource()));

@@ -86,6 +86,31 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 
 	/**
 	 * This keeps track of the one adapter used for all
+	 * {@link org.eclipse.fordiac.ide.model.data.AnyDerivedType} instances. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected AnyDerivedTypeItemProvider anyDerivedTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a
+	 * {@link org.eclipse.fordiac.ide.model.data.AnyDerivedType}. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public Adapter createAnyDerivedTypeAdapter() {
+		if (anyDerivedTypeItemProvider == null) {
+			anyDerivedTypeItemProvider = new AnyDerivedTypeItemProvider(this);
+		}
+
+		return anyDerivedTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all
 	 * {@link org.eclipse.fordiac.ide.model.data.ArrayType} instances. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -462,6 +487,8 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 	 */
 	@Override
 	public void dispose() {
+		if (anyDerivedTypeItemProvider != null)
+			anyDerivedTypeItemProvider.dispose();
 		if (arrayTypeItemProvider != null)
 			arrayTypeItemProvider.dispose();
 		if (directlyDerivedTypeItemProvider != null)

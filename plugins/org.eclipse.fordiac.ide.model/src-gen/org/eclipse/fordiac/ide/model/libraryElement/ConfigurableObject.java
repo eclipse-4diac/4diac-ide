@@ -51,7 +51,10 @@ public interface ConfigurableObject extends INamedElement {
 	EList<Attribute> getAttributes();
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc --> <!-- begin-model-doc -->
+	 * searches for an existing Parameter with the specified parameterName. it is
+	 * NOT case sensitive! If there is no Parameter available a new one will be
+	 * created. <!-- end-model-doc -->
 	 * 
 	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
 	 *        typeDataType="org.eclipse.emf.ecore.xml.type.String"
@@ -77,5 +80,14 @@ public interface ConfigurableObject extends INamedElement {
 	 * @generated
 	 */
 	String getAttributeValue(String attributeName);
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 *        attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @generated
+	 */
+	boolean deleteAttribute(String attributeName);
 
 } // ConfigurableObject

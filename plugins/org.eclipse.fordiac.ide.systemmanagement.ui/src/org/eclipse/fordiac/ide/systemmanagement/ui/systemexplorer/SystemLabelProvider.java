@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2015 fortiss GmbH
- * 
+ * 				 2020 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,58 +11,78 @@
  * Contributors:
  *   Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Reworked system explorer layout
+ *   Daniel Lindhuber - Changed getText method to suppress file endings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.navigator.IDescriptionProvider;
 
 public class SystemLabelProvider extends AdapterFactoryLabelProvider implements IDescriptionProvider {
 
 	private static ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 
-	private ILabelProvider workbenchLabelProvider = WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider();
-
 	public SystemLabelProvider() {
 		super(systemAdapterFactory);
 	}
 
 	@Override
-	public void dispose() {
-		workbenchLabelProvider.dispose();
-		super.dispose();
-	}
-
-	@Override
 	public String getText(Object object) {
+		if (object instanceof IFile) {
+			return getTextForFiles((IFile) object);
+		}
 		if (object instanceof IResource) {
 			return null;
 		}
 		return super.getText(object);
 	}
 
+	private String getTextForFiles(IFile element) {
+		String text = null;
+		if (TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
+				|| TypeLibraryTags.DEVICE_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
+				|| TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
+				|| TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
+				|| TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
+			text = TypeLibrary.getTypeNameFromFile(element);
+		}
+		return text;
+	}
+
 	@Override
 	public Image getImage(Object object) {
-		if (object instanceof AutomationSystem) {
-			return FordiacImage.ICON_SYSTEM_PERSPECTIVE.getImage();
-		}
 		if (object instanceof IResource) {
-			return null;
+			return getImageForResource((IResource) object);
 		}
 		return super.getImage(object);
+	}
+
+	private static Image getImageForResource(IResource resource) {
+		if (FordiacProjectSorter.isSystemFile(resource)) {
+			// provide the icon for the system configuration file,
+			// TODO this should in the future provided by a dedicated editor
+			return FordiacImage.ICON_SYSTEM_PERSPECTIVE.getImage();
+		}
+
+		if (FordiacProjectSorter.isTypeLibFolder(resource)) {
+			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
+		}
+
+		return null;
 	}
 
 	@Override
@@ -71,7 +92,7 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static List<AdapterFactory> createFactoryList() {
-		ArrayList<AdapterFactory> factories = new ArrayList<AdapterFactory>();
+		ArrayList<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new LibraryElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());
 		return factories;

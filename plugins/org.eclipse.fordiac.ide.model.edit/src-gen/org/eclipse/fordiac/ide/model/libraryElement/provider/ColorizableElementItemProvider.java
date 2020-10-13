@@ -105,8 +105,10 @@ public class ColorizableElementItemProvider extends ItemProviderAdapter implemen
 		case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**

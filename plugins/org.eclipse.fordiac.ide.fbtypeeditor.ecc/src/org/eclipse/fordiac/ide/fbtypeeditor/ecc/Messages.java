@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2015, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2020                         Andrea Zoitl
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -31,12 +31,10 @@ public class Messages extends NLS {
 	public static String AlgorithmList_ConfigureTableLayout_Comment;
 	public static String AlgorithmList_ConfigureTableLayout_Name;
 	public static String AlgorithmList_ConfigureTableLayout_Language;
-	public static String CreateAlgorithmCommand_NewAlgorithm;
 	public static String ECAlgorithmGroup_Title;
 	public static String ECCActions_AddAction;
 	public static String ECCActions_AddState;
 	public static String ECCActions_InitialState;
-	public static String ECCContentAndLabelProvider_EmptyField;
 	public static String ECCEditor_LABEL_ECCEditorTabName;
 	public static String ECCPaletteFactory_LABEL_Action;
 	public static String ECCPaletteFactory_LABEL_ECCGroup;
@@ -46,19 +44,13 @@ public class Messages extends NLS {
 	public static String ECCPaletteFactory_TOOLTIP_State;
 	public static String ECCPaletteFactory_TOOLTIP_STAlgorithm;
 	public static String ECStateSetPositionCommand_LABEL_Move;
-	public static String FordiacECCPreferencePage_LABEL_ECCAlgorithmBorderColor;
+	public static String FordiacECCPreferencePage_LABEL_ECCAlgorithmTextColor;
 	public static String FordiacECCPreferencePage_LABEL_ECCAlgorithmColor;
-	public static String FordiacECCPreferencePage_LABEL_ECCEventBorderColor;
+	public static String FordiacECCPreferencePage_LABEL_ECCEventTextColor;
 	public static String FordiacECCPreferencePage_LABEL_ECCEventColor;
-	public static String FordiacECCPreferencePage_LABEL_ECCStateBorderColor;
+	public static String FordiacECCPreferencePage_LABEL_ECCStateTextColor;
 	public static String FordiacECCPreferencePage_LABEL_ECCStateColor;
 	public static String FordiacECCPreferencePage_LABEL_ECCTransitionColor;
-	public static String FordiacECCPreferencePage_LABEL_PreferencePageDescription;
-	public static String InternalVarsSection_ConfigureTableLayout_ArraySize;
-	public static String InternalVarsSection_ConfigureTableLayout_Comment;
-	public static String InternalVarsSection_ConfigureTableLayout_InitialValue;
-	public static String InternalVarsSection_ConfigureTableLayout_Name;
-	public static String InternalVarsSection_ConfigureTableLayout_Type;
 	public static String ReconnectTransitionCommand_ReconnectTransition;
 	public static String StateCreationFactory_LABEL_NewECState;
 	public static String StateSection_Comment;

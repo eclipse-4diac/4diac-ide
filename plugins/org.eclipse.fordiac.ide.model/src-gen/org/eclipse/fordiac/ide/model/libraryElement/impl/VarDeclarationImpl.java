@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,9 +21,9 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -63,21 +63,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  *
  * @generated
  */
-public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclaration {
+public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = "";
+	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -92,7 +92,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = "";
+	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -128,7 +128,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * The cached value of the '{@link #getInputConnections() <em>Input
 	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getInputConnections()
 	 * @generated
 	 * @ordered
@@ -139,7 +139,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * The cached value of the '{@link #getOutputConnections() <em>Output
 	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getOutputConnections()
 	 * @generated
 	 * @ordered
@@ -149,7 +149,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	/**
 	 * The cached value of the '{@link #getType() <em>Type</em>}' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -296,13 +296,12 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated not
+	 * @generated
 	 */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
-		NameRepository.checkNameIdentifier(this);
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__NAME, oldName,
 					name));
@@ -557,8 +556,9 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 					msgs);
 		case LibraryElementPackage.VAR_DECLARATION__WITHS:
 			return ((InternalEList<InternalEObject>) (InternalEList<?>) getWiths()).basicAdd(otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -577,8 +577,9 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			return ((InternalEList<?>) getWiths()).basicRemove(otherEnd, msgs);
 		case LibraryElementPackage.VAR_DECLARATION__VALUE:
 			return basicSetValue(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -613,8 +614,9 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			if (resolve)
 				return getValue();
 			return basicGetValue();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -659,8 +661,10 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 		case LibraryElementPackage.VAR_DECLARATION__VALUE:
 			setValue((Value) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -701,8 +705,10 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 		case LibraryElementPackage.VAR_DECLARATION__VALUE:
 			setValue((Value) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -733,8 +739,9 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			return withs != null && !withs.isEmpty();
 		case LibraryElementPackage.VAR_DECLARATION__VALUE:
 			return value != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.application.figures;
 
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * The Class SubAppForFbNetworkFigure.
@@ -32,5 +33,9 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 
 	public void updateTypeLabel(SubApp model) {
 		getTypeLabel().setText(null != model.getType() ? model.getTypeName() : ""); //$NON-NLS-1$
+		if (null == model.getType()) {
+			getTypeLabel().setIcon(FordiacImage.ICON_SUB_APP.getImage());
+		}
 	}
+
 }

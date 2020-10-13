@@ -20,13 +20,12 @@ public class ChangeSubAppInterfaceOrderCommand extends ChangeInterfaceOrderComma
 
 	private ChangeInterfaceOrderCommand mirroredElement = null;
 
-	public ChangeSubAppInterfaceOrderCommand(IInterfaceElement selection, boolean isInput, boolean moveUp) {
-		super(selection, isInput, moveUp);
+	public ChangeSubAppInterfaceOrderCommand(IInterfaceElement selection, boolean moveUp) {
+		super(selection, moveUp);
 
 		if (selection.getFBNetworkElement().isMapped()) {
 			mirroredElement = new ChangeInterfaceOrderCommand(
-					selection.getFBNetworkElement().getOpposite().getInterfaceElement(selection.getName()), isInput,
-					moveUp);
+					selection.getFBNetworkElement().getOpposite().getInterfaceElement(selection.getName()), moveUp);
 		}
 	}
 

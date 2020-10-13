@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
-import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public final class PaletteAnnotations {
@@ -58,38 +57,33 @@ public final class PaletteAnnotations {
 			palette.getSubAppTypes().put(entry.getLabel(), (SubApplicationTypePaletteEntry) entry);
 		} else {
 			Activator.getDefault()
-					.logError("Unknown pallet entry to be added to palette: " + entry.getClass().getName());
+					.logError("Unknown pallet entry to be added to palette: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
 	}
 
 	public static void removeTypeEntry(Palette palette, PaletteEntry entry) {
 		if (entry instanceof AdapterTypePaletteEntry) {
-			palette.getAdapterTypes().remove(entry.getLabel());
+			palette.getAdapterTypes().removeKey(entry.getLabel());
 		} else if (entry instanceof DeviceTypePaletteEntry) {
-			palette.getDeviceTypes().remove(entry.getLabel());
+			palette.getDeviceTypes().removeKey(entry.getLabel());
 		} else if (entry instanceof FBTypePaletteEntry) {
-			palette.getFbTypes().remove(entry.getLabel());
+			palette.getFbTypes().removeKey(entry.getLabel());
 		} else if (entry instanceof ResourceTypeEntry) {
-			palette.getResourceTypes().remove(entry.getLabel());
+			palette.getResourceTypes().removeKey(entry.getLabel());
 		} else if (entry instanceof SegmentTypePaletteEntry) {
-			palette.getSegmentTypes().remove(entry.getLabel());
+			palette.getSegmentTypes().removeKey(entry.getLabel());
 		} else if (entry instanceof SubApplicationTypePaletteEntry) {
-			palette.getSubAppTypes().remove(entry.getLabel());
+			palette.getSubAppTypes().removeKey(entry.getLabel());
 		} else {
 			Activator.getDefault()
-					.logError("Unknown palette entry to be removed from palette: " + entry.getClass().getName());
+					.logError("Unknown palette entry to be removed from palette: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
 	}
 
 	public static LibraryElement loadType(PaletteEntryImpl paletteEntryImpl) {
-		LibraryElement retval = null;
-		try {
-			TypeImporter importer = paletteEntryImpl.getTypeImporter(paletteEntryImpl.getPalette());
-			retval = importer.importType(paletteEntryImpl.getFile());
-		} catch (TypeImportException e) {
-			Activator.getDefault().logError("Error loading type: " + paletteEntryImpl.getFile().getName(), //$NON-NLS-1$
-					e);
-		}
+		TypeImporter importer = paletteEntryImpl.getTypeImporter();
+		importer.loadElement();
+		LibraryElement retval = importer.getElement();
 
 		if (null == retval) {
 			Activator.getDefault().logError("Error loading type: " + paletteEntryImpl.getFile().getName()); //$NON-NLS-1$
@@ -98,7 +92,7 @@ public final class PaletteAnnotations {
 	}
 
 	private PaletteAnnotations() {
-		throw new UnsupportedOperationException("The utility class PaletteAnnotations should not be instatiated");
+		throw new UnsupportedOperationException("The utility class PaletteAnnotations should not be instatiated"); //$NON-NLS-1$
 	}
 
 }

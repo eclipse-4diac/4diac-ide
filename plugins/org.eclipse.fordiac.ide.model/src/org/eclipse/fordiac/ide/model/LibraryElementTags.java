@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model;
 public interface LibraryElementTags {
 	String FB_TYPE = "FBType"; //$NON-NLS-1$
 	String ADAPTER_TYPE = "AdapterType"; //$NON-NLS-1$
+	String DATA_TYPE = "DataType"; //$NON-NLS-1$
 
 	String SERVICE_ELEMENT = "Service"; //$NON-NLS-1$
 	String RIGHT_INTERFACE_ATTRIBUTE = "RightInterface"; //$NON-NLS-1$
@@ -100,6 +101,8 @@ public interface LibraryElementTags {
 	String VERSION_ATTRIBUTE = "Version"; //$NON-NLS-1$
 	String AUTHOR_ATTRIBUTE = "Author"; //$NON-NLS-1$
 
+	String SUBAPP_REPRESENTATION_ATTRIBUTE = "Unfolded"; //$NON-NLS-1$
+
 	String FBTYPE_ELEMENT = "FBType"; //$NON-NLS-1$
 	String DEVICETYPE_ELEMENT = "DeviceType"; //$NON-NLS-1$
 	String RESOURCETYPE_NAME_ELEMENT = "ResourceTypeName"; //$NON-NLS-1$
@@ -146,4 +149,10 @@ public interface LibraryElementTags {
 	String ATTRIBUTE_ELEMENT = "Attribute"; //$NON-NLS-1$
 	String COLOR = "Color"; //$NON-NLS-1$
 	String SYSTEM = "System"; //$NON-NLS-1$
+
+	String STRUCTURED_TYPE_ELEMENT = "StructuredType"; //$NON-NLS-1$
+	String DEMUX_VISIBLE_CHILDREN = "VisibleChildren"; //$NON-NLS-1$
+	String VARIABLE_SEPARATOR = ","; //$NON-NLS-1$
+	String ASN1_TAG = "ASN1Tag"; //$NON-NLS-1$
+
 }

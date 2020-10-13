@@ -400,8 +400,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		switch (featureID) {
 		case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 			return ((InternalEList<InternalEObject>) (InternalEList<?>) getOutConnections()).basicAdd(otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -418,8 +419,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 			return ((InternalEList<?>) getVarDeclarations()).basicRemove(otherEnd, msgs);
 		case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 			return ((InternalEList<?>) getOutConnections()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -444,8 +446,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 			return getVarDeclarations();
 		case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 			return getOutConnections();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -477,8 +480,10 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 			getOutConnections().clear();
 			getOutConnections().addAll((Collection<? extends Link>) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -507,8 +512,10 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 			getOutConnections().clear();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -531,8 +538,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 			return varDeclarations != null && !varDeclarations.isEmpty();
 		case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 			return outConnections != null && !outConnections.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

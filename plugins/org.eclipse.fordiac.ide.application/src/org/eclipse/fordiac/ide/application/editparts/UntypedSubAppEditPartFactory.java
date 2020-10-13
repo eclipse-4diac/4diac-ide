@@ -13,13 +13,12 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class UntypedSubAppEditPartFactory extends ElementEditPartFactory {
 
-	public UntypedSubAppEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {
-		super(editor, zoomManager);
+	public UntypedSubAppEditPartFactory(GraphicalEditor editor) {
+		super(editor);
 	}
 
 	@Override

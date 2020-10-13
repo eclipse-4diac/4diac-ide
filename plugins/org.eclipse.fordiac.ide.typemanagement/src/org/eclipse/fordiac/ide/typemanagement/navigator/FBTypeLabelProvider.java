@@ -34,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
-import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.navigator.IDescriptionProvider;
@@ -59,7 +58,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
 			image = FordiacImage.ICON_ADAPTER.getImage();
 		} else if (TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			image = FordiacImage.ICON_SUB_APP.getImage();
+			image = FordiacImage.ICON_SUB_APP_TYPE.getImage();
 		} else if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
 			image = getImageForFBTypeFile(element);
 		}
@@ -103,13 +102,17 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		try (Scanner scanner = new Scanner(element.getContents())) {
 			if (null != scanner.findWithinHorizon("BasicFB", 0)) { //$NON-NLS-1$
 				image = FordiacImage.ICON_BASIC_FB.getImage();
-
 			} else {
 				scanner.reset();
 				if (null != scanner.findWithinHorizon("FBNetwork", 0)) { //$NON-NLS-1$
 					image = FordiacImage.ICON_COMPOSITE_FB.getImage();
 				} else {
-					image = FordiacImage.ICON_SIFB.getImage();
+					scanner.reset();
+					if (null != scanner.findWithinHorizon("SimpleFB", 0)) { //$NON-NLS-1$
+						image = FordiacImage.ICON_SIMPLE_FB.getImage();
+					} else {
+						image = FordiacImage.ICON_SIFB.getImage();
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -168,7 +171,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static FBType getAdapterTypeForFile(IFile file) {
-		PaletteEntry entry = FBTypeUtils.getPaletteEntryForFile(file);
+		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 		if (entry instanceof AdapterTypePaletteEntry) {
 			return ((AdapterTypePaletteEntry) entry).getType().getAdapterFBType();
 		}
@@ -176,7 +179,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static FBType getFBTypeFromFile(IFile file) {
-		PaletteEntry entry = FBTypeUtils.getPaletteEntryForFile(file);
+		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
 		if (entry instanceof FBTypePaletteEntry) {
 			return ((FBTypePaletteEntry) entry).getFBType();
 		}

@@ -13,6 +13,8 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import org.eclipse.emf.ecore.EObject;
+
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>INamed
  * Element</b></em>'. <!-- end-user-doc -->
@@ -31,7 +33,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface INamedElement extends I4DIACElement {
+public interface INamedElement extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute. The default value
 	 * is <code>""</code>. <!-- begin-user-doc -->

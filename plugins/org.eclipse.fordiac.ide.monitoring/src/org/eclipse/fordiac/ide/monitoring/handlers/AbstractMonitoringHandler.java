@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2016 - 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
-import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -54,12 +54,10 @@ public abstract class AbstractMonitoringHandler extends AbstractHandler {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private static void refresh(RootEditPart rootEditPart) {
 		rootEditPart.refresh();
-		for (Iterator iterator = rootEditPart.getChildren().iterator(); iterator.hasNext();) {
-			EditPart part = (EditPart) iterator.next();
-			part.refresh();
-		}
+
+		List<?> children = rootEditPart.getChildren();
+		children.forEach(child -> ((EditPart) child).refresh());
 	}
 }

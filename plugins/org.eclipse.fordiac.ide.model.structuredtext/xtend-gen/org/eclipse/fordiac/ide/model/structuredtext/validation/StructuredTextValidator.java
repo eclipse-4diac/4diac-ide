@@ -16,14 +16,18 @@ package org.eclipse.fordiac.ide.model.structuredtext.validation;
 import com.google.common.base.Objects;
 import java.util.Arrays;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocatedVariable;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
 import org.eclipse.fordiac.ide.model.structuredtext.validation.AbstractStructuredTextValidator;
+import org.eclipse.fordiac.ide.model.structuredtext.validation.DatetimeLiteral;
 import org.eclipse.xtext.validation.Check;
 
 /**
@@ -33,12 +37,8 @@ import org.eclipse.xtext.validation.Check;
  */
 @SuppressWarnings("all")
 public class StructuredTextValidator extends AbstractStructuredTextValidator {
-  private int AccessBits(final PartialAccess part) {
-    return this.BitSize(this.extractTypeInformation(part, ""));
-  }
-  
-  private boolean isIndexInRange(final PartialAccess p, final int size) {
-    return ((p.getIndex() >= 0) && (p.getIndex() < size));
+  private boolean isIndexInRange(final PartialAccess p, final int start, final int stop) {
+    return ((p.getIndex() >= start) && (p.getIndex() <= stop));
   }
   
   @Check
@@ -46,23 +46,13 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
     PartialAccess _part = v.getPart();
     boolean _tripleNotEquals = (null != _part);
     if (_tripleNotEquals) {
-      int _BitSize = this.BitSize(v.getVar().getType().getName());
-      int _AccessBits = this.AccessBits(v.getPart());
-      final int indexSize = (_BitSize / _AccessBits);
-      if (((this.AccessBits(v.getPart()) > 0) && (this.BitSize(v.getVar().getType().getName()) > this.AccessBits(v.getPart())))) {
-        boolean _isIndexInRange = this.isIndexInRange(v.getPart(), indexSize);
-        boolean _not = (!_isIndexInRange);
-        if (_not) {
-          this.error("Incorrect partial access: index not within limits.", StructuredTextPackage.Literals.PRIMARY_VARIABLE__VAR);
-        } else {
-          if (((this.AccessBits(v.getPart()) == 0) || (this.BitSize(v.getVar().getType().getName()) == 0))) {
-            this.error("Incorrect partial access: datatypes other than ANY_BIT.", StructuredTextPackage.Literals.PRIMARY_VARIABLE__VAR);
-          } else {
-            if ((indexSize < 1)) {
-              this.error("Incorrect partial access: access dataype must be smaller than storage datatype.", StructuredTextPackage.Literals.PRIMARY_VARIABLE__VAR);
-            }
-          }
-        }
+      PartialAccess _part_1 = v.getPart();
+      int _arraySize = v.getVar().getArraySize();
+      int _minus = (_arraySize - 1);
+      boolean _isIndexInRange = this.isIndexInRange(_part_1, 0, _minus);
+      boolean _not = (!_isIndexInRange);
+      if (_not) {
+        this.error("Incorrect partial access: index not within limits.", StructuredTextPackage.Literals.PRIMARY_VARIABLE__VAR);
       }
     }
   }
@@ -75,41 +65,41 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
     return this.BitSize(this.extractTypeInformation(v));
   }
   
-  private int _BitSize(final LocatedVariable v) {
+  private int _BitSize(final LocalVariable v) {
     return this.BitSize(this.extractTypeInformation(v));
   }
   
   private int _BitSize(final String str) {
     int _switchResult = (int) 0;
     boolean _matched = false;
-    boolean _equals = str.equals("LWORD");
+    boolean _equals = str.equals(FordiacKeywords.LWORD);
     if (_equals) {
       _matched=true;
       _switchResult = 64;
     }
     if (!_matched) {
-      boolean _equals_1 = str.equals("DWORD");
+      boolean _equals_1 = str.equals(FordiacKeywords.DWORD);
       if (_equals_1) {
         _matched=true;
         _switchResult = 32;
       }
     }
     if (!_matched) {
-      boolean _equals_2 = str.equals("WORD");
+      boolean _equals_2 = str.equals(FordiacKeywords.WORD);
       if (_equals_2) {
         _matched=true;
         _switchResult = 16;
       }
     }
     if (!_matched) {
-      boolean _equals_3 = str.equals("BYTE");
+      boolean _equals_3 = str.equals(FordiacKeywords.BYTE);
       if (_equals_3) {
         _matched=true;
         _switchResult = 8;
       }
     }
     if (!_matched) {
-      boolean _equals_4 = str.equals("BOOL");
+      boolean _equals_4 = str.equals(FordiacKeywords.BOOL);
       if (_equals_4) {
         _matched=true;
         _switchResult = 1;
@@ -127,22 +117,22 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
       String _xifexpression_1 = null;
       boolean _isBitaccess = part.isBitaccess();
       if (_isBitaccess) {
-        _xifexpression_1 = "BOOL";
+        _xifexpression_1 = FordiacKeywords.BOOL;
       } else {
         String _xifexpression_2 = null;
         boolean _isByteaccess = part.isByteaccess();
         if (_isByteaccess) {
-          _xifexpression_2 = "BYTE";
+          _xifexpression_2 = FordiacKeywords.BYTE;
         } else {
           String _xifexpression_3 = null;
           boolean _isWordaccess = part.isWordaccess();
           if (_isWordaccess) {
-            _xifexpression_3 = "WORD";
+            _xifexpression_3 = FordiacKeywords.WORD;
           } else {
             String _xifexpression_4 = null;
             boolean _isDwordaccess = part.isDwordaccess();
             if (_isDwordaccess) {
-              _xifexpression_4 = "DWORD";
+              _xifexpression_4 = FordiacKeywords.DWORD;
             } else {
               _xifexpression_4 = "";
             }
@@ -194,32 +184,98 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
   }
   
   protected String _extractTypeInformation(final AdapterVariable variable) {
-    return variable.getVar().getType().getName();
+    String _xblockexpression = null;
+    {
+      final AdapterVariable head = variable.getCurr();
+      String _switchResult = null;
+      boolean _matched = false;
+      if (head instanceof AdapterRoot) {
+        _matched=true;
+        _switchResult = ((AdapterRoot)head).getAdapter().getType().getName();
+      }
+      if (!_matched) {
+        if (head instanceof AdapterVariable) {
+          _matched=true;
+          _switchResult = head.getVar().getType().getName();
+        }
+      }
+      if (!_matched) {
+        _switchResult = "";
+      }
+      _xblockexpression = _switchResult;
+    }
+    return _xblockexpression;
   }
   
   @Check
-  public void checkAtLocation(final LocatedVariable v) {
-    Variable _location = v.getLocation();
-    boolean _tripleNotEquals = (null != _location);
-    if (_tripleNotEquals) {
-      if (((this.BitSize(v) == 0) && v.isArray())) {
-        this.error("Piecewise located variables are allowed only for variables of type ANY_BIT", StructuredTextPackage.Literals.LOCATED_VARIABLE__LOCATION);
-      }
-      if ((((this.BitSize(v) > 0) && v.isArray()) && (v.getArraySize() == 0))) {
-        this.error("Piecewise located variables must have at least an array size of 1", StructuredTextPackage.Literals.LOCATED_VARIABLE__LOCATION);
-      }
-      if ((((this.BitSize(v) > 0) && v.isArray()) && (v.getArraySize() > this.BitSize(v.getLocation())))) {
-        this.error("Piecewise located variables cannot access more bits than are available in the destination", StructuredTextPackage.Literals.LOCATED_VARIABLE__LOCATION);
-      }
-      if ((((this.BitSize(v) == 0) && (this.BitSize(v.getLocation()) == 0)) && (!Objects.equal(this.extractTypeInformation(v.getLocation(), this.extractTypeInformation(v.getLocation())), this.extractTypeInformation(v))))) {
-        this.error("General located variables must have matching types", StructuredTextPackage.Literals.LOCATED_VARIABLE__LOCATION);
+  public void checkLocalVariable(final LocalVariable v) {
+    if ((v.isLocated() && v.isInitalized())) {
+      this.error("Located variables can not be initialized.", StructuredTextPackage.Literals.LOCAL_VARIABLE__INITIAL_VALUE);
+    } else {
+      if ((v.isArray() && v.isInitalized())) {
+        this.error("Local arrays can not be initialized.", StructuredTextPackage.Literals.LOCAL_VARIABLE__INITIAL_VALUE);
       }
     }
   }
   
+  @Check
+  public void checkArray(final LocalVariable v) {
+    boolean _isArray = v.isArray();
+    if (_isArray) {
+      int _arrayStart = v.getArrayStart();
+      boolean _notEquals = (_arrayStart != 0);
+      if (_notEquals) {
+        this.error("Only arrays with a start index of 0 are supported.", StructuredTextPackage.Literals.LOCAL_VARIABLE__ARRAY);
+      }
+      int _arrayStart_1 = v.getArrayStart();
+      int _arrayStop = v.getArrayStop();
+      boolean _greaterEqualsThan = (_arrayStart_1 >= _arrayStop);
+      if (_greaterEqualsThan) {
+        this.error("Only arrays with incrementing index are supported.", StructuredTextPackage.Literals.LOCAL_VARIABLE__ARRAY);
+      }
+    }
+  }
+  
+  private int extractArraySize(final VarDeclaration v) {
+    if ((v instanceof LocalVariable)) {
+      int _arrayStop = ((LocalVariable)v).getArrayStop();
+      int _arrayStart = ((LocalVariable)v).getArrayStart();
+      int _minus = (_arrayStop - _arrayStart);
+      return (_minus + 1);
+    } else {
+      return v.getArraySize();
+    }
+  }
+  
+  @Check
+  public void checkAtLocation(final LocalVariable v) {
+    if ((v.isLocated() && (null != v.getLocation()))) {
+      if ((((this.BitSize(v.getLocation()) == 0) || (this.BitSize(v) == 0)) && v.isArray())) {
+        this.error("Piecewise located variables are allowed only for variables of type ANY_BIT", StructuredTextPackage.Literals.LOCAL_VARIABLE__LOCATED);
+      }
+      if (((((this.BitSize(v.getLocation()) > 0) && (this.BitSize(v) > 0)) && v.isArray()) && ((this.extractArraySize(v) * this.BitSize(v)) > this.BitSize(v.getLocation())))) {
+        this.error("Piecewise located variables cannot access more bits than are available in the destination", StructuredTextPackage.Literals.LOCAL_VARIABLE__LOCATED);
+      }
+      if ((((this.BitSize(v) == 0) && (this.BitSize(v.getLocation()) == 0)) && (!Objects.equal(this.extractTypeInformation(v.getLocation(), this.extractTypeInformation(v.getLocation())), this.extractTypeInformation(v))))) {
+        this.error("General located variables must have matching types", StructuredTextPackage.Literals.LOCAL_VARIABLE__LOCATED);
+      }
+    }
+  }
+  
+  @Check
+  public void validateTimeLiteral(final TimeLiteral expr) {
+    String _literal = expr.getLiteral();
+    final DatetimeLiteral literal = new DatetimeLiteral(_literal);
+    boolean _isValid = literal.isValid();
+    boolean _not = (!_isValid);
+    if (_not) {
+      this.error("Invalid Literal", StructuredTextPackage.Literals.TIME_LITERAL__LITERAL);
+    }
+  }
+  
   private int BitSize(final Object v) {
-    if (v instanceof LocatedVariable) {
-      return _BitSize((LocatedVariable)v);
+    if (v instanceof LocalVariable) {
+      return _BitSize((LocalVariable)v);
     } else if (v instanceof VarDeclaration) {
       return _BitSize((VarDeclaration)v);
     } else if (v instanceof PrimaryVariable) {

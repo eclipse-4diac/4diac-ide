@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -50,7 +50,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String AUTHOR_EDEFAULT = null;
+	protected static final String AUTHOR_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getAuthor() <em>Author</em>}' attribute.
@@ -65,17 +65,17 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	/**
 	 * The default value of the '{@link #getDate() <em>Date</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getDate()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String DATE_EDEFAULT = null;
+	protected static final String DATE_EDEFAULT = "YYYY-MM-DD"; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getDate() <em>Date</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getDate()
 	 * @generated
 	 * @ordered
@@ -90,7 +90,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String ORGANIZATION_EDEFAULT = null;
+	protected static final String ORGANIZATION_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getOrganization() <em>Organization</em>}'
@@ -110,7 +110,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String REMARKS_EDEFAULT = null;
+	protected static final String REMARKS_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getRemarks() <em>Remarks</em>}' attribute.
@@ -130,7 +130,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VERSION_EDEFAULT = null;
+	protected static final String VERSION_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
@@ -299,8 +299,9 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 			return getRemarks();
 		case LibraryElementPackage.VERSION_INFO__VERSION:
 			return getVersion();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -326,8 +327,10 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 		case LibraryElementPackage.VERSION_INFO__VERSION:
 			setVersion((String) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -353,8 +356,10 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 		case LibraryElementPackage.VERSION_INFO__VERSION:
 			setVersion(VERSION_EDEFAULT);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -375,8 +380,9 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 			return REMARKS_EDEFAULT == null ? remarks != null : !REMARKS_EDEFAULT.equals(remarks);
 		case LibraryElementPackage.VERSION_INFO__VERSION:
 			return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

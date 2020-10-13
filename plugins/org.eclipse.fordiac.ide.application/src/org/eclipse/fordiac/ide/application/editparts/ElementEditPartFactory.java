@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * 				 2019 - 2020 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,19 +13,23 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - separated FBNetworkElement from instance name for better
  *                 direct editing of instance names
+ *   Bianca Wiesmayr - added struct
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 /**
@@ -33,15 +37,8 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
  */
 public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 
-	private final ZoomManager zoomManager;
-
-	public ElementEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {
+	public ElementEditPartFactory(GraphicalEditor editor) {
 		super(editor);
-		this.zoomManager = zoomManager;
-	}
-
-	protected ZoomManager getZoomManager() {
-		return zoomManager;
 	}
 
 	/**
@@ -60,26 +57,57 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 				part = new FBNetworkEditPart();
 			}
 		} else if (modelElement instanceof FB) {
-			part = new FBEditPart(zoomManager);
+			if (null != ((FB) modelElement).getType()) {
+				if (((FB) modelElement).getType().getName().contentEquals("STRUCT_MUX")) { //$NON-NLS-1$
+					part = new MultiplexerEditPart();
+				} else if (((FB) modelElement).getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
+					part = new DemultiplexerEditPart();
+				} else {
+					part = new FBEditPart();
+				}
+			}
 		} else if (modelElement instanceof InstanceName) {
 			part = new InstanceNameEditPart();
 		} else if (modelElement instanceof Connection) {
 			part = new ConnectionEditPart();
 		} else if (modelElement instanceof SubApp) {
-			part = new SubAppForFBNetworkEditPart(zoomManager);
+			part = new SubAppForFBNetworkEditPart();
 		} else if (modelElement instanceof IInterfaceElement) {
-			IInterfaceElement element = (IInterfaceElement) modelElement;
-			if (element.getFBNetworkElement() instanceof SubApp && null == element.getFBNetworkElement().getType()) {
-				part = new UntypedSubAppInterfaceElementEditPart();
-			} else {
-				part = new InterfaceEditPartForFBNetwork();
-			}
+			part = createInterfaceEditPart(modelElement);
 		} else if (modelElement instanceof Value) {
 			part = new ValueEditPart();
 		} else {
 			throw createEditpartCreationException(modelElement);
 		}
 		return part;
+	}
+
+	private static EditPart createInterfaceEditPart(final Object modelElement) {
+		EditPart part;
+		IInterfaceElement element = (IInterfaceElement) modelElement;
+		if ((element.getFBNetworkElement() instanceof StructManipulator)
+				&& (element.getType() instanceof StructuredType)) {
+			if (isMuxOutput(element)) {
+				return new StructInterfaceEditPart();
+			}
+			if (isDemuxInput(element)) {
+				return new StructInterfaceEditPart();
+			}
+		}
+		if ((element.getFBNetworkElement() instanceof SubApp) && (null == element.getFBNetworkElement().getType())) {
+			part = new UntypedSubAppInterfaceElementEditPart();
+		} else {
+			part = new InterfaceEditPartForFBNetwork();
+		}
+		return part;
+	}
+
+	private static boolean isDemuxInput(IInterfaceElement element) {
+		return (element.getFBNetworkElement() instanceof Demultiplexer) && (element.isIsInput());
+	}
+
+	private static boolean isMuxOutput(IInterfaceElement element) {
+		return (element.getFBNetworkElement() instanceof Multiplexer) && (!element.isIsInput());
 	}
 
 }

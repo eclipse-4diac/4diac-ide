@@ -64,7 +64,7 @@ public class SubAppTypeItemProvider extends CompositeFBTypeItemProvider {
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, FordiacImage.ICON_SUB_APP.getImage());
+		return overlayImage(object, FordiacImage.ICON_SUB_APP_TYPE.getImage());
 	}
 
 	/**

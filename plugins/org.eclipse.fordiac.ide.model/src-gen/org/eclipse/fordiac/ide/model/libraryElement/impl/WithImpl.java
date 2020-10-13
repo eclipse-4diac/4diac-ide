@@ -149,8 +149,9 @@ public class WithImpl extends EObjectImpl implements With {
 				msgs = ((InternalEObject) variables).eInverseRemove(this, LibraryElementPackage.VAR_DECLARATION__WITHS,
 						VarDeclaration.class, msgs);
 			return basicSetVariables((VarDeclaration) otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -163,8 +164,9 @@ public class WithImpl extends EObjectImpl implements With {
 		switch (featureID) {
 		case LibraryElementPackage.WITH__VARIABLES:
 			return basicSetVariables(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -179,8 +181,9 @@ public class WithImpl extends EObjectImpl implements With {
 			if (resolve)
 				return getVariables();
 			return basicGetVariables();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -194,8 +197,10 @@ public class WithImpl extends EObjectImpl implements With {
 		case LibraryElementPackage.WITH__VARIABLES:
 			setVariables((VarDeclaration) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -209,8 +214,10 @@ public class WithImpl extends EObjectImpl implements With {
 		case LibraryElementPackage.WITH__VARIABLES:
 			setVariables((VarDeclaration) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -223,8 +230,9 @@ public class WithImpl extends EObjectImpl implements With {
 		switch (featureID) {
 		case LibraryElementPackage.WITH__VARIABLES:
 			return variables != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // WithImpl

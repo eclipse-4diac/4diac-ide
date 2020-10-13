@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -26,13 +26,13 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.gef.commands.CommandStack;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '
@@ -49,8 +49,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
  * <em>Palette</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getSystemConfiguration
  * <em>System Configuration</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getProject
- * <em>Project</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getSystemFile
+ * <em>System File</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getCommandStack
+ * <em>Command Stack</em>}</li>
  * </ul>
  *
  * @generated
@@ -98,24 +100,44 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	protected SystemConfiguration systemConfiguration;
 
 	/**
-	 * The default value of the '{@link #getProject() <em>Project</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #getSystemFile() <em>System File</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @see #getProject()
+	 * @see #getSystemFile()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final IProject PROJECT_EDEFAULT = null;
+	protected static final IFile SYSTEM_FILE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getProject() <em>Project</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getSystemFile() <em>System File</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @see #getProject()
+	 * @see #getSystemFile()
 	 * @generated
 	 * @ordered
 	 */
-	protected IProject project = PROJECT_EDEFAULT;
+	protected IFile systemFile = SYSTEM_FILE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCommandStack() <em>Command Stack</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see #getCommandStack()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final CommandStack COMMAND_STACK_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCommandStack() <em>Command Stack</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see #getCommandStack()
+	 * @generated
+	 * @ordered
+	 */
+	protected CommandStack commandStack = COMMAND_STACK_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -200,41 +222,13 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * 
 	 * @generated
 	 */
-	public NotificationChain basicSetPalette(Palette newPalette, NotificationChain msgs) {
-		Palette oldPalette = palette;
-		palette = newPalette;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-					LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, oldPalette, newPalette);
-			if (msgs == null)
-				msgs = notification;
-			else
-				msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
 	@Override
 	public void setPalette(Palette newPalette) {
-		if (newPalette != palette) {
-			NotificationChain msgs = null;
-			if (palette != null)
-				msgs = ((InternalEObject) palette).eInverseRemove(this, PalettePackage.PALETTE__AUTOMATION_SYSTEM,
-						Palette.class, msgs);
-			if (newPalette != null)
-				msgs = ((InternalEObject) newPalette).eInverseAdd(this, PalettePackage.PALETTE__AUTOMATION_SYSTEM,
-						Palette.class, msgs);
-			msgs = basicSetPalette(newPalette, msgs);
-			if (msgs != null)
-				msgs.dispatch();
-		} else if (eNotificationRequired())
+		Palette oldPalette = palette;
+		palette = newPalette;
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE,
-					newPalette, newPalette));
+					oldPalette, palette));
 	}
 
 	/**
@@ -330,8 +324,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @generated
 	 */
 	@Override
-	public IProject getProject() {
-		return project;
+	public IFile getSystemFile() {
+		return systemFile;
 	}
 
 	/**
@@ -340,12 +334,36 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @generated
 	 */
 	@Override
-	public void setProject(IProject newProject) {
-		IProject oldProject = project;
-		project = newProject;
+	public void setSystemFile(IFile newSystemFile) {
+		IFile oldSystemFile = systemFile;
+		systemFile = newSystemFile;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__PROJECT,
-					oldProject, project));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE,
+					oldSystemFile, systemFile));
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public CommandStack getCommandStack() {
+		return commandStack;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public void setCommandStack(CommandStack newCommandStack) {
+		CommandStack oldCommandStack = commandStack;
+		commandStack = newCommandStack;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK, oldCommandStack, commandStack));
 	}
 
 	/**
@@ -374,35 +392,17 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-		case LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE:
-			if (palette != null)
-				msgs = ((InternalEObject) palette).eInverseRemove(this, PalettePackage.PALETTE__AUTOMATION_SYSTEM,
-						Palette.class, msgs);
-			return basicSetPalette((Palette) otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 			return ((InternalEList<?>) getApplication()).basicRemove(otherEnd, msgs);
 		case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
 			return ((InternalEList<?>) getMapping()).basicRemove(otherEnd, msgs);
-		case LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE:
-			return basicSetPalette(null, msgs);
 		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 			return basicSetSystemConfiguration(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -425,10 +425,13 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			if (resolve)
 				return getSystemConfiguration();
 			return basicGetSystemConfiguration();
-		case LibraryElementPackage.AUTOMATION_SYSTEM__PROJECT:
-			return getProject();
+		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
+			return getSystemFile();
+		case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
+			return getCommandStack();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -454,11 +457,16 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 			setSystemConfiguration((SystemConfiguration) newValue);
 			return;
-		case LibraryElementPackage.AUTOMATION_SYSTEM__PROJECT:
-			setProject((IProject) newValue);
+		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
+			setSystemFile((IFile) newValue);
+			return;
+		case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
+			setCommandStack((CommandStack) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
 			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -481,11 +489,16 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 			setSystemConfiguration((SystemConfiguration) null);
 			return;
-		case LibraryElementPackage.AUTOMATION_SYSTEM__PROJECT:
-			setProject(PROJECT_EDEFAULT);
+		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
+			setSystemFile(SYSTEM_FILE_EDEFAULT);
+			return;
+		case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
+			setCommandStack(COMMAND_STACK_EDEFAULT);
+			return;
+		default:
+			super.eUnset(featureID);
 			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -504,10 +517,13 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			return palette != null;
 		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 			return systemConfiguration != null;
-		case LibraryElementPackage.AUTOMATION_SYSTEM__PROJECT:
-			return PROJECT_EDEFAULT == null ? project != null : !PROJECT_EDEFAULT.equals(project);
+		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
+			return SYSTEM_FILE_EDEFAULT == null ? systemFile != null : !SYSTEM_FILE_EDEFAULT.equals(systemFile);
+		case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
+			return COMMAND_STACK_EDEFAULT == null ? commandStack != null : !COMMAND_STACK_EDEFAULT.equals(commandStack);
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**
@@ -521,8 +537,10 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (project: "); //$NON-NLS-1$
-		result.append(project);
+		result.append(" (systemFile: "); //$NON-NLS-1$
+		result.append(systemFile);
+		result.append(", commandStack: "); //$NON-NLS-1$
+		result.append(commandStack);
 		result.append(')');
 		return result.toString();
 	}

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>Library
@@ -116,5 +117,15 @@ public interface LibraryElement extends INamedElement {
 	 * @generated
 	 */
 	void setPaletteEntry(PaletteEntry value);
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation"
+	 *        dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary"
+	 *        required="true"
+	 * @generated
+	 */
+	TypeLibrary getTypeLibrary();
 
 } // LibraryElement

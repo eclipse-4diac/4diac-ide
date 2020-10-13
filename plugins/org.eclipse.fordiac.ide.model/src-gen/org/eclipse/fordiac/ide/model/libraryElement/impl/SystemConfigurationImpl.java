@@ -19,6 +19,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -45,7 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
  *
  * @generated
  */
-public class SystemConfigurationImpl extends I4DIACElementImpl implements SystemConfiguration {
+public class SystemConfigurationImpl extends EObjectImpl implements SystemConfiguration {
 	/**
 	 * The cached value of the '{@link #getDevices() <em>Devices</em>}' containment
 	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -179,8 +180,9 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 			return ((InternalEList<?>) getSegments()).basicRemove(otherEnd, msgs);
 		case LibraryElementPackage.SYSTEM_CONFIGURATION__LINKS:
 			return ((InternalEList<?>) getLinks()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -197,8 +199,9 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 			return getSegments();
 		case LibraryElementPackage.SYSTEM_CONFIGURATION__LINKS:
 			return getLinks();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -222,8 +225,10 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 			getLinks().clear();
 			getLinks().addAll((Collection<? extends Link>) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -243,8 +248,10 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 		case LibraryElementPackage.SYSTEM_CONFIGURATION__LINKS:
 			getLinks().clear();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -261,8 +268,9 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 			return segments != null && !segments.isEmpty();
 		case LibraryElementPackage.SYSTEM_CONFIGURATION__LINKS:
 			return links != null && !links.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // SystemConfigurationImpl

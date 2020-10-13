@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.workbench.feature"
       label="Workbench Base"
-      version="1.12.2.qualifier"
+      version="1.13.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
@@ -171,6 +171,14 @@ United States, other countries, or both.\n
          id="org.eclipse.emf.mwe2.language.sdk"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.elk.algorithms.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.elk.feature"
+         version="0.0.0"/>
+
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.ui"/>
@@ -220,6 +228,7 @@ United States, other countries, or both.\n
       <import plugin="org.eclipse.jface" version="3.3.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jdt.core" match="compatible"/>
       <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="org.eclipse.ocl.ecore"/>
    </requires>
 
    <plugin
@@ -238,6 +247,13 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.application"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.elk"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -455,6 +471,20 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.metrics"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.validation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.model.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"

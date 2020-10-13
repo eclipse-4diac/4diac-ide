@@ -1,0 +1,120 @@
+/*******************************************************************************
+ * Copyright (c) 2020 Johannes Kepler University Linz
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+package org.eclipse.fordiac.ide.model.helpers;
+
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.With;
+
+public final class InterfaceListCopier {
+
+	public static InterfaceList copy(InterfaceList src) {
+		InterfaceList copy = LibraryElementFactory.eINSTANCE.createInterfaceList();
+
+		// variables will be copied before the events so that the event copy can used
+		// the copied vars for the with creation
+		copyVarList(copy.getInputVars(), src.getInputVars());
+		copyVarList(copy.getOutputVars(), src.getOutputVars());
+
+		copyEventList(copy.getEventInputs(), copy.getInputVars(), src.getEventInputs(), src.getInputVars());
+		copyEventList(copy.getEventOutputs(), copy.getOutputVars(), src.getEventOutputs(), src.getOutputVars());
+
+		copyAdapterList(copy.getPlugs(), src.getPlugs());
+		copyAdapterList(copy.getSockets(), src.getSockets());
+
+		return copy;
+	}
+
+	public static void copyVarList(EList<VarDeclaration> destVars, final EList<VarDeclaration> srcVars) {
+		srcVars.forEach(var -> destVars.add(copyVar(var)));
+	}
+
+	private static VarDeclaration copyVar(VarDeclaration var) {
+		VarDeclaration copy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		copy.setArraySize(var.getArraySize());
+		copy.setComment(var.getComment());
+		copy.setIsInput(var.isIsInput());
+		copy.setName(var.getName());
+		copy.setType(var.getType());
+		copy.setTypeName(var.getTypeName());
+
+		if (null != var.getValue()) {
+			Value varInitialization = LibraryElementFactory.eINSTANCE.createValue();
+			varInitialization.setValue(var.getValue().getValue());
+			copy.setValue(varInitialization);
+		}
+
+		return copy;
+	}
+
+	/**
+	 * copy a list of events with the associated with constructs
+	 *
+	 * @param destEvents the list of the copied events
+	 * @param copyVars   the list of the data points for the new withs
+	 * @param srcEvents  the source event list
+	 * @param srcVars    the source vars used in the withs
+	 */
+	private static void copyEventList(EList<Event> destEvents, final EList<VarDeclaration> copyVars,
+			final EList<Event> srcEvents, final EList<VarDeclaration> srcVars) {
+		srcEvents.forEach(srcEvent -> {
+			Event copy = copyEvent(srcEvent);
+			copyWiths(copy, srcEvent, copyVars, srcVars);
+			destEvents.add(copy);
+		});
+
+	}
+
+	private static Event copyEvent(Event srcEvent) {
+		Event copy = LibraryElementFactory.eINSTANCE.createEvent();
+		copy.setComment(srcEvent.getComment());
+		copy.setIsInput(srcEvent.isIsInput());
+		copy.setName(srcEvent.getName());
+		copy.setType(srcEvent.getType());
+		copy.setTypeName(srcEvent.getTypeName());
+		return copy;
+	}
+
+	private static void copyWiths(Event copy, Event srcEvent, EList<VarDeclaration> copyVars,
+			EList<VarDeclaration> srcVars) {
+		for (With with : srcEvent.getWith()) {
+			With withCopy = LibraryElementFactory.eINSTANCE.createWith();
+			withCopy.setVariables(copyVars.get(srcVars.indexOf(with.getVariables())));
+			copy.getWith().add(withCopy);
+		}
+	}
+
+	private static void copyAdapterList(EList<AdapterDeclaration> destAdapters, EList<AdapterDeclaration> srcAdapters) {
+		srcAdapters.forEach(adapter -> {
+			AdapterDeclaration copy = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
+			copy.setComment(adapter.getComment());
+			copy.setIsInput(adapter.isIsInput());
+			copy.setName(adapter.getName());
+			copy.setPaletteEntry(adapter.getPaletteEntry());
+			copy.setType(adapter.getType());
+			copy.setTypeName(adapter.getTypeName());
+			destAdapters.add(copy);
+		});
+
+	}
+
+	private InterfaceListCopier() {
+		throw new IllegalStateException("InterfaceListCopier is a utility class that can not be instantiated"); //$NON-NLS-1$
+	}
+
+}

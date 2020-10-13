@@ -346,7 +346,7 @@ public class CompositeFBFilter {
         } else {
           _builder.appendImmediate(",", "  ");
         }
-        _builder.append("  \t  ");
+        _builder.append("  ");
         FBNetworkElement dne = con.getDestination().getFBNetworkElement();
         _builder.newLineIfNotEmpty();
         {
@@ -361,9 +361,10 @@ public class CompositeFBFilter {
             _builder.append("}");
             _builder.newLineIfNotEmpty();
           } else {
+            _builder.append("  ");
             _builder.append("{dstID = \"");
             String _name = con.getDestination().getName();
-            _builder.append(_name);
+            _builder.append(_name, "  ");
             _builder.append("\", -1}");
             _builder.newLineIfNotEmpty();
           }
@@ -579,7 +580,7 @@ public class CompositeFBFilter {
     for (final FBNetworkElement ne : fbs) {
       EList<VarDeclaration> _inputVars = ne.getInterface().getInputVars();
       for (final VarDeclaration iv : _inputVars) {
-        if ((((null != iv.getValue()) && (null != iv.getValue().getValue())) && (!iv.getValue().getValue().isEmpty()))) {
+        if (((null != iv.getValue()) && (!iv.getValue().getValue().isEmpty()))) {
           ArrayList<Object> list = new ArrayList<Object>();
           list.add(Integer.valueOf(fbs.indexOf(ne)));
           list.add(iv.getName());

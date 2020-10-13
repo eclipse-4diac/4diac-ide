@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -49,11 +50,11 @@ import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
@@ -118,7 +119,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	private String path;
 	private KeyHandler sharedKeyHandler;
 	private StackLayout stack;
-	private Palette palette;
+	private TypeLibrary typeLib;
 	private final Map<String, IFBTestConfiguration> configurations = new HashMap<>();
 	private Composite configurationParent;
 	private TableViewer testDataViewer;
@@ -154,7 +155,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		if (input instanceof FBTypeEditorInput) {
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			type = untypedInput.getContent();
-			palette = untypedInput.getPaletteEntry().getPalette();
+			typeLib = type.getTypeLibrary();
 		}
 		setSite(site);
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
@@ -440,7 +441,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	}
 
 	protected FBInterfaceEditPartFactory getEditpartFactory() {
-		return new FBInterfaceEditPartFactory(this, palette, getZoomManger());
+		return new FBInterfaceEditPartFactory(this, typeLib);
 	}
 
 	protected KeyHandler getCommonKeyHandler() {
@@ -580,4 +581,16 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	public void setCommonCommandStack(CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
+
+	@Override
+	public void gotoMarker(IMarker marker) {
+		// For now we don't handle markers in this editor
+	}
+
+	@Override
+	public boolean isMarkerTarget(IMarker marker) {
+		// For now we don't handle markers in this editor
+		return false;
+	}
+
 }

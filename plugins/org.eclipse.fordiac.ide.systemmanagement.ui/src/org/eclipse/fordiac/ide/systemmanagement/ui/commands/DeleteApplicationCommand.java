@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -54,21 +54,21 @@ public class DeleteApplicationCommand extends Command {
 		unmappApplicationElements.execute();
 		closeApplicationEditor();
 		system.getApplication().remove(application);
-		SystemManager.INSTANCE.saveSystem(system);
+		SystemManager.saveSystem(system);
 	}
 
 	@Override
 	public void redo() {
 		unmappApplicationElements.redo();
 		system.getApplication().remove(application);
-		SystemManager.INSTANCE.saveSystem(system);
+		SystemManager.saveSystem(system);
 	}
 
 	@Override
 	public void undo() {
 		system.getApplication().add(application);
 		unmappApplicationElements.undo();
-		SystemManager.INSTANCE.saveSystem(system);
+		SystemManager.saveSystem(system);
 	}
 
 	private void getUnmappCommands() {

@@ -218,8 +218,9 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 			return ((InternalEList<?>) getVarDeclaration()).basicRemove(otherEnd, msgs);
 		case LibraryElementPackage.RESOURCE_TYPE__FB_NETWORK:
 			return basicSetFBNetwork(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -238,8 +239,9 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 			if (resolve)
 				return getSupportedFBTypes();
 			return basicGetSupportedFBTypes();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -261,8 +263,10 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 		case LibraryElementPackage.RESOURCE_TYPE__SUPPORTED_FB_TYPES:
 			setSupportedFBTypes((FBType) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -282,8 +286,10 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 		case LibraryElementPackage.RESOURCE_TYPE__SUPPORTED_FB_TYPES:
 			setSupportedFBTypes((FBType) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -300,8 +306,9 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 			return fBNetwork != null;
 		case LibraryElementPackage.RESOURCE_TYPE__SUPPORTED_FB_TYPES:
 			return supportedFBTypes != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // ResourceTypeImpl

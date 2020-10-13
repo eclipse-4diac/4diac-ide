@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object
@@ -340,10 +341,20 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * @generated
 	 */
 	@Override
-	public TypeImporter getTypeImporter(Palette palette) {
+	public TypeImporter getTypeImporter() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public TypeLibrary getTypeLibrary() {
+		return getPalette().getTypeLibrary();
 	}
 
 	/**
@@ -359,8 +370,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 				msgs = ((InternalEObject) type).eInverseRemove(this,
 						LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY, LibraryElement.class, msgs);
 			return basicSetType((LibraryElement) otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -373,8 +385,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		switch (featureID) {
 		case PalettePackage.PALETTE_ENTRY__TYPE:
 			return basicSetType(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -395,8 +408,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 			return getType();
 		case PalettePackage.PALETTE_ENTRY__PALETTE:
 			return getPalette();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -422,8 +436,10 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		case PalettePackage.PALETTE_ENTRY__PALETTE:
 			setPalette((Palette) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -449,8 +465,10 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		case PalettePackage.PALETTE_ENTRY__PALETTE:
 			setPalette((Palette) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -471,8 +489,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 			return type != null;
 		case PalettePackage.PALETTE_ENTRY__PALETTE:
 			return palette != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

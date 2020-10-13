@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
@@ -41,7 +42,8 @@ public class ChangeTypeCommand extends Command {
 	public void execute() {
 		oldDataType = interfaceElement.getType();
 		setNewType();
-		if (dataType instanceof AdapterType && interfaceElement.eContainer().eContainer() instanceof CompositeFBType) {
+		if ((dataType instanceof AdapterType) && (interfaceElement.eContainer().eContainer() instanceof CompositeFBType)
+				&& (!(interfaceElement.eContainer().eContainer() instanceof SubAppType))) {
 			cmd = new ChangeAdapterFBCommand((AdapterDeclaration) interfaceElement);
 			cmd.execute();
 		}

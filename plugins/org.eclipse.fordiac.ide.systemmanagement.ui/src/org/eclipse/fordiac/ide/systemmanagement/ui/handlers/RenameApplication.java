@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013 - 2016 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -19,7 +19,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.CommandStack;
@@ -81,7 +80,7 @@ public class RenameApplication extends AbstractHandler {
 
 	private static void performApplicationRename(Application application, String newName) {
 		ChangeNameCommand cmd = new ChangeNameCommand(application, newName);
-		CommandStack cmdStack = SystemManager.INSTANCE.getCommandStack(application.getAutomationSystem());
+		CommandStack cmdStack = application.getAutomationSystem().getCommandStack();
 		cmdStack.execute(cmd);
 	}
 }

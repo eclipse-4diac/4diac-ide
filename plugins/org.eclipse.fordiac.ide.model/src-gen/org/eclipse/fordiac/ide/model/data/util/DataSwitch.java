@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.data.util;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+import org.eclipse.fordiac.ide.model.data.*;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -29,7 +30,6 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.data.SubrangeType;
 import org.eclipse.fordiac.ide.model.data.ValueType;
-import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
@@ -88,17 +88,30 @@ public class DataSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+		case DataPackage.ANY_DERIVED_TYPE: {
+			AnyDerivedType anyDerivedType = (AnyDerivedType) theEObject;
+			T result = caseAnyDerivedType(anyDerivedType);
+			if (result == null)
+				result = caseDataType(anyDerivedType);
+			if (result == null)
+				result = caseLibraryElement(anyDerivedType);
+			if (result == null)
+				result = caseINamedElement(anyDerivedType);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		case DataPackage.ARRAY_TYPE: {
 			ArrayType arrayType = (ArrayType) theEObject;
 			T result = caseArrayType(arrayType);
+			if (result == null)
+				result = caseAnyDerivedType(arrayType);
 			if (result == null)
 				result = caseDataType(arrayType);
 			if (result == null)
 				result = caseLibraryElement(arrayType);
 			if (result == null)
 				result = caseINamedElement(arrayType);
-			if (result == null)
-				result = caseI4DIACElement(arrayType);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -110,8 +123,6 @@ public class DataSwitch<T> extends Switch<T> {
 				result = caseLibraryElement(dataType);
 			if (result == null)
 				result = caseINamedElement(dataType);
-			if (result == null)
-				result = caseI4DIACElement(dataType);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -130,8 +141,6 @@ public class DataSwitch<T> extends Switch<T> {
 			if (result == null)
 				result = caseINamedElement(directlyDerivedType);
 			if (result == null)
-				result = caseI4DIACElement(directlyDerivedType);
-			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
 		}
@@ -147,8 +156,6 @@ public class DataSwitch<T> extends Switch<T> {
 			if (result == null)
 				result = caseINamedElement(enumeratedType);
 			if (result == null)
-				result = caseI4DIACElement(enumeratedType);
-			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
 		}
@@ -163,13 +170,13 @@ public class DataSwitch<T> extends Switch<T> {
 			StructuredType structuredType = (StructuredType) theEObject;
 			T result = caseStructuredType(structuredType);
 			if (result == null)
+				result = caseAnyDerivedType(structuredType);
+			if (result == null)
 				result = caseDataType(structuredType);
 			if (result == null)
 				result = caseLibraryElement(structuredType);
 			if (result == null)
 				result = caseINamedElement(structuredType);
-			if (result == null)
-				result = caseI4DIACElement(structuredType);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -195,8 +202,6 @@ public class DataSwitch<T> extends Switch<T> {
 			if (result == null)
 				result = caseINamedElement(subrangeType);
 			if (result == null)
-				result = caseI4DIACElement(subrangeType);
-			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
 		}
@@ -209,8 +214,6 @@ public class DataSwitch<T> extends Switch<T> {
 				result = caseLibraryElement(valueType);
 			if (result == null)
 				result = caseINamedElement(valueType);
-			if (result == null)
-				result = caseI4DIACElement(valueType);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -227,8 +230,6 @@ public class DataSwitch<T> extends Switch<T> {
 			if (result == null)
 				result = caseINamedElement(elementaryType);
 			if (result == null)
-				result = caseI4DIACElement(elementaryType);
-			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
 		}
@@ -244,8 +245,6 @@ public class DataSwitch<T> extends Switch<T> {
 			if (result == null)
 				result = caseINamedElement(derivedType);
 			if (result == null)
-				result = caseI4DIACElement(derivedType);
-			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
 		}
@@ -259,14 +258,27 @@ public class DataSwitch<T> extends Switch<T> {
 			if (result == null)
 				result = caseINamedElement(eventType);
 			if (result == null)
-				result = caseI4DIACElement(eventType);
-			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
 		}
 		default:
 			return defaultCase(theEObject);
 		}
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Any
+	 * Derived Type</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
+	 * 
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Any
+	 *         Derived Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAnyDerivedType(AnyDerivedType object) {
+		return null;
 	}
 
 	/**
@@ -451,21 +463,6 @@ public class DataSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseEventType(EventType object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>I4DIAC
-	 * Element</em>'. <!-- begin-user-doc --> This implementation returns null;
-	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>I4DIAC
-	 *         Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseI4DIACElement(I4DIACElement object) {
 		return null;
 	}
 

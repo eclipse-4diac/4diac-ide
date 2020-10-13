@@ -86,6 +86,15 @@ public interface PaletteFactory extends EFactory {
 	AdapterTypePaletteEntry createAdapterTypePaletteEntry();
 
 	/**
+	 * Returns a new object of class '<em>Data Type Palette Entry</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return a new object of class '<em>Data Type Palette Entry</em>'.
+	 * @generated
+	 */
+	DataTypePaletteEntry createDataTypePaletteEntry();
+
+	/**
 	 * Returns a new object of class '<em>Sub Application Type Palette Entry</em>'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 

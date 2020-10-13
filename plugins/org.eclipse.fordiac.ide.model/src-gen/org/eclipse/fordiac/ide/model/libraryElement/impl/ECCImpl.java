@@ -244,8 +244,9 @@ public class ECCImpl extends EObjectImpl implements ECC {
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
 			return basicSetBasicFBType((BasicFBType) otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -262,8 +263,9 @@ public class ECCImpl extends EObjectImpl implements ECC {
 			return ((InternalEList<?>) getECTransition()).basicRemove(otherEnd, msgs);
 		case LibraryElementPackage.ECC__BASIC_FB_TYPE:
 			return basicSetBasicFBType(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -277,8 +279,9 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		case LibraryElementPackage.ECC__BASIC_FB_TYPE:
 			return eInternalContainer().eInverseRemove(this, LibraryElementPackage.BASIC_FB_TYPE__ECC,
 					BasicFBType.class, msgs);
+		default:
+			return super.eBasicRemoveFromContainerFeature(msgs);
 		}
-		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -301,8 +304,9 @@ public class ECCImpl extends EObjectImpl implements ECC {
 			if (resolve)
 				return getBasicFBType();
 			return basicGetBasicFBType();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -328,8 +332,10 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		case LibraryElementPackage.ECC__BASIC_FB_TYPE:
 			setBasicFBType((BasicFBType) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -352,8 +358,10 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		case LibraryElementPackage.ECC__BASIC_FB_TYPE:
 			setBasicFBType((BasicFBType) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -372,8 +380,9 @@ public class ECCImpl extends EObjectImpl implements ECC {
 			return start != null;
 		case LibraryElementPackage.ECC__BASIC_FB_TYPE:
 			return basicGetBasicFBType() != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // ECCImpl

@@ -17,6 +17,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.utilities;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -32,7 +33,7 @@ import org.eclipse.swt.dnd.DND;
 
 public abstract class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDropTargetListener {
 
-	private AutomationSystem system;
+	private final IProject targetProject;
 
 	/**
 	 * Constructs a listener on the specified viewer.
@@ -41,7 +42,7 @@ public abstract class FbTypeTemplateTransferDropTargetListener extends TemplateT
 	 */
 	public FbTypeTemplateTransferDropTargetListener(final EditPartViewer viewer, AutomationSystem system) {
 		super(viewer);
-		this.system = system;
+		targetProject = (null != system) ? system.getSystemFile().getProject() : null;
 	}
 
 	/**
@@ -61,11 +62,10 @@ public abstract class FbTypeTemplateTransferDropTargetListener extends TemplateT
 		} else {
 			if (TemplateTransfer.getInstance().getTemplate() instanceof FBTypePaletteEntry) {
 				FBTypePaletteEntry entry = (FBTypePaletteEntry) TemplateTransfer.getInstance().getTemplate();
-				AutomationSystem paletteSystem = entry.getPalette().getAutomationSystem();
+				IProject srcProject = entry.getFile().getProject();
 
-				// If project is null it is an entry from the tool palette
-				if ((((null == paletteSystem) && null == system))
-						|| ((null != paletteSystem) && (null != system) && (system.equals(paletteSystem)))) {
+				// Only allow drag from the same project
+				if ((null != targetProject) && (targetProject.equals(srcProject))) {
 					getCurrentEvent().detail = DND.DROP_COPY;
 				} else {
 					getCurrentEvent().detail = DND.DROP_NONE;

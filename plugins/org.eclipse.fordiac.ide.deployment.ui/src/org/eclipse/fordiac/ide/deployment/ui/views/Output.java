@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -91,7 +91,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.
 	 * Composite)
@@ -114,7 +114,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 	/**
 	 * Fill local tool bar.
-	 * 
+	 *
 	 * @param manager the manager
 	 */
 	private void fillLocalToolBar(final IToolBarManager manager) {
@@ -141,7 +141,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see
 		 * org.eclipse.jface.text.source.ISharedTextColors#getColor(org.eclipse.swt.
 		 * graphics.RGB)
@@ -156,7 +156,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.text.source.ISharedTextColors#dispose()
 		 */
 		@Override
@@ -180,7 +180,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 	/**
 	 * Creates the source viewer.
-	 * 
+	 *
 	 * @param parent the parent
 	 */
 	private void createSourceViewer(final Composite parent) {
@@ -236,7 +236,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		fAnnotationHoverManager.install(annotationRuler.getControl());
 
 		AnnotationPainter ap = new AnnotationPainter(sv, annotationMarker);
-		ap.addAnnotationType(ERROR_TYPE);
+		ap.addAnnotationType(ERROR_TYPE, new AnnotationPainter.UnderlineStrategy(SWT.UNDERLINE_SQUIGGLE));
 		ap.setAnnotationTypeColor(ERROR_TYPE, colorCache.getColor(new RGB(255, 0, 0)));
 		// this will draw the squigglies under the text
 		sv.addPainter(ap);
@@ -251,7 +251,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see
 		 * org.eclipse.jface.text.source.IAnnotationHover#getHoverInfo(org.eclipse.jface
 		 * .text.source.ISourceViewer, int)
@@ -276,7 +276,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.text.ITextHover#getHoverInfo(org.eclipse.jface.text.
 		 * ITextViewer, org.eclipse.jface.text.IRegion)
 		 */
@@ -287,7 +287,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.text.ITextHover#getHoverRegion(org.eclipse.jface.text.
 		 * ITextViewer, int)
 		 */
@@ -304,7 +304,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see
 		 * org.eclipse.jface.text.IInformationControlCreator#createInformationControl(
 		 * org.eclipse.swt.widgets.Shell)
@@ -317,7 +317,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
 	 */
 	@Override
@@ -327,11 +327,11 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 	/**
 	 * Gets the formatted xml.
-	 * 
+	 *
 	 * @param command the command
-	 * 
+	 *
 	 * @return the formatted xml
-	 * 
+	 *
 	 * @throws TransformerFactoryConfigurationError the transformer factory
 	 *                                              configuration error
 	 */

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 - 2019 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2010 - 2020 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
@@ -13,18 +13,28 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - reworked type selection to a type list with description
  *   Bianca Wiesmayr - extracted TableViewer creation
+ *   Daniel Lindhuber - added Data Type
+ *   Lisa Sonnleithner - added duplicate check
+ *   Martin Melik Merkumians - fixed Comment regex to accept score and underscore,
+ *                         added case when description is null
+ *                         replaced magic strings with constants for file endings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
+import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
@@ -52,7 +62,7 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private static final Pattern NAME_PATTERN = Pattern.compile("Name=\"\\w+\""); //$NON-NLS-1$
-	private static final Pattern COMMENT_PATTERN = Pattern.compile("Comment=\"[\\w\\s]+\""); //$NON-NLS-1$
+	private static final Pattern COMMENT_PATTERN = Pattern.compile("Comment=\"[\\w\\s-_]+\""); //$NON-NLS-1$
 
 	private Button openTypeCheckbox;
 	private int openTypeParentHeight = -1;
@@ -137,8 +147,52 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			return false;
 		}
 
-		setErrorMessage(null);
+		// Check for duplicates in typelib if a project is selected
+		if (null != getContainerFullPath() && isDuplicate()) {
+			setErrorMessage(MessageFormat.format(Messages.NewFBTypeWizardPage_TypeAlreadyExists, getFileName()));
+			return false;
+		}
+
 		return super.validatePage();
+	}
+
+	private boolean isDuplicate() {
+		// here: getContainerFullPath().segment(0) --> name of the selected project
+		TypeLibrary lib = TypeLibrary
+				.getTypeLibrary(ResourcesPlugin.getWorkspace().getRoot().getProject(getContainerFullPath().segment(0)));
+
+		String[] s = getTemplate().getName().split("\\."); //$NON-NLS-1$
+		String fileExtension = s[s.length - 1].toUpperCase();
+		if (fileExtension.equals(TypeLibraryTags.DATA_TYPE_FILE_ENDING)) {
+			return isDtpDuplicate(lib);
+		} else {
+			return isSubFbtAdpDuplicate(lib, fileExtension);
+		}
+
+	}
+
+	private boolean isSubFbtAdpDuplicate(TypeLibrary lib, String fileExtension) {
+		EMap<String, ?> map = null;
+
+		switch (fileExtension) {
+		case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING:
+			map = lib.getBlockTypeLib().getSubAppTypes();
+			break;
+		case TypeLibraryTags.FB_TYPE_FILE_ENDING:
+			map = lib.getBlockTypeLib().getFbTypes();
+			break;
+		case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING:
+			map = lib.getBlockTypeLib().getAdapterTypes();
+			break;
+		default:
+			break;
+		}
+		return (null != map) && (map.containsKey(super.getFileName()));
+	}
+
+	private boolean isDtpDuplicate(TypeLibrary lib) {
+		Map<String, ?> map = lib.getDataTypeLibrary().getDerivedDataTypes();
+		return map.containsKey(super.getFileName());
 	}
 
 	public File getTemplate() {
@@ -227,13 +281,14 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	@SuppressWarnings("static-method") // this method is need to allow sub-classes to override it with specific filters
 	protected FileFilter createTemplatesFileFilter() {
-		return pathname -> pathname.getName().toUpperCase().endsWith(".FBT") //$NON-NLS-1$
-				|| pathname.getName().toUpperCase().endsWith(".ADP") //$NON-NLS-1$
+		return pathname -> pathname.getName().toUpperCase().endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)
+				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING_WITH_DOT)
+				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT)
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
 	}
 
 	private static TemplateInfo createTemplateFileInfo(File f) {
-		Scanner scanner;
+		Scanner scanner = null;
 		String name = f.getName();
 		String description = ""; //$NON-NLS-1$
 		try {
@@ -245,9 +300,17 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			// we need a new scanner as name and comment may be in arbitrary order
 			scanner = new Scanner(f);
 			description = scanner.findWithinHorizon(COMMENT_PATTERN, 0);
-			description = description.substring(9, description.length() - 1);
+			if (null == description) {
+				description = Messages.NewFBTypeWizardPage_InvalidOrNoComment;
+			} else {
+				description = description.substring(9, description.length() - 1);
+			}
 		} catch (FileNotFoundException e) {
 			Activator.getDefault().logError(Messages.NewFBTypeWizardPage_CouldNotFindTemplateFiles, e);
+		} finally {
+			if (null != scanner) {
+				scanner.close();
+			}
 		}
 		return new TemplateInfo(f, name, description);
 	}

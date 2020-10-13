@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,15 +21,16 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Library
@@ -52,21 +53,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
  *
  * @generated
  */
-public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElement {
+public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = "";
+	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -81,7 +82,7 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = "";
+	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -156,13 +157,12 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated not
+	 * @generated
 	 */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
-		NameRepository.checkNameIdentifier(this);
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.LIBRARY_ELEMENT__NAME, oldName,
 					name));
@@ -343,6 +343,19 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 	 * @generated
 	 */
 	@Override
+	public TypeLibrary getTypeLibrary() {
+		if (null != getPaletteEntry()) {
+			return getPaletteEntry().getTypeLibrary();
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
@@ -350,8 +363,9 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 				msgs = ((InternalEObject) paletteEntry).eInverseRemove(this, PalettePackage.PALETTE_ENTRY__TYPE,
 						PaletteEntry.class, msgs);
 			return basicSetPaletteEntry((PaletteEntry) otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -368,8 +382,9 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 			return basicSetIdentification(null, msgs);
 		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
 			return basicSetPaletteEntry(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -392,8 +407,9 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 			return basicGetIdentification();
 		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
 			return getPaletteEntry();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -421,8 +437,10 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
 			setPaletteEntry((PaletteEntry) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -448,8 +466,10 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
 			setPaletteEntry((PaletteEntry) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -470,8 +490,9 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 			return identification != null;
 		case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
 			return paletteEntry != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

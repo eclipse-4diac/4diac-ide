@@ -183,8 +183,9 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 		switch (featureID) {
 		case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
 			return basicSetColor(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -199,8 +200,9 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 			if (resolve)
 				return getColor();
 			return basicGetColor();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -214,8 +216,10 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 		case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
 			setColor((Color) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -229,8 +233,10 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 		case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
 			setColor((Color) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -243,8 +249,9 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 		switch (featureID) {
 		case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
 			return color != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // ColorizableElementImpl

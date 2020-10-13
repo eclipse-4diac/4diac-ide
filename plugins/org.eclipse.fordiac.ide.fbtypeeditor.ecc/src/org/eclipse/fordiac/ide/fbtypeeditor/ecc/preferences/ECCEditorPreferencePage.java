@@ -30,7 +30,6 @@ public class ECCEditorPreferencePage extends FieldEditorPreferencePage implement
 	public ECCEditorPreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription(Messages.FordiacECCPreferencePage_LABEL_PreferencePageDescription);
 	}
 
 	/**
@@ -42,16 +41,16 @@ public class ECCEditorPreferencePage extends FieldEditorPreferencePage implement
 	public void createFieldEditors() {
 		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_STATE_COLOR,
 				Messages.FordiacECCPreferencePage_LABEL_ECCStateColor, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR,
-				Messages.FordiacECCPreferencePage_LABEL_ECCStateBorderColor, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR,
+				Messages.FordiacECCPreferencePage_LABEL_ECCStateTextColor, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_ALGORITHM_COLOR,
 				Messages.FordiacECCPreferencePage_LABEL_ECCAlgorithmColor, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_ALGORITHM_BORDER_COLOR,
-				Messages.FordiacECCPreferencePage_LABEL_ECCAlgorithmBorderColor, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR,
+				Messages.FordiacECCPreferencePage_LABEL_ECCAlgorithmTextColor, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_EVENT_COLOR,
 				Messages.FordiacECCPreferencePage_LABEL_ECCEventColor, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_EVENT_BORDER_COLOR,
-				Messages.FordiacECCPreferencePage_LABEL_ECCEventBorderColor, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_EVENT_TEXT_COLOR,
+				Messages.FordiacECCPreferencePage_LABEL_ECCEventTextColor, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_TRANSITION_COLOR,
 				Messages.FordiacECCPreferencePage_LABEL_ECCTransitionColor, getFieldEditorParent()));
 	}

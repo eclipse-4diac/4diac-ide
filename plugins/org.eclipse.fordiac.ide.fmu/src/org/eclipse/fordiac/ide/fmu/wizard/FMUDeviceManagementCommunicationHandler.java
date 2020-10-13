@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 - 2018 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -146,15 +147,24 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			return mInitialValue;
 		}
 
+		private static String orString(String... strings) {
+			return String.join("|", strings);
+		}
+
 		static variableType getTypeFromString(String text) {
 			variableType varType;
-			if (text.equals("BOOL")) { //$NON-NLS-1$
+			if (text.equals(FordiacKeywords.BOOL)) {
 				varType = FMUInputOutput.variableType.BOOLEAN;
-			} else if (text.matches("BYTE|WORD|DWORD|LWORD|INT|DINT|LINT|SINT|USINT|UINT|UDINT|ULINT|ANY_INT")) { //$NON-NLS-1$
+			} else if (text.matches(orString(FordiacKeywords.BYTE, FordiacKeywords.WORD, FordiacKeywords.DWORD,
+					FordiacKeywords.LWORD, FordiacKeywords.INT, FordiacKeywords.DINT, FordiacKeywords.LINT,
+					FordiacKeywords.SINT, FordiacKeywords.USINT, FordiacKeywords.UINT, FordiacKeywords.UDINT,
+					FordiacKeywords.ULINT, FordiacKeywords.ANY_INT))) {
 				varType = FMUInputOutput.variableType.INTEGER;
-			} else if (text.matches("STRING|WSTRING|ANY_STRING|DATE|DATE_AND_TIME|TIME_OF_DAY|ANY_DATE|TIME")) { //$NON-NLS-1$
+			} else if (text.matches(orString(FordiacKeywords.STRING, FordiacKeywords.WSTRING,
+					FordiacKeywords.ANY_STRING, FordiacKeywords.DATE, FordiacKeywords.DATE_AND_TIME,
+					FordiacKeywords.TIME_OF_DAY, FordiacKeywords.ANY_DATE, FordiacKeywords.TIME))) {
 				varType = FMUInputOutput.variableType.STRING;
-			} else if (text.matches("REAL|LREAL|ANY_REAL")) { //$NON-NLS-1$
+			} else if (text.matches(orString(FordiacKeywords.REAL, FordiacKeywords.LREAL, FordiacKeywords.ANY_REAL))) {
 				varType = FMUInputOutput.variableType.REAL;
 			} else {
 				varType = FMUInputOutput.variableType.UNKNOWN;
@@ -710,8 +720,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			returnValue.setType(getInfoFromConnectedFB(commFB, paFBNetwork, fbName, var));
 		}
 
-		if (value != null && null != value.getValue() && !"".equals(value.getValue())) { // has some //$NON-NLS-1$
-																							// literal
+		if (value != null && !value.getValue().isEmpty()) { // has some literal
 			initialValue = value.getValue();
 			if (initialValue.contains("%")) { //$NON-NLS-1$
 				String replaced = SystemManager.INSTANCE.getReplacedString(paFBNetwork.getAutomationSystem(),

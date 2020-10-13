@@ -5,7 +5,7 @@
          point="org.eclipse.ui.editors">
 <editor
             class="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer"
-            contributorClass="org.eclipse.fordiac.ide.util.ZoomUndoRedoActionBarContributor"
+            contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             default="true"
             icon="fordiacimage://ICON_COMPOSITE_FB"
             id="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer"
@@ -42,13 +42,13 @@
                afterTab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab"
                category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.propertyFBTypeInfoTab"
-               image="fordiacimage://ICON_FB"
+               image="fordiacimage://ICON_FB_TYPE"
                label="Type Info">
          </propertyTab>
          <propertyTab
                category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.propertyInterfaceElementTab"
-               label="Interface Element">
+               label="Pin">
          </propertyTab>
          <propertyTab
                category="FB-Network"
@@ -56,7 +56,7 @@
                label="Connection">
          </propertyTab>
          <propertyTab
-               category="Connection"
+               category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.CreateConnection"
                label="Create Connection">
          </propertyTab>
@@ -83,7 +83,7 @@
             </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+               class="org.eclipse.fordiac.ide.gef.properties.InterfaceElementSection"
                id="org.eclipse.fordiac.ide.fbnet.properties.InterfaceElementSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceElementTab">
             <input

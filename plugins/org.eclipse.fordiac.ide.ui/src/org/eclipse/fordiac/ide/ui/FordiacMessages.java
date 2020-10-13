@@ -12,9 +12,9 @@
  * Contributors:
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl 
+ *   Alois Zoitl
  *     - moved preference messages from utils plugin
- *   Andrea Zoitl 
+ *   Andrea Zoitl
  *     - Externalized translatable strings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui;
@@ -27,9 +27,12 @@ import org.eclipse.osgi.util.NLS;
 public class FordiacMessages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.ui.messages"; //$NON-NLS-1$
 
+	public static String OPEN_TYPE_EDITOR_MESSAGE;
+
 	public static String Algorithm;
 	public static String Algorithms;
 	public static String ApplicationDomain;
+	public static String ApplicationName;
 	public static String ArraySize;
 	public static String Author;
 	public static String Classdef;
@@ -41,7 +44,9 @@ public class FordiacMessages extends NLS {
 	public static String Description;
 	public static String Destination;
 	public static String Device;
+	public static String EmptyField;
 	public static String Event;
+	public static String FBNetwork;
 	public static String Function;
 	public static String Header;
 	public static String Identification;
@@ -49,12 +54,14 @@ public class FordiacMessages extends NLS {
 	public static String Inputs;
 	public static String InstanceComment;
 	public static String InstanceName;
+	public static String InstanceInfo;
 	public static String Interface;
 	public static String Language;
 	public static String NA;
 	public static String ND;
 	public static String Name;
 	public static String NewType;
+	public static String NewSystem;
 	public static String Organization;
 	public static String Product;
 	public static String Properties;
@@ -62,12 +69,16 @@ public class FordiacMessages extends NLS {
 	public static String Resource;
 	public static String SelectType;
 	public static String Standard;
+	public static String SystemName;
 	public static String Type;
+	public static String TypeInfo;
 	public static String TypeLibrary;
 	public static String TypeName;
 	public static String Unmap;
 	public static String Unknown;
 	public static String Value;
+	public static String DefaultValue;
+	public static String CurrentValue;
 	public static String Variable;
 	public static String Vendor;
 	public static String Version;

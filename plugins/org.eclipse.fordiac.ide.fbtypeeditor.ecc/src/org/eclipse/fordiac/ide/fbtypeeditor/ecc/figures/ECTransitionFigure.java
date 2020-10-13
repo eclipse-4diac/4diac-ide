@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Ingo Hengy, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - extracted TransitionFigure code and changed to cubic spline
+ *   Bianca Wiesmayr, Ernst Blecha - added tooltip
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
@@ -25,30 +26,24 @@ import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Ellipse;
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PolygonDecoration;
-import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.RotatableDecoration;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.draw2d.geometry.Vector;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.Path;
 
-public class ECTransitionFigure extends PolylineConnection {
+public class ECTransitionFigure extends SplineConnection {
 
-	private static final double TRANSITION_CONTROL_POINT_VECTOR_LENGTH = 0.3;
-
-	private class TransitionOrderDecorator extends Ellipse implements RotatableDecoration {
+	private static class TransitionOrderDecorator extends Ellipse implements RotatableDecoration {
 
 		private static final int TRANSITON_ORDER_LABEL_FONT_SIZE = 7;
 		private static final String TRANSITION_ORDER_LABEL_FONT = "TransitionOrderLabelFont"; //$NON-NLS-1$
@@ -69,7 +64,7 @@ public class ECTransitionFigure extends PolylineConnection {
 			add(orderLabel);
 		}
 
-		private Font getOrderLabelFont() {
+		private static Font getOrderLabelFont() {
 			FontData[] fontData = JFaceResources.getFontRegistry()
 					.getFontData(org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants.DIAGRAM_FONT).clone();
 			Arrays.stream(fontData).forEach(fd -> fd.setHeight(TRANSITON_ORDER_LABEL_FONT_SIZE));
@@ -102,6 +97,7 @@ public class ECTransitionFigure extends PolylineConnection {
 
 	}
 
+	private SetableAlphaLabel conditionBackground;
 	private Label condition;
 	private final TransitionOrderDecorator transitionOrderDecorator;
 
@@ -118,10 +114,15 @@ public class ECTransitionFigure extends PolylineConnection {
 		createConditionLabel(ecTransition.getConditionText());
 
 		setTargetDecoration(createTargetDecorator());
+
+		ECTransitionToolTipFigure transitionTooltip = new ECTransitionToolTipFigure();
+		transitionTooltip.setVisible(true);
+		setToolTip(transitionTooltip);
 	}
 
 	public void setConditionText(String conditionText) {
 		condition.setText(conditionText);
+		conditionBackground.setText(conditionText);
 	}
 
 	public void updateBendPoints(ECTransition ecTransition) {
@@ -142,57 +143,27 @@ public class ECTransitionFigure extends PolylineConnection {
 		return rectDec;
 	}
 
+	private static final int VERTICAL_MARGIN = 2;
+	private static final int HORIZONTAL_MARGIN = 4;
+
 	private void createConditionLabel(String conditionText) {
 		condition = new Label(conditionText);
-		condition.setBorder(new MarginBorder(3, 6, 3, 6));
-		condition.setOpaque(true);
+		condition.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
+		condition.setOpaque(false);
+
+		conditionBackground = new SetableAlphaLabel();
+		conditionBackground.setText(conditionText); // needed for correct size
+		conditionBackground
+				.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
+		conditionBackground.setAlpha(190);
+		conditionBackground.setOpaque(true);
+
+		add(conditionBackground, new ConnectionLocator(this, ConnectionLocator.MIDDLE));
 		add(condition, new ConnectionLocator(this, ConnectionLocator.MIDDLE));
 	}
 
 	@Override
-	protected void outlineShape(Graphics g) {
-		Path p = getPath();
-		g.drawPath(p);
-		p.dispose();
+	public ECTransitionToolTipFigure getToolTip() {
+		return (ECTransitionToolTipFigure) super.getToolTip();
 	}
-
-	@Override
-	public Rectangle getBounds() {
-		float[] pathBounds = new float[4];
-		Path p = getPath();
-		p.getBounds(pathBounds);
-		p.dispose();
-		Rectangle pathRect = new Rectangle((int) pathBounds[0], (int) pathBounds[1], (int) pathBounds[2],
-				(int) pathBounds[3]);
-		return super.getBounds().getUnion(pathRect);
-	}
-
-	private Path getPath() {
-		Path p = new Path(null);
-		if (3 == getPoints().size()) {
-			p.moveTo(getStart().x, getStart().y);
-			Vector startEnd = new Vector((float) getEnd().x - getStart().x, (float) getEnd().y - getStart().y);
-			Vector startMid = new Vector((float) getPoints().getMidpoint().x - getStart().x,
-					(float) getPoints().getMidpoint().y - getStart().y);
-			Vector midEnd = new Vector((float) getEnd().x - getPoints().getMidpoint().x,
-					(float) getEnd().y - getPoints().getMidpoint().y);
-
-			Vector startEndNorm = startEnd.getDivided((startEnd.getLength() < 0.0001) ? 1.0 : startEnd.getLength());
-			Vector startEnd30 = startEndNorm
-					.getMultiplied(startMid.getLength() * TRANSITION_CONTROL_POINT_VECTOR_LENGTH);
-			Vector startMid30 = startMid.getMultiplied(TRANSITION_CONTROL_POINT_VECTOR_LENGTH);
-			Vector midEnd30 = midEnd.getMultiplied(TRANSITION_CONTROL_POINT_VECTOR_LENGTH);
-
-			p.cubicTo(getStart().x + (float) startMid30.x, getStart().y + (float) startMid30.y,
-					getPoints().getMidpoint().x - (float) startEnd30.x,
-					getPoints().getMidpoint().y - (float) startEnd30.y, getPoints().getMidpoint().x,
-					getPoints().getMidpoint().y);
-
-			p.cubicTo(getPoints().getMidpoint().x + (float) startEnd30.x,
-					getPoints().getMidpoint().y + (float) startEnd30.y, getEnd().x - (float) midEnd30.x,
-					getEnd().y - (float) midEnd30.y, getEnd().x, getEnd().y);
-		}
-		return p;
-	}
-
 }

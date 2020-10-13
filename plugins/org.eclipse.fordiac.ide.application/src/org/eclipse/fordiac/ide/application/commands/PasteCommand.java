@@ -16,13 +16,16 @@
 package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -33,8 +36,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.ElementSelector;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.graphics.Point;
@@ -45,8 +49,7 @@ import org.eclipse.swt.graphics.Point;
 public class PasteCommand extends Command {
 
 	private static final int DEFAULT_DELTA = 20;
-	@SuppressWarnings("rawtypes")
-	private final List templates;
+	private final Collection<? extends Object> templates;
 	private final FBNetwork dstFBNetwork;
 	private FBNetwork srcFBNetwork = null;
 
@@ -71,16 +74,14 @@ public class PasteCommand extends Command {
 	 *                    copied to
 	 * @param pasteRefPos the reference position for pasting the elements
 	 */
-	@SuppressWarnings("rawtypes")
-	public PasteCommand(List templates, FBNetwork destination, Point pasteRefPos) {
+	public PasteCommand(List<? extends Object> templates, FBNetwork destination, Point pasteRefPos) {
 		this.templates = templates;
 		this.dstFBNetwork = destination;
 		this.pasteRefPos = pasteRefPos;
 		calcualteDelta = true;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public PasteCommand(List templates, FBNetwork destination, int copyDeltaX, int copyDeltaY) {
+	public PasteCommand(List<? extends Object> templates, FBNetwork destination, int copyDeltaX, int copyDeltaY) {
 		this.templates = templates;
 		this.dstFBNetwork = destination;
 		xDelta = copyDeltaX;
@@ -176,7 +177,28 @@ public class PasteCommand extends Command {
 
 		copiedElement.setMapping(null);
 
+		if (copiedElement instanceof StructManipulator) {
+			// structmanipulators may destroy the param values during copy
+			checkDataValues(element, copiedElement);
+		}
+
 		return copiedElement;
+	}
+
+	private static void checkDataValues(FBNetworkElement src, FBNetworkElement copy) {
+		EList<VarDeclaration> srcList = src.getInterface().getInputVars();
+		EList<VarDeclaration> copyList = copy.getInterface().getInputVars();
+
+		for (int i = 0; i < srcList.size(); i++) {
+			VarDeclaration srcVar = srcList.get(i);
+			VarDeclaration copyVar = copyList.get(i);
+			if (null == copyVar.getValue()) {
+				copyVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			}
+			if (null != srcVar.getValue()) {
+				copyVar.getValue().setValue(srcVar.getValue().getValue());
+			}
+		}
 	}
 
 	private void copyConnections() {

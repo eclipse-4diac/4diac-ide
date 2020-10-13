@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2015, 2016, 2018 Profactor GmbH, fortiss GmbH, Johannes
  *                                      Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -92,7 +92,7 @@ public abstract class AbstractMonitoringManager {
 
 	/**
 	 * Register IMonitoringListener.
-	 * 
+	 *
 	 * @param listener the listener
 	 */
 	public void registerMonitoringListener(IMonitoringListener listener) {
@@ -103,7 +103,7 @@ public abstract class AbstractMonitoringManager {
 
 	/**
 	 * Notify add port.
-	 * 
+	 *
 	 * @param port the port
 	 */
 	public void notifyAddPort(PortElement port) {
@@ -114,7 +114,7 @@ public abstract class AbstractMonitoringManager {
 
 	/**
 	 * Notify remove port.
-	 * 
+	 *
 	 * @param port the port
 	 */
 	public void notifyRemovePort(PortElement port) {
@@ -125,7 +125,7 @@ public abstract class AbstractMonitoringManager {
 
 	/**
 	 * Notify trigger event.
-	 * 
+	 *
 	 * @param port the port
 	 */
 	public void notifyTriggerEvent(PortElement port) {

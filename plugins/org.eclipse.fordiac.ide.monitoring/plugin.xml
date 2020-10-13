@@ -2,22 +2,6 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="org.eclipse.fordiac.ide.monitoring.actionSet2"
-            label="label"
-            visible="true">
-         <action
-               class="org.eclipse.fordiac.ide.monitoring.actions.SwitchMonitoringModeAction"
-               icon="fordiacimage://ICON_START_MONITORING"
-               id="org.eclipse.fordiac.ide.monitoring.actions.SwitchMonitoringModeAction"
-               label="Online"
-               style="pulldown"
-               toolbarPath="Normal">
-         </action>
-      </actionSet>
-   </extension>
-   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.eclipse.fordiac.ide.monitoring.preferences.PreferenceInitializer">
@@ -76,16 +60,25 @@
             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.MonitorSystem"
+               icon="fordiacimage://ICON_START_MONITORING"
                style="toggle"
                tooltip="Enable/Disable monitoring of selected system">
-               <visibleWhen
-                  checkEnabled="false">
-               <iterate>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
+                <visibleWhen
+                      checkEnabled="false">
+                   <with
+                         variable="selection">
+                      <iterate>
+                         <adapt
+                               type="org.eclipse.core.resources.IFile">
+                            <test
+                                  forcePluginActivation="false"
+                                  property="org.eclipse.core.resources.extension"
+                                  value="sys">
+                            </test>
+                         </adapt>
+                      </iterate>
+                   </with>
+                </visibleWhen>
          </command>
       </menuContribution>
    </extension>
@@ -94,14 +87,21 @@
       <handler
             class="org.eclipse.fordiac.ide.monitoring.handlers.MonitorSystemHandler"
             commandId="org.eclipse.fordiac.ide.monitoring.MonitorSystem">
-            <visibleWhen>
-           
-               <iterate>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
+            <activeWhen>
+              <with
+                         variable="selection">
+                      <iterate>
+                         <adapt
+                               type="org.eclipse.core.resources.IFile">
+                            <test
+                                  forcePluginActivation="false"
+                                  property="org.eclipse.core.resources.extension"
+                                  value="sys">
+                            </test>
+                         </adapt>
+                      </iterate>
+                   </with></activeWhen>
+         
       </handler>
    </extension>
    <extension
@@ -115,9 +115,7 @@
             location="TOP_LEFT"
             state="true">
             <enablement>
-               <objectClass
-                     name="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-               </objectClass>      
+               <objectClass name="org.eclipse.core.resources.IFile" />
          </enablement>
       </decorator>
    </extension>
@@ -169,15 +167,21 @@
          <menu
                label="%contributions.menus.debug.label"
                mnemonic="%contributions.menus.debug.menmonic"
-               id="org.eclipse.4diac.ide.monitoring.menus.debug">          
+               id="org.eclipse.4diac.ide.monitoring.menus.debug">     
+             <command
+                   commandId="org.eclipse.fordiac.ide.monitoring.MonitorSystem"
+                   label="Monitor System"
+                   icon="fordiacimage://ICON_START_MONITORING"
+                   style="toggle">
+             </command>          
           <menu
-               label="%contributions.menus.debug.monitorSystem.label"
+               label="%contributions.menus.debug.monitoredSystem.label"
                id="org.eclipse.4diac.ide.monitoring.menus.debug.monitorsystem">
              <dynamic
                    class="org.eclipse.fordiac.ide.monitoring.MonitoredSystems"
                    id="org.eclipse.fordiac.ide.monitoring.monitoredSystems">
-             </dynamic>               
-          </menu>     
+             </dynamic>
+          </menu>               
            
          <separator
                name="org.eclipse.fordiac.ide.monitoring.monitoringBegin"
@@ -213,6 +217,10 @@
                label="%contributions.menus.debug.clearForce"
                tooltip="%contributions.menus.debug.clearForceToolTop">
          </command>
+          <separator
+               name="org.eclipse.fordiac.ide.monitoring.monitoringAdditions"
+               visible="true">
+         </separator>
          </menu>
       </menuContribution>         
       <menuContribution

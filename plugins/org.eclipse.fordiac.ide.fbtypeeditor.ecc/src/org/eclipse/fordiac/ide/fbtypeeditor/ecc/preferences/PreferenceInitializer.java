@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +10,7 @@
  * Contributors:
  *   Ingo Hegny, Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Lisa Sonnleithner - updated color scheme
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences;
 
@@ -26,7 +27,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
 	 * initializeDefaultPreferences()
 	 */
@@ -35,17 +36,17 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 
 		/* blue */
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_STATE_COLOR, new RGB(207, 205, 245));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_STATE_BORDER_COLOR, new RGB(78, 70, 217));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_TRANSITION_COLOR, new RGB(78, 70, 217));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_STATE_COLOR, new RGB(184, 182, 206));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_STATE_TEXT_COLOR, new RGB(21, 17, 72));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_TRANSITION_COLOR, new RGB(68, 64, 121));
 
 		/* yellow */
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_ALGORITHM_COLOR, new RGB(254, 254, 194));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_ALGORITHM_BORDER_COLOR, new RGB(214, 145, 1));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_ALGORITHM_COLOR, new RGB(235, 242, 179));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR, new RGB(91, 101, 11));
 
-		/* green */
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_EVENT_COLOR, new RGB(190, 233, 197));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_EVENT_BORDER_COLOR, new RGB(57, 137, 46));
+		/* red */
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_EVENT_COLOR, new RGB(245, 181, 183));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_EVENT_TEXT_COLOR, new RGB(141, 45, 47));
 	}
 
 }

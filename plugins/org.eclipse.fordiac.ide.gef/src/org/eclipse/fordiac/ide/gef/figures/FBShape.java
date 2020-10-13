@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.gef.draw2d.AdvancedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -46,7 +47,6 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.util.ColorHelper;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -82,9 +82,9 @@ public class FBShape extends Shape implements IFontUpdateListener {
 
 	private UnderlineAlphaLabel typeLabel;
 
-	public FBShape(FBType fbType, ZoomManager zoomManager) {
+	public FBShape(FBType fbType) {
 		configureMainFigure();
-		createFBFigureShape(fbType, zoomManager);
+		createFBFigureShape(fbType);
 		setTypeLabelFont();
 	}
 
@@ -136,8 +136,16 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		return typeLabel;
 	}
 
+	protected RoundedRectangle getTop() {
+		return top;
+	}
+
 	public AdvancedRoundedRectangle getMiddle() {
 		return middle;
+	}
+
+	protected AdvancedRoundedRectangle getBottom() {
+		return bottom;
 	}
 
 	@Override
@@ -186,19 +194,18 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		setLayoutManager(mainLayout);
 	}
 
-	private void createFBFigureShape(final FBType fbType, final ZoomManager zoomManager) {
+	private void createFBFigureShape(final FBType fbType) {
 		Color borderColor = getBorderColor(fbType);
 
 		Figure fbFigureContainer = createFigureContainer();
-		createFBTop(fbFigureContainer, DiagramPreferences.CORNER_DIM, borderColor, zoomManager);
-		configureFBMiddle(fbType, fbFigureContainer, borderColor, zoomManager);
-		createFBBottom(fbFigureContainer, DiagramPreferences.CORNER_DIM, borderColor, zoomManager);
+		createFBTop(fbFigureContainer, DiagramPreferences.CORNER_DIM, borderColor);
+		configureFBMiddle(fbType, fbFigureContainer, borderColor);
+		createFBBottom(fbFigureContainer, DiagramPreferences.CORNER_DIM, borderColor);
 	}
 
-	private void createFBBottom(Figure fbFigureContainer, int cornerDim, Color borderColor,
-			final ZoomManager zoomManager) {
+	private void createFBBottom(Figure fbFigureContainer, int cornerDim, Color borderColor) {
 		bottom = new AdvancedRoundedRectangle(PositionConstants.SOUTH | PositionConstants.EAST | PositionConstants.WEST,
-				zoomManager, this, false, borderColor);
+				borderColor);
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 		GridLayout bottomLayout = new GridLayout(2, false);
 		bottomLayout.marginHeight = 4;
@@ -217,8 +224,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		setBottomIOs(bottom);
 	}
 
-	private void configureFBMiddle(final FBType fbType, Figure fbFigureContainer, Color borderColor,
-			final ZoomManager zoomManager) {
+	private void configureFBMiddle(final FBType fbType, Figure fbFigureContainer, Color borderColor) {
 		Figure middleContainer = new Figure();
 		BorderLayout borderLayout = new BorderLayout();
 		middleContainer.setLayoutManager(borderLayout);
@@ -229,13 +235,12 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		GridData middleLayouData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		fbFigureContainer.setConstraint(middleContainer, middleLayouData);
 
-		setupTypeNameAndVersion(fbType, middleContainer, borderColor, zoomManager);
+		setupTypeNameAndVersion(fbType, middleContainer, borderColor);
 	}
 
-	private void createFBTop(Figure fbFigureContainer, int cornerDim, Color borderColor,
-			final ZoomManager zoomManager) {
+	private void createFBTop(Figure fbFigureContainer, int cornerDim, Color borderColor) {
 		top = new AdvancedRoundedRectangle(PositionConstants.NORTH | PositionConstants.EAST | PositionConstants.WEST,
-				zoomManager, this, false, borderColor);
+				borderColor);
 		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 
 		GridLayout topLayout = new GridLayout(2, false);
@@ -321,10 +326,8 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		bottomOutputArea.add(plugs);
 	}
 
-	protected void setupTypeNameAndVersion(final FBType type, Figure container, Color borderColor,
-			final ZoomManager zoomManager) {
-		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, zoomManager, this, false,
-				borderColor);
+	protected void setupTypeNameAndVersion(final FBType type, Figure container, Color borderColor) {
+		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, borderColor);
 
 		container.add(middle, BorderLayout.CENTER);
 		middle.setCornerDimensions(new Dimension());
@@ -340,6 +343,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		typeLabel = new UnderlineAlphaLabel(null != typeName ? typeName : FordiacMessages.ND);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
 		typeLabel.setOpaque(false);
+		typeLabel.setIcon(ResultListLabelProvider.getTypeImage(type));
 		middle.add(typeLabel);
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 	}

@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -63,7 +63,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String CLASSDEF_EDEFAULT = null;
+	protected static final String CLASSDEF_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getClassdef() <em>Classdef</em>}' attribute.
@@ -83,7 +83,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String HEADER_EDEFAULT = null;
+	protected static final String HEADER_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getHeader() <em>Header</em>}' attribute.
@@ -187,8 +187,9 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 		switch (featureID) {
 		case LibraryElementPackage.COMPILER_INFO__COMPILER:
 			return ((InternalEList<?>) getCompiler()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -205,8 +206,9 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 			return getClassdef();
 		case LibraryElementPackage.COMPILER_INFO__HEADER:
 			return getHeader();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -229,8 +231,10 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 		case LibraryElementPackage.COMPILER_INFO__HEADER:
 			setHeader((String) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -250,8 +254,10 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 		case LibraryElementPackage.COMPILER_INFO__HEADER:
 			setHeader(HEADER_EDEFAULT);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -268,8 +274,9 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 			return CLASSDEF_EDEFAULT == null ? classdef != null : !CLASSDEF_EDEFAULT.equals(classdef);
 		case LibraryElementPackage.COMPILER_INFO__HEADER:
 			return HEADER_EDEFAULT == null ? header != null : !HEADER_EDEFAULT.equals(header);
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

@@ -32,28 +32,34 @@
     </ul>
     </li>
     <li>http://download.eclipse.org/releases/20xx-xx
-    <ul>
-        <li>EMF - Eclipse Modeling Framework SDK, org.eclipse.emf.sdk.feature.group</li>
-        <li>GEF (MVC) SDK, org.eclipse.gef.sdk.feature.group</li>
-        <li>Xtext Complete SDK, org.eclipse.xtext.sdk.feature.group</li>
-        <li>Eclipse Platform Launcher Executables</li>
-        <li>Git integration for Eclipse</li>
-    </ul>
+	    <ul>
+	        <li>EMF - Eclipse Modeling Framework SDK, org.eclipse.emf.sdk.feature.group</li>
+	        <li>GEF (MVC) SDK, org.eclipse.gef.sdk.feature.group</li>
+	        <li>Git integration for Eclipse, org.eclipse.egit.feature.group</li>
+	        <li>OCL classic SDK: Ecore/UML Parsers, Evaluator, Edit, org.eclipse.ocl.all.sdk.feature.group</li>
+	        <li>Xtext Complete SDK, org.eclipse.xtext.sdk.feature.group</li>
+	    </ul>
+	<li>https://build.eclipse.org/modeling/elk/updates/0.6.1/
+		<ul>
+			<li>Eclipse LayoutKernel (Incubation) - Core Components, org.eclipse.elk.feature.feature.group</li>
+			<li>Eclipse LayoutKernel (Incubation) - Layout Algorithms, org.eclipse.elk.algorithms.feature.feature.group</li>
+		</ul>
+	<li>
     </li>
 </ul>
 <p>For upgrading to new Eclipse platform versions the following steps need to be done:</p>
 <ul>
-    <li>Update org.eclipse.fordiac.ide.product.target in the org.eclipse.fordiac.ide.product plugin</li>
-    <li>Update pom.xml in the org.eclipse.fordiac.ide.master plugin. At least the following steps have to be done:
+    <li>Update org.eclipse.fordiac.ide.product.target in the org.eclipse.fordiac.ide.product plug-in</li>
+    <li>Update pom.xml in the 4diac IDE's source root directory. At least the following steps have to be done:
         <ul> 
             <li> Check tycho.version</li>
             <li> Update tycho-repo.url to the new target platform version</li>
             <li> Check org.eclipse.equinox.executable version range. Attention this has to be done on two places in the file.
         </ul>
     </li>
-    <li>Regenerate all model and model edit code from the models plugin.</li>
+    <li>Regenerate all model and model edit code from the models plug-in.</li>
     <li>Run product from Eclipse IDE using product editor, i.e., press the synchronize button and then the "Launch an Eclipse Application"</li>
-    <li>Run Maven install for pom.xml in the org.eclipse.fordiac.ide.master plugin locally</li>
+    <li>Run Maven install for pom.xml in the 4diac IDE's source root directory locally</li>
     <li>Test if the generated product can be executed. The generated products are in: <br> 
         /org.eclipse.4diac.ide/plugins/org.eclipse.fordiac.ide.product/target/products/org.eclipse.fordiac.ide.product 
     <li>Push to Gerrit so that CI build can also check if it is working</li>

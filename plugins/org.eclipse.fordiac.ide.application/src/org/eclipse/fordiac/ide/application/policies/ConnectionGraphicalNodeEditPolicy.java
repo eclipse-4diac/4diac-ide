@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.CreateConnectionRequest;
@@ -26,8 +26,7 @@ public class ConnectionGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy {
 		AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
 		command.setDestination(command.getSource().isIsInput() ? // if the source is an input we need to deliver our
 																	// source i.e., the output
-				((ConnectionEditPart) getHost()).getModel().getSource()
-				: ((ConnectionEditPart) getHost()).getModel().getDestination());
+				((Connection) getHost().getModel()).getSource() : ((Connection) getHost().getModel()).getDestination());
 		return command;
 	}
 

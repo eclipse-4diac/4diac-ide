@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -29,46 +29,43 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
  * <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * 
  * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory
  * @model kind="package"
  * @generated
  */
 public interface MonitoringPackage extends EPackage {
 	/**
-	 * The package name. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The package name.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNAME = "monitoring";
+	String eNAME = "monitoring"; //$NON-NLS-1$
 
 	/**
-	 * The package namespace URI. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The package namespace URI.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "org.eclipse.fordiac.monitoring";
+	String eNS_URI = "org.eclipse.fordiac.monitoring"; //$NON-NLS-1$
 
 	/**
-	 * The package namespace name. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The package namespace name.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_PREFIX = "monitoring";
+	String eNS_PREFIX = "monitoring"; //$NON-NLS-1$
 
 	/**
-	 * The singleton instance of the package. <!-- begin-user-doc --> <!--
+	 * The singleton instance of the package.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	MonitoringPackage eINSTANCE = org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl.init();
 
 	/**
-	 * The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl
-	 * <em>Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl <em>Element</em>}' class.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getMonitoringElement()
 	 * @generated
@@ -80,7 +77,7 @@ public interface MonitoringPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringAdapterElementImpl
 	 * <em>Adapter Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringAdapterElementImpl
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getMonitoringAdapterElement()
 	 * @generated
@@ -88,10 +85,8 @@ public interface MonitoringPackage extends EPackage {
 	int MONITORING_ADAPTER_ELEMENT = 1;
 
 	/**
-	 * The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part
-	 * Creator</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part Creator</em>}' class.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getIEditPartCreator()
 	 * @generated
@@ -99,9 +94,9 @@ public interface MonitoringPackage extends EPackage {
 	int IEDIT_PART_CREATOR = 5;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference. <!-- begin-user-doc
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
@@ -110,16 +105,16 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Offline</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MONITORING_ELEMENT__OFFLINE = MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE;
 
 	/**
-	 * The feature id for the '<em><b>Force</b></em>' attribute. <!-- begin-user-doc
+	 * The feature id for the '<em><b>Force</b></em>' attribute.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
@@ -128,7 +123,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Force Value</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -137,25 +132,25 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Current Value</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MONITORING_ELEMENT__CURRENT_VALUE = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Sec</b></em>' attribute. <!-- begin-user-doc
+	 * The feature id for the '<em><b>Sec</b></em>' attribute.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
 	int MONITORING_ELEMENT__SEC = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Usec</b></em>' attribute. <!-- begin-user-doc
+	 * The feature id for the '<em><b>Usec</b></em>' attribute.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
@@ -164,16 +159,16 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Element</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int MONITORING_ELEMENT_FEATURE_COUNT = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference. <!-- begin-user-doc
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
@@ -182,7 +177,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Offline</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -191,7 +186,6 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
@@ -200,28 +194,24 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Monitored Adapter FB</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int MONITORING_ADAPTER_ELEMENT__MONITORED_ADAPTER_FB = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT
-			+ 1;
+	int MONITORING_ADAPTER_ELEMENT__MONITORED_ADAPTER_FB = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Adapter Element</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
 	int MONITORING_ADAPTER_ELEMENT_FEATURE_COUNT = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterPortElementImpl
-	 * <em>Adapter Port Element</em>}' class. <!-- begin-user-doc --> <!--
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterPortElementImpl <em>Adapter Port Element</em>}' class.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.AdapterPortElementImpl
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getAdapterPortElement()
 	 * @generated
@@ -229,9 +219,9 @@ public interface MonitoringPackage extends EPackage {
 	int ADAPTER_PORT_ELEMENT = 2;
 
 	/**
-	 * The feature id for the '<em><b>Fb</b></em>' reference. <!-- begin-user-doc
+	 * The feature id for the '<em><b>Fb</b></em>' reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
@@ -240,7 +230,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Interface Element</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -249,7 +239,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Resource</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -258,7 +248,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Hierarchy</b></em>' attribute list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -267,16 +257,14 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Ports</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
 	int ADAPTER_PORT_ELEMENT__PORTS = MonitoringBasePackage.PORT_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Adapter Port Element</em>'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The number of structural features of the '<em>Adapter Port Element</em>' class.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -285,18 +273,15 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>IEdit Part Creator</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
 	int IEDIT_PART_CREATOR_FEATURE_COUNT = 0;
 
 	/**
-	 * The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl
-	 * <em>Adapter Monitoring Event</em>}' class. <!-- begin-user-doc --> <!--
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl <em>Adapter Monitoring Event</em>}' class.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getAdapterMonitoringEvent()
 	 * @generated
@@ -304,101 +289,86 @@ public interface MonitoringPackage extends EPackage {
 	int ADAPTER_MONITORING_EVENT = 3;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_MONITORING_EVENT__ANNOTATIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 1;
+	int ADAPTER_MONITORING_EVENT__NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__COMMENT = IEDIT_PART_CREATOR_FEATURE_COUNT + 2;
+	int ADAPTER_MONITORING_EVENT__COMMENT = IEDIT_PART_CREATOR_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Is Input</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__IS_INPUT = IEDIT_PART_CREATOR_FEATURE_COUNT + 3;
+	int ADAPTER_MONITORING_EVENT__IS_INPUT = IEDIT_PART_CREATOR_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 4;
+	int ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 5;
+	int ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__TYPE = IEDIT_PART_CREATOR_FEATURE_COUNT + 6;
+	int ADAPTER_MONITORING_EVENT__TYPE = IEDIT_PART_CREATOR_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__TYPE_NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 7;
+	int ADAPTER_MONITORING_EVENT__TYPE_NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>With</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__WITH = IEDIT_PART_CREATOR_FEATURE_COUNT + 8;
+	int ADAPTER_MONITORING_EVENT__WITH = IEDIT_PART_CREATOR_FEATURE_COUNT + 7;
 
 	/**
-	 * The number of structural features of the '<em>Adapter Monitoring Event</em>'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The number of structural features of the '<em>Adapter Monitoring Event</em>' class.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 9;
+	int ADAPTER_MONITORING_EVENT_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 8;
 
 	/**
-	 * The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl
-	 * <em>Adapter Monitoring Var Declaration</em>}' class. <!-- begin-user-doc -->
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl <em>Adapter Monitoring Var Declaration</em>}' class.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl
 	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getAdapterMonitoringVarDeclaration()
 	 * @generated
@@ -406,118 +376,104 @@ public interface MonitoringPackage extends EPackage {
 	int ADAPTER_MONITORING_VAR_DECLARATION = 4;
 
 	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__ANNOTATIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 1;
+	int ADAPTER_MONITORING_VAR_DECLARATION__NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__COMMENT = IEDIT_PART_CREATOR_FEATURE_COUNT + 2;
+	int ADAPTER_MONITORING_VAR_DECLARATION__COMMENT = IEDIT_PART_CREATOR_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Is Input</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT = IEDIT_PART_CREATOR_FEATURE_COUNT + 3;
+	int ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT = IEDIT_PART_CREATOR_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 4;
+	int ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 5;
+	int ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS = IEDIT_PART_CREATOR_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference. <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' reference.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__TYPE = IEDIT_PART_CREATOR_FEATURE_COUNT + 6;
+	int ADAPTER_MONITORING_VAR_DECLARATION__TYPE = IEDIT_PART_CREATOR_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__TYPE_NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 7;
+	int ADAPTER_MONITORING_VAR_DECLARATION__TYPE_NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Array Size</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE = IEDIT_PART_CREATOR_FEATURE_COUNT + 8;
+	int ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE = IEDIT_PART_CREATOR_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Withs</b></em>' reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__WITHS = IEDIT_PART_CREATOR_FEATURE_COUNT + 9;
+	int ADAPTER_MONITORING_VAR_DECLARATION__WITHS = IEDIT_PART_CREATOR_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__VALUE = IEDIT_PART_CREATOR_FEATURE_COUNT + 10;
+	int ADAPTER_MONITORING_VAR_DECLARATION__VALUE = IEDIT_PART_CREATOR_FEATURE_COUNT + 9;
 
 	/**
-	 * The number of structural features of the '<em>Adapter Monitoring Var
-	 * Declaration</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The number of structural features of the '<em>Adapter Monitoring Var Declaration</em>' class.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 11;
+	int ADAPTER_MONITORING_VAR_DECLARATION_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 10;
 
 	/**
-	 * Returns the meta object for class
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement
-	 * <em>Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement <em>Element</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Element</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringElement
 	 * @generated
@@ -525,10 +481,8 @@ public interface MonitoringPackage extends EPackage {
 	EClass getMonitoringElement();
 
 	/**
-	 * Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isForce
-	 * <em>Force</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isForce <em>Force</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Force</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isForce()
 	 * @see #getMonitoringElement()
@@ -537,10 +491,8 @@ public interface MonitoringPackage extends EPackage {
 	EAttribute getMonitoringElement_Force();
 
 	/**
-	 * Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getForceValue
-	 * <em>Force Value</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getForceValue <em>Force Value</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Force Value</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getForceValue()
 	 * @see #getMonitoringElement()
@@ -549,10 +501,8 @@ public interface MonitoringPackage extends EPackage {
 	EAttribute getMonitoringElement_ForceValue();
 
 	/**
-	 * Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getCurrentValue
-	 * <em>Current Value</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getCurrentValue <em>Current Value</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Current Value</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getCurrentValue()
 	 * @see #getMonitoringElement()
@@ -561,10 +511,8 @@ public interface MonitoringPackage extends EPackage {
 	EAttribute getMonitoringElement_CurrentValue();
 
 	/**
-	 * Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getSec
-	 * <em>Sec</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getSec <em>Sec</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Sec</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getSec()
 	 * @see #getMonitoringElement()
@@ -573,10 +521,8 @@ public interface MonitoringPackage extends EPackage {
 	EAttribute getMonitoringElement_Sec();
 
 	/**
-	 * Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getUsec
-	 * <em>Usec</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getUsec <em>Usec</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Usec</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getUsec()
 	 * @see #getMonitoringElement()
@@ -585,10 +531,8 @@ public interface MonitoringPackage extends EPackage {
 	EAttribute getMonitoringElement_Usec();
 
 	/**
-	 * Returns the meta object for class
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement
-	 * <em>Adapter Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement <em>Adapter Element</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Adapter Element</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement
 	 * @generated
@@ -596,12 +540,9 @@ public interface MonitoringPackage extends EPackage {
 	EClass getMonitoringAdapterElement();
 
 	/**
-	 * Returns the meta object for the containment reference list
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getElements
-	 * <em>Elements</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return the meta object for the containment reference list
-	 *         '<em>Elements</em>'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getElements <em>Elements</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Elements</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getElements()
 	 * @see #getMonitoringAdapterElement()
 	 * @generated
@@ -613,7 +554,7 @@ public interface MonitoringPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getMonitoredAdapterFB
 	 * <em>Monitored Adapter FB</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for the reference '<em>Monitored Adapter FB</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getMonitoredAdapterFB()
 	 * @see #getMonitoringAdapterElement()
@@ -622,10 +563,8 @@ public interface MonitoringPackage extends EPackage {
 	EReference getMonitoringAdapterElement_MonitoredAdapterFB();
 
 	/**
-	 * Returns the meta object for class
-	 * '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part
-	 * Creator</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part Creator</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>IEdit Part Creator</em>'.
 	 * @see org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator
 	 * @model instanceClass="org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator"
@@ -638,7 +577,7 @@ public interface MonitoringPackage extends EPackage {
 	 * '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement
 	 * <em>Adapter Port Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @return the meta object for class '<em>Adapter Port Element</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement
 	 * @generated
@@ -646,10 +585,8 @@ public interface MonitoringPackage extends EPackage {
 	EClass getAdapterPortElement();
 
 	/**
-	 * Returns the meta object for the containment reference list
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement#getPorts
-	 * <em>Ports</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement#getPorts <em>Ports</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Ports</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement#getPorts()
 	 * @see #getAdapterPortElement()
@@ -658,11 +595,9 @@ public interface MonitoringPackage extends EPackage {
 	EReference getAdapterPortElement_Ports();
 
 	/**
-	 * Returns the meta object for class
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent
-	 * <em>Adapter Monitoring Event</em>}'. <!-- begin-user-doc --> <!--
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent <em>Adapter Monitoring Event</em>}'.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @return the meta object for class '<em>Adapter Monitoring Event</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent
 	 * @generated
@@ -670,13 +605,10 @@ public interface MonitoringPackage extends EPackage {
 	EClass getAdapterMonitoringEvent();
 
 	/**
-	 * Returns the meta object for class
-	 * '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration
-	 * <em>Adapter Monitoring Var Declaration</em>}'. <!-- begin-user-doc --> <!--
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration <em>Adapter Monitoring Var Declaration</em>}'.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
-	 * @return the meta object for class '<em>Adapter Monitoring Var
-	 *         Declaration</em>'.
+	 * @return the meta object for class '<em>Adapter Monitoring Var Declaration</em>'.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration
 	 * @generated
 	 */
@@ -685,7 +617,7 @@ public interface MonitoringPackage extends EPackage {
 	/**
 	 * Returns the factory that creates the instances of the model. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
@@ -700,15 +632,12 @@ public interface MonitoringPackage extends EPackage {
 	 * <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl
-		 * <em>Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl <em>Element</em>}' class.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getMonitoringElement()
 		 * @generated
@@ -718,23 +647,20 @@ public interface MonitoringPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Force</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
 		 * @generated
 		 */
 		EAttribute MONITORING_ELEMENT__FORCE = eINSTANCE.getMonitoringElement_Force();
 
 		/**
-		 * The meta object literal for the '<em><b>Force Value</b></em>' attribute
-		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * The meta object literal for the '<em><b>Force Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute MONITORING_ELEMENT__FORCE_VALUE = eINSTANCE.getMonitoringElement_ForceValue();
 
 		/**
-		 * The meta object literal for the '<em><b>Current Value</b></em>' attribute
-		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * The meta object literal for the '<em><b>Current Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute MONITORING_ELEMENT__CURRENT_VALUE = eINSTANCE.getMonitoringElement_CurrentValue();
@@ -742,7 +668,7 @@ public interface MonitoringPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Sec</b></em>' attribute feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EAttribute MONITORING_ELEMENT__SEC = eINSTANCE.getMonitoringElement_Sec();
@@ -750,7 +676,6 @@ public interface MonitoringPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Usec</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
 		 * @generated
 		 */
 		EAttribute MONITORING_ELEMENT__USEC = eINSTANCE.getMonitoringElement_Usec();
@@ -760,7 +685,7 @@ public interface MonitoringPackage extends EPackage {
 		 * '{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringAdapterElementImpl
 		 * <em>Adapter Element</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 		 * -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringAdapterElementImpl
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getMonitoringAdapterElement()
 		 * @generated
@@ -768,27 +693,22 @@ public interface MonitoringPackage extends EPackage {
 		EClass MONITORING_ADAPTER_ELEMENT = eINSTANCE.getMonitoringAdapterElement();
 
 		/**
-		 * The meta object literal for the '<em><b>Elements</b></em>' containment
-		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference MONITORING_ADAPTER_ELEMENT__ELEMENTS = eINSTANCE.getMonitoringAdapterElement_Elements();
 
 		/**
-		 * The meta object literal for the '<em><b>Monitored Adapter FB</b></em>'
-		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * The meta object literal for the '<em><b>Monitored Adapter FB</b></em>' reference feature.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MONITORING_ADAPTER_ELEMENT__MONITORED_ADAPTER_FB = eINSTANCE
-				.getMonitoringAdapterElement_MonitoredAdapterFB();
+		EReference MONITORING_ADAPTER_ELEMENT__MONITORED_ADAPTER_FB = eINSTANCE.getMonitoringAdapterElement_MonitoredAdapterFB();
 
 		/**
-		 * The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part
-		 * Creator</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part Creator</em>}' class.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getIEditPartCreator()
 		 * @generated
@@ -796,11 +716,9 @@ public interface MonitoringPackage extends EPackage {
 		EClass IEDIT_PART_CREATOR = eINSTANCE.getIEditPartCreator();
 
 		/**
-		 * The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterPortElementImpl
-		 * <em>Adapter Port Element</em>}' class. <!-- begin-user-doc --> <!--
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterPortElementImpl <em>Adapter Port Element</em>}' class.
+		 * <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
-		 * 
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.AdapterPortElementImpl
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getAdapterPortElement()
 		 * @generated
@@ -808,19 +726,16 @@ public interface MonitoringPackage extends EPackage {
 		EClass ADAPTER_PORT_ELEMENT = eINSTANCE.getAdapterPortElement();
 
 		/**
-		 * The meta object literal for the '<em><b>Ports</b></em>' containment reference
-		 * list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * The meta object literal for the '<em><b>Ports</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ADAPTER_PORT_ELEMENT__PORTS = eINSTANCE.getAdapterPortElement_Ports();
 
 		/**
-		 * The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl
-		 * <em>Adapter Monitoring Event</em>}' class. <!-- begin-user-doc --> <!--
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl <em>Adapter Monitoring Event</em>}' class.
+		 * <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
-		 * 
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getAdapterMonitoringEvent()
 		 * @generated
@@ -828,11 +743,9 @@ public interface MonitoringPackage extends EPackage {
 		EClass ADAPTER_MONITORING_EVENT = eINSTANCE.getAdapterMonitoringEvent();
 
 		/**
-		 * The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl
-		 * <em>Adapter Monitoring Var Declaration</em>}' class. <!-- begin-user-doc -->
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl <em>Adapter Monitoring Var Declaration</em>}' class.
+		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * 
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl
 		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getAdapterMonitoringVarDeclaration()
 		 * @generated

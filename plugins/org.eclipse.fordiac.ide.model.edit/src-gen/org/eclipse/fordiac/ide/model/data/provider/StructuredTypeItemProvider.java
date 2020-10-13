@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
  * 
  * @generated
  */
-public class StructuredTypeItemProvider extends DataTypeItemProvider {
+public class StructuredTypeItemProvider extends AnyDerivedTypeItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -73,7 +73,7 @@ public class StructuredTypeItemProvider extends DataTypeItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(DataPackage.Literals.STRUCTURED_TYPE__VAR_DECLARATION);
+			childrenFeatures.add(DataPackage.Literals.STRUCTURED_TYPE__MEMBER_VARIABLES);
 		}
 		return childrenFeatures;
 	}
@@ -128,11 +128,13 @@ public class StructuredTypeItemProvider extends DataTypeItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(StructuredType.class)) {
-		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
+		case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**
@@ -146,11 +148,14 @@ public class StructuredTypeItemProvider extends DataTypeItemProvider {
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(DataPackage.Literals.STRUCTURED_TYPE__VAR_DECLARATION,
+		newChildDescriptors.add(createChildParameter(DataPackage.Literals.STRUCTURED_TYPE__MEMBER_VARIABLES,
 				LibraryElementFactory.eINSTANCE.createVarDeclaration()));
 
-		newChildDescriptors.add(createChildParameter(DataPackage.Literals.STRUCTURED_TYPE__VAR_DECLARATION,
+		newChildDescriptors.add(createChildParameter(DataPackage.Literals.STRUCTURED_TYPE__MEMBER_VARIABLES,
 				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+
+		newChildDescriptors.add(createChildParameter(DataPackage.Literals.STRUCTURED_TYPE__MEMBER_VARIABLES,
+				LibraryElementFactory.eINSTANCE.createLocalVariable()));
 	}
 
 }

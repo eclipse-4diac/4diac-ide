@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>  
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Data Type Editor"
+            extensions="dtp"
+            contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
+            default="true"
+            class="org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor"
+            id="org.eclipse.fordiac.ide.datatypeeditor.editors.DTPFileEditor">
+      </editor>
+   </extension>
+</plugin>

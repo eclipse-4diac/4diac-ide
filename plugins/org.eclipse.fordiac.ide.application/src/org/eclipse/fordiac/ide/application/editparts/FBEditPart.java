@@ -24,15 +24,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.editparts.ZoomManager;
 
 /**
  * This class implements an EditPart for a FunctionBlock.
  */
 public class FBEditPart extends AbstractFBNElementEditPart {
 
-	public FBEditPart(final ZoomManager zoomManager) {
-		super(zoomManager);
+	public FBEditPart() {
+		super();
 	}
 
 	/**

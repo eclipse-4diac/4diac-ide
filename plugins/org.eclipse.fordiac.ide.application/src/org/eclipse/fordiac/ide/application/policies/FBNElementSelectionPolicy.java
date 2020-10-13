@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.Request;
@@ -31,7 +30,7 @@ public class FBNElementSelectionPolicy extends SelectionEditPolicy {
 
 	@Override
 	protected void hideSelection() {
-		for (Object object : ((AbstractFBNElementEditPart) getHost()).getChildren()) {
+		for (Object object : getHost().getChildren()) {
 			if (object instanceof InterfaceEditPart) {
 				((InterfaceEditPart) object).setInOutConnectionsWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 
@@ -41,7 +40,7 @@ public class FBNElementSelectionPolicy extends SelectionEditPolicy {
 
 	@Override
 	protected void showSelection() {
-		for (Object object : ((AbstractFBNElementEditPart) getHost()).getChildren()) {
+		for (Object object : getHost().getChildren()) {
 			if (object instanceof InterfaceEditPart) {
 				((InterfaceEditPart) object)
 						.setInOutConnectionsWidth(ConnectionPreferenceValues.HIGHLIGTHED_LINE_WIDTH);

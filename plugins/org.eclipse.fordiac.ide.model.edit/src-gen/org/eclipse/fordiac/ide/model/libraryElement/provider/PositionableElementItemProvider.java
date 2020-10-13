@@ -142,8 +142,10 @@ public class PositionableElementItemProvider extends ItemProviderAdapter impleme
 		case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
+		default:
+			super.notifyChanged(notification);
+			return;
 		}
-		super.notifyChanged(notification);
 	}
 
 	/**

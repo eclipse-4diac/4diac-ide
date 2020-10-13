@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,19 +21,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 public class ChangeStandardCommand extends ChangeIdentificationCommand {
 
 	/** The new standard value. */
-	private String newStandard;
+	private final String newStandard;
 
 	/** The old standard value. */
 	private String oldStandard;
 
 	public ChangeStandardCommand(LibraryElement type, final String newStandard) {
 		super(type);
-		this.newStandard = newStandard;
+		this.newStandard = (null == newStandard) ? "" : newStandard; //$NON-NLS-1$
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -44,7 +44,7 @@ public class ChangeStandardCommand extends ChangeIdentificationCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -54,7 +54,7 @@ public class ChangeStandardCommand extends ChangeIdentificationCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override

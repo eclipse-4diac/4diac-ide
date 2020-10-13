@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Model Command Tests (Incubation)
+Bundle-SymbolicName: org.eclipse.fordiac.ide.test.model.commands
+Bundle-Version: 1.13.0.qualifier
+Fragment-Host: org.eclipse.fordiac.ide.model.commands
+Automatic-Module-Name: org.eclipse.fordiac.ide.test.model.commands
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Vendor: Eclipse 4diac
+Require-Bundle: org.junit, org.eclipse.core.resources

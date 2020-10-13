@@ -34,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.events.ControlEvent;
@@ -45,7 +44,6 @@ import org.eclipse.swt.widgets.Display;
 public class FBTypeEditPart extends AbstractConnectableEditPart {
 
 	private ControlListener controlListener;
-	private ZoomManager zoomManager;
 	private EventInputContainer eic;
 	private EventOutputContainer eoc;
 	private VariableInputContainer vic;
@@ -100,14 +98,13 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		return (FBType) super.getModel();
 	}
 
-	FBTypeEditPart(ZoomManager zoomManager) {
+	FBTypeEditPart() {
 		super();
-		this.zoomManager = zoomManager;
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		return new FBTypeFigure(getModel(), zoomManager);
+		return new FBTypeFigure(getModel());
 	}
 
 	@Override
@@ -119,9 +116,8 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 //		Display.getDefault().asyncExec(() -> getNameLabel().setText(getINamedElement().getName()));
 //	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	protected List getModelChildren() {
+	protected List<Object> getModelChildren() {
 		if (null == eic) {
 			eic = new EventInputContainer(getModel());
 		}
@@ -230,7 +226,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 					Point p = getParent().getViewer().getControl().getSize();
 					Dimension dim = getFigure().getPreferredSize(-1, -1);
 
-					Rectangle rect = new Rectangle(p.x / 2 - dim.width / 2, p.y / 2 - dim.height / 2, -1, -1);
+					Rectangle rect = new Rectangle((p.x / 2) - (dim.width / 2), (p.y / 2) - (dim.height / 2), -1, -1);
 					// rectangle rect = new Rectangle()
 
 					update(rect);
@@ -246,7 +242,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		}
 		Point p = getParent().getViewer().getControl().getSize();
 		Dimension dim = getFigure().getPreferredSize(-1, -1);
-		Rectangle rect = new Rectangle(p.x / 2 - dim.width / 2, p.y / 2 - dim.height / 2, -1, -1);
+		Rectangle rect = new Rectangle((p.x / 2) - (dim.width / 2), (p.y / 2) - (dim.height / 2), -1, -1);
 		update(rect);
 	}
 

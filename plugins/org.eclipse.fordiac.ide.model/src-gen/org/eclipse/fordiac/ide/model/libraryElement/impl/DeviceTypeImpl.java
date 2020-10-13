@@ -297,8 +297,9 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 			return basicSetFBNetwork(null, msgs);
 		case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
 			return ((InternalEList<?>) getAttributeDeclarations()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -321,8 +322,9 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 			return getProfile();
 		case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
 			return getAttributeDeclarations();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -356,8 +358,10 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 			getAttributeDeclarations().clear();
 			getAttributeDeclarations().addAll((Collection<? extends AttributeDeclaration>) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -386,8 +390,10 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
 			getAttributeDeclarations().clear();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -410,8 +416,9 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 			return PROFILE_EDEFAULT == null ? profile != null : !PROFILE_EDEFAULT.equals(profile);
 		case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
 			return attributeDeclarations != null && !attributeDeclarations.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

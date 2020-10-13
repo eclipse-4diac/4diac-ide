@@ -17,7 +17,6 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
@@ -31,7 +30,7 @@ public class ResourceSection extends AbstractInterfaceSection {
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
 		Resource helper = getInputType(input);
 		if (null != helper) {
-			return SystemManager.INSTANCE.getCommandStack(helper.getAutomationSystem());
+			return helper.getAutomationSystem().getCommandStack();
 		}
 		return null;
 	}

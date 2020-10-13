@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -19,7 +19,6 @@ import java.io.IOException;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,12 +35,12 @@ public final class SystemPaletteManagement {
 
 	/**
 	 * Copy tool type lib to project.
-	 * 
-	 * @param project the project
+	 *
+	 * @param destination the project
 	 */
-	public static void copyToolTypeLibToProject(final IProject project) {
+	public static void copyToolTypeLibToDestination(final IContainer destination) {
 		try {
-			copyDirectory(TypeLibrary.getToolLibFolder(), project);
+			copyDirectory(TypeLibrary.getToolLibFolder(), destination);
 		} catch (Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}

@@ -178,7 +178,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		return testResult;
 		// TODO: implement this method to return the 'Test Result' attribute
 		// Ensure that you remove @generated or mark it @generated NOT
-//		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 					LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT, oldTestResult, testResult));
 		// TODO: implement this method to set the 'Test Result' attribute
 		// Ensure that you remove @generated or mark it @generated NOT
-//		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		testResult = TEST_RESULT_EDEFAULT;
 		// TODO: implement this method to unset the 'Test Result' attribute
 		// Ensure that you remove @generated or mark it @generated NOT
-//		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -222,7 +222,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		// TODO: implement this method to return whether the 'Test Result' attribute is
 		// set
 		// Ensure that you remove @generated or mark it @generated NOT
-//		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -237,8 +237,9 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 			return basicSetInputPrimitive(null, msgs);
 		case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
 			return ((InternalEList<?>) getOutputPrimitive()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -255,8 +256,9 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 			return getOutputPrimitive();
 		case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
 			return getTestResult();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -278,8 +280,10 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
 			setTestResult((Integer) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -299,8 +303,10 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
 			unsetTestResult();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -317,8 +323,9 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 			return outputPrimitive != null && !outputPrimitive.isEmpty();
 		case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
 			return isSetTestResult();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // ServiceTransactionImpl
