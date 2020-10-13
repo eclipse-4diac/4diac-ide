@@ -33,63 +33,57 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 
 	private static State executeCommandOutputWithoutName(State state) {
 		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.BOOL),
-				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ false, /* index */ 0));
+				getTypeInterfaceList(state), /* isInput */ false, /* index */ 0));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyStateOutputWithoutName(State state, State oldState, TestFunction t) {
-		InterfaceList interfacelist = state.getFbNetwork().getNetworkElements().get(0).getInterface();
-		InterfaceList oldInterfacelist = oldState.getFbNetwork().getNetworkElements().get(0).getInterface();
-
+	private static void verifyInterfaceListWithName(InterfaceList interfacelist, String element, String type,
+			TestFunction t) {
 		t.test(interfacelist.getInputVars().isEmpty());
 		t.test(!interfacelist.getOutputVars().isEmpty());
-		t.test(interfacelist.getOutputVars().size(), oldInterfacelist.getOutputVars().size() + 1);
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(interfacelist.getInterfaceElement(ELEMENT1_NAME));
-		t.test(interfacelist.getInterfaceElement(ELEMENT1_NAME).getTypeName(), FordiacKeywords.BOOL);
+		t.test(interfacelist.getInterfaceElement(element));
+		t.test(interfacelist.getInterfaceElement(element).getTypeName(), type);
+	}
+
+	private static void verifyStateOutputWithoutName(State state, State oldState, TestFunction t) {
+		InterfaceList interfacelist = getTypeInterfaceList(state);
+		InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
+
+		verifyInterfaceListWithName(interfacelist, ELEMENT1_NAME, FordiacKeywords.BOOL, t);
+		t.test(interfacelist.getOutputVars().size(), oldInterfacelist.getOutputVars().size() + 1);
 	}
 
 	private static State executeCommandOutputWithName(State state) {
 		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.WORD),
-				ELEMENT2_NAME, state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ false,
-				/* index */ 1));
+				ELEMENT2_NAME, getTypeInterfaceList(state), /* isInput */ false, /* index */ 1));
 
 		return commandExecution(state);
 	}
 
 	private static void verifyStateOutputWithName(State state, State oldState, TestFunction t) {
-		InterfaceList interfacelist = state.getFbNetwork().getNetworkElements().get(0).getInterface();
-		InterfaceList oldInterfacelist = oldState.getFbNetwork().getNetworkElements().get(0).getInterface();
+		InterfaceList interfacelist = getTypeInterfaceList(state);
+		InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
 
-		t.test(interfacelist.getInputVars().isEmpty());
-		t.test(!interfacelist.getOutputVars().isEmpty());
+		verifyInterfaceListWithName(interfacelist, ELEMENT2_NAME, FordiacKeywords.WORD, t);
 		t.test(interfacelist.getOutputVars().size(), oldInterfacelist.getOutputVars().size() + 1);
-		t.test(interfacelist.getEventInputs().isEmpty());
-		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(interfacelist.getInterfaceElement(ELEMENT2_NAME));
-		t.test(interfacelist.getInterfaceElement(ELEMENT2_NAME).getTypeName(), FordiacKeywords.WORD);
 	}
 
 	private static State executeCommandOutputWithNameNull(State state) {
 		state.setCommand(new CreateInterfaceElementCommand(getDatatypelib().getType(FordiacKeywords.BYTE), null,
-				state.getFbNetwork().getNetworkElements().get(0).getInterface(), /* isInput */ false, /* index */ 1));
+				getTypeInterfaceList(state), /* isInput */ false, /* index */ 1));
 
 		return commandExecution(state);
 	}
 
 	private static void verifyStateOutputWithNameNull(State state, State oldState, TestFunction t) {
-		InterfaceList interfacelist = state.getFbNetwork().getNetworkElements().get(0).getInterface();
-		InterfaceList oldInterfacelist = oldState.getFbNetwork().getNetworkElements().get(0).getInterface();
+		InterfaceList interfacelist = getTypeInterfaceList(state);
+		InterfaceList oldInterfacelist = getTypeInterfaceList(oldState);
 
-		t.test(interfacelist.getInputVars().isEmpty());
-		t.test(!interfacelist.getOutputVars().isEmpty());
+		verifyInterfaceListWithName(interfacelist, ELEMENT3_NAME, FordiacKeywords.BYTE, t);
 		t.test(interfacelist.getOutputVars().size(), oldInterfacelist.getOutputVars().size() + 1);
-		t.test(interfacelist.getEventInputs().isEmpty());
-		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(interfacelist.getInterfaceElement(ELEMENT3_NAME));
-		t.test(interfacelist.getInterfaceElement(ELEMENT3_NAME).getTypeName(), FordiacKeywords.BYTE);
 	}
 
 	// parameter creation function
@@ -110,11 +104,24 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 		);
 
 		final Collection<ExecutionDescription<State>> reordering = createReordering(
-				(State s) -> s.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars(), ELEMENT1_NAME,
-				ELEMENT3_NAME, ELEMENT2_NAME);
+				(State s) -> getTypeInterfaceList(s).getOutputVars(), ELEMENT1_NAME, ELEMENT3_NAME, ELEMENT2_NAME);
 
-		return createCommands(
-				Stream.concat(executionDescriptions.stream(), reordering.stream()).collect(Collectors.toList()));
+		final Collection<ExecutionDescription<State>> updateFBandValidate = createUpdateAndValidate(
+				(State s, State o, TestFunction t) -> {
+					InterfaceList interfacelist = getInstanceInterfaceList(s);
+
+					verifyInterfaceListWithName(interfacelist, ELEMENT1_NAME, FordiacKeywords.BOOL, t);
+					verifyInterfaceListWithName(interfacelist, ELEMENT2_NAME, FordiacKeywords.WORD, t);
+					verifyInterfaceListWithName(interfacelist, ELEMENT3_NAME, FordiacKeywords.BYTE, t);
+					t.test(interfacelist.getOutputVars().size(), 3);
+				});
+
+		return createCommands(Stream.concat( //
+				Stream.concat( //
+						executionDescriptions.stream(), //
+						reordering.stream()), //
+				updateFBandValidate.stream() //
+		).collect(Collectors.toList()));
 	}
 
 }

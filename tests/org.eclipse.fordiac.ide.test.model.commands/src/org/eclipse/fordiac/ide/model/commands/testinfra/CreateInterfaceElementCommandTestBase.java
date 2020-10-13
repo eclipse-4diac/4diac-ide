@@ -20,8 +20,10 @@ import java.util.function.Function;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.commands.Command;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -53,6 +55,14 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 		return commands;
 	}
 
+	protected static InterfaceList getTypeInterfaceList(State s) {
+		return s.getFunctionblock().getFBType().getInterfaceList();
+	}
+
+	protected static InterfaceList getInstanceInterfaceList(State s) {
+		return s.getFbNetwork().getNetworkElements().get(0).getInterface();
+	}
+
 	private static <V extends IInterfaceElement> State executeNOP(State state) {
 		state.setCommand(new Command() {
 			// NOP
@@ -64,6 +74,13 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 			int index, boolean direction) {
 		final EList<V> list = translator.apply(state);
 		state.setCommand(new ChangeInterfaceOrderCommand(list.get(index), direction));
+		return commandExecution(state);
+	}
+
+	private static <V extends IInterfaceElement> State executeReorder(State state, Function<State, EList<V>> translator,
+			int index, int newPosition) {
+		final EList<V> list = translator.apply(state);
+		state.setCommand(new ChangeInterfaceOrderCommand(list.get(index), newPosition));
 		return commandExecution(state);
 	}
 
@@ -80,7 +97,7 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 			Function<State, EList<V>> translator, final String element1, final String element2, final String element3) {
 		return List.of( //
 				new ExecutionDescription<>("validate order", //$NON-NLS-1$
-						(State s) -> executeNOP(s), //
+						CreateInterfaceElementCommandTestBase::executeNOP, //
 						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, translator, element1, element2,
 								element3)), //
 				new ExecutionDescription<>("move second element to third place", //$NON-NLS-1$
@@ -98,7 +115,34 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 				new ExecutionDescription<>("move third element past upper bound", //$NON-NLS-1$
 						(State s) -> executeReorder(s, translator, 2, false), //
 						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, translator, element3, element1,
-								element2)) //
+								element2)), //
+				new ExecutionDescription<>("move first element to third place", //$NON-NLS-1$
+						(State s) -> executeReorder(s, translator, 0, 2), //
+						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, translator, element1, element2,
+								element3)) //
+		);
+	}
+
+	private static State executeUpdate(State state) {
+		state.setCommand(
+				new UpdateFBTypeCommand(state.getFbNetwork().getNetworkElements().get(0), state.getFunctionblock()));
+		return commandExecution(state);
+	}
+
+	protected static Collection<ExecutionDescription<State>> createUpdateAndValidate(StateVerifier<State> v) {
+		return List.of( //
+				new ExecutionDescription<>("validate missing entries before update FB", //
+						CreateInterfaceElementCommandTestBase::executeNOP, //
+						(State s, State oldState, TestFunction t) -> {
+							InterfaceList interfacelist = getInstanceInterfaceList(s);
+							t.test(interfacelist.getInputVars().isEmpty());
+							t.test(interfacelist.getOutputVars().isEmpty());
+							t.test(interfacelist.getEventInputs().isEmpty());
+							t.test(interfacelist.getEventOutputs().isEmpty());
+						}), //
+				new ExecutionDescription<>("update FB", //
+						CreateInterfaceElementCommandTestBase::executeUpdate, //
+						v) //
 		);
 	}
 
