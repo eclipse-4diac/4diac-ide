@@ -52,7 +52,16 @@ public class AddElementsToSubAppCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return !elementsToAdd.isEmpty();
+		return !elementsToAdd.isEmpty() && targetSubappIsInSameFbNetwork();
+	}
+
+	private boolean targetSubappIsInSameFbNetwork() {
+		for (FBNetworkElement block : elementsToAdd) {
+			if (!block.getFbNetwork().getNetworkElements().contains(targetSubApp)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
