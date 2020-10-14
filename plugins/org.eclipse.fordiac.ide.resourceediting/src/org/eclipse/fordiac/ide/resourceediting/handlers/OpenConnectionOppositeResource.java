@@ -1,11 +1,19 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
+ * 				 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  *
  * SPDX-License-Identifier: EPL-2.0 3
+ *
+ * Contributors:
+ *   Alois Zoitl - initial implementation and/or documentation
+ *   Alexander Lumplecker
+ *     - extraced getOppositeInterfaceelement and getConnectionOpposite
+ *       to ConnectionsHelper
+ *     - added getOppositeMappedIE
  *******************************************************************************/
 package org.eclipse.fordiac.ide.resourceediting.handlers;
 
@@ -18,8 +26,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
@@ -39,7 +47,7 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 		if (selection instanceof IStructuredSelection) {
 			Object first = ((IStructuredSelection) selection).getFirstElement();
 			if (first instanceof VirtualInOutputEditPart) {
-				IInterfaceElement oppositeMappedIE = getOppositeInterfaceelement((VirtualInOutputEditPart) first);
+				IInterfaceElement oppositeMappedIE = getOppositeMappedIE((VirtualInOutputEditPart) first);
 				if (null != oppositeMappedIE) {
 					openResource(oppositeMappedIE);
 				}
@@ -60,33 +68,17 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 			}
 		}
 		if (obj instanceof VirtualInOutputEditPart) {
-			setBaseEnabled(null != getOppositeInterfaceelement((VirtualInOutputEditPart) obj));
+			setBaseEnabled(null != getOppositeMappedIE((VirtualInOutputEditPart) obj));
 		} else {
 			setBaseEnabled(false);
 		}
 	}
 
-	private static IInterfaceElement getOppositeInterfaceelement(VirtualInOutputEditPart vIOEditPart) {
+	private static IInterfaceElement getOppositeMappedIE(VirtualInOutputEditPart vIOEditPart) {
 		IInterfaceElement ie = vIOEditPart.getModel().getReferencedInterfaceElement();
-		IInterfaceElement fbOppostiteIE = ie.getFBNetworkElement().getOpposite().getInterfaceElement(ie.getName());
-		if (null != fbOppostiteIE) {
-			IInterfaceElement connectionOpposite = getConnectionOpposite(fbOppostiteIE);
-			if (null != connectionOpposite && connectionOpposite.getFBNetworkElement().isMapped()) {
-				FBNetworkElement mappedOppositeElement = connectionOpposite.getFBNetworkElement().getOpposite();
-				return mappedOppositeElement.getInterfaceElement(connectionOpposite.getName());
-			}
-
-		}
-		return null;
-	}
-
-	private static IInterfaceElement getConnectionOpposite(IInterfaceElement fbOppostiteIE) {
-		EList<Connection> connections = (fbOppostiteIE.isIsInput()) ? fbOppostiteIE.getInputConnections()
-				: fbOppostiteIE.getOutputConnections();
-		if (!connections.isEmpty()) {
-			return (fbOppostiteIE.isIsInput()) ? connections.get(0).getSource() : connections.get(0).getDestination();
-		}
-		return null;
+		EList<Connection> ieConnections = ConnectionsHelper.getConnections(ie);
+		IInterfaceElement oppositeMappedIE = ConnectionsHelper.getOppositeInterfaceElement(ie, ieConnections, 0);
+		return oppositeMappedIE;
 	}
 
 	private static void openResource(IInterfaceElement oppositeMappedIE) {
