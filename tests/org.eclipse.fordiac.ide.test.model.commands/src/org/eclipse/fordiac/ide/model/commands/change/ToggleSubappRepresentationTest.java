@@ -22,28 +22,15 @@ import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateMemberVariableCommandTestBase.State;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.gef.commands.Command;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class ToggleSubappRepresentationTest extends CommandTestBase<State> {
-	protected static class State implements CommandTestBase.StateBase {
+	protected static class State extends CommandTestBase.StateBase {
 
 		private final SubApp subapp;
 
-		private Command cmd;
-
 		public SubApp getSubApp() {
 			return subapp;
-		}
-
-		@Override
-		public Command getCommand() {
-			return cmd;
-		}
-
-		@Override
-		public void setCommand(Command command) {
-			this.cmd = command;
 		}
 
 		public State() {
@@ -62,8 +49,8 @@ public class ToggleSubappRepresentationTest extends CommandTestBase<State> {
 
 	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
-		return describeCommand(description, initializer, initialVerifier, commands,
-				CommandTestBase::defaultUndoCommand, CommandTestBase::defaultRedoCommand);
+		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
+				CommandTestBase::defaultRedoCommand);
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {

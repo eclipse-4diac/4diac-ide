@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
-import org.eclipse.gef.commands.Command;
 import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTestBase.State> {
@@ -33,23 +32,11 @@ public abstract class VersionInfoTestBase extends CommandTestBase<VersionInfoTes
 	private static final String SET_VERSION = "13.0"; //$NON-NLS-1$
 
 	// create a state description that fits our purpose
-	public static class State implements CommandTestBase.StateBase {
+	public static class State extends CommandTestBase.StateBase {
 		private final VersionInfo vInfo;
-
-		private Command cmd;
 
 		public VersionInfo getVersionInfo() {
 			return vInfo;
-		}
-
-		@Override
-		public Command getCommand() {
-			return cmd;
-		}
-
-		@Override
-		public void setCommand(Command cmd) {
-			this.cmd = cmd;
 		}
 
 		public State() {

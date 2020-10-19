@@ -17,25 +17,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.UnexecutableCommand;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class UnexecutableCommandTest extends CommandTestBase<CommandTestBase.StateBase> {
 
-	public static class State implements StateBase {
-
-		Command cmd;
-
-		@Override
-		public Command getCommand() {
-			return cmd;
-		}
-
-		@Override
-		public void setCommand(Command cmd) {
-			this.cmd = cmd;
-		}
+	public static class State extends StateBase {
 
 		@Override
 		public Object getClone() {

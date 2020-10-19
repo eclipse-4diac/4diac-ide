@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.gef.commands.Command;
 import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandTestBase.State> {
@@ -28,7 +27,7 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 	private static final String SET_VALUE = "default"; //$NON-NLS-1$
 
 	// create a state description that fits our purpose
-	public static class State implements CommandTestBase.StateBase {
+	public static class State extends CommandTestBase.StateBase {
 		private final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
 		public State() {
@@ -36,20 +35,8 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 			var.setValue(LibraryElementFactory.eINSTANCE.createValue());
 		}
 
-		private Command cmd;
-
 		public VarDeclaration getVar() {
 			return var;
-		}
-
-		@Override
-		public Command getCommand() {
-			return cmd;
-		}
-
-		@Override
-		public void setCommand(Command cmd) {
-			this.cmd = cmd;
 		}
 
 		@Override

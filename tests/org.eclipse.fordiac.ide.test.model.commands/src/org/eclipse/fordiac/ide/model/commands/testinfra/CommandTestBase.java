@@ -13,8 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.testinfra;
 
-import org.hamcrest.CoreMatchers;
-
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -40,6 +39,8 @@ import org.opentest4j.TestAbortedException;
  */
 public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 
+	private static ErrorMessageTestReceiver emh = new ErrorMessageTestReceiver();
+
 	/**
 	 * Test Function object that can be used to access assertions
 	 */
@@ -51,11 +52,12 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 
 	/**
 	 * assertThat method to be used to validate the current state
+	 *
 	 * @throws AssertionError
 	 *
-	 * @param reason     textual description of what is expected
-	 * @param actual     actual value to be compared
-	 * @param matcher    matcher-object that does the comparison
+	 * @param reason  textual description of what is expected
+	 * @param actual  actual value to be compared
+	 * @param matcher matcher-object that does the comparison
 	 */
 	public static <T> void assertThat(String reason, T actual, Matcher<T> matcher) {
 		org.hamcrest.MatcherAssert.assertThat(reason, actual, matcher);
@@ -63,11 +65,12 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 
 	/**
 	 * assumeThat method to be used to validate the current state
+	 *
 	 * @throws TestAbortedException
 	 *
-	 * @param reason     textual description of what is expected
-	 * @param actual     actual value to be compared
-	 * @param matcher    matcher-object that does the comparison
+	 * @param reason  textual description of what is expected
+	 * @param actual  actual value to be compared
+	 * @param matcher matcher-object that does the comparison
 	 */
 	public static <T> void assumeThat(String reason, T actual, Matcher<T> matcher) {
 		try {
@@ -80,29 +83,29 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * forwarding of the "is" hamcrest-core-matcher
 	 *
-	 * @param matcher    matcher-object that does the comparison
+	 * @param matcher matcher-object that does the comparison
 	 * @return matcher object
 	 */
-	protected static <T> Matcher<T> is(Matcher<T> matcher)  {
+	protected static <T> Matcher<T> is(Matcher<T> matcher) {
 		return CoreMatchers.is(matcher);
 	}
-	
+
 	/**
 	 * forwarding of the "is" hamcrest-core-matcher
 	 *
-	 * @param matcher    value to compare against
+	 * @param matcher value to compare against
 	 * @return matcher object
 	 */
-	protected static <T> Matcher<T> is(T matcher)  {
+	protected static <T> Matcher<T> is(T matcher) {
 		return CoreMatchers.is(matcher);
 	}
 
 	/**
 	 * empty verification method
 	 *
-	 * @param s    current state description
-	 * @param o    state description before the last state transition
-	 * @param t    TestFunction object that selects either assert or assume
+	 * @param s current state description
+	 * @param o state description before the last state transition
+	 * @param t TestFunction object that selects either assert or assume
 	 */
 	protected static <T extends StateBase> void verifyNothing(T s, T o, TestFunction t) {
 		// Nothing to do
@@ -111,93 +114,189 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * undo method that expects that undo is possible
 	 *
-	 * @param stateObj    current state description
-	 * @return            new state description
+	 * @param stateObj current state description
+	 * @return new state description
 	 */
 	protected static <T extends StateBase> T defaultUndoCommand(Object stateObj) {
 		@SuppressWarnings("unchecked")
 		final T state = (T) stateObj;
-		assumption.test(state.getCommand().canExecute() && state.getCommand().canUndo());
-		state.getCommand().undo();
-		return (state);
+		if (state.isUndoAllowed()) {
+			return enabledUndoCommand(stateObj);
+		}
+		return disabledUndoCommand(stateObj);
 	}
 
 	/**
 	 * redo method that expects that redo is possible
 	 *
-	 * @param stateObj    current state description
-	 * @return            new state description
+	 * @param stateObj current state description
+	 * @return new state description
 	 */
 	protected static <T extends StateBase> T defaultRedoCommand(Object stateObj) {
 		@SuppressWarnings("unchecked")
 		final T state = (T) stateObj;
+		if (state.isUndoAllowed()) {
+			return enabledRedoCommand(stateObj);
+		}
+		return disabledRedoCommand(stateObj);
+	}
+
+	/**
+	 * redo method that expects that redo is possible
+	 *
+	 * @param stateObj current state description
+	 * @return new state description
+	 */
+	protected static <T extends StateBase> T enabledRedoCommand(Object stateObj) {
+		@SuppressWarnings("unchecked")
+		final T state = (T) stateObj;
+		emh.start();
 		assumption.test(state.getCommand().canExecute() && state.getCommand().canRedo());
 		state.getCommand().redo();
+		state.setMessages(emh.getMessages());
+		emh.stop();
+		return (state);
+	}
+
+	/**
+	 * undo method that expects that undo is possible
+	 *
+	 * @param stateObj current state description
+	 * @return new state description
+	 */
+	protected static <T extends StateBase> T enabledUndoCommand(Object stateObj) {
+		@SuppressWarnings("unchecked")
+		final T state = (T) stateObj;
+		emh.start();
+		state.setViaUndo();
+		assumption.test(state.getCommand().canUndo());
+		state.getCommand().undo();
+		state.setMessages(emh.getMessages());
+		emh.stop();
 		return (state);
 	}
 
 	/**
 	 * undo method that expects that undo is not possible
 	 *
-	 * @param stateObj    current state description
-	 * @return            new state description
+	 * @param stateObj current state description
+	 * @return new state description
 	 */
 	protected static <T extends StateBase> T disabledUndoCommand(Object stateObj) {
 		@SuppressWarnings("unchecked")
 		final T state = (T) stateObj;
+		emh.start();
 		assumption.test(!(state.getCommand().canExecute() && state.getCommand().canUndo()));
+		state.setMessages(emh.getMessages());
+		emh.stop();
 		return (state);
 	}
 
 	/**
 	 * redo method that expects that redo is not possible
 	 *
-	 * @param stateObj    current state description
-	 * @return            new state description
+	 * @param stateObj current state description
+	 * @return new state description
 	 */
 	protected static <T extends StateBase> T disabledRedoCommand(Object stateObj) {
 		@SuppressWarnings("unchecked")
 		final T state = (T) stateObj;
+		emh.start();
 		assumption.test(!(state.getCommand().canExecute() && state.getCommand().canRedo()));
+		state.setMessages(emh.getMessages());
+		emh.stop();
 		return (state);
 	}
 
 	/**
 	 * execution method that expects that execution is not possible
 	 *
-	 * @param stateObj    current state description
-	 * @return            new state description
+	 * @param stateObj current state description
+	 * @return new state description
 	 */
 	protected static <T extends StateBase> T disabledCommandExecution(T state) {
 		assumption.test(state.getCommand());
+		emh.start();
 		assumption.test(!state.getCommand().canExecute());
+		state.setMessages(emh.getMessages());
+		emh.stop();
+		state.setUndoAllowed(false);
 		return state;
 	}
 
 	/**
 	 * execution method that expects that execution is possible
 	 *
-	 * @param stateObj    current state description
-	 * @return            new state description
+	 * @param stateObj current state description
+	 * @return new state description
 	 */
 	protected static <T extends StateBase> T commandExecution(T state) {
 		assumption.test(state.getCommand());
+		emh.start();
 		assumption.test(state.getCommand().canExecute());
 		state.getCommand().execute();
+		state.setMessages(emh.getMessages());
+		emh.stop();
 		return state;
 	}
-	
+
 	/**
 	 * Base type for state descriptions, used to structure class hierarchy
 	 *
 	 */
 
-	public interface StateBase {
-		Command getCommand();
+	public abstract static class StateBase {
+		private Command cmd;
 
-		void setCommand(Command cmd);
+		private boolean undoAllowed = true;
+		private boolean viaUndo = false;
 
-		Object getClone();
+		private List<String> messages = List.of();
+
+		public Command getCommand() {
+			return cmd;
+		}
+
+		public void setCommand(Command cmd) {
+			this.cmd = cmd;
+		}
+
+		public void setUndoAllowed(boolean undoAllowed) {
+			this.undoAllowed = undoAllowed;
+		}
+
+		public boolean isUndoAllowed() {
+			return undoAllowed;
+		}
+
+		public void setViaUndo() {
+			viaUndo = true;
+		}
+
+		public boolean getViaUndo() {
+			return viaUndo;
+		}
+
+		public void setMessages(List<String> messages) {
+			this.messages = messages;
+		}
+
+		public List<String> getMessages() {
+			return messages;
+		}
+
+		public StateBase() {
+			// NOP
+		}
+
+		public StateBase(StateBase s) {
+			this.undoAllowed = s.undoAllowed;
+			this.cmd = s.cmd;
+			this.viaUndo = s.viaUndo;
+			this.messages = s.messages;
+		}
+
+		public abstract Object getClone();
 
 	}
 
@@ -225,17 +324,17 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		/**
 		 * assumeThat/assertThat method to be used to validate the current state
 		 *
-		 * @param message    textual description of what is expected
-		 * @param actual     actual value to be compared
-		 * @param matcher    matcher-object that does the comparison
+		 * @param message textual description of what is expected
+		 * @param actual  actual value to be compared
+		 * @param matcher matcher-object that does the comparison
 		 */
 		<T> void test(String message, T actual, Matcher<T> matcher);
 
 		/**
 		 * assumeThat/assertThat method to be used to validate the current state
 		 *
-		 * @param actual     actual value to be compared
-		 * @param matcher    matcher-object that does the comparison
+		 * @param actual  actual value to be compared
+		 * @param matcher matcher-object that does the comparison
 		 */
 		default <T> void test(T actual, Matcher<T> matcher) {
 			test("", actual, matcher);
@@ -244,8 +343,8 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		/**
 		 * assumeEqual/assertEqual method to be used to validate the current state
 		 *
-		 * @param actual     actual value to be compared
-		 * @param expected   expected value for the comparision
+		 * @param actual   actual value to be compared
+		 * @param expected expected value for the comparision
 		 */
 		default <T> void test(T actual, T expected) {
 			test("", actual, is(expected));
@@ -254,7 +353,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		/**
 		 * assumeTrue/assertTrue method to be used to validate the current state
 		 *
-		 * @param equals     boolean value which is expected to be true
+		 * @param equals boolean value which is expected to be true
 		 */
 		default void test(boolean equals) {
 			test("", equals, is(true));
@@ -262,9 +361,10 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 
 		/**
 		 * assumeNotNull/assertNotNull method to check for non-null references
+		 *
 		 * @throws TestAbortedException
 		 *
-		 * @param notNull     reference that should not be null
+		 * @param notNull reference that should not be null
 		 */
 		default void test(Object notNull) {
 			test("", notNull, org.hamcrest.CoreMatchers.notNullValue());

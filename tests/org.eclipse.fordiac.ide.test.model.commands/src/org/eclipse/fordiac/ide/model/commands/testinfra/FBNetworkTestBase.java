@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.gef.commands.Command;
 import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBase.State> {
@@ -33,11 +32,9 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 	private static final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 
 	// create a state description that fits our purpose
-	public static class State implements CommandTestBase.StateBase {
+	public static class State extends CommandTestBase.StateBase {
 		private final FBNetwork net;
 		private final FBTypePaletteEntry functionblock;
-
-		private Command cmd;
 
 		public static final String FUNCTIONBLOCK_NAME = "functionblock"; //$NON-NLS-1$
 
@@ -65,16 +62,6 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 
 		public FBTypePaletteEntry getFunctionblock() {
 			return functionblock;
-		}
-
-		@Override
-		public Command getCommand() {
-			return cmd;
-		}
-
-		@Override
-		public void setCommand(Command cmd) {
-			this.cmd = cmd;
 		}
 
 		public State() {

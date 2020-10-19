@@ -33,18 +33,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.gef.commands.Command;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 	private static final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(null);
 
-	protected static class State implements CommandTestBase.StateBase {
+	protected static class State extends CommandTestBase.StateBase {
 
 		private final Demultiplexer demux;
 		private StructuredType struct;
-
-		private Command cmd;
 
 		public Demultiplexer getDemultiplexer() {
 			return demux;
@@ -52,16 +49,6 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 
 		public StructuredType getStruct() {
 			return struct;
-		}
-
-		@Override
-		public Command getCommand() {
-			return cmd;
-		}
-
-		@Override
-		public void setCommand(Command command) {
-			this.cmd = command;
 		}
 
 		public State() {
@@ -144,17 +131,16 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		}
 	}
 
-
 	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
-		return describeCommand(description, initializer, initialVerifier, commands,
-				CommandTestBase::defaultUndoCommand, CommandTestBase::defaultRedoCommand);
+		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
+				CommandTestBase::defaultRedoCommand);
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
 		t.test(state.getDemultiplexer());
-		t.test(state.getStruct().getMemberVariables().size(), state.getDemultiplexer().getInterface().getOutputVars()
-				.size());
+		t.test(state.getStruct().getMemberVariables().size(),
+				state.getDemultiplexer().getInterface().getOutputVars().size());
 	}
 
 	protected static void verifyAdded(State state, State oldState, TestFunction t, String name) {

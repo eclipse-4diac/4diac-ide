@@ -21,7 +21,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.gef.commands.Command;
 import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class CreateMemberVariableCommandTestBase
@@ -29,24 +28,12 @@ public abstract class CreateMemberVariableCommandTestBase
 	protected static DataTypeLibrary datatypeLib = new DataTypeLibrary();
 
 	// create a state description that holds the struct and the command
-	public static class State implements CommandTestBase.StateBase {
+	public static class State extends CommandTestBase.StateBase {
 
 		private final StructuredType struct;
 
-		private Command cmd;
-
 		public StructuredType getStructuredType() {
 			return struct;
-		}
-
-		@Override
-		public Command getCommand() {
-			return cmd;
-		}
-
-		@Override
-		public void setCommand(Command command) {
-			this.cmd = command;
 		}
 
 		public State() {
@@ -66,8 +53,8 @@ public abstract class CreateMemberVariableCommandTestBase
 
 	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
-		return describeCommand(description, initializer, initialVerifier, commands,
-				CommandTestBase::defaultUndoCommand, CommandTestBase::defaultRedoCommand);
+		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
+				CommandTestBase::defaultRedoCommand);
 	}
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
