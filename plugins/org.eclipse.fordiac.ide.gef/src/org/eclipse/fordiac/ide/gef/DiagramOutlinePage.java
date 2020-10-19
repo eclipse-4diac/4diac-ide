@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2014 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,13 +15,13 @@ package org.eclipse.fordiac.ide.gef;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.FreeformViewport;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.parts.ScrollableThumbnail;
 import org.eclipse.draw2d.parts.Thumbnail;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -57,7 +57,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements IContentOut
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.part.Page#createControl(org.eclipse.swt.widgets.Composite
 	 * )
 	 */
@@ -76,7 +76,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements IContentOut
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.part.Page#dispose()
 	 */
 	@Override
@@ -90,7 +90,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements IContentOut
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.part.Page#getControl()
 	 */
 	@Override
@@ -108,7 +108,9 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements IContentOut
 			ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart) rep;
 			thumbnail = new ScrollableThumbnail((Viewport) root.getFigure());
 			thumbnail.setBorder(new MarginBorder(3));
-			thumbnail.setSource(root.getLayer(LayerConstants.PRINTABLE_LAYERS));
+			FreeformViewport viewport = (FreeformViewport) root.getFigure();
+			thumbnail.setSource(viewport.getContents());
+			// root.getLayer(LayerConstants.PRINTABLE_LAYERS));
 			lws.setContents(thumbnail);
 			getEditor().addDisposeListener(e -> {
 				if (thumbnail != null) {
@@ -121,7 +123,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements IContentOut
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
 	@Override
@@ -134,7 +136,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements IContentOut
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.part.Page#setFocus()
 	 */
 	@Override
@@ -146,7 +148,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements IContentOut
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener
 	 * (org.eclipse.jface.viewers.ISelectionChangedListener)
 	 */
@@ -158,7 +160,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements IContentOut
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#getSelection()
 	 */
 	@Override
@@ -169,7 +171,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements IContentOut
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @seeorg.eclipse.jface.viewers.ISelectionProvider#
 	 * removeSelectionChangedListener
 	 * (org.eclipse.jface.viewers.ISelectionChangedListener)
@@ -182,7 +184,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements IContentOut
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse
 	 * .jface.viewers.ISelection)
 	 */
