@@ -59,7 +59,7 @@ public class ErrorMessageHandler {
 		}
 	}
 
-	private static final int DEFAULT_DISABLE_AFTER_MS = 1500;
+	private static final int DEFAULT_DISABLE_AFTER_MS = 3000;
 
 	private static final String TOPIC_ERRORMESSAGES = "ORG/ECLIPSE/FORDIAC/IDE/ERRORMESSAGES"; //$NON-NLS-1$
 
