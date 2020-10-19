@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.ui.breadcrumb.BreadcrumbWidget;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemElementItemProviderAdapterFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -201,6 +202,9 @@ public class SystemEditor extends EditorPart
 
 		form = toolkit.createForm(parent);
 		form.getBody().setLayout(new GridLayout(1, true));
+
+		BreadcrumbWidget breadcrumb = new BreadcrumbWidget(form.getBody());
+		breadcrumb.setInput(system);
 
 		SashForm sash = new SashForm(form.getBody(), SWT.VERTICAL);
 		toolkit.adapt(sash);
