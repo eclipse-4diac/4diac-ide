@@ -32,6 +32,7 @@ public class FBCreateCommandTest extends FBNetworkTestBase {
 	public static void verifyState(State state, State oldState, TestFunction t) {
 		t.test(!state.getFbNetwork().isSubApplicationNetwork());
 		t.test(!state.getFbNetwork().getNetworkElements().isEmpty());
+		t.test(state.getFbNetwork().getElementNamed(FBNetworkTestBase.State.FUNCTIONBLOCK_NAME));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface());
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs());
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs());
