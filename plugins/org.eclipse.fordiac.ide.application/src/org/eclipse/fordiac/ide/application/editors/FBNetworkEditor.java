@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
  * 				 2018 - 2020 Johannes Kepler University
+ * 				 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,11 +15,9 @@
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed copy/paste handling
  *               - extracted FBNetworkRootEditPart from FBNetworkEditor
+ *               - extracted panning and selection tool
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.application.actions.CopyEditPartsAction;
@@ -29,6 +28,7 @@ import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
 import org.eclipse.fordiac.ide.application.editparts.ElementEditPartFactory;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
+import org.eclipse.fordiac.ide.application.tools.FBNetworkPanningSelectionTool;
 import org.eclipse.fordiac.ide.application.utilities.ApplicationEditorTemplateTransferDropTargetListener;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
@@ -41,13 +41,10 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
-import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
-import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
@@ -55,8 +52,6 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionFactory;
@@ -264,41 +259,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@Override
 	protected AdvancedPanningSelectionTool createDefaultTool() {
-		return new AdvancedPanningSelectionTool() {
-			static final int LEFT_MOUSE = 1;
-			static final double TYPE_DISTANCE = 10.0; // the max distance the mouse may move between left click and
-			// typing
-
-			private org.eclipse.draw2d.geometry.Point lastLeftClick = new org.eclipse.draw2d.geometry.Point(0, 0);
-
-			@Override
-			public void mouseUp(MouseEvent me, EditPartViewer viewer) {
-				if (LEFT_MOUSE == me.button) {
-					lastLeftClick = getLocation();
-				}
-				super.mouseUp(me, viewer);
-			}
-
-			@Override
-			public void keyDown(KeyEvent evt, EditPartViewer viewer) {
-				if ((Character.isLetterOrDigit(evt.character))
-						&& (TYPE_DISTANCE > getLocation().getDistance(lastLeftClick))) {
-					EditPart editPart = getCurrentViewer().findObjectAt(getLocation());
-					if (null != editPart) {
-						SelectionRequest request = new SelectionRequest();
-						request.setLocation(lastLeftClick);
-						request.setType(RequestConstants.REQ_OPEN);
-						Map<String, String> map = new HashMap<>();
-						map.put(String.valueOf(evt.character), String.valueOf(evt.character));
-						request.setExtendedData(map);
-						editPart.performRequest(request);
-						return;
-					}
-				}
-				super.keyDown(evt, viewer);
-			}
-
-		};
+		return new FBNetworkPanningSelectionTool();
 	}
 
 }
