@@ -244,11 +244,10 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	}
 
 	// Duplicated and adjusted this method from base class to allow moving the
-	// handle_layer to scaled layers for correct zooming
+	// handle_layer and feedback_layer to scaled layers for correct zooming
 	@Override
 	protected void createLayers(LayeredPane layeredPane) {
 		layeredPane.add(getScaledLayers(), SCALABLE_LAYERS);
-		layeredPane.add(new FeedbackLayer(), FEEDBACK_LAYER);
 		layeredPane.add(new GuideLayer(), GUIDE_LAYER);
 	}
 
@@ -262,6 +261,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	protected ScalableFreeformLayeredPane createScaledLayers() {
 		ScalableFreeformLayeredPane pane = super.createScaledLayers();
 		pane.add(new FreeformLayer(), HANDLE_LAYER);
+		pane.add(new FeedbackLayer(), FEEDBACK_LAYER);
 		return pane;
 	}
 

@@ -23,11 +23,10 @@ public class ECTransitionFeedbackEditPolicy extends FeedbackConnectionEndpointEd
 	@Override
 	protected IFigure createSelectionFeedbackFigure(PolylineConnection connFigure) {
 		SplineConnection figure = new SplineConnection();
-		double zoomFactor = getZoomFactor();
-		figure.setLineWidth((int) ((connFigure.getLineWidth() + 5) * zoomFactor));
+		figure.setLineWidth(connFigure.getLineWidth() + 5);
 		figure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 		figure.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
-		figure.setPoints(getConnPoints(connFigure, zoomFactor));
+		figure.setPoints(connFigure.getPoints().getCopy());
 		return figure;
 	}
 }

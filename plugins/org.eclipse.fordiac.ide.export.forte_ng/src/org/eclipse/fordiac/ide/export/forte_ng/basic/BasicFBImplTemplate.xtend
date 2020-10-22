@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2019 fortiss GmbH
  *               2020 Johannes Kepler University
+ *               2020 TU Wien/ACIN
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl
  *     - Add internal var generation, fix adapter generation
+ *   Martin Melik Merkumians - adds generation of initial value assignment
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.basic
 
@@ -27,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 class BasicFBImplTemplate extends ForteFBTemplate {
 
@@ -51,8 +54,12 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 
 		«IF !type.internalVars.isEmpty»
 		  «generateInternalVarDefinition(type)»
-
+		  
         «ENDIF»
+		«IF !(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).empty»
+		«generateInitialValueAssignmentDefinition(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars)»
+		
+		«ENDIF»
 		«generateAlgorithms»
 
 		«generateStates»

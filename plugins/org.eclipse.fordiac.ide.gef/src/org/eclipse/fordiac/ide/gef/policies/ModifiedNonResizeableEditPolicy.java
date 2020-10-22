@@ -26,8 +26,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 
 /**
@@ -106,8 +104,6 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 
 	private static Rectangle getSelectableFigureBounds(GraphicalEditPart ep) {
 		Rectangle bounds = ep.getFigure().getBounds().getExpanded(2, 2);
-		ZoomManager zoomManager = ((ScalableFreeformRootEditPart) ep.getRoot()).getZoomManager();
-		bounds.scale(zoomManager.getZoom());
 		return bounds;
 	}
 
