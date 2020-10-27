@@ -152,6 +152,8 @@ public class Messages extends NLS {
 
 	public static String UpdateFBTypeAction_Text;
 
+	public static String PasteRecreateNotPossible;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

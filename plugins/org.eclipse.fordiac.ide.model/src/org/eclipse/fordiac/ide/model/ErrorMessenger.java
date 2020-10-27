@@ -11,14 +11,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.fordiac.ide.model.helpers.JUnitDetector;
 
 public class ErrorMessenger {
+
+	private static boolean messagesPaused = false;
+	private static List<String> pausedMessages = List.of();
+
+	public static void pauseMessages() {
+		messagesPaused = true;
+		pausedMessages = new ArrayList<>();
+	}
+
+	public static List<String> unpauseMessages() {
+		messagesPaused = false;
+		return pausedMessages;
+	}
 
 	/**
 	 * This method sends an error message to be displayed This can be done from any
@@ -32,6 +47,11 @@ public class ErrorMessenger {
 	}
 
 	public static void popUpErrorMessage(final String errorMsg, final String title, final int timeout) {
+		if (messagesPaused) {
+			pausedMessages.add(errorMsg);
+			return;
+		}
+
 		Dictionary<String, Object> d = new Hashtable<>();
 		d.put("message", errorMsg); //$NON-NLS-1$
 		d.put("title", title); //$NON-NLS-1$
@@ -48,8 +68,8 @@ public class ErrorMessenger {
 	}
 
 	private static final String TOPIC_ERRORMESSAGES = "ORG/ECLIPSE/FORDIAC/IDE/ERRORMESSAGES"; //$NON-NLS-1$
-	private static final int USE_DEFAULT_TIMEOUT = -1;
-	private static final String DIALOG_TITLE = "Not possible";
+	public static final int USE_DEFAULT_TIMEOUT = -1;
+	private static final String DIALOG_TITLE = "Operation not possible";
 
 	private static IEventBroker initEventBroker() {
 		// This initialization can fail if this is run as a simple JUnit-Test instead of

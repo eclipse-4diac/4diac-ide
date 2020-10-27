@@ -137,8 +137,12 @@ public class ErrorMessageHandler {
 			image.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 			Label text = new Label(warningComposite, SWT.NONE);
-			text.setText(title + "\n" + errorMsg); //$NON-NLS-1$ // title & message are never null (instanceof check in
-													// receiver)
+			if (title.isEmpty()) {
+				text.setText(errorMsg); // title & message are never null (instanceof check in receiver)
+			} else {
+				text.setText(title + "\n" + errorMsg); //$NON-NLS-1$ // title & message are never null (instanceof
+														// check in receiver)
+			}
 			text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 
 			final Control focused = getShell().getDisplay().getFocusControl();

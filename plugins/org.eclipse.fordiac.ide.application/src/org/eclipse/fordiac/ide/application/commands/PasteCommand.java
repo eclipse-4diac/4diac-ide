@@ -25,7 +25,9 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
+import org.eclipse.fordiac.ide.model.ErrorMessenger;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -96,10 +98,16 @@ public class PasteCommand extends Command {
 	@Override
 	public void execute() {
 		if (dstFBNetwork != null) {
+			ErrorMessenger.pauseMessages();
 			gatherCopyData();
 			copyFBs();
 			copyConnections();
 			ElementSelector.selectViewObjects(copiedElements.values());
+			if (!ErrorMessenger.unpauseMessages().isEmpty()) {
+				ErrorMessenger.popUpErrorMessage("",
+						Messages.PasteRecreateNotPossible,
+						ErrorMessenger.USE_DEFAULT_TIMEOUT);
+			}
 		}
 	}
 
