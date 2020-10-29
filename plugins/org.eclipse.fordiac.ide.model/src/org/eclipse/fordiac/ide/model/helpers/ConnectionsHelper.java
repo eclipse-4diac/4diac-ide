@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-2.0.
  *
  * SPDX-License-Identifier: EPL-2.0 3
- * 
+ *
  * Contributors:
  *   Alois Zoitl - initial implementation and/or documentation
  *   Alexander Lumplecker - extracted Code from OpenConnectionOppositeResource
@@ -29,20 +29,17 @@ public class ConnectionsHelper {
 			final EList<Connection> connections = (fbOppostiteIE.isIsInput()) ? fbOppostiteIE.getInputConnections()
 					: fbOppostiteIE.getOutputConnections();
 
-			if (!connections.isEmpty()) {
-				return connections;
-			}
+			return connections;
 		}
 		return null;
 	}
 
-	public static IInterfaceElement getOppositeInterfaceElement(IInterfaceElement ie, EList<Connection> connections,
-			int elementID) {
+	public static IInterfaceElement getOppositeInterfaceElement(IInterfaceElement ie, Connection connection) {
 		IInterfaceElement fbOppostiteIE = ie.getFBNetworkElement().getOpposite().getInterfaceElement(ie.getName());
 
 		if (null != fbOppostiteIE) {
-			IInterfaceElement connectionOpposite = (fbOppostiteIE.isIsInput()) ? connections.get(elementID).getSource()
-					: connections.get(elementID).getDestination();
+			IInterfaceElement connectionOpposite = (fbOppostiteIE.isIsInput()) ? connection.getSource()
+					: connection.getDestination();
 
 			if ((null != connectionOpposite) && connectionOpposite.getFBNetworkElement().isMapped()) {
 				FBNetworkElement mappedOppositeElement = connectionOpposite.getFBNetworkElement().getOpposite();

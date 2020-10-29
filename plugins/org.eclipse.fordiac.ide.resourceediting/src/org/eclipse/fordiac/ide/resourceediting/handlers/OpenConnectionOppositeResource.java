@@ -43,11 +43,11 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof IStructuredSelection) {
-			Object first = ((IStructuredSelection) selection).getFirstElement();
+			final Object first = ((IStructuredSelection) selection).getFirstElement();
 			if (first instanceof VirtualInOutputEditPart) {
-				IInterfaceElement oppositeMappedIE = getOppositeMappedIE((VirtualInOutputEditPart) first);
+				final IInterfaceElement oppositeMappedIE = getOppositeMappedIE((VirtualInOutputEditPart) first);
 				if (null != oppositeMappedIE) {
 					openResource(oppositeMappedIE);
 				}
@@ -58,11 +58,11 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 
 	@Override
 	public void setEnabled(Object evaluationContext) {
-		IEvaluationContext ctx = (IEvaluationContext) evaluationContext;
+		final IEvaluationContext ctx = (IEvaluationContext) evaluationContext;
 		Object obj = ctx.getDefaultVariable();
 
 		if (obj instanceof List) {
-			List<?> list = (List<?>) obj;
+			final List<?> list = (List<?>) obj;
 			if (!list.isEmpty()) {
 				obj = list.get(0);
 			}
@@ -75,22 +75,26 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 	}
 
 	private static IInterfaceElement getOppositeMappedIE(VirtualInOutputEditPart vIOEditPart) {
-		IInterfaceElement ie = vIOEditPart.getModel().getReferencedInterfaceElement();
-		EList<Connection> ieConnections = ConnectionsHelper.getConnections(ie);
-		IInterfaceElement oppositeMappedIE = ConnectionsHelper.getOppositeInterfaceElement(ie, ieConnections, 0);
-		return oppositeMappedIE;
+		final IInterfaceElement ie = vIOEditPart.getModel().getReferencedInterfaceElement();
+		final EList<Connection> ieConnections = ConnectionsHelper.getConnections(ie);
+		if (!ieConnections.isEmpty()) {
+			final IInterfaceElement oppositeMappedIE = ConnectionsHelper.getOppositeInterfaceElement(ie,
+					ieConnections.get(0));
+			return oppositeMappedIE;
+		}
+		return null;
 	}
 
 	private static void openResource(IInterfaceElement oppositeMappedIE) {
-		Resource res = oppositeMappedIE.getFBNetworkElement().getResource();
+		final Resource res = oppositeMappedIE.getFBNetworkElement().getResource();
 
 		if (null != res) {
-			IEditorPart editor = OpenListenerManager.openEditor(res);
+			final IEditorPart editor = OpenListenerManager.openEditor(res);
 			if (editor instanceof ResourceDiagramEditor) {
-				AdvancedScrollingGraphicalViewer viewer = ((ResourceDiagramEditor) editor).getViewer();
+				final AdvancedScrollingGraphicalViewer viewer = ((ResourceDiagramEditor) editor).getViewer();
 				if (viewer != null) {
-					Map<?, ?> map = viewer.getEditPartRegistry();
-					Object ieToSelect = map.get(oppositeMappedIE);
+					final Map<?, ?> map = viewer.getEditPartRegistry();
+					final Object ieToSelect = map.get(oppositeMappedIE);
 					if (ieToSelect instanceof EditPart) {
 						viewer.selectAndRevealEditPart((EditPart) ieToSelect);
 					}

@@ -204,6 +204,10 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 	private class VirtualIOTooltipFigure extends Figure {
 		public VirtualIOTooltipFigure() {
 
+			if (!getIInterfaceElement().getFBNetworkElement().isMapped()) {
+				return;
+			}
+
 			setLayoutManager(new GridLayout());
 
 			boolean drawLine = false;
@@ -213,55 +217,43 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 				return;
 			}
 
-			for (int i = 0; i <= (connections.size() - 1); i++) {
-				final TextFlow connectionTo = new TextFlow();
-				final FlowPage fp = new FlowPage();
-				final Figure line = new VerticalLineCompartmentFigure();
-				final IInterfaceElement oppositeIE = ConnectionsHelper
-						.getOppositeInterfaceElement(getIInterfaceElement(), connections, i);
-				final FBNetworkElement oppositefbNetElement = oppositeIE.getFBNetworkElement();
+			for (Connection conn : connections) {
+				FBNetworkElement oppositefbNetElement;
+				TextFlow connectionTo = new TextFlow();
+				FlowPage fp = new FlowPage();
+				Figure line = new VerticalLineCompartmentFigure();
+				IInterfaceElement oppositeIE = ConnectionsHelper.getOppositeInterfaceElement(getIInterfaceElement(),
+						conn);
 
-				if (i >= 1) {
-					drawLine = true;
+				if ((oppositeIE != null) && (oppositeIE.getFBNetworkElement() != null)
+						&& (oppositeIE.getFBNetworkElement().getResource() != null)
+						&& (oppositeIE.getFBNetworkElement().getResource().getDevice() != null)) {
+					oppositefbNetElement = oppositeIE.getFBNetworkElement();
+					Resource res = oppositefbNetElement.getResource();
+					Device dev = res.getDevice();
+
+					if (drawLine) {
+						add(line);
+						setConstraint(line,
+								new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
+						connectionTo.setText(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
+								+ oppositefbNetElement.getName() + "." //$NON-NLS-1$
+								+ oppositeIE.getName());
+						fp.add(connectionTo);
+						line.add(fp);
+						line.setConstraint(fp,
+								new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, false, true));
+					} else {
+						final Label nameLabel = new Label(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
+								+ oppositefbNetElement.getName() + "." //$NON-NLS-1$
+								+ oppositeIE.getName());
+						add(nameLabel);
+						setConstraint(nameLabel,
+								new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
+					}
 				}
 
-				if (drawLine) {
-					add(line);
-					setConstraint(line, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
-				}
-
-				if (oppositefbNetElement == null) {
-					return;
-				}
-				if (oppositefbNetElement.getResource() == null) {
-					return;
-				}
-
-				final Resource res = oppositefbNetElement.getResource();
-				if (res == null) {
-					return;
-				}
-				final Device dev = res.getDevice();
-				if (dev == null) {
-					return;
-				}
-
-				if (drawLine) {
-					connectionTo.setText(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
-							+ oppositefbNetElement.getName() + "." //$NON-NLS-1$
-							+ oppositeIE.getName());
-					fp.add(connectionTo);
-					line.add(fp);
-					line.setConstraint(fp,
-							new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, false, true));
-				} else {
-					final Label nameLabel = new Label(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
-							+ oppositefbNetElement.getName() + "." //$NON-NLS-1$
-							+ oppositeIE.getName());
-					add(nameLabel);
-					setConstraint(nameLabel,
-							new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
-				}
+				drawLine = true;
 			}
 		}
 	}
