@@ -62,8 +62,12 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
-			refreshTransitionTooltip();
-			refresh();
+			if (null != notification.getNewValue()) {
+				// if newValue is null we are most probably in the deletion process, no update
+				// is needed
+				refreshTransitionTooltip();
+				refresh();
+			}
 		}
 	};
 
