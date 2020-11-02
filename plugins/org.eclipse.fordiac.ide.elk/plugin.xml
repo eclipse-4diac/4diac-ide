@@ -30,6 +30,26 @@
             commandId="org.eclipse.fordiac.ide.elk.layout"
             label="Layout the diagrams"
             style="push">
+            <visibleWhen checkEnabled="false">
+            	<with variable="selection">
+            		<or>
+            			<count value="0" />
+            			<and>
+            				<count value="1" />
+            				<iterate>
+            					<or>
+            						<instanceof
+                       					value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart">
+            						</instanceof>
+            						<instanceof
+                       					value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
+            						</instanceof>
+            					</or>
+            				</iterate>
+            			</and>
+            		</or>
+            	</with>
+            </visibleWhen>
                </command>
 	</menuContribution> 
 	<menuContribution
