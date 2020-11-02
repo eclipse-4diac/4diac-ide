@@ -63,13 +63,12 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		} else if (modelElement instanceof FB) {
 			if (null != ((FB) modelElement).getType()) {
 				if (((FB) modelElement).getType().getName().contentEquals("STRUCT_MUX")) { //$NON-NLS-1$
-					part = new MultiplexerEditPart();
+					return new MultiplexerEditPart();
 				} else if (((FB) modelElement).getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
-					part = new DemultiplexerEditPart();
-				} else {
-					part = new FBEditPart();
+					return new DemultiplexerEditPart();
 				}
 			}
+			part = new FBEditPart();
 		} else if (modelElement instanceof InstanceName) {
 			part = new InstanceNameEditPart();
 		} else if (modelElement instanceof InstanceComment) {
