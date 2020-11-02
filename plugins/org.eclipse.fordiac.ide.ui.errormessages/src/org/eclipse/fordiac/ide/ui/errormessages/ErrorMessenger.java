@@ -9,16 +9,12 @@
  * Contributors:
  *   Ernst Blecha - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model;
+package org.eclipse.fordiac.ide.ui.errormessages;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
-
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.fordiac.ide.model.helpers.JUnitDetector;
 
 public class ErrorMessenger {
 
@@ -43,33 +39,23 @@ public class ErrorMessenger {
 	 *
 	 */
 	public static void popUpErrorMessage(final String errorMsg) {
-		popUpErrorMessage(errorMsg, DIALOG_TITLE, USE_DEFAULT_TIMEOUT);
+		popUpErrorMessage(errorMsg, USE_DEFAULT_TIMEOUT);
 	}
 
-	public static void popUpErrorMessage(final String errorMsg, final String title, final int timeout) {
+	public static void popUpErrorMessage(final String errorMsg, final int timeout) {
 		if (messagesPaused) {
 			pausedMessages.add(errorMsg);
 			return;
 		}
 
-		Dictionary<String, Object> d = new Hashtable<>();
-		d.put("message", errorMsg); //$NON-NLS-1$
-		d.put("title", title); //$NON-NLS-1$
-		d.put("timeout", timeout); //$NON-NLS-1$
+		final ErrorMessage m = new ErrorMessage(errorMsg, timeout);
 		if (null != eventBroker) {
-			if (IS_PRODUCTION) {
-				// production: decouple through asynchronous process - keeps the UI responsive
-				eventBroker.post(TOPIC_ERRORMESSAGES, d);
-			} else {
-				// testing: allow the receiver to catch the message
-				eventBroker.send(TOPIC_ERRORMESSAGES, d);
-			}
+			eventBroker.send(TOPIC_ERRORMESSAGES, m);
 		}
 	}
 
 	private static final String TOPIC_ERRORMESSAGES = "ORG/ECLIPSE/FORDIAC/IDE/ERRORMESSAGES"; //$NON-NLS-1$
 	public static final int USE_DEFAULT_TIMEOUT = -1;
-	private static final String DIALOG_TITLE = "Operation not possible";
 
 	private static IEventBroker initEventBroker() {
 		// This initialization can fail if this is run as a simple JUnit-Test instead of
@@ -84,5 +70,4 @@ public class ErrorMessenger {
 		throw new UnsupportedOperationException();
 	}
 
-	private static final boolean IS_PRODUCTION = !JUnitDetector.detect();
 }

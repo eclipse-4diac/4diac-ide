@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.ui.workbench,
  org.eclipse.fordiac.ide.ui;bundle-version="[1.11.0,2.0.0)",
  org.eclipse.core.runtime,
- org.eclipse.jface
+ org.eclipse.jface,
+ org.eclipse.fordiac.ide.ui.errormessages
 Export-Package: org.eclipse.fordiac.ide.model.commands.change,
  org.eclipse.fordiac.ide.model.commands.create,
  org.eclipse.fordiac.ide.model.commands.delete,

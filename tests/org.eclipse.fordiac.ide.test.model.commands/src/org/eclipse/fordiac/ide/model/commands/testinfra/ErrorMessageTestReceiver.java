@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessage;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -60,11 +61,9 @@ public class ErrorMessageTestReceiver {
 	private List<String> messages;
 
 	private EventHandler receiver = (Event event) -> {
-		Object message = event.getProperty("message"); //$NON-NLS-1$
-		Object title = event.getProperty("title"); //$NON-NLS-1$
-		Object timeout = event.getProperty("timeout"); //$NON-NLS-1$
-		if (eventsRegistered && message instanceof String && title instanceof String && timeout instanceof Integer) {
-			messages.add((String) message);
+		Object message = event.getProperty(IEventBroker.DATA); //$NON-NLS-1$
+		if (eventsRegistered && message instanceof ErrorMessage) {
+			messages.add(((ErrorMessage) message).getMessage());
 		}
 	};
 

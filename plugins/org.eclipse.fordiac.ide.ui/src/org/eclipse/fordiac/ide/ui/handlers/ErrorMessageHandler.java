@@ -11,10 +11,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.handlers;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessage;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -59,26 +64,22 @@ public class ErrorMessageHandler {
 		}
 	}
 
-	private static final int DEFAULT_DISABLE_AFTER_MS = 3000;
-
 	private static final String TOPIC_ERRORMESSAGES = "ORG/ECLIPSE/FORDIAC/IDE/ERRORMESSAGES"; //$NON-NLS-1$
 
 	private IEventBroker eventBroker;
 
 	private boolean eventsRegistered = false;
 
-	private Integer errorMessageHash;
-	private Integer titleHash;
-
 	private LinkedList<Composite> windows = new LinkedList<>();
 
+	private Set<ErrorMessage> messages = new HashSet<>();
+	
 	private static class ErrorMessageDialog extends PopupDialog {
 
 		private static final int MOUSE_CURSOR_OFFSET_Y = 10;
 		private static final int MOUSE_CURSOR_OFFSET_X = 5;
 		private static final Point MOUSE_CURSOR_OFFSET = new Point(MOUSE_CURSOR_OFFSET_X, MOUSE_CURSOR_OFFSET_Y);
 		private final String errorMsg;
-		private final String title;
 		private final int timeout;
 
 		private final ErrorMessageHandler container;
@@ -93,11 +94,10 @@ public class ErrorMessageHandler {
 			return Display.getCurrent().getSystemColor(SWT.COLOR_INFO_FOREGROUND);
 		}
 
-		private ErrorMessageDialog(ErrorMessageHandler container, String errorMsg, String title, int timeout) {
+		private ErrorMessageDialog(ErrorMessageHandler container, String errorMsg, int timeout) {
 			super(null, HOVER_SHELLSTYLE, false, false, false, false, false, null, null);
 			this.errorMsg = errorMsg;
-			this.title = title;
-			this.timeout = timeout > 0 ? timeout : DEFAULT_DISABLE_AFTER_MS;
+			this.timeout = timeout;
 			this.container = container;
 		}
 
@@ -137,12 +137,8 @@ public class ErrorMessageHandler {
 			image.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 			Label text = new Label(warningComposite, SWT.NONE);
-			if (title.isEmpty()) {
-				text.setText(errorMsg); // title & message are never null (instanceof check in receiver)
-			} else {
-				text.setText(title + "\n" + errorMsg); //$NON-NLS-1$ // title & message are never null (instanceof
-														// check in receiver)
-			}
+			text.setText(errorMsg); // message is never null (instanceof check in receiver)
+
 			text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 
 			final Control focused = getShell().getDisplay().getFocusControl();
@@ -196,7 +192,6 @@ public class ErrorMessageHandler {
 		// calling close on a disposed element will fail; must not be reentrant
 		if (null != dialogArea && !dialogArea.isDisposed()) {
 			closeDialog(dialogArea);
-			setHashes(null, null);
 		}
 	}
 
@@ -206,40 +201,26 @@ public class ErrorMessageHandler {
 			windows.remove(dialogArea.getShell());
 			dialogArea.getShell().close();
 		}
+		removeInvalidMessages();
 	}
 
-	protected synchronized void setHashes(Integer pErrorMessageHash, Integer pTitleHash) {
-		// Hash values can be changed from two threads (GUI and EventBroker)
-		// must not be reentrant
-		errorMessageHash = pErrorMessageHash;
-		titleHash = pTitleHash;
+	private void removeInvalidMessages() {
+		List<ErrorMessage> toRemove = messages.stream().filter((ErrorMessage m) -> !m.isStillValid()).collect(Collectors.toList());
+		messages.removeAll(toRemove);
 	}
-
-	protected synchronized boolean isNewMessage(String errorMsg, String title) {
-		// the hash values may change at any point
-		// must not be interrupted by setHashes
-		final int errorMessageHashValue = errorMsg.hashCode();
-		final int titleHashValue = title.hashCode();
-		final boolean isNewMessage = //
-				(null == errorMessageHash || null == titleHash) || // check for valid hashes
-						(!errorMessageHash.equals(errorMessageHashValue)) || // are the hashes identical?
-						(!titleHash.equals(titleHashValue) //
-						);
-		if (isNewMessage) {
-			setHashes(errorMessageHashValue, titleHashValue);
-		}
-		return isNewMessage;
-	}
-
-	private void showErrorMessageDialog(String errorMsg, String title, int timeout) {
+	
+	private void showErrorMessageDialog(ErrorMessage m) {
 		Display.getDefault().asyncExec(() -> {
-			if (isNewMessage(errorMsg, title)) {
+			messages.add(m);
+			removeInvalidMessages();
+			for (Composite w = windows.pollFirst(); null != w; w = windows.pollFirst()) {
+				closeDialog(w);
+			}
 
-				for (Composite w = windows.pollFirst(); null != w; w = windows.pollFirst()) {
-					closeDialog(w);
-				}
-
-				final ErrorMessageDialog dialog = new ErrorMessageDialog(this, errorMsg, title, timeout);
+			if(!messages.isEmpty()) {
+				final String dialogContent = messages.stream().map(ErrorMessage::getMessage).collect(Collectors.joining("\n"));
+				
+				final ErrorMessageDialog dialog = new ErrorMessageDialog(this, dialogContent, m.getTimeout());
 				dialog.open();
 				windows.push(dialog.getShell());
 			}
@@ -247,11 +228,9 @@ public class ErrorMessageHandler {
 	}
 
 	private EventHandler receiver = (Event event) -> {
-		Object message = event.getProperty("message"); //$NON-NLS-1$
-		Object title = event.getProperty("title"); //$NON-NLS-1$
-		Object timeout = event.getProperty("timeout"); //$NON-NLS-1$
-		if (eventsRegistered && message instanceof String && title instanceof String && timeout instanceof Integer) {
-			showErrorMessageDialog((String) message, (String) title, (Integer) timeout);
+		Object data = event.getProperty(IEventBroker.DATA); //$NON-NLS-1$
+		if (eventsRegistered && data instanceof ErrorMessage) {
+			showErrorMessageDialog((ErrorMessage)data);
 		}
 	};
 

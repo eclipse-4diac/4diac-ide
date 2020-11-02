@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.core.commands,
  org.eclipse.e4.core.services,
  org.eclipse.osgi.services,
- org.eclipse.e4.core.contexts
+ org.eclipse.e4.core.contexts,
+ org.eclipse.fordiac.ide.ui.errormessages
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.13.0.qualifier
