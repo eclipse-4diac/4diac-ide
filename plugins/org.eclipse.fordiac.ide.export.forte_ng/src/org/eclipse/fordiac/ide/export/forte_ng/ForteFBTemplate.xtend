@@ -25,9 +25,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.With
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.emf.common.util.EList
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
+import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 
 abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
+
+	extension STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter
 
 	new(String name, Path prefix) {
 		super(name, prefix)
@@ -42,13 +48,39 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 		«type.compilerInfo?.header»
 	'''
 
+	def protected generateVarTypesFromAlgorithms(Iterable<Algorithm> algorithms) {
+		val vars = newArrayList
+		for(alg : algorithms) {
+			if (alg instanceof STAlgorithm) 
+				vars.addAll(alg.generateLocalVariables())
+		}
+		return vars
+	}
+
+	def private getAlgorithmList(FBType type) {
+		if (type instanceof BasicFBType) {
+			return type.algorithm
+		} else if (type instanceof SimpleFBType) {
+			return List.of(type.algorithm)
+		} else {
+			return List.of()
+		}
+	}
+
 	def protected generateImplIncludes() '''
 		#include "«type.name».h"
 		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
 		#include "«type.name»_gen.cpp"
 		#endif
 		
+		«type.getAlgorithmList.generateVarTypesFromAlgorithms.generateImplTypeIncludes»
 		«type.compilerInfo?.header»
+	'''
+
+	def protected generateImplTypeIncludes(Iterable<VarDeclaration> vars) '''
+		«IF !vars.empty»
+		«vars.generateTypeIncludes»
+		«ENDIF»
 	'''
 
 	def protected generateAdapterIncludes(Iterable<AdapterDeclaration> vars) '''

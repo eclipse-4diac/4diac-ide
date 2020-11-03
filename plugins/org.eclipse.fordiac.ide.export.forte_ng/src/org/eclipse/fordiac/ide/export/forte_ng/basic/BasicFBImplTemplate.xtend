@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 class BasicFBImplTemplate extends ForteFBTemplate {
 
