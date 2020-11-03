@@ -25,6 +25,10 @@ public class UIPlugin extends Abstract4DIACUIPlugin {
 	private static UIPlugin plugin;
 	private ErrorMessageHandler emh;
 
+	public ErrorMessageHandler getEMH() {
+		return emh;
+	}
+	
 	/**
 	 * The constructor.
 	 */

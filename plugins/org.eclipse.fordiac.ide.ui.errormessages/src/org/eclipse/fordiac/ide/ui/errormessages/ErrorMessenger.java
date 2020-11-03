@@ -19,16 +19,23 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 public class ErrorMessenger {
 
 	private static boolean messagesPaused = false;
-	private static List<String> pausedMessages = List.of();
+	private static List<ErrorMessage> pausedMessages = List.of();
+	private static Integer lastHash;
 
 	public static void pauseMessages() {
 		messagesPaused = true;
 		pausedMessages = new ArrayList<>();
 	}
 
-	public static List<String> unpauseMessages() {
+	public static List<ErrorMessage> unpauseMessages() {
 		messagesPaused = false;
 		return pausedMessages;
+	}
+
+	public static void hashCleared(final int hash) {
+		if(lastHash instanceof Integer && hash == lastHash) {
+			lastHash = null;
+		}
 	}
 
 	/**
@@ -43,14 +50,17 @@ public class ErrorMessenger {
 	}
 
 	public static void popUpErrorMessage(final String errorMsg, final int timeout) {
-		if (messagesPaused) {
-			pausedMessages.add(errorMsg);
-			return;
-		}
-
 		final ErrorMessage m = new ErrorMessage(errorMsg, timeout);
-		if (null != eventBroker) {
-			eventBroker.send(TOPIC_ERRORMESSAGES, m);
+		if(!(lastHash instanceof Integer && m.hashCode() == lastHash)) {
+			lastHash = m.hashCode();
+			if (messagesPaused) {
+				pausedMessages.add(m);
+				return;
+			}
+	
+			if (null != eventBroker) {
+				eventBroker.send(TOPIC_ERRORMESSAGES, m);
+			}
 		}
 	}
 

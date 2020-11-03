@@ -14,18 +14,23 @@ package org.eclipse.fordiac.ide.ui.errormessages;
 public class ErrorMessage {
 
 	private static final int DEFAULT_DISABLE_AFTER_MS = 3000;
-	
+
 	private final String message;
 	private final int timeout;
-	private long enableTime = System.currentTimeMillis(); 
+	private long enableTime = System.currentTimeMillis();
+	private boolean valid = true;
 
 	ErrorMessage(final String message, final int timeout) {
 		this.message = message;
 		this.timeout = timeout > 0 ? timeout : DEFAULT_DISABLE_AFTER_MS;
 	}
 
+	public void setInvalid() {
+		valid = false;
+	}
+
 	public boolean isStillValid() {
-		return (System.currentTimeMillis() - enableTime) < timeout;
+		return valid && ((System.currentTimeMillis() - enableTime) < timeout);
 	}
 
 	public String getMessage() {
@@ -39,7 +44,7 @@ public class ErrorMessage {
 	public void updateEnabled() {
 		enableTime = System.currentTimeMillis();
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return message.hashCode();
