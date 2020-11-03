@@ -68,7 +68,7 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 		return connections;
 	}
 
-	private boolean isUnfoldedSubapp() {
+	protected boolean isUnfoldedSubapp() {
 		if (getModel().getFBNetworkElement() instanceof SubApp) {
 			SubApp subapp = (SubApp) getModel().getFBNetworkElement();
 			if (subapp.isUnfolded()) {
