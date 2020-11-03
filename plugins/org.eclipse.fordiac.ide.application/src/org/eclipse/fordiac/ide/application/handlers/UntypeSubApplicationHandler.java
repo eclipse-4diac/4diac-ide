@@ -35,6 +35,8 @@ public class UntypeSubApplicationHandler extends AbstractHandler {
 		SubApp subApp = getSelectedSubApp(selection);
 		if (null != subApp) {
 			editor.getCommandStack().execute(new UntypeSubAppCommand(subApp));
+			editor.getViewer().deselectAll();
+			editor.selectElement(subApp);
 		}
 		return Status.OK_STATUS;
 	}
