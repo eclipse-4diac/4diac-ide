@@ -38,6 +38,7 @@ public class Messages extends NLS {
 	public static String MapToCommand_STATUSMessage_TypeNotSupported;
 	public static String ViewSetPositionCommand_LABEL_Move;
 	public static String WithExists;
+	public static String ConnectingIncompatibleInterfaceTypes;
 
 	static {
 		// initialize resource bundle

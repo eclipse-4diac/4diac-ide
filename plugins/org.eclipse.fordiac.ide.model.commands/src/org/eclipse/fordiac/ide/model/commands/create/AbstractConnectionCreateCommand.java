@@ -19,11 +19,13 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
 public abstract class AbstractConnectionCreateCommand extends Command {
@@ -102,16 +104,14 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 			return false;
 		}
 		if (!getInterfaceType().isInstance(getSource())) {
+			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
 		if (!getInterfaceType().isInstance(getDestination())) {
+			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
-		if (checkUnfoldedSubAppConnections()) {
-			return false;
-		}
-
-		return true;
+		return !checkUnfoldedSubAppConnections();
 	}
 
 	private boolean checkUnfoldedSubAppConnections() {
