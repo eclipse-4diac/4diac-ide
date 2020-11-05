@@ -89,7 +89,7 @@ public class Activator extends AbstractUIPlugin {
 		super.stop(context);
 	}
 
-	private static void setPluginInstance(Activator instance) {
+	private static synchronized void setPluginInstance(Activator instance) {
 		plugin = instance;
 	}
 

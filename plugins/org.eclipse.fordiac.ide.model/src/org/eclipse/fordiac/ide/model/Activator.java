@@ -27,13 +27,6 @@ public class Activator extends Abstract4DIACUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	/**
-	 * The constructor.
-	 */
-	public Activator() {
-		// empty constructor
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -42,7 +35,7 @@ public class Activator extends Abstract4DIACUIPlugin {
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		setPlugin(this);
 	}
 
 	/*
@@ -52,8 +45,12 @@ public class Activator extends Abstract4DIACUIPlugin {
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
-		plugin = null;
+		setPlugin(null);
 		super.stop(context);
+	}
+
+	private static synchronized void setPlugin(Activator newPlugin) {
+		plugin = newPlugin;
 	}
 
 	/**

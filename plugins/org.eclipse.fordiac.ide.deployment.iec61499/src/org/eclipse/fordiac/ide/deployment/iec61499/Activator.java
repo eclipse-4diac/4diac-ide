@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2013 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -30,38 +30,35 @@ public class Activator extends Plugin {
 	/** The plugin. */
 	private static Activator plugin;
 
-	/**
-	 * The constructor.
-	 */
-	public Activator() {
-		// empty constructor
-	}
-
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
 	 */
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		setPlugin(this);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
-		plugin = null;
+		setPlugin(null);
 		super.stop(context);
+	}
+
+	private static synchronized void setPlugin(Activator newPlugin) {
+		plugin = newPlugin;
 	}
 
 	/**
 	 * Returns the shared instance.
-	 * 
+	 *
 	 * @return the shared instance
 	 */
 	public static Activator getDefault() {
@@ -72,7 +69,7 @@ public class Activator extends Plugin {
 
 	/**
 	 * Gets the preference store.
-	 * 
+	 *
 	 * @return the preference store
 	 */
 	public IPreferenceStore getPreferenceStore() {
