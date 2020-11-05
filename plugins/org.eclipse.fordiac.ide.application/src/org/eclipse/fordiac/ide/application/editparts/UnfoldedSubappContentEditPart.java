@@ -10,6 +10,8 @@
  * Contributors:
  *   Bianca Wiesmayr, Alois Zoitl
  *      - initial implementation and/or documentation
+ *   Alexander Lumplecker, Bianca Wiesmayr, Alois Zoitl
+ *   	- Bug: 568569
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.application.editparts;
@@ -21,11 +23,16 @@ import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -37,13 +44,44 @@ import org.eclipse.swt.graphics.Point;
 
 public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	private Point p;
+	private Adapter adapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			
+			Object feature = notification.getFeature();
+			if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature) ||
+					LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature)) {
+				p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
+				getChildren().forEach(ep->((EditPart)ep).refresh());
+			} else {
+				super.notifyChanged(notification);
+			}
+		}
+	};
 
 	@Override
 	public void setModel(Object model) {
 		super.setModel(model);
 		p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
 	}
+	
+	@Override
+	public void activate() {
+		if (!isActive()) {
+			super.activate();
+			((Notifier) getModel()).eAdapters().add(adapter);
+		}
+	}
+	
+	@Override
+	public void deactivate() {
+		if (isActive()) {
+			super.deactivate();
+			((Notifier) getModel()).eAdapters().remove(adapter);
 
+		}
+	}
+	
 	@Override
 	public void installEditPolicy(Object key, EditPolicy editPolicy) {
 		if (!(editPolicy instanceof ModifiedNonResizeableEditPolicy)) {
