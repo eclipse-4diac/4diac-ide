@@ -10,7 +10,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
- *               - allow navigation to parent by double-clicking on subapp 
+ *               - allow navigation to parent by double-clicking on subapp
  *                 interface element
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
@@ -49,6 +49,11 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 	@Override
 	public boolean isInput() {
 		return !super.isInput();
+	}
+
+	@Override
+	protected boolean isUnfoldedSubapp() {
+		return false; // in the subapp editor we are always not unfolded
 	}
 
 	@Override
