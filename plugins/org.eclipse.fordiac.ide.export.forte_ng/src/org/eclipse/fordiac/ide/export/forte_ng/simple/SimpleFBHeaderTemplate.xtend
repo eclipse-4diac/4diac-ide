@@ -22,10 +22,14 @@ import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
+import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter
 
 class SimpleFBHeaderTemplate extends ForteFBTemplate {
 
 	@Accessors(PROTECTED_GETTER) SimpleFBType type
+
+	extension STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter
 
 	new(SimpleFBType type, String name, Path prefix) {
 		super(name, prefix)

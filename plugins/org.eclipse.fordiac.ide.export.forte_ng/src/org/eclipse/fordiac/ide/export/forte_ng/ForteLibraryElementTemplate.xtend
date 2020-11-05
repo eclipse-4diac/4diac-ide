@@ -60,7 +60,6 @@ abstract class ForteLibraryElementTemplate extends ExportTemplate {
 		#endif // _«type.name.toUpperCase»_H_
 	'''
 
-
 	def protected generateTypeIncludes(Iterable<VarDeclaration> vars) '''
 		«FOR include : vars.map[it.typeName].sort.toSet»
 			#include "forte_«include.toLowerCase».h"

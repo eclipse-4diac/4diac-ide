@@ -119,12 +119,27 @@ class STAlgorithmFilter {
 		throw new IllegalStateException()
 	}
 
-	def generate(STAlgorithm alg, List<String> errors) {
+	def parseAlgorithm(STAlgorithm alg) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		createFBResource(resourceSet, alg.rootContainer as BaseFBType)
 		// create resource for algorithm
 		val resource = resourceSet.createResource(resourceSet.computeUnusedUri(ST_URI_EXTENSION)) as XtextResource
 		resource.load(new LazyStringInputStream(alg.text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
+		return resource
+	}
+
+	def generateLocalVariables(STAlgorithm alg) {
+		val parseResult = alg.parseAlgorithm.parseResult
+		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
+		for (variable: stalg.localVariables) {
+			if(null === variable.typeName)
+				variable.typeName = variable.type.name
+		}
+		return stalg.localVariables
+	}
+
+	def generate(STAlgorithm alg, List<String> errors) {
+		val resource = alg.parseAlgorithm
 		val parseResult = resource.parseResult
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
