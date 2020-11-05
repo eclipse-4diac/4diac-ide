@@ -38,6 +38,13 @@ import org.eclipse.swt.events.MouseEvent;
 
 public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool {
 
+	/**
+	 * Key to indicate that connection creation mode should be activated.
+	 * 
+	 * The current default is on most system the Alt key.
+	 */
+	private static final int CONNECTION_CREATION_MOD_KEY = SWT.MOD3;
+
 	static class InlineConnectionCreationTool extends FordiacConnectionDragCreationTool {
 
 		private final EditPart sourcePart;
@@ -121,7 +128,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 				return;
 			}
 		}
-		if (evt.keyCode == SWT.MOD1) { // Ctrl or Command key was pressed
+		if (evt.keyCode == CONNECTION_CREATION_MOD_KEY) { // Ctrl or Command key was pressed
 			activateConnectionCreation();
 		}
 		super.keyDown(evt, viewer);
@@ -138,7 +145,8 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 
 	@Override
 	public void keyUp(KeyEvent evt, EditPartViewer viewer) {
-		if ((evt.keyCode == SWT.MOD1) && (null != connectionCreationTool)) { // Ctrl or Command key was pressed
+		if ((evt.keyCode == CONNECTION_CREATION_MOD_KEY) && (null != connectionCreationTool)) { // Ctrl or Command key
+																								// was pressed
 			connectionCreationTool.deactivate();
 			connectionCreationTool = null;
 		}
