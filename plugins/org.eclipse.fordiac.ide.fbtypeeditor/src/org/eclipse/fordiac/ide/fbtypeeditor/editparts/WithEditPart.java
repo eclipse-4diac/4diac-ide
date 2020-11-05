@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2020		 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Virendra Ashiwal
+ *   	- moved calculateWithPos to the InterfaceEditPart
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
@@ -45,16 +48,16 @@ public class WithEditPart extends AbstractConnectionEditPart {
 		return false;
 	}
 
-	private int calculateWithPos() {
-		int pos = 1;
-		final With with = getCastedModel();
-		final Event event = (Event) with.eContainer();
-		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
-		if (null != interfaceList) {
-			pos += ((isInput()) ? interfaceList.getEventInputs() : interfaceList.getEventOutputs()).indexOf(event);
-		}
-		return pos;
-	}
+//	private int calculateWithPos(final boolean isInput) {
+//		int pos = 0;
+//		final With with = getCastedModel();
+//		final Event event = (Event) with.eContainer();
+//		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
+//		if (null != interfaceList) {
+//			return InterfaceEditPart.getnumEventwith( isInput?interfaceList.getEventInputs():interfaceList.getEventOutputs(), event);
+//	}
+//	return 0;
+//}
 
 	@Override
 	protected void createEditPolicies() {
@@ -80,8 +83,30 @@ public class WithEditPart extends AbstractConnectionEditPart {
 	private void updateConnection(final PolylineConnection connection) {
 		final int h = 15;
 		final float scale = 0.2f;
+		// ConnectionEditPart connection_var = null;
+		// final int withPos = InterfaceEditPart.calculateWithPos((ConnectionEditPart)
+		// connection_var, isInput());
+		final int withPos = InterfaceEditPart.calculateWithPos(getCastedModel(),isInput());
+		// creating top rectangle
+		final PointList rect = createPointList(h, withPos);
+		// creating bottom rectangle
+		final PointList targetRect = createPointList(h, withPos);
+
+		final PolygonDecoration rectDec = new PolygonDecoration();
+		rectDec.setTemplate(targetRect.getCopy());
+		rectDec.setScale(scale, scale);
+		rectDec.setFill(false);
+		connection.setTargetDecoration(rectDec);
+
+		final PolygonDecoration rectDec2 = new PolygonDecoration();
+		rectDec2.setTemplate(rect.getCopy());
+		rectDec2.setScale(scale, scale);
+		rectDec2.setFill(false);
+		connection.setSourceDecoration(rectDec2);
+	}
+
+	private PointList createPointList(final int h, final int withPos) {
 		final PointList rect = new PointList();
-		final int withPos = calculateWithPos();
 		rect.addPoint(-h, -h);
 		rect.addPoint(-h, h);
 		rect.addPoint(h, h);
@@ -96,31 +121,7 @@ public class WithEditPart extends AbstractConnectionEditPart {
 			rect.addPoint(0, +h + 45);
 		}
 		rect.addPoint(0, -h);
-		final PointList targetRect = new PointList();
-		targetRect.addPoint(-h, -h);
-		targetRect.addPoint(-h, h);
-		targetRect.addPoint(h, h);
-		targetRect.addPoint(h, -h);
-		targetRect.addPoint(-h, -h);
-		targetRect.addPoint(0, -h);
-		if (isInput()) {
-			targetRect.addPoint(0, -h - 45 * withPos);
-			targetRect.addPoint(0, +h + 45);
-		} else {
-			targetRect.addPoint(0, -h - 45);
-			targetRect.addPoint(0, +h + 45 * withPos);
-		}
-		targetRect.addPoint(0, -h);
-		final PolygonDecoration rectDec = new PolygonDecoration();
-		rectDec.setTemplate(targetRect.getCopy());
-		rectDec.setScale(scale, scale);
-		rectDec.setFill(false);
-		connection.setTargetDecoration(rectDec);
-		final PolygonDecoration rectDec2 = new PolygonDecoration();
-		rectDec2.setTemplate(rect.getCopy());
-		rectDec2.setScale(scale, scale);
-		rectDec2.setFill(false);
-		connection.setSourceDecoration(rectDec2);
+		return rect;
 	}
 
 	public void updateWithPos() {
