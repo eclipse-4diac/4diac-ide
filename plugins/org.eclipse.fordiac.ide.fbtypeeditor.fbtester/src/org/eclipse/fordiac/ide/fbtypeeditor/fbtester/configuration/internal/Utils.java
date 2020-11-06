@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
  */
 /**
  * @author kerbled
- * 
+ *
  */
 public final class Utils {
 
@@ -44,19 +44,17 @@ public final class Utils {
 
 	/**
 	 * Deploy the network required for testing a function block.
-	 * 
+	 *
 	 * @param type           the type
 	 * @param monitoringPort the monitoring port
 	 * @param runtimePort    the runtime port
 	 * @param ipAddress
-	 * 
+	 *
 	 * @return the string
 	 */
 	public static String deployNetwork(FBType type, String ipAddress, int port) {
 		int id = 0;
-		try {
-
-			Socket socket = new Socket(InetAddress.getByName(ipAddress), port);
+		try (Socket socket = new Socket(InetAddress.getByName(ipAddress), port)) {
 			DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			DataInputStream inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 			socket.setSoTimeout(10000);
@@ -64,21 +62,20 @@ public final class Utils {
 			// create monitoring resource
 
 			// create test resource
-			String request = MessageFormat.format(Messages.FBTester_CreateResourceInstance,
-					new Object[] { id++, "_" + type.getName() + "_RES", "EMB_RES" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			String request = MessageFormat.format(Messages.FBTester_CreateResourceInstance, id++,
+					"_" + type.getName() + "_RES", "EMB_RES"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			sendREQ("", request, outputStream, inputStream); //$NON-NLS-1$
 
-			request = MessageFormat.format(Messages.FBTester_CreateFBInstance,
-					new Object[] { id++, "_" + type.getName(), type.getName() }); //$NON-NLS-1$
+			request = MessageFormat.format(Messages.FBTester_CreateFBInstance, id++, "_" + type.getName(), //$NON-NLS-1$
+					type.getName());
 			sendREQ("_" + type.getName() + "_RES", request, outputStream, //$NON-NLS-1$ //$NON-NLS-2$
 					inputStream);
 
 			// start test resource
-			request = MessageFormat.format(Messages.FBTester_Start, new Object[] { id++ });
+			request = MessageFormat.format(Messages.FBTester_Start, id++);
 			sendREQ("_" + type.getName() + "_RES", request, outputStream, //$NON-NLS-1$ //$NON-NLS-2$
 					inputStream);
 
-			socket.close();
 		} catch (Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 			return e.getMessage();
@@ -88,40 +85,33 @@ public final class Utils {
 
 	/**
 	 * Clean the network required for testing a function block.
-	 * 
+	 *
 	 * @param type           the type
 	 * @param monitoringPort the monitoring port
 	 * @param runtimePort    the runtime port
 	 * @param ipAddress
-	 * 
+	 *
 	 * @return the string
 	 */
 	public static String cleanNetwork(FBType type, String ipAddress, int port, Socket socket) {
 		int id = 0;
-		try {
-
-			if (null == socket) {
-				socket = new Socket(InetAddress.getByName(ipAddress), port);
-			}
-			if (!socket.isConnected()) {
+		try (Socket socketToUse = (null == socket) ? new Socket(InetAddress.getByName(ipAddress), port) : socket) {
+			if (!socketToUse.isConnected()) {
 				SocketAddress endpoint = new InetSocketAddress(InetAddress.getByName(ipAddress), port);
-				socket.connect(endpoint);
+				socketToUse.connect(endpoint);
 			}
-			DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-			DataInputStream inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+			DataOutputStream outputStream = new DataOutputStream(
+					new BufferedOutputStream(socketToUse.getOutputStream()));
+			DataInputStream inputStream = new DataInputStream(new BufferedInputStream(socketToUse.getInputStream()));
 
-			socket.setSoTimeout(10000);
+			socketToUse.setSoTimeout(10000);
 
-			String kill = MessageFormat.format(Messages.FBTester_KillFB,
-					new Object[] { id++, "_" + type.getName() + "_RES" }); //$NON-NLS-1$ //$NON-NLS-2$
-			String delete = MessageFormat.format(Messages.FBTester_DeleteFB,
-					new Object[] { id++, "_" + type.getName() + "_RES" }); //$NON-NLS-1$ //$NON-NLS-2$
+			String kill = MessageFormat.format(Messages.FBTester_KillFB, id++, "_" + type.getName() + "_RES"); //$NON-NLS-1$ //$NON-NLS-2$
+			String delete = MessageFormat.format(Messages.FBTester_DeleteFB, id++, "_" + type.getName() + "_RES"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			sendREQ("", kill, outputStream, inputStream); //$NON-NLS-1$
-
 			sendREQ("", delete, outputStream, inputStream); //$NON-NLS-1$
 
-			socket.close();
 		} catch (Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 			return e.getMessage();
@@ -131,14 +121,14 @@ public final class Utils {
 
 	/**
 	 * Send a management commmand to the rutime.
-	 * 
+	 *
 	 * @param destination  the destination
 	 * @param request      the request
 	 * @param outputStream the output stream
 	 * @param inputStream  the input stream
-	 * 
+	 *
 	 * @return the string
-	 * 
+	 *
 	 * @throws Exception the exception
 	 */
 	public static synchronized String sendREQ(final String destination, final String request,
