@@ -17,18 +17,13 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
-import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentProvider;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.resource.CompositeImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -48,8 +43,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
 
 class BreadcrumbItem {
 
@@ -61,20 +54,17 @@ class BreadcrumbItem {
 		@Override
 		public Object[] getChildren(Object parentElement) {
 			return Arrays.stream(super.getChildren(parentElement))
-					.filter(obj -> obj instanceof IFile
-							|| obj instanceof SystemConfiguration
-							|| obj instanceof Application
-							|| (obj instanceof SubApp && ((SubApp) obj).getType() == null))
-					.collect(Collectors.toList())
-					.toArray();
+					.filter(obj -> obj instanceof IFile || obj instanceof SystemConfiguration
+							|| obj instanceof Application || (obj instanceof SubApp && ((SubApp) obj).getType() == null)
+							|| obj instanceof Device || obj instanceof Resource)
+					.collect(Collectors.toList()).toArray();
 		}
 
 		@Override
 		public boolean hasChildren(Object element) {
 			return getChildren(element).length != 0;
 		}
-		
-		
+
 	};
 
 	private Object current;
@@ -162,46 +152,6 @@ class BreadcrumbItem {
 		if (!selection.isEmpty()) {
 			updateBreadcrumb(selection.getFirstElement());
 		}
-	}
-
-	private void openEditor(Object obj) {
-		IEditorInput input = getEditorInput(obj);
-		String editorId = getEditorId(obj);
-		if (input != null && editorId != null) {
-			EditorUtils.openEditor(input, editorId);
-		}
-	}
-
-	private static IEditorInput getEditorInput(Object obj) {
-		if (obj instanceof IFile) {
-			return new FileEditorInput((IFile) obj);
-		}
-		if (obj instanceof SubApp) {
-			return new SubApplicationEditorInput((SubApp) obj);
-		}
-		if (obj instanceof Application) {
-			return new ApplicationEditorInput((Application) obj);
-		}
-		if (obj instanceof SystemConfiguration) {
-			return new SystemConfigurationEditorInput((SystemConfiguration) obj);
-		}
-		return null;
-	}
-
-	private static String getEditorId(Object obj) {
-		if (obj instanceof IFile) {
-			return "org.eclipse.fordiac.ide.editors.SystemEditor"; //$NON-NLS-1$
-		}
-		if (obj instanceof SubApp) {
-			return SubAppNetworkEditor.class.getName();
-		}
-		if (obj instanceof Application) {
-			return FBNetworkEditor.class.getName();
-		}
-		if (obj instanceof SystemConfiguration) {
-			return SystemConfigurationEditor.class.getName();
-		}
-		return null;
 	}
 
 	private final class BreadcrumbArrowDescriptor extends CompositeImageDescriptor {

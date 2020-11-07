@@ -64,7 +64,7 @@
             extensions="sys"
             contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             default="true"
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.SystemEditor"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.AutomationSystemEditor"
             icon="fordiacimage://ICON_SYSTEM_PERSPECTIVE"
             id="org.eclipse.fordiac.ide.editors.SystemEditor">
       </editor>
