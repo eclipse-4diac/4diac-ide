@@ -142,7 +142,7 @@ class BreadcrumbItem {
 
 	private void updateBreadcrumb(Object obj) {
 		parent.setInput(obj);
-		if (shell != null && shell.isEnabled()) {
+		if (shell != null && !shell.isDisposed() && shell.isEnabled()) {
 			shell.close();
 		}
 	}
