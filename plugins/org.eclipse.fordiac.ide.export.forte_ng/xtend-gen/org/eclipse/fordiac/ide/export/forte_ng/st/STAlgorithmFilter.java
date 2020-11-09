@@ -112,24 +112,34 @@ public class STAlgorithmFilter {
   public void createFBResource(final XtextResourceSet resourceSet, final BaseFBType fbType) {
     final Resource fbResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
     fbResource.getContents().add(fbType);
-    final Consumer<AdapterDeclaration> _function = (AdapterDeclaration adp) -> {
-      this.createAdapterResource(resourceSet, adp);
+    final Consumer<AdapterDeclaration> _function = new Consumer<AdapterDeclaration>() {
+      public void accept(final AdapterDeclaration adp) {
+        STAlgorithmFilter.this.createAdapterResource(resourceSet, adp);
+      }
     };
     fbType.getInterfaceList().getSockets().forEach(_function);
-    final Consumer<AdapterDeclaration> _function_1 = (AdapterDeclaration adp) -> {
-      this.createAdapterResource(resourceSet, adp);
+    final Consumer<AdapterDeclaration> _function_1 = new Consumer<AdapterDeclaration>() {
+      public void accept(final AdapterDeclaration adp) {
+        STAlgorithmFilter.this.createAdapterResource(resourceSet, adp);
+      }
     };
     fbType.getInterfaceList().getPlugs().forEach(_function_1);
-    final Consumer<VarDeclaration> _function_2 = (VarDeclaration v) -> {
-      this.createStructResource(resourceSet, v);
+    final Consumer<VarDeclaration> _function_2 = new Consumer<VarDeclaration>() {
+      public void accept(final VarDeclaration v) {
+        STAlgorithmFilter.this.createStructResource(resourceSet, v);
+      }
     };
     fbType.getInterfaceList().getInputVars().forEach(_function_2);
-    final Consumer<VarDeclaration> _function_3 = (VarDeclaration v) -> {
-      this.createStructResource(resourceSet, v);
+    final Consumer<VarDeclaration> _function_3 = new Consumer<VarDeclaration>() {
+      public void accept(final VarDeclaration v) {
+        STAlgorithmFilter.this.createStructResource(resourceSet, v);
+      }
     };
     fbType.getInterfaceList().getOutputVars().forEach(_function_3);
-    final Consumer<VarDeclaration> _function_4 = (VarDeclaration v) -> {
-      this.createStructResource(resourceSet, v);
+    final Consumer<VarDeclaration> _function_4 = new Consumer<VarDeclaration>() {
+      public void accept(final VarDeclaration v) {
+        STAlgorithmFilter.this.createStructResource(resourceSet, v);
+      }
     };
     fbType.getInternalVars().forEach(_function_4);
   }
@@ -146,8 +156,10 @@ public class STAlgorithmFilter {
       DataType _type_1 = variable.getType();
       final StructuredType type = ((StructuredType) _type_1);
       structResource.getContents().add(type);
-      final Consumer<VarDeclaration> _function = (VarDeclaration v) -> {
-        this.createStructResource(resourceSet, v);
+      final Consumer<VarDeclaration> _function = new Consumer<VarDeclaration>() {
+        public void accept(final VarDeclaration v) {
+          STAlgorithmFilter.this.createStructResource(resourceSet, v);
+        }
       };
       type.getMemberVariables().forEach(_function);
     }
@@ -168,27 +180,51 @@ public class STAlgorithmFilter {
     throw new IllegalStateException();
   }
   
-  public CharSequence generate(final STAlgorithm alg, final List<String> errors) {
+  public XtextResource parseAlgorithm(final STAlgorithm alg) {
     try {
-      CharSequence _xblockexpression = null;
-      {
-        ResourceSet _get = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
-        final XtextResourceSet resourceSet = ((XtextResourceSet) _get);
-        EObject _rootContainer = EcoreUtil.getRootContainer(alg);
-        this.createFBResource(resourceSet, ((BaseFBType) _rootContainer));
-        Resource _createResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.ST_URI_EXTENSION));
-        final XtextResource resource = ((XtextResource) _createResource);
-        String _text = alg.getText();
-        LazyStringInputStream _lazyStringInputStream = new LazyStringInputStream(_text);
-        Pair<String, Boolean> _mappedTo = Pair.<String, Boolean>of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
-        resource.load(_lazyStringInputStream, Collections.<String, Boolean>unmodifiableMap(CollectionLiterals.<String, Boolean>newHashMap(_mappedTo)));
-        final IParseResult parseResult = resource.getParseResult();
-        final IResourceValidator validator = resource.getResourceServiceProvider().getResourceValidator();
-        final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
-        boolean _isEmpty = issues.isEmpty();
-        boolean _not = (!_isEmpty);
-        if (_not) {
-          final Function1<Issue, String> _function = (Issue it) -> {
+      ResourceSet _get = STAlgorithmFilter.SERVICE_PROVIDER.<ResourceSet>get(ResourceSet.class);
+      final XtextResourceSet resourceSet = ((XtextResourceSet) _get);
+      EObject _rootContainer = EcoreUtil.getRootContainer(alg);
+      this.createFBResource(resourceSet, ((BaseFBType) _rootContainer));
+      Resource _createResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.ST_URI_EXTENSION));
+      final XtextResource resource = ((XtextResource) _createResource);
+      String _text = alg.getText();
+      LazyStringInputStream _lazyStringInputStream = new LazyStringInputStream(_text);
+      Pair<String, Boolean> _mappedTo = Pair.<String, Boolean>of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
+      resource.load(_lazyStringInputStream, Collections.<String, Boolean>unmodifiableMap(CollectionLiterals.<String, Boolean>newHashMap(_mappedTo)));
+      return resource;
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
+    }
+  }
+  
+  public EList<VarDeclaration> generateLocalVariables(final STAlgorithm alg) {
+    final IParseResult parseResult = this.parseAlgorithm(alg).getParseResult();
+    EObject _rootASTElement = parseResult.getRootASTElement();
+    final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
+    EList<VarDeclaration> _localVariables = stalg.getLocalVariables();
+    for (final VarDeclaration variable : _localVariables) {
+      String _typeName = variable.getTypeName();
+      boolean _tripleEquals = (null == _typeName);
+      if (_tripleEquals) {
+        variable.setTypeName(variable.getType().getName());
+      }
+    }
+    return stalg.getLocalVariables();
+  }
+  
+  public CharSequence generate(final STAlgorithm alg, final List<String> errors) {
+    CharSequence _xblockexpression = null;
+    {
+      final XtextResource resource = this.parseAlgorithm(alg);
+      final IParseResult parseResult = resource.getParseResult();
+      final IResourceValidator validator = resource.getResourceServiceProvider().getResourceValidator();
+      final List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
+      boolean _isEmpty = issues.isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        final Function1<Issue, String> _function = new Function1<Issue, String>() {
+          public String apply(final Issue it) {
             String _name = alg.getName();
             String _plus = (_name + ", Line ");
             String _string = Long.toString((it.getLineNumber()).intValue());
@@ -196,18 +232,16 @@ public class STAlgorithmFilter {
             String _plus_2 = (_plus_1 + ": ");
             String _message = it.getMessage();
             return (_plus_2 + _message);
-          };
-          errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
-          return null;
-        }
-        EObject _rootASTElement = parseResult.getRootASTElement();
-        final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
-        _xblockexpression = this.generateStructuredTextAlgorithm(stalg);
+          }
+        };
+        errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
+        return null;
       }
-      return _xblockexpression;
-    } catch (Throwable _e) {
-      throw Exceptions.sneakyThrow(_e);
+      EObject _rootASTElement = parseResult.getRootASTElement();
+      final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
+      _xblockexpression = this.generateStructuredTextAlgorithm(stalg);
     }
+    return _xblockexpression;
   }
   
   public CharSequence generate(final String expression, final BasicFBType fb, final List<String> errors) {
@@ -233,8 +267,10 @@ public class STAlgorithmFilter {
         boolean _isEmpty = issues.isEmpty();
         boolean _not = (!_isEmpty);
         if (_not) {
-          final Function1<Issue, String> _function = (Issue it) -> {
-            return it.getMessage();
+          final Function1<Issue, String> _function = new Function1<Issue, String>() {
+            public String apply(final Issue it) {
+              return it.getMessage();
+            }
           };
           errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
           return null;

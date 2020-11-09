@@ -17,6 +17,7 @@
  */
 package org.eclipse.fordiac.ide.export.forte_ng;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -25,25 +26,33 @@ import java.util.Set;
 import java.util.function.Consumer;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
+import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
+  @Extension
+  private STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
+  
   public ForteFBTemplate(final String name, final Path prefix) {
     super(name, prefix);
   }
   
-  @Override
   protected abstract FBType getType();
   
   protected CharSequence generateHeaderIncludes() {
@@ -69,6 +78,28 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     return _builder;
   }
   
+  protected ArrayList<VarDeclaration> generateVarTypesFromAlgorithms(final Iterable<Algorithm> algorithms) {
+    final ArrayList<VarDeclaration> vars = CollectionLiterals.<VarDeclaration>newArrayList();
+    for (final Algorithm alg : algorithms) {
+      if ((alg instanceof STAlgorithm)) {
+        vars.addAll(this.stAlgorithmFilter.generateLocalVariables(((STAlgorithm)alg)));
+      }
+    }
+    return vars;
+  }
+  
+  private List<Algorithm> getAlgorithmList(final FBType type) {
+    if ((type instanceof BasicFBType)) {
+      return ((BasicFBType)type).getAlgorithm();
+    } else {
+      if ((type instanceof SimpleFBType)) {
+        return List.<Algorithm>of(((SimpleFBType)type).getAlgorithm());
+      } else {
+        return List.<Algorithm>of();
+      }
+    }
+  }
+  
   protected CharSequence generateImplIncludes() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("#include \"");
@@ -86,6 +117,9 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     _builder.append("#endif");
     _builder.newLine();
     _builder.newLine();
+    CharSequence _generateImplTypeIncludes = this.generateImplTypeIncludes(this.generateVarTypesFromAlgorithms(this.getAlgorithmList(this.getType())));
+    _builder.append(_generateImplTypeIncludes);
+    _builder.newLineIfNotEmpty();
     CompilerInfo _compilerInfo = this.getType().getCompilerInfo();
     String _header = null;
     if (_compilerInfo!=null) {
@@ -96,11 +130,27 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     return _builder;
   }
   
+  protected CharSequence generateImplTypeIncludes(final Iterable<VarDeclaration> vars) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      boolean _isEmpty = IterableExtensions.isEmpty(vars);
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        CharSequence _generateTypeIncludes = this.generateTypeIncludes(vars);
+        _builder.append(_generateTypeIncludes);
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    return _builder;
+  }
+  
   protected CharSequence generateAdapterIncludes(final Iterable<AdapterDeclaration> vars) {
     StringConcatenation _builder = new StringConcatenation();
     {
-      final Function1<AdapterDeclaration, String> _function = (AdapterDeclaration it) -> {
-        return it.getTypeName();
+      final Function1<AdapterDeclaration, String> _function = new Function1<AdapterDeclaration, String>() {
+        public String apply(final AdapterDeclaration it) {
+          return it.getTypeName();
+        }
       };
       Set<String> _set = IterableExtensions.<String>toSet(IterableExtensions.<String>sort(IterableExtensions.<AdapterDeclaration, String>map(vars, _function)));
       for(final String include : _set) {
@@ -286,33 +336,37 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     {
       final ArrayList<Object> inputWith = CollectionLiterals.<Object>newArrayList();
       final ArrayList<Object> inputWithIndexes = CollectionLiterals.<Object>newArrayList();
-      final Consumer<Event> _function = (Event event) -> {
-        boolean _isEmpty = event.getWith().isEmpty();
-        if (_isEmpty) {
-          inputWithIndexes.add(Integer.valueOf((-1)));
-        } else {
-          inputWithIndexes.add(Integer.valueOf(inputWith.size()));
-          EList<With> _with = event.getWith();
-          for (final With with : _with) {
-            inputWith.add(Integer.valueOf(this.getType().getInterfaceList().getInputVars().indexOf(with.getVariables())));
+      final Consumer<Event> _function = new Consumer<Event>() {
+        public void accept(final Event event) {
+          boolean _isEmpty = event.getWith().isEmpty();
+          if (_isEmpty) {
+            inputWithIndexes.add(Integer.valueOf((-1)));
+          } else {
+            inputWithIndexes.add(Integer.valueOf(inputWith.size()));
+            EList<With> _with = event.getWith();
+            for (final With with : _with) {
+              inputWith.add(Integer.valueOf(ForteFBTemplate.this.getType().getInterfaceList().getInputVars().indexOf(with.getVariables())));
+            }
+            inputWith.add(Integer.valueOf(255));
           }
-          inputWith.add(Integer.valueOf(255));
         }
       };
       this.getType().getInterfaceList().getEventInputs().forEach(_function);
       final ArrayList<Object> outputWith = CollectionLiterals.<Object>newArrayList();
       final ArrayList<Object> outputWithIndexes = CollectionLiterals.<Object>newArrayList();
-      final Consumer<Event> _function_1 = (Event event) -> {
-        boolean _isEmpty = event.getWith().isEmpty();
-        if (_isEmpty) {
-          outputWithIndexes.add(Integer.valueOf((-1)));
-        } else {
-          outputWithIndexes.add(Integer.valueOf(outputWith.size()));
-          EList<With> _with = event.getWith();
-          for (final With with : _with) {
-            outputWith.add(Integer.valueOf(this.getType().getInterfaceList().getOutputVars().indexOf(with.getVariables())));
+      final Consumer<Event> _function_1 = new Consumer<Event>() {
+        public void accept(final Event event) {
+          boolean _isEmpty = event.getWith().isEmpty();
+          if (_isEmpty) {
+            outputWithIndexes.add(Integer.valueOf((-1)));
+          } else {
+            outputWithIndexes.add(Integer.valueOf(outputWith.size()));
+            EList<With> _with = event.getWith();
+            for (final With with : _with) {
+              outputWith.add(Integer.valueOf(ForteFBTemplate.this.getType().getInterfaceList().getOutputVars().indexOf(with.getVariables())));
+            }
+            outputWith.add(Integer.valueOf(255));
           }
-          outputWith.add(Integer.valueOf(255));
         }
       };
       this.getType().getInterfaceList().getEventOutputs().forEach(_function_1);
@@ -489,17 +543,21 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
   }
   
   protected boolean hasInputWith() {
-    final Function1<Event, Boolean> _function = (Event it) -> {
-      boolean _isEmpty = it.getWith().isEmpty();
-      return Boolean.valueOf((!_isEmpty));
+    final Function1<Event, Boolean> _function = new Function1<Event, Boolean>() {
+      public Boolean apply(final Event it) {
+        boolean _isEmpty = it.getWith().isEmpty();
+        return Boolean.valueOf((!_isEmpty));
+      }
     };
     return IterableExtensions.<Event>exists(this.getType().getInterfaceList().getEventInputs(), _function);
   }
   
   protected boolean hasOutputWith() {
-    final Function1<Event, Boolean> _function = (Event it) -> {
-      boolean _isEmpty = it.getWith().isEmpty();
-      return Boolean.valueOf((!_isEmpty));
+    final Function1<Event, Boolean> _function = new Function1<Event, Boolean>() {
+      public Boolean apply(final Event it) {
+        boolean _isEmpty = it.getWith().isEmpty();
+        return Boolean.valueOf((!_isEmpty));
+      }
     };
     return IterableExtensions.<Event>exists(this.getType().getInterfaceList().getEventOutputs(), _function);
   }
@@ -656,100 +714,110 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
   protected CharSequence generateInitialAssignment(final VarDeclaration variable) {
     CharSequence _switchResult = null;
     String _typeName = variable.getTypeName();
-    if (_typeName != null) {
-      switch (_typeName) {
-        case "STRING":
-          StringConcatenation _builder = new StringConcatenation();
-          String _name = variable.getName();
-          _builder.append(_name);
-          _builder.append("() = \"");
-          String _value = variable.getValue().getValue();
-          _builder.append(_value);
-          _builder.append("\";");
-          _switchResult = _builder;
-          break;
-        case "WSTRING":
-          StringConcatenation _builder_1 = new StringConcatenation();
-          String _name_1 = variable.getName();
-          _builder_1.append(_name_1);
-          _builder_1.append("() = \"");
-          String _value_1 = variable.getValue().getValue();
-          _builder_1.append(_value_1);
-          _builder_1.append("\";");
-          _switchResult = _builder_1;
-          break;
-        case "ARRAY":
-          StringConcatenation _builder_2 = new StringConcatenation();
-          String _name_2 = variable.getName();
-          _builder_2.append(_name_2);
-          _builder_2.append("().fromString(\"");
-          String _value_2 = variable.getValue().getValue();
-          _builder_2.append(_value_2);
-          _builder_2.append("\");");
-          _switchResult = _builder_2;
-          break;
-        case "TIME":
-          StringConcatenation _builder_3 = new StringConcatenation();
-          String _name_3 = variable.getName();
-          _builder_3.append(_name_3);
-          _builder_3.append("().fromString(\"");
-          String _value_3 = variable.getValue().getValue();
-          _builder_3.append(_value_3);
-          _builder_3.append("\");");
-          _switchResult = _builder_3;
-          break;
-        case "DATE":
-          StringConcatenation _builder_4 = new StringConcatenation();
-          String _name_4 = variable.getName();
-          _builder_4.append(_name_4);
-          _builder_4.append("().fromString(\"");
-          String _value_4 = variable.getValue().getValue();
-          _builder_4.append(_value_4);
-          _builder_4.append("\");");
-          _switchResult = _builder_4;
-          break;
-        case "TIME:OF_DAY":
-          StringConcatenation _builder_5 = new StringConcatenation();
-          String _name_5 = variable.getName();
-          _builder_5.append(_name_5);
-          _builder_5.append("().fromString(\"");
-          String _value_5 = variable.getValue().getValue();
-          _builder_5.append(_value_5);
-          _builder_5.append("\");");
-          _switchResult = _builder_5;
-          break;
-        case "DATE_AND_TIME":
-          StringConcatenation _builder_6 = new StringConcatenation();
-          String _name_6 = variable.getName();
-          _builder_6.append(_name_6);
-          _builder_6.append("().fromString(\"");
-          String _value_6 = variable.getValue().getValue();
-          _builder_6.append(_value_6);
-          _builder_6.append("\");");
-          _switchResult = _builder_6;
-          break;
-        case "BOOL":
-          StringConcatenation _builder_7 = new StringConcatenation();
-          String _name_7 = variable.getName();
-          _builder_7.append(_name_7);
-          _builder_7.append("() = \"");
-          String _lowerCase = variable.getValue().getValue().toLowerCase();
-          _builder_7.append(_lowerCase);
-          _builder_7.append("\";");
-          _switchResult = _builder_7;
-          break;
-        default:
-          StringConcatenation _builder_8 = new StringConcatenation();
-          String _name_8 = variable.getName();
-          _builder_8.append(_name_8);
-          _builder_8.append("() = ");
-          String _value_7 = variable.getValue().getValue();
-          _builder_8.append(_value_7);
-          _builder_8.append(";");
-          _switchResult = _builder_8;
-          break;
+    boolean _matched = false;
+    if (Objects.equal(_typeName, "STRING")) {
+      _matched=true;
+      StringConcatenation _builder = new StringConcatenation();
+      String _name = variable.getName();
+      _builder.append(_name);
+      _builder.append("() = \"");
+      String _value = variable.getValue().getValue();
+      _builder.append(_value);
+      _builder.append("\";");
+      _switchResult = _builder;
+    }
+    if (!_matched) {
+      if (Objects.equal(_typeName, "WSTRING")) {
+        _matched=true;
+        StringConcatenation _builder_1 = new StringConcatenation();
+        String _name_1 = variable.getName();
+        _builder_1.append(_name_1);
+        _builder_1.append("() = \"");
+        String _value_1 = variable.getValue().getValue();
+        _builder_1.append(_value_1);
+        _builder_1.append("\";");
+        _switchResult = _builder_1;
       }
-    } else {
+    }
+    if (!_matched) {
+      if (Objects.equal(_typeName, "ARRAY")) {
+        _matched=true;
+        StringConcatenation _builder_2 = new StringConcatenation();
+        String _name_2 = variable.getName();
+        _builder_2.append(_name_2);
+        _builder_2.append("().fromString(\"");
+        String _value_2 = variable.getValue().getValue();
+        _builder_2.append(_value_2);
+        _builder_2.append("\");");
+        _switchResult = _builder_2;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(_typeName, "TIME")) {
+        _matched=true;
+        StringConcatenation _builder_3 = new StringConcatenation();
+        String _name_3 = variable.getName();
+        _builder_3.append(_name_3);
+        _builder_3.append("().fromString(\"");
+        String _value_3 = variable.getValue().getValue();
+        _builder_3.append(_value_3);
+        _builder_3.append("\");");
+        _switchResult = _builder_3;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(_typeName, "DATE")) {
+        _matched=true;
+        StringConcatenation _builder_4 = new StringConcatenation();
+        String _name_4 = variable.getName();
+        _builder_4.append(_name_4);
+        _builder_4.append("().fromString(\"");
+        String _value_4 = variable.getValue().getValue();
+        _builder_4.append(_value_4);
+        _builder_4.append("\");");
+        _switchResult = _builder_4;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(_typeName, "TIME:OF_DAY")) {
+        _matched=true;
+        StringConcatenation _builder_5 = new StringConcatenation();
+        String _name_5 = variable.getName();
+        _builder_5.append(_name_5);
+        _builder_5.append("().fromString(\"");
+        String _value_5 = variable.getValue().getValue();
+        _builder_5.append(_value_5);
+        _builder_5.append("\");");
+        _switchResult = _builder_5;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(_typeName, "DATE_AND_TIME")) {
+        _matched=true;
+        StringConcatenation _builder_6 = new StringConcatenation();
+        String _name_6 = variable.getName();
+        _builder_6.append(_name_6);
+        _builder_6.append("().fromString(\"");
+        String _value_6 = variable.getValue().getValue();
+        _builder_6.append(_value_6);
+        _builder_6.append("\");");
+        _switchResult = _builder_6;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(_typeName, "BOOL")) {
+        _matched=true;
+        StringConcatenation _builder_7 = new StringConcatenation();
+        String _name_7 = variable.getName();
+        _builder_7.append(_name_7);
+        _builder_7.append("() = \"");
+        String _lowerCase = variable.getValue().getValue().toLowerCase();
+        _builder_7.append(_lowerCase);
+        _builder_7.append("\";");
+        _switchResult = _builder_7;
+      }
+    }
+    if (!_matched) {
       StringConcatenation _builder_8 = new StringConcatenation();
       String _name_8 = variable.getName();
       _builder_8.append(_name_8);

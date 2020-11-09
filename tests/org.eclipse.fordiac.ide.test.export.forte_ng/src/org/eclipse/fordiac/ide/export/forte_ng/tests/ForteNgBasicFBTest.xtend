@@ -113,6 +113,9 @@ class ForteNgBasicFBTest extends ForteNgTestBasicFBTypeBase {
 					#include "«FUNCTIONBLOCK_NAME»_gen.cpp"
 					#endif
 
+					#include "forte_dword.h"
+					#include "forte_array.h"
+					#include "forte_array_at.h"
 
 					DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringId«FUNCTIONBLOCK_NAME»)
 
