@@ -47,11 +47,12 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	private Adapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			
+
 			Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature) ||
 					LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature)) {
 				p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
+				p.x -= 40;
 				getChildren().forEach(ep->((EditPart)ep).refresh());
 			} else {
 				super.notifyChanged(notification);
@@ -63,8 +64,9 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	public void setModel(Object model) {
 		super.setModel(model);
 		p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
+		p.x -= 40;
 	}
-	
+
 	@Override
 	public void activate() {
 		if (!isActive()) {
@@ -72,7 +74,7 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 			((Notifier) getModel()).eAdapters().add(adapter);
 		}
 	}
-	
+
 	@Override
 	public void deactivate() {
 		if (isActive()) {
@@ -81,7 +83,7 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 
 		}
 	}
-	
+
 	@Override
 	public void installEditPolicy(Object key, EditPolicy editPolicy) {
 		if (!(editPolicy instanceof ModifiedNonResizeableEditPolicy)) {
@@ -124,10 +126,13 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 		});
 	}
 
+	static final int VER_BORDER_WIDTH = 10;
+	static final int HOR_BORDER_WIDTH = 5 * VER_BORDER_WIDTH;
+	static final Insets BORDER_INSET = new Insets(VER_BORDER_WIDTH, HOR_BORDER_WIDTH, VER_BORDER_WIDTH,
+			HOR_BORDER_WIDTH);
+
 	@Override
 	protected IFigure createFigure() {
-		final int BORDER_WIDTH = 10;
-		final Insets BORDER_INSET = new Insets(BORDER_WIDTH);
 
 		IFigure figure = new Figure() {
 			@Override
@@ -155,7 +160,8 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 		if (constraint instanceof Rectangle) {
 			Rectangle rectConstraint = (Rectangle) constraint;
 			if (child instanceof ValueEditPart) {
-				rectConstraint.performTranslate(-getFigure().getBounds().x, -getFigure().getBounds().y);
+				rectConstraint.performTranslate(-getFigure().getBounds().x - HOR_BORDER_WIDTH,
+						-getFigure().getBounds().y - VER_BORDER_WIDTH);
 			} else {
 				rectConstraint.performTranslate(-p.x, -p.y);
 			}
