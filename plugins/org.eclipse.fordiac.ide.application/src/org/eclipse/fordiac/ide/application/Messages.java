@@ -119,7 +119,7 @@ public class Messages extends NLS {
 
 	public static String SaveAsSubApplicationTypeAction_WizardPageName;
 
-	public static String SaveAsSubApplicationTypeAction_WizardPageTitel;
+	public static String SaveAsSubApplicationTypeAction_WizardPageTitle;
 
 	public static String SaveAsSubApplicationTypeAction_WizardPageDescription;
 

@@ -49,7 +49,7 @@ public class ErrorMessenger {
 
 	private static final String TOPIC_ERRORMESSAGES = "ORG/ECLIPSE/FORDIAC/IDE/ERRORMESSAGES"; //$NON-NLS-1$
 	private static final int USE_DEFAULT_TIMEOUT = -1;
-	private static final String DIALOG_TITLE = "Operation not possible";
+	private static final String DIALOG_TITLE = "Not possible";
 
 	private static IEventBroker initEventBroker() {
 		// This initialization can fail if this is run as a simple JUnit-Test instead of

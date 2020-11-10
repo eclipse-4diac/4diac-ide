@@ -41,7 +41,7 @@ public class SaveAsSubappWizardPage extends WizardNewFileCreationPage {
 
 	public SaveAsSubappWizardPage(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
-		setTitle(Messages.SaveAsSubApplicationTypeAction_WizardPageTitel);
+		setTitle(Messages.SaveAsSubApplicationTypeAction_WizardPageTitle);
 		setDescription(Messages.SaveAsSubApplicationTypeAction_WizardPageDescription);
 		setAllowExistingResources(true); // needed for correct duplicate type check
 	}
