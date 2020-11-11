@@ -47,13 +47,17 @@ import org.eclipse.elk.graph.ElkLabel;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
+import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.elk.commands.LayoutCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -75,10 +79,12 @@ public class LayoutHandler extends AbstractHandler {
 	private static final PrecisionPoint END_POINT = new PrecisionPoint();
 
 	private int maxIOLabelSize;
+	private String editorId;
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		clear();
+		editorId = HandlerUtil.getActiveEditorId(event);
 		IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 		if (null != viewer) {
@@ -150,6 +156,7 @@ public class LayoutHandler extends AbstractHandler {
 		connEditParts.clear();
 		nodeMapping.clear();
 		values.clear();
+		editorId = null;
 		// set a min for the padding
 		maxIOLabelSize = 60;
 	}
@@ -264,24 +271,12 @@ public class LayoutHandler extends AbstractHandler {
 		@SuppressWarnings("unchecked")
 		Map<Object, Object> editPartSet = viewer.getEditPartRegistry();
 		editPartSet.values().forEach(entry -> {
-			if (entry instanceof AbstractFBNElementEditPart) {
+			if (entry instanceof AbstractFBNElementEditPart
+					&& !(((AbstractFBNElementEditPart) entry).getParent() instanceof UnfoldedSubappContentEditPart)) {
 				fbNetworkElements.add((AbstractFBNElementEditPart) entry);
 			}
 			if (entry instanceof ConnectionEditPart) {
-				IFigure fig = ((ConnectionEditPart) entry).getFigure();
-				if (fig.isVisible()) {
-					/*
-					 * use isVisble instead of isHidden -> the hideConnection command handler does
-					 * not change the "hidden" field but only sets the visibility of the connection
-					 * figure
-					 * 
-					 * TODO move the visibility check to createConnectionNodes()
-					 * 
-					 * this is currently not possible because the layout command uses the edit parts
-					 * for undo
-					 */
-					connections.add((ConnectionEditPart) entry);
-				}
+				handleConnectionCollection((ConnectionEditPart) entry);
 			}
 			if (entry instanceof ValueEditPart) {
 				values.add((ValueEditPart) entry);
@@ -291,6 +286,33 @@ public class LayoutHandler extends AbstractHandler {
 				calculateSubAppPadding(part);
 			}
 		});
+	}
+
+	private void handleConnectionCollection(ConnectionEditPart entry) {
+		Object sourceModel = entry.getSource().getParent().getModel();
+		if (sourceModel instanceof SubApp && ((InterfaceEditPart) entry.getSource()).getModel().isIsInput()) {
+			return;
+		}
+		if (sourceModel instanceof FB
+				&& ((FB) sourceModel).eContainer().eContainer() instanceof SubApp
+				&& !SubAppNetworkEditor.class.getName().equals(editorId)) {
+			return;
+		}
+		
+		IFigure fig = entry.getFigure();
+		if (fig.isVisible()) {
+			/*
+			 * use isVisble instead of isHidden -> the hideConnection command handler does
+			 * not change the "hidden" field but only sets the visibility of the connection
+			 * figure
+			 *
+			 * TODO move the visibility check to createConnectionNodes()
+			 *
+			 * this is currently not possible because the layout command uses the edit parts
+			 * for undo
+			 */
+			connections.add(entry);
+		}
 	}
 
 	private void calculateSubAppPadding(InterfaceEditPart part) {
