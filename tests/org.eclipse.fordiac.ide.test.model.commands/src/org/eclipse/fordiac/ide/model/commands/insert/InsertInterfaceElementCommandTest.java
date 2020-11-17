@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
@@ -35,7 +36,9 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 
 	public static State executeCommand(State state, String typeName, boolean isInput) {
 		IInterfaceElement element = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		element.setIsInput(isInput);
 		element.setName(INTERFACE_ELEMENT);
+		element.setTypeName(typeName);
 		DataType type = getDatatypelib().getType(typeName);
 
 		state.setCommand(new InsertInterfaceElementCommand(element, type,
@@ -96,6 +99,16 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getInputVars().size(), 1);
 	}
 
+	private static void verifyGetters(State state, TestFunction t) {
+		t.test(state.getCommand() instanceof InsertInterfaceElementCommand);
+		final InsertInterfaceElementCommand c = ((InsertInterfaceElementCommand) state.getCommand());
+		t.test(c.isInput(), true);
+		t.test(c.getInterfaceList(), state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface());
+		t.test(c.getDataType(), getDatatypelib().getType(FordiacKeywords.DWORD));
+		t.test(c.getEntry());
+		t.test(c.getInterfaceElement());
+	}
+	
 	public static void verifyStateHasDataOutput(State state, State oldState, TestFunction t) {
 		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getOutputVars().size(), 1);
 	}
@@ -112,7 +125,7 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<State>("Add Input", //$NON-NLS-1$
-						(State s) -> executeCommand(s, FordiacKeywords.DWORD, true), //
+						(State s) -> {final State result = executeCommand(s, FordiacKeywords.DWORD, true); verifyGetters(s,assertion); return result;}, //
 						(State s, State o, TestFunction t) -> {
 							verifyStateHasDataInput(s, o, t);
 							verifyStateNoDataOutput(s, o, t);

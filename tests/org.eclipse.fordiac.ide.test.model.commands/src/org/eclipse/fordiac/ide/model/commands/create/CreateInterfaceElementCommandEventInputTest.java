@@ -75,7 +75,17 @@ public class CreateInterfaceElementCommandEventInputTest extends CreateInterface
 		state.setCommand(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), null,
 				getTypeInterfaceList(state), /* isInput */ true, /* index */ 1));
 
-		return commandExecution(state);
+		final State result = commandExecution(state);
+
+		assertion.test(state.getCommand() instanceof CreateInterfaceElementCommand);
+		final CreateInterfaceElementCommand c = ((CreateInterfaceElementCommand) state.getCommand());
+		assertion.test(c.isInput(), true);
+		assertion.test(c.getInterfaceList(), getTypeInterfaceList(state));
+		assertion.test(c.getDataType(), EventTypeLibrary.getInstance().getType(null));
+		assertion.test(getTypeInterfaceList(state).getInterfaceElement(ELEMENT3_NAME), c.getInterfaceElement());
+		assertion.test(c.getCreatedElement(), c.getInterfaceElement());
+
+		return result;
 	}
 
 	private static void verifyStateInputWithNameNull(State state, State oldState, TestFunction t) {

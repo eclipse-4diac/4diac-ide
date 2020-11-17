@@ -37,7 +37,14 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 	private static State executeSimpleInsertion(State state) {
 		state.setCommand(new CreateMemberVariableCommand(state.getStructuredType(), datatypeLib));
 
-		return commandExecution(state);
+		final State result = commandExecution(state);
+
+		assertion.test(state.getCommand() instanceof CreateMemberVariableCommand);
+		final CreateMemberVariableCommand c = (CreateMemberVariableCommand) state.getCommand();
+		assertion.test(c.getCreatedElement(), c.getVarDeclaration());
+		assertion.test(!c.getVariableList().isEmpty());
+
+		return result;
 	}
 
 	private static State executeAdvancedInsertion(State state, int index, String name, DataType type) {

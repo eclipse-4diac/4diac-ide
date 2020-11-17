@@ -26,6 +26,10 @@ public class FBCreateCommandTest extends FBNetworkTestBase {
 	public static State executeCommand(State state) {
 		state.setCommand(new FBCreateCommand(state.getFunctionblock(), state.getFbNetwork(), 0, 0));
 
+		assertion.test(state.getCommand() instanceof FBCreateCommand);
+		final FBCreateCommand c = (FBCreateCommand) state.getCommand();
+		assertion.test(c.getPaletteEntry(), state.getFunctionblock());
+
 		return commandExecution(state);
 	}
 
