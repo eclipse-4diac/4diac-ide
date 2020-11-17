@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
+import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -34,6 +35,7 @@ import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEdi
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.breadcrumb.BreadcrumbWidget;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -50,6 +52,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -60,6 +63,8 @@ public class AutomationSystemEditor extends MultiPageEditorPart
 	private AutomationSystem system;
 
 	private Map<Object, Integer> modelToEditorNum = new HashMap<>();
+
+	private DiagramOutlinePage outlinePage;
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
@@ -112,6 +117,10 @@ public class AutomationSystemEditor extends MultiPageEditorPart
 		int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor);
 		if (-1 != pagenum) {
 			setActivePage(pagenum);
+			if (null != outlinePage) {
+				GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
+				outlinePage.viewerChanged(viewer);
+			}
 		}
 	}
 
@@ -199,6 +208,12 @@ public class AutomationSystemEditor extends MultiPageEditorPart
 		}
 		if (adapter == IPropertySheetPage.class) {
 			return adapter.cast(new TabbedPropertySheetPage(this));
+		}
+		if (adapter == IContentOutlinePage.class) {
+			if (null == outlinePage) {
+				outlinePage = new DiagramOutlinePage(getActiveEditor().getAdapter(GraphicalViewer.class));
+			}
+			return adapter.cast(outlinePage);
 		}
 		return super.getAdapter(adapter);
 	}
