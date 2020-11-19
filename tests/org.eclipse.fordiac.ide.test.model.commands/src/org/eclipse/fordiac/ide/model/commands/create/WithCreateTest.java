@@ -28,7 +28,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 public class WithCreateTest extends FBNetworkTestBase {
 
-	private static State createInterfaceElements(State state) {
+	public static State createInterfaceElements(State state) {
 		CompoundCommand c = new CompoundCommand();
 
 		c.add(new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null),
@@ -55,7 +55,7 @@ public class WithCreateTest extends FBNetworkTestBase {
 		return commandExecution(state);
 	}
 
-	private static void verifyFBCreation(State state, State oldState, TestFunction t) {
+	public static void verifyFBCreation(State state, State oldState, TestFunction t) {
 		t.test(state.getFbNetwork().getNetworkElements().size(), 2);
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getType(),
 				state.getFbNetwork().getNetworkElements().get(1).getType());
@@ -88,7 +88,7 @@ public class WithCreateTest extends FBNetworkTestBase {
 		t.test(c.getVarDeclaration());
 	}
 
-	private static State updateNetworkElements(State state) {
+	public static State updateNetworkElements(State state) {
 		CompoundCommand c = new CompoundCommand();
 
 		c.add(new UpdateFBTypeCommand(state.getFbNetwork().getNetworkElements().get(0), state.getFunctionblock()));
