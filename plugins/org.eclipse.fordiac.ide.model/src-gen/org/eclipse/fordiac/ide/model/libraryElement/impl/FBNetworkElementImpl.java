@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -51,7 +52,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	/**
 	 * The default value of the '{@link #getX() <em>X</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getX()
 	 * @generated
 	 * @ordered
@@ -61,7 +62,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	/**
 	 * The cached value of the '{@link #getX() <em>X</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getX()
 	 * @generated
 	 * @ordered
@@ -71,7 +72,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	/**
 	 * The default value of the '{@link #getY() <em>Y</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getY()
 	 * @generated
 	 * @ordered
@@ -81,7 +82,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	/**
 	 * The cached value of the '{@link #getY() <em>Y</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getY()
 	 * @generated
 	 * @ordered
@@ -284,7 +285,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated not
 	 */
 	@Override
@@ -388,13 +389,43 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	@Override
+	public boolean isNestedInSubApp() {
+		final EObject parent = this.eContainer();
+		if (parent == null) {
+			return false;
+		}
+		final EObject grandParent = parent.eContainer();
+		if (grandParent == null) {
+			return false;
+		}
+		return grandParent instanceof org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public FBNetworkElement getOuterFBNetworkElement() {
+		if ((this.eContainer() == null) || !(this.eContainer().eContainer() instanceof FBNetworkElement)) {
+			return null;
+		}
+		return (FBNetworkElement) this.eContainer().eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
 			return basicSetInterface(null, msgs);
-		default:
-			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -417,9 +448,8 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 			if (resolve)
 				return getMapping();
 			return basicGetMapping();
-		default:
-			return super.eGet(featureID, resolve, coreType);
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -442,10 +472,8 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
 			setMapping((Mapping) newValue);
 			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -468,10 +496,8 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
 			setMapping((Mapping) null);
 			return;
-		default:
-			super.eUnset(featureID);
-			return;
 		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -490,9 +516,8 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 			return interface_ != null;
 		case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
 			return mapping != null;
-		default:
-			return super.eIsSet(featureID);
 		}
+		return super.eIsSet(featureID);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -69,7 +69,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Mapping</em>' reference.
 	 * @see #setMapping(Mapping)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetworkElement_Mapping()
@@ -145,5 +145,22 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 */
 	@Override
 	FBType getType();
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 *        required="true"
+	 * @generated
+	 */
+	boolean isNestedInSubApp();
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	FBNetworkElement getOuterFBNetworkElement();
 
 } // FBNetworkElement

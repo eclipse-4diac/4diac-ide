@@ -10,7 +10,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
- *               - added check if subapp interface is selected and mark that in 
+ *               - added check if subapp interface is selected and mark that in
  *                 parent
  *   Daniel Lindhuber - MoveElementsFromSubappCommand integration
  *   				  - adjusted for unfolded subapps
@@ -25,6 +25,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubappCommand;
+import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubappCommand.MoveOperation;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
@@ -53,16 +54,17 @@ public class MoveToParentHandler extends AbstractHandler {
 			editor = openParentEditor(subEditor);
 		}
 		if (null != editor) {
-			StructuredSelection selection = getEditorSelection((subEditor == null) ? editor : subEditor);
-			CompoundCommand cmd = new CompoundCommand();
-			for (Object ne : selection) {
+			final StructuredSelection selection = getEditorSelection((subEditor == null) ? editor : subEditor);
+			final CompoundCommand cmd = new CompoundCommand();
+			for (final Object ne : selection) {
 				if ((ne instanceof EditPart) && (((EditPart) ne).getModel() instanceof FBNetworkElement)) {
-					FBNetworkElement element = (FBNetworkElement) ((EditPart) ne).getModel();
-					SubApp subapp = (subEditor == null) ? (SubApp) element.eContainer().eContainer()
+					final FBNetworkElement element = (FBNetworkElement) ((EditPart) ne).getModel();
+					final SubApp subapp = (subEditor == null) ? (SubApp) element.eContainer().eContainer()
 							: (SubApp) subEditor.getModel().eContainer();
-					GraphicalEditPart ep = (GraphicalEditPart) editor.getViewer().getEditPartRegistry().get(subapp);
-					MoveElementFromSubappCommand moveCmd = new MoveElementFromSubappCommand(subapp, element,
-							ep.getFigure().getBounds());
+					final GraphicalEditPart ep = (GraphicalEditPart) editor.getViewer().getEditPartRegistry()
+							.get(subapp);
+					final MoveElementFromSubappCommand moveCmd = new MoveElementFromSubappCommand(subapp, element,
+							ep.getFigure().getBounds(), MoveOperation.CONTEXT_MENU);
 					cmd.add(moveCmd);
 				}
 			}
@@ -81,7 +83,7 @@ public class MoveToParentHandler extends AbstractHandler {
 	}
 
 	private FBNetworkEditor openParentEditor(SubAppNetworkEditor editor) {
-		EObject model = editor.getModel().eContainer().eContainer().eContainer();
+		final EObject model = editor.getModel().eContainer().eContainer().eContainer();
 		return (FBNetworkEditor) EditorUtils.openEditor(getEditorInput(model), getEditorId(model));
 	}
 
@@ -91,7 +93,7 @@ public class MoveToParentHandler extends AbstractHandler {
 		int left = 0;
 		int right = 0;
 		int below = 0;
-		for (MoveElementFromSubappCommand cmd : commands) {
+		for (final MoveElementFromSubappCommand cmd : commands) {
 			switch (cmd.getSide()) {
 			case LEFT:
 				cmd.getElement().setY(cmd.getElement().getY() + (left * OFFSET));

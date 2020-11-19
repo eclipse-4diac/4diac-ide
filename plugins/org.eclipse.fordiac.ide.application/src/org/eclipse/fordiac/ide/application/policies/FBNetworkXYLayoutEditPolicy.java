@@ -21,7 +21,14 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.ListFBCreateCommand;
+import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubappCommand;
+import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubappCommand.MoveOperation;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
+import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
@@ -29,12 +36,15 @@ import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionOfFb;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
@@ -70,26 +80,27 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
 		if (null != request) {
-			Object childClass = request.getNewObjectType();
-			Rectangle constraint = (Rectangle) getConstraintFor(request);
+			final Object childClass = request.getNewObjectType();
+			final Rectangle constraint = (Rectangle) getConstraintFor(request);
 			if (getHost().getModel() instanceof FBNetwork) {
-				FBNetwork fbNetwork = (FBNetwork) getHost().getModel();
+				final FBNetwork fbNetwork = (FBNetwork) getHost().getModel();
 				if (childClass instanceof FBTypePaletteEntry) {
-					FBTypePaletteEntry type = (FBTypePaletteEntry) childClass;
+					final FBTypePaletteEntry type = (FBTypePaletteEntry) childClass;
 					return new FBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
 				}
 				if (childClass instanceof FBTypePaletteEntry[]) {
-					FBTypePaletteEntry[] type = (FBTypePaletteEntry[]) childClass;
+					final FBTypePaletteEntry[] type = (FBTypePaletteEntry[]) childClass;
 					return new ListFBCreateCommand(type, fbNetwork, constraint.getLocation().x,
 							constraint.getLocation().y);
 				}
 				if (childClass instanceof SubApplicationTypePaletteEntry) {
-					SubApplicationTypePaletteEntry type = (SubApplicationTypePaletteEntry) request.getNewObjectType();
+					final SubApplicationTypePaletteEntry type = (SubApplicationTypePaletteEntry) request
+							.getNewObjectType();
 					return new CreateSubAppInstanceCommand(type, fbNetwork, constraint.getLocation().x,
 							constraint.getLocation().y);
 				}
 				if (childClass instanceof TransferDataSelectionOfFb[]) {
-					TransferDataSelectionOfFb[] type = (TransferDataSelectionOfFb[]) childClass;
+					final TransferDataSelectionOfFb[] type = (TransferDataSelectionOfFb[]) childClass;
 					return new ListFBCreateCommand(type, fbNetwork, constraint.getLocation().x,
 							constraint.getLocation().y);
 				}
@@ -99,16 +110,49 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	@Override
-	protected Command getAddCommand(final Request generic) {
+	protected Command getAddCommand(final Request request) {
+		if (isDragAndDropRequestFromSubAppToRoot(request, getTargetEditPart(request))) {
+			final List<?> editParts = ((ChangeBoundsRequest) request).getEditParts();
+			final Point mouseMoveDelta = ((ChangeBoundsRequest) request).getMoveDelta()
+					.getScaled(1.0 / zoomManager.getZoom());
+			final CompoundCommand commandos = new CompoundCommand();
+			for (final Object editPart : editParts) {
+				if (((editPart instanceof EditPart)
+						&& (((EditPart) editPart).getModel() instanceof FBNetworkElement))) {
+					final FBNetworkElement dragEditPartModel = (FBNetworkElement) ((EditPart) editPart).getModel();
+					if (dragEditPartModel.isNestedInSubApp()) {
+						final SubApp outerSubApp = (SubApp) dragEditPartModel.getOuterFBNetworkElement();
+						final SubAppForFBNetworkEditPart outerSubAppEdit = (SubAppForFBNetworkEditPart) ((AbstractFBNElementEditPart) editPart)
+								.getParent().getParent();
+
+						final MoveElementFromSubappCommand moveElementFromSubappCommand = new MoveElementFromSubappCommand(
+								outerSubApp, dragEditPartModel, outerSubAppEdit.getFigure().getBounds(),
+								MoveOperation.DRAG_AND_DROP_TO_ROOT);
+						moveElementFromSubappCommand.setMouseMoveDelta(mouseMoveDelta);
+						commandos.add(moveElementFromSubappCommand);
+					}
+				}
+
+			}
+			return commandos;
+
+		}
+
 		return null;
 	}
 
 	@Override
 	protected Command getCloneCommand(ChangeBoundsRequest request) {
-		List<EObject> elements = ((Stream<?>) (request.getEditParts()).stream())
+		final List<EObject> elements = ((Stream<?>) (request.getEditParts()).stream())
 				.map(n -> (EObject) (((EditPart) n).getModel())).collect(Collectors.toList());
-		Point scaledPoint = request.getMoveDelta().getScaled(1.0 / zoomManager.getZoom());
+		final Point scaledPoint = request.getMoveDelta().getScaled(1.0 / zoomManager.getZoom());
 		return new PasteCommand(elements, (FBNetwork) getHost().getModel(), scaledPoint.x, scaledPoint.y);
 	}
 
+	public static boolean isDragAndDropRequestFromSubAppToRoot(Request generic, EditPart targetEditPart) {
+		return (generic instanceof ChangeBoundsRequest)
+				&& ((targetEditPart instanceof FBNetworkEditPart)
+						|| (targetEditPart instanceof UISubAppNetworkEditPart))
+				&& !(targetEditPart instanceof UnfoldedSubappContentEditPart);
+	}
 }

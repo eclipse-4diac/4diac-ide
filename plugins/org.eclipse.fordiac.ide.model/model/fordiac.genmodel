@@ -293,6 +293,10 @@
           body="org.eclipse.fordiac.ide.model.Annotations.checkConnections(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isMapped" body="return org.eclipse.fordiac.ide.model.Annotations.isMapped(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getType" body="//the base class of all types a FBNetworkElement can be (FB, Subapp, Adapter) is a FBType. Therefore we can have this here.&#xA;&#xA;//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;&#xA;return super.getType() instanceof FBType ? (FBType)super.getType() : null;"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isNestedInSubApp"
+          body="final EObject parent = this.eContainer();if (parent == null) {return false;}final EObject grandParent = parent.eContainer();if (grandParent == null) {return false;}return grandParent instanceof org.eclipse.fordiac.ide.model.libraryElement.SubApp;"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getOuterFBNetworkElement"
+          body="&#x9;&#x9;if ((this.eContainer() == null) || !(this.eContainer().eContainer() instanceof FBNetworkElement)) {&#xA;&#x9;&#x9;&#x9;return null;&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;return (FBNetworkElement) this.eContainer().eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//SubApp">
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
