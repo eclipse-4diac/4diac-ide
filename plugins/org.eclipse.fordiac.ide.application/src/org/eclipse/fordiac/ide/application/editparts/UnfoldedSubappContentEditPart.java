@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * 				 2020 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -26,6 +27,9 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.impl.EAttributeImpl;
+import org.eclipse.emf.ecore.impl.EReferenceImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
@@ -43,6 +47,7 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.swt.graphics.Point;
 
 public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
+	private int childrenNumber = 0;
 	private Point p;
 	private Adapter adapter = new EContentAdapter() {
 		@Override
@@ -55,7 +60,13 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 				p.x -= 40;
 				getChildren().forEach(ep->((EditPart)ep).refresh());
 			} else {
-				super.notifyChanged(notification);
+				if(getModel().getNetworkElements().size() != childrenNumber) {
+					super.notifyChanged(notification);
+					childrenNumber = getModel().getNetworkElements().size();
+					p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
+				        p.x -= 40;
+					getChildren().forEach(ep->((EditPart)ep).refresh());
+				}
 			}
 		}
 	};
