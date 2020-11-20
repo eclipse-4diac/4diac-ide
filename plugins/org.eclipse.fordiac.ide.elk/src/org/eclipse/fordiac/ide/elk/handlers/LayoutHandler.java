@@ -293,6 +293,11 @@ public class LayoutHandler extends AbstractHandler {
 		if (sourceModel instanceof SubApp && ((InterfaceEditPart) entry.getSource()).getModel().isIsInput()) {
 			return;
 		}
+		if (sourceModel instanceof SubApp && ((SubApp) sourceModel).isUnfolded()
+				&& ((SubApp) sourceModel).eContainer().eContainer() instanceof SubApp) {
+			// nested subapp
+			return;
+		}
 		if (sourceModel instanceof FB
 				&& ((FB) sourceModel).eContainer().eContainer() instanceof SubApp
 				&& !SubAppNetworkEditor.class.getName().equals(editorId)) {
