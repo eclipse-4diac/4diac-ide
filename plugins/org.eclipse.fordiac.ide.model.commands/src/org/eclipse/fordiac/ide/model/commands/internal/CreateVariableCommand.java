@@ -89,11 +89,6 @@ public abstract class CreateVariableCommand extends AbstractCreationCommand {
 	 */
 	protected abstract String getDefaultVarName();
 
-	protected int getLastIndex() {
-		EList<VarDeclaration> list = getVariableList();
-		return (list != null) ? (list.size() - 1) : 0;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
