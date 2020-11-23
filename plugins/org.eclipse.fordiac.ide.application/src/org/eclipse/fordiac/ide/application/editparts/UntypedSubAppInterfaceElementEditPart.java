@@ -10,9 +10,9 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
- *               - fixed untyped subapp interface updates and according code 
+ *               - fixed untyped subapp interface updates and according code
  *                 cleanup
- *               - allow navigation to parent by double-clicking on subapp 
+ *               - allow navigation to parent by double-clicking on subapp
  *                 interface element
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
@@ -79,7 +79,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			// from the application
 			subApp = (SubApp) subApp.getOpposite();
 		}
-		OpenSubApplicationEditorAction openAction = new OpenSubApplicationEditorAction(subApp);
+		final OpenSubApplicationEditorAction openAction = new OpenSubApplicationEditorAction(subApp);
 		openAction.run();
 		((FBNetworkEditor) openAction.getOpenedEditor()).selectElement(getModel());
 	}
@@ -100,10 +100,11 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
-				Object feature = notification.getFeature();
+				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
 					refresh();
 				} else if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
 					updateConnectorBorderColor();
@@ -112,7 +113,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			}
 
 			private void updateConnectorBorderColor() {
-				Border border = getFigure().getBorder();
+				final Border border = getFigure().getBorder();
 				if (border instanceof ConnectorBorder) {
 					((ConnectorBorder) border).updateColor();
 					getFigure().repaint();

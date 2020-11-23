@@ -17,18 +17,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeRootEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceEventSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.gef.EditPart;
 
 public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
@@ -47,12 +46,15 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 	}
 
 	@Override
-	protected INamedElement getInputType(Object input) {
-		if (input instanceof FBTypeEditPart) {
-			return ((FBTypeEditPart) input).getModel();
-		}
-		if (input instanceof FBTypeRootEditPart) {
-			return ((FBTypeRootEditPart) input).getModel();
+	protected FBType getInputType(Object input) {
+		if (input instanceof EditPart) {
+			Object model = ((EditPart) input).getModel();
+			if (model instanceof FBType) {
+				return (FBType) model;
+			}
+			if ((model instanceof FBNetwork) && (((FBNetwork) model).eContainer() instanceof FBType)) {
+				return (FBType) ((FBNetwork) model).eContainer();
+			}
 		}
 		return null;
 	}

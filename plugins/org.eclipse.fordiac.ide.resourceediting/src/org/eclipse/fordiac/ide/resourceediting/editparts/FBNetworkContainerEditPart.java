@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 						2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -46,7 +47,7 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 	/** The content adapter. */
 	private Adapter contentAdapter;
 
-	private final Map<IInterfaceElement, VirtualIO> virutalIOMapping = new HashMap<>();
+	private final Map<IInterfaceElement, VirtualIO> virtualIOMapping = new HashMap<>();
 
 	@Override
 	protected Adapter getContentAdapter() {
@@ -70,13 +71,13 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 	}
 
 	public VirtualIO getVirtualIOElement(IInterfaceElement element) {
-		return virutalIOMapping.get(element);
+		return virtualIOMapping.get(element);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected List getModelChildren() {
-		virutalIOMapping.clear();
+		virtualIOMapping.clear();
 		ArrayList<Object> children = new ArrayList<>(super.getModelChildren());
 		ArrayList<Object> interfaceElements = new ArrayList<>();
 
@@ -107,9 +108,9 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 
 	private VirtualIO createVirtualIOElement(FBNetworkElement fbNetworkelement, String name) {
 		IInterfaceElement ie = fbNetworkelement.getInterfaceElement(name);
-		if (null != ie) {
+		if ((null != ie) && (virtualIOMapping.get(ie) == null)) {
 			VirtualIO vIO = new VirtualIO(ie);
-			virutalIOMapping.put(ie, vIO);
+			virtualIOMapping.put(ie, vIO);
 			return vIO;
 		}
 		return null;
@@ -133,7 +134,7 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 	@Override
 	public void performRequest(final Request req) {
 		Command cmd = getCommand(req);
-		if (cmd != null && cmd.canExecute()) {
+		if ((cmd != null) && cmd.canExecute()) {
 			getViewer().getEditDomain().getCommandStack().execute(cmd);
 		}
 		super.performRequest(req);
