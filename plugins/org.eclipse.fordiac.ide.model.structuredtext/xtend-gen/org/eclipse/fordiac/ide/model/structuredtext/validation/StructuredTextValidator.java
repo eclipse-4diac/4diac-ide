@@ -170,13 +170,7 @@ public class StructuredTextValidator extends AbstractStructuredTextValidator {
   }
   
   protected String _extractTypeInformation(final PrimaryVariable variable) {
-    String _xifexpression = null;
-    if ((null != variable)) {
-      _xifexpression = this.extractTypeInformation(variable, this.extractTypeInformation(variable.getVar()));
-    } else {
-      _xifexpression = variable.getVar().getType().getName();
-    }
-    return _xifexpression;
+    return this.extractTypeInformation(variable, this.extractTypeInformation(variable.getVar()));
   }
   
   protected String _extractTypeInformation(final VarDeclaration variable) {
