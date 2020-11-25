@@ -24,82 +24,84 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-public class FordiacMessages extends NLS {
+public final class FordiacMessages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.ui.messages"; //$NON-NLS-1$
 
-	public static String OPEN_TYPE_EDITOR_MESSAGE;
+	public static String OPEN_TYPE_EDITOR_MESSAGE;   // NOSONAR
 
-	public static String Algorithm;
-	public static String Algorithms;
-	public static String ApplicationDomain;
-	public static String ApplicationName;
-	public static String ArraySize;
-	public static String Author;
-	public static String Classdef;
-	public static String Classification;
-	public static String Comment;
-	public static String CompilerInfo;
-	public static String Date;
-	public static String DataType;
-	public static String Description;
-	public static String Destination;
-	public static String Device;
-	public static String EmptyField;
-	public static String Event;
-	public static String FBNetwork;
-	public static String Function;
-	public static String Header;
-	public static String Identification;
-	public static String InitialValue;
-	public static String Inputs;
-	public static String InstanceComment;
-	public static String InstanceName;
-	public static String InstanceInfo;
-	public static String Interface;
-	public static String Language;
-	public static String NA;
-	public static String ND;
-	public static String Name;
-	public static String NewType;
-	public static String NewSystem;
-	public static String Organization;
-	public static String Product;
-	public static String Properties;
-	public static String Remarks;
-	public static String Resource;
-	public static String SelectType;
-	public static String Standard;
-	public static String SystemName;
-	public static String Type;
-	public static String TypeInfo;
-	public static String TypeLibrary;
-	public static String TypeName;
-	public static String Unmap;
-	public static String Unknown;
-	public static String Value;
-	public static String DefaultValue;
-	public static String CurrentValue;
-	public static String Variable;
-	public static String Vendor;
-	public static String Version;
-	public static String VersionInfo;
-	public static String With;
+	public static String Algorithm;  // NOSONAR
+	public static String Algorithms;  // NOSONAR
+	public static String ApplicationDomain;  // NOSONAR
+	public static String ApplicationName;  // NOSONAR
+	public static String ArraySize;  // NOSONAR
+	public static String Author;  // NOSONAR
+	public static String Classdef;  // NOSONAR
+	public static String Classification;  // NOSONAR
+	public static String Comment;  // NOSONAR
+	public static String CompilerInfo;  // NOSONAR
+	public static String Date;  // NOSONAR
+	public static String DataType;  // NOSONAR
+	public static String Description;  // NOSONAR
+	public static String Destination;  // NOSONAR
+	public static String Device;  // NOSONAR
+	public static String EmptyField;  // NOSONAR
+	public static String Event;  // NOSONAR
+	public static String FBNetwork;  // NOSONAR
+	public static String Function;  // NOSONAR
+	public static String Header;  // NOSONAR
+	public static String Identification;  // NOSONAR
+	public static String InitialValue;  // NOSONAR
+	public static String Inputs;  // NOSONAR
+	public static String InstanceComment;  // NOSONAR
+	public static String InstanceName;  // NOSONAR
+	public static String InstanceInfo;  // NOSONAR
+	public static String Interface;  // NOSONAR
+	public static String Language;  // NOSONAR
+	public static String NA;  // NOSONAR
+	public static String ND;  // NOSONAR
+	public static String Name;  // NOSONAR
+	public static String NewType;  // NOSONAR
+	public static String NewSystem;  // NOSONAR
+	public static String Organization;  // NOSONAR
+	public static String Pin;  // NOSONAR
+	public static String Product;  // NOSONAR
+	public static String Properties;  // NOSONAR
+	public static String Remarks;  // NOSONAR
+	public static String Resource;  // NOSONAR
+	public static String SelectType;  // NOSONAR
+	public static String Standard;  // NOSONAR
+	public static String SystemName;  // NOSONAR
+	public static String Target;  // NOSONAR
+	public static String Type;  // NOSONAR
+	public static String TypeInfo;  // NOSONAR
+	public static String TypeLibrary;  // NOSONAR
+	public static String TypeName;  // NOSONAR
+	public static String Unmap;  // NOSONAR
+	public static String Unknown;  // NOSONAR
+	public static String Value;  // NOSONAR
+	public static String DefaultValue;  // NOSONAR
+	public static String CurrentValue;  // NOSONAR
+	public static String Variable;  // NOSONAR
+	public static String Vendor;  // NOSONAR
+	public static String Version;  // NOSONAR
+	public static String VersionInfo;  // NOSONAR
+	public static String With;  // NOSONAR
 
-	public static String DirectoryChooserControl_LABEL_Browse;
-	public static String DirectoryChooserControl_LABEL_ChooseDirectory;
-	public static String DirectoryChooserControl_LABEL_SelectdDirectoryDialogMessage;
+	public static String DirectoryChooserControl_LABEL_Browse;  // NOSONAR
+	public static String DirectoryChooserControl_LABEL_ChooseDirectory;  // NOSONAR
+	public static String DirectoryChooserControl_LABEL_SelectdDirectoryDialogMessage;  // NOSONAR
 
-	public static String FordiacPreferencePage_LABEL_DefaultComplianceProfile;
-	public static String FordiacPreferencePage_LABEL_DefaultEventConnectorColor;
-	public static String FordiacPreferencePage_LABEL_BoolConnectorColor;
-	public static String FordiacPreferencePage_LABEL_AnyBitConnectorColor;
-	public static String FordiacPreferencePage_LABEL_AnyIntConnectorColor;
-	public static String FordiacPreferencePage_LABEL_AnyRealConnectorColor;
-	public static String FordiacPreferencePage_LABEL_AnyStringConnectorColor;
-	public static String FordiacPreferencePage_LABEL_DataConnectorColor;
+	public static String FordiacPreferencePage_LABEL_DefaultComplianceProfile;  // NOSONAR
+	public static String FordiacPreferencePage_LABEL_DefaultEventConnectorColor;  // NOSONAR
+	public static String FordiacPreferencePage_LABEL_BoolConnectorColor;  // NOSONAR
+	public static String FordiacPreferencePage_LABEL_AnyBitConnectorColor;  // NOSONAR
+	public static String FordiacPreferencePage_LABEL_AnyIntConnectorColor;  // NOSONAR
+	public static String FordiacPreferencePage_LABEL_AnyRealConnectorColor;  // NOSONAR
+	public static String FordiacPreferencePage_LABEL_AnyStringConnectorColor;  // NOSONAR
+	public static String FordiacPreferencePage_LABEL_DataConnectorColor;  // NOSONAR
 
-	public static String FordiacPreferencePage_LABEL_DefaultAdapterConnectorColor;
-	public static String FordiacPreferencePage_LABEL_PreferencePageDescription;
+	public static String FordiacPreferencePage_LABEL_DefaultAdapterConnectorColor;  // NOSONAR
+	public static String FordiacPreferencePage_LABEL_PreferencePageDescription;  // NOSONAR
 
 	static {
 		// initialize resource bundle

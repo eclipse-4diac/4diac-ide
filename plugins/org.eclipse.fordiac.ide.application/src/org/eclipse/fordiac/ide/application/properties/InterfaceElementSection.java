@@ -13,52 +13,65 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed issues in type changes for subapp interface elements
  *   Lisa Sonnleithner - new TypeAndCommentSection
+ *   Alois Zoitl - Harmonized and improved connection section
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.commands.ChangeSubAppIETypeCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
+import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
+import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.viewers.AbstractTreeViewer;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InterfaceElementSection extends AbstractSection {
-	private TreeViewer connectionsTree;
-	private Group group;
+	private Section connectionSection;
+	private TableViewer connectionsViewer;
+
+	private static final String TARGET = "target"; //$NON-NLS-1$
+	private static final String PIN = "pin"; //$NON-NLS-1$
+	private static final String COMMENT = "comment"; //$NON-NLS-1$
+
+	private static final int TARGET_PIN_WIDTH = 100;
+	private static final int COMMENT_WIDTH = 200;
 
 	private Text typeText;
 	private Text commentText;
@@ -70,66 +83,78 @@ public class InterfaceElementSection extends AbstractSection {
 	private Button openEditorButton;
 	private Section infoSection;
 
+
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent.setLayout(new GridLayout(2, true));
-		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 
-		createTypeAndCommentSection(parent);
-		createConnectionDisplaySection(parent);
+		createInstanceInfoSection(getLeftComposite());
+		createTypeInfoSection(getLeftComposite());
+		createConnectionDisplaySection(getRightComposite());
 	}
 
-	protected void createTypeAndCommentSection(Composite parent) {
+	private void createConnectionDisplaySection(final Composite parent) {
 
-		Form form = getWidgetFactory().createForm(parent);
-		form.getBody().setLayout(new GridLayout(1, false));
-		form.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, false));
+		connectionSection = getWidgetFactory().createSection(parent,
+				ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
+		connectionSection.setText(Messages.InterfaceElementSection_ConnectionGroup);
+		connectionSection.setLayout(new GridLayout(1, false));
+		connectionSection
+		.setLayoutData(GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).create());
 
-		createInstanceInfoSection(form.getBody());
-		createTypeInfoSection(form.getBody());
+		final Composite composite = getWidgetFactory().createComposite(connectionSection);
+		composite.setLayout(new GridLayout(2, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
+		final AddDeleteWidget deleteButtonArea = new AddDeleteWidget();
+		deleteButtonArea.createControls(composite, getWidgetFactory());
+		deleteButtonArea.setVisibleCreateButton(false);
+
+		connectionsViewer = createConnectionsViewer(composite);
+
+		deleteButtonArea.bindToTableViewer(connectionsViewer, this, ref -> null,
+				ref -> new DeleteConnectionCommand((Connection) ref));
+
+		connectionSection.setClient(composite);
 	}
 
-	private void createConnectionDisplaySection(Composite parent) {
-		group = getWidgetFactory().createGroup(parent, Messages.InterfaceElementSection_ConnectionGroup);
-		group.setLayout(new GridLayout(2, false));
-		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		connectionsTree = new TreeViewer(group, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
-		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
-		gridData.heightHint = 100;
-		gridData.widthHint = 80;
-		connectionsTree.getTree().setLayoutData(gridData);
-		connectionsTree.setContentProvider(new ConnectionContentProvider());
-		connectionsTree.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
-		connectionsTree.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
-		new AdapterFactoryTreeEditor(connectionsTree.getTree(), getAdapterFactory());
-
-		Button delConnection = getWidgetFactory().createButton(group, "", SWT.PUSH); //$NON-NLS-1$
-		delConnection.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, false, true));
-		delConnection.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		delConnection.setToolTipText(Messages.InterfaceElementSection_DeleteConnectionToolTip);
-		delConnection.addListener(SWT.Selection, event -> {
-			Object selection = ((TreeSelection) connectionsTree.getSelection()).getFirstElement();
-			if (selection instanceof Connection) {
-				executeCommand(new DeleteConnectionCommand((Connection) selection));
-				connectionsTree.refresh();
-			}
-		});
+	private TableViewer createConnectionsViewer(final Composite parent) {
+		final TableViewer viewer = TableWidgetFactory.createTableViewer(parent);
+		viewer.getTable().setLayout(createTableLayout(viewer.getTable()));
+		viewer.setColumnProperties(new String[] { TARGET, PIN, COMMENT });
+		viewer.setCellModifier(new ConnectionCellModifier(viewer));
+		viewer.setCellEditors(new CellEditor[] { null, null, new CustomTextCellEditor(viewer.getTable()) });
+		viewer.setLabelProvider(new ConnectionTableLabelProvider());
+		viewer.setContentProvider(new ConnectionContentProvider());
+		return viewer;
 	}
 
-	private void createTypeInfoSection(Composite parent) {
+	private static TableLayout createTableLayout(final Table table) {
+		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
+		column1.setText(FordiacMessages.Target);
+		final TableColumn column2 = new TableColumn(table, SWT.LEFT);
+		column2.setText(FordiacMessages.Pin);
+		final TableColumn column3 = new TableColumn(table, SWT.LEFT);
+		column3.setText(FordiacMessages.Comment);
+		final TableLayout layout = new TableLayout();
+		layout.addColumnData(new ColumnPixelData(TARGET_PIN_WIDTH));
+		layout.addColumnData(new ColumnPixelData(TARGET_PIN_WIDTH));
+		layout.addColumnData(new ColumnPixelData(COMMENT_WIDTH));
+		return layout;
+	}
+
+	private void createTypeInfoSection(final Composite parent) {
 		// textfields in this section without a button need to span 2 cols so that all
 		// textfields are aligned
 
-		Section typeInfoSection = getWidgetFactory().createSection(parent,
-				Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED);
+		final Section typeInfoSection = getWidgetFactory().createSection(parent,
+				ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
 		typeInfoSection.setText(FordiacMessages.TypeInfo + ":"); //$NON-NLS-1$
 		typeInfoSection.setLayout(new GridLayout(1, false));
 		typeInfoSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		Composite composite = getWidgetFactory().createComposite(typeInfoSection);
+		final Composite composite = getWidgetFactory().createComposite(typeInfoSection);
 
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
@@ -156,12 +181,13 @@ public class InterfaceElementSection extends AbstractSection {
 
 	}
 
-	private void createInstanceInfoSection(Composite parent) {
-		infoSection = getWidgetFactory().createSection(parent, Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED);
+	private void createInstanceInfoSection(final Composite parent) {
+		infoSection = getWidgetFactory().createSection(parent,
+				ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
 		infoSection.setLayout(new GridLayout(1, false));
 		infoSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		Composite composite = getWidgetFactory().createComposite(infoSection);
+		final Composite composite = getWidgetFactory().createComposite(infoSection);
 
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
@@ -180,10 +206,10 @@ public class InterfaceElementSection extends AbstractSection {
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 
-		Boolean b = null != type && (getType() instanceof VarDeclaration)
+		final boolean b = null != type && (getType() instanceof VarDeclaration)
 				&& !(getType().getType() instanceof AdapterType);
 		parameterTextCLabel.setVisible(b);
 		parameterText.setVisible(b);
@@ -207,11 +233,11 @@ public class InterfaceElementSection extends AbstractSection {
 			typeText.setText(itype);
 
 			if (getType().isIsInput()) {
-				group.setText(Messages.InterfaceElementSection_InConnections);
+				connectionSection.setText(Messages.InterfaceElementSection_InConnections);
 			} else {
-				group.setText(Messages.InterfaceElementSection_OutConnections);
+				connectionSection.setText(Messages.InterfaceElementSection_OutConnections);
 			}
-			connectionsTree.setInput(getType());
+			connectionsViewer.setInput(getType());
 
 		}
 
@@ -220,11 +246,11 @@ public class InterfaceElementSection extends AbstractSection {
 
 	protected String setParameterAndType() {
 		String itype;
-		VarDeclaration var = (VarDeclaration) getType();
+		final VarDeclaration var = (VarDeclaration) getType();
 		itype = var.getType() != null ? var.getType().getName() : ""; //$NON-NLS-1$
 		if (getType().isIsInput()) {
-			if (getType().getFBNetworkElement().getType() instanceof FBType) {
-				IInterfaceElement ie = getType().getFBNetworkElement().getType().getInterfaceList()
+			if (null != getType().getFBNetworkElement().getType()) {
+				final IInterfaceElement ie = getType().getFBNetworkElement().getType().getInterfaceList()
 						.getInterfaceElement(getType().getName());
 				if (ie instanceof VarDeclaration) {
 					parameterText.setText(
@@ -242,14 +268,13 @@ public class InterfaceElementSection extends AbstractSection {
 
 	// this method will be removed as soon as there is a toString for StructType in
 	// the model
-	protected String getStructTypes(StructuredType st) {
-
-		EList<VarDeclaration> list = st.getMemberVariables();
-		StringBuilder sb = new StringBuilder();
+	private static String getStructTypes(final StructuredType st) {
+		final EList<VarDeclaration> list = st.getMemberVariables();
+		final StringBuilder sb = new StringBuilder();
 		sb.append(st.getName());
 		sb.append(": ("); //$NON-NLS-1$
 		boolean printString = false;
-		for (VarDeclaration v : list) {
+		for (final VarDeclaration v : list) {
 			if ((v.getType() != null)) {
 				sb.append(v.getType().getName());
 				printString = true;
@@ -266,65 +291,7 @@ public class InterfaceElementSection extends AbstractSection {
 
 	@Override
 	protected void setInputCode() {
-		connectionsTree.setInput(null);
-	}
-
-	private static class ConnectionContentProvider implements ITreeContentProvider {
-		private IInterfaceElement element;
-
-		@Override
-		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof IInterfaceElement) {
-				element = ((IInterfaceElement) inputElement);
-				if (element.isIsInput() && null != element.getFBNetworkElement()
-						|| (!element.isIsInput() && null == element.getFBNetworkElement())) {
-					return element.getInputConnections().toArray();
-				} else {
-					return element.getOutputConnections().toArray();
-				}
-			}
-			return new Object[] {};
-		}
-
-		@Override
-		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof Connection) {
-				Object[] objects = new Object[2];
-				if (element.isIsInput()) {
-					objects[0] = null != ((Connection) parentElement).getSourceElement()
-							? ((Connection) parentElement).getSourceElement()
-							: element;
-					objects[1] = ((Connection) parentElement).getSource();
-				} else {
-					objects[0] = null != ((Connection) parentElement).getDestinationElement()
-							? ((Connection) parentElement).getDestinationElement()
-							: element;
-					objects[1] = ((Connection) parentElement).getDestination();
-				}
-				return objects;
-			}
-			return null;
-		}
-
-		@Override
-		public Object getParent(Object element) {
-			if (element instanceof Connection) {
-				return this.element;
-			}
-			return null;
-		}
-
-		@Override
-		public boolean hasChildren(Object element) {
-			if (element instanceof Connection) {
-				return null != ((Connection) element).getSource() && null != ((Connection) element).getDestination();
-			}
-			return false;
-		}
-	}
-
-	protected ChangeTypeCommand newChangeTypeCommand(VarDeclaration data, DataType newType) {
-		return new ChangeSubAppIETypeCommand(data, newType);
+		connectionsViewer.setInput(null);
 	}
 
 	@Override
@@ -333,7 +300,7 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 
 	@Override
-	protected Object getInputType(Object input) {
+	protected Object getInputType(final Object input) {
 		if (input instanceof InterfaceEditPart) {
 			return ((InterfaceEditPart) input).getModel();
 		} else if (input instanceof ValueEditPart) {
@@ -345,7 +312,114 @@ public class InterfaceElementSection extends AbstractSection {
 	@Override
 	protected void setInputInit() {
 		// no implementation needed
+	}
 
+	private static class ConnectionContentProvider implements IStructuredContentProvider {
+		@Override
+		public Object[] getElements(final Object inputElement) {
+			if (inputElement instanceof IInterfaceElement) {
+				final IInterfaceElement element = ((IInterfaceElement) inputElement);
+				if (element.isIsInput() && null != element.getFBNetworkElement()
+						|| (!element.isIsInput() && null == element.getFBNetworkElement())) {
+					return element.getInputConnections().toArray();
+				}
+				return element.getOutputConnections().toArray();
+			}
+			return new Object[] {};
+		}
+	}
+
+	private class ConnectionTableLabelProvider extends LabelProvider implements ITableLabelProvider {
+		public static final int TARGET_COL_INDEX = 0;
+		public static final int PIN_COL_INDEX = 1;
+		public static final int COMMENT_COL_INDEX = 2;
+
+		AdapterFactoryLabelProvider labelProvider = new AdapterFactoryLabelProvider(getAdapterFactory());
+
+		@Override
+		public Image getColumnImage(final Object element, final int columnIndex) {
+			if (element instanceof Connection) {
+				final Connection con = ((Connection) element);
+				final IInterfaceElement ie = getInterfaceElement(con);
+				if (null != ie) {
+					switch (columnIndex) {
+					case TARGET_COL_INDEX:
+						if (null != ie.getFBNetworkElement()) {
+							return labelProvider.getImage(ie.getFBNetworkElement());
+						}
+						break;
+					case PIN_COL_INDEX:
+						return labelProvider.getImage(ie);
+					default:
+						break;
+					}
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public String getColumnText(final Object element, final int columnIndex) {
+			if (element instanceof Connection) {
+				final Connection con = ((Connection) element);
+				final IInterfaceElement ie = getInterfaceElement(con);
+				if (null != ie) {
+					switch (columnIndex) {
+					case TARGET_COL_INDEX:
+						if (null != ie.getFBNetworkElement()) {
+							return ie.getFBNetworkElement().getName();
+						}
+						break;
+					case PIN_COL_INDEX:
+						return ie.getName();
+					case COMMENT_COL_INDEX:
+						return con.getComment() != null ? con.getComment() : ""; //$NON-NLS-1$
+					default:
+						break;
+					}
+				}
+			}
+			return element.toString();
+		}
+
+		private IInterfaceElement getInterfaceElement(final Connection con) {
+			final IInterfaceElement root = getType();
+			return (root.equals(con.getSource())) ? con.getDestination() : con.getSource();
+		}
+	}
+
+	private class ConnectionCellModifier implements ICellModifier {
+		private final TableViewer viewer;
+
+		public ConnectionCellModifier(final TableViewer viewer) {
+			this.viewer = viewer;
+		}
+
+		@Override
+		public boolean canModify(final Object element, final String property) {
+			return COMMENT.equals(property);
+		}
+
+		@Override
+		public Object getValue(final Object element, final String property) {
+			if (COMMENT.equals(property)) {
+				final Connection con = (Connection) element;
+				return con.getComment() != null ? con.getComment() : ""; //$NON-NLS-1$
+			}
+			return null;
+		}
+
+		@Override
+		public void modify(final Object element, final String property, final Object value) {
+			final TableItem tableItem = (TableItem) element;
+			final Object data = tableItem.getData();
+
+			if (COMMENT.equals(property)) {
+				final Connection con = (Connection) data;
+				executeCommand(new ChangeCommentCommand(con, value.toString()));
+				viewer.refresh(data);
+			}
+		}
 	}
 
 }
