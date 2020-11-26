@@ -120,8 +120,8 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 	 *
 	 * @return the manager
 	 */
-	public DirectEditManager getManager() {
-		if (manager == null) {
+	protected DirectEditManager getManager() {
+		if (null == manager) {
 			manager = createDirectEditManager();
 		}
 		return manager;

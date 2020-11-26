@@ -14,10 +14,14 @@
  *   Alois Zoitl - extracted TransitionFigure code and changed to cubic spline
  *   Alois Zoitl - reworked transition and handle widths
  *   Bianca Wiesmayr, Ernst Blecha - added tooltip
+ *   Lisa Sonnleitner - Inital implementation of DirectEdit
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
+import java.util.List;
+
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
@@ -27,15 +31,19 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.MoveBendpointCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECTransitionFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECTransitionFeedbackEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
+import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -48,13 +56,19 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.editpolicies.ConnectionEditPolicy;
+import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
 public class ECTransitionEditPart extends AbstractConnectionEditPart {
+
+	private DirectEditManager manager;
 
 	private static final int NORMAL_WIDTH = 2;
 
@@ -174,6 +188,30 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 		});
 
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
+
+			protected Command getDirectEditCommand(final DirectEditRequest request) {
+				if (getHost() instanceof AbstractConnectionEditPart) {
+					Integer value = (Integer) request.getCellEditor().getValue();
+					if (null != value) {
+						int selected = value.intValue();
+						List<String> events = ECCContentAndLabelProvider
+								.getTransitionConditionEventNames(getBasicFBType());
+						String ev = null;
+						if ((0 <= selected) && (selected < events.size())) {
+							ev = events.get(selected);
+						}
+						return new ChangeConditionEventCommand(getModel(), ev != null ? ev : "1");
+					}
+				}
+				return null;
+			}
+
+			protected void showCurrentEditValue(final DirectEditRequest request) {
+				// handled by the direct edit manager
+			}
+		});
+
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
 
 			@Override
@@ -213,11 +251,51 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 		if (request.getType() == RequestConstants.REQ_OPEN) {
-			// TODO implement direct edit
-
+			request.setType(RequestConstants.REQ_DIRECT_EDIT);
+			performDirectEdit();
 		} else {
 			super.performRequest(request);
 		}
+	}
+
+	protected DirectEditManager createDirectEditManager() {
+		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(getNameLabel()),
+				getNameLabel());
+	}
+
+	public void performDirectEdit() {
+
+		List<String> eventNames = ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType());
+		int selected = (getModel().getConditionEvent() != null)
+				? eventNames.indexOf(getModel().getConditionEvent().getName())
+				: eventNames.size() - 1;
+		((ComboDirectEditManager) getManager()).updateComboData(eventNames);
+		((ComboDirectEditManager) getManager()).setSelectedItem(selected);
+		getManager().show();
+
+	}
+
+	public BasicFBType getBasicFBType() {
+		return getModel().getECC().getBasicFBType();
+
+	}
+
+	private DirectEditManager getManager() {
+		if (null == manager) {
+			manager = createDirectEditManager();
+		}
+		return manager;
+	}
+
+	// This is used for the DirectEditManager's Locator
+	protected Label getNameLabel() {
+		Label transitionLabel = new Label();
+		transitionLabel.setLocation(new Point(getModel().getX(), getModel().getY()));
+		return transitionLabel;
+	}
+
+	protected void refreshLocator() {
+		getManager().setLocator(new ComboCellEditorLocator(getNameLabel()));
 	}
 
 	@Override
@@ -226,6 +304,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		getConnectionFigure().updateBendPoints(getModel());
 		updateOrderLabel();
 		refreshTransitionTooltip();
+		refreshLocator();
 	}
 
 	@Override
