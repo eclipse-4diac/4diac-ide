@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 -2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * * 		     2020 Johannes Kepler University Linz
+ * 		     2020 Johannes Kepler University Linz
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.export.ui.wizard;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -55,6 +54,9 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	/** The overwrite. */
 	private Button overwrite;
 
+	/** The CMakeLists option. */
+	private Button cmake;
+
 	// dialog store id constants
 	private static final String STORE_DIRECTORY_NAMES_ID = "SelectFBTypesWizardPage.STORE_DIRECTORY_NAMES_ID"; //$NON-NLS-1$
 
@@ -64,7 +66,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 	/**
 	 * Instantiates a new SelectFBTypesWizardPage.
-	 * 
+	 *
 	 * @param pageName the page name
 	 */
 	protected SelectFBTypesWizardPage(final String pageName, IStructuredSelection selection) {
@@ -78,22 +80,18 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elems = registry
 				.getConfigurationElementsFor("org.eclipse.fordiac.ide.export.exportFilter"); //$NON-NLS-1$
-		Arrays.sort(elems, new Comparator<IConfigurationElement>() {
-
-			@Override
-			public int compare(IConfigurationElement o1, IConfigurationElement o2) {
-				int sortIndex1 = 0;
-				try {
-					sortIndex1 = Integer.parseInt(o1.getAttribute(SORT_INDEX));
-				} catch (NumberFormatException e) {
-				}
-				int sortIndex2 = 0;
-				try {
-					sortIndex2 = Integer.parseInt(o2.getAttribute(SORT_INDEX));
-				} catch (NumberFormatException e) {
-				}
-				return sortIndex1 - sortIndex2;
+		Arrays.sort(elems, (o1, o2) -> {
+			int sortIndex1 = 0;
+			try {
+				sortIndex1 = Integer.parseInt(o1.getAttribute(SORT_INDEX));
+			} catch (NumberFormatException e1) {
 			}
+			int sortIndex2 = 0;
+			try {
+				sortIndex2 = Integer.parseInt(o2.getAttribute(SORT_INDEX));
+			} catch (NumberFormatException e2) {
+			}
+			return sortIndex1 - sortIndex2;
 		});
 		exportFilters.clear();
 		exportFilters.addAll(Arrays.asList(elems));
@@ -121,7 +119,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 	/**
 	 * Gets the selected export filter.
-	 * 
+	 *
 	 * @return the selected export filter
 	 */
 	public IConfigurationElement getSelectedExportFilter() {
@@ -131,8 +129,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	@Override
 	protected boolean validateDestinationGroup() {
 
-		if (getDirectory() == null || getDirectory().equals("") //$NON-NLS-1$
-				|| !new File(getDirectory()).isDirectory()) {
+		if (getDirectory() == null || getDirectory().isEmpty() || !new File(getDirectory()).isDirectory()) {
 			setErrorMessage(Messages.SelectFBTypesWizardPage_DestinationDirectoryNeedsToBeChosen);
 			return false;
 		}
@@ -165,7 +162,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 	/**
 	 * Overwrite without warning.
-	 * 
+	 *
 	 * @return true, if successful
 	 */
 	public boolean overwriteWithoutWarning() {
@@ -173,8 +170,17 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	}
 
 	/**
+	 * Add CMakeLists.txt
+	 *
+	 * @return true, if enabled
+	 */
+	public boolean enableCMakeLists() {
+		return cmake.getSelection();
+	}
+
+	/**
 	 * Gets the directory.
-	 * 
+	 *
 	 * @return the directory
 	 */
 	public String getDirectory() {
@@ -183,7 +189,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 	/**
 	 * Sets the directory.
-	 * 
+	 *
 	 * @param dir the new directory
 	 */
 	public void setDirectory(final String dir) {
@@ -194,7 +200,6 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	protected void restoreWidgetValues() {
 		loadTargetDirctories();
 		loadLastSelectedFilter();
-		overwrite.setSelection(getDialogSettings().getBoolean(STORE_OVERWRITE_CHECKBOX));
 	}
 
 	/**
@@ -209,10 +214,8 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 			}
 
 			// destination
+			destinationNameField.setItems(directoryNames);
 			setDirectory(directoryNames[0]);
-			for (int i = 0; i < directoryNames.length; i++) {
-				destinationNameField.add(directoryNames[i]);
-			}
 		}
 	}
 
@@ -309,6 +312,10 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 		overwrite = new Button(optionsGroup, SWT.CHECK);
 		overwrite.setText(Messages.SelectFBTypesWizardPage_OverwriteWithoutWarning);
+
+		cmake = new Button(optionsGroup, SWT.CHECK);
+		cmake.setText("Export CMakeLists.txt");
+
 		GridData twoColumns = new GridData();
 		twoColumns.grabExcessHorizontalSpace = true;
 		twoColumns.grabExcessVerticalSpace = false;

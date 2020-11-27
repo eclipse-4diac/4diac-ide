@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.util.Utils;
 
@@ -157,6 +158,14 @@ public class DelayedFiles {
 	 */
 	public void clear() {
 		storage.clear();
+	}
+
+	/**
+	 * retrieve an iterable of all filenames currently ready for writing
+	 *
+	 */
+	public List<String> getFilenames() {
+		return storage.stream().map(item -> item.getPath().getFileName().toString()).collect(Collectors.toList());
 	}
 
 }
