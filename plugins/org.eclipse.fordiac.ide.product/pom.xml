@@ -80,7 +80,7 @@
 					</products>
 				</configuration>
 			</plugin>
-		<plugin>
+			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.0.2</version>
 				<executions>
@@ -102,31 +102,10 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+				</plugin>
 		</plugins>
 	</build>
 	<profiles>
-		<profile>
-			<id>latest</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<profile.name>latest</profile.name>
-			</properties>
-		</profile>
-		<profile>
-			<id>nightly</id>
-			<properties>
-				<profile.name>nightly</profile.name>
-			</properties>
-		</profile>
-		<profile>
-			<id>milestone</id>
-			<properties>
-				<profile.name>milestone</profile.name>
-			</properties>
-		</profile>
 		<profile>
 			<id>eclipse-sign</id>
 			<build>
@@ -193,10 +172,7 @@
 							</execution>
 						</executions>
 					</plugin>
-
-
 				</plugins>
-
 			</build>
 		</profile>
 	</profiles>
