@@ -7,6 +7,10 @@
         name="Layout with ELK">
     </command>
     <command
+        id="org.eclipse.fordiac.ide.elk.layoutUnfoldedSubApp"
+        name="Layout unfolded subapp with ELK">
+    </command>
+    <command
         id="org.eclipse.fordiac.ide.elk.resetInterfaces"
         name="Reset the layouted interfaces">
     </command>
@@ -15,6 +19,10 @@
     <handler
         class="org.eclipse.fordiac.ide.elk.handlers.LayoutHandler"
         commandId="org.eclipse.fordiac.ide.elk.layout">
+    </handler>
+    <handler
+        class="org.eclipse.fordiac.ide.elk.handlers.UnfoldedSubAppLayoutHandler"
+        commandId="org.eclipse.fordiac.ide.elk.layoutUnfoldedSubApp">
     </handler>
     <handler
         class="org.eclipse.fordiac.ide.elk.handlers.ResetInterfacesHandler"
@@ -51,7 +59,26 @@
             	</with>
             </visibleWhen>
                </command>
-	</menuContribution> 
+	</menuContribution>
+	<menuContribution
+         allPopups="false"
+         locationURI="popup:org.eclipse.ui.popup.any?after=additions">  
+      <command
+            commandId="org.eclipse.fordiac.ide.elk.layoutUnfoldedSubApp"
+            label="Layout unfolded subapp"
+            style="push">
+            <visibleWhen checkEnabled="false">
+            	<with variable="selection">
+            		<count value="1" />
+            		<iterate>
+            			<test
+                			property="org.eclipse.fordiac.ide.elk.properties.isUnfoldedSubApp" forcePluginActivation="true">
+                		</test>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+               </command>
+	</menuContribution>  
 	<menuContribution
          allPopups="false"
          locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">  
@@ -68,4 +95,13 @@
                </command>
 	</menuContribution> 
    </extension>
+   <extension point="org.eclipse.core.expressions.propertyTesters">
+    	<propertyTester
+          class="org.eclipse.fordiac.ide.elk.properties.UnfoldedSubAppPropertyTester"
+          id="org.eclipse.fordiac.ide.elk.properties.unfoldedSubAppPropertyTester"
+          namespace="org.eclipse.fordiac.ide.elk.properties"
+          properties="isUnfoldedSubApp"
+          type="java.lang.Object">
+    	</propertyTester>
+ 	</extension>
 </plugin>

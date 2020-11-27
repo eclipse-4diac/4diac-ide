@@ -16,12 +16,12 @@ package org.eclipse.fordiac.ide.application.properties;
 import java.util.List;
 
 import org.eclipse.core.expressions.PropertyTester;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
+import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 
-public class UnfoldedSubAppFilter extends PropertyTester {
+public class MoveToParentPropertyTester extends PropertyTester {
 
 	/*
 	 * This function is called inside the eclipse manifest file (application.xml) if
@@ -32,13 +32,15 @@ public class UnfoldedSubAppFilter extends PropertyTester {
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
 		if (receiver instanceof List) {
 			@SuppressWarnings({ "rawtypes", "unchecked" })
-			List<Object> selection = (List) receiver;
+			List<Object> list = (List) receiver;
 			// this flag is used to indicate if the selection consists of connections only
 			boolean hasFBs = false;
-			for (Object editPart : selection) {
-				if (editPart instanceof ConnectionEditPart) {
+			for (Object v : list) {
+				if (v instanceof ConnectionEditPart) {
 					// no need to do anything
-				} else if ((editPart instanceof AbstractFBNElementEditPart) && isInsideSubApp((AbstractFBNElementEditPart) editPart)) {
+				} else if ((v instanceof FBEditPart)
+						&& ((((FBEditPart) v).getParent() instanceof UnfoldedSubappContentEditPart)
+								|| (((FBEditPart) v).getParent() instanceof UISubAppNetworkEditPart))) {
 					hasFBs = true;
 				} else {
 					// if it is not a connection or a fb inside a subapp
@@ -48,10 +50,6 @@ public class UnfoldedSubAppFilter extends PropertyTester {
 			return hasFBs;
 		}
 		return false;
-	}
-	
-	private boolean isInsideSubApp(AbstractFBNElementEditPart ep) {
-		return ((ep.getParent() instanceof UnfoldedSubappContentEditPart) || (ep.getParent() instanceof UISubAppNetworkEditPart));
 	}
 
 }
