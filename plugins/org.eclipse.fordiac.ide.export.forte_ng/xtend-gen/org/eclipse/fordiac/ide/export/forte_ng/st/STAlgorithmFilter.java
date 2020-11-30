@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.export.forte_ng.st;
 
 import com.google.common.base.Objects;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -180,6 +181,12 @@ public class STAlgorithmFilter {
       LazyStringInputStream _lazyStringInputStream = new LazyStringInputStream(_text);
       Pair<String, Boolean> _mappedTo = Pair.<String, Boolean>of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
       resource.load(_lazyStringInputStream, Collections.<String, Boolean>unmodifiableMap(CollectionLiterals.<String, Boolean>newHashMap(_mappedTo)));
+      EObject _rootASTElement = resource.getParseResult().getRootASTElement();
+      final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
+      final Consumer<VarDeclaration> _function = (VarDeclaration v) -> {
+        this.createStructResource(resourceSet, v);
+      };
+      stalg.getLocalVariables().forEach(_function);
       return resource;
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
@@ -190,14 +197,10 @@ public class STAlgorithmFilter {
     final IParseResult parseResult = this.parseAlgorithm(alg).getParseResult();
     EObject _rootASTElement = parseResult.getRootASTElement();
     final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
-    EList<VarDeclaration> _localVariables = stalg.getLocalVariables();
-    for (final VarDeclaration variable : _localVariables) {
-      String _typeName = variable.getTypeName();
-      boolean _tripleEquals = (null == _typeName);
-      if (_tripleEquals) {
-        variable.setTypeName(variable.getType().getName());
-      }
-    }
+    final Consumer<VarDeclaration> _function = (VarDeclaration v) -> {
+      v.setTypeName(v.getType().getName());
+    };
+    stalg.getLocalVariables().forEach(_function);
     return stalg.getLocalVariables();
   }
   
@@ -212,13 +215,7 @@ public class STAlgorithmFilter {
       boolean _not = (!_isEmpty);
       if (_not) {
         final Function1<Issue, String> _function = (Issue it) -> {
-          String _name = alg.getName();
-          String _plus = (_name + ", Line ");
-          String _string = Long.toString((it.getLineNumber()).intValue());
-          String _plus_1 = (_plus + _string);
-          String _plus_2 = (_plus_1 + ": ");
-          String _message = it.getMessage();
-          return (_plus_2 + _message);
+          return MessageFormat.format("{0}, Line {1}: {2}", alg.getName(), Long.toString((it.getLineNumber()).intValue()), it.getMessage());
         };
         errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
         return null;
