@@ -25,10 +25,12 @@ public class CMakeListsTemplate extends ForteFBTemplate {
     super(name, prefix);
   }
   
+  @Override
   protected FBType getType() {
     return null;
   }
   
+  @Override
   public CharSequence generate() throws ExportException {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("# This is a generated build-system-configuration file for 4diac forte");

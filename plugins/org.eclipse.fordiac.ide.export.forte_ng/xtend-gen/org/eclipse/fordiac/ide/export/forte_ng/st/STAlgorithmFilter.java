@@ -112,34 +112,24 @@ public class STAlgorithmFilter {
   public void createFBResource(final XtextResourceSet resourceSet, final BaseFBType fbType) {
     final Resource fbResource = resourceSet.createResource(this.computeUnusedUri(resourceSet, STAlgorithmFilter.FB_URI_EXTENSION));
     fbResource.getContents().add(fbType);
-    final Consumer<AdapterDeclaration> _function = new Consumer<AdapterDeclaration>() {
-      public void accept(final AdapterDeclaration adp) {
-        STAlgorithmFilter.this.createAdapterResource(resourceSet, adp);
-      }
+    final Consumer<AdapterDeclaration> _function = (AdapterDeclaration adp) -> {
+      this.createAdapterResource(resourceSet, adp);
     };
     fbType.getInterfaceList().getSockets().forEach(_function);
-    final Consumer<AdapterDeclaration> _function_1 = new Consumer<AdapterDeclaration>() {
-      public void accept(final AdapterDeclaration adp) {
-        STAlgorithmFilter.this.createAdapterResource(resourceSet, adp);
-      }
+    final Consumer<AdapterDeclaration> _function_1 = (AdapterDeclaration adp) -> {
+      this.createAdapterResource(resourceSet, adp);
     };
     fbType.getInterfaceList().getPlugs().forEach(_function_1);
-    final Consumer<VarDeclaration> _function_2 = new Consumer<VarDeclaration>() {
-      public void accept(final VarDeclaration v) {
-        STAlgorithmFilter.this.createStructResource(resourceSet, v);
-      }
+    final Consumer<VarDeclaration> _function_2 = (VarDeclaration v) -> {
+      this.createStructResource(resourceSet, v);
     };
     fbType.getInterfaceList().getInputVars().forEach(_function_2);
-    final Consumer<VarDeclaration> _function_3 = new Consumer<VarDeclaration>() {
-      public void accept(final VarDeclaration v) {
-        STAlgorithmFilter.this.createStructResource(resourceSet, v);
-      }
+    final Consumer<VarDeclaration> _function_3 = (VarDeclaration v) -> {
+      this.createStructResource(resourceSet, v);
     };
     fbType.getInterfaceList().getOutputVars().forEach(_function_3);
-    final Consumer<VarDeclaration> _function_4 = new Consumer<VarDeclaration>() {
-      public void accept(final VarDeclaration v) {
-        STAlgorithmFilter.this.createStructResource(resourceSet, v);
-      }
+    final Consumer<VarDeclaration> _function_4 = (VarDeclaration v) -> {
+      this.createStructResource(resourceSet, v);
     };
     fbType.getInternalVars().forEach(_function_4);
   }
@@ -156,10 +146,8 @@ public class STAlgorithmFilter {
       DataType _type_1 = variable.getType();
       final StructuredType type = ((StructuredType) _type_1);
       structResource.getContents().add(type);
-      final Consumer<VarDeclaration> _function = new Consumer<VarDeclaration>() {
-        public void accept(final VarDeclaration v) {
-          STAlgorithmFilter.this.createStructResource(resourceSet, v);
-        }
+      final Consumer<VarDeclaration> _function = (VarDeclaration v) -> {
+        this.createStructResource(resourceSet, v);
       };
       type.getMemberVariables().forEach(_function);
     }
@@ -223,16 +211,14 @@ public class STAlgorithmFilter {
       boolean _isEmpty = issues.isEmpty();
       boolean _not = (!_isEmpty);
       if (_not) {
-        final Function1<Issue, String> _function = new Function1<Issue, String>() {
-          public String apply(final Issue it) {
-            String _name = alg.getName();
-            String _plus = (_name + ", Line ");
-            String _string = Long.toString((it.getLineNumber()).intValue());
-            String _plus_1 = (_plus + _string);
-            String _plus_2 = (_plus_1 + ": ");
-            String _message = it.getMessage();
-            return (_plus_2 + _message);
-          }
+        final Function1<Issue, String> _function = (Issue it) -> {
+          String _name = alg.getName();
+          String _plus = (_name + ", Line ");
+          String _string = Long.toString((it.getLineNumber()).intValue());
+          String _plus_1 = (_plus + _string);
+          String _plus_2 = (_plus_1 + ": ");
+          String _message = it.getMessage();
+          return (_plus_2 + _message);
         };
         errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
         return null;
@@ -267,10 +253,8 @@ public class STAlgorithmFilter {
         boolean _isEmpty = issues.isEmpty();
         boolean _not = (!_isEmpty);
         if (_not) {
-          final Function1<Issue, String> _function = new Function1<Issue, String>() {
-            public String apply(final Issue it) {
-              return it.getMessage();
-            }
+          final Function1<Issue, String> _function = (Issue it) -> {
+            return it.getMessage();
           };
           errors.addAll(ListExtensions.<Issue, String>map(issues, _function));
           return null;
