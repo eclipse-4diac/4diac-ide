@@ -199,7 +199,7 @@ public class MoveElementFromSubappCommand extends Command {
 	}
 
 	private Position checkConnection(Connection con, IInterfaceElement opposite, IInterfaceElement ie) {
-		if (opposite.getFBNetworkElement() instanceof SubApp) {
+		if ((opposite.getFBNetworkElement() instanceof SubApp) && opposite.getFBNetworkElement().equals(sourceSubApp)) {
 			handleCrossingConnections(con, opposite, ie.isIsInput());
 			return ie.isIsInput() ? Position.LEFT : Position.RIGHT;
 		}
