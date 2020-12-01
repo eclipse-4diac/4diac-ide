@@ -54,11 +54,16 @@
 	</menuContribution> 
 	<menuContribution
          allPopups="false"
-         locationURI="popup:org.eclipse.ui.popup.any?after=additions">  
+         locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">  
       <separator name="layouting stuff" visible="true"/>
       <command
             commandId="org.eclipse.fordiac.ide.elk.resetInterfaces"
             label="Reset Interfaces"
+            style="push">
+               </command>
+      <command
+            commandId="org.eclipse.fordiac.ide.elk.layout"
+            label="Layout the diagrams"
             style="push">
                </command>
 	</menuContribution> 
