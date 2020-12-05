@@ -1,6 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2013 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019, 2020 Johannes Kepler University, Linz
+ * Copyright (c) 2008, 2020 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University, Linz, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,10 +14,13 @@
  *  Alois Zoitl - fixed coordinate system resolution conversion in in- and export
  *              - Changed XML parsing to Staxx cursor interface for improved
  *  			  parsing performance
+ *              - extension for connection error markers
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -39,6 +42,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
@@ -102,17 +106,17 @@ abstract class CommonElementImporter {
 		return element;
 	}
 
-	protected void setElement(LibraryElement element) {
+	protected void setElement(final LibraryElement element) {
 		this.element = element;
 	}
 
-	protected CommonElementImporter(IFile file) {
+	protected CommonElementImporter(final IFile file) {
 		Assert.isNotNull(file);
 		this.file = file;
 		typeLibrary = TypeLibrary.getTypeLibrary(file.getProject());
 	}
 
-	protected CommonElementImporter(CommonElementImporter importer) {
+	protected CommonElementImporter(final CommonElementImporter importer) {
 		Assert.isNotNull(importer);
 		reader = importer.reader;
 		file = importer.file;
@@ -126,24 +130,40 @@ abstract class CommonElementImporter {
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Activator.getDefault().logWarning("Type Loading issue", e);
 			createErrorMarker(e.getMessage());
 		}
 	}
 
-	protected void createErrorMarker(String message) {
-		WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) {
+	protected void createErrorMarker(final String message) {
+		final Map<String, String> attrs = new HashMap<>();
+		attrs.put(IMarker.MESSAGE, message);
+		createErrorMarker(attrs);
+	}
+
+	protected void createErrorMarker(final String message, final INamedElement errorLocation) {
+		final Map<String, String> attrs = new HashMap<>();
+		attrs.put(IMarker.MESSAGE, message);
+		FordiacMarkerHelper.addLocation(errorLocation, attrs);
+		FordiacMarkerHelper.addTargetIdentifier(errorLocation, attrs);
+		createErrorMarker(attrs);
+	}
+
+	protected void createErrorMarker(final Map<String, String> attrs) {
+		final int lineNumber = reader.getLocation().getLineNumber();
+		final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) {
 			@Override
-			public IStatus runInWorkspace(IProgressMonitor monitor) {
+			public IStatus runInWorkspace(final IProgressMonitor monitor) {
 				try {
-					IMarker marker = file.createMarker(IMarker.PROBLEM);
+					final IMarker marker = file.createMarker(IMarker.PROBLEM);
 					if (marker.exists()) {
-						marker.setAttribute(IMarker.MESSAGE, message);
+						marker.setAttributes(attrs);
+						marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
 						marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
 						marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 					}
-				} catch (CoreException e) {
+				} catch (final CoreException e) {
 					Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
 				}
 				return Status.OK_STATUS;
@@ -160,12 +180,12 @@ abstract class CommonElementImporter {
 	protected abstract IChildHandler getBaseChildrenHandler();
 
 	protected void deleteMarkers() {
-		WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + file.getName()) {
+		final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + file.getName()) {
 			@Override
-			public IStatus runInWorkspace(IProgressMonitor monitor) {
+			public IStatus runInWorkspace(final IProgressMonitor monitor) {
 				try {
 					file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-				} catch (CoreException e) {
+				} catch (final CoreException e) {
 					Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
 				}
 				return Status.OK_STATUS;
@@ -175,10 +195,10 @@ abstract class CommonElementImporter {
 		job.schedule();
 	}
 
-	private ImporterStreams createInputStreams(InputStream fileInputStream) throws XMLStreamException {
-		XMLInputFactory factory = XMLInputFactory.newInstance();
-		factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-		factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+	private ImporterStreams createInputStreams(final InputStream fileInputStream) throws XMLStreamException {
+		final XMLInputFactory factory = XMLInputFactory.newInstance();
+		factory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
+		factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
 		reader = factory.createXMLStreamReader(fileInputStream);
 		return new ImporterStreams(fileInputStream, reader);
 	}
@@ -187,9 +207,9 @@ abstract class CommonElementImporter {
 		return reader;
 	}
 
-	protected void proceedToStartElementNamed(String elementName) throws XMLStreamException {
+	protected void proceedToStartElementNamed(final String elementName) throws XMLStreamException {
 		while (reader.hasNext()) {
-			int event = reader.next();
+			final int event = reader.next();
 			if ((XMLStreamConstants.START_ELEMENT == event) && (reader.getLocalName().equals(elementName))) {
 				// we found it
 				return;
@@ -198,7 +218,7 @@ abstract class CommonElementImporter {
 		throw new XMLStreamException("Could not find start element named: " + elementName); //$NON-NLS-1$
 	}
 
-	protected void proceedToEndElementNamed(String elementName) throws XMLStreamException {
+	protected void proceedToEndElementNamed(final String elementName) throws XMLStreamException {
 		do {
 			if ((XMLStreamConstants.END_ELEMENT == reader.getEventType())
 					&& (reader.getLocalName().equals(elementName))) {
@@ -215,10 +235,10 @@ abstract class CommonElementImporter {
 
 	}
 
-	protected void processChildren(String elementName, IChildHandler childHandler)
+	protected void processChildren(final String elementName, final IChildHandler childHandler)
 			throws XMLStreamException, TypeImportException {
 		while (getReader().hasNext()) {
-			int event = getReader().next();
+			final int event = getReader().next();
 			if (XMLStreamConstants.START_ELEMENT == event) {
 				if (!childHandler.checkChild(getReader().getLocalName())) {
 					throw new XMLStreamException(
@@ -245,28 +265,28 @@ abstract class CommonElementImporter {
 	 * @throws XMLStreamException
 	 */
 	protected void parseIdentification(final LibraryElement elem) throws XMLStreamException {
-		Identification ident = LibraryElementFactory.eINSTANCE.createIdentification();
-		String standard = getAttributeValue(LibraryElementTags.STANDARD_ATTRIBUTE);
+		final Identification ident = LibraryElementFactory.eINSTANCE.createIdentification();
+		final String standard = getAttributeValue(LibraryElementTags.STANDARD_ATTRIBUTE);
 		if (null != standard) {
 			ident.setStandard(standard);
 		}
-		String classification = getAttributeValue(LibraryElementTags.CLASSIFICATION_ATTRIBUTE);
+		final String classification = getAttributeValue(LibraryElementTags.CLASSIFICATION_ATTRIBUTE);
 		if (null != classification) {
 			ident.setClassification(classification);
 		}
-		String applicationDomain = getAttributeValue(LibraryElementTags.APPLICATION_DOMAIN_ATTRIBUTE);
+		final String applicationDomain = getAttributeValue(LibraryElementTags.APPLICATION_DOMAIN_ATTRIBUTE);
 		if (null != applicationDomain) {
 			ident.setApplicationDomain(applicationDomain);
 		}
-		String function = getAttributeValue(LibraryElementTags.FUNCTION_ELEMENT);
+		final String function = getAttributeValue(LibraryElementTags.FUNCTION_ELEMENT);
 		if (null != function) {
 			ident.setFunction(function);
 		}
-		String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != type) {
 			ident.setType(type);
 		}
-		String description = getAttributeValue(LibraryElementTags.DESCRIPTION_ELEMENT);
+		final String description = getAttributeValue(LibraryElementTags.DESCRIPTION_ELEMENT);
 		if (null != description) {
 			ident.setDescription(description);
 		}
@@ -274,43 +294,41 @@ abstract class CommonElementImporter {
 		proceedToEndElementNamed(LibraryElementTags.IDENTIFICATION_ELEMENT);
 	}
 
-	/**
-	 * Parses the version info.
+	/** Parses the version info.
 	 *
-	 * @param elem the libraryelemetn the version info should be added to.
+	 * @param elem the library element the version info should be added to.
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected void parseVersionInfo(final LibraryElement elem) throws TypeImportException, XMLStreamException {
-		VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
+		final VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
 
-		String organization = getReader().getAttributeValue("", LibraryElementTags.ORGANIZATION_ATTRIBUTE); //$NON-NLS-1$
+		final String organization = getReader().getAttributeValue("", LibraryElementTags.ORGANIZATION_ATTRIBUTE); //$NON-NLS-1$
 		if (null != organization) {
 			versionInfo.setOrganization(organization);
 		}
 
-		String version = getReader().getAttributeValue("", LibraryElementTags.VERSION_ATTRIBUTE); //$NON-NLS-1$
+		final String version = getReader().getAttributeValue("", LibraryElementTags.VERSION_ATTRIBUTE); //$NON-NLS-1$
 		if (null != version) {
 			versionInfo.setVersion(version);
 		} else {
 			throw new TypeImportException(Messages.CommonElementImporter_ERROR_MissingVersionInfo);
 
 		}
-		String author = getReader().getAttributeValue("", LibraryElementTags.AUTHOR_ATTRIBUTE); //$NON-NLS-1$
+		final String author = getReader().getAttributeValue("", LibraryElementTags.AUTHOR_ATTRIBUTE); //$NON-NLS-1$
 		if (null != author) {
 			versionInfo.setAuthor(author);
 		} else {
 			throw new TypeImportException(Messages.CommonElementImporter_ERROR_MissingAuthorInfo);
 		}
 
-		String date = getReader().getAttributeValue("", LibraryElementTags.DATE_ATTRIBUTE); //$NON-NLS-1$
+		final String date = getReader().getAttributeValue("", LibraryElementTags.DATE_ATTRIBUTE); //$NON-NLS-1$
 		if (null != date) {
 			versionInfo.setDate(date);
 			// TODO: check whether it is better to change type to Date
 		}
 
-		String remarks = getReader().getAttributeValue("", LibraryElementTags.REMARKS_ATTRIBUTE); //$NON-NLS-1$
+		final String remarks = getReader().getAttributeValue("", LibraryElementTags.REMARKS_ATTRIBUTE); //$NON-NLS-1$
 		versionInfo.setRemarks((null != remarks) ? remarks : ""); //$NON-NLS-1$
 
 		elem.getVersionInfo().add(versionInfo);
@@ -326,28 +344,28 @@ abstract class CommonElementImporter {
 	 *
 	 * @throws TypeImportException the FBT import exception
 	 */
-	public void getXandY(PositionableElement positionableElement) throws TypeImportException {
+	public void getXandY(final PositionableElement positionableElement) throws TypeImportException {
 		try {
-			String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
+			final String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
 			if (null != x) {
 				positionableElement.setX(CoordinateConverter.INSTANCE.convertFrom1499XML(x));
 			}
-			String y = getAttributeValue(LibraryElementTags.Y_ATTRIBUTE);
+			final String y = getAttributeValue(LibraryElementTags.Y_ATTRIBUTE);
 			if (null != y) {
 				positionableElement.setY(CoordinateConverter.INSTANCE.convertFrom1499XML(y));
 			}
-		} catch (NumberFormatException nfe) {
+		} catch (final NumberFormatException nfe) {
 			throw new TypeImportException(Messages.FBTImporter_POSITION_EXCEPTION, nfe);
 		}
 	}
 
-	protected void readNameCommentAttributes(INamedElement namedElement) throws TypeImportException {
+	protected void readNameCommentAttributes(final INamedElement namedElement) throws TypeImportException {
 		readNameAttribute(namedElement);
 		readCommentAttribute(namedElement);
 	}
 
-	private void readNameAttribute(INamedElement namedElement) throws TypeImportException {
-		String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+	private void readNameAttribute(final INamedElement namedElement) throws TypeImportException {
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		if (null != name) {
 			namedElement.setName(name.trim());
 		} else {
@@ -355,18 +373,18 @@ abstract class CommonElementImporter {
 		}
 	}
 
-	private void readCommentAttribute(INamedElement namedElement) {
-		String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+	private void readCommentAttribute(final INamedElement namedElement) {
+		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
 			namedElement.setComment(comment);
 		}
 	}
 
-	protected void parseGenericAttributeNode(ConfigurableObject confObject) {
-		String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
-		String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
-		String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+	protected void parseGenericAttributeNode(final ConfigurableObject confObject) {
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != name && null != value) {
 			confObject.setAttribute(name, null == type ? "STRING" : type, //$NON-NLS-1$
 					value, comment);
@@ -374,24 +392,24 @@ abstract class CommonElementImporter {
 	}
 
 	protected VarDeclaration parseParameter() throws TypeImportException, XMLStreamException {
-		VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
-		String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		if (null != name) {
 			var.setName(name);
 		} else {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterNotSet);
 		}
 
-		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (null != value) {
-			Value val = LibraryElementFactory.eINSTANCE.createValue();
+			final Value val = LibraryElementFactory.eINSTANCE.createValue();
 			val.setValue(value);
 			var.setValue(val);
 		} else {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterValueNotSet);
 		}
-		String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
 			var.setComment(comment);
 		}
@@ -399,18 +417,18 @@ abstract class CommonElementImporter {
 		return var;
 	}
 
-	protected String getAttributeValue(String attributeName) {
+	protected String getAttributeValue(final String attributeName) {
 		return getReader().getAttributeValue("", attributeName); //$NON-NLS-1$
 	}
 
 	protected void parseCompilerInfo(final CompilableType ctype) throws TypeImportException, XMLStreamException {
-		CompilerInfo compilerInfo = LibraryElementFactory.eINSTANCE.createCompilerInfo();
+		final CompilerInfo compilerInfo = LibraryElementFactory.eINSTANCE.createCompilerInfo();
 
-		String header = getAttributeValue(LibraryElementTags.HEADER_ATTRIBUTE);
+		final String header = getAttributeValue(LibraryElementTags.HEADER_ATTRIBUTE);
 		if (null != header) {
 			compilerInfo.setHeader(header);
 		}
-		String classdef = getAttributeValue(LibraryElementTags.CLASSDEF_ATTRIBUTE);
+		final String classdef = getAttributeValue(LibraryElementTags.CLASSDEF_ATTRIBUTE);
 		if (null != classdef) {
 			compilerInfo.setClassdef(classdef);
 		}
@@ -426,8 +444,8 @@ abstract class CommonElementImporter {
 	}
 
 	private void parseCompiler(final CompilerInfo compilerInfo) throws TypeImportException, XMLStreamException {
-		Compiler comp = LibraryElementFactory.eINSTANCE.createCompiler();
-		String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
+		final Compiler comp = LibraryElementFactory.eINSTANCE.createCompiler();
+		final String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
 
 		if (null != language) {
 			switch (language.toUpperCase()) {
@@ -448,21 +466,21 @@ abstract class CommonElementImporter {
 			}
 		}
 
-		String vendor = getAttributeValue(LibraryElementTags.VENDOR_ATTRIBUTE);
+		final String vendor = getAttributeValue(LibraryElementTags.VENDOR_ATTRIBUTE);
 		if (null != vendor) {
 			comp.setVendor(vendor);
 		} else {
 			throw new TypeImportException(Messages.CompilableElementImporter_ERROR_VendorNotSet);
 		}
 
-		String product = getAttributeValue(LibraryElementTags.PRODUCT_ATTRIBUTE);
+		final String product = getAttributeValue(LibraryElementTags.PRODUCT_ATTRIBUTE);
 		if (null != product) {
 			comp.setProduct(product);
 		} else {
 			throw new TypeImportException(Messages.CompilableElementImporter_ERROR_ProductNotSet);
 		}
 
-		String version = getAttributeValue(LibraryElementTags.VERSION_ATTRIBUTE);
+		final String version = getAttributeValue(LibraryElementTags.VERSION_ATTRIBUTE);
 		if (null != version) {
 			comp.setVersion(version);
 		} else {
@@ -473,12 +491,12 @@ abstract class CommonElementImporter {
 	}
 
 	protected boolean isProfileAttribute() {
-		String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		return (null != name) && LibraryElementTags.DEVICE_PROFILE.equals(name);
 	}
 
-	protected void parseProfile(Device device) {
-		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+	protected void parseProfile(final Device device) {
+		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (null != value) {
 			device.setProfile(value);
 		}

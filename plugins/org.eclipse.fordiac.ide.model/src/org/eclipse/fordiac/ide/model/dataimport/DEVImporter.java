@@ -46,7 +46,7 @@ import org.w3c.dom.NodeList;
 
 public final class DEVImporter extends TypeImporter {
 
-	public DEVImporter(IFile typeFile) {
+	public DEVImporter(final IFile typeFile) {
 		super(typeFile);
 	}
 
@@ -79,7 +79,7 @@ public final class DEVImporter extends TypeImporter {
 				parseCompilerInfo(getElement());
 				break;
 			case LibraryElementTags.VAR_DECLARATION_ELEMENT:
-				VarDeclaration v = parseVarDeclaration();
+				final VarDeclaration v = parseVarDeclaration();
 				v.setIsInput(true);
 				getElement().getVarDeclaration().add(v);
 				break;
@@ -90,8 +90,9 @@ public final class DEVImporter extends TypeImporter {
 				getElement().getResource().add(parseResource());
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				getElement().setFBNetwork(new ResDevFBNetworkImporter(this, getElement().getVarDeclaration())
-						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
+				final ResDevFBNetworkImporter resNetworkImporter = new ResDevFBNetworkImporter(this, getElement().getVarDeclaration());
+				getElement().setFBNetwork(resNetworkImporter.getFbNetwork());
+				resNetworkImporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseDeviceTypeAttribute();
@@ -115,22 +116,22 @@ public final class DEVImporter extends TypeImporter {
 	 * @throws DevTypeImportException the dev type import exception
 	 */
 	private Resource parseResource() throws TypeImportException, XMLStreamException {
-		Resource res = LibraryElementFactory.eINSTANCE.createResource();
+		final Resource res = LibraryElementFactory.eINSTANCE.createResource();
 
 		readNameCommentAttributes(res);
 
-		String resType = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		final String resType = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != resType) {
 			res.setPaletteEntry(getPalette().getResourceTypeEntry(resType));
 		} else {
 			throw new TypeImportException(Messages.DEVImporter_ERROR_ResourceTypeHasToBeSet);
 		}
 
-		String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
+		final String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
 		if (null != x) {
 			res.setX(x);
 		}
-		String y = getAttributeValue(LibraryElementTags.Y_ATTRIBUTE);
+		final String y = getAttributeValue(LibraryElementTags.Y_ATTRIBUTE);
 		if (null != y) {
 			res.setY(y);
 		}
@@ -141,8 +142,10 @@ public final class DEVImporter extends TypeImporter {
 				res.getVarDeclarations().add(parseParameter());
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				res.setFBNetwork(new ResDevFBNetworkImporter(this, res.getVarDeclarations())
-						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
+				final ResDevFBNetworkImporter networkImporter = new ResDevFBNetworkImporter(this,
+						res.getVarDeclarations());
+				res.setFBNetwork(networkImporter.getFbNetwork());
+				networkImporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 				break;
 			default:
 				return false;
@@ -161,8 +164,8 @@ public final class DEVImporter extends TypeImporter {
 	 * @return the referenced types
 	 */
 	public static List<String> getReferencedTypes(final File file) {
-		List<String> references = new ArrayList<>();
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		final List<String> references = new ArrayList<>();
+		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
 
 		dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
@@ -173,10 +176,10 @@ public final class DEVImporter extends TypeImporter {
 			Document document;
 			document = db.parse(file);
 			// parse document for "FBNetwork" tag
-			Node rootNode = document.getDocumentElement();
-			NodeList childNodes = rootNode.getChildNodes();
+			final Node rootNode = document.getDocumentElement();
+			final NodeList childNodes = rootNode.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); i++) {
-				Node n = childNodes.item(i);
+				final Node n = childNodes.item(i);
 				if (n.getNodeName().equals(LibraryElementTags.RESOURCE_ELEMENT)) {
 					// add nodes to NodeList
 					String type = ""; //$NON-NLS-1$
@@ -185,7 +188,7 @@ public final class DEVImporter extends TypeImporter {
 				}
 
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 
@@ -194,7 +197,7 @@ public final class DEVImporter extends TypeImporter {
 	}
 
 	private void parseDeviceTypeAttributeDeclaration() {
-		AttributeDeclaration attributeDeclaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
+		final AttributeDeclaration attributeDeclaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
 		attributeDeclaration.setName(getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE));
 		attributeDeclaration.setComment(getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE));
 		attributeDeclaration.setInitialValue(getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE));
@@ -209,7 +212,7 @@ public final class DEVImporter extends TypeImporter {
 	}
 
 	private void parseProfile() {
-		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (null != value) {
 			getElement().setProfile(value);
 		}

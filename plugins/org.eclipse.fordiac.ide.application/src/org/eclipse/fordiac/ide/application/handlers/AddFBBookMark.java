@@ -26,10 +26,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -45,21 +43,21 @@ import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 public class AddFBBookMark extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		FBNetworkElement element = getSelectedFBElement(event);
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final FBNetworkElement element = getSelectedFBElement(event);
 		if (null != element) {
-			String description = getDescription(element, event);
+			final String description = getDescription(element, event);
 			if (null != description) {
-				Map<String, String> attrs = new HashMap<>();
+				final Map<String, String> attrs = new HashMap<>();
 				attrs.put(IMarker.MESSAGE, description);
-				attrs.put(IMarker.LOCATION, getLocation(element));
 				FordiacMarkerHelper.addTargetIdentifier(element, attrs);
-				CreateMarkersOperation op = new CreateMarkersOperation(IMarker.BOOKMARK, attrs, getFile(element),
+				FordiacMarkerHelper.addLocation(element, attrs);
+				final CreateMarkersOperation op = new CreateMarkersOperation(IMarker.BOOKMARK, attrs, getFile(element),
 						Messages.AddFBBookMark_AddBookmark);
 				try {
 					PlatformUI.getWorkbench().getOperationSupport().getOperationHistory().execute(op, null,
 							WorkspaceUndoUtil.getUIInfoAdapter(HandlerUtil.getActiveShell(event)));
-				} catch (ExecutionException e) {
+				} catch (final ExecutionException e) {
 					ApplicationPlugin.getDefault().logError("Could not create bookmark", e); //$NON-NLS-1$
 				}
 				return Status.OK_STATUS;
@@ -68,15 +66,15 @@ public class AddFBBookMark extends AbstractHandler {
 		return Status.CANCEL_STATUS;
 	}
 
-	private static String getDescription(FBNetworkElement element, ExecutionEvent event) {
-		InputDialog descriptiondialog = new InputDialog(HandlerUtil.getActiveShell(event),
+	private static String getDescription(final FBNetworkElement element, final ExecutionEvent event) {
+		final InputDialog descriptiondialog = new InputDialog(HandlerUtil.getActiveShell(event),
 				MessageFormat.format(Messages.AddFBBookMark_AddBookMarkTitle, element.getName()),
 				Messages.AddFBBookMark_EnterBookmarkName, element.getName(), null) {
 
 			@Override
-			protected void createButtonsForButtonBar(Composite parent) {
+			protected void createButtonsForButtonBar(final Composite parent) {
 				super.createButtonsForButtonBar(parent);
-				Button okButton = getOkButton();
+				final Button okButton = getOkButton();
 				okButton.setText(Messages.AddFBBookMark_AddBookmark);
 			}
 		};
@@ -92,16 +90,8 @@ public class AddFBBookMark extends AbstractHandler {
 		return null;
 	}
 
-	private static String getLocation(FBNetworkElement element) {
-		EObject container = element.eContainer().eContainer();
-		if (container instanceof FBType) {
-			return element.getName();
-		}
-		return createHierarchicalName(element);
-	}
-
-	private static IResource getFile(FBNetworkElement element) {
-		EObject container = element.eContainer().eContainer();
+	private static IResource getFile(final FBNetworkElement element) {
+		final EObject container = element.eContainer().eContainer();
 		if (container instanceof FBType) {
 			return ((FBType) container).getPaletteEntry().getFile();
 		}
@@ -109,26 +99,8 @@ public class AddFBBookMark extends AbstractHandler {
 		return element.getFbNetwork().getAutomationSystem().getSystemFile();
 	}
 
-	private static String createHierarchicalName(final FBNetworkElement element) {
-		StringBuilder builder = new StringBuilder(element.getName());
-
-		EObject runner = element.getFbNetwork().eContainer();
-		while (runner instanceof SubApp) {
-			SubApp parent = (SubApp) runner;
-			builder.insert(0, '.');
-			builder.insert(0, parent.getName());
-			runner = parent.getFbNetwork().eContainer();
-		}
-		if (runner instanceof Application) {
-			builder.insert(0, '.');
-			builder.insert(0, ((Application) runner).getName());
-		}
-
-		return builder.toString();
-	}
-
-	private static FBNetworkElement getSelectedFBElement(ExecutionEvent event) {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
+	private static FBNetworkElement getSelectedFBElement(final ExecutionEvent event) {
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof StructuredSelection) {
 			Object selObj = ((StructuredSelection) selection).getFirstElement();
 			if (selObj instanceof EditPart) {

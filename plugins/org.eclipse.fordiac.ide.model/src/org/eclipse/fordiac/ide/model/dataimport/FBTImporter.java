@@ -76,32 +76,32 @@ import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 public class FBTImporter extends TypeImporter {
 
 	/** The variables. */
-	private Map<String, VarDeclaration> variables = new HashMap<>();
+	private final Map<String, VarDeclaration> variables = new HashMap<>();
 
 	/** The input events. */
-	private Map<String, Event> inputEvents = new HashMap<>();
+	private final Map<String, Event> inputEvents = new HashMap<>();
 
 	/** The output events. */
-	private Map<String, Event> outputEvents = new HashMap<>();
+	private final Map<String, Event> outputEvents = new HashMap<>();
 
 	/** The adapters. */
-	private Map<String, AdapterDeclaration> adapters = new HashMap<>();
-	private Map<String, PositionableElement> adapterPositions = new HashMap<>();
+	private final Map<String, AdapterDeclaration> adapters = new HashMap<>();
+	private final Map<String, PositionableElement> adapterPositions = new HashMap<>();
 
 	/** The algorithm name ec action mapping. */
-	private Map<String, List<ECAction>> algorithmNameECActionMapping = new HashMap<>();
+	private final Map<String, List<ECAction>> algorithmNameECActionMapping = new HashMap<>();
 
 	/** The ec states. */
-	private Map<String, ECState> ecStates = new HashMap<>();
+	private final Map<String, ECState> ecStates = new HashMap<>();
 
-	private Map<Event, List<String>> withList = new HashMap<>();
+	private final Map<Event, List<String>> withList = new HashMap<>();
 
 	@Override
 	public FBType getElement() {
 		return (FBType) super.getElement();
 	}
 
-	public FBTImporter(IFile typeFile) {
+	public FBTImporter(final IFile typeFile) {
 		super(typeFile);
 	}
 
@@ -111,7 +111,7 @@ public class FBTImporter extends TypeImporter {
 
 	@Override
 	protected LibraryElement createRootModelElement() {
-		FBType newType = LibraryElementFactory.eINSTANCE.createFBType();
+		final FBType newType = LibraryElementFactory.eINSTANCE.createFBType();
 		newType.setService(LibraryElementFactory.eINSTANCE.createService());
 		return newType;
 	}
@@ -164,7 +164,7 @@ public class FBTImporter extends TypeImporter {
 	public void loadElement() {
 		super.loadElement();
 
-		FBType newType = getElement();
+		final FBType newType = getElement();
 
 		if ((newType instanceof BasicFBType) || (newType instanceof CompositeFBType)
 				|| (newType instanceof ServiceInterfaceFBType) || (newType instanceof SimpleFBType)
@@ -182,25 +182,25 @@ public class FBTImporter extends TypeImporter {
 	 * @throws TypeImportException the FBT import exception
 	 * @throws XMLStreamException
 	 */
-	protected void parseService(FBType type) throws TypeImportException, XMLStreamException {
+	protected void parseService(final FBType type) throws TypeImportException, XMLStreamException {
 
-		String rightInterface = getAttributeValue(LibraryElementTags.RIGHT_INTERFACE_ATTRIBUTE);
+		final String rightInterface = getAttributeValue(LibraryElementTags.RIGHT_INTERFACE_ATTRIBUTE);
 		if (null != rightInterface) {
-			ServiceInterface rightInter = LibraryElementFactory.eINSTANCE.createServiceInterface();
+			final ServiceInterface rightInter = LibraryElementFactory.eINSTANCE.createServiceInterface();
 			rightInter.setName(rightInterface);
 			type.getService().setRightInterface(rightInter);
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_SERVICE_INTERFACE_RIGHTINTERFACE_EXCEPTION);
 		}
-		String leftInterface = getAttributeValue(LibraryElementTags.LEFT_INTERFACE_ATTRIBUTE);
+		final String leftInterface = getAttributeValue(LibraryElementTags.LEFT_INTERFACE_ATTRIBUTE);
 		if (null != leftInterface) {
-			ServiceInterface leftInter = LibraryElementFactory.eINSTANCE.createServiceInterface();
+			final ServiceInterface leftInter = LibraryElementFactory.eINSTANCE.createServiceInterface();
 			leftInter.setName(leftInterface);
 			type.getService().setLeftInterface(leftInter);
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_SERVICE_INTERFACE_LEFTINTERFACE_EXCEPTION);
 		}
-		String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
 			type.setComment(comment);
 		}
@@ -224,7 +224,7 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException
 	 */
 	private void parseServiceSequence(final FBType type) throws TypeImportException, XMLStreamException {
-		ServiceSequence serviceSequence = LibraryElementFactory.eINSTANCE.createServiceSequence();
+		final ServiceSequence serviceSequence = LibraryElementFactory.eINSTANCE.createServiceSequence();
 		readNameCommentAttributes(serviceSequence);
 
 		processChildren(LibraryElementTags.SERVICE_SEQUENCE_ELEMENT, name -> {
@@ -250,7 +250,7 @@ public class FBTImporter extends TypeImporter {
 	 */
 	private void parseServiceTransaction(final ServiceSequence serviceSequence, final FBType type)
 			throws TypeImportException, XMLStreamException {
-		ServiceTransaction serviceTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
+		final ServiceTransaction serviceTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 
 		processChildren(LibraryElementTags.SERVICE_TRANSACTION_ELEMENT, name -> {
 			switch (name) {
@@ -282,15 +282,15 @@ public class FBTImporter extends TypeImporter {
 	 */
 	private void parseOutputPrimitive(final ServiceTransaction serviceTransaction, final FBType type)
 			throws TypeImportException, XMLStreamException {
-		OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
+		final OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
 
 		parsePrimitive(type, outputPrimitive);
 		proceedToEndElementNamed(LibraryElementTags.OUTPUT_PRIMITIVE_ELEMENT);
 		serviceTransaction.getOutputPrimitive().add(outputPrimitive);
 	}
 
-	private void parsePrimitive(final FBType type, Primitive outputPrimitive) throws TypeImportException {
-		String interFace = getAttributeValue(LibraryElementTags.INTERFACE_ATTRIBUTE);
+	private void parsePrimitive(final FBType type, final Primitive outputPrimitive) throws TypeImportException {
+		final String interFace = getAttributeValue(LibraryElementTags.INTERFACE_ATTRIBUTE);
 		if (null != interFace) {
 			if (interFace.equals(type.getService().getLeftInterface().getName())) {
 				outputPrimitive.setInterface(type.getService().getLeftInterface());
@@ -300,13 +300,13 @@ public class FBTImporter extends TypeImporter {
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_OUTPUT_PRIMITIVE_EXCEPTION);
 		}
-		String event = getAttributeValue(getEventElement());
+		final String event = getAttributeValue(getEventElement());
 		if (null != event) {
 			outputPrimitive.setEvent(event);
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_OUTPUT_PRIMITIVE_EVENT_EXCEPTION);
 		}
-		String parameters = getAttributeValue(LibraryElementTags.PARAMETERS_ATTRIBUTE);
+		final String parameters = getAttributeValue(LibraryElementTags.PARAMETERS_ATTRIBUTE);
 		if (null != parameters) {
 			outputPrimitive.setParameters(parameters);
 		}
@@ -325,7 +325,7 @@ public class FBTImporter extends TypeImporter {
 	 */
 	private void parseInputPrimitive(final ServiceTransaction serviceTransaction, final FBType type)
 			throws TypeImportException, XMLStreamException {
-		InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
+		final InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
 
 		parsePrimitive(type, inputPrimitive);
 		proceedToEndElementNamed(LibraryElementTags.INPUT_PRIMITIVE_ELEMENT);
@@ -340,12 +340,12 @@ public class FBTImporter extends TypeImporter {
 	 * @return - A FBType that is converted
 	 */
 	private static FBType convertToServiceInterfaceType(final FBType type) {
-		ServiceInterfaceFBType serviceType = LibraryElementFactory.eINSTANCE.createServiceInterfaceFBType();
+		final ServiceInterfaceFBType serviceType = LibraryElementFactory.eINSTANCE.createServiceInterfaceFBType();
 		copyGeneralTypeInformation(serviceType, type);
 		return serviceType;
 	}
 
-	private static void copyGeneralTypeInformation(FBType dstType, FBType srcType) {
+	private static void copyGeneralTypeInformation(final FBType dstType, final FBType srcType) {
 		dstType.setName(srcType.getName());
 		dstType.setComment(srcType.getComment());
 		dstType.setCompilerInfo(srcType.getCompilerInfo());
@@ -364,19 +364,20 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException
 	 */
 	private void parseFBNetwork(final CompositeFBType type) throws TypeImportException, XMLStreamException {
-		FBNetwork fbNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
+		final FBNetwork fbNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
+		type.setFBNetwork(fbNetwork);
 		adapters.values().forEach(adapter -> addAdapterFB(fbNetwork, adapter, getPalette()));
-		FBNetworkImporter fbnInmporter = new FBNetworkImporter(this, fbNetwork, type.getInterfaceList());
-		type.setFBNetwork(fbnInmporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
+		final FBNetworkImporter fbnInmporter = new FBNetworkImporter(this, fbNetwork, type.getInterfaceList());
+		fbnInmporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 	}
 
-	private void addAdapterFB(final FBNetwork fbNetwork, AdapterDeclaration adapter, Palette palette) {
-		AdapterFB aFB = LibraryElementFactory.eINSTANCE.createAdapterFB();
+	private void addAdapterFB(final FBNetwork fbNetwork, final AdapterDeclaration adapter, final Palette palette) {
+		final AdapterFB aFB = LibraryElementFactory.eINSTANCE.createAdapterFB();
 		aFB.setPaletteEntry(palette.getAdapterTypeEntry(adapter.getTypeName()));
 		aFB.setAdapterDecl(adapter);
 
 		aFB.setName(adapter.getName());
-		PositionableElement position = adapterPositions.get(adapter.getName());
+		final PositionableElement position = adapterPositions.get(adapter.getName());
 		if (position == null) {
 			aFB.setX(0);
 			aFB.setY(0);
@@ -402,7 +403,7 @@ public class FBTImporter extends TypeImporter {
 	 * @return - A FBType that is converted
 	 */
 	private static FBType convertToCompositeType(final FBType type) {
-		CompositeFBType compositeType = LibraryElementFactory.eINSTANCE.createCompositeFBType();
+		final CompositeFBType compositeType = LibraryElementFactory.eINSTANCE.createCompositeFBType();
 		copyGeneralTypeInformation(compositeType, type);
 		return compositeType;
 	}
@@ -425,12 +426,12 @@ public class FBTImporter extends TypeImporter {
 				parseECC(type);
 				break;
 			case LibraryElementTags.ALGORITHM_ELEMENT:
-				Algorithm alg = parseAlgorithm();
+				final Algorithm alg = parseAlgorithm();
 				if (null != alg) {
 					type.getAlgorithm().add(alg);
-					List<ECAction> list = algorithmNameECActionMapping.get(alg.getName());
+					final List<ECAction> list = algorithmNameECActionMapping.get(alg.getName());
 					if (null != list) {
-						for (ECAction action : list) {
+						for (final ECAction action : list) {
 							action.setAlgorithm(alg);
 						}
 					}
@@ -475,12 +476,12 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException
 	 */
 	private Algorithm parseAlgorithm() throws TypeImportException, XMLStreamException {
-		String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
-		String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 
 		Algorithm retVal = null;
 		while (getReader().hasNext()) {
-			int event = getReader().next();
+			final int event = getReader().next();
 			if (XMLStreamConstants.START_ELEMENT == event) {
 
 				switch (getReader().getLocalName()) {
@@ -526,7 +527,7 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException
 	 */
 	private void parseOtherAlg(final OtherAlgorithm alg) throws TypeImportException, XMLStreamException {
-		String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
+		final String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
 		if (null != language) {
 			alg.setLanguage(language);
 		} else {
@@ -551,11 +552,11 @@ public class FBTImporter extends TypeImporter {
 	}
 
 	private void parseAlgorithmText(final TextAlgorithm alg) throws TypeImportException, XMLStreamException {
-		String text = getAttributeValue(LibraryElementTags.TEXT_ATTRIBUTE);
+		final String text = getAttributeValue(LibraryElementTags.TEXT_ATTRIBUTE);
 		if (null != text) {
 			alg.setText(text);
 		} else {
-			StringBuilder algText = new StringBuilder();
+			final StringBuilder algText = new StringBuilder();
 			// the parser my split the content of several parts therefore this while loop
 			while ((getReader().hasNext()) && (XMLStreamConstants.CHARACTERS == getReader().next())) {
 				algText.append(getReader().getText());
@@ -573,7 +574,7 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException
 	 */
 	private void parseECC(final BasicFBType type) throws TypeImportException, XMLStreamException {
-		ECC ecc = LibraryElementFactory.eINSTANCE.createECC();
+		final ECC ecc = LibraryElementFactory.eINSTANCE.createECC();
 
 		processChildren(LibraryElementTags.ECC_ELEMENT, name -> {
 			switch (name) {
@@ -601,32 +602,32 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException
 	 */
 	private void parseECTransition(final ECC ecc) throws TypeImportException, XMLStreamException {
-		ECTransition ecTransition = LibraryElementFactory.eINSTANCE.createECTransition();
-		String source = getAttributeValue(LibraryElementTags.SOURCE_ATTRIBUTE);
+		final ECTransition ecTransition = LibraryElementFactory.eINSTANCE.createECTransition();
+		final String source = getAttributeValue(LibraryElementTags.SOURCE_ATTRIBUTE);
 		if (null != source) {
-			ECState state = ecStates.get(source);
+			final ECState state = ecStates.get(source);
 			if (state != null) {
 				ecTransition.setSource(state);
 			}
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANSITION_SOURCE_EXCEPTION);
 		}
-		String destination = getAttributeValue(LibraryElementTags.DESTINATION_ATTRIBUTE);
+		final String destination = getAttributeValue(LibraryElementTags.DESTINATION_ATTRIBUTE);
 		if (null != destination) {
-			ECState state = ecStates.get(destination);
+			final ECState state = ecStates.get(destination);
 			if (state != null) {
 				ecTransition.setDestination(state);
 			}
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANSITION_DEST_EXCEPTION);
 		}
-		String condition = getAttributeValue(LibraryElementTags.CONDITION_ATTRIBUTE);
+		final String condition = getAttributeValue(LibraryElementTags.CONDITION_ATTRIBUTE);
 		if (null != condition) {
 			validateTransitionCondition(ecTransition, condition);
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANASITION_CONDITION_EXCEPTION);
 		}
-		String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
 			ecTransition.setComment(comment);
 		}
@@ -635,7 +636,7 @@ public class FBTImporter extends TypeImporter {
 		ecc.getECTransition().add(ecTransition);
 	}
 
-	private void validateTransitionCondition(ECTransition ecTransition, String condition) {
+	private void validateTransitionCondition(final ECTransition ecTransition, final String condition) {
 		Event event;
 		String expression;
 
@@ -674,7 +675,7 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException
 	 */
 	private void parseECState(final ECC ecc) throws TypeImportException, XMLStreamException {
-		ECState state = LibraryElementFactory.eINSTANCE.createECState();
+		final ECState state = LibraryElementFactory.eINSTANCE.createECState();
 		readNameCommentAttributes(state);
 		getXandY(state);
 
@@ -700,20 +701,20 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException
 	 */
 	private void parseECAction(final ECState type) throws XMLStreamException {
-		ECAction ecAction = LibraryElementFactory.eINSTANCE.createECAction();
-		String algorithm = getAttributeValue(LibraryElementTags.ALGORITHM_ELEMENT);
+		final ECAction ecAction = LibraryElementFactory.eINSTANCE.createECAction();
+		final String algorithm = getAttributeValue(LibraryElementTags.ALGORITHM_ELEMENT);
 		if (null != algorithm) {
 			if (algorithmNameECActionMapping.containsKey(algorithm)) {
 				algorithmNameECActionMapping.get(algorithm).add(ecAction);
 			} else {
-				List<ECAction> temp = new ArrayList<>();
+				final List<ECAction> temp = new ArrayList<>();
 				temp.add(ecAction);
 				algorithmNameECActionMapping.put(algorithm, temp);
 			}
 		}
-		String output = getAttributeValue(LibraryElementTags.OUTPUT_ATTRIBUTE);
+		final String output = getAttributeValue(LibraryElementTags.OUTPUT_ATTRIBUTE);
 		if (null != output) {
-			Event outp = outputEvents.get(output);
+			final Event outp = outputEvents.get(output);
 			if (null != outp) {
 				ecAction.setOutput(outp);
 			}
@@ -733,7 +734,7 @@ public class FBTImporter extends TypeImporter {
 	private void parseInternalVars(final BaseFBType type) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.INTERNAL_VARS_ELEMENT, name -> {
 			if (LibraryElementTags.VAR_DECLARATION_ELEMENT.equals(name)) {
-				VarDeclaration v = parseVarDeclaration();
+				final VarDeclaration v = parseVarDeclaration();
 				type.getInternalVars().add(v);
 				return true;
 			}
@@ -749,7 +750,7 @@ public class FBTImporter extends TypeImporter {
 	 * @return the basicFBType
 	 */
 	private static FBType convertToBasicType(final FBType type) {
-		BasicFBType basicType = LibraryElementFactory.eINSTANCE.createBasicFBType();
+		final BasicFBType basicType = LibraryElementFactory.eINSTANCE.createBasicFBType();
 		copyGeneralTypeInformation(basicType, type);
 		return basicType;
 	}
@@ -762,7 +763,7 @@ public class FBTImporter extends TypeImporter {
 	 * @return the simpleFBType
 	 */
 	private static FBType convertToSimpleType(final FBType type) {
-		SimpleFBType simpleType = LibraryElementFactory.eINSTANCE.createSimpleFBType();
+		final SimpleFBType simpleType = LibraryElementFactory.eINSTANCE.createSimpleFBType();
 		copyGeneralTypeInformation(simpleType, type);
 		return simpleType;
 	}
@@ -775,9 +776,9 @@ public class FBTImporter extends TypeImporter {
 	 * @throws TypeImportException the FBT import exception
 	 * @throws XMLStreamException
 	 */
-	protected InterfaceList parseInterfaceList(String interfaceListName)
+	protected InterfaceList parseInterfaceList(final String interfaceListName)
 			throws TypeImportException, XMLStreamException {
-		InterfaceList interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
+		final InterfaceList interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
 		final String inputEventListName = getEventInputElement();
 		final String outputEventListName = getEventOutputElement();
 
@@ -846,11 +847,11 @@ public class FBTImporter extends TypeImporter {
 	 * @throws TypeImportException the FBT import exception
 	 * @throws XMLStreamException
 	 */
-	private void parseAdapterList(final EList<AdapterDeclaration> adpaterList, String adpaterListName, boolean isInput)
+	private void parseAdapterList(final EList<AdapterDeclaration> adpaterList, final String adpaterListName, final boolean isInput)
 			throws TypeImportException, XMLStreamException {
 		processChildren(adpaterListName, name -> {
 			if (LibraryElementTags.ADAPTER_DECLARATION_ELEMENT.equals(name)) {
-				AdapterDeclaration a = parseAdapterDeclaration();
+				final AdapterDeclaration a = parseAdapterDeclaration();
 				a.setIsInput(isInput);
 				adapters.put(a.getName(), a);
 				adpaterList.add(a);
@@ -869,17 +870,17 @@ public class FBTImporter extends TypeImporter {
 		});
 	}
 
-	private void addAdapterEventOutputs(EList<Event> eventOutputs, AdapterDeclaration a) {
-		for (Event event : eventOutputs) {
-			AdapterEvent ae = ImportUtils.createAdapterEvent(event, a);
+	private void addAdapterEventOutputs(final EList<Event> eventOutputs, final AdapterDeclaration a) {
+		for (final Event event : eventOutputs) {
+			final AdapterEvent ae = ImportUtils.createAdapterEvent(event, a);
 			outputEvents.put(ae.getName(), ae);
 		}
 
 	}
 
-	private void addAdapterEventInputs(EList<Event> eventInputs, AdapterDeclaration a) {
-		for (Event event : eventInputs) {
-			AdapterEvent ae = ImportUtils.createAdapterEvent(event, a);
+	private void addAdapterEventInputs(final EList<Event> eventInputs, final AdapterDeclaration a) {
+		for (final Event event : eventInputs) {
+			final AdapterEvent ae = ImportUtils.createAdapterEvent(event, a);
 			inputEvents.put(ae.getName(), ae);
 		}
 	}
@@ -895,11 +896,11 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException
 	 */
 	private AdapterDeclaration parseAdapterDeclaration() throws TypeImportException, XMLStreamException {
-		AdapterDeclaration a = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
+		final AdapterDeclaration a = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
 		readNameCommentAttributes(a);
-		String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
-			AdapterTypePaletteEntry entry = getPalette().getAdapterTypeEntry(typeName);
+			final AdapterTypePaletteEntry entry = getPalette().getAdapterTypeEntry(typeName);
 			a.setPaletteEntry(entry);
 			AdapterType dataType = null;
 			if (null != entry) {
@@ -913,7 +914,7 @@ public class FBTImporter extends TypeImporter {
 			throw new TypeImportException(Messages.FBTImporter_ADAPTER_DECLARATION_TYPE_EXCEPTION);
 		}
 
-		PositionableElement pos = LibraryElementFactory.eINSTANCE.createPositionableElement();
+		final PositionableElement pos = LibraryElementFactory.eINSTANCE.createPositionableElement();
 		getXandY(pos);
 		adapterPositions.put(a.getName(), pos);
 		proceedToEndElementNamed(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
@@ -922,11 +923,11 @@ public class FBTImporter extends TypeImporter {
 
 	protected void processWiths() {
 		withList.entrySet().forEach(entry -> {
-			Event e = entry.getKey();
+			final Event e = entry.getKey();
 			entry.getValue().forEach(varName -> {
-				VarDeclaration v = variables.get(varName);
+				final VarDeclaration v = variables.get(varName);
 				if (null != v) {
-					With withConstruct = LibraryElementFactory.eINSTANCE.createWith();
+					final With withConstruct = LibraryElementFactory.eINSTANCE.createWith();
 					withConstruct.setVariables(v);
 					e.getWith().add(withConstruct);
 				}
@@ -942,13 +943,13 @@ public class FBTImporter extends TypeImporter {
 	 * @throws TypeImportException the FBT import exception
 	 * @throws XMLStreamException
 	 */
-	private void parseEventList(final EList<Event> eventList, final String eventListName, boolean isInput)
+	private void parseEventList(final EList<Event> eventList, final String eventListName, final boolean isInput)
 			throws TypeImportException, XMLStreamException {
 		final String eventName = getEventElement();
 
 		processChildren(eventListName, name -> {
 			if (eventName.equals(name)) {
-				Event e = parseEvent(eventName);
+				final Event e = parseEvent(eventName);
 				e.setIsInput(isInput);
 				if (isInput) {
 					inputEvents.put(e.getName(), e);
@@ -967,16 +968,16 @@ public class FBTImporter extends TypeImporter {
 		return LibraryElementTags.EVENT_ELEMENT;
 	}
 
-	private Event parseEvent(String eventName) throws TypeImportException, XMLStreamException {
-		Event e = LibraryElementFactory.eINSTANCE.createEvent();
+	private Event parseEvent(final String eventName) throws TypeImportException, XMLStreamException {
+		final Event e = LibraryElementFactory.eINSTANCE.createEvent();
 		e.setType(EventTypeLibrary.getInstance().getType(null));
 
 		readNameCommentAttributes(e);
-		List<String> withVars = new ArrayList<>();
+		final List<String> withVars = new ArrayList<>();
 
 		processChildren(eventName, name -> {
 			if (LibraryElementTags.WITH_ELEMENT.equals(name)) {
-				String val = getAttributeValue(LibraryElementTags.VAR_ATTRIBUTE);
+				final String val = getAttributeValue(LibraryElementTags.VAR_ATTRIBUTE);
 				if (null != val) {
 					withVars.add(val);
 				}
