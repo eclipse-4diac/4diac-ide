@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020 Primetals Technologies Germany GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,23 +8,32 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl  - initial implementation and/or documentation
+ *   Alois Zoitl - initial implementation and/or documentation
+ *               - implemented first version of gotoMarker for FB markers
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditor;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
+import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
+import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -49,6 +58,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -58,24 +68,25 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class AutomationSystemEditor extends MultiPageEditorPart
-		implements CommandStackEventListener, ITabbedPropertySheetPageContributor {
+implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker {
 
 	private AutomationSystem system;
 
-	private Map<Object, Integer> modelToEditorNum = new HashMap<>();
+	private final Map<Object, Integer> modelToEditorNum = new HashMap<>();
 
+	private BreadcrumbWidget breadcrumb;
 	private DiagramOutlinePage outlinePage;
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		loadSystem();
 	}
 
 	@Override
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 		parent.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true).spacing(0, 0).create());
-		BreadcrumbWidget breadcrumb = new BreadcrumbWidget(parent);
+		breadcrumb = new BreadcrumbWidget(parent);
 		breadcrumb.setInput(system);
 		breadcrumb.addSelectionChangedListener(
 				event -> handleBreadCrumbSelection(((StructuredSelection) event.getSelection()).getFirstElement()));
@@ -86,8 +97,8 @@ public class AutomationSystemEditor extends MultiPageEditorPart
 	}
 
 	@Override
-	protected Composite createPageContainer(Composite parent) {
-		Composite pageContainer = new Composite(parent, SWT.NONE);
+	protected Composite createPageContainer(final Composite parent) {
+		final Composite pageContainer = new Composite(parent, SWT.NONE);
 		pageContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 		return pageContainer;
 	}
@@ -105,39 +116,39 @@ public class AutomationSystemEditor extends MultiPageEditorPart
 	@Override
 	protected void createPages() {
 		try {
-			int pagenum = addPage(new SystemEditor(), getEditorInput());
+			final int pagenum = addPage(new SystemEditor(), getEditorInput());
 			modelToEditorNum.put(system.getSystemFile(), pagenum); // need to use the file as reference as this is
-																	// provided by the content providers
-		} catch (PartInitException e) {
+			// provided by the content providers
+		} catch (final PartInitException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}
 
-	private void handleBreadCrumbSelection(Object element) {
-		int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor);
+	private void handleBreadCrumbSelection(final Object element) {
+		final int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor);
 		if (-1 != pagenum) {
 			setActivePage(pagenum);
 			if (null != outlinePage) {
-				GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
+				final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
 				outlinePage.viewerChanged(viewer);
 			}
 		}
 	}
 
-	private int createEditor(Object model) {
-		EditorPart part = createEditorPart(model);
+	private int createEditor(final Object model) {
+		final EditorPart part = createEditorPart(model);
 		if (null != part) {
-			IEditorInput input = createEditorInput(model);
+			final IEditorInput input = createEditorInput(model);
 			try {
 				return addPage(part, input);
-			} catch (PartInitException e) {
+			} catch (final PartInitException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 		}
 		return -1;
 	}
 
-	private static EditorPart createEditorPart(Object model) {
+	private static EditorPart createEditorPart(final Object model) {
 		if (model instanceof SubApp) {
 			return new SubAppNetworkEditor();
 		}
@@ -157,7 +168,7 @@ public class AutomationSystemEditor extends MultiPageEditorPart
 		return null;
 	}
 
-	private static IEditorInput createEditorInput(Object model) {
+	private static IEditorInput createEditorInput(final Object model) {
 		if (model instanceof SubApp) {
 			return new SubApplicationEditorInput((SubApp) model);
 		}
@@ -177,7 +188,7 @@ public class AutomationSystemEditor extends MultiPageEditorPart
 	}
 
 	@Override
-	public void doSave(IProgressMonitor monitor) {
+	public void doSave(final IProgressMonitor monitor) {
 		if (null != system) {
 			SystemManager.saveSystem(system);
 			getCommandStack().markSaveLocation();
@@ -202,7 +213,7 @@ public class AutomationSystemEditor extends MultiPageEditorPart
 	}
 
 	@Override
-	public <T> T getAdapter(Class<T> adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == CommandStack.class) {
 			return adapter.cast(getCommandStack());
 		}
@@ -215,11 +226,14 @@ public class AutomationSystemEditor extends MultiPageEditorPart
 			}
 			return adapter.cast(outlinePage);
 		}
+		if (adapter == IGotoMarker.class) {
+			return adapter.cast(this);
+		}
 		return super.getAdapter(adapter);
 	}
 
 	@Override
-	public void stackChanged(CommandStackEvent event) {
+	public void stackChanged(final CommandStackEvent event) {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
@@ -238,6 +252,70 @@ public class AutomationSystemEditor extends MultiPageEditorPart
 	@Override
 	public String getContributorId() {
 		return DiagramEditorWithFlyoutPalette.PROPERTY_CONTRIBUTOR_ID;
+	}
+
+	@Override
+	public void gotoMarker(final IMarker marker) {
+		try {
+			final Map<String, Object> attrs = marker.getAttributes();
+			if (FordiacMarkerHelper.markerTargetsFBNetworkElement(attrs)) {
+				gotoFBNetworkElement(attrs.get(IMarker.LOCATION));
+			}
+		} catch (final CoreException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
+		}
+	}
+
+	private void gotoFBNetworkElement(final Object object) {
+		final String[] split = ((String) object).split("\\."); //$NON-NLS-1$
+		if (split.length >= 2) {
+			final EObject targetmodel = getTargetModel(Arrays.copyOf(split, split.length - 1));
+			if (null != targetmodel) {
+				breadcrumb.setInput(targetmodel);
+				final FBNetworkEditor fbEditor = getAdapter(FBNetworkEditor.class);
+				if (null != fbEditor) {
+					final FBNetworkElement elementToSelect = fbEditor.getModel()
+							.getElementNamed(split[split.length - 1]);
+					fbEditor.selectElement(elementToSelect);
+				}
+			}
+		}
+	}
+
+	private EObject getTargetModel(final String[] path) {
+		EObject retVal = system.getApplicationNamed(path[0]);
+		if (null != retVal) {
+			if(path.length > 1) {
+				// we are within a subapplication in the application
+				retVal = parseSubappPath(((Application) retVal).getFBNetwork(),
+						Arrays.copyOfRange(path, 1, path.length));
+			}
+		} else if (path.length > 2) {
+			// we need to have at least a device and a resource in the path
+			retVal = system.getDeviceNamed(path[0]);
+			if (null != retVal) {
+				retVal = ((Device) retVal).getResourceNamed(path[1]);
+				if ((null != retVal) && (path.length > 2)) {
+					// we are within a subapplication in the resource
+					retVal = parseSubappPath(((Resource) retVal).getFBNetwork(),
+							Arrays.copyOfRange(path, 2, path.length));
+				}
+			}
+		}
+		return retVal;
+	}
+
+	private static EObject parseSubappPath(FBNetwork network, final String[] path) {
+		EObject retVal = null;
+		for (final String element : path) {
+			retVal = network.getElementNamed(element);
+			if (retVal instanceof SubApp) {
+				network = ((SubApp) retVal).getSubAppNetwork();
+			} else {
+				return null;
+			}
+		}
+		return retVal;
 	}
 
 }
