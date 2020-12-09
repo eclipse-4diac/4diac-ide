@@ -622,6 +622,15 @@
                   
          </activeWhen>
       </handler>
+      
+      <handler
+        class="org.eclipse.fordiac.ide.application.handlers.ConvertToStructHandler"
+        commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct">
+        	<activeWhen>
+			    <reference definitionId="org.eclipse.fordiac.ide.application.InterfaceElementSelection" />
+			</activeWhen>
+      </handler>
+    
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -679,7 +688,32 @@
              <command
                   commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes">
             </command>
+            <command commandId= "org.eclipse.fordiac.ide.application.commands.convertToStruct"
+            		label="Convert to Struct">
+                <visibleWhen checkEnabled="true">
+                	<with variable="activeEditor">
+                		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
+                	</with>
+            	</visibleWhen>
+            </command>
       </menuContribution>            
+      
+      <menuContribution
+         allPopups="false"
+         locationURI="popup:org.eclipse.ui.popup.any?after=additions">  
+      <separator name="layouting stuff" visible="true"/>
+      <command
+            commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct"
+            label="Convert to Struct"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            		<reference
+            			definitionId="org.eclipse.fordiac.ide.application.InterfaceElementSelection">
+            		</reference>
+            </visibleWhen>
+      </command>
+	</menuContribution> 
+      
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup"> 
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.changeType"
@@ -1069,6 +1103,16 @@
     </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">
+      <definition
+      		id="org.eclipse.fordiac.ide.application.InterfaceElementSelection">
+      		<with variable="selection">
+      			<iterate>
+      				<instanceof
+      					value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
+      				</instanceof>
+      			</iterate>
+      		</with>
+      </definition>
       <definition
             id="org.eclipse.fordiac.ide.application.SubAppSelection">
             <with
