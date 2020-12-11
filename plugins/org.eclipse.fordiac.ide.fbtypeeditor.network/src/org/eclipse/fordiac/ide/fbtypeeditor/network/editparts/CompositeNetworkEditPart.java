@@ -115,7 +115,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	}
 
 	@Override
-	protected Boolean isVarVisible(final EditPart childEditPart) {
+	protected boolean isVarVisible(final EditPart childEditPart) {
 		return !(childEditPart.getModel() instanceof AdapterDeclaration);
 	}
 

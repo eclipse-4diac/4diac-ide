@@ -22,7 +22,7 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 public class TypedSubAppNetworkEditPart extends CompositeNetworkEditPart {
 
 	@Override
-	protected Boolean isVarVisible(final EditPart childEditPart) {
+	protected boolean isVarVisible(final EditPart childEditPart) {
 		return true;
 	}
 

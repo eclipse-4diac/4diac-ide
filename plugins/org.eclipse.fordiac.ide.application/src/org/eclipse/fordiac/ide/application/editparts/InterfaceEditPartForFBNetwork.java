@@ -46,7 +46,7 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 
 	@Override
 	protected List<?> getModelSourceConnections() {
-		List<Object> connections = new ArrayList<>(super.getModelSourceConnections());
+		final List<Object> connections = new ArrayList<>(super.getModelSourceConnections());
 		if (isUnfoldedSubapp()) {
 			if (isInput()) {
 				connections.addAll(getModel().getOutputConnections());
@@ -58,7 +58,7 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 
 	@Override
 	protected List<?> getModelTargetConnections() {
-		List<Object> connections = new ArrayList<>(super.getModelTargetConnections());
+		final List<Object> connections = new ArrayList<>(super.getModelTargetConnections());
 		if (isUnfoldedSubapp()) {
 			if (!isInput()) {
 				connections.addAll(getModel().getInputConnections());
@@ -70,7 +70,7 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 
 	protected boolean isUnfoldedSubapp() {
 		if (getModel().getFBNetworkElement() instanceof SubApp) {
-			SubApp subapp = (SubApp) getModel().getFBNetworkElement();
+			final SubApp subapp = (SubApp) getModel().getFBNetworkElement();
 			if (subapp.isUnfolded()) {
 				return true;
 			}

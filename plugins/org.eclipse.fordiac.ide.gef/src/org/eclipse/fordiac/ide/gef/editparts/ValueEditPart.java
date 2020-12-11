@@ -58,9 +58,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	private static int getMaxWidth() {
 		if (-1 == maxWidth) {
-			IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-			int maxLabelSize = pf.getInt(DiagramPreferences.MAX_VALUE_LABEL_SIZE);
-			FontMetrics fm = FigureUtilities
+			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
+			final int maxLabelSize = pf.getInt(DiagramPreferences.MAX_VALUE_LABEL_SIZE);
+			final FontMetrics fm = FigureUtilities
 					.getFontMetrics(JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
 			maxWidth = (int) (maxLabelSize * fm.getAverageCharacterWidth());
 		}
@@ -77,24 +77,24 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		super.activate();
 		getModel().eAdapters().add(contentAdapter);
 
-		Object part = getViewer().getEditPartRegistry().get(getModel().getVarDeclaration());
+		final Object part = getViewer().getEditPartRegistry().get(getModel().getVarDeclaration());
 		if (part instanceof InterfaceEditPart) {
 			parentPart = (InterfaceEditPart) part;
-			IFigure f = parentPart.getFigure();
+			final IFigure f = parentPart.getFigure();
 			f.addAncestorListener(new AncestorListener() {
 
 				@Override
-				public void ancestorRemoved(IFigure ancestor) {
+				public void ancestorRemoved(final IFigure ancestor) {
 					// Nothing to do here
 				}
 
 				@Override
-				public void ancestorMoved(IFigure ancestor) {
+				public void ancestorMoved(final IFigure ancestor) {
 					refreshVisuals();
 				}
 
 				@Override
-				public void ancestorAdded(IFigure ancestor) {
+				public void ancestorAdded(final IFigure ancestor) {
 					// Nothing to do here
 				}
 			});
@@ -106,14 +106,14 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	private Point calculatePos() {
 		if (parentPart != null) {
-			Rectangle bounds = parentPart.getFigure().getBounds();
+			final Rectangle bounds = parentPart.getFigure().getBounds();
 			int x = 0;
 			if (isInput()) {
 				x = bounds.x - 2 - calculateWidth();
 			} else {
 				x = (bounds.x + bounds.width + 2);
 			}
-			int y = bounds.y;
+			final int y = bounds.y;
 			return new Point(x, y);
 		}
 		return new Point(0, 0);
@@ -122,7 +122,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	protected void refreshPosition() {
 		if (getParent() != null) {
 			Rectangle bounds = null;
-			Point p = calculatePos();
+			final Point p = calculatePos();
 			bounds = new Rectangle(p.x, p.y, calculateWidth(), -1);
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
@@ -152,8 +152,8 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	private final Adapter contentAdapter = new AdapterImpl() {
 
 		@Override
-		public void notifyChanged(Notification notification) {
-			Object feature = notification.getFeature();
+		public void notifyChanged(final Notification notification) {
+			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getValue_Value().equals(feature)) {
 				refreshValue();
 				refreshPosition();
@@ -310,7 +310,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		IFigure f = null;
 		try {
 			f = createFigureForModel();
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 		return f;

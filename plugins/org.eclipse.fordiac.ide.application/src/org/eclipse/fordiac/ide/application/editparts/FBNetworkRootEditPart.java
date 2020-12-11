@@ -21,19 +21,16 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.FreeformFigure;
 import org.eclipse.draw2d.FreeformLayeredPane;
 import org.eclipse.draw2d.FreeformListener;
 import org.eclipse.draw2d.FreeformViewport;
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
+import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -66,7 +63,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		@SuppressWarnings("unchecked")
 		@Override
 		protected Collection<Object> calculateMarqueeSelectedEditParts() {
-			Collection<Object> marqueeSelectedEditParts = super.calculateMarqueeSelectedEditParts();
+			final Collection<Object> marqueeSelectedEditParts = super.calculateMarqueeSelectedEditParts();
 			// only report connections and fbelements, isMarqueeslectable can not be used
 			// for that as it affects connection selection in the wrong way
 			return marqueeSelectedEditParts.stream()
@@ -80,16 +77,16 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	private final Palette palette;
 	private NewInstanceDirectEditManager manager;
 
-	public FBNetworkRootEditPart(FBNetwork fbNetwork, Palette palette, IWorkbenchPartSite site,
-			ActionRegistry actionRegistry) {
+	public FBNetworkRootEditPart(final FBNetwork fbNetwork, final Palette palette, final IWorkbenchPartSite site,
+			final ActionRegistry actionRegistry) {
 		super(site, actionRegistry);
 		this.fbNetwork = fbNetwork;
 		this.palette = palette;
 	}
 
 	@Override
-	public DragTracker getDragTracker(Request req) {
-		MarqueeDragTracker dragTracker = new FBNetworkMarqueeDragTracker();
+	public DragTracker getDragTracker(final Request req) {
+		final MarqueeDragTracker dragTracker = new FBNetworkMarqueeDragTracker();
 		dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 		return dragTracker;
 	}
@@ -114,13 +111,13 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		return manager;
 	}
 
-	private void performDirectEdit(SelectionRequest request) {
-		NewInstanceDirectEditManager directEditManager = getManager();
+	void performDirectEdit(final SelectionRequest request) {
+		final NewInstanceDirectEditManager directEditManager = getManager();
 		directEditManager.updateRefPosition(new Point(request.getLocation().x, request.getLocation().y));
 		if (request.getExtendedData().isEmpty()) {
 			directEditManager.show();
 		} else {
-			Object key = request.getExtendedData().keySet().iterator().next();
+			final Object key = request.getExtendedData().keySet().iterator().next();
 			if (key instanceof String) {
 				directEditManager.show((String) key);
 			}
@@ -128,12 +125,12 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	}
 
 	@Override
-	public Command getCommand(Request request) {
+	public Command getCommand(final Request request) {
 		if (request instanceof DirectEditRequest) {
-			AbstractCreateFBNetworkElementCommand cmd = getDirectEditCommand((DirectEditRequest) request);
+			final AbstractCreateFBNetworkElementCommand cmd = getDirectEditCommand((DirectEditRequest) request);
 			if (null != cmd) {
 				getViewer().getEditDomain().getCommandStack().execute(cmd);
-				EditPart part = (EditPart) getViewer().getEditPartRegistry().get(cmd.getElement());
+				final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(cmd.getElement());
 				getViewer().select(part);
 			}
 			return null;
@@ -141,9 +138,9 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		return super.getCommand(request);
 	}
 
-	private AbstractCreateFBNetworkElementCommand getDirectEditCommand(DirectEditRequest request) {
-		Object value = request.getCellEditor().getValue();
-		Point refPoint = getInsertPos();
+	private AbstractCreateFBNetworkElementCommand getDirectEditCommand(final DirectEditRequest request) {
+		final Object value = request.getCellEditor().getValue();
+		final Point refPoint = getInsertPos();
 		if (value instanceof FBTypePaletteEntry) {
 			return new FBCreateCommand((FBTypePaletteEntry) value, fbNetwork, refPoint.x, refPoint.y);
 		}
@@ -155,55 +152,30 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	}
 
 	private Point getInsertPos() {
-		Point location = getManager().getLocator().getRefPoint();
-		FigureCanvas figureCanvas = (FigureCanvas) getViewer().getControl();
-		org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
+		final Point location = getManager().getLocator().getRefPoint();
+		final FigureCanvas figureCanvas = (FigureCanvas) getViewer().getControl();
+		final org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
 		location.x += viewLocation.x;
 		location.y += viewLocation.y;
-		org.eclipse.draw2d.geometry.Point insertPos = new org.eclipse.draw2d.geometry.Point(location.x, location.y)
+		final org.eclipse.draw2d.geometry.Point insertPos = new org.eclipse.draw2d.geometry.Point(location.x, location.y)
 				.scale(1.0 / getZoomManager().getZoom());
 		return new Point(insertPos.x, insertPos.y);
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		FreeformViewport viewPort = (FreeformViewport) super.createFigure();
-		FreeformLayeredPane drawingArea = (FreeformLayeredPane) viewPort.getContents();
+		final FreeformViewport viewPort = (FreeformViewport) super.createFigure();
+		final FreeformLayeredPane drawingArea = (FreeformLayeredPane) viewPort.getContents();
 
-		BackgroundFreeformFigure editorBackground = new BackgroundFreeformFigure();
+		final BackgroundFreeformFigure editorBackground = new BackgroundFreeformFigure();
 		viewPort.setContents(editorBackground);
-		ModuloFreeformFigure drawingAreaContainer = new ModuloFreeformFigure(); // same size as drawingArea, resizes
+		final ModuloFreeformFigure drawingAreaContainer = new ModuloFreeformFigure(); // same size as drawingArea, resizes
 		// that
-		drawingAreaContainer.setBorder(new EditingAreaBorder());
+		drawingAreaContainer.setBorder(new SingleLineBorder());
 		editorBackground.setContents(drawingAreaContainer);
 		drawingAreaContainer.setContents(drawingArea);
 
 		return viewPort;
-	}
-
-	public static class EditingAreaBorder extends MarginBorder {
-
-		private static final Insets DEFAULT_INSETS = new Insets(1, 1, 1, 1);
-
-		public EditingAreaBorder() {
-			super(DEFAULT_INSETS);
-		}
-
-		@Override
-		public boolean isOpaque() {
-			return true;
-		}
-
-		@Override
-		public void paint(IFigure figure, Graphics g, Insets insets) {
-			g.setLineStyle(Graphics.LINE_SOLID);
-			g.setLineWidth(1);
-			Rectangle r = getPaintRectangle(figure, insets);
-			r.resize(-1, -1);
-			g.setForegroundColor(ColorConstants.buttonDarker);
-			g.drawRectangle(r);
-		}
-
 	}
 
 	protected class ModuloFreeformFigure extends Figure implements FreeformFigure, FreeformListener {
@@ -217,7 +189,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		ModuloFreeformFigure() {
 			setOpaque(true);
 
-			ColorRegistry colorRegistry = PlatformUI.getWorkbench().getThemeManager().getCurrentTheme()
+			final ColorRegistry colorRegistry = PlatformUI.getWorkbench().getThemeManager().getCurrentTheme()
 					.getColorRegistry();
 
 			setBackgroundColor(colorRegistry.get("org.eclipse.ui.editors.backgroundColor")); //$NON-NLS-1$
@@ -225,7 +197,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		}
 
 		@Override
-		public void addFreeformListener(FreeformListener listener) {
+		public void addFreeformListener(final FreeformListener listener) {
 			addListener(FreeformListener.class, listener);
 		}
 
@@ -251,17 +223,18 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		private Rectangle calculateModuloExtent() { // adjust size to be a multiple of the base width/height
 			Rectangle contentsExtent = contents.getFreeformExtent().getCopy();
 			contentsExtent.scale(1.0 / getZoomManager().getZoom());
-			int x = calcAxisOrigin(contentsExtent.x, BASE_WIDTH);
-			int y = calcAxisOrigin(contentsExtent.y, BASE_HEIGHT);
-			int width = calcAxisExtent(contentsExtent.x, x, contentsExtent.width, BASE_WIDTH);
-			int height = calcAxisExtent(contentsExtent.y, y, contentsExtent.height, BASE_HEIGHT);
+			contentsExtent.shrink(getInsets());  // take any border into our calculation
+			final int x = calcAxisOrigin(contentsExtent.x, BASE_WIDTH);
+			final int y = calcAxisOrigin(contentsExtent.y, BASE_HEIGHT);
+			final int width = calcAxisExtent(contentsExtent.x, x, contentsExtent.width, BASE_WIDTH);
+			final int height = calcAxisExtent(contentsExtent.y, y, contentsExtent.height, BASE_HEIGHT);
 			contentsExtent = new Rectangle(x, y, width, height);
 			contentsExtent.scale(getZoomManager().getZoom());
 			return contentsExtent;
 		}
 
-		private int calcAxisExtent(int baseOrigin, int newOrigin, int sourceExtent, int baseUnit) {
-			int startExtent = sourceExtent + PADDING + baseOrigin - newOrigin;
+		private int calcAxisExtent(final int baseOrigin, final int newOrigin, final int sourceExtent, final int baseUnit) {
+			final int startExtent = sourceExtent + PADDING + baseOrigin - newOrigin;
 
 			int newExtend = (startExtent / baseUnit + 1) * baseUnit;
 			if (newExtend < (3 * baseUnit)) {
@@ -270,7 +243,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 			return newExtend;
 		}
 
-		private int calcAxisOrigin(int axisPos, int baseUnit) {
+		private int calcAxisOrigin(final int axisPos, final int baseUnit) {
 			if (axisPos < 0) {
 				// when negative we need to go one beyond to have the correct origin
 				return (axisPos / baseUnit - 1) * baseUnit;
@@ -288,12 +261,12 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		}
 
 		@Override
-		public void removeFreeformListener(FreeformListener listener) {
+		public void removeFreeformListener(final FreeformListener listener) {
 			removeListener(FreeformListener.class, listener);
 		}
 
 		@Override
-		public void setFreeformBounds(Rectangle bounds) {
+		public void setFreeformBounds(final Rectangle bounds) {
 			Rectangle r = getFreeformExtent(); // we insist on our own size calculation
 			setBounds(r);
 			r = r.getCopy();
@@ -301,7 +274,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 			contents.setFreeformBounds(r);
 		}
 
-		public void setContents(FreeformLayeredPane contents) {
+		public void setContents(final FreeformLayeredPane contents) {
 			this.contents = contents;
 			add(contents);
 			contents.addFreeformListener(this);
@@ -314,21 +287,21 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 
 		public BackgroundFreeformFigure() {
 			setOpaque(true);
-			Display display = Display.getCurrent();
+			final Display display = Display.getCurrent();
 			if (null != display) {
 				setBackgroundColor(display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 			}
 		}
 
 		@Override
-		public void addFreeformListener(FreeformListener listener) {
+		public void addFreeformListener(final FreeformListener listener) {
 			addListener(FreeformListener.class, listener);
 		}
 
 		@Override
 		public void fireExtentChanged() {
 			getListeners(FreeformListener.class)
-					.forEachRemaining(listener -> ((FreeformListener) listener).notifyFreeformExtentChanged());
+			.forEachRemaining(listener -> ((FreeformListener) listener).notifyFreeformExtentChanged());
 			performRevalidation();
 		}
 
@@ -341,8 +314,8 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		public Rectangle getFreeformExtent() {
 			if (extent == null) {
 				extent = contents.getFreeformExtent().getCopy();
-				FigureCanvas figureCanvas = (FigureCanvas) getViewer().getControl();
-				org.eclipse.swt.graphics.Rectangle canvasBounds = figureCanvas.getBounds();
+				final FigureCanvas figureCanvas = (FigureCanvas) getViewer().getControl();
+				final org.eclipse.swt.graphics.Rectangle canvasBounds = figureCanvas.getBounds();
 				extent.expand(canvasBounds.width * 0.9, canvasBounds.height * 0.9);
 				translateToParent(extent);
 			}
@@ -350,24 +323,24 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		}
 
 		@Override
-		public void removeFreeformListener(FreeformListener listener) {
+		public void removeFreeformListener(final FreeformListener listener) {
 			removeListener(FreeformListener.class, listener);
 		}
 
 		@Override
-		public void setFreeformBounds(Rectangle bounds) {
-			Rectangle newExtents = calculateBackgroundSize(bounds);
+		public void setFreeformBounds(final Rectangle bounds) {
+			final Rectangle newExtents = calculateBackgroundSize(bounds);
 			setBounds(newExtents);
 			translateFromParent(newExtents);
 			contents.setFreeformBounds(newExtents); // we insist on our own size calculation
 		}
 
-		private Rectangle calculateBackgroundSize(Rectangle bounds) {
+		private Rectangle calculateBackgroundSize(final Rectangle bounds) {
 			return new Rectangle(bounds.x + ((bounds.width - extent.width) / 2),
 					bounds.y + ((bounds.height - extent.height) / 2), extent.width, extent.height);
 		}
 
-		public void setContents(ModuloFreeformFigure contents) {
+		public void setContents(final ModuloFreeformFigure contents) {
 			this.contents = contents;
 			add(contents);
 			contents.addFreeformListener(this);
