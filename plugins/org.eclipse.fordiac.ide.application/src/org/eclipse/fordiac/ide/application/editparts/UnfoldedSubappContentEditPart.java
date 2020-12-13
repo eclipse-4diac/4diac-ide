@@ -27,9 +27,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.impl.EAttributeImpl;
-import org.eclipse.emf.ecore.impl.EReferenceImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
@@ -64,7 +61,7 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 					super.notifyChanged(notification);
 					childrenNumber = getModel().getNetworkElements().size();
 					p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
-				        p.x -= 40;
+					p.x -= 40;
 					getChildren().forEach(ep->((EditPart)ep).refresh());
 				}
 			}
@@ -138,7 +135,7 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	}
 
 	static final int VER_BORDER_WIDTH = 10;
-	static final int HOR_BORDER_WIDTH = 5 * VER_BORDER_WIDTH;
+	static final int HOR_BORDER_WIDTH = 7 * VER_BORDER_WIDTH;
 	static final Insets BORDER_INSET = new Insets(VER_BORDER_WIDTH, HOR_BORDER_WIDTH, VER_BORDER_WIDTH,
 			HOR_BORDER_WIDTH);
 

@@ -23,6 +23,7 @@ Require-Bundle: org.eclipse.elk.core,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.elk.alg.layered,
  org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.fbtypeeditor.network
+ org.eclipse.fordiac.ide.fbtypeeditor.network,
+ org.eclipse.core.expressions
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy

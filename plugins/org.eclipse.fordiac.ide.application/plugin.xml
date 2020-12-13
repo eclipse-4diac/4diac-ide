@@ -322,8 +322,8 @@
    </extension>
    <extension point="org.eclipse.core.expressions.propertyTesters">
     	<propertyTester
-          class="org.eclipse.fordiac.ide.application.properties.UnfoldedSubAppFilter"
-          id="org.eclipse.fordiac.ide.application.properties.unfoldedSubAppFilter"
+          class="org.eclipse.fordiac.ide.application.properties.MoveToParentPropertyTester"
+          id="org.eclipse.fordiac.ide.application.properties.moveToParentPropertyTester"
           namespace="org.eclipse.fordiac.ide.application.properties"
           properties="parentIsSubApp"
           type="java.lang.Object">
