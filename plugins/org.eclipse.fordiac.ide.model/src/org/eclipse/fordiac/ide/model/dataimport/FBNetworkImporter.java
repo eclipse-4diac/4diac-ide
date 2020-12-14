@@ -140,12 +140,6 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 
-		for (final VarDeclaration var : fb.getInterface().getInputVars()) {
-			if (null == var.getValue()) {
-				var.setValue(LibraryElementFactory.eINSTANCE.createValue());
-			}
-		}
-
 		fbNetwork.getNetworkElements().add(fb);
 		fbNetworkElementMap.put(fb.getName(), fb);
 	}
