@@ -27,10 +27,10 @@ import org.junit.jupiter.params.provider.Arguments;
 
 public class ConnectionCommandsTest extends FBNetworkTestBase {
 
-	private static State addIOWiths(State state) {
-		CompoundCommand c = new CompoundCommand();
+	public static State addIOWiths(final State state) {
+		final CompoundCommand c = new CompoundCommand();
 		c.add(new WithCreateCommand(state.getFunctionblock().getFBType().getInterfaceList().getEventInputs().get(0),
-						state.getFunctionblock().getFBType().getInterfaceList().getInputVars().get(0)));
+				state.getFunctionblock().getFBType().getInterfaceList().getInputVars().get(0)));
 		c.add(new WithCreateCommand(state.getFunctionblock().getFBType().getInterfaceList().getEventOutputs().get(0),
 				state.getFunctionblock().getFBType().getInterfaceList().getOutputVars().get(0)));
 		state.setCommand(c);
@@ -43,127 +43,127 @@ public class ConnectionCommandsTest extends FBNetworkTestBase {
 		state = WithCreateTest.updateNetworkElements(state);
 		return state;
 	}
-	
 
-	private static State workingAddDataConnection(State state) {
+
+	public static State workingAddDataConnection(final State state) {
 		addDataConnection(state);
 		return commandExecution(state);
 	}
 
-	private static void addDataConnection(State state) {
+	private static void addDataConnection(final State state) {
 		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
 		final InterfaceList fb2 = state.getFbNetwork().getNetworkElements().get(1).getInterface();
-		
-		AbstractConnectionCreateCommand c = new DataConnectionCreateCommand(state.getFbNetwork());
+
+		final AbstractConnectionCreateCommand c = new DataConnectionCreateCommand(state.getFbNetwork());
 		c.setSource(fb1.getOutputVars().get(0));
 		c.setDestination(fb2.getInputVars().get(0));
 		state.setCommand(c);
 	}
 
-	private static State workingAddReverseDataConnection(State state) {
+	private static State workingAddReverseDataConnection(final State state) {
 		addReverseDataConnection(state);
 		return commandExecution(state);
 	}
 
-	private static void addReverseDataConnection(State state) {
+	private static void addReverseDataConnection(final State state) {
 		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
 		final InterfaceList fb2 = state.getFbNetwork().getNetworkElements().get(1).getInterface();
-		
-		AbstractConnectionCreateCommand c = new DataConnectionCreateCommand(state.getFbNetwork());
+
+		final AbstractConnectionCreateCommand c = new DataConnectionCreateCommand(state.getFbNetwork());
 		c.setSource(fb2.getInputVars().get(0));
 		c.setDestination(fb1.getOutputVars().get(0));
 		state.setCommand(c);
 	}
 
-	private static void verifyDataConnection(State state, State oldState, TestFunction t) {
+	public static void verifyDataConnection(final State state, final State oldState, final TestFunction t) {
 		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
 		final InterfaceList fb2 = state.getFbNetwork().getNetworkElements().get(1).getInterface();
-		
+
 		t.test(state.getMessages().isEmpty());
 		t.test(fb1.getOutputVars().get(0).getOutputConnections().size(), 1);
 		t.test(fb1.getOutputVars().get(0).getOutputConnections().get(0).getDestination(), fb2.getInputVars().get(0));
 	}
 
-	private static State workingAddEventConnection(State state) {
+	public static State workingAddEventConnection(final State state) {
 		addEventConnection(state);
 		return commandExecution(state);
 	}
 
-	private static void addEventConnection(State state) {
+	private static void addEventConnection(final State state) {
 		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
 		final InterfaceList fb2 = state.getFbNetwork().getNetworkElements().get(1).getInterface();
-		
-		AbstractConnectionCreateCommand c = new EventConnectionCreateCommand(state.getFbNetwork());
+
+		final AbstractConnectionCreateCommand c = new EventConnectionCreateCommand(state.getFbNetwork());
 		c.setSource(fb1.getEventOutputs().get(0));
 		c.setDestination(fb2.getEventInputs().get(0));
 		state.setCommand(c);
 	}
 
-	private static State workingAddReverseEventConnection(State state) {
+	private static State workingAddReverseEventConnection(final State state) {
 		addReverseEventConnection(state);
 		return commandExecution(state);
 	}
 
-	private static void addReverseEventConnection(State state) {
+	private static void addReverseEventConnection(final State state) {
 		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
 		final InterfaceList fb2 = state.getFbNetwork().getNetworkElements().get(1).getInterface();
-		
-		AbstractConnectionCreateCommand c = new EventConnectionCreateCommand(state.getFbNetwork());
+
+		final AbstractConnectionCreateCommand c = new EventConnectionCreateCommand(state.getFbNetwork());
 		c.setSource(fb2.getEventInputs().get(0));
 		c.setDestination(fb1.getEventOutputs().get(0));
 		state.setCommand(c);
 	}
 
-	private static void verifyEventConnection(State state, State oldState, TestFunction t) {
+	public static void verifyEventConnection(final State state, final State oldState, final TestFunction t) {
 		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
 		final InterfaceList fb2 = state.getFbNetwork().getNetworkElements().get(1).getInterface();
-		
+
 		t.test(state.getMessages().isEmpty());
 		t.test(fb1.getEventOutputs().get(0).getOutputConnections().size(), 1);
 		t.test(fb1.getEventOutputs().get(0).getOutputConnections().get(0).getDestination(), fb2.getEventInputs().get(0));
 	}
 
-	private static Collection<Arguments> twoFunctionBlocks(List<ExecutionDescription<?>> executionDescriptions) {
+	private static Collection<Arguments> twoFunctionBlocks(final List<ExecutionDescription<?>> executionDescriptions) {
 		return describeCommand("Start with two functionblocks", // //$NON-NLS-1$
 				ConnectionCommandsTest::initState, //
-				(State state, State oldState, TestFunction t) -> CommandTestBase.verifyNothing(state, oldState, t), //
+				(final State state, final State oldState, final TestFunction t) -> CommandTestBase.verifyNothing(state, oldState, t), //
 				executionDescriptions //
 				);
 	}
 
-	private static State deleteDataConnection(State state) {
+	private static State deleteDataConnection(final State state) {
 		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
 		state.setCommand(new DeleteConnectionCommand(fb1.getOutputVars().get(0).getOutputConnections().get(0)));
 		return commandExecution(state);
 	}
-	
-	private static void verifyDeleteDataConnection(State state, State oldState, TestFunction t) {
+
+	private static void verifyDeleteDataConnection(final State state, final State oldState, final TestFunction t) {
 		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
 		final InterfaceList fb2 = state.getFbNetwork().getNetworkElements().get(1).getInterface();
 		t.test(fb1.getOutputVars().get(0).getOutputConnections().isEmpty());
 		t.test(fb2.getInputVars().get(0).getInputConnections().isEmpty());
 	}
 
-	private static State deleteEventConnection(State state) {
+	private static State deleteEventConnection(final State state) {
 		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
 		state.setCommand(new DeleteConnectionCommand(fb1.getEventOutputs().get(0).getOutputConnections().get(0)));
 		return commandExecution(state);
 	}
 
-	private static void verifyDeleteEventConnection(State state, State oldState, TestFunction t) {
+	private static void verifyDeleteEventConnection(final State state, final State oldState, final TestFunction t) {
 		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
 		final InterfaceList fb2 = state.getFbNetwork().getNetworkElements().get(1).getInterface();
 		t.test(fb1.getEventOutputs().get(0).getOutputConnections().isEmpty());
 		t.test(fb2.getEventInputs().get(0).getInputConnections().isEmpty());
 	}
 
-	private static State deleteFB2(State state) {
+	private static State deleteFB2(final State state) {
 		state.setCommand(new DeleteFBNetworkElementCommand(state.getFbNetwork().getNetworkElements().get(1)));
 		assertion.test(((DeleteFBNetworkElementCommand)state.getCommand()).getFBNetworkElement(), state.getFbNetwork().getNetworkElements().get(1));
 		return commandExecution(state);
 	}
 
-	private static void verifyDeleteFB2(State state, State oldState, TestFunction t) {
+	private static void verifyDeleteFB2(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getCommand() instanceof DeleteFBNetworkElementCommand);
 		t.test(state.getFbNetwork().getNetworkElements().size(), 1);
 		t.test(state.getFbNetwork().getDataConnections().isEmpty());
@@ -173,59 +173,59 @@ public class ConnectionCommandsTest extends FBNetworkTestBase {
 	// parameter creation function
 	protected static Collection<Arguments> data() {
 		final Collection<Arguments> commands = new ArrayList<>();
-		
-		commands.addAll(twoFunctionBlocks(List.of( //
-				new ExecutionDescription<State>("Add data connection between data interface points", //$NON-NLS-1$
-						ConnectionCommandsTest::workingAddDataConnection, //
-						ConnectionCommandsTest::verifyDataConnection //
-				), //
-				new ExecutionDescription<State>("Add event connection between event interface points", //$NON-NLS-1$
-						ConnectionCommandsTest::workingAddEventConnection, //
-						ConnectionCommandsTest::verifyEventConnection //
-				), //
-				new ExecutionDescription<State>("Delete data connection between event interface points", //$NON-NLS-1$
-						ConnectionCommandsTest::deleteDataConnection, //
-						ConnectionCommandsTest::verifyDeleteDataConnection //
-				), //
-				new ExecutionDescription<State>("Delete event connection between event interface points", //$NON-NLS-1$
-						ConnectionCommandsTest::deleteEventConnection, //
-						ConnectionCommandsTest::verifyDeleteEventConnection //
-				) //
-		)));
 
 		commands.addAll(twoFunctionBlocks(List.of( //
-				new ExecutionDescription<State>("Add reverse data connection between data interface points", //$NON-NLS-1$
-						ConnectionCommandsTest::workingAddReverseDataConnection, //
+				new ExecutionDescription<>("Add data connection between data interface points", //$NON-NLS-1$
+						ConnectionCommandsTest::workingAddDataConnection, //
 						ConnectionCommandsTest::verifyDataConnection //
-				), //
-				new ExecutionDescription<State>("Add reverse event connection between event interface points", //$NON-NLS-1$
-						ConnectionCommandsTest::workingAddReverseEventConnection, //
+						), //
+				new ExecutionDescription<>("Add event connection between event interface points", //$NON-NLS-1$
+						ConnectionCommandsTest::workingAddEventConnection, //
 						ConnectionCommandsTest::verifyEventConnection //
-				), //
-				new ExecutionDescription<State>("Delete data connection between event interface points", //$NON-NLS-1$
+						), //
+				new ExecutionDescription<>("Delete data connection between event interface points", //$NON-NLS-1$
 						ConnectionCommandsTest::deleteDataConnection, //
 						ConnectionCommandsTest::verifyDeleteDataConnection //
-				), //
-				new ExecutionDescription<State>("Delete event connection between event interface points", //$NON-NLS-1$
+						), //
+				new ExecutionDescription<>("Delete event connection between event interface points", //$NON-NLS-1$
 						ConnectionCommandsTest::deleteEventConnection, //
 						ConnectionCommandsTest::verifyDeleteEventConnection //
-				) //
-		)));
-		
+						) //
+				)));
+
 		commands.addAll(twoFunctionBlocks(List.of( //
-				new ExecutionDescription<State>("Add reverse data connection between data interface points", //$NON-NLS-1$
+				new ExecutionDescription<>("Add reverse data connection between data interface points", //$NON-NLS-1$
 						ConnectionCommandsTest::workingAddReverseDataConnection, //
 						ConnectionCommandsTest::verifyDataConnection //
-				), //
-				new ExecutionDescription<State>("Add reverse event connection between event interface points", //$NON-NLS-1$
+						), //
+				new ExecutionDescription<>("Add reverse event connection between event interface points", //$NON-NLS-1$
 						ConnectionCommandsTest::workingAddReverseEventConnection, //
 						ConnectionCommandsTest::verifyEventConnection //
-				), //
-				new ExecutionDescription<State>("Delete second functionblock und remove connections", //$NON-NLS-1$
+						), //
+				new ExecutionDescription<>("Delete data connection between event interface points", //$NON-NLS-1$
+						ConnectionCommandsTest::deleteDataConnection, //
+						ConnectionCommandsTest::verifyDeleteDataConnection //
+						), //
+				new ExecutionDescription<>("Delete event connection between event interface points", //$NON-NLS-1$
+						ConnectionCommandsTest::deleteEventConnection, //
+						ConnectionCommandsTest::verifyDeleteEventConnection //
+						) //
+				)));
+
+		commands.addAll(twoFunctionBlocks(List.of( //
+				new ExecutionDescription<>("Add reverse data connection between data interface points", //$NON-NLS-1$
+						ConnectionCommandsTest::workingAddReverseDataConnection, //
+						ConnectionCommandsTest::verifyDataConnection //
+						), //
+				new ExecutionDescription<>("Add reverse event connection between event interface points", //$NON-NLS-1$
+						ConnectionCommandsTest::workingAddReverseEventConnection, //
+						ConnectionCommandsTest::verifyEventConnection //
+						), //
+				new ExecutionDescription<>("Delete second functionblock und remove connections", //$NON-NLS-1$
 						ConnectionCommandsTest::deleteFB2, //
 						ConnectionCommandsTest::verifyDeleteFB2 //
-				) //
-		)));
+						) //
+				)));
 		return commands;
 	}
 }
