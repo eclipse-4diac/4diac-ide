@@ -38,7 +38,6 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.actions.UpdateAction;
-import org.eclipse.gef.ui.properties.UndoablePropertySheetPage;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.JFaceResources;
@@ -60,6 +59,7 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class DataTypeEditor extends EditorPart
 		implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISelectionListener {
@@ -73,9 +73,9 @@ public class DataTypeEditor extends EditorPart
 	private boolean outsideWorkspace;
 
 	private ActionRegistry actionRegistry;
-	private List<String> selectionActions = new ArrayList<>();
-	private List<String> stackActions = new ArrayList<>();
-	private List<String> propertyActions = new ArrayList<>();
+	private final List<String> selectionActions = new ArrayList<>();
+	private final List<String> stackActions = new ArrayList<>();
+	private final List<String> propertyActions = new ArrayList<>();
 
 	@Override
 	public void stackChanged(CommandStackEvent event) {
@@ -105,12 +105,12 @@ public class DataTypeEditor extends EditorPart
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		DataTypeExporter exporter = new DataTypeExporter((AnyDerivedType) dataType);
+		final DataTypeExporter exporter = new DataTypeExporter((AnyDerivedType) dataType);
 		try {
 			exporter.saveType(file);
 			commandStack.markSaveLocation();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
-		} catch (XMLStreamException e) {
+		} catch (final XMLStreamException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 			MessageDialog.openError(getSite().getShell().getShell(), Messages.MessageDialogTitle_SaveError,
 					Messages.MessageDialogContent_SaveError);
@@ -157,8 +157,8 @@ public class DataTypeEditor extends EditorPart
 	}
 
 	private void setActionHandlers(IEditorSite site) {
-		ActionRegistry registry = getActionRegistry();
-		IActionBars bars = site.getActionBars();
+		final ActionRegistry registry = getActionRegistry();
+		final IActionBars bars = site.getActionBars();
 		String id = ActionFactory.UNDO.getId();
 		bars.setGlobalActionHandler(id, registry.getAction(id));
 		id = ActionFactory.REDO.getId();
@@ -226,7 +226,7 @@ public class DataTypeEditor extends EditorPart
 	}
 
 	private void createActions() {
-		ActionRegistry registry = getActionRegistry();
+		final ActionRegistry registry = getActionRegistry();
 		IAction action;
 
 		action = new UndoAction(this);
@@ -239,11 +239,9 @@ public class DataTypeEditor extends EditorPart
 	}
 
 	@Override
-	public  <T extends Object> T getAdapter(Class<T> key) {
+	public <T extends Object> T getAdapter(Class<T> key) {
 		if (key == org.eclipse.ui.views.properties.IPropertySheetPage.class) {
-			return key.cast(new UndoablePropertySheetPage(getCommandStack(),
-					getActionRegistry().getAction(ActionFactory.UNDO.getId()),
-					getActionRegistry().getAction(ActionFactory.REDO.getId())));
+			return key.cast(new TabbedPropertySheetPage(this));
 		}
 		if (key == CommandStack.class) {
 			return key.cast(getCommandStack());
@@ -266,9 +264,9 @@ public class DataTypeEditor extends EditorPart
 	}
 
 	private void updateActions(List<String> actionIds) {
-		ActionRegistry registry = getActionRegistry();
+		final ActionRegistry registry = getActionRegistry();
 		actionIds.forEach(id -> {
-			IAction action = registry.getAction(id);
+			final IAction action = registry.getAction(id);
 			if (action instanceof UpdateAction) {
 				((UpdateAction) action).update();
 			}

@@ -49,7 +49,9 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -79,8 +81,8 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	private final DataType dataType;
 
-	public StructViewingComposite(Composite parent, int style, CommandStack cmdStack, DataType dataType,
-			DataTypeLibrary dataTypeLibrary, IWorkbenchPart part) {
+	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack,
+			final DataType dataType, final DataTypeLibrary dataTypeLibrary, final IWorkbenchPart part) {
 		super(parent, style);
 		this.cmdStack = cmdStack;
 		this.dataType = dataType;
@@ -88,7 +90,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		this.part = part;
 	}
 
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 		final TabbedPropertySheetWidgetFactory widgetFactory = new TabbedPropertySheetWidgetFactory();
 		parent.setLayout(new GridLayout(2, false));
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -111,12 +113,12 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		createContextMenu(structViewer);
 	}
 
-	private static void showLabel(Composite parent) {
+	private static void showLabel(final Composite parent) {
 		final Label label = new Label(parent, SWT.CENTER);
 		label.setText(Messages.StructViewingComposite_Headline);
 	}
 
-	private void showTable(Composite parent) {
+	private void showTable(final Composite parent) {
 		structViewer = TableWidgetFactory.createPropertyTableViewer(parent);
 		configureTableLayout(structViewer.getTable());
 
@@ -164,8 +166,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		typeDropDown = new DataTypeDropdown(dataTypeLibrary, structViewer) {
 			@Override
 			protected List<DataType> getDataTypesSorted() {
-				return super.getDataTypesSorted().stream()
-						.filter(Objects::nonNull)
+				return super.getDataTypesSorted().stream().filter(Objects::nonNull)
 						.filter(type -> !type.getName().equals(StructViewingComposite.this.getType().getName()))
 						.collect(Collectors.toList());
 			}
@@ -195,18 +196,18 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	@Override
-	public void executeCommand(Command cmd) {
+	public void executeCommand(final Command cmd) {
 		cmdStack.execute(cmd);
 	}
 
 	private final class StructCellModifier implements ICellModifier {
 		@Override
-		public boolean canModify(final Object element, String property) {
+		public boolean canModify(final Object element, final String property) {
 			return true;
 		}
 
 		@Override
-		public Object getValue(final Object element, String property) {
+		public Object getValue(final Object element, final String property) {
 			final VarDeclaration var = (VarDeclaration) element;
 			switch (property) {
 			case NAME:
@@ -263,7 +264,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	@Override
-	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			final VarDeclaration varEntry = (VarDeclaration) entry;
 			cmd.add(new InsertVariableCommand(((StructuredType) dataType).getMemberVariables(), varEntry, index));
@@ -271,22 +272,32 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	@Override
-	public void executeCompoundCommand(CompoundCommand cmd) {
+	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
 	}
 
 	@Override
-	public Object removeEntry(int index, CompoundCommand cmd) {
+	public Object removeEntry(final int index, final CompoundCommand cmd) {
 		final VarDeclaration entry = (VarDeclaration) getEntry(index);
 		cmd.add(new DeleteMemberVariableCommand(getType(), entry));
 		return entry;
 	}
 
-	public Object getEntry(int index) {
+	public DataType getStruct() {
+		return dataType;
+	}
+
+	public Object getEntry(final int index) {
 		return getType().getMemberVariables().get(index);
 	}
 
-	private static void createContextMenu(TableViewer viewer) {
+	private static void createContextMenu(final TableViewer viewer) {
 		OpenStructMenu.addTo(viewer);
+	}
+
+	@Override
+	public ISelection getSelection() {
+		// for now return the whole object so that property sheets and otehr stuff can filter on it.
+		return new StructuredSelection(this);
 	}
 }
