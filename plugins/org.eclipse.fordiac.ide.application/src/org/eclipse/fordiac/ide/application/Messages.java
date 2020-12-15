@@ -109,10 +109,6 @@ public class Messages extends NLS {
 
 	public static String ReconnectAdapterConnectionCommand_LABEL;
 
-	public static String SaveAsSubApplicationTypeAction_UntypedSubappError;
-
-	public static String SaveAsSubApplicationTypeAction_UntypedSubappErrorDescription;
-
 	public static String SaveAsSubappHandler_ReplaceDialogText;
 
 	public static String SaveAsSubApplicationTypeAction_WizardTitle;
