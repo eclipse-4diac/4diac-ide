@@ -10,15 +10,13 @@
  * Contributors:
  *   Alois Zoitl - initial implementation and/or documentation
  *               - implemented first version of gotoMarker for FB markers
+ *               - extracted breadcrumb based editor to model.ui
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditor;
@@ -28,7 +26,6 @@ import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -37,44 +34,35 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
-import org.eclipse.fordiac.ide.systemmanagement.ui.breadcrumb.BreadcrumbWidget;
+import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentProvider;
+import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
-import org.eclipse.gef.commands.CommandStackEventListener;
-import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class AutomationSystemEditor extends MultiPageEditorPart
-implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker {
+public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 
 	private AutomationSystem system;
 
-	private final Map<Object, Integer> modelToEditorNum = new HashMap<>();
-
-	private BreadcrumbWidget breadcrumb;
 	private DiagramOutlinePage outlinePage;
 
 	@Override
@@ -85,15 +73,10 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		parent.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true).spacing(0, 0).create());
-		breadcrumb = new BreadcrumbWidget(parent);
-		breadcrumb.setInput(system);
-		breadcrumb.addSelectionChangedListener(
-				event -> handleBreadCrumbSelection(((StructuredSelection) event.getSelection()).getFirstElement()));
-
 		super.createPartControl(parent);
-
-		((CTabFolder) getContainer()).setTabHeight(0); // we don't want the tabs to be seen
+		getBreadcrumb().setContentProvider(new SystemContentProvider());
+		getBreadcrumb().setLabelProvider(new SystemLabelProvider());
+		getBreadcrumb().setInput(system.getSystemFile());
 	}
 
 	@Override
@@ -101,6 +84,18 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 		final Composite pageContainer = new Composite(parent, SWT.NONE);
 		pageContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 		return pageContainer;
+	}
+
+	@Override
+	protected void createPages() {
+		try {
+			final int pagenum = addPage(new SystemEditor(), getEditorInput());
+			getModelToEditorNumMapping().put(system.getSystemFile(), pagenum); // need to use the file as reference as
+			// this is
+			// provided by the content providers
+		} catch (final PartInitException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
+		}
 	}
 
 	private void loadSystem() {
@@ -114,41 +109,20 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 	}
 
 	@Override
-	protected void createPages() {
-		try {
-			final int pagenum = addPage(new SystemEditor(), getEditorInput());
-			modelToEditorNum.put(system.getSystemFile(), pagenum); // need to use the file as reference as this is
-			// provided by the content providers
-		} catch (final PartInitException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+	protected void pageChange(final int newPageIndex) {
+		super.pageChange(newPageIndex);
+		if ((-1 != newPageIndex) && (null != outlinePage)) {
+			final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
+			outlinePage.viewerChanged(viewer);
 		}
 	}
 
-	private void handleBreadCrumbSelection(final Object element) {
-		final int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor);
-		if (-1 != pagenum) {
-			setActivePage(pagenum);
-			if (null != outlinePage) {
-				final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
-				outlinePage.viewerChanged(viewer);
-			}
-		}
-	}
 
-	private int createEditor(final Object model) {
-		final EditorPart part = createEditorPart(model);
-		if (null != part) {
-			final IEditorInput input = createEditorInput(model);
-			try {
-				return addPage(part, input);
-			} catch (final PartInitException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-			}
+	@Override
+	protected EditorPart createEditorPart(final Object model) {
+		if (model instanceof IFile) {
+			return new SystemEditor();
 		}
-		return -1;
-	}
-
-	private static EditorPart createEditorPart(final Object model) {
 		if (model instanceof SubApp) {
 			return new SubAppNetworkEditor();
 		}
@@ -168,7 +142,11 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 		return null;
 	}
 
-	private static IEditorInput createEditorInput(final Object model) {
+	@Override
+	protected IEditorInput createEditorInput(final Object model) {
+		if (model instanceof IFile) {
+			return getEditorInput();
+		}
 		if (model instanceof SubApp) {
 			return new SubApplicationEditorInput((SubApp) model);
 		}
@@ -214,9 +192,6 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
-		if (adapter == CommandStack.class) {
-			return adapter.cast(getCommandStack());
-		}
 		if (adapter == IPropertySheetPage.class) {
 			return adapter.cast(new TabbedPropertySheetPage(this));
 		}
@@ -225,9 +200,6 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 				outlinePage = new DiagramOutlinePage(getActiveEditor().getAdapter(GraphicalViewer.class));
 			}
 			return adapter.cast(outlinePage);
-		}
-		if (adapter == IGotoMarker.class) {
-			return adapter.cast(this);
 		}
 		return super.getAdapter(adapter);
 	}
@@ -245,6 +217,7 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 		super.dispose();
 	}
 
+	@Override
 	public CommandStack getCommandStack() {
 		return (null != system) ? system.getCommandStack() : null;
 	}
@@ -255,23 +228,12 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 	}
 
 	@Override
-	public void gotoMarker(final IMarker marker) {
-		try {
-			final Map<String, Object> attrs = marker.getAttributes();
-			if (FordiacMarkerHelper.markerTargetsFBNetworkElement(attrs)) {
-				gotoFBNetworkElement(attrs.get(IMarker.LOCATION));
-			}
-		} catch (final CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-		}
-	}
-
-	private void gotoFBNetworkElement(final Object object) {
+	protected void gotoFBNetworkElement(final Object object) {
 		final String[] split = ((String) object).split("\\."); //$NON-NLS-1$
 		if (split.length >= 2) {
 			final EObject targetmodel = getTargetModel(Arrays.copyOf(split, split.length - 1));
 			if (null != targetmodel) {
-				breadcrumb.setInput(targetmodel);
+				getBreadcrumb().setInput(targetmodel);
 				final FBNetworkEditor fbEditor = getAdapter(FBNetworkEditor.class);
 				if (null != fbEditor) {
 					final FBNetworkElement elementToSelect = fbEditor.getModel()

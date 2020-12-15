@@ -8,24 +8,24 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Daniel Lindhuber
- *      - initial implementation and/or documentation
+ *   Daniel Lindhuber - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.breadcrumb;
+package org.eclipse.fordiac.ide.model.ui.widgets;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentProvider;
-import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
 import org.eclipse.jface.resource.CompositeImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -49,40 +49,28 @@ class BreadcrumbItem {
 	private static final int SHELL_WIDTH = 250;
 	private static final int SHELL_HEIGHT = 250;
 
-	private SystemLabelProvider labelProvider = new SystemLabelProvider();
-	private SystemContentProvider contentProvider = new SystemContentProvider() {
-		@Override
-		public Object[] getChildren(Object parentElement) {
-			return Arrays.stream(super.getChildren(parentElement))
-					.filter(obj -> obj instanceof IFile || obj instanceof SystemConfiguration
-							|| obj instanceof Application || (obj instanceof SubApp && ((SubApp) obj).getType() == null)
-							|| obj instanceof Device || obj instanceof Resource)
-					.collect(Collectors.toList()).toArray();
-		}
+	private final AdapterFactoryLabelProvider labelProvider;
+	private final ITreeContentProvider contentProvider;
 
-		@Override
-		public boolean hasChildren(Object element) {
-			return getChildren(element).length != 0;
-		}
-
-	};
-
-	private Object current;
-	private ToolItem text;
+	private final Object current;
+	private final ToolItem text;
 	private ToolItem arrow;
-	private BreadcrumbWidget parent;
+	private final BreadcrumbWidget parent;
 	private Shell shell;
 
-	BreadcrumbItem(BreadcrumbWidget parent, Object current) {
+	BreadcrumbItem(final BreadcrumbWidget parent, final Object current,
+			final AdapterFactoryLabelProvider labelProvider, final AdapterFactoryContentProvider contentProvider) {
 		this.current = current;
 		this.parent = parent;
+		this.labelProvider = labelProvider;
+		this.contentProvider = new FilteredBreadCrumbContentProvider(contentProvider);
 
 		text = new ToolItem(parent.getToolBar(), SWT.PUSH);
 		text.setText(labelProvider.getText(current));
 		text.setImage(labelProvider.getImage(current));
 		text.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				super.widgetSelected(e);
 				updateBreadcrumb(current);
 			}
@@ -93,7 +81,7 @@ class BreadcrumbItem {
 			arrow.setImage(new BreadcrumbArrowDescriptor().createImage());
 			arrow.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected(final SelectionEvent e) {
 					super.widgetSelected(e);
 					openShell();
 				}
@@ -118,13 +106,13 @@ class BreadcrumbItem {
 		shell.setSize(SHELL_WIDTH, SHELL_HEIGHT);
 		shell.setLayout(new FillLayout());
 
-		TreeViewer viewer = new TreeViewer(shell);
+		final TreeViewer viewer = new TreeViewer(shell);
 		viewer.setContentProvider(contentProvider);
 		viewer.setLabelProvider(labelProvider);
 		viewer.setInput(current);
 		viewer.getControl().addFocusListener(new FocusAdapter() {
 			@Override
-			public void focusLost(FocusEvent e) {
+			public void focusLost(final FocusEvent e) {
 				super.focusLost(e);
 				if (shell != null) {
 					shell.close();
@@ -133,46 +121,79 @@ class BreadcrumbItem {
 		});
 		viewer.addSelectionChangedListener(this::handleTreeSelection);
 
-		Point location = new Point(arrow.getBounds().x, arrow.getBounds().y);
-		Rectangle rect = arrow.getBounds();
-		Point menuLocation = new Point(location.x - 1, location.y + rect.height);
+		final Point location = new Point(arrow.getBounds().x, arrow.getBounds().y);
+		final Rectangle rect = arrow.getBounds();
+		final Point menuLocation = new Point(location.x - 1, location.y + rect.height);
 		shell.setLocation(display.map(arrow.getParent(), null, menuLocation));
 		shell.open();
 	}
 
-	private void updateBreadcrumb(Object obj) {
+	private void updateBreadcrumb(final Object obj) {
 		parent.setInput(obj);
 		if (shell != null && !shell.isDisposed() && shell.isEnabled()) {
 			shell.close();
 		}
 	}
 
-	private void handleTreeSelection(SelectionChangedEvent event) {
-		IStructuredSelection selection = event.getStructuredSelection();
+	private void handleTreeSelection(final SelectionChangedEvent event) {
+		final IStructuredSelection selection = event.getStructuredSelection();
 		if (!selection.isEmpty()) {
 			updateBreadcrumb(selection.getFirstElement());
 		}
 	}
 
-	private final class BreadcrumbArrowDescriptor extends CompositeImageDescriptor {
+	private static class FilteredBreadCrumbContentProvider implements ITreeContentProvider {
+
+		final AdapterFactoryContentProvider nestedContentProvider;
+
+		public FilteredBreadCrumbContentProvider(final AdapterFactoryContentProvider nestedContentProvider) {
+			this.nestedContentProvider = nestedContentProvider;
+		}
 
 		@Override
-		protected void drawCompositeImage(int width, int height) {
-			Display display = Display.getCurrent();
-			final int SIZE = 5;
-			ImageDataProvider imageProvider = zoom -> {
-				Image image = new Image(display, SIZE, SIZE * 2);
+		public Object[] getElements(final Object inputElement) {
+			return getChildren(inputElement);
+		}
 
-				GC gc = new GC(image, SWT.LEFT_TO_RIGHT);
+		@Override
+		public Object[] getChildren(final Object parentElement) {
+			return Arrays.stream(nestedContentProvider.getChildren(parentElement))
+					.filter(obj -> obj instanceof IFile || obj instanceof SystemConfiguration
+							|| obj instanceof Application || (obj instanceof SubApp && ((SubApp) obj).getType() == null)
+							|| obj instanceof Device || obj instanceof Resource)
+					.collect(Collectors.toList()).toArray();
+		}
+
+		@Override
+		public Object getParent(final Object element) {
+			return nestedContentProvider.getParent(element);
+		}
+
+		@Override
+		public boolean hasChildren(final Object element) {
+			return getChildren(element).length != 0;
+		}
+	}
+
+	private static final class BreadcrumbArrowDescriptor extends CompositeImageDescriptor {
+
+		@Override
+		protected void drawCompositeImage(final int width, final int height) {
+			final Display display = Display.getCurrent();
+			final int SIZE = 5;
+			final ImageDataProvider imageProvider = zoom -> {
+				final Image image = new Image(display, SIZE, SIZE * 2);
+
+				final GC gc = new GC(image, SWT.LEFT_TO_RIGHT);
 
 				gc.setBackground(display.getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 				gc.fillPolygon(new int[] { 0, 0, SIZE, SIZE, 0, SIZE * 2 });
 				gc.dispose();
 
-				ImageData imageData = image.getImageData(zoom);
+				final ImageData imageData = image.getImageData(zoom);
 				image.dispose();
 
-				int whitePixel = imageData.palette.getPixel(display.getSystemColor(SWT.COLOR_LIST_BACKGROUND).getRGB());
+				final int whitePixel = imageData.palette.getPixel(display.getSystemColor(SWT.COLOR_LIST_BACKGROUND).getRGB());
 				imageData.transparentPixel = whitePixel;
 
 				return imageData;

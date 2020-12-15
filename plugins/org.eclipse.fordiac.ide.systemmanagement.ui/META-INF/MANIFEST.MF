@@ -29,7 +29,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.resourceediting,
  org.eclipse.jface,
  org.eclipse.fordiac.ide.systemconfiguration,
- org.eclipse.fordiac.ide.model.commands
+ org.eclipse.fordiac.ide.model.commands,
+ org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-Version: 1.13.0.qualifier
 Bundle-ManifestVersion: 2
