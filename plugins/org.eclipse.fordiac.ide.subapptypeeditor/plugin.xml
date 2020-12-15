@@ -24,7 +24,7 @@
 <extension
          point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
       <editor
-            class="org.eclipse.fordiac.ide.subapptypeeditor.editors.SubAppNetworkEditor"
+            class="org.eclipse.fordiac.ide.subapptypeeditor.editors.SubAppNetworkBreadCrumbEditor"
             sortIndex="30"
             type="subapp">
       </editor>

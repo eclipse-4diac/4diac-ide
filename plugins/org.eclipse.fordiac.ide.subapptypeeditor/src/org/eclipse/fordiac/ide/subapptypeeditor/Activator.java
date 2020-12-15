@@ -13,13 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.subapptypeeditor;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends Abstract4DIACUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.subapptypeeditor"; //$NON-NLS-1$
@@ -34,7 +34,7 @@ public class Activator extends AbstractUIPlugin {
 	 * BundleContext)
 	 */
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		setPlugin(this);
 	}
@@ -46,12 +46,12 @@ public class Activator extends AbstractUIPlugin {
 	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 		setPlugin(null);
 		super.stop(context);
 	}
 
-	private static synchronized void setPlugin(Activator newPlugin) {
+	private static synchronized void setPlugin(final Activator newPlugin) {
 		plugin = newPlugin;
 	}
 

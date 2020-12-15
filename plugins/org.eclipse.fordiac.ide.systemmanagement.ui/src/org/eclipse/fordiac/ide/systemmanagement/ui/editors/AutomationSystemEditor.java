@@ -45,7 +45,6 @@ import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentP
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -186,11 +185,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	}
 
 	@Override
-	public boolean isDirty() {
-		return ((null != system) && getCommandStack().isDirty());
-	}
-
-	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == IPropertySheetPage.class) {
 			return adapter.cast(new TabbedPropertySheetPage(this));
@@ -205,23 +199,10 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	}
 
 	@Override
-	public void stackChanged(final CommandStackEvent event) {
-		firePropertyChange(IEditorPart.PROP_DIRTY);
-	}
-
-	@Override
-	public void dispose() {
-		if (null != system) {
-			getCommandStack().removeCommandStackEventListener(this);
-		}
-		super.dispose();
-	}
-
-	@Override
 	public CommandStack getCommandStack() {
 		return (null != system) ? system.getCommandStack() : null;
 	}
-
+	
 	@Override
 	public String getContributorId() {
 		return DiagramEditorWithFlyoutPalette.PROPERTY_CONTRIBUTOR_ID;

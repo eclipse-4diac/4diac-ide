@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.viewers.ISelection;
@@ -78,7 +79,7 @@ public class BreadcrumbWidget implements ISelectionProvider {
 	private static boolean isValidInput(final Object input) {
 		return input instanceof IFile || input instanceof AutomationSystem || input instanceof SystemConfiguration
 				|| input instanceof Application || input instanceof SubApp || input instanceof Device
-				|| input instanceof Resource;
+				|| input instanceof Resource || input instanceof SubAppType;
 	}
 
 	ToolBar getToolBar() {

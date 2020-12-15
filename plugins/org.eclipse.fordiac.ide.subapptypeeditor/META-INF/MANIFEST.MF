@@ -4,7 +4,8 @@ Bundle-Name: Subapplication Type Editor (Incubation)
 Bundle-SymbolicName: org.eclipse.fordiac.ide.subapptypeeditor;singleton:=true
 Bundle-Version: 1.13.0.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.subapptypeeditor.Activator
-Require-Bundle: org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.ui;bundle-version="[1.11.0,2.0.0)",
@@ -15,7 +16,12 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.model.commands
+ org.eclipse.fordiac.ide.model.commands,
+ org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.fordiac.ide.typemanagement,
+ org.eclipse.fordiac.ide.util,
+ org.eclipse.emf.edit.ui,
+ org.eclipse.fordiac.ide.model.edit
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Eclipse 4diac
 Bundle-RequiredExecutionEnvironment: JavaSE-11

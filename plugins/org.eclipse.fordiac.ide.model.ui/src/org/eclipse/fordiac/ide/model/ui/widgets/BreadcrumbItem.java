@@ -157,6 +157,7 @@ class BreadcrumbItem {
 
 		@Override
 		public Object[] getChildren(final Object parentElement) {
+			// TODO move to content provider
 			return Arrays.stream(nestedContentProvider.getChildren(parentElement))
 					.filter(obj -> obj instanceof IFile || obj instanceof SystemConfiguration
 							|| obj instanceof Application || (obj instanceof SubApp && ((SubApp) obj).getType() == null)

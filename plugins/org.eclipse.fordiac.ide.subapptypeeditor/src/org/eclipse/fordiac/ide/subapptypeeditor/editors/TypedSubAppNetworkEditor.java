@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.network.CompositeNetworkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
 import org.eclipse.fordiac.ide.subapptypeeditor.editparts.SubAppTypeNetworkEditPartFactory;
 
-public class SubAppNetworkEditor extends CompositeNetworkEditor {
+public class TypedSubAppNetworkEditor extends CompositeNetworkEditor {
 
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
