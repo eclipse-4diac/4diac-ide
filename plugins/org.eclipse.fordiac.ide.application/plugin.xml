@@ -817,15 +817,21 @@
                			<or>
 		            		<equals value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor" />
 		            		<equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
+		            		<equals value="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor" />
 		            	</or>
 	            	</with>
-	            	<with variable="selection">
+	            	<with variable="activeEditor">
+                    	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+            		</with>
+	
+            		<with variable="selection">
 	            		<iterate ifEmpty="true">
 	            			<or>
 	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart" />
 	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
 	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
 	            				<instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+            					<instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
             				</or>
             			</iterate>
         			</with>

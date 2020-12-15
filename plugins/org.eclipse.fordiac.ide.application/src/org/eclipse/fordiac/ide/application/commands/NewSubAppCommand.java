@@ -35,22 +35,42 @@ import org.eclipse.ui.IEditorInput;
 public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	/** The input for reopening subApp. */
 	private IEditorInput input;
+	private final List<?> parts;
 	private final AddElementsToSubAppCommand addElements;
 	private MapToCommand mapSubappCmd; // can not be in the compound command as it needs to be performed when
-										// subapp interface is finished
+	// subapp interface is finished
 
 	public NewSubAppCommand(FBNetwork fbNetwork, List<?> selection, int x, int y) {
 		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
 		getSubApp().setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
 		addElements = new AddElementsToSubAppCommand(getSubApp(), selection);
 		checkMapping(selection);
+		parts = selection;
+	}
+
+	@Override
+	public boolean canExecute() {
+		return super.canExecute() && allElementsInSameFBnetwork();
+	}
+
+	private boolean allElementsInSameFBnetwork() {
+		final FBNetworkElement el;
+		for (final Object o : parts) {
+			if (o instanceof EditPart) {
+				final Object model = ((EditPart) o).getModel();
+				if ((model instanceof FBNetworkElement)
+						&& (((FBNetworkElement) model).getFbNetwork() != getFBNetwork())) {
+					// an element is not in the target fbnetwork
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	@Override
 	public void execute() {
 		super.execute();
-		// We can not call redo here as the unmap and map commands would not be handled
-		// correctly
 		addElements.execute();
 		if (null != mapSubappCmd) {
 			mapSubappCmd.execute();
@@ -74,16 +94,16 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 			mapSubappCmd.undo();
 		}
 		addElements.undo(); // this has to be done bevor super.undo() as otherwise addElements does not have
-							// the correct networks.
+		// the correct networks.
 		super.undo();
 		closeOpenedSubApp();
 	}
 
 	private void checkMapping(List<?> selection) {
 		Resource res = null;
-		for (Object ne : selection) {
+		for (final Object ne : selection) {
 			if ((ne instanceof EditPart) && (((EditPart) ne).getModel() instanceof FBNetworkElement)) {
-				FBNetworkElement element = (FBNetworkElement) ((EditPart) ne).getModel();
+				final FBNetworkElement element = (FBNetworkElement) ((EditPart) ne).getModel();
 				if (element.isMapped()) {
 					if (null == res) {
 						// this is the first element

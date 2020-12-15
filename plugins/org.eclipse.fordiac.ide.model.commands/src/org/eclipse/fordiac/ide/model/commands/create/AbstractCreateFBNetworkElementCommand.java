@@ -73,4 +73,8 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command {
 	}
 
 	protected abstract InterfaceList getTypeInterfaceList();
+
+	protected FBNetwork getFBNetwork() {
+		return fbNetwork;
+	}
 }
