@@ -58,14 +58,14 @@ public class MoveElementFromSubappCommand extends Command {
 	}
 
 	/** this enum shows if the command is executed either by right click on context menu or by drag and drop */
-	public static enum MoveOperation {
+	public enum MoveOperation {
 		DRAG_AND_DROP_TO_ROOT, DRAG_AND_DROP_TO_SUBAPP, CONTEXT_MENU
 	}
 
 	private final MoveOperation moveOperation;
 
-	public MoveElementFromSubappCommand(SubApp sourceSubApp, FBNetworkElement element, Rectangle targetRect,
-			MoveOperation moveOperation) {
+	public MoveElementFromSubappCommand(final SubApp sourceSubApp, final FBNetworkElement element, final Rectangle targetRect,
+			final MoveOperation moveOperation) {
 		this.sourceSubApp = sourceSubApp;
 		this.element = element;
 		this.targetRect = targetRect;
@@ -129,14 +129,12 @@ public class MoveElementFromSubappCommand extends Command {
 		return element;
 	}
 
-	private void positionElement(FBNetworkElement element, Position pos) {
+	private void positionElement(final FBNetworkElement element, final Position pos) {
 
 		switch (moveOperation) {
 		case DRAG_AND_DROP_TO_ROOT:
-			final int X_OFFSET_MOUSE = 120;
-			final int Y_OFFSET_MOUSE = 60;
-			element.setX(sourceSubApp.getX() + mouseMoveDelta.x + X_OFFSET_MOUSE);
-			element.setY(sourceSubApp.getY() + mouseMoveDelta.y + Y_OFFSET_MOUSE);
+			element.setX(sourceSubApp.getX() + mouseMoveDelta.x + element.getX());
+			element.setY(sourceSubApp.getY() + mouseMoveDelta.y + element.getY());
 			break;
 		case DRAG_AND_DROP_TO_SUBAPP:
 		case CONTEXT_MENU:
@@ -167,7 +165,7 @@ public class MoveElementFromSubappCommand extends Command {
 
 	}
 
-	private Position checkElementConnections(FBNetworkElement fbNetworkElement) {
+	private Position checkElementConnections(final FBNetworkElement fbNetworkElement) {
 		final List<Position> posList = new ArrayList<>();
 		for (final IInterfaceElement ie : fbNetworkElement.getInterface().getAllInterfaceElements()) {
 			if (ie.isIsInput()) {
@@ -185,7 +183,7 @@ public class MoveElementFromSubappCommand extends Command {
 
 	/* return the position where the FB should be placed in the parent network if all connections indicate a side, its
 	 * returned otherwise Position.Below is returned */
-	private static Position checkPosition(List<Position> posList) {
+	private static Position checkPosition(final List<Position> posList) {
 		Position pos = null;
 		for (final Position p : posList) {
 			if (pos == null) {
@@ -198,7 +196,7 @@ public class MoveElementFromSubappCommand extends Command {
 		return pos == null ? Position.BELOW : pos;
 	}
 
-	private Position checkConnection(Connection con, IInterfaceElement opposite, IInterfaceElement ie) {
+	private Position checkConnection(final Connection con, final IInterfaceElement opposite, final IInterfaceElement ie) {
 		if ((opposite.getFBNetworkElement() instanceof SubApp) && opposite.getFBNetworkElement().equals(sourceSubApp)) {
 			handleCrossingConnections(con, opposite, ie.isIsInput());
 			return ie.isIsInput() ? Position.LEFT : Position.RIGHT;
@@ -207,7 +205,7 @@ public class MoveElementFromSubappCommand extends Command {
 		return ie.isIsInput() ? Position.RIGHT : Position.LEFT;
 	}
 
-	private void handleInnerConnections(Connection con, IInterfaceElement ie, boolean isInput) {
+	private void handleInnerConnections(final Connection con, final IInterfaceElement ie, final boolean isInput) {
 		final String subAppIEName = generateSubAppIEName(ie);
 		IInterfaceElement subAppIE = sourceSubApp.getInterfaceElement(subAppIEName);
 		if (null == subAppIE) {
@@ -224,7 +222,7 @@ public class MoveElementFromSubappCommand extends Command {
 				con.getDestination(), sourceSubApp.getFbNetwork());
 	}
 
-	private void handleCrossingConnections(Connection con, IInterfaceElement opposite, boolean isInput) {
+	private void handleCrossingConnections(final Connection con, final IInterfaceElement opposite, final boolean isInput) {
 
 		final List<Connection> internalCons = isInput ? opposite.getOutputConnections()
 				: opposite.getInputConnections();
@@ -237,7 +235,7 @@ public class MoveElementFromSubappCommand extends Command {
 				modifiedConns.add(new DeleteConnectionCommand(outCon));
 				createConnection(isInput ? outCon.getSource() : con.getSource(),
 						isInput ? con.getDestination() : outCon.getDestination(), con.getDestination(),
-						sourceSubApp.getFbNetwork());
+								sourceSubApp.getFbNetwork());
 			}
 		} else {
 			modifiedConns.add(new DeleteConnectionCommand(con));
@@ -247,20 +245,20 @@ public class MoveElementFromSubappCommand extends Command {
 						sourceSubApp.getFbNetwork());
 				createConnection(isInput ? outCon.getSource() : con.getSource(),
 						isInput ? con.getDestination() : outCon.getDestination(), con.getDestination(),
-						sourceSubApp.getFbNetwork());
+								sourceSubApp.getFbNetwork());
 			}
 		}
 	}
 
-	private void createConnection(IInterfaceElement source, IInterfaceElement destination, IInterfaceElement subappIE,
-			FBNetwork network) {
+	private void createConnection(final IInterfaceElement source, final IInterfaceElement destination, final IInterfaceElement subappIE,
+			final FBNetwork network) {
 		final AbstractConnectionCreateCommand cmd = getCreateConnectionCommand(network, subappIE);
 		cmd.setSource(source);
 		cmd.setDestination(destination);
 		modifiedConns.add(cmd);
 	}
 
-	private IInterfaceElement createInterfaceElement(IInterfaceElement ie, String subAppIEName, boolean isInput) {
+	private IInterfaceElement createInterfaceElement(final IInterfaceElement ie, final String subAppIEName, final boolean isInput) {
 		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(ie.getType(),
 				sourceSubApp.getInterface(), isInput, -1);
 		cmd.execute();
@@ -272,12 +270,12 @@ public class MoveElementFromSubappCommand extends Command {
 		return cmd.getInterfaceElement();
 	}
 
-	private static String generateSubAppIEName(IInterfaceElement ie) {
+	private static String generateSubAppIEName(final IInterfaceElement ie) {
 		return ie.getFBNetworkElement().getName() + "_" + ie.getName(); //$NON-NLS-1$
 	}
 
-	private static AbstractConnectionCreateCommand getCreateConnectionCommand(FBNetwork fbNetwork,
-			IInterfaceElement subAppIE) {
+	private static AbstractConnectionCreateCommand getCreateConnectionCommand(final FBNetwork fbNetwork,
+			final IInterfaceElement subAppIE) {
 		AbstractConnectionCreateCommand cmd = null;
 		if (subAppIE instanceof Event) {
 			cmd = new EventConnectionCreateCommand(fbNetwork);
@@ -289,7 +287,7 @@ public class MoveElementFromSubappCommand extends Command {
 		return cmd;
 	}
 
-	public void setMouseMoveDelta(org.eclipse.draw2d.geometry.Point mouseMoveDelta) {
+	public void setMouseMoveDelta(final org.eclipse.draw2d.geometry.Point mouseMoveDelta) {
 		this.mouseMoveDelta = mouseMoveDelta;
 	}
 
