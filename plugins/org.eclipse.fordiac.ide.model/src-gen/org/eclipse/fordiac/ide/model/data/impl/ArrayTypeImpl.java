@@ -28,88 +28,68 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Array
- * Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Array Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl#getSubranges
- * <em>Subranges</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl#getInitialValues
- * <em>Initial Values</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl#getBaseType
- * <em>Base Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl#getSubranges <em>Subranges</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl#getInitialValues <em>Initial Values</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl#getBaseType <em>Base Type</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
-	/**
-	 * The cached value of the '{@link #getSubranges() <em>Subranges</em>}'
-	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getSubranges() <em>Subranges</em>}' containment reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getSubranges()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Subrange> subranges;
 
-	/**
-	 * The default value of the '{@link #getInitialValues() <em>Initial
-	 * Values</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getInitialValues() <em>Initial Values</em>}' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
 	 * @see #getInitialValues()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String INITIAL_VALUES_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getInitialValues() <em>Initial Values</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getInitialValues() <em>Initial Values</em>}' attribute. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @see #getInitialValues()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String initialValues = INITIAL_VALUES_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getBaseType() <em>Base Type</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getBaseType() <em>Base Type</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getBaseType()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected DataType baseType;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected ArrayTypeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return DataPackage.Literals.ARRAY_TYPE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<Subrange> getSubranges() {
 		if (subranges == null) {
@@ -118,21 +98,17 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 		return subranges;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getInitialValues() {
 		return initialValues;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setInitialValues(String newInitialValues) {
 		String oldInitialValues = initialValues;
@@ -142,11 +118,9 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 					oldInitialValues, initialValues));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public DataType getBaseType() {
 		if (baseType != null && baseType.eIsProxy()) {
@@ -161,20 +135,16 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 		return baseType;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public DataType basicGetBaseType() {
 		return baseType;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setBaseType(DataType newBaseType) {
 		DataType oldBaseType = baseType;
@@ -184,11 +154,9 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 					baseType));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -199,11 +167,9 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -220,11 +186,9 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -245,11 +209,9 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -268,11 +230,9 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -288,11 +248,9 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

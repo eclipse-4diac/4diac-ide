@@ -13,29 +13,23 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.data;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>Derived
- * Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Derived Type</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType
- * <em>Base Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType <em>Base Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDerivedType()
  * @model
- * @generated
- */
+ * @generated */
 public interface DerivedType extends ValueType {
-	/**
-	 * Returns the value of the '<em><b>Base Type</b></em>' reference. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>Base Type</b></em>' reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Base Type</em>' reference isn't clear, there
-	 * really should be more of a description here...
+	 * If the meaning of the '<em>Base Type</em>' reference isn't clear, there really should be more of a description
+	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
@@ -43,19 +37,15 @@ public interface DerivedType extends ValueType {
 	 * @see #setBaseType(ElementaryType)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDerivedType_BaseType()
 	 * @model required="true"
-	 * @generated
-	 */
+	 * @generated */
 	ElementaryType getBaseType();
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType <em>Base
-	 * Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType <em>Base Type</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @param value the new value of the '<em>Base Type</em>' reference.
 	 * @see #getBaseType()
-	 * @generated
-	 */
+	 * @generated */
 	void setBaseType(ElementaryType value);
 
 } // DerivedType

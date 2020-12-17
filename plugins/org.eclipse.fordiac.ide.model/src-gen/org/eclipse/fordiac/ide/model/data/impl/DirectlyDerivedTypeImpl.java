@@ -17,27 +17,21 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Directly Derived Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Directly Derived Type</b></em>'. <!--
+ * end-user-doc -->
  *
- * @generated
- */
+ * @generated */
 public class DirectlyDerivedTypeImpl extends DerivedTypeImpl implements DirectlyDerivedType {
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected DirectlyDerivedTypeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return DataPackage.Literals.DIRECTLY_DERIVED_TYPE;

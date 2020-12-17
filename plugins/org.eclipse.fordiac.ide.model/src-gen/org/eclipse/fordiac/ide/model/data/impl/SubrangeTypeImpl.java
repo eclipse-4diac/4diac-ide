@@ -22,64 +22,50 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.data.SubrangeType;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Subrange Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Subrange Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeTypeImpl#getSubrange
- * <em>Subrange</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeTypeImpl#getSubrange <em>Subrange</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
-	/**
-	 * The cached value of the '{@link #getSubrange() <em>Subrange</em>}'
-	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getSubrange() <em>Subrange</em>}' containment reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
 	 * @see #getSubrange()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected Subrange subrange;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected SubrangeTypeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return DataPackage.Literals.SUBRANGE_TYPE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Subrange getSubrange() {
 		return subrange;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetSubrange(Subrange newSubrange, NotificationChain msgs) {
 		Subrange oldSubrange = subrange;
 		subrange = newSubrange;
@@ -94,11 +80,9 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setSubrange(Subrange newSubrange) {
 		if (newSubrange != subrange) {
@@ -117,11 +101,9 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 					newSubrange));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -132,11 +114,9 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -147,11 +127,9 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -164,11 +142,9 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -181,11 +157,9 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

@@ -16,36 +16,29 @@ package org.eclipse.fordiac.ide.model.data;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object
- * '<em><b>Structured Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Structured Type</b></em>'. <!-- end-user-doc
+ * -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.StructuredType#getMemberVariables
- * <em>Member Variables</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.StructuredType#getMemberVariables <em>Member Variables</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getStructuredType()
  * @model
- * @generated
- */
+ * @generated */
 public interface StructuredType extends AnyDerivedType {
-	/**
-	 * Returns the value of the '<em><b>Member Variables</b></em>' containment
-	 * reference list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Returns the value of the '<em><b>Member Variables</b></em>' containment reference list. The list contents are of
+	 * type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
-	 * @return the value of the '<em>Member Variables</em>' containment reference
-	 *         list.
+	 * @return the value of the '<em>Member Variables</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getStructuredType_MemberVariables()
-	 * @model containment="true" extendedMetaData="kind='element'
-	 *        name='VarDeclaration' namespace='http://www.fordiac.org/61499/lib'"
-	 * @generated
-	 */
+	 * @model containment="true" extendedMetaData="kind='element' name='VarDeclaration'
+	 *        namespace='http://www.fordiac.org/61499/lib'"
+	 * @generated */
 	EList<VarDeclaration> getMemberVariables();
 
 } // StructuredType

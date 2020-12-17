@@ -17,27 +17,21 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.ElementaryType;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Elementary Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Elementary Type</b></em>'. <!-- end-user-doc
+ * -->
  *
- * @generated
- */
+ * @generated */
 public class ElementaryTypeImpl extends ValueTypeImpl implements ElementaryType {
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected ElementaryTypeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return DataPackage.Literals.ELEMENTARY_TYPE;

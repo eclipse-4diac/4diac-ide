@@ -13,51 +13,40 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.data;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>Subrange
- * Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Subrange Type</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.SubrangeType#getSubrange
- * <em>Subrange</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.SubrangeType#getSubrange <em>Subrange</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getSubrangeType()
  * @model
- * @generated
- */
+ * @generated */
 public interface SubrangeType extends DerivedType {
-	/**
-	 * Returns the value of the '<em><b>Subrange</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+	/** Returns the value of the '<em><b>Subrange</b></em>' containment reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Subrange</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Subrange</em>' containment reference isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Subrange</em>' containment reference.
 	 * @see #setSubrange(Subrange)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getSubrangeType_Subrange()
-	 * @model containment="true" required="true" extendedMetaData="kind='element'
-	 *        name='Subrange' namespace='##targetNamespace'"
-	 * @generated
-	 */
+	 * @model containment="true" required="true" extendedMetaData="kind='element' name='Subrange'
+	 *        namespace='##targetNamespace'"
+	 * @generated */
 	Subrange getSubrange();
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.data.SubrangeType#getSubrange
-	 * <em>Subrange</em>}' containment reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.SubrangeType#getSubrange <em>Subrange</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @param value the new value of the '<em>Subrange</em>' containment reference.
 	 * @see #getSubrange()
-	 * @generated
-	 */
+	 * @generated */
 	void setSubrange(Subrange value);
 
 } // SubrangeType

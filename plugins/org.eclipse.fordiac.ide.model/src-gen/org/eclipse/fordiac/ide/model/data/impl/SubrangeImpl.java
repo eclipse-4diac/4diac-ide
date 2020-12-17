@@ -20,96 +20,75 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Subrange</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Subrange</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl#getLowerLimit
- * <em>Lower Limit</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl#getUpperLimit
- * <em>Upper Limit</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl#getLowerLimit <em>Lower Limit</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl#getUpperLimit <em>Upper Limit</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class SubrangeImpl extends EObjectImpl implements Subrange {
-	/**
-	 * The default value of the '{@link #getLowerLimit() <em>Lower Limit</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getLowerLimit() <em>Lower Limit</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getLowerLimit()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int LOWER_LIMIT_EDEFAULT = 0;
 
-	/**
-	 * The cached value of the '{@link #getLowerLimit() <em>Lower Limit</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getLowerLimit() <em>Lower Limit</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getLowerLimit()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected int lowerLimit = LOWER_LIMIT_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getUpperLimit() <em>Upper Limit</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getUpperLimit() <em>Upper Limit</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getUpperLimit()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int UPPER_LIMIT_EDEFAULT = 0;
 
-	/**
-	 * The cached value of the '{@link #getUpperLimit() <em>Upper Limit</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getUpperLimit() <em>Upper Limit</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getUpperLimit()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected int upperLimit = UPPER_LIMIT_EDEFAULT;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected SubrangeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return DataPackage.Literals.SUBRANGE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getLowerLimit() {
 		return lowerLimit;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setLowerLimit(int newLowerLimit) {
 		int oldLowerLimit = lowerLimit;
@@ -119,21 +98,17 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 					lowerLimit));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getUpperLimit() {
 		return upperLimit;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setUpperLimit(int newUpperLimit) {
 		int oldUpperLimit = upperLimit;
@@ -143,11 +118,9 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 					upperLimit));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -160,11 +133,9 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -180,11 +151,9 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -200,11 +169,9 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -217,11 +184,9 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())
