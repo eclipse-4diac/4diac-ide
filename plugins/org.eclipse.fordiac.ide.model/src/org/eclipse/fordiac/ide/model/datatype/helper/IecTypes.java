@@ -1,0 +1,193 @@
+/*******************************************************************************
+ * Copyright (c) 2018-2020 Johannes Kepler University
+ * 				 2020 Primetals Technologies Germany GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Michael Jaeger - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+package org.eclipse.fordiac.ide.model.datatype.helper;
+
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.data.AnyBitType;
+import org.eclipse.fordiac.ide.model.data.AnyCharType;
+import org.eclipse.fordiac.ide.model.data.AnyCharsType;
+import org.eclipse.fordiac.ide.model.data.AnyDateType;
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.data.AnyDurationType;
+import org.eclipse.fordiac.ide.model.data.AnyElementaryType;
+import org.eclipse.fordiac.ide.model.data.AnyIntType;
+import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType;
+import org.eclipse.fordiac.ide.model.data.AnyNumType;
+import org.eclipse.fordiac.ide.model.data.AnyRealType;
+import org.eclipse.fordiac.ide.model.data.AnySignedType;
+import org.eclipse.fordiac.ide.model.data.AnyStringType;
+import org.eclipse.fordiac.ide.model.data.AnyType;
+import org.eclipse.fordiac.ide.model.data.AnyUnsignedType;
+import org.eclipse.fordiac.ide.model.data.BoolType;
+import org.eclipse.fordiac.ide.model.data.ByteType;
+import org.eclipse.fordiac.ide.model.data.CharType;
+import org.eclipse.fordiac.ide.model.data.DataFactory;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.DateAndTimeType;
+import org.eclipse.fordiac.ide.model.data.DintType;
+import org.eclipse.fordiac.ide.model.data.DwordType;
+import org.eclipse.fordiac.ide.model.data.IntType;
+import org.eclipse.fordiac.ide.model.data.LdtType;
+import org.eclipse.fordiac.ide.model.data.LintType;
+import org.eclipse.fordiac.ide.model.data.LrealType;
+import org.eclipse.fordiac.ide.model.data.LtimeType;
+import org.eclipse.fordiac.ide.model.data.LtodType;
+import org.eclipse.fordiac.ide.model.data.LwordType;
+import org.eclipse.fordiac.ide.model.data.RealType;
+import org.eclipse.fordiac.ide.model.data.SintType;
+import org.eclipse.fordiac.ide.model.data.StringType;
+import org.eclipse.fordiac.ide.model.data.TimeOfDayType;
+import org.eclipse.fordiac.ide.model.data.TimeType;
+import org.eclipse.fordiac.ide.model.data.UdintType;
+import org.eclipse.fordiac.ide.model.data.UintType;
+import org.eclipse.fordiac.ide.model.data.UlintType;
+import org.eclipse.fordiac.ide.model.data.UsintType;
+import org.eclipse.fordiac.ide.model.data.WcharType;
+import org.eclipse.fordiac.ide.model.data.WordType;
+import org.eclipse.fordiac.ide.model.data.WstringType;
+
+public class IecTypes {
+
+	public static class ElementaryTypes {
+
+		public static final RealType REAL = DataFactory.eINSTANCE.createRealType();
+		public static final LrealType LREAL = DataFactory.eINSTANCE.createLrealType();
+
+		public static final UsintType USINT = DataFactory.eINSTANCE.createUsintType();
+		public static final UintType UINT = DataFactory.eINSTANCE.createUintType();
+		public static final UdintType UDINT = DataFactory.eINSTANCE.createUdintType();
+		public static final UlintType ULINT = DataFactory.eINSTANCE.createUlintType();
+
+		public static final SintType SINT = DataFactory.eINSTANCE.createSintType();
+		public static final IntType INT = DataFactory.eINSTANCE.createIntType();
+		public static final DintType DINT = DataFactory.eINSTANCE.createDintType();
+		public static final LintType LINT = DataFactory.eINSTANCE.createLintType();
+
+		public static final TimeType TIME = DataFactory.eINSTANCE.createTimeType();
+		public static final LtimeType LTIME = DataFactory.eINSTANCE.createLtimeType();
+
+		public static final BoolType BOOL = DataFactory.eINSTANCE.createBoolType();
+		public static final ByteType BYTE = DataFactory.eINSTANCE.createByteType();
+		public static final WordType WORD = DataFactory.eINSTANCE.createWordType();
+		public static final DwordType DWORD = DataFactory.eINSTANCE.createDwordType();
+		public static final LwordType LWORD = DataFactory.eINSTANCE.createLwordType();
+
+		public static final StringType STRING = DataFactory.eINSTANCE.createStringType();
+		public static final WstringType WSTRING = DataFactory.eINSTANCE.createWstringType();
+
+		public static final CharType CHAR = DataFactory.eINSTANCE.createCharType();
+		public static final WcharType WCHAR = DataFactory.eINSTANCE.createWcharType();
+
+		public static final DateAndTimeType DATE_AND_TIME = DataFactory.eINSTANCE.createDateAndTimeType();
+		public static final LdtType LDT = DataFactory.eINSTANCE.createLdtType();
+		public static final TimeOfDayType TIME_OF_DAY = DataFactory.eINSTANCE.createTimeOfDayType();
+		public static final LtodType LTOD = DataFactory.eINSTANCE.createLtodType();
+
+		static {
+			REAL.setName(FordiacKeywords.REAL);
+			LREAL.setName(FordiacKeywords.LREAL);
+
+			USINT.setName(FordiacKeywords.USINT);
+			UINT.setName(FordiacKeywords.UINT);
+			UDINT.setName(FordiacKeywords.UDINT);
+			ULINT.setName(FordiacKeywords.ULINT);
+
+			SINT.setName(FordiacKeywords.SINT);
+			INT.setName(FordiacKeywords.INT);
+			DINT.setName(FordiacKeywords.DINT);
+			LINT.setName(FordiacKeywords.LINT);
+
+			TIME.setName(FordiacKeywords.TIME);
+			LTIME.setName(FordiacKeywords.LTIME);
+
+			BOOL.setName(FordiacKeywords.BOOL);
+			BYTE.setName(FordiacKeywords.BYTE);
+			WORD.setName(FordiacKeywords.WORD);
+			DWORD.setName(FordiacKeywords.DWORD);
+			LWORD.setName(FordiacKeywords.LWORD);
+
+			STRING.setName(FordiacKeywords.STRING);
+			WSTRING.setName(FordiacKeywords.WSTRING);
+
+			CHAR.setName(FordiacKeywords.CHAR);
+			WCHAR.setName(FordiacKeywords.WCHAR);
+
+			DATE_AND_TIME.setName(FordiacKeywords.DATE_AND_TIME);
+			LDT.setName(FordiacKeywords.LDT);
+			TIME_OF_DAY.setName(FordiacKeywords.TIME_OF_DAY);
+			LTOD.setName(FordiacKeywords.LTOD);
+		}
+
+		public static DataType[] getAllElementaryType() {
+			return new DataType[] { REAL, LREAL, USINT, UINT, UDINT, ULINT, SINT, INT, DINT, LINT, TIME, LTIME, BOOL,
+					BYTE, WORD, DWORD, LWORD, STRING, WSTRING, CHAR, WCHAR, DATE_AND_TIME, LDT, TIME_OF_DAY, LTOD };
+		}
+	}
+
+	public static class GenericTypes {
+
+		public static final AnyType ANY = DataFactory.eINSTANCE.createAnyType();
+		public static final AnyElementaryType ANY_ELEMENTARY = DataFactory.eINSTANCE.createAnyElementaryType();
+		public static final AnyDerivedType ANY_DERIVED = DataFactory.eINSTANCE.createAnyDerivedType();
+
+		public static final AnyMagnitudeType ANY_MAGNITUDE = DataFactory.eINSTANCE.createAnyMagnitudeType();
+		public static final AnyNumType ANY_NUM = DataFactory.eINSTANCE.createAnyNumType();
+
+		public static final AnyRealType ANY_REAL = DataFactory.eINSTANCE.createAnyRealType();
+		public static final AnyIntType ANY_INT = DataFactory.eINSTANCE.createAnyIntType();
+
+		public static final AnyUnsignedType ANY_UNSIGNED = DataFactory.eINSTANCE.createAnyUnsignedType();
+		public static final AnySignedType ANY_SIGNED = DataFactory.eINSTANCE.createAnySignedType();
+
+		public static final AnyDurationType ANY_DURATION = DataFactory.eINSTANCE.createAnyDurationType();
+		public static final AnyBitType ANY_BIT = DataFactory.eINSTANCE.createAnyBitType();
+
+		public static final AnyCharsType ANY_CHARS = DataFactory.eINSTANCE.createAnyCharsType();
+		public static final AnyStringType ANY_STRING = DataFactory.eINSTANCE.createAnyStringType();
+		public static final AnyCharType ANY_CHAR = DataFactory.eINSTANCE.createAnyCharType();
+
+		public static final AnyDateType ANY_DATE = DataFactory.eINSTANCE.createAnyDateType();
+
+		static {
+			ANY.setName(FordiacKeywords.ANY);
+			ANY_ELEMENTARY.setName(FordiacKeywords.ANY_ELEMENTARY);
+			ANY_DERIVED.setName(FordiacKeywords.ANY_DERIVED);
+
+			ANY_MAGNITUDE.setName(FordiacKeywords.ANY_MAGNITUDE);
+			ANY_NUM.setName(FordiacKeywords.ANY_NUM);
+
+			ANY_REAL.setName(FordiacKeywords.ANY_REAL);
+			ANY_INT.setName(FordiacKeywords.ANY_INT);
+
+			ANY_UNSIGNED.setName(FordiacKeywords.ANY_UNSIGNED);
+			ANY_SIGNED.setName(FordiacKeywords.ANY_SIGNED);
+
+			ANY_DURATION.setName(FordiacKeywords.ANY_DURATION);
+			ANY_BIT.setName(FordiacKeywords.ANY_BIT);
+
+			ANY_CHARS.setName(FordiacKeywords.ANY_CHARS);
+			ANY_STRING.setName(FordiacKeywords.ANY_STRING);
+			ANY_CHAR.setName(FordiacKeywords.ANY_CHAR);
+			ANY_DATE.setName(FordiacKeywords.ANY_DATE);
+
+		}
+
+		public static DataType[] getAllGenericTypes() {
+			return new DataType[] { ANY, ANY_ELEMENTARY, ANY_DERIVED, ANY_MAGNITUDE, ANY_NUM, ANY_REAL, ANY_INT,
+					ANY_UNSIGNED, ANY_SIGNED, ANY_DURATION, ANY_BIT, ANY_CHARS, ANY_STRING, ANY_CHAR, ANY_DATE };
+		}
+
+	}
+
+}

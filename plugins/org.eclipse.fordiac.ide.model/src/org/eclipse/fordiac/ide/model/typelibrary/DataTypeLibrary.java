@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,81 +26,78 @@ import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.ElementaryType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 
 public final class DataTypeLibrary {
 
 	private final Map<String, DataType> typeMap = new HashMap<>();
 	private final Map<String, DataTypePaletteEntry> derivedTypeMap = new HashMap<>();
 
-	/**
-	 * Instantiates a new data type library.
-	 */
+	/** Instantiates a new data type library. */
 	public DataTypeLibrary() {
 		initElementaryTypes();
+		initGenericTypes();
+		initStructTypes();
 	}
 
-	public void addPaletteEntry(DataTypePaletteEntry entry) {
+
+	public void addPaletteEntry(final DataTypePaletteEntry entry) {
 		derivedTypeMap.put(entry.getLabel(), entry);
 	}
 
-	public void removePaletteEntry(DataTypePaletteEntry entry) {
+	public void removePaletteEntry(final DataTypePaletteEntry entry) {
 		derivedTypeMap.remove(entry.getLabel());
 	}
 
-	/**
-	 * Inits the elementary types.
-	 */
+	/** Inits the elementary types. */
 	private void initElementaryTypes() {
-		BaseType1.VALUES.forEach(baseType -> {
-			ElementaryType type = DataFactory.eINSTANCE.createElementaryType();
-			type.setName(baseType.getLiteral());
-			typeMap.put(baseType.getLiteral(), type);
-		});
-		StructuredType struct = DataFactory.eINSTANCE.createStructuredType();
+		Arrays.asList(ElementaryTypes.getAllElementaryType()).forEach(type -> typeMap.put(type.getName(), type));
+	}
+
+
+	private void initStructTypes() {
+		final StructuredType struct = DataFactory.eINSTANCE.createStructuredType();
 		struct.setName("ANY_STRUCT"); //$NON-NLS-1$
 		typeMap.put(struct.getName(), struct);
+	}
+
+	private void initGenericTypes() {
+		Arrays.asList(GenericTypes.getAllGenericTypes()).forEach(type -> typeMap.put(type.getName(), type));
 	}
 
 	public Map<String, DataTypePaletteEntry> getDerivedDataTypes() {
 		return derivedTypeMap;
 	}
 
-	/**
-	 * Gets the data types.
+	/** Gets the data types.
 	 *
-	 * @return the data types
-	 */
+	 * @return the data types */
 	public List<DataType> getDataTypes() {
-		List<DataType> dataTypes = new ArrayList<>(typeMap.size() + derivedTypeMap.size());
+		final List<DataType> dataTypes = new ArrayList<>(typeMap.size() + derivedTypeMap.size());
 		dataTypes.addAll(typeMap.values());
 		dataTypes.addAll(derivedTypeMap.values().stream().map(DataTypePaletteEntry::getType).filter(Objects::nonNull)
 				.collect(Collectors.toList()));
 		return dataTypes;
 	}
 
-	/**
-	 * Gets the data types sorted alphabetically from a to z.
+	/** Gets the data types sorted alphabetically from a to z.
 	 *
-	 * @return the sorted data types list
-	 */
+	 * @return the sorted data types list */
 	public List<DataType> getDataTypesSorted() {
-		List<DataType> dataTypes = getDataTypes();
+		final List<DataType> dataTypes = getDataTypes();
 		Collections.sort(dataTypes, NamedElementComparator.INSTANCE);
 		return dataTypes;
 	}
 
-	/**
-	 * FIXME only return type if it really exists!
+	/** FIXME only return type if it really exists!
 	 *
 	 * @param name the name
 	 *
-	 * @return the type
-	 */
+	 * @return the type */
 	public DataType getType(final String name) {
 		if (null == name) {
 			return typeMap.get("ANY"); //$NON-NLS-1$
@@ -119,7 +117,7 @@ public final class DataTypeLibrary {
 	}
 
 	public List<StructuredType> getStructuredTypes() {
-		List<StructuredType> types = getDerivedDataTypes().entrySet().stream()
+		final List<StructuredType> types = getDerivedDataTypes().entrySet().stream()
 				.filter(entry -> (entry.getValue().getType() instanceof StructuredType))
 				.map(entry -> ((StructuredType) entry.getValue().getType())).collect(Collectors.toList());
 		types.add((StructuredType) getType("ANY_STRUCT")); //$NON-NLS-1$
@@ -127,21 +125,21 @@ public final class DataTypeLibrary {
 	}
 
 	public List<StructuredType> getStructuredTypesSorted() {
-		List<StructuredType> structTypes = getStructuredTypes();
+		final List<StructuredType> structTypes = getStructuredTypes();
 		Collections.sort(structTypes, NamedElementComparator.INSTANCE);
 		return structTypes;
 	}
 
-	private DataType getDerivedType(String name) {
-		DataTypePaletteEntry entry = derivedTypeMap.get(name);
+	private DataType getDerivedType(final String name) {
+		final DataTypePaletteEntry entry = derivedTypeMap.get(name);
 		if (null != entry) {
 			return entry.getType();
 		}
 		return null;
 	}
 
-	public StructuredType getStructuredType(String name) {
-		DataType derivedType = getDerivedType(name);
+	public StructuredType getStructuredType(final String name) {
+		final DataType derivedType = getDerivedType(name);
 		if (derivedType instanceof StructuredType) {
 			return (StructuredType) derivedType;
 		}
