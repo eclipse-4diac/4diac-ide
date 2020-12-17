@@ -34,6 +34,10 @@ public class Messages extends NLS {
 
 	public static String ConnectionConstraintsPrefernecePage_EnableFORTETypeCasts;
 
+	public static String ConvertToStructHandler_NotAllowedReasons;
+
+	public static String ConvertToStructHandler_OperationNotPossible;
+
 	public static String CopyEditPartsAction_Text;
 
 	public static String CreateConnectionSection_CreateConnection;

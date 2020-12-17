@@ -109,8 +109,8 @@ public class SaveAsSubappWizard extends Wizard {
 
 		if (perform) {
 			if (createSubAppTemplateCopy()) { // copy the subapp template so that we don't need to write code for any
-												// basic type information stuff (e.g., version, coments etc.)
-				entry = getPalletEntry();
+				// basic type information stuff (e.g., version, coments etc.)
+				entry = getPaletteEntry();
 				LibraryElement type = entry.getType();
 				type.setName(TypeLibrary.getTypeNameFromFile(entry.getFile()));
 
@@ -167,7 +167,7 @@ public class SaveAsSubappWizard extends Wizard {
 				+ File.separator + newFilePage.getFileName() + TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT));
 	}
 
-	private PaletteEntry getPalletEntry() {
+	private PaletteEntry getPaletteEntry() {
 		IFile targetTypeFile = getTargetTypeFile();
 		PaletteEntry newEntry = TypeLibrary.getPaletteEntryForFile(targetTypeFile);
 		if (null == newEntry) {

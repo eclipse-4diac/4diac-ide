@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -47,6 +49,10 @@ public final class InterfaceListCopier {
 
 	public static InterfaceList copy(final InterfaceList src) {
 		return copy(src, false);
+	}
+
+	public static void copyVarList(Collection<VarDeclaration> destVars, final Collection<VarDeclaration> srcVars) {
+		srcVars.forEach(var -> destVars.add(copyVar(var, false)));
 	}
 
 	private static void copyVarList(final EList<VarDeclaration> destVars, final EList<VarDeclaration> srcVars,

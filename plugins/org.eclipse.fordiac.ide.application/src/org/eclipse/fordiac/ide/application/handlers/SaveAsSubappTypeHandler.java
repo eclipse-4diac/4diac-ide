@@ -19,21 +19,21 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.wizards.SaveAsSubappWizard;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class SaveAsSubappTypeHandler extends AbstractHandler {
 
 	@Override
-	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final FBNetworkEditor editor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		// we check in the enablement that it is a structured selection therefore we can
 		// easily cast here
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
@@ -72,7 +72,8 @@ public class SaveAsSubappTypeHandler extends AbstractHandler {
 		return false;
 	}
 
-	private static void invokeSaveWizard(final SubApp subApp, final FBNetworkEditor editor) {
+
+	private static void invokeSaveWizard(SubApp subApp, IEditorPart editor) {
 		final SaveAsSubappWizard wizard = new SaveAsSubappWizard(subApp);
 
 		final WizardDialog dialog = new WizardDialog(editor.getSite().getShell(), wizard);
