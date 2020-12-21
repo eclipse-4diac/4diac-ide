@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
 import org.eclipse.fordiac.ide.model.commands.create.ConnectionCommandsTest;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.junit.jupiter.params.provider.Arguments;
@@ -78,7 +79,7 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 
 		final SubApp subapp = (SubApp) s.getFbNetwork().getNetworkElements().stream().filter(e -> e instanceof SubApp)
 				.findFirst().orElseGet(null);
-		t.test(subapp instanceof SubApp);
+		t.test(subapp);
 		t.test(subapp.getSubAppNetwork().getNetworkElements().size(), 1);
 
 		t.test(subapp.getSubAppNetwork().isSubApplicationNetwork());
@@ -88,6 +89,35 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 
 	private static void verifySubAppCreationWithConnections(final State s, final State o, final TestFunction t) {
 		verifySubAppCreation(s, o, t);
+
+		// extract the functionblock in the outer network
+		final FB fb = (FB) s.getFbNetwork().getNetworkElements().stream().filter(e -> e instanceof FB)
+				.findFirst().orElseGet(null);
+		t.test(fb);
+
+		// get the subapp from the outer network
+		final SubApp subapp = (SubApp) s.getFbNetwork().getNetworkElements().stream().filter(e -> e instanceof SubApp)
+				.findFirst().orElseGet(null);
+		t.test(subapp);
+
+		// get the functionblock in the subapp
+		t.test(subapp.getSubAppNetwork().getNetworkElements().size(), 1);
+		final FB subappFB = (FB) subapp.getSubAppNetwork().getNetworkElements().get(0);
+		t.test(subappFB);
+
+		// data connection from outer fb output to subapp interface
+		t.test(fb.getInterface().getOutputVars().get(0).getOutputConnections().get(0).getDestination(),
+				subapp.getInterface().getInputVars().get(0));
+		// data connection from subapp interface to inner fb
+		t.test(subapp.getInterface().getInputVars().get(0).getOutputConnections().get(0).getDestination(),
+				subappFB.getInterface().getInputVars().get(0));
+
+		// event connection from outer fb output to subapp interface
+		t.test(fb.getInterface().getEventOutputs().get(0).getOutputConnections().get(0).getDestination(),
+				subapp.getInterface().getEventInputs().get(0));
+		// event connection from subapp interface to inner fb
+		t.test(subapp.getInterface().getEventInputs().get(0).getOutputConnections().get(0).getDestination(),
+				subappFB.getInterface().getEventInputs().get(0));
 	}
 
 	// parameter creation function
