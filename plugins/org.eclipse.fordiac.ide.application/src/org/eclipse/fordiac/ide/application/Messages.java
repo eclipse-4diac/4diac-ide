@@ -18,9 +18,7 @@ package org.eclipse.fordiac.ide.application;
 
 import org.eclipse.osgi.util.NLS;
 
-/**
- * The Class Messages.
- */
+/** The Class Messages. */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.application.messages"; //$NON-NLS-1$
 
@@ -34,9 +32,15 @@ public class Messages extends NLS {
 
 	public static String ConnectionConstraintsPrefernecePage_EnableFORTETypeCasts;
 
+	public static String ConvertToStructHandler_ErrorMessage;
+
+	public static String ConvertToStructHandler_ErrorTitle;
+
 	public static String ConvertToStructHandler_NotAllowedReasons;
 
 	public static String ConvertToStructHandler_OperationNotPossible;
+
+	public static String ConvertToStructHandler_Title;
 
 	public static String CopyEditPartsAction_Text;
 
@@ -98,9 +102,7 @@ public class Messages extends NLS {
 	public static String OpenApplicationEditorAction_Name;
 
 	public static String OpenCompositeInstanceViewerAction_Name;
-	/**
-	 * The Open sub application editor action_ erro r_ open subapplication editor.
-	 */
+	/** The Open sub application editor action_ erro r_ open subapplication editor. */
 	public static String OpenSubApplicationEditorAction_ERROR_OpenSubapplicationEditor;
 
 	public static String OpenSubApplicationEditorAction_Name;
@@ -112,6 +114,16 @@ public class Messages extends NLS {
 	public static String ReconnectEventConnectionCommand_LABEL;
 
 	public static String ReconnectAdapterConnectionCommand_LABEL;
+
+	public static String SaveAsStructWizard_WizardPageName;
+
+	public static String SaveAsStructWizardPage_ConvertSourceElements;
+
+	public static String SaveAsStructWizardPage_TypeName;
+
+	public static String SaveAsStructWizardPage_WizardPageDescription;
+
+	public static String SaveAsStructWizardPage_WizardPageTitle;
 
 	public static String SaveAsSubappHandler_ReplaceDialogText;
 

@@ -12,6 +12,8 @@
  *     - created stub class
  *   Bianca Wiesmayr, Lukas Wais, Virendra Ashiwal
  *     - initial implementation and/or initial documentation
+ *   Lukas Wais
+ *     - Adaption for new SaveAsStructWizard
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -50,11 +52,11 @@ public class ConvertToStructHandler extends AbstractHandler {
 		final IStructuredSelection sel = HandlerUtil.getCurrentStructuredSelection(event);
 		final List<VarDeclaration> varDecls = collectSelectedVarDecls(sel);
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		final CommandStack commandStack = HandlerUtil.getActiveEditor(event).getAdapter(CommandStack.class);
-		final FBNetworkElement fb = getNetworkElement(sel);
+		final CommandStack commandStack = editor.getAdapter(CommandStack.class);
+		final FBNetworkElement fb = getNetworkElementFromSelectedPins(sel);
+
 		if ((null != fb) && (null != commandStack) && !varDecls.isEmpty()) {
 			project = fb.getFbNetwork().getAutomationSystem().getSystemFile().getProject();
-
 
 			// open wizard to save in struct
 			invokeSaveWizard(varDecls, editor);
@@ -76,8 +78,7 @@ public class ConvertToStructHandler extends AbstractHandler {
 	}
 
 	private void invokeSaveWizard(final List<VarDeclaration> varDecls, final IEditorPart editor) {
-		wizard = new SaveAsStructWizard(varDecls, project);
-
+		wizard = new SaveAsStructWizard(varDecls, project, Messages.ConvertToStructHandler_Title);
 		final WizardDialog dialog = new WizardDialog(editor.getSite().getShell(), wizard);
 		dialog.create();
 		dialog.open();
@@ -95,10 +96,10 @@ public class ConvertToStructHandler extends AbstractHandler {
 				.collect(Collectors.toList());
 	}
 
-	private static FBNetworkElement getNetworkElement(final IStructuredSelection selection) {
-		for (final Object o : selection) {
-			if (o instanceof InterfaceEditPartForFBNetwork) {
-				final InterfaceEditPartForFBNetwork ep = (InterfaceEditPartForFBNetwork) o;
+	private static FBNetworkElement getNetworkElementFromSelectedPins(final IStructuredSelection selectedPins) {
+		for (final Object pin : selectedPins) {
+			if (pin instanceof InterfaceEditPartForFBNetwork) {
+				final InterfaceEditPartForFBNetwork ep = (InterfaceEditPartForFBNetwork) pin;
 				if (ep.getModel() instanceof VarDeclaration) {
 					return (FBNetworkElement) ep.getParent().getModel();
 				}

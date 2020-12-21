@@ -29,7 +29,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 public class CreateStructFromInterfaceElementsCommand extends Command {
 	private List<VarDeclaration> elementsToRemove = new ArrayList<>();
 	private final int position; // new struct should be at top-most selected pin position
-	private boolean isInput;
+	private boolean hasInputVariables;
 	private final DataType datatype;
 
 	private final CompoundCommand deleteCmds = new CompoundCommand();
@@ -38,7 +38,7 @@ public class CreateStructFromInterfaceElementsCommand extends Command {
 	public CreateStructFromInterfaceElementsCommand(List<VarDeclaration> selection, DataType datatype) {
 		elementsToRemove = Collections.unmodifiableList(selection);
 		if (!elementsToRemove.isEmpty()) {
-			isInput = elementsToRemove.get(0).isIsInput();
+			hasInputVariables = elementsToRemove.get(0).isIsInput();
 		}
 		position = elementsToRemove.isEmpty() ? 0 : getTopMostPosition();
 		this.datatype = datatype;
@@ -58,11 +58,10 @@ public class CreateStructFromInterfaceElementsCommand extends Command {
 	}
 
 	private List<VarDeclaration> getInterfaceElementList() {
-		if (isInput) {
+		if (hasInputVariables) {
 			return getInterfaceList().getInputVars();
-		} else {
-			return getInterfaceList().getOutputVars();
 		}
+		return getInterfaceList().getOutputVars();
 	}
 
 	private InterfaceList getInterfaceList() {
@@ -102,8 +101,7 @@ public class CreateStructFromInterfaceElementsCommand extends Command {
 		for (final VarDeclaration varDecl : elementsToRemove) {
 			deleteCmds.add(new DeleteInterfaceCommand(varDecl));
 		}
-		addStructCmd = new CreateInterfaceElementCommand(datatype,
-				getInterfaceList(), isInput, position);
+		addStructCmd = new CreateInterfaceElementCommand(datatype, getInterfaceList(), hasInputVariables, position);
 
 		deleteCmds.execute();
 		addStructCmd.execute();

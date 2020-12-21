@@ -10,10 +10,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl - initial API and implementation and/or initial documentation
- *   			 - moved open type and replace soure with type into advanced
- *                 section
- *   Bianca Wiesmayr - copied SaveAsSubappWizardPage and adapted it for structs
+ *   Lukas Wais - initial API and implementation and/or initial documentation.
+ *   			  Mostly copied from SaveAsStructWizard and SaveAsSubappWizard.
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.wizards;
 
@@ -30,8 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
-// TODO extract Strings to messages.properties
-public class SaveAsStructWizardPage extends WizardNewFileCreationPage {
+public class SaveAsWizardPage extends WizardNewFileCreationPage {
 
 	private static final String STORE_OPEN_TYPE_ID = "SUBAPP_SECTION.STORE_OPEN_TYPE_ID"; //$NON-NLS-1$
 	private static final String STORE_REPLACE_SOURCE_ID = "SUBAPP_SECTION.STORE_REPLACE_SOURCE_ID"; //$NON-NLS-1$
@@ -42,12 +39,19 @@ public class SaveAsStructWizardPage extends WizardNewFileCreationPage {
 	private Composite advancedComposite;
 	private int advancedCompositeHeight = -1;
 
-	public SaveAsStructWizardPage(String pageName, IStructuredSelection selection) {
+	private final String fileLabel;
+	private final String checkBoxText;
+	private final String replaceSourceText;
+
+	private SaveAsWizardPage(String pageName, IStructuredSelection selection, String title, String description,
+			String fileLabel, String checkBoxText, String replaceSourceText) {
 		super(pageName, selection);
-		setTitle("Save element(s) as Structured Type");
-		setDescription(
-				"Store new Type in library. Specify desired path to create missing folders automatically");
-		setAllowExistingResources(true); // needed for correct duplicate type check
+		setTitle(title);
+		setDescription(description);
+		setAllowExistingResources(true); // needed for correct duplicate type
+		this.fileLabel = fileLabel;
+		this.checkBoxText = checkBoxText;
+		this.replaceSourceText = replaceSourceText;
 	}
 
 	public boolean getOpenType() {
@@ -60,7 +64,7 @@ public class SaveAsStructWizardPage extends WizardNewFileCreationPage {
 
 	@Override
 	protected String getNewFileLabel() {
-		return "Type name:";
+		return fileLabel;
 	}
 
 	@Override
@@ -71,7 +75,7 @@ public class SaveAsStructWizardPage extends WizardNewFileCreationPage {
 	}
 
 	public void saveWidgetValues() {
-		IDialogSettings settings = getDialogSettings();
+		final IDialogSettings settings = getDialogSettings();
 		if (null != settings) {
 			settings.put(STORE_OPEN_TYPE_ID, openType);
 			settings.put(STORE_REPLACE_SOURCE_ID, replaceSource);
@@ -79,7 +83,7 @@ public class SaveAsStructWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private void restoreWidgetValues() {
-		IDialogSettings settings = getDialogSettings();
+		final IDialogSettings settings = getDialogSettings();
 		if (null != settings) {
 			openType = settings.getBoolean(STORE_OPEN_TYPE_ID);
 			replaceSource = settings.getBoolean(STORE_REPLACE_SOURCE_ID);
@@ -88,9 +92,9 @@ public class SaveAsStructWizardPage extends WizardNewFileCreationPage {
 
 	@Override
 	protected void handleAdvancedButtonSelect() {
-		Shell shell = getShell();
-		Point shellSize = shell.getSize();
-		Composite composite = (Composite) getControl();
+		final Shell shell = getShell();
+		final Point shellSize = shell.getSize();
+		final Composite composite = (Composite) getControl();
 
 		if (null != advancedComposite) {
 			advancedComposite.dispose();
@@ -99,7 +103,7 @@ public class SaveAsStructWizardPage extends WizardNewFileCreationPage {
 		} else {
 			advancedComposite = createAdvancedGroup(composite);
 			if (-1 == advancedCompositeHeight) {
-				Point groupSize = advancedComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+				final Point groupSize = advancedComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 				advancedCompositeHeight = groupSize.y;
 			}
 			shell.setSize(shellSize.x, shellSize.y + advancedCompositeHeight);
@@ -108,26 +112,40 @@ public class SaveAsStructWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private Composite createAdvancedGroup(Composite parent) {
-		Font font = parent.getFont();
+		final Font font = parent.getFont();
 		initializeDialogUnits(parent);
 		// top level group
-		Composite groupComposite = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
+		final Composite groupComposite = new Composite(parent, SWT.NONE);
+		final GridLayout layout = new GridLayout();
 		groupComposite.setLayout(layout);
 		groupComposite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.FILL_HORIZONTAL));
 		groupComposite.setFont(font);
 
-		Button openTypeCheckbox = new Button(groupComposite, SWT.CHECK);
-		openTypeCheckbox.setText(Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType);
+		final Button openTypeCheckbox = new Button(groupComposite, SWT.CHECK);
+		openTypeCheckbox.setText(checkBoxText);
 		openTypeCheckbox.setSelection(openType);
 		openTypeCheckbox.addListener(SWT.Selection, ev -> openType = openTypeCheckbox.getSelection());
 
-		Button replaceSourceSubapp = new Button(parent, SWT.CHECK);
-		replaceSourceSubapp.setText("Convert source element(s)");
+		final Button replaceSourceSubapp = new Button(parent, SWT.CHECK);
+		replaceSourceSubapp.setText(replaceSourceText);
 		replaceSourceSubapp.setSelection(replaceSource);
 		replaceSourceSubapp.addListener(SWT.Selection, ev -> replaceSource = replaceSourceSubapp.getSelection());
 
 		return groupComposite;
 	}
 
+	public static SaveAsWizardPage createSaveAsStructWizardPage(String pageName, IStructuredSelection selection) {
+		return new SaveAsWizardPage(pageName, selection, Messages.SaveAsStructWizardPage_WizardPageTitle,
+				Messages.SaveAsStructWizardPage_WizardPageDescription, Messages.SaveAsStructWizardPage_TypeName,
+				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType,
+				Messages.SaveAsStructWizardPage_ConvertSourceElements);
+	}
+
+	public static SaveAsWizardPage createSaveAsSubAppWizardPage(String pageName, IStructuredSelection selection) {
+		return new SaveAsWizardPage(pageName, selection, Messages.SaveAsSubApplicationTypeAction_WizardPageTitle,
+				Messages.SaveAsSubApplicationTypeAction_WizardPageDescription,
+				Messages.SaveAsSubApplicationTypeAction_WizardPageNameLabel,
+				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType,
+				Messages.SaveAsSubappHandler_ReplaceDialogText);
+	}
 }

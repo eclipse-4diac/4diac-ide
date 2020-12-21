@@ -12,6 +12,8 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   			 - migrated the save as subapp type action to a handler and added
  *                 question dialog if the origin fb should be replaced
+ *  Lukas Wais   - Adaption to work with new SaveAsSubappWizard
+ *  Lukas Wais	 - Removed old code and adaption for the improved SaveAsSubappWizard
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -19,6 +21,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.wizards.SaveAsSubappWizard;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
@@ -30,9 +33,8 @@ import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class SaveAsSubappTypeHandler extends AbstractHandler {
-
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		// we check in the enablement that it is a structured selection therefore we can
 		// easily cast here
@@ -72,13 +74,12 @@ public class SaveAsSubappTypeHandler extends AbstractHandler {
 		return false;
 	}
 
-
 	private static void invokeSaveWizard(SubApp subApp, IEditorPart editor) {
-		final SaveAsSubappWizard wizard = new SaveAsSubappWizard(subApp);
+		final SaveAsSubappWizard wizard = new SaveAsSubappWizard(subApp,
+				Messages.SaveAsSubApplicationTypeAction_WizardPageName);
 
 		final WizardDialog dialog = new WizardDialog(editor.getSite().getShell(), wizard);
 		dialog.create();
 		dialog.open();
 	}
-
 }
