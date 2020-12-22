@@ -178,11 +178,11 @@ class LuaConstants {
 	'''
 
 	def static luaFBAdapterInECCVariablesPrefix(VarDeclaration adapterVariable, String adapterName, boolean isPlug) '''
-			«IF isPlug»
-				local «adapterVariable.name.luaAdapterVariable(adapterName)» = fb[«adapterVariable.isInput ? adapterVariable.luaFBAdapterInputVarName(adapterName) : adapterVariable.luaFBAdapterOutputVarName(adapterName)»]
-			«ELSE»
-				local «adapterVariable.name.luaAdapterVariable(adapterName)» = fb[«adapterVariable.isInput ? adapterVariable.luaFBAdapterOutputVarName(adapterName) : adapterVariable.luaFBAdapterInputVarName(adapterName)»]
-			«ENDIF»
+		«IF isPlug»
+			local «adapterVariable.name.luaAdapterVariable(adapterName)» = fb[«adapterVariable.isInput ? adapterVariable.luaFBAdapterInputVarName(adapterName) : adapterVariable.luaFBAdapterOutputVarName(adapterName)»]
+		«ELSE»
+			local «adapterVariable.name.luaAdapterVariable(adapterName)» = fb[«adapterVariable.isInput ? adapterVariable.luaFBAdapterOutputVarName(adapterName) : adapterVariable.luaFBAdapterInputVarName(adapterName)»]
+		«ENDIF»
 	'''
 
 	def static luaFBAdapterVariablesPrefix(Iterable<AdapterVariable> variables) '''
@@ -190,11 +190,15 @@ class LuaConstants {
 			«var index = variables.toList.indexOf(av)»
 			«var sublist = variables.toList.subList(0, index)»
 			«IF !(sublist.map[it.^var].contains(av.^var) && sublist.map[it.adapter].contains(av.adapter))»
-				local «av.^var.name.luaAdapterVariable(av.adapter.name)» = fb[«if(av.^var.isInput) av.^var.luaFBAdapterInputVarName(av.adapter.name) else av.^var.luaFBAdapterOutputVarName(av.adapter.name)»]
+				«IF av.adapter.isIsInput»
+					local «av.^var.name.luaAdapterVariable(av.adapter.name)» = fb[«if(av.^var.isInput) av.^var.luaFBAdapterOutputVarName(av.adapter.name) else av.^var.luaFBAdapterInputVarName(av.adapter.name)»]
+				«ELSE»
+					local «av.^var.name.luaAdapterVariable(av.adapter.name)» = fb[«if(av.^var.isInput) av.^var.luaFBAdapterInputVarName(av.adapter.name) else av.^var.luaFBAdapterOutputVarName(av.adapter.name)»]
+				«ENDIF»
 			«ENDIF»
 		«ENDFOR»
 	'''
-	
+
 	protected def static VarDeclaration getAdapter(AdapterVariable adapterVar) {
 		(adapterVar.curr as AdapterRoot).adapter
 	}
@@ -210,10 +214,14 @@ class LuaConstants {
 			«var index = variables.toList.indexOf(av)»
 			«var sublist = variables.toList.subList(0, index)»
 			«IF !(sublist.map[it.^var].contains(av.^var) && sublist.map[it.adapter].contains(av.adapter))»
-				fb[«if(av.^var.isInput) av.^var.luaFBAdapterInputVarName(av.adapter.name) else av.^var.luaFBAdapterOutputVarName(av.adapter.name)»] = «av.^var.name.luaAdapterVariable(av.adapter.name)»
+				«IF av.adapter.isIsInput»
+					fb[«if(av.^var.isInput) av.^var.luaFBAdapterOutputVarName(av.adapter.name) else av.^var.luaFBAdapterInputVarName(av.adapter.name)»] = «av.^var.name.luaAdapterVariable(av.adapter.name)»
+				«ELSE»
+					fb[«if(av.^var.isInput) av.^var.luaFBAdapterInputVarName(av.adapter.name) else av.^var.luaFBAdapterOutputVarName(av.adapter.name)»] = «av.^var.name.luaAdapterVariable(av.adapter.name)»
+				«ENDIF»
 			«ENDIF»
-		«ENDFOR»
-		
+			«ENDFOR»
+			
 	'''
 
 	def static luaSendOutputEvent(Event event) '''fb(«event.luaOutputEventName»)'''
