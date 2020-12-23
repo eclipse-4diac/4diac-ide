@@ -11,17 +11,19 @@
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.export.forte_ng.tests
+package org.eclipse.fordiac.ide.test.export.forte_ng
 
 import org.junit.Test
-import static org.junit.Assert.assertNull
-import static org.junit.Assert.assertNotNull
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.fail
-import static org.junit.Assert.assertTrue
-import static org.eclipse.fordiac.ide.model.FordiacKeywords.*
 
-class ForteNgTest extends ForteNgTestBasicFBTypeBase {
+import static org.eclipse.fordiac.ide.model.FordiacKeywords.*
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertNull
+import static org.junit.Assert.assertTrue
+import static org.junit.Assert.fail
+import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeBase
+
+class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def emptyExpression() {
@@ -196,7 +198,7 @@ class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 
 		for (export : exports) {
 			switch export.getName() {
-				case '''«FUNCTIONBLOCK_NAME».h''': {
+				case '''«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h''': {
 					headerfileFound = true
 					
 					assertEquals('''
@@ -205,13 +207,13 @@ class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 					 ***
 					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
 					 ***
-					 *** Name: «FUNCTIONBLOCK_NAME»
+					 *** Name: «org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
 					 *** Description: 
 					 *** Version:
 					 *************************************************************************/
 
-					#ifndef _«FUNCTIONBLOCK_NAME.toUpperCase»_H_
-					#define _«FUNCTIONBLOCK_NAME.toUpperCase»_H_
+					#ifndef _«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
+					#define _«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
 
 					#include "basicfb.h"
 					#include "forte_array_at.h"
@@ -245,14 +247,14 @@ class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 					  virtual ~«EXPORTED_FUNCTIONBLOCK_NAME»() = default;
 					};
 
-					#endif // _«FUNCTIONBLOCK_NAME.toUpperCase»_H_
+					#endif // _«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
 
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
 					assertNoErrors(export.warnings)
 					assertNoErrors(export.infos)
 				}
-				case '''«FUNCTIONBLOCK_NAME».cpp''': {
+				case '''«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME».cpp''': {
 					cppfileFound = true
 					
 					assertEquals('''
@@ -261,14 +263,14 @@ class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 					 ***
 					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
 					 ***
-					 *** Name: «FUNCTIONBLOCK_NAME»
+					 *** Name: «org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
 					 *** Description: 
 					 *** Version:
 					 *************************************************************************/
 					
-					#include "«FUNCTIONBLOCK_NAME».h"
+					#include "«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h"
 					#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-					#include "«FUNCTIONBLOCK_NAME»_gen.cpp"
+					#include "«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_gen.cpp"
 					#endif
 					
 					
@@ -287,7 +289,7 @@ class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 					  0, nullptr
 					};
 					
-					void FORTE_«FUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
+					void FORTE_«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
 					  #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
 					  #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
 					  «ALGORITHM_TEXT»
@@ -295,7 +297,7 @@ class ForteNgTest extends ForteNgTestBasicFBTypeBase {
 					
 					
 					
-					void FORTE_«FUNCTIONBLOCK_NAME»::executeEvent(int pa_nEIID){
+					void FORTE_«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(int pa_nEIID){
 					  bool bTransitionCleared;
 					  do {
 					    bTransitionCleared = true;
