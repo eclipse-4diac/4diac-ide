@@ -37,7 +37,7 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 		t.test(s.getFbNetwork().getNetworkElements().size(), 0);
 	}
 
-	private static State createEmptySubApp(final State s) {
+	static State createEmptySubApp(final State s) {
 		s.setCommand(new NewSubAppCommand(s.getFbNetwork(), List.of(), 0, 0));
 		return commandExecution(s);
 	}

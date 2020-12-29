@@ -24,8 +24,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubappCommand;
-import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubappCommand.MoveOperation;
+import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand;
+import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand.MoveOperation;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
@@ -63,7 +63,7 @@ public class MoveToParentHandler extends AbstractHandler {
 							: (SubApp) subEditor.getModel().eContainer();
 					final GraphicalEditPart ep = (GraphicalEditPart) editor.getViewer().getEditPartRegistry()
 							.get(subapp);
-					final MoveElementFromSubappCommand moveCmd = new MoveElementFromSubappCommand(subapp, element,
+					final MoveElementFromSubAppCommand moveCmd = new MoveElementFromSubAppCommand(subapp, element,
 							ep.getFigure().getBounds(), MoveOperation.CONTEXT_MENU);
 					cmd.add(moveCmd);
 				}
@@ -88,12 +88,12 @@ public class MoveToParentHandler extends AbstractHandler {
 	}
 
 	// prevents the FBs from lying on top of one another
-	private void preventFBPiling(List<MoveElementFromSubappCommand> commands) {
+	private void preventFBPiling(List<MoveElementFromSubAppCommand> commands) {
 		final int OFFSET = 90;
 		int left = 0;
 		int right = 0;
 		int below = 0;
-		for (final MoveElementFromSubappCommand cmd : commands) {
+		for (final MoveElementFromSubAppCommand cmd : commands) {
 			switch (cmd.getSide()) {
 			case LEFT:
 				cmd.getElement().setY(cmd.getElement().getY() + (left * OFFSET));

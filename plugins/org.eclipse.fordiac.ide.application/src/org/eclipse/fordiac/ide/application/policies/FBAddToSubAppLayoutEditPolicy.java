@@ -21,8 +21,8 @@ import java.util.List;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
-import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubappCommand;
-import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubappCommand.MoveOperation;
+import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand;
+import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand.MoveOperation;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
@@ -59,7 +59,7 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 					if (dragEditPartModel.isNestedInSubApp()
 							&& isChildFromDropTarget(dragEditPartModel, dropEditPart)) {
 						final SubAppForFBNetworkEditPart outerSubAppEdit = getOuterSubappEditPart(editPart);
-						commandos.add(new MoveElementFromSubappCommand(outerSubAppEdit.getModel(), dragEditPartModel,
+						commandos.add(new MoveElementFromSubAppCommand(outerSubAppEdit.getModel(), dragEditPartModel,
 								outerSubAppEdit.getFigure().getBounds(), MoveOperation.DRAG_AND_DROP_TO_SUBAPP));
 					} else {
 						commandos.add(new AddElementsToSubAppCommand(dropEditPart.getModel(), editParts));

@@ -39,7 +39,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.graphics.Point;
 
-public class MoveElementFromSubappCommand extends Command {
+public class MoveElementFromSubAppCommand extends Command {
 
 	private final SubApp sourceSubApp;
 	private final FBNetworkElement element;
@@ -64,7 +64,7 @@ public class MoveElementFromSubappCommand extends Command {
 
 	private final MoveOperation moveOperation;
 
-	public MoveElementFromSubappCommand(final SubApp sourceSubApp, final FBNetworkElement element, final Rectangle targetRect,
+	public MoveElementFromSubAppCommand(final SubApp sourceSubApp, final FBNetworkElement element, final Rectangle targetRect,
 			final MoveOperation moveOperation) {
 		this.sourceSubApp = sourceSubApp;
 		this.element = element;

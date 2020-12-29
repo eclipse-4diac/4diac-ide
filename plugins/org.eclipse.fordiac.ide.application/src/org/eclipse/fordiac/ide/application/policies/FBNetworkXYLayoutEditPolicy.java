@@ -21,8 +21,8 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.ListFBCreateCommand;
-import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubappCommand;
-import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubappCommand.MoveOperation;
+import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand;
+import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand.MoveOperation;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
@@ -125,7 +125,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 						final SubAppForFBNetworkEditPart outerSubAppEdit = (SubAppForFBNetworkEditPart) ((AbstractFBNElementEditPart) editPart)
 								.getParent().getParent();
 
-						final MoveElementFromSubappCommand moveElementFromSubappCommand = new MoveElementFromSubappCommand(
+						final MoveElementFromSubAppCommand moveElementFromSubappCommand = new MoveElementFromSubAppCommand(
 								outerSubApp, dragEditPartModel, outerSubAppEdit.getFigure().getBounds(),
 								MoveOperation.DRAG_AND_DROP_TO_ROOT);
 						moveElementFromSubappCommand.setMouseMoveDelta(mouseMoveDelta);
