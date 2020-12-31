@@ -84,7 +84,7 @@ public class MoveElementsFromSubAppCommandTest extends FBNetworkTestBase {
 		t.test(sub.getSubAppNetwork().getDataConnections().size(), 1);
 	}
 
-	private static State addEventConnection(final State state) {
+	public static State addEventConnection(final State state) {
 		final SubApp sub = (SubApp) state.getFbNetwork().getElementNamed(SUBAPP);
 		final InterfaceList fb1 = sub.getSubAppNetwork().getFBNamed(FB1).getInterface();
 		final InterfaceList fb2 = sub.getSubAppNetwork().getFBNamed(FB2).getInterface();
@@ -110,7 +110,7 @@ public class MoveElementsFromSubAppCommandTest extends FBNetworkTestBase {
 				fb2.getEventInputs().get(0));
 	}
 
-	private static State addDataConnection(final State state) {
+	public static State addDataConnection(final State state) {
 		final SubApp sub = (SubApp) state.getFbNetwork().getElementNamed(SUBAPP);
 		final InterfaceList fb1 = sub.getSubAppNetwork().getFBNamed(FB1).getInterface();
 		final InterfaceList fb2 = sub.getSubAppNetwork().getFBNamed(FB2).getInterface();
