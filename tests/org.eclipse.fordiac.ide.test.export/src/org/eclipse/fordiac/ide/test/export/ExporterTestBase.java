@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
+ * Copyright (c) 2020, 2021 Johannes Kepler University Linz, fortiss GmbH.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,8 @@
  * Contributors:
  *   Ernst Blecha
  *     - test for forte_ng
+ *   Kirill Dorofeev
+ *     - tests for lua exporter
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.test.export;
@@ -31,9 +33,12 @@ import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -73,6 +78,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	protected static final String EXPORTED_VARIABLE2_NAME = addExportPrefix(VARIABLE2_NAME);
 
 	protected static final String BASICFUNCTIONBLOCK_NAME = "functionblock"; //$NON-NLS-1$
+	protected static final String COMPOSITEFUNCTIONBLOCK_NAME = "compositefunctionblock"; //$NON-NLS-1$
 	protected static final String ADAPTERFUNCTIONBLOCK_NAME = "TEST_ADAPTER"; //$NON-NLS-1$
 	protected static final String EXPORTED_FUNCTIONBLOCK_NAME = "FORTE_" + BASICFUNCTIONBLOCK_NAME; //$NON-NLS-1$
 
@@ -86,6 +92,10 @@ public abstract class ExporterTestBase<T extends FBType> {
 	private static final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private final STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
 	protected T functionBlock;
+	protected Event inputEvent;
+	protected Event outputEvent;
+	protected VarDeclaration inputData;
+	protected VarDeclaration outputData;
 	private List<String> errors;
 
 	/** generate code from an algorithm stored in a function block
@@ -180,7 +190,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @param fb reference to the function block
 	 *
 	 * @return the generated code or null on error */
-	public String generateLuaString(final LibraryElement fb) {
+	public static String generateLuaString(final LibraryElement fb) {
 		return new ForteLuaExportFilter().createLUA(fb);
 	}
 
@@ -356,4 +366,40 @@ public abstract class ExporterTestBase<T extends FBType> {
 		return (sourceSize / accessSize) - 1;
 	}
 
+	protected void setupAdvancedInterface() {
+		inputEvent = LibraryElementFactory.eINSTANCE.createEvent();
+		inputEvent.setName(EVENT_INPUT_NAME);
+		functionBlock.getInterfaceList().getEventInputs().add(inputEvent);
+		outputEvent = LibraryElementFactory.eINSTANCE.createEvent();
+		outputEvent.setName(EVENT_OUTPUT_NAME);
+		functionBlock.getInterfaceList().getEventOutputs().add(outputEvent);
+		inputData = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		inputData.setType(new DataTypeLibrary().getType(FordiacKeywords.INT));
+		inputData.setTypeName(FordiacKeywords.INT);
+		inputData.setName(DATA_INPUT_NAME);
+		functionBlock.getInterfaceList().getInputVars().add(inputData);
+		outputData = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		outputData.setType(new DataTypeLibrary().getType(FordiacKeywords.INT));
+		outputData.setTypeName(FordiacKeywords.INT);
+		outputData.setName(DATA_OUTPUT_NAME);
+		functionBlock.getInterfaceList().getOutputVars().add(outputData);
+
+		final AdapterDeclaration adapterSocketDecl = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
+		final AdapterType adapterType = LibraryElementFactory.eINSTANCE.createAdapterType();
+		final ExporterTestAdapterFBType adapterFBType = new ExporterTestAdapterFBType();
+		adapterFBType.setupFunctionBlock();
+		adapterType.setAdapterFBType(adapterFBType.getFunctionBlock());
+		adapterSocketDecl.setType(adapterType);
+		adapterSocketDecl.setName(ADAPTER_SOCKET_NAME);
+		adapterSocketDecl.setTypeName(ADAPTERFUNCTIONBLOCK_NAME);
+		adapterSocketDecl.setIsInput(true);
+		functionBlock.getInterfaceList().getSockets().add(adapterSocketDecl);
+		final AdapterDeclaration adapterPlugDecl = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
+		adapterPlugDecl.setType(adapterType);
+		adapterPlugDecl.setName(ADAPTER_PLUG_NAME);
+		adapterPlugDecl.setTypeName(ADAPTERFUNCTIONBLOCK_NAME);
+		functionBlock.getInterfaceList().getPlugs().add(adapterPlugDecl);
+
+
+	}
 }

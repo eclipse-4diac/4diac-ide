@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 fortiss GmbH.
+ * Copyright (c) 2020, 2021 fortiss GmbH.
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -30,6 +30,7 @@ class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
 		assertEquals('''
 			local FB_STATE = 0
 			local ECC_START = 0
+			local ECC_State = 1
 			local EI_«EVENT_INPUT_NAME» = 0
 			local EO_«EVENT_OUTPUT_NAME» = 0
 			local DI_«DATA_INPUT_NAME» = 33554432
@@ -43,9 +44,23 @@ class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
 			local ADO_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_OUTPUT_NAME» = 167772160
 			local ADI_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_INPUT_NAME» = 201326592
 			
+			local function alg_ALG1(fb)
+			  local VAR_«DATA_OUTPUT_NAME» = fb[DO_«DATA_OUTPUT_NAME»]
+			  VAR_«DATA_OUTPUT_NAME» = 42
+			  fb[DO_«DATA_OUTPUT_NAME»] = VAR_«DATA_OUTPUT_NAME»
+			  	
+			end
+			
 			
 			local function enterECC_START(fb)
 			  fb[FB_STATE] = ECC_START
+			  return true
+			end
+			
+			local function enterECC_State(fb)
+			  fb[FB_STATE] = ECC_State
+			  alg_ALG1(fb)
+			  fb(EO_«EVENT_OUTPUT_NAME»)
 			  return true
 			end
 			
@@ -59,7 +74,13 @@ class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
 			  local VAR_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_INPUT_NAME» = fb[ADI_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_INPUT_NAME»]
 			  local VAR_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_OUTPUT_NAME» = fb[ADO_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_OUTPUT_NAME»]
 			  if ECC_START == STATE then
-			  
+			  if true and true then return enterECC_State(fb)
+			  else return false
+			  end
+			  elseif ECC_State == STATE then
+			  if EI_«EVENT_INPUT_NAME» == id and true then return enterECC_START(fb)
+			  else return false
+			  end
 			  else return false
 			  end
 			end
