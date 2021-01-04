@@ -170,7 +170,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
                             errors.add(" - " + name + " FORTE does currently not allow that a data a composite's data connection may be connected to several data outputs of the composite FB."); //$NON-NLS-1$
                         }
                         fannedOutConns.append(fannedConn.genFannedOutConnString(dataConnNumber))
-                        fannedOutEventConns++
+                        fannedOutDataConns++
                     }
                 }
                 dataConnNumber++;
@@ -196,7 +196,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
     }
 
     def private getPrimaryDataConn(DataConnection dataConn) {
-        //if from the source one connection is target to the interface of the CFB we have to take these first
+        //if from the source one connection is target to the interface of the CFB we have to take this first
         for (Connection dc : dataConn.getSource().getOutputConnections()) {
             if (dc.hasCFBInterfaceDestination) {
                 return dc
