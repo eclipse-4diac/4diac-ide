@@ -8,26 +8,27 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.runtime.views;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.part.ViewPart;
 
-public class RuntimesView extends ViewPart {
-
-	@Override
-	public void createPartControl(Composite parent) {
-		// TODO Auto-generated method stub
+public class RuntimesView {
+	@Inject
+	public RuntimesView() {
 
 	}
 
-	@Override
-	public void setFocus() {
-		// TODO Auto-generated method stub
+	@PostConstruct
+	public void postConstruct(final Composite parent) {
 
 	}
+
+
+
 
 }
