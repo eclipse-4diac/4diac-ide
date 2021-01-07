@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ArrayVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AssignmentStatement
@@ -50,6 +51,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
@@ -59,7 +61,6 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getAllProperContents
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants.*
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
 
 class STAlgorithmFilter {
 
@@ -87,7 +88,9 @@ class STAlgorithmFilter {
 			return null
 		}
 		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
-		val usedAdapterVariables = stalg.getAllProperContents(true).filter(AdapterVariable).toSet
+		val usedAdapterVariables = stalg.getAllProperContents(true).filter(AdapterVariable).filter [
+			getClass() == AdapterVariableImpl
+		].toSet
 		val usedFBVariables = stalg.getAllProperContents(true).filter(PrimaryVariable).map[it.^var].filter [
 			it.rootContainer instanceof FBType
 		].toSet

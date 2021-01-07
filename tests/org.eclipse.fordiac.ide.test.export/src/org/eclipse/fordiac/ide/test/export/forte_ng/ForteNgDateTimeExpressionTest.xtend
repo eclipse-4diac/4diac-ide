@@ -11,7 +11,7 @@
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.export.forte_ng.tests
+package org.eclipse.fordiac.ide.test.export.forte_ng
 
 import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertNotNull
@@ -20,10 +20,11 @@ import java.util.stream.Stream
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeBase
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-class ForteNgDateTimeExpressionTest extends ForteNgTestBasicFBTypeBase {
+class ForteNgDateTimeExpressionTest extends ExporterTestBasicFBTypeBase {
 
 	static final boolean VALID_VALUE = true
 	static final boolean INVALID_VALUE = !VALID_VALUE

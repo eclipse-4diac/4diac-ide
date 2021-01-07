@@ -393,7 +393,7 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
                   _errors.add(_plus_3);
                 }
                 fannedOutConns.append(this.genFannedOutConnString(fannedConn, this.dataConnNumber));
-                this.fannedOutEventConns++;
+                this.fannedOutDataConns++;
               }
             }
           }

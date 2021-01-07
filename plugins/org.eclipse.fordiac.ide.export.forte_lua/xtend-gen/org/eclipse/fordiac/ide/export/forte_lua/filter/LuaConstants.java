@@ -539,20 +539,40 @@ public class LuaConstants {
             return LuaConstants.getAdapter(it);
           })).contains(LuaConstants.getAdapter(av))));
           if (_not) {
-            _builder.append("local ");
-            CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), LuaConstants.getAdapter(av).getName());
-            _builder.append(_luaAdapterVariable);
-            _builder.append(" = fb[");
-            CharSequence _xifexpression = null;
-            boolean _isIsInput = av.getVar().isIsInput();
-            if (_isIsInput) {
-              _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
-            } else {
-              _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
+            {
+              boolean _isIsInput = LuaConstants.getAdapter(av).isIsInput();
+              if (_isIsInput) {
+                _builder.append("local ");
+                CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), LuaConstants.getAdapter(av).getName());
+                _builder.append(_luaAdapterVariable);
+                _builder.append(" = fb[");
+                CharSequence _xifexpression = null;
+                boolean _isIsInput_1 = av.getVar().isIsInput();
+                if (_isIsInput_1) {
+                  _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
+                } else {
+                  _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
+                }
+                _builder.append(_xifexpression);
+                _builder.append("]");
+                _builder.newLineIfNotEmpty();
+              } else {
+                _builder.append("local ");
+                CharSequence _luaAdapterVariable_1 = LuaConstants.luaAdapterVariable(av.getVar().getName(), LuaConstants.getAdapter(av).getName());
+                _builder.append(_luaAdapterVariable_1);
+                _builder.append(" = fb[");
+                CharSequence _xifexpression_1 = null;
+                boolean _isIsInput_2 = av.getVar().isIsInput();
+                if (_isIsInput_2) {
+                  _xifexpression_1 = LuaConstants.luaFBAdapterInputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
+                } else {
+                  _xifexpression_1 = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
+                }
+                _builder.append(_xifexpression_1);
+                _builder.append("]");
+                _builder.newLineIfNotEmpty();
+              }
             }
-            _builder.append(_xifexpression);
-            _builder.append("]");
-            _builder.newLineIfNotEmpty();
           }
         }
       }
@@ -600,23 +620,43 @@ public class LuaConstants {
             return LuaConstants.getAdapter(it);
           })).contains(LuaConstants.getAdapter(av))));
           if (_not) {
-            _builder.append("fb[");
-            CharSequence _xifexpression = null;
-            boolean _isIsInput = av.getVar().isIsInput();
-            if (_isIsInput) {
-              _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
-            } else {
-              _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
+            {
+              boolean _isIsInput = LuaConstants.getAdapter(av).isIsInput();
+              if (_isIsInput) {
+                _builder.append("fb[");
+                CharSequence _xifexpression = null;
+                boolean _isIsInput_1 = av.getVar().isIsInput();
+                if (_isIsInput_1) {
+                  _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
+                } else {
+                  _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
+                }
+                _builder.append(_xifexpression);
+                _builder.append("] = ");
+                CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), LuaConstants.getAdapter(av).getName());
+                _builder.append(_luaAdapterVariable);
+                _builder.newLineIfNotEmpty();
+              } else {
+                _builder.append("fb[");
+                CharSequence _xifexpression_1 = null;
+                boolean _isIsInput_2 = av.getVar().isIsInput();
+                if (_isIsInput_2) {
+                  _xifexpression_1 = LuaConstants.luaFBAdapterInputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
+                } else {
+                  _xifexpression_1 = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), LuaConstants.getAdapter(av).getName());
+                }
+                _builder.append(_xifexpression_1);
+                _builder.append("] = ");
+                CharSequence _luaAdapterVariable_1 = LuaConstants.luaAdapterVariable(av.getVar().getName(), LuaConstants.getAdapter(av).getName());
+                _builder.append(_luaAdapterVariable_1);
+                _builder.newLineIfNotEmpty();
+              }
             }
-            _builder.append(_xifexpression);
-            _builder.append("] = ");
-            CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), LuaConstants.getAdapter(av).getName());
-            _builder.append(_luaAdapterVariable);
-            _builder.newLineIfNotEmpty();
           }
         }
       }
     }
+    _builder.append("\t");
     _builder.newLine();
     return _builder;
   }

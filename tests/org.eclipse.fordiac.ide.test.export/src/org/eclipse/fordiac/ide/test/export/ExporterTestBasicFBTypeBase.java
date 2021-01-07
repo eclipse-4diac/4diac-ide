@@ -12,21 +12,21 @@
  *     - test for forte_ng
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.export.forte_ng.tests;
+package org.eclipse.fordiac.ide.test.export;
 
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-public class ForteNgTestBasicFBTypeBase extends ForteNgTestBase<BasicFBType> {
+public class ExporterTestBasicFBTypeBase extends ExporterTestBase<BasicFBType> {
 
 	@Override
 	void setupFunctionBlock() {
 		// prepare a function block object including an interface list
 		functionBlock = LibraryElementFactory.eINSTANCE.createBasicFBType();
 		functionBlock.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		functionBlock.setName(FUNCTIONBLOCK_NAME);
+		functionBlock.setName(BASICFUNCTIONBLOCK_NAME);
 
 		functionBlock.setECC(LibraryElementFactory.eINSTANCE.createECC());
 
