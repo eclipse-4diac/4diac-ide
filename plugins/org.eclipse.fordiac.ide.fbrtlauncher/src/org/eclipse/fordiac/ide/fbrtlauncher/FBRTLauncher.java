@@ -33,6 +33,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
  */
 public class FBRTLauncher implements IRuntimeLauncher {
 
+	private static final String RMT_FRAME = "RMT_FRAME"; //$NON-NLS-1$
 	private final List<LaunchParameter> params = new ArrayList<>();
 
 	/**
@@ -41,9 +42,9 @@ public class FBRTLauncher implements IRuntimeLauncher {
 	public FBRTLauncher() {
 		// define the initial parameters for the runtime
 		setParam(Messages.FBRTLauncher_LABEL_PortParam, "61505"); //$NON-NLS-1$
-		LaunchParameter param = setParam(Messages.FBRTLauncher_LABEL_DeviceTypeParam, "RMT_FRAME"); //$NON-NLS-1$
+		final LaunchParameter param = setParam(Messages.FBRTLauncher_LABEL_DeviceTypeParam, RMT_FRAME);
 		param.setFixedValues(true);
-		param.setValues(new String[] { "RMT_FRAME", "RMT_DEV" }); //$NON-NLS-1$ //$NON-NLS-2$
+		param.setValues(new String[] { RMT_FRAME, "RMT_DEV" }); //$NON-NLS-1$
 	}
 
 	@Override
@@ -54,22 +55,22 @@ public class FBRTLauncher implements IRuntimeLauncher {
 	@Override
 	public void launch() throws LaunchRuntimeException {
 		checkPlatform();
-		String javaRte = getJavaRte();
-		String runtimePath = getRuntimePath();
+		final String javaRte = getJavaRte();
+		final String runtimePath = getRuntimePath();
 
-		String deviceType = params.get(1).getValue();
+		final String deviceType = params.get(1).getValue();
 		String fbrtPath = "fb.rt."; //$NON-NLS-1$
-		if (deviceType.equalsIgnoreCase("RMT_FRAME")) { //$NON-NLS-1$
+		if (RMT_FRAME.equalsIgnoreCase(deviceType)) {
 			fbrtPath += "hmi."; //$NON-NLS-1$
 		}
-		String arguments = "-noverify -classpath ./lib" //$NON-NLS-1$
+		final String arguments = "-noverify -classpath ./lib" //$NON-NLS-1$
 				+ File.pathSeparatorChar + "./" //$NON-NLS-1$
 				+ new File(runtimePath).getName() + File.pathSeparatorChar + " " //$NON-NLS-1$
 				+ fbrtPath + deviceType + " -n " //$NON-NLS-1$
 				+ deviceType + " -s " //$NON-NLS-1$
 				+ Integer.toString(getPortNumber()) + " -p " //$NON-NLS-1$
 				+ Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_LIB);
-		LaunchRuntimeUtils.startRuntime("FBRT " + deviceType, javaRte, //$NON-NLS-1$
+		LaunchRuntimeUtils.startRuntime("FBRT " + deviceType + " on port " + Integer.toString(getPortNumber()), javaRte, //$NON-NLS-1$ //$NON-NLS-2$
 				new File(runtimePath).getParentFile().getAbsolutePath(), arguments);
 
 	}
@@ -79,7 +80,7 @@ public class FBRTLauncher implements IRuntimeLauncher {
 		return Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH);
 	}
 
-	private String getJavaRte() throws LaunchRuntimeException {
+	private static String getJavaRte() throws LaunchRuntimeException {
 		String javaRte = System.getProperty("java.home"); //$NON-NLS-1$
 		if (javaRte.isEmpty()) {
 			throw new LaunchRuntimeException(Messages.FBRTLauncher_ERROR_MissingJavaVM);
@@ -92,22 +93,22 @@ public class FBRTLauncher implements IRuntimeLauncher {
 	}
 
 	private int getPortNumber() throws LaunchRuntimeException {
-		int port = Integer.parseInt(params.get(0).getValue());
+		final int port = Integer.parseInt(params.get(0).getValue());
 		if ((port < 1024) || (port > 65535)) {
 			throw new LaunchRuntimeException(Messages.FBRTLauncher_ERROR_WrongPort);
 		}
 		return port;
 	}
 
-	private void checkPlatform() throws LaunchRuntimeException {
-		boolean isLinux = Platform.getOS().equalsIgnoreCase(Platform.OS_LINUX);
-		boolean isMacOS = Platform.getOS().equalsIgnoreCase(Platform.OS_MACOSX);
+	private static void checkPlatform() throws LaunchRuntimeException {
+		final boolean isLinux = Platform.getOS().equalsIgnoreCase(Platform.OS_LINUX);
+		final boolean isMacOS = Platform.getOS().equalsIgnoreCase(Platform.OS_MACOSX);
 		if (!(isWin32Platform() || isLinux || isMacOS)) {
 			throw new LaunchRuntimeException(Messages.FBRTLauncher_ERROR_MissingPlatform);
 		}
 	}
 
-	private boolean isWin32Platform() {
+	private static boolean isWin32Platform() {
 		return Platform.getOS().equalsIgnoreCase(Platform.OS_WIN32);
 	}
 
@@ -123,13 +124,13 @@ public class FBRTLauncher implements IRuntimeLauncher {
 
 	@Override
 	public final LaunchParameter setParam(final String name, final String value) {
-		for (int i = 0; i < params.size(); i++) {
-			if (params.get(i).getName().equals(name)) {
-				params.get(i).setValue(value);
-				return params.get(i);
+		for (final LaunchParameter param : params) {
+			if (param.getName().equals(name)) {
+				param.setValue(value);
+				return param;
 			}
 		}
-		LaunchParameter param = new LaunchParameter();
+		final LaunchParameter param = new LaunchParameter();
 		param.setName(name);
 		param.setValue(value);
 		params.add(param);
@@ -142,7 +143,7 @@ public class FBRTLauncher implements IRuntimeLauncher {
 	}
 
 	@Override
-	public void addPathPreferenceChangeListener(IPropertyChangeListener listener) {
+	public void addPathPreferenceChangeListener(final IPropertyChangeListener listener) {
 		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(listener);
 	}
 }

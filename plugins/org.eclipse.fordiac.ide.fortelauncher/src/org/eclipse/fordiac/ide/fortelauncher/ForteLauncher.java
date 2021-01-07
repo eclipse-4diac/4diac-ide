@@ -11,7 +11,7 @@
  * Contributors:
  *   Martijn Rooker, Gerhard Ebenhofer, Thomas Strasser, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
-  *   Bianca Wiesmayr
+ *   Bianca Wiesmayr
  *     - add access to path setting and configured runtime path
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fortelauncher;
@@ -51,19 +51,20 @@ public class ForteLauncher implements IRuntimeLauncher {
 	@Override
 	public void launch() throws LaunchRuntimeException {
 		try {
-			int port = Integer.parseInt(params.get(0).getValue());
+			final int port = Integer.parseInt(params.get(0).getValue());
 			if ((port < 1024) || (port > 65535)) {
 				throw new NumberFormatException();
 			}
-			String runtimePath = getRuntimePath();
-			LaunchRuntimeUtils.startRuntime("FORTE", runtimePath, new File(runtimePath) //$NON-NLS-1$
+			final String runtimePath = getRuntimePath();
+			LaunchRuntimeUtils.startRuntime("FORTE on port " + params.get(0).getValue(), runtimePath, //$NON-NLS-1$
+					new File(runtimePath)
 					.getParentFile().getAbsolutePath(),
 					"-c " //$NON-NLS-1$
-							+ "localhost:" //$NON-NLS-1$
-							+ params.get(0).getValue());
-		} catch (NumberFormatException num) {
+					+ "localhost:" //$NON-NLS-1$
+					+ params.get(0).getValue());
+		} catch (final NumberFormatException num) {
 			throw new LaunchRuntimeException(Messages.ForteLauncher_ERROR_WrongPort);
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			Activator.getDefault().logError(Messages.ForteLauncher_ERROR_CouldNotLaunchFORTE, ex);
 		}
 	}
@@ -85,13 +86,13 @@ public class ForteLauncher implements IRuntimeLauncher {
 
 	@Override
 	public final LaunchParameter setParam(final String name, final String value) {
-		for (int i = 0; i < params.size(); i++) {
-			if (params.get(i).getName().equals(name)) {
-				params.get(i).setValue(value);
-				return params.get(i);
+		for (final LaunchParameter param : params) {
+			if (param.getName().equals(name)) {
+				param.setValue(value);
+				return param;
 			}
 		}
-		LaunchParameter param = new LaunchParameter();
+		final LaunchParameter param = new LaunchParameter();
 		param.setName(name);
 		param.setValue(value);
 		params.add(param);
@@ -104,7 +105,7 @@ public class ForteLauncher implements IRuntimeLauncher {
 	}
 
 	@Override
-	public void addPathPreferenceChangeListener(IPropertyChangeListener listener) {
+	public void addPathPreferenceChangeListener(final IPropertyChangeListener listener) {
 		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(listener);
 	}
 }

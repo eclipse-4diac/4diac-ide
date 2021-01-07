@@ -62,7 +62,7 @@ public class RuntimesView implements ILaunchesListener2 {
 	private static final String DEVICE_NAME = "device_name"; //$NON-NLS-1$
 	private static final String PARAMETERS = "parameters"; //$NON-NLS-1$
 
-	private static final int DEVICE_NAME_WIDTH = 100;
+	private static final int DEVICE_NAME_WIDTH = 200;
 	private static final int PARAMETERS_WIDTH = 200;
 
 	private final ILaunchManager lm;
