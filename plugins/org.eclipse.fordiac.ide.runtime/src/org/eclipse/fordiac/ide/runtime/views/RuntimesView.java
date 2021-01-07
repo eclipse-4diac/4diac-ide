@@ -26,11 +26,13 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.ILaunchesListener2;
+import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.fordiac.ide.runtime.Activator;
 import org.eclipse.fordiac.ide.runtime.LaunchRuntimeUtils;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -48,6 +50,10 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.IConsoleManager;
+import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -86,7 +92,10 @@ public class RuntimesView implements ILaunchesListener2 {
 		setupButtonArea(composite);
 
 		runtimesViewer = createConnectionsViewer(composite);
-		runtimesViewer.addSelectionChangedListener(ev -> setButtonEnablement(!runtimesViewer.getSelection().isEmpty()));
+		runtimesViewer.addSelectionChangedListener(ev -> {
+			setButtonEnablement(!runtimesViewer.getSelection().isEmpty());
+			showConsole(runtimesViewer.getSelection());
+		});
 
 		lm.addLaunchListener(this);
 		runtimesViewer.setInput(runtimes);
@@ -200,6 +209,40 @@ public class RuntimesView implements ILaunchesListener2 {
 			}
 		}
 	}
+
+	private static void showConsole(final ISelection selection) {
+		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
+			final RuntimeData first = (RuntimeData) ((IStructuredSelection) selection).getFirstElement();
+			final IConsole console = findConsole(first.launch);
+			if (null != console) {
+				revealConsole(console);
+			}
+		}
+
+	}
+
+	private static IConsole findConsole(final ILaunch launch) {
+		final IProcess rtProcess = launch.getProcesses()[0];
+		final IConsoleManager conMan = ConsolePlugin.getDefault().getConsoleManager();
+		final IConsole[] existing = conMan.getConsoles();
+
+		for (final IConsole console : existing) {
+			if (console instanceof TextConsole) {
+				final TextConsole procCons = (TextConsole) console;
+				final Object conProcess = procCons.getAttribute("org.eclipse.debug.ui.ATTR_CONSOLE_PROCESS"); //$NON-NLS-1$
+				if (rtProcess.equals(conProcess)) {
+					return procCons;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static void revealConsole(final IConsole console) {
+		final IConsoleManager conMan = ConsolePlugin.getDefault().getConsoleManager();
+		conMan.showConsoleView(console);
+	}
+
 
 	private static class RuntimeData {
 		final ILaunch launch;
