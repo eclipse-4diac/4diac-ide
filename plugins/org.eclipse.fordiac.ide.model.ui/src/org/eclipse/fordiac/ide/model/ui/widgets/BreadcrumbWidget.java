@@ -57,15 +57,19 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		if (isValidInput(input)) {
 			items.forEach(BreadcrumbItem::dispose);
 			toolbar.requestLayout();
-			final ArrayList<Object> list = new ArrayList<>(); // list of all parent objects
-			createItems(input, list);
-			Collections.reverse(list); // is needed for correct order in composite
-			list.forEach(obj -> items.add(new BreadcrumbItem(this, obj, labelProvider, contentProvider)));
+			createBreadcrumbItems(input);
 			toolbar.pack();
 		}
 
 		final SelectionChangedEvent changeEvent = new SelectionChangedEvent(this, new StructuredSelection(input));
 		fireSelectionChanged(changeEvent);
+	}
+
+	private void createBreadcrumbItems(final Object input) {
+		final ArrayList<Object> parentObjects = new ArrayList<>();
+		createItems(input, parentObjects);
+		Collections.reverse(parentObjects); // is needed for correct order in composite
+		parentObjects.forEach(obj -> items.add(new BreadcrumbItem(this, obj, labelProvider, contentProvider)));
 	}
 
 	public void setContentProvider(final AdapterFactoryContentProvider contentProvider) {
@@ -86,20 +90,16 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		return toolbar;
 	}
 
-	private void createItems(final Object v, final ArrayList<Object> list) {
-		if (v == null) {
+	// recursive function for collecting parent objects
+	private void createItems(final Object input, final ArrayList<Object> parentObjects) {
+		if (input == null) {
 			return;
 		}
-		// if the input is a automation system we have to ignore it,
-		// the next object up the tree is the system file which we use instead of the
-		// automation system itself
-		if (!(v instanceof AutomationSystem)) {
-			list.add(v);
+		parentObjects.add(input);
+		if (input instanceof AutomationSystem) {
+			return;
 		}
-		if (!(v instanceof IFile)) { // (file -> AutomationSystem) no need for
-			// objects further up the tree
-			createItems(contentProvider.getParent(v), list);
-		}
+		createItems(contentProvider.getParent(input), parentObjects);
 	}
 
 	@Override

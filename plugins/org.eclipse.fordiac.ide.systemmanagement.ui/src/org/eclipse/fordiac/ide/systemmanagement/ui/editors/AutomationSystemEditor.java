@@ -19,6 +19,7 @@ import java.util.Arrays;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditor;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
@@ -41,7 +42,7 @@ import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEdi
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
-import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentProvider;
+import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
@@ -73,9 +74,10 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	@Override
 	public void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
-		getBreadcrumb().setContentProvider(new SystemContentProvider());
+		getBreadcrumb()
+				.setContentProvider(new AdapterFactoryContentProvider(new AutomationSystemProviderAdapterFactory()));
 		getBreadcrumb().setLabelProvider(new SystemLabelProvider());
-		getBreadcrumb().setInput(system.getSystemFile());
+		getBreadcrumb().setInput(system);
 	}
 
 	@Override
@@ -89,7 +91,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	protected void createPages() {
 		try {
 			final int pagenum = addPage(new SystemEditor(), getEditorInput());
-			getModelToEditorNumMapping().put(system.getSystemFile(), pagenum); // need to use the file as reference as
+			getModelToEditorNumMapping().put(system, pagenum);
 			// this is
 			// provided by the content providers
 		} catch (final PartInitException e) {

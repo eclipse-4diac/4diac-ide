@@ -76,7 +76,7 @@ class BreadcrumbItem {
 			}
 		});
 
-		if (contentProvider.hasChildren(current)) {
+		if (this.contentProvider.hasChildren(current)) {
 			arrow = new ToolItem(parent.getToolBar(), SWT.PUSH);
 			arrow.setImage(new BreadcrumbArrowDescriptor().createImage());
 			arrow.addSelectionListener(new SelectionAdapter() {
@@ -157,7 +157,6 @@ class BreadcrumbItem {
 
 		@Override
 		public Object[] getChildren(final Object parentElement) {
-			// TODO move to content provider
 			return Arrays.stream(nestedContentProvider.getChildren(parentElement))
 					.filter(obj -> obj instanceof IFile || obj instanceof SystemConfiguration
 							|| obj instanceof Application || (obj instanceof SubApp && ((SubApp) obj).getType() == null)
