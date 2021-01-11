@@ -333,7 +333,6 @@
          </topic>
       </topic>
       <topic label="External Event SIFB" href="html/development/externalEvent_example.html"/>
-      <topic label="Contributing to FORTE" href="html/development/contributeToForte.html"/>
         <topic href="html/development/forte_codequality.html" label="Assuring FORTE Code Quality">
            <topic href="html/development/forte_codequality.html#staticAnalysis" label="Static Code Analysis">
            </topic>
@@ -343,6 +342,7 @@
            </topic>
         </topic>
     </topic>
+    <topic label="Contributing to 4diac" href="html/development/contribute.html"/>
   </topic>
   
 <!--********************************************************************************************-->
