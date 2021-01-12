@@ -16,6 +16,8 @@
  *   Alois Zoitl - Integrated code from child classes to reduce code duplication
  *               - Reworked figure so that interface bars are always at the most
  *                 left or right position
+ *               - forwarding the getDragDracker request to the parent edit parts
+ *                 as with the new interface bar this didn't happen automatically
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -39,6 +41,7 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
@@ -372,6 +375,11 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		} else {
 			super.performRequest(request);
 		}
+	}
+
+	@Override
+	public DragTracker getDragTracker(final Request req) {
+		return getParent().getDragTracker(req);
 	}
 
 }
