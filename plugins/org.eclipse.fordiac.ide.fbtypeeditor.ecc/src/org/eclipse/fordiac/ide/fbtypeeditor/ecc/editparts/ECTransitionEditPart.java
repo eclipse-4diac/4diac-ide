@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
+ * 				 2019 - 2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,8 +20,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
 import java.util.List;
 
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
@@ -29,6 +29,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.MoveBendpointCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
@@ -38,8 +39,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEdit
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
-import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -54,7 +53,9 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.ConnectionEditPolicy;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
@@ -64,7 +65,6 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
 public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
@@ -190,18 +190,23 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
 
-			protected Command getDirectEditCommand(final DirectEditRequest request) {
+			protected CompoundCommand getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof AbstractConnectionEditPart) {
-					Integer value = (Integer) request.getCellEditor().getValue();
-					if (null != value) {
-						int selected = value.intValue();
+					String[] values = (String[]) request.getCellEditor().getValue();
+					if (null != values) {
+						int selected = Integer.parseInt(values[0]);
 						List<String> events = ECCContentAndLabelProvider
 								.getTransitionConditionEventNames(getBasicFBType());
 						String ev = null;
 						if ((0 <= selected) && (selected < events.size())) {
 							ev = events.get(selected);
 						}
-						return new ChangeConditionEventCommand(getModel(), ev != null ? ev : "1");
+
+						CompoundCommand commands = new CompoundCommand();
+						commands.add(new ChangeConditionExpressionCommand(getModel(), values[1]));
+						commands.add(new ChangeConditionEventCommand(getModel(), ev != null ? ev : "1"));
+
+						return commands;
 					}
 				}
 				return null;
@@ -259,20 +264,17 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	}
 
 	protected DirectEditManager createDirectEditManager() {
-		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(getNameLabel()),
-				getNameLabel());
+		return new ECTransitionDirectEditManager(this, getModel(), getFigure().getLabel(), getZoomManager(),
+				(FigureCanvas) getViewer().getControl());
 	}
 
 	public void performDirectEdit() {
-
-		List<String> eventNames = ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType());
-		int selected = (getModel().getConditionEvent() != null)
-				? eventNames.indexOf(getModel().getConditionEvent().getName())
-				: eventNames.size() - 1;
-		((ComboDirectEditManager) getManager()).updateComboData(eventNames);
-		((ComboDirectEditManager) getManager()).setSelectedItem(selected);
 		getManager().show();
 
+	}
+
+	private ZoomManager getZoomManager() {
+		return ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager();
 	}
 
 	public BasicFBType getBasicFBType() {
@@ -280,22 +282,16 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 	}
 
-	private DirectEditManager getManager() {
+	private ECTransitionDirectEditManager getManager() {
 		if (null == manager) {
 			manager = createDirectEditManager();
 		}
-		return manager;
-	}
-
-	// This is used for the DirectEditManager's Locator
-	protected Label getNameLabel() {
-		Label transitionLabel = new Label();
-		transitionLabel.setLocation(new Point(getModel().getX(), getModel().getY()));
-		return transitionLabel;
+		return (ECTransitionDirectEditManager) manager;
 	}
 
 	protected void refreshLocator() {
-		getManager().setLocator(new ComboCellEditorLocator(getNameLabel()));
+		((ECTransitionDirectEditManager) getManager())
+				.updateRefPosition(new Point(getModel().getX(), getModel().getY()));
 	}
 
 	@Override

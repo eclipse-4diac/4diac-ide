@@ -166,4 +166,8 @@ public class ECTransitionFigure extends SplineConnection {
 	public ECTransitionToolTipFigure getToolTip() {
 		return (ECTransitionToolTipFigure) super.getToolTip();
 	}
+	
+	public Label getLabel() {
+		return condition;
+	}
 }
