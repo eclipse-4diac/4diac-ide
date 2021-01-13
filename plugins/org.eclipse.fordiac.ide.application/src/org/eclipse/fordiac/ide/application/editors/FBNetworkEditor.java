@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
 import org.eclipse.fordiac.ide.application.editparts.ElementEditPartFactory;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.application.tools.FBNetworkPanningSelectionTool;
-import org.eclipse.fordiac.ide.application.utilities.ApplicationEditorTemplateTransferDropTargetListener;
+import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropTargetListener;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
@@ -68,7 +68,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	private FBNetwork model;
 
-	protected void setModel(FBNetwork model) {
+	protected void setModel(final FBNetwork model) {
 		this.model = model;
 	}
 
@@ -110,7 +110,8 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
-		return new ApplicationEditorTemplateTransferDropTargetListener(getGraphicalViewer(), getSystem());
+		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(),
+				getSystem().getSystemFile().getProject());
 	}
 
 	@Override
@@ -136,7 +137,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
-		ActionRegistry registry = getActionRegistry();
+		final ActionRegistry registry = getActionRegistry();
 		IAction action;
 
 		action = new CopyEditPartsAction(this);
@@ -214,8 +215,8 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		return PALETTE_PREFERENCES;
 	}
 
-	public void selectElement(Object element) {
-		EditPart editPart = (EditPart) getGraphicalViewer().getEditPartRegistry().get(element);
+	public void selectElement(final Object element) {
+		final EditPart editPart = (EditPart) getGraphicalViewer().getEditPartRegistry().get(element);
 		if (null != editPart) {
 			getGraphicalViewer().flush();
 			getGraphicalViewer().selectAndRevealEditPart(editPart);
@@ -229,14 +230,14 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(final Class adapter) {
 		if (adapter == FBNetwork.class) {
 			return getModel();
 		}
 		return super.getAdapter(adapter);
 	}
 
-	private void handleActivationChanged(Event event) {
+	private void handleActivationChanged(final Event event) {
 		IAction copy = null;
 		IAction cut = null;
 		IAction paste = null;

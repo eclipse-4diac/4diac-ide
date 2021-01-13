@@ -23,6 +23,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.FBTypePaletteViewerProvider;
+import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropTargetListener;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
@@ -46,6 +47,7 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
+import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
@@ -55,9 +57,9 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	private CompositeFBType fbType;
 	private CommandStack commandStack;
 	private TypeLibrary typeLib;
-	private Adapter adapter = new AdapterImpl() {
+	private final Adapter adapter = new AdapterImpl() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			// only refresh propertypage (page) if the event is not an
 			// REMOVING_ADAPTER event - otherwise, the remove adapter in the
@@ -73,7 +75,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	};
 
 	@Override
-	public void setCommonCommandStack(CommandStack commandStack) {
+	public void setCommonCommandStack(final CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
 
@@ -106,9 +108,9 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	@Override
-	public boolean outlineSelectionChanged(Object selectedElement) {
+	public boolean outlineSelectionChanged(final Object selectedElement) {
 
-		EditPart editPart = getEditPartForSelection(selectedElement);
+		final EditPart editPart = getEditPartForSelection(selectedElement);
 		if (null != editPart) {
 			getGraphicalViewer().select(editPart);
 			return true;
@@ -118,9 +120,10 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	EditPart getEditPartForSelection(Object selectedElement) {
 		@SuppressWarnings("rawtypes")
+		final
 		Map map = getGraphicalViewer().getEditPartRegistry();
 
-		for (Object key : map.keySet()) {
+		for (final Object key : map.keySet()) {
 			if ((key instanceof FB) && (((FB) key) == selectedElement)) {
 				selectedElement = key;
 				break;
@@ -131,7 +134,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 			}
 		}
 
-		Object obj = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
+		final Object obj = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
 		if (obj instanceof EditPart) {
 			return (EditPart) obj;
 		}
@@ -149,9 +152,9 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	@Override
-	protected void setModel(IEditorInput input) {
+	protected void setModel(final IEditorInput input) {
 		if (input instanceof FBTypeEditorInput) {
-			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			if (untypedInput.getContent() instanceof CompositeFBType) {
 				fbType = (CompositeFBType) untypedInput.getContent();
 				setModel(fbType.getFBNetwork());
@@ -165,11 +168,11 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	@Override
-	protected void setEditorPartName(IEditorInput input) {
+	protected void setEditorPartName(final IEditorInput input) {
 		setPartName(FordiacMessages.FBNetwork);
 	}
 
-	protected void configurePalette(FBTypeEditorInput fbTypeEditorInput) {
+	protected void configurePalette(final FBTypeEditorInput fbTypeEditorInput) {
 		typeLib = fbTypeEditorInput.getPaletteEntry().getTypeLibrary();
 	}
 
@@ -196,28 +199,34 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	@Override
-	public void gotoMarker(IMarker marker) {
+	protected TransferDropTargetListener createTransferDropTargetListener() {
+		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(),
+				fbType.getPaletteEntry().getFile().getProject());
+	}
+
+	@Override
+	public void gotoMarker(final IMarker marker) {
 		try {
-			Map<String, Object> attributes = marker.getAttributes();
+			final Map<String, Object> attributes = marker.getAttributes();
 			if (FordiacMarkerHelper.markerTargetsFBNetworkElement(attributes)) {
-				Object location = attributes.get(IMarker.LOCATION);
+				final Object location = attributes.get(IMarker.LOCATION);
 				if (location instanceof String) {
-					FBNetworkElement fbne = getModel().getElementNamed((String) location);
+					final FBNetworkElement fbne = getModel().getElementNamed((String) location);
 					if (null != fbne) {
 						selectElement(fbne);
 					}
 				}
 			}
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			Activator.getDefault().logError("Could not get marker attributes", e); //$NON-NLS-1$
 		}
 	}
 
 	@Override
-	public boolean isMarkerTarget(IMarker marker) {
+	public boolean isMarkerTarget(final IMarker marker) {
 		try {
 			return FordiacMarkerHelper.markerTargetsFBNetworkElement(marker.getAttributes());
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			Activator.getDefault().logError("Could not get marker attributes", e); //$NON-NLS-1$
 		}
 		return false;

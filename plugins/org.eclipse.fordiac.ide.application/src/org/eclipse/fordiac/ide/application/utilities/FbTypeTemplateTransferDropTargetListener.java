@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2015 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2020 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,7 @@
  *   Alois Zoitl - fixed snapp to grid placement of new FBs based on a commit on
  *   			   the Eclipse Siriuse project by Laurent Redor:
  *   			   https://git.eclipse.org/c/sirius/org.eclipse.sirius.git/commit/?id=278bcefbf04a5e93636b16b45ccce27e455cc3be
+ *               - merged ApplicationEditorTemplatetransferlistern into this class
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.utilities;
 
@@ -22,16 +23,17 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionOfFb;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.swt.dnd.DND;
 
-public abstract class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDropTargetListener {
+public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDropTargetListener {
 
 	private final IProject targetProject;
 
@@ -40,9 +42,9 @@ public abstract class FbTypeTemplateTransferDropTargetListener extends TemplateT
 	 *
 	 * @param viewer the EditPartViewer
 	 */
-	public FbTypeTemplateTransferDropTargetListener(final EditPartViewer viewer, AutomationSystem system) {
+	public FbTypeTemplateTransferDropTargetListener(final EditPartViewer viewer, final IProject targetProject) {
 		super(viewer);
-		targetProject = (null != system) ? system.getSystemFile().getProject() : null;
+		this.targetProject = targetProject;
 	}
 
 	/**
@@ -61,8 +63,8 @@ public abstract class FbTypeTemplateTransferDropTargetListener extends TemplateT
 
 		} else {
 			if (TemplateTransfer.getInstance().getTemplate() instanceof FBTypePaletteEntry) {
-				FBTypePaletteEntry entry = (FBTypePaletteEntry) TemplateTransfer.getInstance().getTemplate();
-				IProject srcProject = entry.getFile().getProject();
+				final FBTypePaletteEntry entry = (FBTypePaletteEntry) TemplateTransfer.getInstance().getTemplate();
+				final IProject srcProject = entry.getFile().getProject();
 
 				// Only allow drag from the same project
 				if ((null != targetProject) && (targetProject.equals(srcProject))) {
@@ -104,16 +106,29 @@ public abstract class FbTypeTemplateTransferDropTargetListener extends TemplateT
 	protected void updateTargetRequest() {
 		super.updateTargetRequest();
 		if (null != getTargetEditPart()) {
-			SnapToHelper helper = getTargetEditPart().getAdapter(SnapToHelper.class);
+			final SnapToHelper helper = getTargetEditPart().getAdapter(SnapToHelper.class);
 			if (null != helper) {
-				PrecisionPoint preciseLocation = new PrecisionPoint(getDropLocation());
-				PrecisionPoint result = new PrecisionPoint(getDropLocation());
-				CreateRequest req = getCreateRequest();
+				final PrecisionPoint preciseLocation = new PrecisionPoint(getDropLocation());
+				final PrecisionPoint result = new PrecisionPoint(getDropLocation());
+				final CreateRequest req = getCreateRequest();
 				helper.snapPoint(req, PositionConstants.HORIZONTAL | PositionConstants.VERTICAL, preciseLocation,
 						result);
 				req.setLocation(result.getCopy());
 			}
 		}
+	}
+
+	@Override
+	protected CreationFactory getFactory(final Object template) {
+		getCurrentEvent().detail = DND.DROP_COPY;
+
+		if (template instanceof FBType || template instanceof FBTypePaletteEntry
+				|| template instanceof FBTypePaletteEntry[] || template instanceof TransferDataSelectionOfFb[]
+						|| template instanceof SubApplicationTypePaletteEntry
+						|| template instanceof SubApplicationTypePaletteEntry[]) {
+			return new FBTypeTemplateCreationFactory(template);
+		}
+		return null;
 	}
 
 }
