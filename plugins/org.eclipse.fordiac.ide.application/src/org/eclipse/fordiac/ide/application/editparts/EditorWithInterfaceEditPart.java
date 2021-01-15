@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Profactor GmbH, TU Wien ACIN, fortiss GmbH, Johannes
+ * Copyright (c) 2008, 2020, 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH, Johannes
  *                          Kepler University Linz, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -18,6 +18,7 @@
  *                 left or right position
  *               - forwarding the getDragDracker request to the parent edit parts
  *                 as with the new interface bar this didn't happen automatically
+ *   Daniel Lindhuber - instance comment
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayer;
@@ -34,12 +36,14 @@ import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -131,10 +135,14 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	private FreeformLayer contentContainer;
 	private ControlListener controlListener;
 
+	private InstanceComment instanceComment;
+	private Figure commentContainer;
+
 	@Override
 	protected IFigure createFigure() {
 		final IFigure mainFigure = new Figure();
 		final BorderLayout mainLayout = new InterfaceBarLayout();
+		mainLayout.setVerticalSpacing(-1); // remove spacing between comment and interface container
 
 		mainFigure.setLayoutManager(mainLayout);
 		mainFigure.setOpaque(false);
@@ -146,6 +154,8 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		mainFigure.add(contentContainer, BorderLayout.CENTER);
 
 		createRightInterface(mainFigure);
+
+		createCommentContainer(mainFigure);
 
 		final IFigure root = super.createFigure();
 		root.setBorder(null);  // we don't want a border here
@@ -202,6 +212,28 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		mainFigure.add(rightInterfaceContainer, BorderLayout.RIGHT);
 	}
 
+	private void createCommentContainer(final IFigure mainFigure) {
+		commentContainer = new Figure();
+		final Border border = new SingleLineBorder() {
+
+			private final Insets insets = new Insets(5); // spacing
+
+			@Override
+			public Insets getInsets(IFigure figure) {
+				return insets;
+			}
+
+		};
+		commentContainer.setBorder(border);
+		final ToolbarLayout layout = new ToolbarLayout();
+		layout.setMinorAlignment(ToolbarLayout.ALIGN_CENTER);
+		layout.setStretchMinorAxis(false);
+		commentContainer.setOpaque(true);
+
+		commentContainer.setLayoutManager(layout);
+		mainFigure.add(commentContainer, BorderLayout.TOP);
+	}
+
 	public Figure getLeftInterfaceContainer() {
 		return leftInterfaceContainer;
 	}
@@ -254,9 +286,23 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 				children.addAll(ifList.getPlugs());
 				children.addAll(ifList.getSockets());
 			}
+			if (isUntyped()) {
+				children.add(getInstanceComment());
+			}
 			return children;
 		}
 		return Collections.emptyList();
+	}
+
+	private boolean isUntyped() {
+		return getModel().eContainer() instanceof SubApp;
+	}
+
+	private InstanceComment getInstanceComment() {
+		if (null == instanceComment) {
+			instanceComment = new InstanceComment((SubApp) getModel().eContainer());
+		}
+		return instanceComment;
 	}
 
 	private boolean showAdapterPorts() {
@@ -269,6 +315,10 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		if (childEditPart instanceof InterfaceEditPart) {
 			addChildVisualInterfaceElement((InterfaceEditPart) childEditPart);
+		} else if (childEditPart instanceof InstanceCommentEditPart) {
+			final Figure commentFigure = ((InstanceCommentEditPart) childEditPart).getFigure();
+			commentFigure.setBorder(null);
+			commentContainer.add(commentFigure);
 		} else {
 			super.addChildVisual(childEditPart, index);
 		}
@@ -297,6 +347,8 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	protected void removeChildVisual(final EditPart childEditPart) {
 		if (childEditPart instanceof InterfaceEditPart) {
 			removeChildVisualInterfaceElement((InterfaceEditPart) childEditPart);
+		} else if (childEditPart instanceof InstanceCommentEditPart) {
+			commentContainer.remove(((InstanceCommentEditPart) childEditPart).getFigure());
 		} else {
 			super.removeChildVisual(childEditPart);
 		}
