@@ -14,21 +14,16 @@
 package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.fordiac.ide.util.OpenListener;
+import org.eclipse.fordiac.ide.model.ui.actions.AbstractOpenSystemElementListener;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 /**
  * The Class OpenSubApplicationEditorAction.
  */
-public class OpenSubApplicationEditorAction extends OpenListener {
+public class OpenSubApplicationEditorAction extends AbstractOpenSystemElementListener {
 
 	private static final String OPEN_SUBAPP_LISTENER_ID = "org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"; //$NON-NLS-1$
 
@@ -51,37 +46,24 @@ public class OpenSubApplicationEditorAction extends OpenListener {
 		// empty constructor for OpenListener
 	}
 
-	/**
-	 * Opens the editor for the specified Model or sets the focus to the editor if
-	 * already opened.
-	 */
+	/** Opens the editor for the specified Model or sets the focus to the editor if already opened. */
 	public void run() {
-		openEditor(new SubApplicationEditorInput(subApp), SubAppNetworkEditor.class.getName());
+		openInSystemEditor(subApp.getFbNetwork().getAutomationSystem().getSystemFile(), subApp);
 	}
 
 	@Override
-	public void run(IAction action) {
+	public void run(final IAction action) {
 		run();
 	}
 
 	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
+	public void selectionChanged(final IAction action, final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection structuredSel = (IStructuredSelection) selection;
+			final IStructuredSelection structuredSel = (IStructuredSelection) selection;
 			if (structuredSel.getFirstElement() instanceof SubApp) {
 				subApp = (SubApp) structuredSel.getFirstElement();
 			}
 		}
-	}
-
-	@Override
-	public String getActionText() {
-		return Messages.OpenSubApplicationEditorAction_Name;
-	}
-
-	@Override
-	public ImageDescriptor getImageDescriptor() {
-		return FordiacImage.ICON_SUB_APP.getImageDescriptor();
 	}
 
 	@Override

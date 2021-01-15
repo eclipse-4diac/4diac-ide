@@ -14,5 +14,6 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.ui.views.properties.tabbed
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
-Export-Package: org.eclipse.fordiac.ide.model.ui.editors,
+Export-Package: org.eclipse.fordiac.ide.model.ui.actions,
+ org.eclipse.fordiac.ide.model.ui.editors,
  org.eclipse.fordiac.ide.model.ui.widgets

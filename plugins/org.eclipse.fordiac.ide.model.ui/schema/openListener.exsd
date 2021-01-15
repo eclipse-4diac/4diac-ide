@@ -13,10 +13,10 @@
      - initial API and implementation and/or initial documentation
 -->
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.fordiac.ide.util" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.eclipse.fordiac.ide.model.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.eclipse.fordiac.ide.util" id="openListener" name="openListener"/>
+         <meta.schema plugin="org.eclipse.fordiac.ide.model.ui" id="openListener" name="openListener"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -68,7 +68,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.fordiac.ide.util.OpenListener:"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.fordiac.ide.model.ui.OpenListener:"/>
                </appInfo>
             </annotation>
          </attribute>

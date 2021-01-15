@@ -16,9 +16,9 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.actions;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.ui.actions.IOpenListener;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
-import org.eclipse.fordiac.ide.util.IOpenListener;
-import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;

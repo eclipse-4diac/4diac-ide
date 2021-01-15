@@ -13,10 +13,9 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - moved openEditor helper function to EditorUtils  
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util;
+package org.eclipse.fordiac.ide.model.ui.actions;
 
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.ide.util.action.OpenListenerAction;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorInput;
@@ -45,7 +44,7 @@ public abstract class OpenListener implements IOpenListener {
 		return new OpenListenerAction(this);
 	}
 
-	protected void openEditor(IEditorInput input, String editorId) {
+	protected void openEditor(final IEditorInput input, final String editorId) {
 		editor = EditorUtils.openEditor(input, editorId);
 	}
 

@@ -11,7 +11,7 @@
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util;
+package org.eclipse.fordiac.ide.model.ui.actions;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;

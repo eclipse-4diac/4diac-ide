@@ -46,7 +46,7 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 
 	private BreadcrumbWidget breadcrumb;
 
-	protected BreadcrumbWidget getBreadcrumb() {
+	public BreadcrumbWidget getBreadcrumb() {
 		return breadcrumb;
 	}
 

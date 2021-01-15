@@ -15,20 +15,15 @@ package org.eclipse.fordiac.ide.resourceediting.actions;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.resourceediting.Messages;
-import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
-import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.fordiac.ide.util.OpenListener;
+import org.eclipse.fordiac.ide.model.ui.actions.AbstractOpenSystemElementListener;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 /**
  * The Class OpenResourceEditorAction.
  */
-public class OpenResourceEditorAction extends OpenListener {
+public class OpenResourceEditorAction extends AbstractOpenSystemElementListener {
 
 	private static final String OPEN_RES_EDITOR_LISTENER_ID = "org.eclipse.fordiac.ide.resourceediting.actions.OpenResourceEditorAction"; //$NON-NLS-1$
 
@@ -38,8 +33,7 @@ public class OpenResourceEditorAction extends OpenListener {
 	@Override
 	public void run(final IAction action) {
 		if (null != res) {
-			ResourceEditorInput input = new ResourceEditorInput(res);
-			openEditor(input, ResourceDiagramEditor.class.getName());
+			openInSystemEditor(res.getAutomationSystem().getSystemFile(), res);
 		}
 	}
 
@@ -47,22 +41,13 @@ public class OpenResourceEditorAction extends OpenListener {
 	public void selectionChanged(final IAction action, final ISelection selection) {
 		res = null;
 		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection structuredSel = (IStructuredSelection) selection;
+			final IStructuredSelection structuredSel = (IStructuredSelection) selection;
 			if (structuredSel.getFirstElement() instanceof Resource) {
 				res = (Resource) structuredSel.getFirstElement();
 			}
 		}
 	}
 
-	@Override
-	public String getActionText() {
-		return Messages.OpenResourceEditorAction_Name;
-	}
-
-	@Override
-	public ImageDescriptor getImageDescriptor() {
-		return FordiacImage.ICON_RESOURCE.getImageDescriptor();
-	}
 
 	@Override
 	public Class<? extends EObject> getHandledClass() {
