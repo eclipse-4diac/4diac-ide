@@ -1099,10 +1099,8 @@ public class STAlgorithmFilter {
   
   protected CharSequence _generateExpression(final AdapterRoot expr) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append(STAlgorithmFilter.EXPORT_PREFIX);
-    String _name = expr.getAdapter().getName();
-    _builder.append(_name);
-    _builder.append("()");
+    CharSequence _generateVarAccess = this.generateVarAccess(expr.getAdapter());
+    _builder.append(_generateVarAccess);
     return _builder;
   }
   

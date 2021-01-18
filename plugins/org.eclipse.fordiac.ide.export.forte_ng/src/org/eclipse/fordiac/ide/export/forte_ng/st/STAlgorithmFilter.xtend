@@ -391,7 +391,7 @@ class STAlgorithmFilter {
 	}
 
 	def protected dispatch CharSequence generateExpression(AdapterRoot expr) {
-		'''«EXPORT_PREFIX»«expr.adapter.name»()'''
+		'''«expr.adapter.generateVarAccess»'''
 	}
 
 	def generateStructAdapterVarAccess(EList<VarDeclaration> list)
