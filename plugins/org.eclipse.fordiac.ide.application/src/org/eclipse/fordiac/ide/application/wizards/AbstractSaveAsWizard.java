@@ -15,13 +15,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.wizards;
 
-import java.io.File;
-
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.gef.Activator;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -29,14 +24,9 @@ public abstract class AbstractSaveAsWizard extends Wizard {
 	private final String subappSection;
 	SaveAsWizardPage newFilePage;
 
-	public AbstractSaveAsWizard(String subAppSection) {
+	public AbstractSaveAsWizard(final String subAppSection) {
 		this.subappSection = subAppSection;
 		setupDiagramSettings();
-	}
-
-	public IFile getTargetTypeFile() {
-		return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(newFilePage.getContainerFullPath()
-				+ File.separator + newFilePage.getFileName() + TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT));
 	}
 
 	protected boolean perform() {
@@ -48,6 +38,7 @@ public abstract class AbstractSaveAsWizard extends Wizard {
 		}
 		return true;
 	}
+
 
 	private void setupDiagramSettings() {
 		final IDialogSettings settings = Activator.getDefault().getDialogSettings();
@@ -63,4 +54,6 @@ public abstract class AbstractSaveAsWizard extends Wizard {
 	public abstract boolean performFinish();
 
 	protected abstract boolean askOverwrite();
+
+	protected abstract IFile getTargetTypeFile();
 }

@@ -25,7 +25,9 @@ import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.ApplicationPlugin;
@@ -57,7 +59,7 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 
 	private final SubApp subApp;
 
-	public SaveAsSubappWizard(SubApp subApp, String windowTitle) {
+	public SaveAsSubappWizard(final SubApp subApp, final String windowTitle) {
 		super(SUBAPP_SECTION);
 		setWindowTitle(windowTitle);
 		this.subApp = subApp;
@@ -141,23 +143,23 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 		return newEntry;
 	}
 
-	private static void openTypeEditor(PaletteEntry entry) {
+	private static void openTypeEditor(final PaletteEntry entry) {
 		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 				.getDefaultEditor(entry.getFile().getName());
 		EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
 	}
 
-	private void replaceWithType(PaletteEntry entry) {
+	private void replaceWithType(final PaletteEntry entry) {
 		CommandUtil.closeOpenedSubApp(subApp.getSubAppNetwork());
 		getSystem().getCommandStack().execute(new UpdateFBTypeCommand(subApp, entry));
 	}
 
-	private void performTypeSetup(SubAppType type) {
+	private void performTypeSetup(final SubAppType type) {
 		performInterfaceSetup(type);
 		type.setFBNetwork(FBNetworkHelper.copyFBNetWork(subApp.getSubAppNetwork(), type.getInterfaceList()));
 	}
 
-	private void performInterfaceSetup(SubAppType type) {
+	private void performInterfaceSetup(final SubAppType type) {
 		// replace interface list with newly generated
 		final InterfaceList interfaceList = EcoreUtil.copy(subApp.getInterface());
 		type.setInterfaceList(interfaceList);
@@ -168,4 +170,11 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 		return MessageDialog.openConfirm(getShell(), Messages.SaveAsSubApplicationTypeAction_WizardOverrideTitle,
 				Messages.SaveAsSubApplicationTypeAction_WizardOverrideMessage);
 	}
+
+	@Override
+	public IFile getTargetTypeFile() {
+		return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(newFilePage.getContainerFullPath()
+				+ File.separator + newFilePage.getFileName() + TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT));
+	}
+
 }

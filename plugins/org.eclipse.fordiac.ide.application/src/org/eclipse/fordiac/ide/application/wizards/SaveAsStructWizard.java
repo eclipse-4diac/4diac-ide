@@ -16,12 +16,15 @@
 
 package org.eclipse.fordiac.ide.application.wizards;
 
+import java.io.File;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
@@ -30,6 +33,7 @@ import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -42,7 +46,7 @@ public class SaveAsStructWizard extends AbstractSaveAsWizard {
 	private String datatypeName;
 	private boolean replaceSource;
 
-	public SaveAsStructWizard(List<VarDeclaration> varDecl, IProject project, String windowTitle) {
+	public SaveAsStructWizard(final List<VarDeclaration> varDecl, final IProject project, final String windowTitle) {
 		super(SUBAPP_SECTION);
 		setWindowTitle(windowTitle);
 		this.varDecl = varDecl;
@@ -100,6 +104,12 @@ public class SaveAsStructWizard extends AbstractSaveAsWizard {
 	protected boolean askOverwrite() {
 		return MessageDialog.openConfirm(getShell(), Messages.ConvertToStructHandler_ErrorTitle,
 				Messages.ConvertToStructHandler_ErrorMessage);
+	}
+
+	@Override
+	public IFile getTargetTypeFile() {
+		return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(newFilePage.getContainerFullPath()
+				+ File.separator + newFilePage.getFileName() + TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT));
 	}
 
 }
