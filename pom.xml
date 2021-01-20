@@ -247,6 +247,12 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>rc</id>
+			<properties>
+				<profile.name>rc</profile.name>
+			</properties>
+		</profile>
+		<profile>
 			<id>eclipse-sign</id>
 			<build>
 				<plugins>
