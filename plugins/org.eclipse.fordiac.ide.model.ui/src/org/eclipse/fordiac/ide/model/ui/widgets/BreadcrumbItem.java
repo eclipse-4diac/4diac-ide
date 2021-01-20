@@ -44,7 +44,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolItem;
 
-class BreadcrumbItem {
+public class BreadcrumbItem {
 
 	private static final int SHELL_WIDTH = 250;
 	private static final int SHELL_HEIGHT = 250;
@@ -88,6 +88,10 @@ class BreadcrumbItem {
 			});
 		}
 
+	}
+
+	public Object getModel() {
+		return current;
 	}
 
 	void dispose() {

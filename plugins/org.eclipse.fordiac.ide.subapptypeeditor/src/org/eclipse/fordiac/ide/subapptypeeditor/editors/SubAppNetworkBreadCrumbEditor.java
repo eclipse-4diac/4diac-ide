@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
@@ -70,14 +71,6 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	}
 
 	@Override
-	public void createPartControl(final Composite parent) {
-		super.createPartControl(parent);
-		getBreadcrumb().setContentProvider(new AdapterFactoryContentProvider(new TypedSubappProviderAdapterFactory()));
-		getBreadcrumb().setLabelProvider(new FBTypeLabelProvider());
-		getBreadcrumb().setInput(getSubAppType());
-	}
-
-	@Override
 	protected Composite createPageContainer(final Composite parent) {
 		final Composite pageContainer = new Composite(parent, SWT.NONE);
 		pageContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -115,6 +108,21 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			return new SubApplicationEditorInput((SubApp) model);
 		}
 		return null;
+	}
+
+	@Override
+	protected AdapterFactoryContentProvider createBreadcrumbContentProvider() {
+		return new AdapterFactoryContentProvider(new TypedSubappProviderAdapterFactory());
+	}
+
+	@Override
+	protected AdapterFactoryLabelProvider createBreadcrumbLabelProvider() {
+		return new FBTypeLabelProvider();
+	}
+
+	@Override
+	protected Object getInitialModel() {
+		return getSubAppType();
 	}
 
 	@Override

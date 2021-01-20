@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditor;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
@@ -69,15 +70,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		loadSystem();
-	}
-
-	@Override
-	public void createPartControl(final Composite parent) {
-		super.createPartControl(parent);
-		getBreadcrumb()
-				.setContentProvider(new AdapterFactoryContentProvider(new AutomationSystemProviderAdapterFactory()));
-		getBreadcrumb().setLabelProvider(new SystemLabelProvider());
-		getBreadcrumb().setInput(system);
 	}
 
 	@Override
@@ -174,6 +166,21 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 
+	}
+
+	@Override
+	protected AdapterFactoryContentProvider createBreadcrumbContentProvider() {
+		return new AdapterFactoryContentProvider(new AutomationSystemProviderAdapterFactory());
+	}
+
+	@Override
+	protected AdapterFactoryLabelProvider createBreadcrumbLabelProvider() {
+		return new SystemLabelProvider();
+	}
+
+	@Override
+	protected Object getInitialModel() {
+		return system;
 	}
 
 	@Override

@@ -80,6 +80,14 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		this.labelProvider = labelProvider;
 	}
 
+	public AdapterFactoryContentProvider getContentProvider() {
+		return contentProvider;
+	}
+
+	public AdapterFactoryLabelProvider getLabelProvider() {
+		return labelProvider;
+	}
+
 	private static boolean isValidInput(final Object input) {
 		return input instanceof IFile || input instanceof AutomationSystem || input instanceof SystemConfiguration
 				|| input instanceof Application || input instanceof SubApp || input instanceof Device
@@ -88,6 +96,10 @@ public class BreadcrumbWidget implements ISelectionProvider {
 
 	ToolBar getToolBar() {
 		return toolbar;
+	}
+
+	public BreadcrumbItem getActiveItem() {
+		return items.get(items.size() - 1);
 	}
 
 	// recursive function for collecting parent objects
