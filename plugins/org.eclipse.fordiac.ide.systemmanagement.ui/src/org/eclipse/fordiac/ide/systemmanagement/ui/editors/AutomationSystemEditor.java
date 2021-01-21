@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,8 @@
  *   Alois Zoitl - initial implementation and/or documentation
  *               - implemented first version of gotoMarker for FB markers
  *               - extracted breadcrumb based editor to model.ui
+ *   Michael Oberlehner, Alois Zoitl
+ *               - implemented save and restore state
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 
@@ -83,9 +85,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	protected void createPages() {
 		try {
 			final int pagenum = addPage(new SystemEditor(), getEditorInput());
-			getModelToEditorNumMapping().put(system, pagenum);
-			// this is
-			// provided by the content providers
+			getModelToEditorNumMapping().put(system, Integer.valueOf(pagenum));
 		} catch (final PartInitException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
@@ -179,7 +179,17 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	}
 
 	@Override
-	protected Object getInitialModel() {
+	protected Object getInitialModel(final String itemPath) {
+		if (null != itemPath) {
+			final String[] nameList = itemPath.split("\\."); //$NON-NLS-1$
+			if (nameList.length > 1) {
+				// we have a child of the system
+				final EObject targetmodel = getTargetModel(Arrays.copyOfRange(nameList, 1, nameList.length));
+				if (null != targetmodel) {
+					return targetmodel;
+				}
+			}
+		}
 		return system;
 	}
 
@@ -211,7 +221,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	public CommandStack getCommandStack() {
 		return (null != system) ? system.getCommandStack() : null;
 	}
-	
+
 	@Override
 	public String getContributorId() {
 		return DiagramEditorWithFlyoutPalette.PROPERTY_CONTRIBUTOR_ID;

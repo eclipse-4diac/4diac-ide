@@ -121,7 +121,8 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	}
 
 	@Override
-	protected Object getInitialModel() {
+	protected Object getInitialModel(final String itemPath) {
+		// FIXME implement path analysis for typed subapps
 		return getSubAppType();
 	}
 
