@@ -27,14 +27,12 @@ import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.PolylineConnection;
-import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
 import org.eclipse.gef.handles.ConnectionEndpointHandle;
 import org.eclipse.gef.requests.SelectionRequest;
@@ -147,22 +145,11 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 
 	protected IFigure createSelectionFeedbackFigure(PolylineConnection connFigure) {
 		Polyline figure = new Polyline();
-		double zoomFactor = getZoomFactor();
-		figure.setLineWidth((int) ((connFigure.getLineWidth() + 5) * zoomFactor));
+		figure.setLineWidth(connFigure.getLineWidth() + 5);
 		figure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 		figure.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
-		figure.setPoints(getConnPoints(connFigure, zoomFactor));
+		figure.setPoints(connFigure.getPoints().getCopy());
 		return figure;
-	}
-
-	protected double getZoomFactor() {
-		return ((ScalableFreeformRootEditPart) getHost().getRoot()).getZoomManager().getZoom();
-	}
-
-	protected static PointList getConnPoints(PolylineConnection connFigure, double zoomFactor) {
-		PointList pointList = connFigure.getPoints().getCopy();
-		pointList.performScale(zoomFactor);
-		return (pointList);
 	}
 
 	@Override

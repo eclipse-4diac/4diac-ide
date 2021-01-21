@@ -23,11 +23,10 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 
 /**
@@ -79,19 +78,31 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	public void showTargetFeedback(Request request) {
 		super.showTargetFeedback(request);
 
-		if (((REQ_SELECTION.equals(request.getType())) || (REQ_SELECTION_HOVER.equals(request.getType())))
-				&& (null == selectionFeedback) && (null == handles)) { // we don't have already a feedback showing and
-																		// we are not selected
-			selectionFeedback = createSelectionFeedbackFigure(request);
+		if (isFeedbackRequest(request) && (null == selectionFeedback) && (null == handles)) { // we don't have already a
+																								// feedback showing and
+																								// we are not selected
+			selectionFeedback = createSelectionFeedbackFigure();
 			if (null != selectionFeedback) {
 				addFeedback(selectionFeedback);
 			}
 		}
 	}
 
-	private RoundedRectangle createSelectionFeedbackFigure(Request request) {
-		if (getTargetEditPart(request) instanceof GraphicalEditPart) {
-			GraphicalEditPart ep = ((GraphicalEditPart) getTargetEditPart(request));
+	private boolean isFeedbackRequest(Request request) {
+		return (REQ_SELECTION.equals(request.getType()))
+				|| (REQ_SELECTION_HOVER.equals(request.getType()) || isValidConnectionRequest(request));
+	}
+
+	private boolean isValidConnectionRequest(Request request) {
+		return (getHost() instanceof AbstractConnectableEditPart)
+				&& ((AbstractConnectableEditPart) getHost()).isConnectable()
+				&& (REQ_RECONNECT_SOURCE.equals(request.getType()) || REQ_RECONNECT_TARGET.equals(request.getType())
+						|| REQ_CONNECTION_END.equals(request.getType()));
+	}
+
+	private RoundedRectangle createSelectionFeedbackFigure() {
+		if (getHost() instanceof GraphicalEditPart) {
+			GraphicalEditPart ep = ((GraphicalEditPart) getHost());
 			RoundedRectangle newSelFeedbackFigure = new RoundedRectangle();
 			newSelFeedbackFigure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 			newSelFeedbackFigure.setOutline(false);
@@ -105,10 +116,7 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	}
 
 	private static Rectangle getSelectableFigureBounds(GraphicalEditPart ep) {
-		Rectangle bounds = ep.getFigure().getBounds().getExpanded(2, 2);
-		ZoomManager zoomManager = ((ScalableFreeformRootEditPart) ep.getRoot()).getZoomManager();
-		bounds.scale(zoomManager.getZoom());
-		return bounds;
+		return ep.getFigure().getBounds().getExpanded(2, 2);
 	}
 
 	@Override

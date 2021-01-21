@@ -13,6 +13,7 @@
  */
 package org.eclipse.fordiac.ide.export.forte_lua.filter;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.AdapterVariableImpl;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtend2.lib.StringConcatenation;
@@ -117,15 +119,19 @@ public class STAlgorithmFilter {
       }
       EObject _rootASTElement = parseResult.getRootASTElement();
       final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
-      final Set<AdapterVariable> usedAdapterVariables = IteratorExtensions.<AdapterVariable>toSet(Iterators.<AdapterVariable>filter(EcoreUtil.<Object>getAllProperContents(stalg, true), AdapterVariable.class));
-      final Function1<PrimaryVariable, VarDeclaration> _function_1 = (PrimaryVariable it) -> {
+      final Function1<AdapterVariable, Boolean> _function_1 = (AdapterVariable it) -> {
+        Class<? extends AdapterVariable> _class = it.getClass();
+        return Boolean.valueOf(Objects.equal(_class, AdapterVariableImpl.class));
+      };
+      final Set<AdapterVariable> usedAdapterVariables = IteratorExtensions.<AdapterVariable>toSet(IteratorExtensions.<AdapterVariable>filter(Iterators.<AdapterVariable>filter(EcoreUtil.<Object>getAllProperContents(stalg, true), AdapterVariable.class), _function_1));
+      final Function1<PrimaryVariable, VarDeclaration> _function_2 = (PrimaryVariable it) -> {
         return it.getVar();
       };
-      final Function1<VarDeclaration, Boolean> _function_2 = (VarDeclaration it) -> {
+      final Function1<VarDeclaration, Boolean> _function_3 = (VarDeclaration it) -> {
         EObject _rootContainer = EcoreUtil.getRootContainer(it);
         return Boolean.valueOf((_rootContainer instanceof FBType));
       };
-      final Set<VarDeclaration> usedFBVariables = IteratorExtensions.<VarDeclaration>toSet(IteratorExtensions.<VarDeclaration>filter(IteratorExtensions.<PrimaryVariable, VarDeclaration>map(Iterators.<PrimaryVariable>filter(EcoreUtil.<Object>getAllProperContents(stalg, true), PrimaryVariable.class), _function_1), _function_2));
+      final Set<VarDeclaration> usedFBVariables = IteratorExtensions.<VarDeclaration>toSet(IteratorExtensions.<VarDeclaration>filter(IteratorExtensions.<PrimaryVariable, VarDeclaration>map(Iterators.<PrimaryVariable>filter(EcoreUtil.<Object>getAllProperContents(stalg, true), PrimaryVariable.class), _function_2), _function_3));
       StringConcatenation _builder = new StringConcatenation();
       CharSequence _luaFBVariablesPrefix = LuaConstants.luaFBVariablesPrefix(usedFBVariables);
       _builder.append(_luaFBVariablesPrefix);

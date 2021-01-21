@@ -165,7 +165,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		if (getConnectionFigure().getConnectionRouter() instanceof BendpointPolicyRouter) {
 			installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE,
 					((BendpointPolicyRouter) getConnectionFigure().getConnectionRouter())
-							.getBendpointPolicy(getModel()));
+					.getBendpointPolicy(getModel()));
 		}
 
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new ConnectionGraphicalNodeEditPolicy());
@@ -180,7 +180,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			((HideableConnection) connection).setHidden((status != null) && status.equalsIgnoreCase(HIDDEN));
 			if ((getModel() != null) && (getModel().getSourceElement() != null)) {
 				((HideableConnection) connection)
-						.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
+				.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
 			}
 			((HideableConnection) connection).setModel(getModel());
 		}
@@ -238,6 +238,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 			} else {
 				((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_SOLID);
+				((PolylineConnection) getConnectionFigure()).setLineDash(null);
 			}
 		}
 	}

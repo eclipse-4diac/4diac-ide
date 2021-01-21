@@ -74,7 +74,6 @@
                indented="true"
                label="Edit Events">
          </propertyTab>
-
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
                category="FB"
@@ -105,7 +104,15 @@
                indented="true">
          </propertyTab>
          <propertyTab
-               afterTab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
+               afterTab="org.eclipse.fordiac.ide.application.property.tab.ShowEvent"
+               category="FB"
+               id="org.eclipse.fordiac.ide.application.property.tab.ShowData"
+               image="fordiacimage://ICON_FB"
+               label="Data"
+               indented="true">
+         </propertyTab>
+         <propertyTab
+               afterTab="org.eclipse.fordiac.ide.application.property.tab.ShowData"
                category="FB"
                id="org.eclipse.fordiac.ide.application.property.tab.ShowData"
                image="fordiacimage://ICON_DATA"

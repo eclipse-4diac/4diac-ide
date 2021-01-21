@@ -19,6 +19,8 @@
  *     - code extracted from class FBNetworkElementTooltipFigure
  *     - and from class OpenConnectionOppositeResource
  *     - changed getConnectionOpposite
+ *     - use class ConnectionsHelper
+ *     - removed getConnections and getOppositeInterfaceElement
  *******************************************************************************/
 package org.eclipse.fordiac.ide.resourceediting.editparts;
 
@@ -41,6 +43,7 @@ import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwo
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.figures.VerticalLineCompartmentFigure;
+import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -201,100 +204,57 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 	private class VirtualIOTooltipFigure extends Figure {
 		public VirtualIOTooltipFigure() {
 
+			if (!getIInterfaceElement().getFBNetworkElement().isMapped()) {
+				return;
+			}
+
 			setLayoutManager(new GridLayout());
 
 			boolean drawLine = false;
-			final EList<Connection> connections = getConnections(getIInterfaceElement());
+			final EList<Connection> connections = ConnectionsHelper.getConnections(getIInterfaceElement());
 
 			if (connections == null) {
 				return;
 			}
 
-			for (int i = 0; i <= (connections.size() - 1); i++) {
-				final TextFlow connectionTo = new TextFlow();
-				final FlowPage fp = new FlowPage();
-				final Figure line = new VerticalLineCompartmentFigure();
-				final IInterfaceElement oppositeIE = getOppositeInterfaceelement(getIInterfaceElement(), connections,
-						i);
-				final FBNetworkElement oppositefbNetElement = oppositeIE.getFBNetworkElement();
+			for (Connection conn : connections) {
+				FBNetworkElement oppositefbNetElement;
+				TextFlow connectionTo = new TextFlow();
+				FlowPage fp = new FlowPage();
+				Figure line = new VerticalLineCompartmentFigure();
+				IInterfaceElement oppositeIE = ConnectionsHelper.getOppositeInterfaceElement(getIInterfaceElement(),
+						conn);
 
-				if (i >= 1) {
-					drawLine = true;
+				if ((oppositeIE != null) && (oppositeIE.getFBNetworkElement() != null)
+						&& (oppositeIE.getFBNetworkElement().getResource() != null)
+						&& (oppositeIE.getFBNetworkElement().getResource().getDevice() != null)) {
+					oppositefbNetElement = oppositeIE.getFBNetworkElement();
+					Resource res = oppositefbNetElement.getResource();
+					Device dev = res.getDevice();
+
+					if (drawLine) {
+						add(line);
+						setConstraint(line,
+								new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
+						connectionTo.setText(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
+								+ oppositefbNetElement.getName() + "." //$NON-NLS-1$
+								+ oppositeIE.getName());
+						fp.add(connectionTo);
+						line.add(fp);
+						line.setConstraint(fp,
+								new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, false, true));
+					} else {
+						final Label nameLabel = new Label(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
+								+ oppositefbNetElement.getName() + "." //$NON-NLS-1$
+								+ oppositeIE.getName());
+						add(nameLabel);
+						setConstraint(nameLabel,
+								new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
+					}
 				}
 
-				if (drawLine) {
-					add(line);
-					setConstraint(line, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
-				}
-
-				if (oppositefbNetElement == null) {
-					return;
-				}
-				if (oppositefbNetElement.getResource() == null) {
-					return;
-				}
-
-				final Resource res = oppositefbNetElement.getResource();
-				if (res == null) {
-					return;
-				}
-				final Device dev = res.getDevice();
-				if (dev == null) {
-					return;
-				}
-
-				if (drawLine) {
-					connectionTo.setText(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
-							+ oppositefbNetElement.getName() + "." //$NON-NLS-1$
-							+ oppositeIE.getName());
-					fp.add(connectionTo);
-					line.add(fp);
-					line.setConstraint(fp,
-							new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, false, true));
-				} else {
-					final Label nameLabel = new Label(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
-							+ oppositefbNetElement.getName() + "." //$NON-NLS-1$
-							+ oppositeIE.getName());
-					add(nameLabel);
-					setConstraint(nameLabel,
-							new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
-				}
+				drawLine = true;
 			}
-		}
-
-		private EList<Connection> getConnections(IInterfaceElement oppositeIE) {
-			final IInterfaceElement fbOppostiteIE = oppositeIE.getFBNetworkElement().getOpposite()
-					.getInterfaceElement(oppositeIE.getName());
-
-			if (null != fbOppostiteIE) {
-				final EList<Connection> connections = (fbOppostiteIE.isIsInput()) ? fbOppostiteIE.getInputConnections()
-						: fbOppostiteIE.getOutputConnections();
-
-				if (!connections.isEmpty()) {
-					return connections;
-				}
-			}
-			return null;
-		}
-
-		private IInterfaceElement getOppositeInterfaceelement(IInterfaceElement ie, EList<Connection> connections,
-				int elementID) {
-			final IInterfaceElement fbOppostiteIE = ie.getFBNetworkElement().getOpposite()
-					.getInterfaceElement(ie.getName());
-
-			if (null != fbOppostiteIE) {
-				final IInterfaceElement connectionOpposite = (fbOppostiteIE.isIsInput())
-						? connections.get(elementID).getSource()
-						: connections.get(elementID).getDestination();
-
-				if ((null != connectionOpposite) && connectionOpposite.getFBNetworkElement().isMapped()) {
-					final FBNetworkElement mappedOppositeElement = connectionOpposite.getFBNetworkElement()
-							.getOpposite();
-					return mappedOppositeElement.getInterfaceElement(connectionOpposite.getName());
-				}
-
-			}
-			return null;
 		}
 	}
 

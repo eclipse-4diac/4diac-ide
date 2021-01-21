@@ -11,16 +11,18 @@
  *   Ernst Blecha - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.export.forte_ng.tests
+package org.eclipse.fordiac.ide.test.export.forte_ng
 
 import org.junit.Test
-import static org.junit.Assert.assertNull
-import static org.junit.Assert.assertNotNull
+
 import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertNull
+import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeBase
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-class ForteNgArrayTest extends ForteNgTestBasicFBTypeBase {
+class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 
 	protected static final boolean VALID_DECLARATION = true
 	protected static final boolean INVALID_DECLARATION = !VALID_DECLARATION

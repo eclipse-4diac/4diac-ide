@@ -11,22 +11,24 @@
  *   Ernst Blecha - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.export.forte_ng.tests
+package org.eclipse.fordiac.ide.test.export.forte_ng
 
 import java.util.Collection
 import org.junit.Test
-import org.junit.runners.Parameterized
 import org.junit.runner.RunWith
-import static org.junit.Assert.assertNull
-import static org.junit.Assert.assertNotNull
-import static org.junit.Assert.assertEquals
+import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameter
+
 import static org.eclipse.fordiac.ide.model.FordiacKeywords.*
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertNull
+import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeBase
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
 @RunWith(Parameterized)
-class ForteNgAtArrayDeclarationTest extends ForteNgTestBasicFBTypeBase {
+class ForteNgAtArrayDeclarationTest extends ExporterTestBasicFBTypeBase {
 
 	val static VALID_DECLARATION = true
 	val static INVALID_DECLARATION = !VALID_DECLARATION

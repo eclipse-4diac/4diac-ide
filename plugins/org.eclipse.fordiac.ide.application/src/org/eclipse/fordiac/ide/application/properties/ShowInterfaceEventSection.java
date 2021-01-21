@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -68,12 +69,14 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createButtons = false;
 		super.createControls(parent, tabbedPropertySheetPage);
-		Table table = (Table) getInputsViewer().getControl();
-		table.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		table.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		Table table2 = (Table) getOutputsViewer().getControl();
-		table2.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		table2.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+		getInputsViewer().setCellModifier(new CellImmutableModifier());
+		final Table inputTable = (Table) getInputsViewer().getControl();
+		inputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+		inputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+		getOutputsViewer().setCellModifier(new CellImmutableModifier());
+		final Table outputTable = (Table) getOutputsViewer().getControl();
+		outputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+		outputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
 	}
 
 	@Override
@@ -85,4 +88,24 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 	protected TypeLibrary getTypeLibrary() {
 		return getType().getTypeLibrary();
 	}
+
+	static class CellImmutableModifier implements ICellModifier {
+
+		@Override
+		public boolean canModify(Object element, String property) {
+			return false;
+		}
+
+		@Override
+		public Object getValue(Object element, String property) {
+			return null;
+		}
+
+		@Override
+		public void modify(Object element, String property, Object value) {
+
+		}
+
+	}
+
 }

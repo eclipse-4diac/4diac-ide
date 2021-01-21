@@ -11,17 +11,19 @@
  *   Ernst Blecha - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.export.forte_ng.tests
+package org.eclipse.fordiac.ide.test.export.forte_ng
 
 import org.junit.Test
-import static org.junit.Assert.assertNull
-import static org.junit.Assert.assertNotNull
-import static org.junit.Assert.assertEquals
+
 import static org.eclipse.fordiac.ide.model.FordiacKeywords.*
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertNull
+import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeBase
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase {
+class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void validCaseStatement() {
