@@ -33,34 +33,37 @@ import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class FlattenSubApplication extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		FBNetworkEditor editor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
+		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 
-		CompoundCommand mainCmd = checkSelection(event, editor);
+		final CompoundCommand mainCmd = checkSelection(event, editor);
 		if (!mainCmd.isEmpty()) {
-			editor.getCommandStack().execute(mainCmd);
+			editor.getAdapter(CommandStack.class).execute(mainCmd);
 		}
 		return Status.OK_STATUS;
 	}
 
-	private static CompoundCommand checkSelection(ExecutionEvent event, FBNetworkEditor editor) {
-		CompoundCommand mainCmd = new CompoundCommand();
-		for (Object currentElement : getSelectionList(event)) {
-			SubApp subApp = getSubApp(currentElement);
+	private static CompoundCommand checkSelection(ExecutionEvent event, IEditorPart editor) {
+		final CompoundCommand mainCmd = new CompoundCommand();
+		for (final Object currentElement : getSelectionList(event)) {
+			final SubApp subApp = getSubApp(currentElement);
 			if (null != subApp) {
 				checkCurrentEditor(subApp, editor);
-				FlattenSubAppCommand cmd = new FlattenSubAppCommand(subApp);
+				final FlattenSubAppCommand cmd = new FlattenSubAppCommand(subApp);
 				if (cmd.canExecute()) {
 					mainCmd.add(cmd);
 				}
@@ -82,15 +85,15 @@ public class FlattenSubApplication extends AbstractHandler {
 
 	@SuppressWarnings("unchecked")
 	private static List<Object> getSelectionList(ExecutionEvent event) {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof StructuredSelection) {
 			return ((StructuredSelection) selection).toList();
 		}
 		return Collections.emptyList();
 	}
 
-	private static void checkCurrentEditor(SubApp subApp, FBNetworkEditor editor) {
-		if (editor.getModel().equals(subApp.getSubAppNetwork())) {
+	private static void checkCurrentEditor(SubApp subApp, IEditorPart editor) {
+		if (editor.getAdapter(FBNetwork.class).equals(subApp.getSubAppNetwork())) {
 			// we are invoking the method from within the subapp, switch to the parent
 			// editor
 			openParent(subApp.getFbNetwork().eContainer());

@@ -64,9 +64,9 @@ public class MoveElementFromSubAppCommand extends Command {
 
 	private final MoveOperation moveOperation;
 
-	public MoveElementFromSubAppCommand(final SubApp sourceSubApp, final FBNetworkElement element, final Rectangle targetRect,
+	public MoveElementFromSubAppCommand(final FBNetworkElement element, final Rectangle targetRect,
 			final MoveOperation moveOperation) {
-		this.sourceSubApp = sourceSubApp;
+		this.sourceSubApp = (SubApp) element.getFbNetwork().eContainer();
 		this.element = element;
 		this.targetRect = targetRect;
 		this.moveOperation = moveOperation;

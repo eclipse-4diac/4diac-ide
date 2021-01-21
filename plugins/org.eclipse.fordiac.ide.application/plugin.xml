@@ -320,15 +320,6 @@
          </propertySection>
       </propertySections>
    </extension>
-   <extension point="org.eclipse.core.expressions.propertyTesters">
-    	<propertyTester
-          class="org.eclipse.fordiac.ide.application.properties.MoveToParentPropertyTester"
-          id="org.eclipse.fordiac.ide.application.properties.moveToParentPropertyTester"
-          namespace="org.eclipse.fordiac.ide.application.properties"
-          properties="parentIsSubApp"
-          type="java.lang.Object">
-    	</propertyTester>
- 	</extension>
    <extension
          point="org.eclipse.fordiac.ide.model.ui.openListener">
       <openListener
@@ -742,14 +733,14 @@
                      class="org.eclipse.fordiac.ide.application.handlers.MapToContributionItem"
                      id="org.eclipse.fordiac.ide.application.commands.mapTo">
                </dynamic>
-               <visibleWhen>
+               <visibleWhen
+                     checkEnabled="true">
                     <and>
-                        <with
-                           variable="activeEditorId">
-                        <equals
-                              value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
-                        </equals>
-                     </with>
+                        <with variable="activeEditor">
+                  			<adapt
+                       			 type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+                    		</adapt>
+            			</with>
                      </and>
                </visibleWhen>
             </menu>
@@ -827,14 +818,12 @@
           <visibleWhen checkEnabled="true">
           		<or>
                 	<and> 
-                		<with variable="activeEditorId">
-                    		<equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
-                		</with>
+						<with variable="activeEditor">
+							<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+						</with>
                     	<reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection" />
                 	</and>
-                	<test
-                		property="org.eclipse.fordiac.ide.application.properties.parentIsSubApp">
-                	</test>
+                	<test property="org.eclipse.fordiac.ide.application.properties.parentIsSubApp" />
                 </or>
             </visibleWhen>
          </command>
@@ -845,13 +834,6 @@
             <visibleWhen
                   checkEnabled="false">
                 <and> 
-                	<with variable="activeEditorId">
-               			<or>
-		            		<equals value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor" />
-		            		<equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
-		            		<equals value="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor" />
-		            	</or>
-	            	</with>
 	            	<with variable="activeEditor">
                     	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
             		</with>
@@ -949,17 +931,21 @@
                   class="org.eclipse.fordiac.ide.application.handlers.MapToContributionItem"
                   id="org.eclipse.fordiac.ide.application.commands.mapTo">
                <visibleWhen
-                     checkEnabled="false">
+                     checkEnabled="true">
                      <and>
-                        <with
-                           variable="activeEditorId">
-                        <equals
-                              value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
-                        </equals>
-                     </with>
-                  <reference
-                        definitionId="org.eclipse.fordiac.ide.application.FBNSelection">
-                  </reference>
+          				<with
+             			     variable="activeEditor">
+								<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+						</with>
+                    	<with variable="activeEditorId">
+                    		<and>
+                    			<not><equals value="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor" /></not>
+                    			<not><equals value="org.eclipse.fordiac.ide.network.CompositeNetworkEditor" /></not>
+                    		</and>
+                   		 </with>
+                  		<reference
+                     	   definitionId="org.eclipse.fordiac.ide.application.FBNSelection">
+                  		</reference>
                      </and>
                </visibleWhen>
             </dynamic>
@@ -1180,13 +1166,12 @@
       </definition>      
 	   <definition
 	         id="org.eclipse.fordiac.ide.application.FocusOnActivation">
-	       <with variable="activeEditorId">
-       	   		<or>
-			       <equals value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor"/>
-			       <equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor"/>
-			       <equals value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor"/>
-	        	</or>
-		    </with>
+            <with
+                  variable="activeEditor">
+                   <adapt
+                        type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+                   </adapt>
+            </with>
 	   </definition>
 	   <definition
           id="org.eclipse.fordiac.ide.application.FBNSelection">
@@ -1226,17 +1211,12 @@
           </definition>
     <definition
           id="org.eclipse.fordiac.ide.application.UnmapAllActivation">
-       <with
-             variable="activeEditorId">
-         <or>
-          <equals
-                value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
-          </equals>
-          <equals
-                value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
-          </equals>
-         </or>
-       </with>
+		<with
+			variable="activeEditor">
+			<adapt
+				type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+			</adapt>
+		</with>
     </definition>
    </extension>   
 </plugin>

@@ -9,12 +9,11 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
- *               - added check if subapp interface is selected and mark that in 
+ *               - added check if subapp interface is selected and mark that in
                    parent
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
-import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
@@ -23,6 +22,7 @@ import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
+import org.eclipse.fordiac.ide.gef.handlers.FordiacHandler;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -32,27 +32,29 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class GotoParentHandler extends AbstractHandler {
+public class GotoParentHandler extends FordiacHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		SubAppNetworkEditor editor = (SubAppNetworkEditor) HandlerUtil.getActiveEditor(event);
+		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 
-		EObject model = editor.getModel().eContainer().eContainer().eContainer();
+		final FBNetwork fbnetwork = editor.getAdapter(FBNetwork.class);
+		final EObject model = fbnetwork.eContainer().eContainer().eContainer();
 
-		FBNetworkEditor newEditor = (FBNetworkEditor) EditorUtils.openEditor(getEditorInput(model), getEditorId(model));
+		final FBNetworkEditor newEditor = (FBNetworkEditor) EditorUtils.openEditor(getEditorInput(model), getEditorId(model));
 		if (null != newEditor) {
-			handleSelection(newEditor, editor.getModel(), editor.getViewer().getSelection());
+			handleSelection(newEditor, fbnetwork, getViewer(editor).getSelection());
 		}
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public void setEnabled(Object evaluationContext) {
-		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_EDITOR_ID_NAME);
+		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_EDITOR_ID_NAME);
 		setBaseEnabled(SubAppNetworkEditor.class.getName().equals(selection));
 	}
 
@@ -77,7 +79,7 @@ public class GotoParentHandler extends AbstractHandler {
 	}
 
 	private static void handleSelection(FBNetworkEditor newEditor, FBNetwork model, ISelection selection) {
-		IInterfaceElement selIElement = getSelectedSubappInterfaceElement(selection);
+		final IInterfaceElement selIElement = getSelectedSubappInterfaceElement(selection);
 
 		if ((null != selIElement) && (((SubApp) selIElement.getFBNetworkElement()).getSubAppNetwork().equals(model))) {
 			newEditor.selectElement(selIElement);
@@ -92,9 +94,9 @@ public class GotoParentHandler extends AbstractHandler {
 	private static IInterfaceElement getSelectedSubappInterfaceElement(ISelection selection) {
 		if ((selection instanceof StructuredSelection) && (((StructuredSelection) selection).size() == 1)) {
 			// only one element is selected
-			Object selObj = ((StructuredSelection) selection).getFirstElement();
+			final Object selObj = ((StructuredSelection) selection).getFirstElement();
 			if ((selObj instanceof EditPart) && (((EditPart) selObj).getModel() instanceof IInterfaceElement)) {
-				IInterfaceElement elem = (IInterfaceElement) ((EditPart) selObj).getModel();
+				final IInterfaceElement elem = (IInterfaceElement) ((EditPart) selObj).getModel();
 				if (elem.getFBNetworkElement() instanceof SubApp) {
 					return elem;
 				}

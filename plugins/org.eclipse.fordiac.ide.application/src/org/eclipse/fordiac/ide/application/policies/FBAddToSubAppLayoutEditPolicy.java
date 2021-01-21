@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand.MoveOperation;
@@ -58,9 +59,9 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 							request);
 					if (dragEditPartModel.isNestedInSubApp()
 							&& isChildFromDropTarget(dragEditPartModel, dropEditPart)) {
-						final SubAppForFBNetworkEditPart outerSubAppEdit = getOuterSubappEditPart(editPart);
-						commandos.add(new MoveElementFromSubAppCommand(outerSubAppEdit.getModel(), dragEditPartModel,
-								outerSubAppEdit.getFigure().getBounds(), MoveOperation.DRAG_AND_DROP_TO_SUBAPP));
+						final Rectangle bounds = getOuterSubappEditPart(editPart).getFigure().getBounds();
+						commandos.add(new MoveElementFromSubAppCommand(dragEditPartModel,
+								bounds, MoveOperation.DRAG_AND_DROP_TO_SUBAPP));
 					} else {
 						commandos.add(new AddElementsToSubAppCommand(dropEditPart.getModel(), editParts));
 					}
