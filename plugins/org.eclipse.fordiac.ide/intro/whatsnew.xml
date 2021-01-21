@@ -22,6 +22,12 @@
   	 		<text>A list of all issues and bugs addressed for Eclipse 4diac 1.13.0.</text>
   	 	</link>
   	 	</group>
+  	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.13.1">
+  	 	<link label="Issues Addressed in 1.13.1" style-id="content-link" 
+  	 			url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;component=4DIAC-IDE&amp;list_id=20305309&amp;product=4DIAC&amp;query_format=advanced&amp;target_milestone=1.13.1" id="orgfordiacide-webLink">
+  	 		<text>In the 1.13.1 maintenance release of 4diac IDE 12 bugs have been addressed.</text>
+  	 	</link>
+  	 	</group>
    	</extensionContent>
    	
    	<extensionContent id="fordiac-news" style="css/style.css" name="Whats New Extension" path="whatsnew/@">
