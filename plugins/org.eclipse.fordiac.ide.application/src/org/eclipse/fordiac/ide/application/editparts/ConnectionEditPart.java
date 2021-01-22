@@ -32,7 +32,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
-import org.eclipse.fordiac.ide.application.policies.ConnectionGraphicalNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
@@ -64,16 +63,16 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			setLocator(new ConnectionLocator(getConnection(), endPoint) {
 				@Override
 				protected Point getLocation(PointList points) {
-					Point p = super.getLocation(points);
+					final Point p = super.getLocation(points);
 					// ensure that the returned point is such that the endpoint handle is on the
 					// connection
 					switch (getAlignment()) {
 					case SOURCE:
-						p.x += (getPreferredSize().width / 2 - 4); // TODO replace with connection
+						p.x += ((getPreferredSize().width / 2) - 4); // TODO replace with connection
 						// border size
 						break;
 					case TARGET:
-						p.x += (-getPreferredSize().width / 2 + 4);
+						p.x += ((-getPreferredSize().width / 2) + 4);
 						break;
 					default:
 						break;
@@ -86,22 +85,22 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		@Override
 		protected void init() {
 			super.init();
-			setPreferredSize(ConnectionPreferenceValues.HANDLE_SIZE * 4 / 3, ConnectionPreferenceValues.HANDLE_SIZE);
+			setPreferredSize((ConnectionPreferenceValues.HANDLE_SIZE * 4) / 3, ConnectionPreferenceValues.HANDLE_SIZE);
 		}
 
 		@Override
 		protected void paintHandleCenter(Graphics g, Rectangle r) {
-			int xbuf = r.x;
-			int wbuf = r.width;
+			final int xbuf = r.x;
+			final int wbuf = r.width;
 
-			int shrinkVal = getInnerShrinkVal();
+			final int shrinkVal = getInnerShrinkVal();
 			r.shrink(shrinkVal, shrinkVal + 1);
 			switch (getEndPoint()) {
 			case ConnectionLocator.SOURCE:
 				r.x = xbuf;
 				break;
 			case ConnectionLocator.TARGET:
-				r.x = xbuf + wbuf - r.width;
+				r.x = (xbuf + wbuf) - r.width;
 				break;
 			default:
 				break;
@@ -150,7 +149,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	protected void createEditPolicies() {
 		// Selection handle edit policy.
 		// Makes the connection show a feedback, when selected by the user.
-//		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new DisableConnectionHandleRoleEditPolicy());
+		// installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new DisableConnectionHandleRoleEditPolicy());
 		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new FeedbackConnectionEndpointEditPolicy() {
 			@Override
 			protected ConnectionEndpointHandle createConnectionEndPointHandle(
@@ -165,27 +164,25 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		if (getConnectionFigure().getConnectionRouter() instanceof BendpointPolicyRouter) {
 			installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE,
 					((BendpointPolicyRouter) getConnectionFigure().getConnectionRouter())
-					.getBendpointPolicy(getModel()));
+							.getBendpointPolicy(getModel()));
 		}
-
-		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new ConnectionGraphicalNodeEditPolicy());
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		PolylineConnection connection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
+		final PolylineConnection connection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
 
-		String status = getModel().getAttributeValue(HIDEN_CON);
+		final String status = getModel().getAttributeValue(HIDEN_CON);
 		if (connection instanceof HideableConnection) {
 			((HideableConnection) connection).setHidden((status != null) && status.equalsIgnoreCase(HIDDEN));
 			if ((getModel() != null) && (getModel().getSourceElement() != null)) {
 				((HideableConnection) connection)
-				.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
+						.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
 			}
 			((HideableConnection) connection).setModel(getModel());
 		}
 
-		PolygonDecoration arrow = new PolygonDecoration();
+		final PolygonDecoration arrow = new PolygonDecoration();
 		arrow.setTemplate(PolygonDecoration.TRIANGLE_TIP);
 		arrow.setScale(7, 4);
 		connection.setTargetDecoration(arrow);
@@ -259,7 +256,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			contentAdapter = new AdapterImpl() {
 				@Override
 				public void notifyChanged(Notification notification) {
-					Object feature = notification.getFeature();
+					final Object feature = notification.getFeature();
 					refreshVisuals();
 
 					if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
