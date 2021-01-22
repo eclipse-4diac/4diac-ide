@@ -407,7 +407,7 @@
             categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.SaveAsSubappTypeHandler"
             id="org.eclipse.fordiac.ide.application.commands.saveAsSubappType"
-            name="Save as Subapplication Type">
+            name="Save to Type Library">
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"

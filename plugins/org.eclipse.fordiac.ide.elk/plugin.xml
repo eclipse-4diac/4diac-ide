@@ -36,7 +36,7 @@
       <separator name="layouting stuff" visible="true"/>
       <command
             commandId="org.eclipse.fordiac.ide.elk.layout"
-            label="Layout the diagrams"
+            label="Auto Layouting"
             style="push">
             <visibleWhen checkEnabled="false">
             	<with variable="selection">
@@ -90,7 +90,7 @@
                </command>
       <command
             commandId="org.eclipse.fordiac.ide.elk.layout"
-            label="Layout the diagrams"
+            label="Auto Layouting"
             style="push">
                </command>
 	</menuContribution> 
