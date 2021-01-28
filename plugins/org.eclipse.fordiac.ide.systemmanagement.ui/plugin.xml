@@ -62,7 +62,7 @@
       <editor
             name="%SystemEditor.name"
             extensions="sys"
-            contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
+            contributorClass="org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor"
             default="true"
             class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.AutomationSystemEditor"
             icon="fordiacimage://ICON_SYSTEM_PERSPECTIVE"

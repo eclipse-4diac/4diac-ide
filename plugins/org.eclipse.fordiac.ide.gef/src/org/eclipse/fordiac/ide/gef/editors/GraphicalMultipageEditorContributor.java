@@ -11,7 +11,7 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.editors;
+package org.eclipse.fordiac.ide.gef.editors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +34,14 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 
-public class FBTypeEditorContributor extends MultiPageEditorActionBarContributor {
+public class GraphicalMultipageEditorContributor extends MultiPageEditorActionBarContributor {
 
 	private ActionRegistry registry = new ActionRegistry();
 	private List<RetargetAction> retargetActions = new ArrayList<>();
 	private List<String> globalActionKeys = new ArrayList<>();
 	private ZoomComboContributionItem zoomCombo;
 
-	public FBTypeEditorContributor() {
+	public GraphicalMultipageEditorContributor() {
 		super();
 	}
 
