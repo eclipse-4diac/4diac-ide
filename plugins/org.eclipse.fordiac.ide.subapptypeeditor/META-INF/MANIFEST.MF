@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Export-Package: org.eclipse.fordiac.ide.subapptypeeditor.viewer
 Bundle-ManifestVersion: 2
 Bundle-Name: Subapplication Type Editor (Incubation)
 Bundle-SymbolicName: org.eclipse.fordiac.ide.subapptypeeditor;singleton:=true

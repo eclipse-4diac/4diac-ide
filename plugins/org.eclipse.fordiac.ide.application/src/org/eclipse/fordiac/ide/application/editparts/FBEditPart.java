@@ -18,10 +18,10 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.actions.OpenCompositeInstanceViewerAction;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 
@@ -58,10 +58,10 @@ public class FBEditPart extends AbstractFBNElementEditPart {
 	}
 
 	@Override
-	public void performRequest(Request request) {
+	public void performRequest(final Request request) {
 		if (request.getType().equals(RequestConstants.REQ_OPEN) && getModel() != null
 				&& getModel().getType() instanceof CompositeFBType) {
-			new OpenCompositeInstanceViewerAction(this, getModel()).run();
+			OpenListenerManager.openEditor(getModel());
 		} else {
 			super.performRequest(request);
 		}

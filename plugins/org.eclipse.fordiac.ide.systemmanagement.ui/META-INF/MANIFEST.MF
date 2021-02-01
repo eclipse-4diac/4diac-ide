@@ -30,7 +30,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface,
  org.eclipse.fordiac.ide.systemconfiguration,
  org.eclipse.fordiac.ide.model.commands,
- org.eclipse.fordiac.ide.model.ui
+ org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.fordiac.ide.subapptypeeditor,
+ org.eclipse.fordiac.ide.fbtypeeditor.network
 Bundle-Vendor: Eclipse 4diac
 Bundle-Version: 1.13.1.qualifier
 Bundle-ManifestVersion: 2

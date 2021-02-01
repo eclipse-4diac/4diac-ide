@@ -13,6 +13,15 @@
       </editor>
 </extension>
    <extension
+         point="org.eclipse.fordiac.ide.model.ui.openListener">
+      <openListener
+            class="org.eclipse.fordiac.ide.fbtypeeditor.network.actions.OpenCompositeInstanceViewerOpenListener"
+            icon="fordiacimage://ICON_COMPOSITE_FB"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.network.actions.OpenCompositeInstanceViewerOpenListener"
+            label="Open CFB Instance Viewer">
+      </openListener>
+   </extension>
+   <extension
          point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
       <editor
             class="org.eclipse.fordiac.ide.fbtypeeditor.network.CompositeNetworkEditor"

@@ -28,11 +28,15 @@ import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
+import org.eclipse.fordiac.ide.application.viewer.composite.CompositeAndSubAppInstanceViewerInput;
+import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -41,12 +45,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
+import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
@@ -72,6 +78,15 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		loadSystem();
+	}
+
+	@Override
+	public void createPartControl(final Composite parent) {
+		super.createPartControl(parent);
+		getBreadcrumb()
+		.setContentProvider(new AdapterFactoryContentProvider(new AutomationSystemProviderAdapterFactory()));
+		getBreadcrumb().setLabelProvider(new SystemLabelProvider());
+		getBreadcrumb().setInput(system);
 	}
 
 	@Override
@@ -110,15 +125,25 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 		}
 	}
 
-
 	@Override
 	protected EditorPart createEditorPart(final Object model) {
 		if (model instanceof IFile) {
 			return new SystemEditor();
 		}
+
+		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
+			return new CompositeInstanceViewer();
+		}
+
 		if (model instanceof SubApp) {
+
+			if (((SubApp) model).getType() != null) {
+				return new SubappInstanceViewer();
+			}
+
 			return new SubAppNetworkEditor();
 		}
+
 		if (model instanceof Application) {
 			return new ApplicationEditor();
 		}
@@ -141,8 +166,16 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 			return getEditorInput();
 		}
 		if (model instanceof SubApp) {
+			if (((SubApp) model).getType() != null) {
+				return createSubappInstanceViewer(model);
+			}
 			return new SubApplicationEditorInput((SubApp) model);
 		}
+
+		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
+			return createCompositeInstanceViewer(model);
+		}
+
 		if (model instanceof Application) {
 			return new ApplicationEditorInput((Application) model);
 		}
@@ -156,6 +189,19 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 			return new ResourceEditorInput((Resource) model);
 		}
 		return null;
+	}
+
+	private static IEditorInput createSubappInstanceViewer(final Object model) {
+			final EditPart createEditPart = new SubappInstanceViewer().getEditPartFactory().createEditPart(null,
+					model);
+			return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
+					((FBNetworkElement) model).getType().getName());
+
+	}
+
+	private static IEditorInput createCompositeInstanceViewer(final Object model) {
+		final EditPart createEditPart = new CompositeInstanceViewer().getEditPartFactory().createEditPart(null, model);
+		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model, ((FBNetworkElement) model).getType().getName());
 	}
 
 	@Override
@@ -247,7 +293,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	private EObject getTargetModel(final String[] path) {
 		EObject retVal = system.getApplicationNamed(path[0]);
 		if (null != retVal) {
-			if(path.length > 1) {
+			if (path.length > 1) {
 				// we are within a subapplication in the application
 				retVal = parseSubappPath(((Application) retVal).getFBNetwork(),
 						Arrays.copyOfRange(path, 1, path.length));

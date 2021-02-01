@@ -22,12 +22,12 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class SubAppTypeNetworkEditPartFactory extends CompositeNetworkEditPartFactory {
 
-	public SubAppTypeNetworkEditPartFactory(GraphicalEditor editor) {
+	public SubAppTypeNetworkEditPartFactory(final GraphicalEditor editor) {
 		super(editor);
 	}
 
 	@Override
-	protected EditPart getPartForElement(EditPart context, Object modelElement) {
+	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		if (modelElement instanceof FBNetwork) {
 			return new TypedSubAppNetworkEditPart();
 		}

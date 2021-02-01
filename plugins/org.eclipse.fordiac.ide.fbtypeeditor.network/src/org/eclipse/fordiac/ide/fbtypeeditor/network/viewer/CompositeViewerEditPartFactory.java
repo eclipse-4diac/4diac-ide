@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNElementSelectionPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.AdapterFBEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
@@ -23,40 +22,38 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
-/**
- * A factory for creating ECCEditPart objects.
- */
-class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
+/** A factory for creating ECCEditPart objects. */
+public class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 
-	private FB fbInstance;
-	private FBEditPart fbEditPart;
+	protected final FBNetworkElement fbInstance;
+	protected final EditPart fbEditPart;
 
-	public CompositeViewerEditPartFactory(GraphicalEditor editor, FB fbInstance, FBEditPart fbEditPart) {
+	public CompositeViewerEditPartFactory(final GraphicalEditor editor, final FBNetworkElement fbInstance,
+			final EditPart fbEditPart) {
 		super(editor);
 		this.fbInstance = fbInstance;
 		this.fbEditPart = fbEditPart;
 	}
 
-	/**
-	 * Maps an object to an EditPart.
+	/** Maps an object to an EditPart.
 	 *
 	 * @param context      the context
 	 * @param modelElement the model element
 	 *
 	 * @return the part for element
 	 *
-	 * @throws RuntimeException if no match was found (programming error)
-	 */
+	 * @throws RuntimeException if no match was found (programming error) */
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 
 		if (modelElement instanceof FBNetwork) {
-			CompositeNetworkViewerEditPart compositeNetEP = new CompositeNetworkViewerEditPart();
+			final CompositeNetworkViewerEditPart compositeNetEP = new CompositeNetworkViewerEditPart();
 			compositeNetEP.setFbInstance(fbInstance);
 			if (fbEditPart.getParent() instanceof CompositeNetworkViewerEditPart) {
 				compositeNetEP.setparentInstanceViewerEditPart((CompositeNetworkViewerEditPart) fbEditPart.getParent());
@@ -64,13 +61,13 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 			return compositeNetEP;
 
 		}
+
 		if (modelElement instanceof IInterfaceElement) {
-			IInterfaceElement iElement = (IInterfaceElement) modelElement;
+			final IInterfaceElement iElement = (IInterfaceElement) modelElement;
 			if (iElement.eContainer().eContainer() instanceof CompositeFBType) {
 				return new CompositeInternalInterfaceEditPartRO();
-			} else {
-				return new InterfaceEditPartForFBNetworkRO();
 			}
+			return new InterfaceEditPartForFBNetworkRO();
 		}
 		if (modelElement instanceof AdapterFB) {
 			return new AdapterFBEditPart() {

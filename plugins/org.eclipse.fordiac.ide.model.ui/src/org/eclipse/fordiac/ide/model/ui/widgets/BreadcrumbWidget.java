@@ -24,7 +24,10 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -54,7 +57,7 @@ public class BreadcrumbWidget implements ISelectionProvider {
 	}
 
 	public void setInput(final Object input) {
-		if (isValidInput(input)) {
+		if (isValidBreadcrumbInput(input)) {
 			items.forEach(BreadcrumbItem::dispose);
 			toolbar.requestLayout();
 			createBreadcrumbItems(input);
@@ -88,11 +91,21 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		return labelProvider;
 	}
 
-	private static boolean isValidInput(final Object input) {
-		return input instanceof IFile || input instanceof AutomationSystem || input instanceof SystemConfiguration
-				|| input instanceof Application || input instanceof SubApp || input instanceof Device
-				|| input instanceof Resource || input instanceof SubAppType;
+	private static boolean isValidBreadcrumbInput(final Object input) {
+		// @formatter:off
+		return   input instanceof IFile
+				|| input instanceof AutomationSystem
+				|| input instanceof SystemConfiguration
+				|| input instanceof Application
+				|| input instanceof Device
+				|| input instanceof Resource
+				|| input instanceof SubApp
+				|| isSubAppType(input)
+				|| isCompositeType(input);
+		// @formatter:on
 	}
+
+
 
 	ToolBar getToolBar() {
 		return toolbar;
@@ -107,7 +120,11 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		if (input == null) {
 			return;
 		}
-		parentObjects.add(input);
+
+		// Do not add any FBNetwork into the breadcrumb as item
+		if (!(input instanceof FBNetwork)) {
+			parentObjects.add(input);
+		}
 		if (input instanceof AutomationSystem) {
 			return;
 		}
@@ -116,7 +133,6 @@ public class BreadcrumbWidget implements ISelectionProvider {
 
 	@Override
 	public ISelection getSelection() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -143,4 +159,11 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		}
 	}
 
+	private static boolean isCompositeType(final Object input) {
+		return (input instanceof FB && ((FB) input).getType() instanceof CompositeFBType);
+	}
+
+	private static boolean isSubAppType(final Object input) {
+		return (input instanceof SubApp) && (((SubApp) input).getType() instanceof SubAppType);
+	}
 }

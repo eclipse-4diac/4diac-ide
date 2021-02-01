@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -17,7 +17,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -31,12 +31,12 @@ import org.eclipse.gef.requests.CreateRequest;
 
 /**
  * Edit Part for the visualization of Composite Networks.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 
-	private FB fbInstance;
+	private FBNetworkElement fbInstance;
 
 	// the CompositeNetworkEditPart which contained the instance of the
 	// composite FB this editor visualizes
@@ -46,15 +46,15 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 		return parentInstanceViewerEditPart;
 	}
 
-	public void setparentInstanceViewerEditPart(CompositeNetworkViewerEditPart parentEditPart) {
+	public void setparentInstanceViewerEditPart(final CompositeNetworkViewerEditPart parentEditPart) {
 		this.parentInstanceViewerEditPart = parentEditPart;
 	}
 
-	public FB getFbInstance() {
+	public FBNetworkElement getFbInstance() {
 		return fbInstance;
 	}
 
-	public void setFbInstance(FB fbInstance) {
+	public void setFbInstance(final FBNetworkElement fbInstance) {
 		this.fbInstance = fbInstance;
 	}
 
@@ -64,12 +64,12 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new LayoutEditPolicy() {
 
 			@Override
-			protected Command getCreateCommand(CreateRequest request) {
+			protected Command getCreateCommand(final CreateRequest request) {
 				return null;
 			}
 
 			@Override
-			protected EditPolicy createChildEditPolicy(EditPart child) {
+			protected EditPolicy createChildEditPolicy(final EditPart child) {
 				/*
 				 * a simple selection edit policy which will show a rounded rectangle around the
 				 * host
@@ -87,14 +87,14 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 					@Override
 					protected void hideSelection() {
 						if (handle != null) {
-							IFigure layer = getLayer(LayerConstants.HANDLE_LAYER);
+							final IFigure layer = getLayer(LayerConstants.HANDLE_LAYER);
 							layer.remove(handle);
 						}
 					}
 
 					@Override
 					protected void showSelection() {
-						IFigure layer = getLayer(LayerConstants.HANDLE_LAYER);
+						final IFigure layer = getLayer(LayerConstants.HANDLE_LAYER);
 						layer.add(getHandle());
 					}
 
@@ -102,7 +102,7 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 			}
 
 			@Override
-			protected Command getMoveChildrenCommand(Request request) {
+			protected Command getMoveChildrenCommand(final Request request) {
 				return null;
 			}
 		});
