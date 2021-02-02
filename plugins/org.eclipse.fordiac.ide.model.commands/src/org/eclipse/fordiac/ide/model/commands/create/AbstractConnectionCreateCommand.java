@@ -59,7 +59,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 
 	private AbstractConnectionCreateCommand mirroredConnection;
 
-	public AbstractConnectionCreateCommand(FBNetwork parent) {
+	protected AbstractConnectionCreateCommand(final FBNetwork parent) {
 		super();
 		// initialize values
 		this.connDx1 = 0;
@@ -69,7 +69,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		this.performMappingCheck = true;
 	}
 
-	public void setArrangementConstraints(int dx1, int dx2, int dy) {
+	public void setArrangementConstraints(final int dx1, final int dx2, final int dy) {
 		this.connDx1 = dx1;
 		this.connDx2 = dx2;
 		this.connDy = dy;
@@ -111,6 +111,10 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
+
+		// ensure the right parent
+		checkParent();
+
 		return !checkUnfoldedSubAppConnections();
 	}
 
@@ -193,36 +197,31 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	private void checkSourceAndTarget() {
 		if (LinkConstraints.isSwapNeeded(source, parent)) {
 			// our src is an input we have to swap source and target
-			IInterfaceElement buf = destination;
+			final IInterfaceElement buf = destination;
 			destination = source;
 			source = buf;
 		}
 	}
 
 	private void checkParent() {
-		// input pin to output pin inside subapp
-		if ((getSource().eContainer().eContainer() instanceof SubApp)
-				&& (getDestination().eContainer().eContainer() instanceof SubApp)
-				&& getSource().isIsInput() && !getDestination().isIsInput()) {
-			parent = ((SubApp) getSource().eContainer().eContainer()).getSubAppNetwork();
-		}
-		// input pin to fb inside unfolded subapp
-		if ((getSource().eContainer().eContainer() instanceof SubApp)
-				&& (getDestination().eContainer().eContainer().eContainer().eContainer() instanceof SubApp)
-				&& getSource().isIsInput()) {
-			parent = getDestination().getFBNetworkElement().getFbNetwork();
-		}
-		// output pin to fb inside unfolded subapp (drawn in reverse)
-		if ((getSource().eContainer().eContainer() instanceof SubApp)
-				&& (getDestination().eContainer().eContainer().eContainer().eContainer() instanceof SubApp)
-				&& !getSource().isIsInput()) {
-			parent = getDestination().getFBNetworkElement().getFbNetwork();
-		}
-		// fb to output pin inside unfolded subapp
-		if ((getDestination().eContainer().eContainer() instanceof SubApp)
-				&& (getSource().eContainer().eContainer().eContainer().eContainer() instanceof SubApp)
-				&& !getSource().isIsInput()) {
-			parent = getSource().getFBNetworkElement().getFbNetwork();
+		final FBNetworkElement srcElement = getSource().getFBNetworkElement();
+		final FBNetworkElement dstElement = getDestination().getFBNetworkElement();
+
+		if ((srcElement instanceof SubApp) || (dstElement instanceof SubApp)) {
+			// we only need to check the parent if both ends are subapps
+			final FBNetwork srcNetwork = srcElement.getFbNetwork();
+			final FBNetwork dstNetwork = dstElement.getFbNetwork();
+
+			if (srcNetwork != dstNetwork) {
+				// we have a connection from an interface element to an internal element
+				if ((srcElement instanceof SubApp) && (((SubApp) srcElement).getSubAppNetwork() == dstNetwork)) {
+					// the destination subapp is contained in the source subapp
+					parent = dstNetwork;
+				} else if ((dstElement instanceof SubApp) && (((SubApp) dstElement).getSubAppNetwork() == srcNetwork)) {
+					// the source subapp is contained in the destination subapp
+					parent = srcNetwork;
+				}
+			}
 		}
 	}
 
@@ -238,13 +237,13 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	 */
 	private AbstractConnectionCreateCommand checkAndCreateMirroredConnection() {
 		if (null != source.getFBNetworkElement() && null != destination.getFBNetworkElement()) {
-			FBNetworkElement opSource = source.getFBNetworkElement().getOpposite();
-			FBNetworkElement opDestination = destination.getFBNetworkElement().getOpposite();
+			final FBNetworkElement opSource = source.getFBNetworkElement().getOpposite();
+			final FBNetworkElement opDestination = destination.getFBNetworkElement().getOpposite();
 			if (null != opSource && null != opDestination
 					&& opSource.getFbNetwork() == opDestination.getFbNetwork()) {
-				AbstractConnectionCreateCommand cmd = createMirroredConnectionCommand(opSource.getFbNetwork());
+				final AbstractConnectionCreateCommand cmd = createMirroredConnectionCommand(opSource.getFbNetwork());
 				cmd.setPerformMappingCheck(false); // as this is the command for the mirrored connection we don't want
-													// again to check
+				// again to check
 				cmd.setSource(opSource.getInterfaceElement(source.getName()));
 				cmd.setDestination(opDestination.getInterfaceElement(destination.getName()));
 				return (cmd.canExecute()) ? cmd : null;
@@ -268,7 +267,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	@SuppressWarnings("rawtypes")
 	protected abstract Class getInterfaceType();
 
-	private void setPerformMappingCheck(boolean performMappingCheck) {
+	private void setPerformMappingCheck(final boolean performMappingCheck) {
 		this.performMappingCheck = performMappingCheck;
 	}
 
