@@ -92,13 +92,14 @@ INavigationLocationProvider, IPersistableEditor {
 		}
 		setInitialModel(getInitialModel(itemPath));
 		memento = null;
+		// only add the selection change listener when our editor is full up
+		breadcrumb.addSelectionChangedListener(
+				event -> handleBreadCrumbSelection(((StructuredSelection) event.getSelection()).getFirstElement()));
 	}
 
 	private void initializeBreadcrumb() {
 		getBreadcrumb().setContentProvider(createBreadcrumbContentProvider());
 		getBreadcrumb().setLabelProvider(createBreadcrumbLabelProvider());
-		breadcrumb.addSelectionChangedListener(
-				event -> handleBreadCrumbSelection(((StructuredSelection) event.getSelection()).getFirstElement()));
 	}
 
 	protected void setInitialModel(final Object model) {
@@ -277,21 +278,20 @@ INavigationLocationProvider, IPersistableEditor {
 	private static class BreadcrumbNavigationLocation extends NavigationLocation {
 
 		private final Object model;
+		private final AdapterFactoryContentProvider contentProvider;
+		private final AdapterFactoryLabelProvider labelProvider;
 
 		protected BreadcrumbNavigationLocation(final AbstractBreadCrumbEditor editorPart, final Object model) {
 			super(editorPart);
 			this.model = model;
+			contentProvider = editorPart.getBreadcrumb().getContentProvider();
+			labelProvider = editorPart.getBreadcrumb().getLabelProvider();
 		}
 
 		@Override
 		public String getText() {
-			if (null == getInput()) {
-				return super.getText();
-			}
 			final StringBuilder sb = new StringBuilder();
-
-			generateItemPath(sb, model, getEditorPart().getBreadcrumb().getContentProvider(),
-					getEditorPart().getBreadcrumb().getLabelProvider());
+			generateItemPath(sb, model, contentProvider, labelProvider);
 			return sb.substring(1);
 		}
 
@@ -318,9 +318,7 @@ INavigationLocationProvider, IPersistableEditor {
 
 		@Override
 		public void saveState(final IMemento memento) {
-			if (null != getInput()) {
-				getEditorPart().saveState(memento);
-			}
+			// TODO consider if and how editor state can be saved
 		}
 
 		@Override
@@ -348,7 +346,6 @@ INavigationLocationProvider, IPersistableEditor {
 		@Override
 		public void update() {
 			// TODO Auto-generated method stub
-
 		}
 
 	}
