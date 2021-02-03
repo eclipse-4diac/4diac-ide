@@ -18,7 +18,7 @@
          <propertyTab
                category="Device"
                id="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab"
-               label="Interface">
+               label="Instance">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab"
