@@ -285,7 +285,7 @@
             <propertyTab
                   category="systemInfo"
                   id="property.tab.system.deviceInfo"
-                  label="Interface">
+                  label="Instance">
             </propertyTab>
             <propertyTab
                   afterTab="property.tab.system.deviceInfo"

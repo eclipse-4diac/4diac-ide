@@ -36,7 +36,7 @@
          <propertyTab
                category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab"
-               label="Interface">
+               label="Instance">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab"

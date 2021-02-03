@@ -50,7 +50,7 @@
          <propertyTab
                category="FB"
                id="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
-               label="Interface">
+               label="Instance">
          </propertyTab>
          <propertyTab
                category="FB"
@@ -65,7 +65,7 @@
          <propertyTab
                category="Resource"
                id="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab"
-               label="Interface">
+               label="Instance">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
@@ -151,7 +151,7 @@
          <propertyTab
                category="Interface"
                id="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
-               label="Interface Element">
+               label="Pin">
          </propertyTab>
          <propertyTab
                category="Application"
