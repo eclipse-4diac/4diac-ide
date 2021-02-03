@@ -693,14 +693,14 @@
                   commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes">
             </command>
             <command commandId= "org.eclipse.fordiac.ide.application.commands.convertToStruct"
-            		label="Convert to Struct">
+            		label="Extract Struct">
                 <visibleWhen checkEnabled="true">
                 	<with variable="activeEditor">
                 		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
                 	</with>
             	</visibleWhen>
             </command>
-      </menuContribution>            
+      </menuContribution>
       
       <menuContribution
          allPopups="false"
@@ -708,7 +708,7 @@
       <separator name="layouting stuff" visible="true"/>
       <command
             commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct"
-            label="Convert to Struct"
+            label="Extract Struct"
             style="push">
             <visibleWhen checkEnabled="true">
             		<reference
