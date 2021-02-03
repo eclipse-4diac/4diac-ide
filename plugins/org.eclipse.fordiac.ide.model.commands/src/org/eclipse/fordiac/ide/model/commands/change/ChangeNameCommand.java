@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,8 +22,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeNameCommand extends Command {
-	private INamedElement element;
-	private String name;
+	private final INamedElement element;
+	private final String name;
 	private String oldName;
 	private FBNetworkElement fbNetworkElement;
 	private AdapterDeclaration adapterDeclaration;
@@ -42,28 +42,26 @@ public class ChangeNameCommand extends Command {
 	@Override
 	public void execute() {
 		oldName = element.getName();
-		if (element instanceof AdapterDeclaration && element.eContainer().eContainer() instanceof CompositeFBType) {
+		if ((element instanceof AdapterDeclaration) && (element.eContainer().eContainer() instanceof CompositeFBType)) {
 			fbNetworkElement = ((AdapterDeclaration) element).getAdapterFB();
 		}
 		if (element instanceof AdapterFB) {
 			adapterDeclaration = ((AdapterFB) element).getAdapterDecl();
 		}
-		redo();
+		setName(name);
 	}
 
 	@Override
 	public void undo() {
-		element.setName(oldName);
-		if (null != fbNetworkElement) {
-			fbNetworkElement.setName(oldName);
-		}
-		if (null != adapterDeclaration) {
-			adapterDeclaration.setName(oldName);
-		}
+		setName(oldName);
 	}
 
 	@Override
 	public void redo() {
+		setName(name);
+	}
+
+	private void setName(String name) {
 		element.setName(name);
 		if (null != fbNetworkElement) {
 			fbNetworkElement.setName(name);

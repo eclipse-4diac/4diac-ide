@@ -22,6 +22,8 @@ import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -52,6 +54,7 @@ public class MoveElementFromSubAppCommand extends Command {
 	private final CompoundCommand changedSubAppIEs = new CompoundCommand();
 	private org.eclipse.draw2d.geometry.Point mouseMoveDelta;
 	private Position side;
+	private ChangeNameCommand setUniqueName;
 
 	public enum Position {
 		LEFT, RIGHT, BELOW
@@ -71,7 +74,6 @@ public class MoveElementFromSubAppCommand extends Command {
 		this.targetRect = targetRect;
 		this.moveOperation = moveOperation;
 		this.mouseMoveDelta = new org.eclipse.draw2d.geometry.Point(0, 0); // avoid NPE
-
 	}
 
 	@Override
@@ -90,6 +92,14 @@ public class MoveElementFromSubAppCommand extends Command {
 		final EList<FBNetworkElement> parentFBNetwork = sourceSubApp.getFbNetwork().getNetworkElements();
 		sourceFBNetwork.remove(element);
 		parentFBNetwork.add(element);
+
+		// ensure unique name in new network
+		if (!NameRepository.isValidName(element, element.getName())) {
+			final String uniqueName = NameRepository.createUniqueName(element, element.getName());
+			setUniqueName = new ChangeNameCommand(element, uniqueName);
+			setUniqueName.execute();
+		}
+
 		side = checkElementConnections(element);
 		positionElement(element, side);
 		modifiedConns.execute();
@@ -99,6 +109,9 @@ public class MoveElementFromSubAppCommand extends Command {
 	public void redo() {
 		unmappingCmds.redo();
 		sourceSubApp.getFbNetwork().getNetworkElements().add(element);
+		if (null != setUniqueName) {
+			setUniqueName.redo();
+		}
 		movedConns.forEach(con -> sourceSubApp.getFbNetwork().addConnection(con));
 		changedSubAppIEs.redo();
 		modifiedConns.redo();
@@ -113,6 +126,9 @@ public class MoveElementFromSubAppCommand extends Command {
 		changedSubAppIEs.undo();
 		movedConns.forEach(con -> sourceSubApp.getSubAppNetwork().addConnection(con));
 		sourceSubApp.getSubAppNetwork().getNetworkElements().add(element);
+		if (null != setUniqueName) {
+			setUniqueName.undo();
+		}
 		unmappingCmds.undo();
 		element.setX(oldPos.x);
 		element.setY(oldPos.y);
