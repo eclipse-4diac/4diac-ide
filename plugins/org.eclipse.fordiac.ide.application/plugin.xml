@@ -400,8 +400,13 @@
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
-            id="org.eclipse.fordiac.ide.application.commands.unfoldSubApp"
-            name="Toggle SubApp Representation">
+            id="org.eclipse.fordiac.ide.application.commands.expandSubApp"
+            name="Expand Subapp">
+      </command>
+      <command
+           categoryId="org.eclipse.fordiac.ide.commands.category"
+           id="org.eclipse.fordiac.ide.application.commands.collapseSubApp"
+           name="Collapse Subapp">
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
@@ -578,7 +583,14 @@
       </handler>
       <handler
             class="org.eclipse.fordiac.ide.application.handlers.ToggleSubAppRepresentation"
-            commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp">
+            commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp">
+            <activeWhen>
+                <reference definitionId="org.eclipse.fordiac.ide.application.SubAppSelection" />
+            </activeWhen>
+      </handler>
+      <handler
+      	    class="org.eclipse.fordiac.ide.application.handlers.ToggleSubAppRepresentation"
+            commandId="org.eclipse.fordiac.ide.application.commands.collapseSubApp">
             <activeWhen>
                 <reference definitionId="org.eclipse.fordiac.ide.application.SubAppSelection" />
             </activeWhen>
@@ -679,7 +691,8 @@
       </menuContribution>            
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">
             <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp" />
-            <command commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.collapseSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent" />
@@ -865,14 +878,49 @@
                </reference>
             </visibleWhen>
          </command>
-         <command commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp">
+         
+         <command commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp">
             <visibleWhen
                   checkEnabled="false">
-               <reference
-                     definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
-               </reference>
+                <with variable="selection">
+            		<count value="1" />
+            		<iterate> 
+            			<not>
+            				<test
+                				property="org.eclipse.fordiac.ide.elk.properties.isUnfoldedSubApp" forcePluginActivation="true">
+                			</test>
+            			</not>
+            		</iterate>
+            		<and>
+            			<reference 
+            		       	definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
+               			</reference>
+               			<!-- not visible in  untyped subapp -->
+               			<with variable="activeEditorId">
+               			<or>
+		            		<equals value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor" />
+		            		<equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
+		            		<equals value="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor" />
+		            	</or>
+	            	</with>
+            		</and>
+            	</with>
             </visibleWhen>
          </command>
+         
+         <command commandId="org.eclipse.fordiac.ide.application.commands.collapseSubApp">
+ 			<visibleWhen checkEnabled="false">
+            	<with variable="selection">
+            		<count value="1" />
+            		<iterate>
+            			<test
+                			property="org.eclipse.fordiac.ide.elk.properties.isUnfoldedSubApp" forcePluginActivation="true">
+                		</test>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+         </command>
+         
          <command
                commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" >
             <visibleWhen checkEnabled="true">
@@ -1112,7 +1160,7 @@
       				</instanceof>
       			</iterate>
       		</with>
-      </definition>
+      </definition>      
       <definition
             id="org.eclipse.fordiac.ide.application.SubAppSelection">
             <with
