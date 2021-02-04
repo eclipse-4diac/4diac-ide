@@ -14,8 +14,10 @@
 package org.eclipse.fordiac.ide.gef.handlers;
 
 import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
@@ -44,5 +46,16 @@ public abstract class FordiacHandler extends AbstractHandler {
 				viewer.reveal(editPart);
 			}
 		}
+	}
+
+	protected static IEditorPart selectElement(EObject model) {
+		final IEditorPart editor = openEditor(model);
+		selectElement(model, getViewer(editor));
+
+		return editor;
+	}
+
+	protected static IEditorPart openEditor(EObject model) {
+		return OpenListenerManager.openEditor(model);
 	}
 }

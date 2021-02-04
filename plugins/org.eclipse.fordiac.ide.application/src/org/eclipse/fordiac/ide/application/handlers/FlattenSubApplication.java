@@ -20,31 +20,23 @@ package org.eclipse.fordiac.ide.application.handlers;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.FlattenSubAppCommand;
-import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.gef.handlers.FordiacHandler;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class FlattenSubApplication extends AbstractHandler {
+public class FlattenSubApplication extends FordiacHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -96,32 +88,8 @@ public class FlattenSubApplication extends AbstractHandler {
 		if (editor.getAdapter(FBNetwork.class).equals(subApp.getSubAppNetwork())) {
 			// we are invoking the method from within the subapp, switch to the parent
 			// editor
-			openParent(subApp.getFbNetwork().eContainer());
+			selectElement(subApp.getFbNetwork().eContainer());
 		}
-	}
-
-	private static void openParent(EObject model) {
-		EditorUtils.openEditor(getEditorInput(model), getEditorId(model));
-	}
-
-	private static IEditorInput getEditorInput(EObject model) {
-		if (model instanceof SubApp) {
-			return new SubApplicationEditorInput((SubApp) model);
-		}
-		if (model instanceof Application) {
-			return new ApplicationEditorInput((Application) model);
-		}
-		return null;
-	}
-
-	private static String getEditorId(EObject model) {
-		if (model instanceof SubApp) {
-			return SubAppNetworkEditor.class.getName();
-		}
-		if (model instanceof Application) {
-			return FBNetworkEditor.class.getName();
-		}
-		return null;
 	}
 
 }

@@ -973,9 +973,9 @@
                commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
                icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png">
             <visibleWhen checkEnabled="true">
-                <with variable="activeEditorId">
-                    <equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
-                </with>
+	            <with variable="activeEditor">
+	                   <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+	            </with>
             </visibleWhen>
          </command>
          <command
@@ -1202,7 +1202,7 @@
        <definition
           id="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection">
             <with variable="selection">
-                <iterate operator="and" ifEmpty="false">
+                <iterate operator="or" ifEmpty="false">
                     <instanceof
                           value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
                     </instanceof>

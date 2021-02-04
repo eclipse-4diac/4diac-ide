@@ -26,26 +26,20 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand.MoveOperation;
-import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.gef.handlers.FordiacHandler;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IEditorInput;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -68,9 +62,21 @@ public class MoveToParentHandler extends FordiacHandler {
 						fbel -> cmd.add(new MoveElementFromSubAppCommand(fbel, bounds, MoveOperation.CONTEXT_MENU)));
 				getCommandStack(editor).execute(cmd);
 				preventFBPiling(cmd.getCommands());
+
+				// select moved elements in editor
+				selectElements(editor, fbelements);
 			}
 		}
 		return Status.OK_STATUS;
+	}
+
+	private void selectElements(final IEditorPart editor, final List<FBNetworkElement> fbelements) {
+		final GraphicalViewer viewer = getSubappParentViewer(getFBNetwork(editor), getParent(fbelements.get(0)),
+				editor);
+		@SuppressWarnings("unchecked")
+		final List<EditPart> eps = fbelements.stream()
+		.map(el -> (EditPart) viewer.getEditPartRegistry().get(el)).collect(Collectors.toList());
+		viewer.setSelection(new StructuredSelection(eps));
 	}
 
 	private static Rectangle getParentSubappBounds(final IEditorPart editor,
@@ -87,7 +93,7 @@ public class MoveToParentHandler extends FordiacHandler {
 			IEditorPart parent) {
 		if (fbnetwork.equals(subappNetwork)) {
 			// source subapp editor, subapp content is opened in editor
-			return getViewer(openParentEditor((SubApp) subappNetwork.eContainer()));
+			return getViewer(openEditor(subappNetwork.eContainer().eContainer().eContainer()));
 		}
 		return getViewer(parent);
 	}
@@ -128,11 +134,6 @@ public class MoveToParentHandler extends FordiacHandler {
 						: null;
 	}
 
-	private static IEditorPart openParentEditor(SubApp subApp) {
-		final EObject model = subApp.eContainer().eContainer();
-		return EditorUtils.openEditor(getEditorInput(model), getEditorId(model));
-	}
-
 	// prevents the FBs from lying on top of one another
 	private static void preventFBPiling(List<MoveElementFromSubAppCommand> commands) {
 		final int OFFSET = 90;
@@ -155,25 +156,4 @@ public class MoveToParentHandler extends FordiacHandler {
 			}
 		}
 	}
-
-	private static IEditorInput getEditorInput(EObject model) {
-		if (model instanceof SubApp) {
-			return new SubApplicationEditorInput((SubApp) model);
-		}
-		if (model instanceof Application) {
-			return new ApplicationEditorInput((Application) model);
-		}
-		return null;
-	}
-
-	private static String getEditorId(EObject model) {
-		if (model instanceof SubApp) {
-			return SubAppNetworkEditor.class.getName();
-		}
-		if (model instanceof Application) {
-			return FBNetworkEditor.class.getName();
-		}
-		return null;
-	}
-
 }
