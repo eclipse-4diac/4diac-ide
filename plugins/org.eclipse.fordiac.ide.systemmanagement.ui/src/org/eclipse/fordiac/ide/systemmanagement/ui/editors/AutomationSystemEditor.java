@@ -19,6 +19,8 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 import java.util.Arrays;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -42,42 +44,51 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
 import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
+import org.eclipse.fordiac.ide.systemmanagement.AutomationSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
+public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements AutomationSystemListener {
 
+	private static final int OVERWRITE_CHANGES = 0;
+	private static final int SAVE_CHANGES = 1;
+	private static final int DISCARD_CHANGES = 2;
 	private AutomationSystem system;
-
 	private DiagramOutlinePage outlinePage;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		loadSystem();
+		SystemManager.INSTANCE.addAutomationSystemListener(this);
 	}
 
 	@Override
@@ -107,8 +118,12 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	}
 
 	private void loadSystem() {
+
 		if (getEditorInput() instanceof FileEditorInput) {
-			system = SystemManager.INSTANCE.getSystem(((FileEditorInput) getEditorInput()).getFile());
+			system = SystemManager.INSTANCE.getSystem(((FileEditorInput) getEditorInput()).getFile()); // register as
+			// listener and
+			// call this
+			// method
 			if (null != system) {
 				getCommandStack().addCommandStackEventListener(this);
 				setPartName(system.getName());
@@ -192,24 +207,26 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	}
 
 	private static IEditorInput createSubappInstanceViewer(final Object model) {
-			final EditPart createEditPart = new SubappInstanceViewer().getEditPartFactory().createEditPart(null,
-					model);
-			return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-					((FBNetworkElement) model).getType().getName());
+		final EditPart createEditPart = new SubappInstanceViewer().getEditPartFactory().createEditPart(null, model);
+		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
+				((FBNetworkElement) model).getType().getName());
 
 	}
 
 	private static IEditorInput createCompositeInstanceViewer(final Object model) {
 		final EditPart createEditPart = new CompositeInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model, ((FBNetworkElement) model).getType().getName());
+		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
+				((FBNetworkElement) model).getType().getName());
 	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		if (null != system) {
+			SystemManager.INSTANCE.removeAutomationSystemListener(this);
 			SystemManager.saveSystem(system);
 			getCommandStack().markSaveLocation();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
+			SystemManager.INSTANCE.addAutomationSystemListener(this);
 		}
 
 	}
@@ -241,12 +258,32 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 
 	@Override
 	public void doSaveAs() {
-		// currently not allowed
+		if (system == null) {
+			return;
+		}
+		final SaveAsDialog saveAsDialog = new SaveAsDialog(getSite().getShell());
+		saveAsDialog.setOriginalName(system.getSystemFile().getName());
+
+		final IPath path = saveAsDialog.getResult();
+		if (path == null) {
+			return;
+		}
+
+		final IPath fullPath = system.getSystemFile().getFullPath();
+		if (fullPath.equals(path)) {
+			doSave(null);
+			return;
+		}
+		SystemManager.INSTANCE.removeAutomationSystemListener(this);
+		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+		SystemManager.saveSystem(system, file);
+		SystemManager.INSTANCE.addAutomationSystemListener(this);
+
 	}
 
 	@Override
 	public boolean isSaveAsAllowed() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -324,6 +361,60 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 			}
 		}
 		return retVal;
+	}
+
+	@Override
+	public void dispose() {
+		SystemManager.INSTANCE.removeAutomationSystemListener(this);
+		super.dispose();
+	}
+
+	@Override
+	public void automationSystemChanged(final IFile file) {
+		if (file.equals(system.getSystemFile())) {
+			Display.getDefault().asyncExec(() -> openFileChangedDialog(file));
+		}
+	}
+
+	private void openFileChangedDialog(final IFile file) {
+		final String info = Messages.AutomationSystemEditor_Info.replace("{placeholder}", //$NON-NLS-1$
+				file.getFullPath().toOSString());
+		final MessageDialog dialog = new MessageDialog(getSite().getShell(), Messages.AutomationSystemEditor_Title,
+				null, info, MessageDialog.INFORMATION,
+				new String[] { Messages.AutomationSystemEditor_Overwrite_Changes,
+						Messages.AutomationSystemEditor_Save_Changes, Messages.AutomationSystemEditor_Discard_Changes },
+				0);
+		final int returnCode = dialog.open();
+		handleReturnCode(returnCode, file);
+	}
+
+	private void handleReturnCode(final int returnCode, final IFile file) {
+		switch (returnCode) {
+		case OVERWRITE_CHANGES:
+			// do nothing
+			break;
+		case SAVE_CHANGES:
+			doSaveAs();
+			replaceSystemFile(file);
+			break;
+		case DISCARD_CHANGES:
+			replaceSystemFile(file);
+			break;
+		default:
+			break;
+		}
+
+	}
+
+
+
+	private void replaceSystemFile(final IFile file) {
+		system = SystemManager.INSTANCE.replaceSystemFromFile(system, file);
+		if (!system.getApplication().isEmpty()) {
+			OpenListenerManager.openEditor(system.getApplication().get(0));
+		} else {
+			EditorUtils.CloseEditor.run(this);
+		}
 	}
 
 }
