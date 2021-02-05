@@ -22,23 +22,25 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
+import org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.ui.IEditorPart;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
 	private DirectEditManager manager;
@@ -79,9 +81,9 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			// from the application
 			subApp = (SubApp) subApp.getOpposite();
 		}
-		final OpenSubApplicationEditorAction openAction = new OpenSubApplicationEditorAction(subApp);
-		openAction.run();
-		((FBNetworkEditor) openAction.getOpenedEditor()).selectElement(getModel());
+		final IEditorPart newEditor = OpenListenerManager.openEditor(subApp);
+		final GraphicalViewer viewer = newEditor.getAdapter(GraphicalViewer.class);
+		BreadcrumbUtil.selectElement(getModel(), viewer);
 	}
 
 	private DirectEditManager getManager() {

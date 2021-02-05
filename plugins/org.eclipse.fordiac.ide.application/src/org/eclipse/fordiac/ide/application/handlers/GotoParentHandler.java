@@ -14,11 +14,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
+import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.getViewer;
+import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.openEditor;
+import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.selectElement;
+
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.gef.handlers.FordiacHandler;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -28,8 +32,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
-
-public class GotoParentHandler extends FordiacHandler {
+public class GotoParentHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {

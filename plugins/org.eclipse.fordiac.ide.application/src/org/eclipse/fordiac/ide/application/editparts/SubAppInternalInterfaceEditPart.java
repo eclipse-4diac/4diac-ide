@@ -16,27 +16,21 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 
 public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceElementEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		InterfaceFigure figure = new InterfaceFigure();
+		final InterfaceFigure figure = new InterfaceFigure();
 		figure.setBorder(new ConnectorBorder(getModel()) {
 			@Override
 			public boolean isInput() {
@@ -80,30 +74,9 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 	}
 
 	private void goToParent() {
-		EObject perentModel = getModel().getFBNetworkElement().eContainer().eContainer();
-		FBNetworkEditor newEditor = (FBNetworkEditor) EditorUtils.openEditor(getEditorInput(perentModel),
-				getEditorId(perentModel));
-		newEditor.selectElement(getModel());
-	}
-
-	private static IEditorInput getEditorInput(EObject model) {
-		if (model instanceof SubApp) {
-			return new SubApplicationEditorInput((SubApp) model);
-		}
-		if (model instanceof Application) {
-			return new ApplicationEditorInput((Application) model);
-		}
-		return null;
-	}
-
-	private static String getEditorId(EObject model) {
-		if (model instanceof SubApp) {
-			return SubAppNetworkEditor.class.getName();
-		}
-		if (model instanceof Application) {
-			return FBNetworkEditor.class.getName();
-		}
-		return null;
+		final IEditorPart newEditor = BreadcrumbUtil.openParentEditor(getModel().getFBNetworkElement());
+		final GraphicalViewer viewer = newEditor.getAdapter(GraphicalViewer.class);
+		BreadcrumbUtil.selectElement(getModel(), viewer);
 	}
 
 }

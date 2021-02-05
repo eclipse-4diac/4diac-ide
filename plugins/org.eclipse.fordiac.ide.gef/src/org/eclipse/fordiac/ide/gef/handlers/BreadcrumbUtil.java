@@ -13,30 +13,34 @@
 
 package org.eclipse.fordiac.ide.gef.handlers;
 
-import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IEditorPart;
 
-public abstract class FordiacHandler extends AbstractHandler {
-	protected static GraphicalViewer getViewer(final IEditorPart editor) {
+public final class BreadcrumbUtil {
+	private BreadcrumbUtil() {
+		// do not instantiate this class
+	}
+
+	public static GraphicalViewer getViewer(final IEditorPart editor) {
 		return editor.getAdapter(GraphicalViewer.class);
 	}
 
-	protected static CommandStack getCommandStack(final IEditorPart editor) {
+	public static CommandStack getCommandStack(final IEditorPart editor) {
 		return editor.getAdapter(CommandStack.class);
 	}
 
-	protected static FBNetwork getFBNetwork(final IEditorPart editor) {
+	public static FBNetwork getFBNetwork(final IEditorPart editor) {
 		return editor.getAdapter(FBNetwork.class);
 	}
 
-	protected static void selectElement(final Object element, final GraphicalViewer viewer) {
+	public static void selectElement(final Object element, final GraphicalViewer viewer) {
 		final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
 		if (null != editPart) {
 			if (viewer instanceof AdvancedScrollingGraphicalViewer) {
@@ -48,14 +52,15 @@ public abstract class FordiacHandler extends AbstractHandler {
 		}
 	}
 
-	protected static IEditorPart selectElement(EObject model) {
-		final IEditorPart editor = openEditor(model);
-		selectElement(model, getViewer(editor));
-
-		return editor;
+	public static IEditorPart openEditor(EObject model) {
+		return OpenListenerManager.openEditor(model);
 	}
 
-	protected static IEditorPart openEditor(EObject model) {
-		return OpenListenerManager.openEditor(model);
+	public static IEditorPart openParentEditor(FBNetworkElement model) {
+		EObject parentModel = model.getOuterFBNetworkElement();
+		if (null == parentModel) {
+			parentModel = model.getFbNetwork().getApplication();
+		}
+		return OpenListenerManager.openEditor(parentModel);
 	}
 }

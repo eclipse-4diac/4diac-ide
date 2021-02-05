@@ -18,10 +18,16 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
+import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.getCommandStack;
+import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.getFBNetwork;
+import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.getViewer;
+import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.openEditor;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
@@ -29,7 +35,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.MoveElementFromSubAppCommand.MoveOperation;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.gef.handlers.FordiacHandler;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -44,7 +49,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class MoveToParentHandler extends FordiacHandler {
+public class MoveToParentHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {

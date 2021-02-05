@@ -16,18 +16,19 @@ package org.eclipse.fordiac.ide.application.handlers;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
-import org.eclipse.fordiac.ide.gef.handlers.FordiacHandler;
+import org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class ClearFocusOn extends FordiacHandler {
+public class ClearFocusOn extends AbstractHandler {
 	private static final int NOT_TRANSPARENT = 255;
 
 	/**
@@ -37,7 +38,7 @@ public class ClearFocusOn extends FordiacHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		final IEditorPart part = HandlerUtil.getActiveEditor(event);
-		final GraphicalViewer viewer = getViewer(part);
+		final GraphicalViewer viewer = BreadcrumbUtil.getViewer(part);
 		final Map<?, ?> map = viewer.getEditPartRegistry();
 		for (final Entry<?, ?> entry : map.entrySet()) {
 			final Object obj = entry.getKey();

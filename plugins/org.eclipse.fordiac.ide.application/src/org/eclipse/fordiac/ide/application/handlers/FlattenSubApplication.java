@@ -20,13 +20,14 @@ package org.eclipse.fordiac.ide.application.handlers;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.commands.FlattenSubAppCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
-import org.eclipse.fordiac.ide.gef.handlers.FordiacHandler;
+import org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.CommandStack;
@@ -36,7 +37,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class FlattenSubApplication extends FordiacHandler {
+public class FlattenSubApplication extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -88,7 +89,7 @@ public class FlattenSubApplication extends FordiacHandler {
 		if (editor.getAdapter(FBNetwork.class).equals(subApp.getSubAppNetwork())) {
 			// we are invoking the method from within the subapp, switch to the parent
 			// editor
-			selectElement(subApp.getFbNetwork().eContainer());
+			BreadcrumbUtil.openEditor(subApp.getFbNetwork().eContainer());
 		}
 	}
 

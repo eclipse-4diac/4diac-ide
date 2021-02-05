@@ -29,10 +29,8 @@ import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
-import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteResourceEditPolicy;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.EditPolicy;
@@ -78,7 +76,7 @@ public class ResourceEditPart extends AbstractViewEditPart {
 		private final Label typeInfo;
 
 		public ResourceFigure() {
-			GridLayout mainLayout = new GridLayout(3, false);
+			final GridLayout mainLayout = new GridLayout(3, false);
 			mainLayout.marginHeight = 2;
 			setLayoutManager(mainLayout);
 			if (getINamedElement() == null) {
@@ -182,8 +180,7 @@ public class ResourceEditPart extends AbstractViewEditPart {
 	@Override
 	public void performRequest(final Request request) {
 		if (request.getType() == RequestConstants.REQ_OPEN) {
-			ResourceEditorInput input = new ResourceEditorInput(getModel());
-			EditorUtils.openEditor(input, ResourceDiagramEditor.class.getName());
+			OpenListenerManager.openEditor(getModel());
 		} else {
 			super.performRequest(request);
 		}

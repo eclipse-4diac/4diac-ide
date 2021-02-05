@@ -14,13 +14,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.commands.UntypeSubAppCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
-import org.eclipse.fordiac.ide.gef.handlers.FordiacHandler;
+import org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -28,7 +29,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class UntypeSubApplicationHandler extends FordiacHandler {
+public class UntypeSubApplicationHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -36,9 +37,9 @@ public class UntypeSubApplicationHandler extends FordiacHandler {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		final SubApp subApp = getSelectedSubApp(selection);
 		if (null != subApp) {
-			getCommandStack(editor).execute(new UntypeSubAppCommand(subApp));
-			getViewer(editor).deselectAll();
-			selectElement(subApp, getViewer(editor));
+			BreadcrumbUtil.getCommandStack(editor).execute(new UntypeSubAppCommand(subApp));
+			BreadcrumbUtil.getViewer(editor).deselectAll();
+			BreadcrumbUtil.selectElement(subApp, BreadcrumbUtil.getViewer(editor));
 		}
 		return Status.OK_STATUS;
 	}

@@ -20,11 +20,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
-import org.eclipse.fordiac.ide.gef.handlers.FordiacHandler;
+import org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -36,7 +37,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class FocusOnPredecessor extends FordiacHandler {
+public class FocusOnPredecessor extends AbstractHandler {
 	private static final int HALF_TRANSPERENT = 50;
 	private static final int NON_TRANSPARENT = 255;
 
@@ -46,7 +47,7 @@ public class FocusOnPredecessor extends FordiacHandler {
 		getPredecessorFBNetworkElements(getSelectedFBElement(event), elementToHighlight);
 
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		final Map<?, ?> map = getViewer(editor).getEditPartRegistry();
+		final Map<?, ?> map = BreadcrumbUtil.getViewer(editor).getEditPartRegistry();
 		for (final Entry<?, ?> entry : map.entrySet()) {
 			final Object obj = entry.getKey();
 			final Object editPartAsObject = entry.getValue();
