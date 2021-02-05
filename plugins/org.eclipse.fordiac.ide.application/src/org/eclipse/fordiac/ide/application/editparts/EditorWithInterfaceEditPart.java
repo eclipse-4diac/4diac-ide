@@ -64,7 +64,13 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 			newBounds.setSize(super.calculatePreferredSize(figure, wHint, hHint));
 			newBounds.setLocation(getContentPane().getFreeformExtent().getLocation());
 			newBounds.x -= leftInterfaceContainer.getPreferredSize().width;
-
+			newBounds.y -= commentContainer.getPreferredSize().height;
+			if (newBounds.x > 0) {
+				newBounds.x = 0;
+			}
+			if (newBounds.y > 0) {
+				newBounds.y = 0;
+			}
 			// get the size of the feedback/handle layer and use it to calculate our size, this is needed when stuff is
 			// moved around or
 			FreeformLayer layer = (FreeformLayer) getLayer(LayerConstants.FEEDBACK_LAYER);
@@ -95,9 +101,9 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 
 		private int calcAxisExtent(final int baseOrigin, final int newOrigin, final int sourceExtent,
 				final int baseUnit) {
-			final int startExtent = sourceExtent + baseOrigin - newOrigin;
+			final int startExtent = (sourceExtent + baseOrigin) - newOrigin;
 
-			int newExtend = (startExtent / baseUnit + 1) * baseUnit;
+			int newExtend = ((startExtent / baseUnit) + 1) * baseUnit;
 			if (newExtend < (3 * baseUnit)) {
 				newExtend = 3 * baseUnit;
 			}
@@ -107,7 +113,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		private int calcAxisOrigin(final int axisPos, final int baseUnit) {
 			if (axisPos < 0) {
 				// when negative we need to go one beyond to have the correct origin
-				return (axisPos / baseUnit - 1) * baseUnit;
+				return ((axisPos / baseUnit) - 1) * baseUnit;
 			}
 			return (axisPos / baseUnit) * baseUnit;
 		}
@@ -327,8 +333,8 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		if (controlListener != null && getParent() != null && getParent().getViewer() != null
-				&& getParent().getViewer().getControl() != null) {
+		if ((controlListener != null) && (getParent() != null) && (getParent().getViewer() != null)
+				&& (getParent().getViewer().getControl() != null)) {
 			getParent().getViewer().getControl().removeControlListener(controlListener);
 		}
 	}
