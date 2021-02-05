@@ -866,26 +866,18 @@
                   checkEnabled="false">
                 <with variable="selection">
             		<count value="1" />
-            		<iterate> 
+            		<iterate ifEmpty="false">
+            			<and> 
+            			<reference 
+            		       	definitionId="org.eclipse.fordiac.ide.application.SubAppInstanceSelection">
+               			</reference>
             			<not>
             				<test
                 				property="org.eclipse.fordiac.ide.elk.properties.isUnfoldedSubApp" forcePluginActivation="true">
                 			</test>
             			</not>
+               			</and>
             		</iterate>
-            		<and>
-            			<reference 
-            		       	definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
-               			</reference>
-               			<!-- not visible in  untyped subapp -->
-               			<with variable="activeEditorId">
-               			<or>
-		            		<equals value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor" />
-		            		<equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
-		            		<equals value="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor" />
-		            	</or>
-	            	</with>
-            		</and>
             	</with>
             </visibleWhen>
          </command>
@@ -1163,7 +1155,23 @@
                   </or>
                </iterate>
             </with>
-      </definition>      
+      </definition>    
+      <definition
+            id="org.eclipse.fordiac.ide.application.SubAppInstanceSelection">
+            <with
+               variable="selection">
+               <iterate>
+                  <or>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.model.libraryElement.SubApp">
+                    </instanceof>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart">
+                    </instanceof>
+                  </or>
+               </iterate>
+            </with>
+      </definition>    
 	   <definition
 	         id="org.eclipse.fordiac.ide.application.FocusOnActivation">
             <with
