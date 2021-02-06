@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementAction;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.ContextMenuProvider;
@@ -127,6 +128,11 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		super.configureGraphicalViewer();
 		getGraphicalControl().addListener(SWT.Activate, this::handleActivationChanged);
 		getGraphicalControl().addListener(SWT.Deactivate, this::handleActivationChanged);
+		final ActionRegistry registry = getActionRegistry();
+		final Open4DIACElementAction openAction = (Open4DIACElementAction) registry
+				.getAction(Open4DIACElementAction.ID);
+		getGraphicalViewer().addSelectionChangedListener(openAction);
+
 	}
 
 	@Override
@@ -162,6 +168,12 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		action = new UpdateFBTypeAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
+
+		final Open4DIACElementAction openAction = new Open4DIACElementAction(this);
+		registry.registerAction(openAction);
+
+		// getViewer().addSelectionChangedListener(openAction);
+		// getSelectionActions().add(action.getId());
 
 		super.createActions();
 

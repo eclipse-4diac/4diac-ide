@@ -21,6 +21,8 @@ public class Messages extends NLS {
 	public static String DataTypeDropdown_Select_Type;
 	public static String DataTypeDropdown_Elementary_Types;
 	public static String DataTypeDropdown_STRUCT_Types;
+	public static String OpenEditorAction_text;
+	public static String OpenEditorProvider_OpenWithMenu_label;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

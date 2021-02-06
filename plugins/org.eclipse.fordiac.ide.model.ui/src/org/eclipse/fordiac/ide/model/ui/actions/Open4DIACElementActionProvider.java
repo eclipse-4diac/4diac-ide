@@ -11,14 +11,12 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.actions;
+package org.eclipse.fordiac.ide.model.ui.actions;
 
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.ui.actions.IOpenListener;
-import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
+import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -39,7 +37,7 @@ public class Open4DIACElementActionProvider extends CommonActionProvider {
 	private boolean contribute = false;
 
 	@Override
-	public void init(ICommonActionExtensionSite aConfig) {
+	public void init(final ICommonActionExtensionSite aConfig) {
 		if (aConfig.getViewSite() instanceof ICommonViewerWorkbenchSite) {
 			viewSite = (ICommonViewerWorkbenchSite) aConfig.getViewSite();
 			openAction = new Open4DIACElementAction(viewSite.getPart());
@@ -48,12 +46,12 @@ public class Open4DIACElementActionProvider extends CommonActionProvider {
 	}
 
 	@Override
-	public void fillContextMenu(IMenuManager aMenu) {
+	public void fillContextMenu(final IMenuManager aMenu) {
 		if (!contribute || getContext().getSelection().isEmpty()) {
 			return;
 		}
 
-		IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
+		final IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
 		openAction.selectionChanged(selection);
 		if (openAction.isEnabled()) {
 			aMenu.insertAfter(ICommonMenuConstants.GROUP_OPEN, openAction);
@@ -63,11 +61,11 @@ public class Open4DIACElementActionProvider extends CommonActionProvider {
 	}
 
 	@Override
-	public void fillActionBars(IActionBars theActionBars) {
+	public void fillActionBars(final IActionBars theActionBars) {
 		if (!contribute) {
 			return;
 		}
-		IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
+		final IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
 		if (selection.size() == 1) {
 			openAction.selectionChanged(selection);
 			theActionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, openAction);
@@ -75,23 +73,23 @@ public class Open4DIACElementActionProvider extends CommonActionProvider {
 
 	}
 
-	private void addOpenWithMenu(IMenuManager aMenu) {
-		IStructuredSelection ss = (IStructuredSelection) getContext().getSelection();
+	private void addOpenWithMenu(final IMenuManager aMenu) {
+		final IStructuredSelection ss = (IStructuredSelection) getContext().getSelection();
 
 		if (ss == null || ss.size() != 1) {
 			return;
 		}
 
-		Object obj = ss.getFirstElement();
-		List<IOpenListener> listeners = OpenListenerManager.INSTANCE.getOpenListener((EObject) obj);
+		final Object obj = ss.getFirstElement();
+		final List<IOpenListener> listeners = OpenListenerManager.INSTANCE.getOpenListener((EObject) obj);
 
 		if (!listeners.isEmpty()) {
 			// Create a menu flyout.
-			IMenuManager submenu = new MenuManager(Messages.OpenEditorProvider_OpenWithMenu_label,
+			final IMenuManager submenu = new MenuManager(Messages.OpenEditorProvider_OpenWithMenu_label,
 					ICommonMenuConstants.GROUP_OPEN_WITH);
 			submenu.add(new GroupMarker(ICommonMenuConstants.GROUP_TOP));
 
-			for (IOpenListener openListener : listeners) {
+			for (final IOpenListener openListener : listeners) {
 				submenu.add(openListener.getOpenListenerAction());
 			}
 			submenu.add(new GroupMarker(ICommonMenuConstants.GROUP_ADDITIONS));

@@ -14,9 +14,7 @@
  *   Michael Oberlehner
  *     - adapted for typed subapp and typed cfb
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.actions;
-
-import java.util.Iterator;
+package org.eclipse.fordiac.ide.model.ui.actions;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -29,12 +27,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
-import org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.AbstractEditorLinkHelper;
+import org.eclipse.fordiac.ide.model.ui.Activator;
+import org.eclipse.fordiac.ide.model.ui.Messages;
+import org.eclipse.gef.EditPart;
+//import org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.AbstractEditorLinkHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 
@@ -47,49 +44,47 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 		setId(ID);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected boolean updateSelection(final IStructuredSelection selection) {
-		boolean retval = true;
-		final Iterator element = getStructuredSelection().iterator();
-		while (element.hasNext() && (retval)) {
-			final Object obj = element.next();
-			if ((obj instanceof Device) || (obj instanceof SystemConfiguration) || (obj instanceof Application)
-					|| (obj instanceof SubApp) || obj instanceof Resource) {
-				continue;
-			} else if (obj instanceof FB) {
-				// if we have an Fb check if it is in a subapp or application
-				retval = isFBInAppOrSubApp((FB) obj);
 
-			} else {
-				retval = false;
-			}
+		if (selection.size() != 1) {
+			return false;
 		}
-		return retval;
+		final Object model = convertFromEditPart(getStructuredSelection().getFirstElement());
+
+		if ((model instanceof Device) || (model instanceof SystemConfiguration) || (model instanceof Application)
+				|| (model instanceof SubApp) || model instanceof Resource) {
+			return true;
+		}
+
+		if (model instanceof FB) {
+			// if we have an Fb check if it is in a subapp or application
+			return isFBInAppOrSubApp((FB) model);
+
+		}
+		return false;
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void run() {
-		final Iterator selection = getStructuredSelection().iterator();
+		Object selected = convertFromEditPart(getStructuredSelection().getFirstElement());
 
-		while (selection.hasNext()) {
-			Object selected = selection.next();
-			Object refObject = null;
-			if (selected instanceof FB && !isTypedComposite(selected)) {
-				refObject = selected;
-				selected = getFBRootNode((FBNetworkElement) selected);
-			} else if (selected instanceof Device) {
-				refObject = selected;
-				selected = ((Device) selected).getSystemConfiguration();
-			} else if (selected instanceof Segment) {
-				refObject = selected;
-				selected = ((Segment) refObject).eContainer();
-			}
-
-			final IEditorPart editor = OpenListenerManager.openEditor((EObject) selected);
-			AbstractEditorLinkHelper.selectObject(editor, refObject);
+		Object refObject = null; // TODO keep refObject for the LinkHelper, which must be repaired.
+		if (selected instanceof FB && !isTypedComposite(selected)) {
+			refObject = selected;
+			selected = getFBRootNode((FBNetworkElement) selected);
+		} else if (selected instanceof Device) {
+			refObject = selected;
+			selected = ((Device) selected).getSystemConfiguration();
+		} else if (selected instanceof Segment) {
+			refObject = selected;
+			selected = ((Segment) refObject).eContainer();
 		}
+		OpenListenerManager.openEditor((EObject) selected);
+		// TODO repair the link Helper
+		// final IEditorPart editor = OpenListenerManager.openEditor((EObject) selected);
+		// AbstractEditorLinkHelper.selectObject(editor, refObject);
 
 	}
 
@@ -109,5 +104,12 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 			rootNode = ((FBNetwork) fbCont).eContainer();
 		}
 		return rootNode;
+	}
+
+	private static Object convertFromEditPart(Object model) {
+		if (model instanceof EditPart) {
+			model = ((EditPart) model).getModel();
+		}
+		return model;
 	}
 }
