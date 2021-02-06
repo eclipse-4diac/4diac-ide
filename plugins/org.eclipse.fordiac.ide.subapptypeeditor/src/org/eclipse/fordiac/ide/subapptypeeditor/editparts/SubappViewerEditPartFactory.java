@@ -11,8 +11,9 @@
  *   Michael Oberlehner
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
+package org.eclipse.fordiac.ide.subapptypeeditor.editparts;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeViewerEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;

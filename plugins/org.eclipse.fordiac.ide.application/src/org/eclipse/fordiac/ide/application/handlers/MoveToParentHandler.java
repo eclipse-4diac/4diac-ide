@@ -18,10 +18,10 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
-import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.getCommandStack;
-import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.getFBNetwork;
-import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.getViewer;
-import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.openEditor;
+import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.getCommandStack;
+import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.getFBNetwork;
+import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.getViewer;
+import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.openEditor;
 
 import java.util.Collections;
 import java.util.List;

@@ -26,12 +26,12 @@ import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElement
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
-import org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
+import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalViewer;

@@ -11,10 +11,9 @@
  *   Bianca Wiesmayr - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.gef.handlers;
+package org.eclipse.fordiac.ide.model.ui.editors;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
@@ -40,9 +39,21 @@ public final class BreadcrumbUtil {
 		return editor.getAdapter(FBNetwork.class);
 	}
 
+	public static void selectElement(final Object element, final IEditorPart editor) {
+		if (null != editor) {
+			final GraphicalViewer viewer = getViewer(editor);
+			if (null != viewer) {
+				selectElement(element, viewer);
+			} else {
+				// TODO how other editor may want to handle selection
+			}
+		}
+	}
+
 	public static void selectElement(final Object element, final GraphicalViewer viewer) {
 		final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
 		if (null != editPart) {
+			viewer.flush(); // ensure that the viewer is ready
 			if (viewer instanceof AdvancedScrollingGraphicalViewer) {
 				((AdvancedScrollingGraphicalViewer) viewer).selectAndRevealEditPart(editPart);
 			} else {
@@ -52,11 +63,11 @@ public final class BreadcrumbUtil {
 		}
 	}
 
-	public static IEditorPart openEditor(EObject model) {
+	public static IEditorPart openEditor(final EObject model) {
 		return OpenListenerManager.openEditor(model);
 	}
 
-	public static IEditorPart openParentEditor(FBNetworkElement model) {
+	public static IEditorPart openParentEditor(final FBNetworkElement model) {
 		EObject parentModel = model.getOuterFBNetworkElement();
 		if (null == parentModel) {
 			parentModel = model.getFbNetwork().getApplication();

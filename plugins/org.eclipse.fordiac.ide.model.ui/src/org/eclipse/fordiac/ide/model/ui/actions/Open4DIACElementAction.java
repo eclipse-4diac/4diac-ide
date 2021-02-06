@@ -29,9 +29,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.ui.Activator;
 import org.eclipse.fordiac.ide.model.ui.Messages;
+import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.gef.EditPart;
 //import org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.AbstractEditorLinkHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 
@@ -65,12 +67,11 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 		return false;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void run() {
 		Object selected = convertFromEditPart(getStructuredSelection().getFirstElement());
 
-		Object refObject = null; // TODO keep refObject for the LinkHelper, which must be repaired.
+		Object refObject = null;
 		if (selected instanceof FB && !isTypedComposite(selected)) {
 			refObject = selected;
 			selected = getFBRootNode((FBNetworkElement) selected);
@@ -81,11 +82,8 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 			refObject = selected;
 			selected = ((Segment) refObject).eContainer();
 		}
-		OpenListenerManager.openEditor((EObject) selected);
-		// TODO repair the link Helper
-		// final IEditorPart editor = OpenListenerManager.openEditor((EObject) selected);
-		// AbstractEditorLinkHelper.selectObject(editor, refObject);
-
+		final IEditorPart editor = OpenListenerManager.openEditor((EObject) selected);
+		BreadcrumbUtil.selectElement(refObject, editor);
 	}
 
 	private static boolean isTypedComposite(final Object obj) {

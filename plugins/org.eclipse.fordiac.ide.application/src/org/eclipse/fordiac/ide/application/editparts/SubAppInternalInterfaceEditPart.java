@@ -19,7 +19,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
-import org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;

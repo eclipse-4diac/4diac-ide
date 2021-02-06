@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -28,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.gef.EditPart;
 
 public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {

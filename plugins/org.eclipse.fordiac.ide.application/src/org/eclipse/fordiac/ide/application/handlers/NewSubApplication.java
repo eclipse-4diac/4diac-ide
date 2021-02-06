@@ -17,8 +17,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
-import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.getViewer;
-import static org.eclipse.fordiac.ide.gef.handlers.BreadcrumbUtil.selectElement;
+import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.getViewer;
+import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.selectElement;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;

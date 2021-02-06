@@ -14,16 +14,15 @@ package org.eclipse.fordiac.ide.subapptypeeditor.viewer;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.AbstractFbNetworkInstanceViewer;
-import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.SubappViewerEditPartFactory;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.subapptypeeditor.editparts.SubappViewerEditPartFactory;
 import org.eclipse.gef.EditPartFactory;
 
 public class SubappInstanceViewer extends AbstractFbNetworkInstanceViewer {
-
 
 
 	@Override

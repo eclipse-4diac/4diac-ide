@@ -16,7 +16,7 @@
  *   Bianca Wiesmayr - support keyboard navigation
  *   Alois Zoitl - keep connection draging within canvas bounds
  *******************************************************************************/
-package org.eclipse.fordiac.ide.gef;
+package org.eclipse.fordiac.ide.model.ui.editors;
 
 import org.eclipse.draw2d.RangeModel;
 import org.eclipse.draw2d.geometry.Point;
