@@ -15,14 +15,19 @@ package org.eclipse.fordiac.ide.subapptypeeditor.editors;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.fordiac.ide.subapptypeeditor.Activator;
 import org.eclipse.fordiac.ide.subapptypeeditor.providers.TypedSubappProviderAdapterFactory;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
@@ -166,8 +171,22 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	}
 
 	@Override
-	public boolean outlineSelectionChanged(final Object selectedElement) {
-		// TODO Auto-generated method stub
+	public boolean outlineSelectionChanged(Object selectedElement) {
+		if (selectedElement instanceof FBNetwork) {
+			selectedElement = ((FBNetwork) selectedElement).eContainer();
+		}
+		if ((selectedElement instanceof FBNetworkElement) || (selectedElement instanceof SubAppType)) {
+			EObject refElement = null;
+			if (selectedElement instanceof FB) {
+				refElement = (FB) selectedElement;
+				selectedElement = refElement.eContainer().eContainer();
+			}
+			getBreadcrumb().setInput(selectedElement);
+			if (null != refElement) {
+				BreadcrumbUtil.selectElement(refElement, getActiveEditor());
+			}
+			return true;
+		}
 		return false;
 	}
 

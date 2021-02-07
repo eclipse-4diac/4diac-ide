@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.subapptypeeditor.editors;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.fordiac.ide.application.editors.FBTypePaletteViewerProvider;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
+import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropTargetListener;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -22,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
+import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
@@ -74,6 +76,11 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
 		return new FBTypePaletteViewerProvider(typeLib.getProject(), getEditDomain(), getPaletteNavigatorID());
+	}
+
+	@Override
+	protected TransferDropTargetListener createTransferDropTargetListener() {
+		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(), getPalette().getProject());
 	}
 
 	@Override

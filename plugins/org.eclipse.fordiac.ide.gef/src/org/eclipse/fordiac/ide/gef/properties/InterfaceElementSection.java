@@ -16,6 +16,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -25,11 +27,10 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -65,8 +66,8 @@ public class InterfaceElementSection extends AbstractSection {
 		createTypeAndCommentSection(parent);
 	}
 
-	protected void createTypeAndCommentSection(Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
+	protected void createTypeAndCommentSection(final Composite parent) {
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Name + ":"); //$NON-NLS-1$
@@ -87,7 +88,7 @@ public class InterfaceElementSection extends AbstractSection {
 		});
 
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Type + ":"); //$NON-NLS-1$
-		Composite typeComp = getWidgetFactory().createComposite(composite);
+		final Composite typeComp = getWidgetFactory().createComposite(composite);
 		typeComp.setLayout(new GridLayout(2, false));
 		typeComp.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), typeComp);
@@ -95,7 +96,7 @@ public class InterfaceElementSection extends AbstractSection {
 		typeCombo.addListener(SWT.Selection, event -> {
 			Command cmd = null;
 			if (getType() instanceof AdapterDeclaration) {
-				DataType newType = getPalette().getAdapterTypeEntry(typeCombo.getText()).getType();
+				final DataType newType = getPalette().getAdapterTypeEntry(typeCombo.getText()).getType();
 				cmd = newChangeTypeCommand((VarDeclaration) getType(), newType);
 			} else {
 				if (getType() instanceof VarDeclaration) {
@@ -114,7 +115,7 @@ public class InterfaceElementSection extends AbstractSection {
 		});
 	}
 
-	private void fillTypeCombo(String text) {
+	private void fillTypeCombo(final String text) {
 		typeCombo.removeAll();
 		if (getType() instanceof Event) {
 			EventTypeLibrary.getInstance().getEventTypes().forEach(eType -> typeCombo.add(eType.getName()));
@@ -132,24 +133,14 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 
 	private TypeLibrary getTypeLib() {
-		if (getType().eContainer().eContainer() instanceof FBType) {
-			return ((FBType) getType().eContainer().eContainer()).getTypeLibrary();
-		}
+		final EObject root = EcoreUtil.getRootContainer(getType());
 
-		if (getType().eContainer() instanceof Device) {
-			return ((Device) getType().eContainer()).getTypeLibrary();
+		if (root instanceof FBType) {
+			return ((FBType) root).getTypeLibrary();
+		} else if (root instanceof AutomationSystem) {
+			return ((AutomationSystem) root).getTypeLibrary();
 		}
-
-		if (getType().getFBNetworkElement().getFbNetwork().eContainer() instanceof FBType) {
-			return ((FBType) getType().getFBNetworkElement().getFbNetwork().eContainer()).getTypeLibrary();
-		}
-
-		if (getType().getFBNetworkElement().getFbNetwork().eContainer() instanceof Resource) {
-			return ((Resource) getType().getFBNetworkElement().getFbNetwork().eContainer()).getTypeLibrary();
-		}
-
-		return getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette()
-				.getTypeLibrary();
+		return null;
 	}
 
 	private DataTypeLibrary getDataTypeLib() {
@@ -162,7 +153,7 @@ public class InterfaceElementSection extends AbstractSection {
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			setEditableFields(getType().getFBNetworkElement() instanceof SubApp);
@@ -170,7 +161,7 @@ public class InterfaceElementSection extends AbstractSection {
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			String itype = ""; //$NON-NLS-1$
 			if (getType() instanceof VarDeclaration) {
-				VarDeclaration var = (VarDeclaration) getType();
+				final VarDeclaration var = (VarDeclaration) getType();
 				itype = var.getType() != null ? var.getType().getName() : ""; //$NON-NLS-1$
 				if (getType().isIsInput()) {
 					parameterText.setVisible(true);
@@ -195,7 +186,7 @@ public class InterfaceElementSection extends AbstractSection {
 	 *
 	 * @param editAble flag indicating if the fields should be editable
 	 */
-	private void setEditableFields(boolean editAble) {
+	private void setEditableFields(final boolean editAble) {
 		nameText.setEditable(editAble);
 		nameText.setEnabled(editAble);
 		commentText.setEditable(editAble);
@@ -208,13 +199,13 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 
 	@SuppressWarnings("static-method") // this method allows sub-classes to provide own change type commands, e.g.,
-										// subapps
-	protected ChangeTypeCommand newChangeTypeCommand(VarDeclaration data, DataType newType) {
+	// subapps
+	protected ChangeTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
 		return new ChangeTypeCommand(data, newType);
 	}
 
 	@Override
-	protected IInterfaceElement getInputType(Object input) {
+	protected IInterfaceElement getInputType(final Object input) {
 		if (input instanceof InterfaceEditPart) {
 			return ((InterfaceEditPart) input).getModel();
 		} else if (input instanceof ValueEditPart) {

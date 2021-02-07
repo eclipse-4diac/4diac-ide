@@ -14,11 +14,17 @@
 package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.actions.AbstractOpenSystemElementListener;
+import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * The Class OpenSubApplicationEditorAction.
@@ -26,6 +32,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 public class OpenSubApplicationEditorAction extends AbstractOpenSystemElementListener {
 
 	private static final String OPEN_SUBAPP_LISTENER_ID = "org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"; //$NON-NLS-1$
+
+	private static final String SUBAPP_TYPE_EDITOR = "org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor"; //$NON-NLS-1$
 
 	/** The uiSubAppNetwork. */
 	private SubApp subApp;
@@ -48,7 +56,13 @@ public class OpenSubApplicationEditorAction extends AbstractOpenSystemElementLis
 
 	/** Opens the editor for the specified Model or sets the focus to the editor if already opened. */
 	public void run() {
-		openInSystemEditor(subApp.getFbNetwork().getAutomationSystem().getSystemFile(), subApp);
+		final EObject root = EcoreUtil.getRootContainer(subApp);
+		if (root instanceof AutomationSystem) {
+			openInSystemEditor(((AutomationSystem) root).getSystemFile(), subApp);
+		} else if (root instanceof SubAppType) {
+			openInTypeEditor((SubAppType) root, subApp);
+		}
+
 	}
 
 	@Override
@@ -75,4 +89,14 @@ public class OpenSubApplicationEditorAction extends AbstractOpenSystemElementLis
 	public String getOpenListenerID() {
 		return OPEN_SUBAPP_LISTENER_ID;
 	}
+
+	private void openInTypeEditor(final SubAppType root, final SubApp subApp) {
+		openEditor(new FileEditorInput(root.getPaletteEntry().getFile()), SUBAPP_TYPE_EDITOR);
+		final IEditorPart openedEditor = getOpenedEditor();
+		final AbstractBreadCrumbEditor breadCrumbEditor = openedEditor.getAdapter(AbstractBreadCrumbEditor.class);
+		if (null != breadCrumbEditor) {
+			breadCrumbEditor.getBreadcrumb().setInput(subApp);
+		}
+	}
+
 }

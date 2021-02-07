@@ -100,7 +100,7 @@ public class BreadcrumbWidget implements ISelectionProvider {
 				|| input instanceof Device
 				|| input instanceof Resource
 				|| input instanceof SubApp
-				|| isSubAppType(input)
+				|| input instanceof SubAppType
 				|| isCompositeType(input);
 		// @formatter:on
 	}
@@ -161,9 +161,5 @@ public class BreadcrumbWidget implements ISelectionProvider {
 
 	private static boolean isCompositeType(final Object input) {
 		return (input instanceof FB && ((FB) input).getType() instanceof CompositeFBType);
-	}
-
-	private static boolean isSubAppType(final Object input) {
-		return (input instanceof SubApp) && (((SubApp) input).getType() instanceof SubAppType);
 	}
 }
