@@ -14,7 +14,13 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model.edit,
  org.eclipse.ui.editors,
  org.eclipse.ui.ide,
- org.eclipse.fordiac.ide.gef
+ org.eclipse.fordiac.ide.gef,
+ com.google.guava,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
+ org.eclipse.xtext;bundle-version="2.24.0",
+ org.eclipse.fordiac.ide.model.structuredtext;bundle-version="1.13.1"
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.13.1.qualifier
