@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
@@ -35,6 +37,7 @@ import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementComma
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.providers.InterfaceElementLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -97,14 +100,23 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	protected abstract String[] fillTypeCombo();
 
-	protected abstract TypeLibrary getTypeLibrary();
+	protected final TypeLibrary getTypeLibrary() {
+		final EObject root = EcoreUtil.getRootContainer(getType());
+
+		if (root instanceof FBType) {
+			return ((FBType) root).getTypeLibrary();
+		} else if (root instanceof AutomationSystem) {
+			return ((AutomationSystem) root).getPalette().getTypeLibrary();
+		}
+		return null;
+	}
 
 	@Override
 	protected abstract INamedElement getInputType(Object input);
 
 	@SuppressWarnings("static-method") // this method allows sub-classes to provide own change type commands, e.g.,
 	// subapps
-	protected ChangeTypeCommand newChangeTypeCommand(VarDeclaration data, DataType newType) {
+	protected ChangeTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
 		return new ChangeTypeCommand(data, newType);
 	}
 
@@ -143,12 +155,12 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		getOutputsViewer().getTable().addFocusListener(new FocusListener() {
 
 			@Override
-			public void focusGained(FocusEvent e) {
+			public void focusGained(final FocusEvent e) {
 				isInputsViewer = false;
 			}
 
 			@Override
-			public void focusLost(FocusEvent e) {
+			public void focusLost(final FocusEvent e) {
 				// Nothing to do
 			}
 
@@ -156,12 +168,12 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		getInputsViewer().getTable().addFocusListener(new FocusListener() {
 
 			@Override
-			public void focusGained(FocusEvent e) {
+			public void focusGained(final FocusEvent e) {
 				isInputsViewer = true;
 			}
 
 			@Override
-			public void focusLost(FocusEvent e) {
+			public void focusLost(final FocusEvent e) {
 				// Nothing to do
 			}
 
@@ -173,27 +185,27 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	protected abstract IContentProvider getInputsContentProvider();
 
-	protected TableLayout createTableLayout(Table table) {
-		TableColumn column1 = new TableColumn(table, SWT.LEFT);
+	protected TableLayout createTableLayout(final Table table) {
+		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText(FordiacMessages.Name);
-		TableColumn column2 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column2 = new TableColumn(table, SWT.LEFT);
 		column2.setText(FordiacMessages.Type);
-		TableColumn column3 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column3 = new TableColumn(table, SWT.LEFT);
 		column3.setText(FordiacMessages.Comment);
-		TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(NAME_COLUMN_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
 		return layout;
 	}
 
-	private void createInputEdit(Composite parent) {
-		Group inputsGroup = getWidgetFactory().createGroup(parent, "Inputs"); //$NON-NLS-1$
+	private void createInputEdit(final Composite parent) {
+		final Group inputsGroup = getWidgetFactory().createGroup(parent, "Inputs"); //$NON-NLS-1$
 		inputsGroup.setLayout(new GridLayout(2, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		if (createButtons) {
-			AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+			final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 			buttons.createControls(inputsGroup, getWidgetFactory());
 			inputsViewer = createTypeTableView(inputsGroup);
 			configureButtonList(buttons, inputsViewer, true);
@@ -202,13 +214,13 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		}
 	}
 
-	private void createOutputEdit(Composite parent) {
-		Group outputsGroup = getWidgetFactory().createGroup(parent, "Outputs"); //$NON-NLS-1$
+	private void createOutputEdit(final Composite parent) {
+		final Group outputsGroup = getWidgetFactory().createGroup(parent, "Outputs"); //$NON-NLS-1$
 		outputsGroup.setLayout(new GridLayout(2, false));
 		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		if (createButtons) {
-			AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+			final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 			buttons.createControls(outputsGroup, getWidgetFactory());
 			outputsViewer = createTypeTableView(outputsGroup);
 			configureButtonList(buttons, outputsViewer, false);
@@ -218,8 +230,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		}
 	}
 
-	private TableViewer createTypeTableView(Group parent) {
-		TableViewer viewer = TableWidgetFactory.createTableViewer(parent);
+	private TableViewer createTypeTableView(final Group parent) {
+		final TableViewer viewer = TableWidgetFactory.createTableViewer(parent);
 		viewer.getTable().setLayout(createTableLayout(viewer.getTable()));
 		viewer.getTable().setHeaderVisible(true);
 		viewer.getTable().setLinesVisible(true);
@@ -237,36 +249,36 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		return new InterfaceElementLabelProvider();
 	}
 
-	protected InterfaceCellModifier getCellModifier(TableViewer viewer) {
+	protected InterfaceCellModifier getCellModifier(final TableViewer viewer) {
 		return new InterfaceCellModifier(viewer);
 	}
 
-	private void configureButtonList(AddDeleteReorderListWidget buttons, TableViewer viewer, boolean inputs) {
+	private void configureButtonList(final AddDeleteReorderListWidget buttons, final TableViewer viewer, final boolean inputs) {
 		buttons.bindToTableViewer(viewer, this, ref -> newCreateCommand((IInterfaceElement) ref, inputs),
 				ref -> newDeleteCommand((IInterfaceElement) ref), ref -> newOrderCommand((IInterfaceElement) ref, true),
 				ref -> newOrderCommand((IInterfaceElement) ref, false));
 	}
 
 	// can be overridden by subclasses to use a different type dropdown
-	protected CellEditor createTypeCellEditor(TableViewer viewer) {
+	protected CellEditor createTypeCellEditor(final TableViewer viewer) {
 		return ComboBoxWidgetFactory.createComboBoxCellEditor(viewer.getTable(), fillTypeCombo(), SWT.READ_ONLY);
 	}
 
 	// subclasses need to override this method if they use a different type dropdown
-	protected Object getTypeValue(Object element, TableViewer viewer, final int TYPE_COLUMN_INDEX) {
-		String type = ((IInterfaceElement) element).getTypeName();
-		List<String> items = Arrays
+	protected Object getTypeValue(final Object element, final TableViewer viewer, final int TYPE_COLUMN_INDEX) {
+		final String type = ((IInterfaceElement) element).getTypeName();
+		final List<String> items = Arrays
 				.asList(((ComboBoxCellEditor) viewer.getCellEditors()[TYPE_COLUMN_INDEX]).getItems());
 		return items.indexOf(type);
 	}
 
 	// subclasses need to override this method if they use a different type dropdown
-	protected Command createChangeDataTypeCommand(VarDeclaration data, Object value, TableViewer viewer) {
-		String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
+	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value, final TableViewer viewer) {
+		final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
 		return newChangeTypeCommand(data, getDataTypeLib().getType(dataTypeName));
 	}
 
-	protected void setCellEditors(TableViewer viewer) {
+	protected void setCellEditors(final TableViewer viewer) {
 		viewer.setCellEditors(new CellEditor[] { new CustomTextCellEditor(viewer.getTable()),
 				createTypeCellEditor(viewer), new CustomTextCellEditor(viewer.getTable()) });
 	}
@@ -285,7 +297,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			inputsViewer.setInput(getType());
@@ -295,9 +307,9 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	}
 
 	protected abstract static class InterfaceContentProvider implements IStructuredContentProvider {
-		private boolean inputs;
+		private final boolean inputs;
 
-		public InterfaceContentProvider(boolean inputs) {
+		public InterfaceContentProvider(final boolean inputs) {
 			this.inputs = inputs;
 		}
 
@@ -317,7 +329,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 			return new Object[0];
 		}
 
-		static InterfaceList getInterfaceListFromInput(Object inputElement) {
+		static InterfaceList getInterfaceListFromInput(final Object inputElement) {
 			InterfaceList interfaceList = null;
 			if (inputElement instanceof FBNetworkElement) {
 				interfaceList = ((FBNetworkElement) inputElement).getInterface();
@@ -340,7 +352,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		private static final int TYPE_COLUMN_INDEX = 1;
 		protected TableViewer viewer;
 
-		public InterfaceCellModifier(TableViewer viewer) {
+		public InterfaceCellModifier(final TableViewer viewer) {
 			this.viewer = viewer;
 		}
 
@@ -367,8 +379,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 		@Override
 		public void modify(final Object element, final String property, final Object value) {
-			TableItem tableItem = (TableItem) element;
-			Object data = tableItem.getData();
+			final TableItem tableItem = (TableItem) element;
+			final Object data = tableItem.getData();
 			Command cmd = null;
 
 			switch (property) {
@@ -380,8 +392,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 				break;
 			case TYPE:
 				if (data instanceof AdapterDeclaration) {
-					String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
-					DataType newType = getPalette().getAdapterTypeEntry(dataTypeName).getType();
+					final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
+					final DataType newType = getPalette().getAdapterTypeEntry(dataTypeName).getType();
 					cmd = newChangeTypeCommand((VarDeclaration) data, newType);
 				} else {
 					if (data instanceof VarDeclaration) {
@@ -400,14 +412,14 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		}
 	}
 
-	protected int getInsertingIndex(IInterfaceElement interfaceElement,
-			EList<? extends IInterfaceElement> interfaceList) {
+	protected int getInsertingIndex(final IInterfaceElement interfaceElement,
+			final EList<? extends IInterfaceElement> interfaceList) {
 		return interfaceList.indexOf(interfaceElement) + 1;
 	}
 
 	protected abstract int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput);
 
-	protected String getCreationName(IInterfaceElement interfaceElement) {
+	protected String getCreationName(final IInterfaceElement interfaceElement) {
 		return (null != interfaceElement) ? interfaceElement.getName() : null;
 	}
 
@@ -417,24 +429,24 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	}
 
 	@Override
-	public Object removeEntry(int index, CompoundCommand cmd) {
-		IInterfaceElement entry = getEntry(index);
+	public Object removeEntry(final int index, final CompoundCommand cmd) {
+		final IInterfaceElement entry = getEntry(index);
 		cmd.add(newDeleteCommand(entry));
 		return entry;
 	}
 
 	@Override
-	public void executeCompoundCommand(CompoundCommand cmd) {
+	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
 		getViewer().refresh();
 	}
 
-	private IInterfaceElement getEntry(int index) {
-		Object obj = getViewer().getElementAt(index);
+	private IInterfaceElement getEntry(final int index) {
+		final Object obj = getViewer().getElementAt(index);
 		return (IInterfaceElement) obj;
 	}
 
-	private static void createContextMenu(TableViewer viewer) {
+	private static void createContextMenu(final TableViewer viewer) {
 		OpenStructMenu.addTo(viewer);
 	}
 }

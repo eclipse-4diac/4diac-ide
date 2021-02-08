@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -44,17 +43,17 @@ import org.eclipse.swt.widgets.Display;
 
 public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(IInterfaceElement interfaceElement, boolean isInput) {
-		DataType last = getLastUsedDataType(getType().getInterface(), isInput, interfaceElement);
-		int pos = getInsertingIndex(interfaceElement, isInput);
+	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+		final DataType last = getLastUsedDataType(getType().getInterface(), isInput, interfaceElement);
+		final int pos = getInsertingIndex(interfaceElement, isInput);
 		return new CreateSubAppInterfaceElementCommand(last, getCreationName(interfaceElement),
 				getType().getInterface(), isInput, pos);
 	}
 
 	@Override
-	protected InsertInterfaceElementCommand newInsertCommand(IInterfaceElement interfaceElement, boolean isInput,
-			int index) {
-		DataType last = getLastUsedDataType(getType().getInterface(), isInput, interfaceElement);
+	protected InsertInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
+			final int index) {
+		final DataType last = getLastUsedDataType(getType().getInterface(), isInput, interfaceElement);
 		return new InsertSubAppInterfaceElementCommand(interfaceElement, last, getType().getInterface(), isInput,
 				index);
 	}
@@ -64,7 +63,7 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 		return new DataLabelProvider() {
 
 			@Override
-			public Color getBackground(Object element, int columnIndex) {
+			public Color getBackground(final Object element, final int columnIndex) {
 				if ((columnIndex == INITIALVALUE_COL_INDEX) && (!((VarDeclaration) element).isIsInput())) {
 					return Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
 				}
@@ -72,7 +71,7 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 			}
 
 			@Override
-			public String getColumnText(Object element, int columnIndex) {
+			public String getColumnText(final Object element, final int columnIndex) {
 				if ((columnIndex == INITIALVALUE_COL_INDEX) && !((VarDeclaration) element).isIsInput()) {
 					return "-"; //$NON-NLS-1$
 				} else {
@@ -84,10 +83,10 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected InterfaceCellModifier getCellModifier(TableViewer viewer) {
+	protected InterfaceCellModifier getCellModifier(final TableViewer viewer) {
 		return new DataInterfaceCellModifier(viewer) {
 			@Override
-			public boolean canModify(Object element, String property) {
+			public boolean canModify(final Object element, final String property) {
 				if (INITIAL_VALUE.equals(property)) {
 					return ((VarDeclaration) element).isIsInput();
 				}
@@ -95,7 +94,7 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 			}
 
 			@Override
-			public Object getValue(Object element, String property) {
+			public Object getValue(final Object element, final String property) {
 				if (property.equals(INITIAL_VALUE) && !((VarDeclaration) element).isIsInput()) {
 					return "-"; //$NON-NLS-1$
 				} else {
@@ -106,7 +105,7 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected SubApp getInputType(Object input) {
+	protected SubApp getInputType(final Object input) {
 		if (input instanceof SubAppForFBNetworkEditPart) {
 			return ((SubAppForFBNetworkEditPart) input).getModel();
 		}
@@ -120,28 +119,23 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection) {
+	protected DeleteInterfaceCommand newDeleteCommand(final IInterfaceElement selection) {
 		return new DeleteSubAppInterfaceElementCommand(selection);
 	}
 
 	@Override
-	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean moveUp) {
+	protected ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection, final boolean moveUp) {
 		return new ChangeSubAppInterfaceOrderCommand(selection, moveUp);
 	}
 
 	@Override
-	protected ChangeTypeCommand newChangeTypeCommand(VarDeclaration data, DataType newType) {
+	protected ChangeTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
 		return new ChangeSubAppIETypeCommand(data, newType);
 	}
 
 	@Override
 	protected SubApp getType() {
 		return (SubApp) type;
-	}
-
-	@Override
-	protected TypeLibrary getTypeLibrary() {
-		return getType().getFbNetwork().getAutomationSystem().getPalette().getTypeLibrary();
 	}
 
 }

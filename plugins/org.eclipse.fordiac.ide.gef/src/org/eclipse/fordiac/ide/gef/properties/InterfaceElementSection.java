@@ -120,9 +120,7 @@ public class InterfaceElementSection extends AbstractSection {
 		if (getType() instanceof Event) {
 			EventTypeLibrary.getInstance().getEventTypes().forEach(eType -> typeCombo.add(eType.getName()));
 		} else if (getType() instanceof AdapterDeclaration) {
-			if (null != getType().getFBNetworkElement().getFbNetwork().getApplication()) {
-				getPalette().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getType().getName()));
-			}
+			getPalette().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getType().getName()));
 		} else if (getType() instanceof VarDeclaration) {
 			getDataTypeLib().getDataTypesSorted().forEach(dataType -> typeCombo.add(dataType.getName()));
 		}
@@ -138,7 +136,7 @@ public class InterfaceElementSection extends AbstractSection {
 		if (root instanceof FBType) {
 			return ((FBType) root).getTypeLibrary();
 		} else if (root instanceof AutomationSystem) {
-			return ((AutomationSystem) root).getTypeLibrary();
+			return ((AutomationSystem) root).getPalette().getTypeLibrary();
 		}
 		return null;
 	}
