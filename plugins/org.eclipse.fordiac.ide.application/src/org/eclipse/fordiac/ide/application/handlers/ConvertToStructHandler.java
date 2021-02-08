@@ -28,6 +28,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
+import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.wizards.SaveAsStructWizard;
 import org.eclipse.fordiac.ide.model.commands.create.CreateStructFromInterfaceElementsCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -114,6 +115,12 @@ public class ConvertToStructHandler extends AbstractHandler {
 
 	private static FBNetworkElement getNetworkElementFromSelectedPins(final IStructuredSelection selectedPins) {
 		for (final Object pin : selectedPins) {
+			if (pin instanceof SubAppInternalInterfaceEditPart) {
+				final SubAppInternalInterfaceEditPart ep = (SubAppInternalInterfaceEditPart) pin;
+				if (ep.getModel() instanceof VarDeclaration) {
+					return ep.getModel().getFBNetworkElement();
+				}
+			}
 			if (pin instanceof InterfaceEditPartForFBNetwork) {
 				final InterfaceEditPartForFBNetwork ep = (InterfaceEditPartForFBNetwork) pin;
 				if (ep.getModel() instanceof VarDeclaration) {
