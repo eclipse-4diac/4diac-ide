@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -43,7 +45,9 @@ public class AddElementsToSubAppCommand extends Command {
 	private final List<Connection> movedConns = new ArrayList<>();
 	private final CompoundCommand modifiedConns = new CompoundCommand();
 	private final CompoundCommand changedSubAppIEs = new CompoundCommand();
+	private final CompoundCommand setUniqueName = new CompoundCommand();
 	private org.eclipse.swt.graphics.Point offset;
+
 
 	public AddElementsToSubAppCommand(SubApp targetSubApp, List<?> selection) {
 		this.targetSubApp = targetSubApp;
@@ -72,8 +76,18 @@ public class AddElementsToSubAppCommand extends Command {
 		for (final FBNetworkElement fbNetworkElement : elementsToAdd) {
 			fbNetwork.add(fbNetworkElement);
 			checkElementConnections(fbNetworkElement);
+			ensureUniqueName(fbNetworkElement);
 		}
+		setUniqueName.execute();
 		modifiedConns.execute();
+	}
+
+	private void ensureUniqueName(FBNetworkElement element) {
+		// ensure unique name in new network
+		if (!NameRepository.isValidName(element, element.getName())) {
+			final String uniqueName = NameRepository.createUniqueName(element, element.getName());
+			setUniqueName.add(new ChangeNameCommand(element, uniqueName));
+		}
 	}
 
 	@Override
@@ -83,6 +97,7 @@ public class AddElementsToSubAppCommand extends Command {
 		elementsToAdd.forEach(element -> targetSubApp.getSubAppNetwork().getNetworkElements().add(element));
 		movedConns.forEach(con -> targetSubApp.getSubAppNetwork().addConnection(con));
 		changedSubAppIEs.redo();
+		setUniqueName.redo();
 		modifiedConns.redo();
 	}
 
@@ -95,6 +110,7 @@ public class AddElementsToSubAppCommand extends Command {
 		FBNetworkHelper.moveFBNetworkByOffset(elementsToAdd, getOriginalPositionX(), getOriginalPositionY());
 
 		elementsToAdd.forEach(element -> targetSubApp.getFbNetwork().getNetworkElements().add(element));
+		setUniqueName.undo();
 		unmappingCmds.undo();
 	}
 
