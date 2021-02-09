@@ -97,7 +97,6 @@ class ExportXMIHandler extends AbstractHandler {
 		// create resource for algorithm
 		val resource = resourceSet.createResource(resourceSet.computeUnusedUri(ST_URI_EXTENSION)) as XtextResource
 		resource.load(new LazyStringInputStream(algorithmText), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
-		EcoreUtil.resolveAll(resource)
 		val stalg = resource.parseResult.rootASTElement as StructuredTextAlgorithm
 		stalg.localVariables.forEach[v|createStructResource(resourceSet, v)]
 
@@ -106,9 +105,11 @@ class ExportXMIHandler extends AbstractHandler {
 		m.put("xmi", new XMIResourceFactoryImpl);
 
 		val xmiResourceSet = new ResourceSetImpl
-		val uri = URI.createFileURI(new File(fbFile.fullPath.makeAbsolute + ".xmi").absolutePath)
+		val uri = URI.createFileURI(new File(fbFile.location.makeAbsolute + ".xmi").absolutePath)
 		val xmiRessource = xmiResourceSet.createResource(uri)
+		xmiRessource.contents.add(simpleType)
 		xmiRessource.contents.add((resource.contents.get(0)))
+		EcoreUtil.resolveAll(xmiRessource)
 		try {
 			xmiRessource.save(Collections.EMPTY_MAP)
 		} catch (IOException e) {
