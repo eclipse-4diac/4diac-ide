@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
@@ -76,7 +77,14 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
-			if (notification.getEventType() != Notification.REMOVE) {
+			if (null == notification.getNewValue()) {
+				// if newValue is null we are in the deletion process
+				// refresh only when the event was deleted, must not refresh deleted transition
+				if ((notification.getOldValue() instanceof Event) || "1".equals(notification.getOldValue())) { //$NON-NLS-1$
+					refresh();
+					// tooltip does not contain transition condition, no refresh needed
+				}
+			} else {
 				refreshTransitionTooltip();
 				refresh();
 			}
@@ -91,7 +99,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	};
 
 	private void updateOrderLabel() {
-		ECTransition transition = getModel();
+		final ECTransition transition = getModel();
 		if (null != transition.getSource()) {
 			if (transition.getSource().getOutTransitions().size() > 1) {
 				getConnectionFigure().setTransitionOrder(Integer.toString(transition.getPriority()));
@@ -132,7 +140,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 		private void handleCondiationEventUpdate(Notification notification) {
 			if (notification.getNewValue() instanceof String) {
-				String newValue = (String) notification.getNewValue();
+				final String newValue = (String) notification.getNewValue();
 				if ((getModel().getConditionEvent().getName().equals(newValue))
 						|| ((getModel().getConditionEvent() instanceof AdapterEvent)
 								&& (((AdapterEvent) getModel().getConditionEvent()).getAdapterDeclaration().getName()
@@ -145,11 +153,11 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 		private void checkConditionExpression(Notification notification) {
 			if (notification.getNewValue() instanceof String) {
-				Object feature = notification.getFeature();
+				final Object feature = notification.getFeature();
 				if ((LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature))
 						&& (null != getModel().getConditionExpression())
 						&& (-1 != getModel().getConditionExpression().indexOf(notification.getOldStringValue()))) {
-					String expresion = STStringTokenHandling.replaceSTToken(getModel().getConditionExpression(),
+					final String expresion = STStringTokenHandling.replaceSTToken(getModel().getConditionExpression(),
 							notification.getOldStringValue(), notification.getNewStringValue());
 					getModel().setConditionExpression(expresion);
 					refresh();
@@ -188,19 +196,20 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
 
+			@Override
 			protected CompoundCommand getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof AbstractConnectionEditPart) {
-					String[] values = (String[]) request.getCellEditor().getValue();
+					final String[] values = (String[]) request.getCellEditor().getValue();
 					if (null != values) {
-						int selected = Integer.parseInt(values[0]);
-						List<String> events = ECCContentAndLabelProvider
+						final int selected = Integer.parseInt(values[0]);
+						final List<String> events = ECCContentAndLabelProvider
 								.getTransitionConditionEventNames(getBasicFBType());
 						String ev = null;
 						if ((0 <= selected) && (selected < events.size())) {
 							ev = events.get(selected);
 						}
 
-						CompoundCommand commands = new CompoundCommand();
+						final CompoundCommand commands = new CompoundCommand();
 						commands.add(new ChangeConditionExpressionCommand(getModel(), values[1]));
 						commands.add(new ChangeConditionEventCommand(getModel(), ev != null ? ev : "1"));
 
@@ -210,6 +219,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 				return null;
 			}
 
+			@Override
 			protected void showCurrentEditValue(final DirectEditRequest request) {
 				// handled by the direct edit manager
 			}
@@ -232,8 +242,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 
 			private Command getTransitionMoveCommand(ChangeBoundsRequest request) {
-				Point p = new Point(getModel().getX(), getModel().getY());
-				double scaleFactor = ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager().getZoom();
+				final Point p = new Point(getModel().getX(), getModel().getY());
+				final double scaleFactor = ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager().getZoom();
 				p.scale(scaleFactor);
 				p.x += request.getMoveDelta().x;
 				p.y += request.getMoveDelta().y;
@@ -288,8 +298,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	}
 
 	protected void refreshLocator() {
-		((ECTransitionDirectEditManager) getManager())
-				.updateRefPosition(new Point(getModel().getX(), getModel().getY()));
+		getManager()
+		.updateRefPosition(new Point(getModel().getX(), getModel().getY()));
 	}
 
 	@Override
@@ -303,7 +313,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		ECTransitionFigure figure = new ECTransitionFigure(getModel());
+		final ECTransitionFigure figure = new ECTransitionFigure(getModel());
 		figure.setLineWidth(NORMAL_WIDTH);
 		return figure;
 	}
@@ -335,7 +345,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	}
 
 	public void highlight(boolean highlight) {
-		PolylineConnection pc = getConnectionFigure();
+		final PolylineConnection pc = getConnectionFigure();
 		if (null != pc) {
 			pc.setLineWidth((highlight) ? ConnectionPreferenceValues.HIGHLIGTHED_LINE_WIDTH : NORMAL_WIDTH);
 		}
