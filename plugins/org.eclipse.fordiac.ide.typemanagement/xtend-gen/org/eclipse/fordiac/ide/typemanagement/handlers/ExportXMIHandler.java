@@ -157,7 +157,6 @@ public class ExportXMIHandler extends AbstractHandler {
       LazyStringInputStream _lazyStringInputStream = new LazyStringInputStream(algorithmText);
       Pair<String, Boolean> _mappedTo = Pair.<String, Boolean>of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
       resource.load(_lazyStringInputStream, Collections.<String, Boolean>unmodifiableMap(CollectionLiterals.<String, Boolean>newHashMap(_mappedTo)));
-      EcoreUtil.resolveAll(resource);
       EObject _rootASTElement = resource.getParseResult().getRootASTElement();
       final StructuredTextAlgorithm stalg = ((StructuredTextAlgorithm) _rootASTElement);
       final Consumer<VarDeclaration> _function = (VarDeclaration v) -> {
@@ -169,11 +168,13 @@ public class ExportXMIHandler extends AbstractHandler {
       XMIResourceFactoryImpl _xMIResourceFactoryImpl = new XMIResourceFactoryImpl();
       m.put("xmi", _xMIResourceFactoryImpl);
       final ResourceSetImpl xmiResourceSet = new ResourceSetImpl();
-      IPath _makeAbsolute = fbFile.getFullPath().makeAbsolute();
+      IPath _makeAbsolute = fbFile.getLocation().makeAbsolute();
       String _plus = (_makeAbsolute + ".xmi");
       final URI uri = URI.createFileURI(new File(_plus).getAbsolutePath());
       final Resource xmiRessource = xmiResourceSet.createResource(uri);
+      xmiRessource.getContents().add(simpleType);
       xmiRessource.getContents().add(resource.getContents().get(0));
+      EcoreUtil.resolveAll(xmiRessource);
       try {
         xmiRessource.save(Collections.EMPTY_MAP);
       } catch (final Throwable _t) {
