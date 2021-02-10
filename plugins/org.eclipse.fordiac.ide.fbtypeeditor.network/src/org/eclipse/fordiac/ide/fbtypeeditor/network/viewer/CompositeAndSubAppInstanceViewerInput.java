@@ -11,7 +11,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.viewer.composite;
+package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
 import org.eclipse.fordiac.ide.util.UntypedEditorInput;
 import org.eclipse.gef.EditPart;

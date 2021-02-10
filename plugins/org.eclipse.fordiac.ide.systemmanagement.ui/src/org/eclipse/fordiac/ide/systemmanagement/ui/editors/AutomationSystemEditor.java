@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
-import org.eclipse.fordiac.ide.application.viewer.composite.CompositeAndSubAppInstanceViewerInput;
+import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;

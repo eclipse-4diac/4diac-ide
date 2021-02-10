@@ -8,22 +8,19 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Michael Jäger - initial implementation and/or documentation
+ *   Michael Jï¿½ger - initial implementation and/or documentation
  *                  - extracted a base class for all model listener
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.actions;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.part.FileEditorInput;
 
 public abstract class AbstractOpenSystemElementListener extends OpenListener {
 
-	final String SYSTEM_EDITOR_ID = "org.eclipse.fordiac.ide.editors.SystemEditor"; //$NON-NLS-1$
+	private static final String SYSTEM_EDITOR_ID = "org.eclipse.fordiac.ide.editors.SystemEditor"; //$NON-NLS-1$
 
 	@Override
 	public final String getActionText() {
@@ -36,11 +33,6 @@ public abstract class AbstractOpenSystemElementListener extends OpenListener {
 	}
 
 	protected void openInSystemEditor(final IFile systemFile, final EObject element) {
-		openEditor(new FileEditorInput(systemFile), SYSTEM_EDITOR_ID);
-		final IEditorPart openedEditor = getOpenedEditor();
-		if (openedEditor instanceof AbstractBreadCrumbEditor) {
-			final AbstractBreadCrumbEditor breadCrumbEditor = (AbstractBreadCrumbEditor) openedEditor;
-			breadCrumbEditor.getBreadcrumb().setInput(element);
-		}
+		openInBreadCrumbEditor(systemFile, SYSTEM_EDITOR_ID, element);
 	}
 }

@@ -23,7 +23,6 @@ import java.util.EventObject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
-import org.eclipse.fordiac.ide.application.viewer.composite.CompositeAndSubAppInstanceViewerInput;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;

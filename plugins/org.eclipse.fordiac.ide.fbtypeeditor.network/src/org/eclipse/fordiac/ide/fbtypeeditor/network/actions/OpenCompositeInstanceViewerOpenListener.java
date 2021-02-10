@@ -8,13 +8,19 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Michael Oberlehner
- *     - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - initial API and implementation and/or initial
+ *                        documentation
+ *   Alois Zoitl        - added support for cfb viewers in compiste and subapp
+ *                        types
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.network.actions;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.actions.AbstractOpenSystemElementListener;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -24,28 +30,22 @@ public class OpenCompositeInstanceViewerOpenListener extends AbstractOpenSystemE
 
 	private static final String OPEN_COMPOSITE_LISTENER_ID = "org.eclipse.fordiac.ide.fbtypeeditor.network.actions.OpenCompositeInstanceViewerOpenListener"; //$NON-NLS-1$
 
-	private FB compositeFBType;
+	private FB compositeFBInstance;
 
-	/** Constructor of the Action.
-	 *
-	 * @param uiSubAppNetwork the UISubAppNetwork */
-	public OpenCompositeInstanceViewerOpenListener(final FB compositeFBType) {
-		this.compositeFBType = compositeFBType;
-	}
-
-	/** Consturctor. */
 	public OpenCompositeInstanceViewerOpenListener() {
 		// empty constructor for OpenListener
 	}
 
-	/** Opens the editor for the specified Model or sets the focus to the editor if already opened. */
-	public void run() {
-		openInSystemEditor(compositeFBType.getFbNetwork().getAutomationSystem().getSystemFile(), compositeFBType);
-	}
-
 	@Override
 	public void run(final IAction action) {
-		run();
+		final EObject root = EcoreUtil.getRootContainer(compositeFBInstance);
+		if (root instanceof AutomationSystem) {
+			openInSystemEditor(((AutomationSystem) root).getSystemFile(), compositeFBInstance);
+		} else if (root instanceof SubAppType) {
+			openInSubappTypeEditor((SubAppType) root, compositeFBInstance);
+		} else if (root instanceof CompositeFBType) {
+			openInFBTypeEditor((CompositeFBType) root, compositeFBInstance);
+		}
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class OpenCompositeInstanceViewerOpenListener extends AbstractOpenSystemE
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structuredSel = (IStructuredSelection) selection;
 			if (structuredSel.getFirstElement() instanceof FB) {
-				compositeFBType = (FB) structuredSel.getFirstElement();
+				compositeFBInstance = (FB) structuredSel.getFirstElement();
 			}
 		}
 	}
