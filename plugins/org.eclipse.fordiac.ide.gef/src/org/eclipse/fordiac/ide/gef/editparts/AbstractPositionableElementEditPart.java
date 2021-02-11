@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -25,8 +26,7 @@ public abstract class AbstractPositionableElementEditPart extends AbstractViewEd
 		@Override
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature)) {
+			if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)) {
 				refreshPosition();
 			}
 		}
@@ -40,8 +40,9 @@ public abstract class AbstractPositionableElementEditPart extends AbstractViewEd
 	}
 
 	protected void refreshPosition() {
-		final Rectangle bounds = new Rectangle(getPositionableElement().getX(), getPositionableElement().getY(), -1, -1);
 		if (getParent() != null) {
+			final Rectangle bounds = new Rectangle(getPositionableElement().getPosition().asPoint(),
+					new Dimension(-1, -1));
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}

@@ -46,29 +46,29 @@ public class ChangeStructCommand extends Command {
 	// Helper data class for storing connection data of resource connection as the
 	// connections are lost during the unmapping process
 	private static class ConnData {
-		private IInterfaceElement source;
-		private IInterfaceElement dest;
+		private final IInterfaceElement source;
+		private final IInterfaceElement dest;
 
-		public ConnData(IInterfaceElement source, IInterfaceElement dest) {
+		public ConnData(final IInterfaceElement source, final IInterfaceElement dest) {
 			this.source = source;
 			this.dest = dest;
 		}
 	}
 
-	private StructuredType newStruct;
+	private final StructuredType newStruct;
 	private StructManipulator newMux;
 	private StructManipulator oldMux;
-	private PaletteEntry entry;
+	private final PaletteEntry entry;
 	private FBNetwork network;
 
-	private CompoundCommand deleteConnCmds = new CompoundCommand();
-	private CompoundCommand connCreateCmds = new CompoundCommand();
-	private CompoundCommand resourceConnCreateCmds = new CompoundCommand();
+	private final CompoundCommand deleteConnCmds = new CompoundCommand();
+	private final CompoundCommand connCreateCmds = new CompoundCommand();
+	private final CompoundCommand resourceConnCreateCmds = new CompoundCommand();
 
 	private MapToCommand mapCmd = null;
 	private UnmapCommand unmapCmd = null;
 
-	public ChangeStructCommand(StructManipulator mux, StructuredType struct) {
+	public ChangeStructCommand(final StructManipulator mux, final StructuredType struct) {
 		this.oldMux = mux;
 		newStruct = struct;
 		entry = mux.getPaletteEntry();
@@ -136,11 +136,11 @@ public class ChangeStructCommand extends Command {
 	}
 
 	private List<ConnData> getResourceConns() {
-		List<ConnData> retVal = new ArrayList<>();
-		FBNetworkElement resElement = oldMux.getOpposite();
-		for (Connection conn : getAllConnections(resElement)) {
-			IInterfaceElement source = conn.getSource();
-			IInterfaceElement dest = conn.getDestination();
+		final List<ConnData> retVal = new ArrayList<>();
+		final FBNetworkElement resElement = oldMux.getOpposite();
+		for (final Connection conn : getAllConnections(resElement)) {
+			final IInterfaceElement source = conn.getSource();
+			final IInterfaceElement dest = conn.getDestination();
 			if (!source.getFBNetworkElement().isMapped() || !dest.getFBNetworkElement().isMapped()) {
 				// one of both ends is a resourceFB therefore the connection needs to be
 				// restored
@@ -158,17 +158,17 @@ public class ChangeStructCommand extends Command {
 		return retVal;
 	}
 
-	private void recreateResourceConns(List<ConnData> resourceConns) {
-		FBNetworkElement orgMappedElement = unmapCmd.getMappedFBNetworkElement();
-		FBNetworkElement copiedMappedElement = newMux.getOpposite();
-		for (ConnData connData : resourceConns) {
-			IInterfaceElement source = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement,
+	private void recreateResourceConns(final List<ConnData> resourceConns) {
+		final FBNetworkElement orgMappedElement = unmapCmd.getMappedFBNetworkElement();
+		final FBNetworkElement copiedMappedElement = newMux.getOpposite();
+		for (final ConnData connData : resourceConns) {
+			final IInterfaceElement source = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement,
 					connData.source);
-			IInterfaceElement dest = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement, connData.dest);
+			final IInterfaceElement dest = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement, connData.dest);
 			if ((source != null) && (dest != null)) {
 				// if source or dest is null it means that an interface element is not available
 				// any more
-				AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, copiedMappedElement.getFbNetwork());
+				final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, copiedMappedElement.getFbNetwork());
 				if (null != dccc) {
 					dccc.setSource(source);
 					dccc.setDestination(dest);
@@ -181,9 +181,9 @@ public class ChangeStructCommand extends Command {
 		}
 	}
 
-	private static List<Connection> getAllConnections(FBNetworkElement element) {
-		List<Connection> retVal = new ArrayList<>();
-		for (IInterfaceElement ifEle : element.getInterface().getAllInterfaceElements()) {
+	private static List<Connection> getAllConnections(final FBNetworkElement element) {
+		final List<Connection> retVal = new ArrayList<>();
+		for (final IInterfaceElement ifEle : element.getInterface().getAllInterfaceElements()) {
 			if (ifEle.isIsInput()) {
 				retVal.addAll(ifEle.getInputConnections());
 			} else {
@@ -202,28 +202,27 @@ public class ChangeStructCommand extends Command {
 		newMux.setPaletteEntry(entry);
 		newMux.setInterface(EcoreUtil.copy(oldMux.getType().getInterfaceList()));
 		newMux.setName(oldMux.getName());
-		newMux.setX(oldMux.getX());
-		newMux.setY(oldMux.getY());
+		newMux.setPosition(EcoreUtil.copy(oldMux.getPosition()));
 		newMux.setStructType(newStruct);
 		createValues();
 		replaceFBs(oldMux, newMux);
 	}
 
 	private void createValues() {
-		for (VarDeclaration var : newMux.getInterface().getInputVars()) {
+		for (final VarDeclaration var : newMux.getInterface().getInputVars()) {
 			var.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			checkSourceParam(var);
 		}
 	}
 
-	private void checkSourceParam(VarDeclaration var) {
-		VarDeclaration srcVar = oldMux.getInterface().getVariable(var.getName());
+	private void checkSourceParam(final VarDeclaration var) {
+		final VarDeclaration srcVar = oldMux.getInterface().getVariable(var.getName());
 		if ((null != srcVar) && (null != srcVar.getValue())) {
 			var.getValue().setValue(srcVar.getValue().getValue());
 		}
 	}
 
-	private void replaceFBs(FBNetworkElement oldElement, FBNetworkElement newElement) {
+	private void replaceFBs(final FBNetworkElement oldElement, final FBNetworkElement newElement) {
 		network.getNetworkElements().remove(oldElement);
 		network.getNetworkElements().add(newElement);
 	}
@@ -233,15 +232,15 @@ public class ChangeStructCommand extends Command {
 	}
 
 	private void handleApplicationConnections() {
-		for (Connection conn : getAllConnections(oldMux)) {
+		for (final Connection conn : getAllConnections(oldMux)) {
 			doReconnect(conn, findUpdatedInterfaceElement(newMux, oldMux, conn.getSource()),
 					findUpdatedInterfaceElement(newMux, oldMux, conn.getDestination()));
 		}
 	}
 
-	private static List<Connection> getAllConnections(StructManipulator mux) {
-		List<Connection> retVal = new ArrayList<>();
-		for (IInterfaceElement ifEle : mux.getInterface().getAllInterfaceElements()) {
+	private static List<Connection> getAllConnections(final StructManipulator mux) {
+		final List<Connection> retVal = new ArrayList<>();
+		for (final IInterfaceElement ifEle : mux.getInterface().getAllInterfaceElements()) {
 			if (ifEle.isIsInput()) {
 				retVal.addAll(ifEle.getInputConnections());
 			} else {
@@ -251,8 +250,8 @@ public class ChangeStructCommand extends Command {
 		return retVal;
 	}
 
-	private static IInterfaceElement findUpdatedInterfaceElement(FBNetworkElement copiedElement,
-			FBNetworkElement orgElement, IInterfaceElement orig) {
+	private static IInterfaceElement findUpdatedInterfaceElement(final FBNetworkElement copiedElement,
+			final FBNetworkElement orgElement, final IInterfaceElement orig) {
 		if (orig == null) {
 			// this happens when a connection has already been reconnected,
 			// i.e., a connection from an output to an input of the same FB
@@ -267,19 +266,19 @@ public class ChangeStructCommand extends Command {
 		return retval;
 	}
 
-	private void doReconnect(Connection oldConn, IInterfaceElement source, IInterfaceElement dest) {
+	private void doReconnect(final Connection oldConn, final IInterfaceElement source, final IInterfaceElement dest) {
 		// the connection may be already in our list if source and dest are on our FB
 		if (!isInDeleteConnList(oldConn)) {
-			FBNetwork fbn = oldConn.getFBNetwork();
+			final FBNetwork fbn = oldConn.getFBNetwork();
 			// we have to delete the old connection in all cases
-			DeleteConnectionCommand cmd = new DeleteConnectionCommand(oldConn);
+			final DeleteConnectionCommand cmd = new DeleteConnectionCommand(oldConn);
 			cmd.execute();
 			deleteConnCmds.add(cmd);
 
 			if ((source != null) && (dest != null)) {
 				// if source or dest is null it means that an interface element is not available
 				// any more
-				AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, fbn);
+				final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, fbn);
 				if (null != dccc) {
 					dccc.setSource(source);
 					dccc.setDestination(dest);
@@ -293,8 +292,8 @@ public class ChangeStructCommand extends Command {
 		}
 	}
 
-	private boolean isInDeleteConnList(Connection conn) {
-		for (Object cmd : deleteConnCmds.getCommands()) {
+	private boolean isInDeleteConnList(final Connection conn) {
+		for (final Object cmd : deleteConnCmds.getCommands()) {
 			if (((DeleteConnectionCommand) cmd).getConnectionView().equals(conn)) {
 				return true;
 			}
@@ -302,7 +301,7 @@ public class ChangeStructCommand extends Command {
 		return false;
 	}
 
-	private static AbstractConnectionCreateCommand createConnCreateCMD(IInterfaceElement refIE, FBNetwork fbn) {
+	private static AbstractConnectionCreateCommand createConnCreateCMD(final IInterfaceElement refIE, final FBNetwork fbn) {
 		AbstractConnectionCreateCommand retVal = null;
 		if (refIE instanceof Event) {
 			retVal = new EventConnectionCreateCommand(fbn);

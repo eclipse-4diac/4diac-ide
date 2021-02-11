@@ -172,6 +172,7 @@
     <genDataTypes ecoreDataType="lib.ecore#//IProject"/>
     <genDataTypes ecoreDataType="lib.ecore#//IFile"/>
     <genDataTypes ecoreDataType="lib.ecore#//CommandStack"/>
+    <genDataTypes ecoreDataType="lib.ecore#//Point"/>
     <genClasses ecoreClass="lib.ecore#//AdapterDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/paletteEntry"/>
@@ -583,8 +584,21 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Primitive/interface"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//PositionableElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//PositionableElement/x"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//PositionableElement/y"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//PositionableElement/position"/>
+      <genOperations ecoreOperation="lib.ecore#//PositionableElement/updatePosition"
+          body="final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createPosition();&#xA;pos.setX(x);&#xA;pos.setY(y);&#xA;&#xA;setPosition(pos);">
+        <genParameters ecoreParameter="lib.ecore#//PositionableElement/updatePosition/x"/>
+        <genParameters ecoreParameter="lib.ecore#//PositionableElement/updatePosition/y"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//PositionableElement/updatePosition.1"
+          body="updatePosition(newPos.x, newPos.y);">
+        <genParameters ecoreParameter="lib.ecore#//PositionableElement/updatePosition.1/newPos"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Position">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Position/x"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Position/y"/>
+      <genOperations ecoreOperation="lib.ecore#//Position/asPoint" body="return new org.eclipse.draw2d.geometry.Point(getX(), getY());"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Color">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Color/red"/>

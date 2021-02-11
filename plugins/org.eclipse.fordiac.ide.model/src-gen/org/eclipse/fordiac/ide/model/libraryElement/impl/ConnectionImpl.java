@@ -24,186 +24,144 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Connection</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Connection</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDx1
- * <em>Dx1</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDx2
- * <em>Dx2</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDy
- * <em>Dy</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isResTypeConnection
- * <em>Res Type Connection</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isBrokenConnection
- * <em>Broken Connection</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getSource
- * <em>Source</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDestination
- * <em>Destination</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDx1 <em>Dx1</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDx2 <em>Dx2</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDy <em>Dy</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isResTypeConnection <em>Res Type
+ * Connection</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isBrokenConnection <em>Broken
+ * Connection</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getSource <em>Source</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDestination <em>Destination</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public abstract class ConnectionImpl extends ConfigurableObjectImpl implements Connection {
-	/**
-	 * The default value of the '{@link #getDx1() <em>Dx1</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getDx1() <em>Dx1</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @see #getDx1()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int DX1_EDEFAULT = 0;
 
-	/**
-	 * The cached value of the '{@link #getDx1() <em>Dx1</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getDx1() <em>Dx1</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @see #getDx1()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected int dx1 = DX1_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getDx2() <em>Dx2</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getDx2() <em>Dx2</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @see #getDx2()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int DX2_EDEFAULT = 0;
 
-	/**
-	 * The cached value of the '{@link #getDx2() <em>Dx2</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getDx2() <em>Dx2</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @see #getDx2()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected int dx2 = DX2_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getDy() <em>Dy</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getDy() <em>Dy</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getDy()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int DY_EDEFAULT = 0;
 
-	/**
-	 * The cached value of the '{@link #getDy() <em>Dy</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getDy() <em>Dy</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getDy()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected int dy = DY_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #isResTypeConnection() <em>Res Type
-	 * Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #isResTypeConnection() <em>Res Type Connection</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #isResTypeConnection()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final boolean RES_TYPE_CONNECTION_EDEFAULT = false;
 
-	/**
-	 * The cached value of the '{@link #isResTypeConnection() <em>Res Type
-	 * Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #isResTypeConnection() <em>Res Type Connection</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #isResTypeConnection()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected boolean resTypeConnection = RES_TYPE_CONNECTION_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #isBrokenConnection() <em>Broken
-	 * Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #isBrokenConnection() <em>Broken Connection</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #isBrokenConnection()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final boolean BROKEN_CONNECTION_EDEFAULT = false;
 
-	/**
-	 * The cached value of the '{@link #isBrokenConnection() <em>Broken
-	 * Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #isBrokenConnection() <em>Broken Connection</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #isBrokenConnection()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected boolean brokenConnection = BROKEN_CONNECTION_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getSource() <em>Source</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getSource() <em>Source</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getSource()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected IInterfaceElement source;
 
-	/**
-	 * The cached value of the '{@link #getDestination() <em>Destination</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getDestination() <em>Destination</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getDestination()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected IInterfaceElement destination;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected ConnectionImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.CONNECTION;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getDx1() {
 		return dx1;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setDx1(int newDx1) {
 		int oldDx1 = dx1;
@@ -212,21 +170,17 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__DX1, oldDx1, dx1));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getDx2() {
 		return dx2;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setDx2(int newDx2) {
 		int oldDx2 = dx2;
@@ -235,21 +189,17 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__DX2, oldDx2, dx2));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getDy() {
 		return dy;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setDy(int newDy) {
 		int oldDy = dy;
@@ -258,21 +208,17 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__DY, oldDy, dy));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isResTypeConnection() {
 		return resTypeConnection;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setResTypeConnection(boolean newResTypeConnection) {
 		boolean oldResTypeConnection = resTypeConnection;
@@ -282,51 +228,41 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 					oldResTypeConnection, resTypeConnection));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isResourceConnection() {
 		return org.eclipse.fordiac.ide.model.Annotations.isResourceConnection(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetwork getFBNetwork() {
 		return org.eclipse.fordiac.ide.model.Annotations.getFBNetwork(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void checkIfConnectionBroken() {
 		org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isBrokenConnection() {
 		return brokenConnection;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setBrokenConnection(boolean newBrokenConnection) {
 		boolean oldBrokenConnection = brokenConnection;
@@ -336,11 +272,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 					oldBrokenConnection, brokenConnection));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public IInterfaceElement getSource() {
 		if (source != null && source.eIsProxy()) {
@@ -355,20 +289,16 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		return source;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public IInterfaceElement basicGetSource() {
 		return source;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetSource(IInterfaceElement newSource, NotificationChain msgs) {
 		IInterfaceElement oldSource = source;
 		source = newSource;
@@ -383,9 +313,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		return msgs;
 	}
 
-	/**
-	 * @generated not
-	 */
+	/** @generated not */
 	@Override
 	public void setSource(IInterfaceElement newSource) {
 		setSourceGen(newSource);
@@ -394,11 +322,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public void setSourceGen(IInterfaceElement newSource) {
 		if (newSource != source) {
 			NotificationChain msgs = null;
@@ -416,11 +342,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 					newSource));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public IInterfaceElement getDestination() {
 		if (destination != null && destination.eIsProxy()) {
@@ -435,20 +359,16 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		return destination;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public IInterfaceElement basicGetDestination() {
 		return destination;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetDestination(IInterfaceElement newDestination, NotificationChain msgs) {
 		IInterfaceElement oldDestination = destination;
 		destination = newDestination;
@@ -463,9 +383,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		return msgs;
 	}
 
-	/**
-	 * @generated not
-	 */
+	/** @generated not */
 	@Override
 	public void setDestination(IInterfaceElement newDestination) {
 		setDestinationGen(newDestination);
@@ -474,11 +392,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public void setDestinationGen(IInterfaceElement newDestination) {
 		if (newDestination != destination) {
 			NotificationChain msgs = null;
@@ -496,31 +412,25 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 					newDestination, newDestination));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetworkElement getSourceElement() {
 		return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetworkElement getDestinationElement() {
 		return org.eclipse.fordiac.ide.model.Annotations.getDestinationElement(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -539,11 +449,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -556,11 +464,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -587,11 +493,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -622,11 +526,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -657,11 +559,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -684,11 +584,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

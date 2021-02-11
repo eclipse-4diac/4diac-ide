@@ -23,37 +23,29 @@ import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Segment
- * Type Palette Entry</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Segment Type Palette Entry</b></em>'. <!--
+ * end-user-doc -->
  *
- * @generated
- */
+ * @generated */
 public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements SegmentTypePaletteEntry {
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected SegmentTypePaletteEntryImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return PalettePackage.Literals.SEGMENT_TYPE_PALETTE_ENTRY;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public SegmentType getSegmentType() {
 		LibraryElement type = getType();
@@ -63,11 +55,9 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setType(final LibraryElement type) {
 		if (type instanceof SegmentType) {
@@ -82,11 +72,9 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public TypeImporter getTypeImporter() {
 		return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter(getFile());

@@ -13,23 +13,19 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>Resource
- * Type FB</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Resource Type FB</b></em>'. <!-- end-user-doc
+ * -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getResourceTypeFB()
  * @model
- * @generated
- */
+ * @generated */
 public interface ResourceTypeFB extends FB {
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	boolean isResourceTypeFB();
 	// emtpy interface

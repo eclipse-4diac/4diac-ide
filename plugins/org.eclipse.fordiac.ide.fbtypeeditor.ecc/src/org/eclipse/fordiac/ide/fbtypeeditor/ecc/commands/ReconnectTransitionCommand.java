@@ -16,7 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
@@ -65,7 +64,7 @@ public class ReconnectTransitionCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		ECTransition transition = (ECTransition) request.getConnectionEditPart().getModel();
+		final ECTransition transition = (ECTransition) request.getConnectionEditPart().getModel();
 		cmd = new DeleteTransitionCommand(transition);
 		dccc = new CreateTransitionCommand();
 		if (request.getType().equals(RequestConstants.REQ_RECONNECT_TARGET)) {
@@ -83,11 +82,11 @@ public class ReconnectTransitionCommand extends Command {
 	/**
 	 * Do reconnect source.
 	 */
-	protected void doReconnectSource(ECTransition transition) {
+	protected void doReconnectSource(final ECTransition transition) {
 		dccc.setSource((ECState) request.getTarget().getModel());
 		dccc.setDestination(transition.getDestination());
 
-		dccc.setDestinationLocation(new Point(dccc.getDestination().getX(), dccc.getDestination().getY()));
+		dccc.setDestinationLocation(dccc.getDestination().getPosition().asPoint());
 		dccc.setSourceLocation(request.getLocation());
 	}
 
@@ -95,12 +94,12 @@ public class ReconnectTransitionCommand extends Command {
 	 * Do reconnect target.
 	 *
 	 */
-	protected void doReconnectTarget(ECTransition transition) {
+	protected void doReconnectTarget(final ECTransition transition) {
 		dccc.setSource(transition.getSource());
 		dccc.setDestination((ECState) request.getTarget().getModel());
 
 		dccc.setDestinationLocation(request.getLocation());
-		dccc.setSourceLocation(new Point(dccc.getSource().getX(), dccc.getSource().getY()));
+		dccc.setSourceLocation(dccc.getSource().getPosition().asPoint());
 	}
 
 	@Override

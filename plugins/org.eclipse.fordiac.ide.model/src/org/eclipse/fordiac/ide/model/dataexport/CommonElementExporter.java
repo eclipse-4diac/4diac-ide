@@ -440,7 +440,7 @@ abstract class CommonElementExporter {
 	}
 
 	protected void addXYAttributes(final PositionableElement fb) throws XMLStreamException {
-		addXYAttributes(fb.getX(), fb.getY());
+		addXYAttributes(fb.getPosition().getX(), fb.getPosition().getY());
 	}
 
 	protected void addXYAttributes(final int x, final int y) throws XMLStreamException {

@@ -19,28 +19,24 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Output
- * Primitive</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Output Primitive</b></em>'. <!-- end-user-doc
+ * -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl#getTestResult
- * <em>Test Result</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl#getTestResult <em>Test
+ * Result</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitive {
-	/**
-	 * The default value of the '{@link #getTestResult() <em>Test Result</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getTestResult() <em>Test Result</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getTestResult()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int TEST_RESULT_EDEFAULT = 0;
 
 	public static final int NOT_TESTED = 0;
@@ -49,40 +45,32 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 
 	private int testResult = TEST_RESULT_EDEFAULT;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected OutputPrimitiveImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.OUTPUT_PRIMITIVE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated NOT
-	 */
+	 * @generated NOT */
 	@Override
 	public int getTestResult() {
 		return testResult;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated NOT
-	 */
+	 * @generated NOT */
 	@Override
 	public void setTestResult(int newTestResult) {
 		int oldTestResult = testResult;
@@ -92,11 +80,9 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 					oldTestResult, testResult));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated not
-	 */
+	 * @generated not */
 	@Override
 	public void unsetTestResult() {
 		int oldTestResult = testResult;
@@ -107,21 +93,17 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated not
-	 */
+	 * @generated not */
 	@Override
 	public boolean isSetTestResult() {
 		return (testResult != TEST_RESULT_EDEFAULT);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -132,11 +114,9 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -149,11 +129,9 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -166,11 +144,9 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

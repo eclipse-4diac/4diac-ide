@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
  * 				 2018 - 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo 
+ *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
@@ -44,13 +44,13 @@ public class ResourceCreateCommand extends Command {
 	private final boolean deviceTypeRes;
 	private int index = -1;
 
-	public ResourceCreateCommand(final ResourceTypeEntry entry, Device device, boolean deviceTypeRes) {
+	public ResourceCreateCommand(final ResourceTypeEntry entry, final Device device, final boolean deviceTypeRes) {
 		this.entry = entry;
 		this.device = device;
 		this.deviceTypeRes = deviceTypeRes;
 	}
 
-	public ResourceCreateCommand(final ResourceTypeEntry entry, Device device, int index, boolean deviceTypeRes) {
+	public ResourceCreateCommand(final ResourceTypeEntry entry, final Device device, final int index, final boolean deviceTypeRes) {
 		this.entry = entry;
 		this.device = device;
 		this.index = index;
@@ -63,11 +63,11 @@ public class ResourceCreateCommand extends Command {
 		resource.setDeviceTypeResource(deviceTypeRes);
 		resource.setPaletteEntry(entry);
 		resource.getVarDeclarations().addAll(EcoreUtil.copyAll(entry.getResourceType().getVarDeclaration()));
-		for (VarDeclaration element : resource.getVarDeclarations()) {
-			Value value = LibraryElementFactory.eINSTANCE.createValue();
+		for (final VarDeclaration element : resource.getVarDeclarations()) {
+			final Value value = LibraryElementFactory.eINSTANCE.createValue();
 			element.setValue(value);
 		}
-		FBNetwork resourceFBNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
+		final FBNetwork resourceFBNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		if (entry.getResourceType().getFBNetwork() != null) {
 			resource.setFBNetwork(resourceFBNetwork);
 			createResourceTypeNetwork(resource, entry.getResourceType(), resourceFBNetwork);
@@ -87,17 +87,17 @@ public class ResourceCreateCommand extends Command {
 	// TODO model refactoring - Can this also be used for the resoruce parsing?
 	public void createResourceTypeNetwork(final Resource resource, final ResourceType type,
 			final FBNetwork resourceFBNetwork) {
-		Map<String, Event> events = new HashMap<>();
-		Map<String, VarDeclaration> varDecls = new HashMap<>();
-		for (FBNetworkElement element : type.getFBNetwork().getNetworkElements()) {
-			FB copy = LibraryElementFactory.eINSTANCE.createResourceTypeFB();
+		final Map<String, Event> events = new HashMap<>();
+		final Map<String, VarDeclaration> varDecls = new HashMap<>();
+		for (final FBNetworkElement element : type.getFBNetwork().getNetworkElements()) {
+			final FB copy = LibraryElementFactory.eINSTANCE.createResourceTypeFB();
 			resource.getFBNetwork().getNetworkElements().add(copy);
 			copy.setPaletteEntry(element.getPaletteEntry());
 			copy.setName(element.getName()); // name should be last so that checks
 			// are working correctly
-			InterfaceList interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
-			for (VarDeclaration varDecl : element.getInterface().getOutputVars()) {
-				VarDeclaration varDeclCopy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			final InterfaceList interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
+			for (final VarDeclaration varDecl : element.getInterface().getOutputVars()) {
+				final VarDeclaration varDeclCopy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 				varDeclCopy.setType(varDecl.getType());
 				varDeclCopy.setName(varDecl.getName());
 				varDeclCopy.setComment(varDecl.getComment());
@@ -109,8 +109,8 @@ public class ResourceCreateCommand extends Command {
 						varDeclCopy);
 				interfaceList.getOutputVars().add(varDeclCopy);
 			}
-			for (VarDeclaration varDecl : element.getInterface().getInputVars()) {
-				VarDeclaration varDeclCopy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			for (final VarDeclaration varDecl : element.getInterface().getInputVars()) {
+				final VarDeclaration varDeclCopy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 				varDeclCopy.setType(varDecl.getType());
 				varDeclCopy.setName(varDecl.getName());
 				varDeclCopy.setComment(varDecl.getComment());
@@ -122,16 +122,16 @@ public class ResourceCreateCommand extends Command {
 						varDeclCopy);
 				interfaceList.getInputVars().add(varDeclCopy);
 			}
-			for (Event event : element.getInterface().getEventInputs()) {
-				Event eventCopy = LibraryElementFactory.eINSTANCE.createEvent();
+			for (final Event event : element.getInterface().getEventInputs()) {
+				final Event eventCopy = LibraryElementFactory.eINSTANCE.createEvent();
 				eventCopy.setName(event.getName());
 				eventCopy.setComment(event.getComment());
 				eventCopy.setIsInput(event.isIsInput());
 				events.put(element.getName() + "." + event.getName(), eventCopy); //$NON-NLS-1$
 				interfaceList.getEventInputs().add(eventCopy);
 			}
-			for (Event event : element.getInterface().getEventOutputs()) {
-				Event eventCopy = LibraryElementFactory.eINSTANCE.createEvent();
+			for (final Event event : element.getInterface().getEventOutputs()) {
+				final Event eventCopy = LibraryElementFactory.eINSTANCE.createEvent();
 				eventCopy.setName(event.getName());
 				eventCopy.setComment(event.getComment());
 				eventCopy.setIsInput(event.isIsInput());
@@ -139,18 +139,17 @@ public class ResourceCreateCommand extends Command {
 				interfaceList.getEventOutputs().add(eventCopy);
 			}
 			copy.setInterface(interfaceList);
-			copy.setX(element.getX());
-			copy.setY(element.getY());
+			copy.setPosition(EcoreUtil.copy(element.getPosition()));
 		}
-		for (EventConnection eventCon : type.getFBNetwork().getEventConnections()) {
+		for (final EventConnection eventCon : type.getFBNetwork().getEventConnections()) {
 			if (eventCon.getSource() != null && eventCon.getDestination() != null) {
-				FB sourceFB = (FB) eventCon.getSource().eContainer().eContainer();
-				FB destFB = (FB) eventCon.getDestination().eContainer().eContainer();
-				Event source = events.get(sourceFB.getName() + "." //$NON-NLS-1$
+				final FB sourceFB = (FB) eventCon.getSource().eContainer().eContainer();
+				final FB destFB = (FB) eventCon.getDestination().eContainer().eContainer();
+				final Event source = events.get(sourceFB.getName() + "." //$NON-NLS-1$
 						+ eventCon.getSource().getName());
-				Event dest = events.get(destFB.getName() + "." //$NON-NLS-1$
+				final Event dest = events.get(destFB.getName() + "." //$NON-NLS-1$
 						+ eventCon.getDestination().getName());
-				EventConnection copyEventCon = LibraryElementFactory.eINSTANCE.createEventConnection();
+				final EventConnection copyEventCon = LibraryElementFactory.eINSTANCE.createEventConnection();
 				copyEventCon.setSource(source);
 				copyEventCon.setDestination(dest);
 				copyEventCon.setResTypeConnection(true);
@@ -159,25 +158,25 @@ public class ResourceCreateCommand extends Command {
 				// TODO error log -> no valid event connection!
 			}
 		}
-		for (DataConnection dataCon : type.getFBNetwork().getDataConnections()) {
+		for (final DataConnection dataCon : type.getFBNetwork().getDataConnections()) {
 			if (dataCon.getSource() != null && dataCon.getDestination() != null) {
-				FB sourceFB = (FB) dataCon.getSource().eContainer().eContainer();
-				FB destFB = (FB) dataCon.getDestination().eContainer().eContainer();
+				final FB sourceFB = (FB) dataCon.getSource().eContainer().eContainer();
+				final FB destFB = (FB) dataCon.getDestination().eContainer().eContainer();
 				if (null != sourceFB) {
-					VarDeclaration source = varDecls.get(sourceFB.getName() + "." //$NON-NLS-1$
+					final VarDeclaration source = varDecls.get(sourceFB.getName() + "." //$NON-NLS-1$
 							+ dataCon.getSource().getName());
-					VarDeclaration dest = varDecls.get(destFB.getName() + "." //$NON-NLS-1$
+					final VarDeclaration dest = varDecls.get(destFB.getName() + "." //$NON-NLS-1$
 							+ dataCon.getDestination().getName());
-					DataConnection copyDataCon = LibraryElementFactory.eINSTANCE.createDataConnection();
+					final DataConnection copyDataCon = LibraryElementFactory.eINSTANCE.createDataConnection();
 					copyDataCon.setSource(source);
 					copyDataCon.setDestination(dest);
 					copyDataCon.setResTypeConnection(true);
 					resourceFBNetwork.getDataConnections().add(copyDataCon);
 				} else {
-					VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+					final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 					var.setName(dataCon.getSource().getName());
 					var.setIsInput(true);
-					Value value = LibraryElementFactory.eINSTANCE.createValue();
+					final Value value = LibraryElementFactory.eINSTANCE.createValue();
 					value.setValue(dataCon.getDataSource().getValue().getValue());
 					var.setValue(value);
 					device.getVarDeclarations().add(var);

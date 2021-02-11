@@ -39,15 +39,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.swt.graphics.Point;
 
 public class MoveElementFromSubAppCommand extends Command {
 
 	private final SubApp sourceSubApp;
 	private final FBNetworkElement element;
 	private final Rectangle targetRect;
-	private Point oldPos; // for undo
-	private Point newPos; // for redo
+	private org.eclipse.fordiac.ide.model.libraryElement.Position oldPos; // for undo
+	private org.eclipse.fordiac.ide.model.libraryElement.Position newPos; // for redo
 	private final CompoundCommand unmappingCmds = new CompoundCommand(); // stores all needed unmap commands
 	private final List<Connection> movedConns = new ArrayList<>();
 	private final CompoundCommand modifiedConns = new CompoundCommand();
@@ -83,7 +82,7 @@ public class MoveElementFromSubAppCommand extends Command {
 
 	@Override
 	public void execute() {
-		oldPos = new Point(element.getX(), element.getY());
+		oldPos = element.getPosition();
 		if (element.isMapped()) {
 			unmappingCmds.add(new UnmapCommand(element));
 		}
@@ -115,13 +114,12 @@ public class MoveElementFromSubAppCommand extends Command {
 		movedConns.forEach(con -> sourceSubApp.getFbNetwork().addConnection(con));
 		changedSubAppIEs.redo();
 		modifiedConns.redo();
-		element.setX(newPos.x);
-		element.setY(newPos.y);
+		element.setPosition(newPos);
 	}
 
 	@Override
 	public void undo() {
-		newPos = new Point(element.getX(), element.getY());
+		newPos = element.getPosition();
 		modifiedConns.undo();
 		changedSubAppIEs.undo();
 		movedConns.forEach(con -> sourceSubApp.getSubAppNetwork().addConnection(con));
@@ -130,8 +128,7 @@ public class MoveElementFromSubAppCommand extends Command {
 			setUniqueName.undo();
 		}
 		unmappingCmds.undo();
-		element.setX(oldPos.x);
-		element.setY(oldPos.y);
+		element.setPosition(oldPos);
 	}
 
 	public Position getSide() {
@@ -146,11 +143,11 @@ public class MoveElementFromSubAppCommand extends Command {
 	}
 
 	private void positionElement(final FBNetworkElement element, final Position pos) {
-
 		switch (moveOperation) {
 		case DRAG_AND_DROP_TO_ROOT:
-			element.setX(sourceSubApp.getX() + mouseMoveDelta.x + element.getX());
-			element.setY(sourceSubApp.getY() + mouseMoveDelta.y + element.getY());
+			element.updatePosition(
+					(sourceSubApp.getPosition().getX() + mouseMoveDelta.x + element.getPosition().getX()),
+					(sourceSubApp.getPosition().getY() + mouseMoveDelta.y + element.getPosition().getY()));
 			break;
 		case DRAG_AND_DROP_TO_SUBAPP:
 		case CONTEXT_MENU:
@@ -171,8 +168,8 @@ public class MoveElementFromSubAppCommand extends Command {
 			default:
 				break;
 			}
-			element.setX(sourceSubApp.getX() + xOffset);
-			element.setY(sourceSubApp.getY() + yOffset);
+			element.updatePosition((sourceSubApp.getPosition().getX() + xOffset),
+					(sourceSubApp.getPosition().getY() + yOffset));
 			break;
 		default:
 			break;

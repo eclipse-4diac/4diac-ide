@@ -16,49 +16,41 @@ package org.eclipse.fordiac.ide.model.virtualDNS;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '
- * <em><b>Management</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object ' <em><b>Management</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getAvailableDNSCollections <em>Available DNS Collections</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getActiveVirtualDNS <em>Active Virtual DNS</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getAvailableDNSCollections <em>Available DNS
+ * Collections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getActiveVirtualDNS <em>Active Virtual
+ * DNS</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage#getVirtualDNSManagement()
  * @model
- * @generated
- */
+ * @generated */
 public interface VirtualDNSManagement extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Available DNS Collections</b></em>'
-	 * containment reference list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection}. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>Available DNS Collections</b></em>' containment reference list. The list
+	 * contents are of type {@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection}. <!-- begin-user-doc
+	 * -->
 	 * <p>
-	 * If the meaning of the '<em>Available DNS Collections</em>' containment
-	 * reference list isn't clear, there really should be more of a description
-	 * here...
+	 * If the meaning of the '<em>Available DNS Collections</em>' containment reference list isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
-	 * @return the value of the '<em>Available DNS Collections</em>' containment
-	 *         reference list.
+	 * @return the value of the '<em>Available DNS Collections</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage#getVirtualDNSManagement_AvailableDNSCollections()
 	 * @model containment="true"
-	 * @generated
-	 */
+	 * @generated */
 	EList<VirtualDNSCollection> getAvailableDNSCollections();
 
-	/**
-	 * Returns the value of the '<em><b>Active Virtual DNS</b></em>' reference. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>Active Virtual DNS</b></em>' reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Active Virtual DNS</em>' reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Active Virtual DNS</em>' reference isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
@@ -66,18 +58,15 @@ public interface VirtualDNSManagement extends EObject {
 	 * @see #setActiveVirtualDNS(VirtualDNSCollection)
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage#getVirtualDNSManagement_ActiveVirtualDNS()
 	 * @model
-	 * @generated
-	 */
+	 * @generated */
 	VirtualDNSCollection getActiveVirtualDNS();
 
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getActiveVirtualDNS <em>Active Virtual DNS</em>}' reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getActiveVirtualDNS
+	 * <em>Active Virtual DNS</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Active Virtual DNS</em>' reference.
 	 * @see #getActiveVirtualDNS()
-	 * @generated
-	 */
+	 * @generated */
 	void setActiveVirtualDNS(VirtualDNSCollection value);
 
 	String getReplacedString(String value);

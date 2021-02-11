@@ -38,19 +38,13 @@ import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
- * end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
  * 
- * @generated
- */
+ * @generated */
 public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
-	/**
-	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public static PaletteFactory init() {
 		try {
 			PaletteFactory thePaletteFactory = (PaletteFactory) EPackage.Registry.INSTANCE
@@ -64,21 +58,16 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 		return new PaletteFactoryImpl();
 	}
 
-	/**
-	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/** Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public PaletteFactoryImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
@@ -115,11 +104,9 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
@@ -140,11 +127,9 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
@@ -165,278 +150,222 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Palette createPalette() {
 		PaletteImpl palette = new PaletteImpl();
 		return palette;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Map.Entry<String, FBTypePaletteEntry> createStringToFBTypePaletteEntryMap() {
 		StringToFBTypePaletteEntryMapImpl stringToFBTypePaletteEntryMap = new StringToFBTypePaletteEntryMapImpl();
 		return stringToFBTypePaletteEntryMap;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Map.Entry<String, DeviceTypePaletteEntry> createStringToFDeviceTypePaletteEntryMap() {
 		StringToFDeviceTypePaletteEntryMapImpl stringToFDeviceTypePaletteEntryMap = new StringToFDeviceTypePaletteEntryMapImpl();
 		return stringToFDeviceTypePaletteEntryMap;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Map.Entry<String, ResourceTypeEntry> createStringToResourceTypeEntryMap() {
 		StringToResourceTypeEntryMapImpl stringToResourceTypeEntryMap = new StringToResourceTypeEntryMapImpl();
 		return stringToResourceTypeEntryMap;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Map.Entry<String, SegmentTypePaletteEntry> createStringToSegmentTypePaletteEntryMap() {
 		StringToSegmentTypePaletteEntryMapImpl stringToSegmentTypePaletteEntryMap = new StringToSegmentTypePaletteEntryMapImpl();
 		return stringToSegmentTypePaletteEntryMap;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Map.Entry<String, SubApplicationTypePaletteEntry> createStringToSubApplicationTypePaletteEntryMap() {
 		StringToSubApplicationTypePaletteEntryMapImpl stringToSubApplicationTypePaletteEntryMap = new StringToSubApplicationTypePaletteEntryMapImpl();
 		return stringToSubApplicationTypePaletteEntryMap;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Map.Entry<String, AdapterTypePaletteEntry> createStringToAdapterTypePaletteEntryMap() {
 		StringToAdapterTypePaletteEntryMapImpl stringToAdapterTypePaletteEntryMap = new StringToAdapterTypePaletteEntryMapImpl();
 		return stringToAdapterTypePaletteEntryMap;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBTypePaletteEntry createFBTypePaletteEntry() {
 		FBTypePaletteEntryImpl fbTypePaletteEntry = new FBTypePaletteEntryImpl();
 		return fbTypePaletteEntry;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public DeviceTypePaletteEntry createDeviceTypePaletteEntry() {
 		DeviceTypePaletteEntryImpl deviceTypePaletteEntry = new DeviceTypePaletteEntryImpl();
 		return deviceTypePaletteEntry;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ResourceTypeEntry createResourceTypeEntry() {
 		ResourceTypeEntryImpl resourceTypeEntry = new ResourceTypeEntryImpl();
 		return resourceTypeEntry;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public SegmentTypePaletteEntry createSegmentTypePaletteEntry() {
 		SegmentTypePaletteEntryImpl segmentTypePaletteEntry = new SegmentTypePaletteEntryImpl();
 		return segmentTypePaletteEntry;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public AdapterTypePaletteEntry createAdapterTypePaletteEntry() {
 		AdapterTypePaletteEntryImpl adapterTypePaletteEntry = new AdapterTypePaletteEntryImpl();
 		return adapterTypePaletteEntry;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public DataTypePaletteEntry createDataTypePaletteEntry() {
 		DataTypePaletteEntryImpl dataTypePaletteEntry = new DataTypePaletteEntryImpl();
 		return dataTypePaletteEntry;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public SubApplicationTypePaletteEntry createSubApplicationTypePaletteEntry() {
 		SubApplicationTypePaletteEntryImpl subApplicationTypePaletteEntry = new SubApplicationTypePaletteEntryImpl();
 		return subApplicationTypePaletteEntry;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public IFile createIFileFromString(EDataType eDataType, String initialValue) {
 		return (IFile) super.createFromString(eDataType, initialValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public String convertIFileToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public IProject createIProjectFromString(EDataType eDataType, String initialValue) {
 		return (IProject) super.createFromString(eDataType, initialValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public String convertIProjectToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public TypeImporter createTypeImporterFromString(EDataType eDataType, String initialValue) {
 		return (TypeImporter) super.createFromString(eDataType, initialValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public String convertTypeImporterToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public XMLStreamException createXMLStreamExceptionFromString(EDataType eDataType, String initialValue) {
 		return (XMLStreamException) super.createFromString(eDataType, initialValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public String convertXMLStreamExceptionToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public CoreException createCoreExceptionFromString(EDataType eDataType, String initialValue) {
 		return (CoreException) super.createFromString(eDataType, initialValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public String convertCoreExceptionToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public TypeLibrary createTypeLibraryFromString(EDataType eDataType, String initialValue) {
 		return (TypeLibrary) super.createFromString(eDataType, initialValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public String convertTypeLibraryToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public PalettePackage getPalettePackage() {
 		return (PalettePackage) getEPackage();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @deprecated
-	 * @generated
-	 */
+	 * @generated */
 	@Deprecated
 	public static PalettePackage getPackage() {
 		return PalettePackage.eINSTANCE;

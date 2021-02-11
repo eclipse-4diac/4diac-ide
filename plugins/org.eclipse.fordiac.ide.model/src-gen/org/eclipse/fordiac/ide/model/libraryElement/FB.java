@@ -13,40 +13,33 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '
- * <em><b>FB</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object ' <em><b>FB</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFB()
  * @model
- * @generated
- */
+ * @generated */
 public interface FB extends FBNetworkElement {
-	/**
-	 * <!-- begin-user-doc -->
+	/** <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Resource Type FB</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Resource Type FB</em>' attribute isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated
-	 */
+	 * @generated */
 	boolean isResourceTypeFB();
 
-	/**
-	 * <!-- begin-user-doc -->
+	/** <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Resource FB</em>' attribute isn't clear, there
-	 * really should be more of a description here...
+	 * If the meaning of the '<em>Resource FB</em>' attribute isn't clear, there really should be more of a description
+	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated
-	 */
+	 * @generated */
 	boolean isResourceFB();
 
 } // FB

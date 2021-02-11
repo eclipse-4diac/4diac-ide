@@ -379,11 +379,9 @@ public class FBTImporter extends TypeImporter {
 		aFB.setName(adapter.getName());
 		final PositionableElement position = adapterPositions.get(adapter.getName());
 		if (position == null) {
-			aFB.setX(0);
-			aFB.setY(0);
+			aFB.setPosition(LibraryElementFactory.eINSTANCE.createPosition());
 		} else {
-			aFB.setX(position.getX());
-			aFB.setY(position.getY());
+			aFB.setPosition(position.getPosition());
 		}
 		if (null != aFB.getType() && null != aFB.getType().getInterfaceList()) {
 			aFB.setInterface(aFB.getType().getInterfaceList().copy());

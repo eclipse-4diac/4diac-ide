@@ -147,8 +147,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	private static FB convertFBtoMux(final FB fb, final StructManipulator mux) {
 		mux.setName(fb.getName());
 		mux.setComment(fb.getComment());
-		mux.setX(fb.getX());
-		mux.setY(fb.getY());
+		mux.setPosition(fb.getPosition());
 		mux.setPaletteEntry(fb.getPaletteEntry());
 		mux.setInterface(fb.getInterface());
 		return mux;

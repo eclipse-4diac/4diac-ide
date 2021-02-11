@@ -104,13 +104,12 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	protected Adapter createContentAdapter() {
 		return new AdapterImpl() {
 			@Override
-			public void notifyChanged(Notification notification) {
-				Object feature = notification.getFeature();
+			public void notifyChanged(final Notification notification) {
+				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)) {
 					backgroundColorChanged(getFigure());
 				}
-				if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature)
+				if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getSegment_Width().equals(feature)) {
 					refreshVisuals();
 				}
@@ -136,7 +135,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	}
 
 	@Override
-	protected void backgroundColorChanged(IFigure figure) {
+	protected void backgroundColorChanged(final IFigure figure) {
 		// TODO model refactoring - default value for colors if not persisted
 		org.eclipse.fordiac.ide.model.libraryElement.Color fordiacColor = getModel().getColor();
 		if (fordiacColor == null) {
@@ -161,16 +160,16 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		super.createEditPolicies();
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
 			@Override
-			public Command getCommand(Request request) {
-				Object type = request.getType();
+			public Command getCommand(final Request request) {
+				final Object type = request.getType();
 				if (REQ_ALIGN.equals(type) && (request instanceof AlignmentRequest)) {
 					return getAlignCommand((AlignmentRequest) request);
 				}
 				return null;
 			}
 
-			protected Command getAlignCommand(AlignmentRequest request) {
-				AlignmentRequest req = new AlignmentRequest(REQ_ALIGN_CHILDREN);
+			protected Command getAlignCommand(final AlignmentRequest request) {
+				final AlignmentRequest req = new AlignmentRequest(REQ_ALIGN_CHILDREN);
 				req.setEditParts(getHost());
 				req.setAlignment(request.getAlignment());
 				req.setAlignmentRectangle(request.getAlignmentRectangle());
@@ -178,7 +177,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			}
 
 			@Override
-			protected Command getCreateCommand(CreateRequest request) {
+			protected Command getCreateCommand(final CreateRequest request) {
 				return null;
 			}
 		});
@@ -193,7 +192,8 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	}
 
 	protected void refreshPosition() {
-		Rectangle bounds = new Rectangle(getModel().getX(), getModel().getY(), getModel().getWidth(), -1);
+		final Rectangle bounds = new Rectangle(getModel().getPosition().getX(), getModel().getPosition().getY(),
+				getModel().getWidth(), -1);
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 	}
 
@@ -204,17 +204,17 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 
 		private final RoundedRectangle rect = new RoundedRectangle() {
 			@Override
-			protected void outlineShape(Graphics graphics) {
+			protected void outlineShape(final Graphics graphics) {
 				// nothing to do here right now
 			}
 
 			@Override
-			protected void fillShape(Graphics graphics) {
+			protected void fillShape(final Graphics graphics) {
 				graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
 			}
 
 			@Override
-			public void setBounds(Rectangle rect) {
+			public void setBounds(final Rectangle rect) {
 				super.setBounds(rect);
 				setCornerDimensions(new Dimension((rect.height * 2) / 3, rect.height));
 			}
@@ -224,25 +224,25 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		public SegmentFigure() {
 			this.setFillXOR(true);
 			setFill(true);
-			GridData rectLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-			GridData instanceNameLayout = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+			final GridData rectLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+			final GridData instanceNameLayout = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			instanceNameLabel = new Label();
 			instanceNameLabel.setText(getINamedElement().getName());
 			instanceNameLabel.setTextAlignment(PositionConstants.RIGHT);
 			instanceNameLabel.setLabelAlignment(PositionConstants.RIGHT);
 
-			GridLayout gridLayout = new GridLayout(1, true);
+			final GridLayout gridLayout = new GridLayout(1, true);
 			gridLayout.verticalSpacing = 2;
 			gridLayout.marginHeight = 0;
 			gridLayout.marginWidth = 0;
 			setLayoutManager(gridLayout);
 
-			GridLayout mainLayout = new GridLayout(3, false);
+			final GridLayout mainLayout = new GridLayout(3, false);
 			mainLayout.marginHeight = 0;
 			mainLayout.marginWidth = 0;
 			mainLayout.horizontalSpacing = 0;
 			mainLayout.verticalSpacing = -1;
-			GridData mainLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+			final GridData mainLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 					| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 
 			main.setLayoutManager(mainLayout);
@@ -254,14 +254,14 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			rect.add(instanceNameLabel);
 			instanceNameLabel.setBorder(new MarginBorder(4, 0, 4, 0));
 
-			GridLayout rectLayout = new GridLayout(3, false);
+			final GridLayout rectLayout = new GridLayout(3, false);
 			rectLayout.marginHeight = 2;
 			rectLayout.marginWidth = 0;
 			rect.setLayoutManager(rectLayout);
 			rect.setConstraint(instanceNameLabel, instanceNameLayout);
 			rect.add(new Label(":")); //$NON-NLS-1$
-			LibraryElement type = getModel().getType();
-			String typeName = (null != type) ? type.getName() : "Type not set!";
+			final LibraryElement type = getModel().getType();
+			final String typeName = (null != type) ? type.getName() : "Type not set!";
 			typeLabel = new Label(typeName);
 			rect.add(typeLabel);
 
@@ -289,7 +289,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		}
 
 		@Override
-		public int getIntersectionStyle(Point location) {
+		public int getIntersectionStyle(final Point location) {
 			if (instanceNameLabel.intersects(new Rectangle(location, new Dimension(1, 1)))) {
 				return InteractionStyleFigure.REGION_DRAG; // move/drag
 			}

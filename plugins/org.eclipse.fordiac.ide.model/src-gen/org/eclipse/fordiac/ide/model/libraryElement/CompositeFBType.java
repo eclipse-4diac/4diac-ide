@@ -13,52 +13,40 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object
- * '<em><b>Composite FB Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Composite FB Type</b></em>'. <!-- end-user-doc
+ * -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType#getFBNetwork
- * <em>FB Network</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType#getFBNetwork <em>FB Network</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCompositeFBType()
  * @model
- * @generated
- */
+ * @generated */
 public interface CompositeFBType extends FBType {
-	/**
-	 * Returns the value of the '<em><b>FB Network</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+	/** Returns the value of the '<em><b>FB Network</b></em>' containment reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>FB Network</em>' containment reference isn't
-	 * clear, there really should be more of a description here...
+	 * If the meaning of the '<em>FB Network</em>' containment reference isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>FB Network</em>' containment reference.
 	 * @see #setFBNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCompositeFBType_FBNetwork()
-	 * @model containment="true" extendedMetaData="kind='element' name='FBNetwork'
-	 *        namespace='##targetNamespace'"
-	 * @generated
-	 */
+	 * @model containment="true" extendedMetaData="kind='element' name='FBNetwork' namespace='##targetNamespace'"
+	 * @generated */
 	FBNetwork getFBNetwork();
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType#getFBNetwork
-	 * <em>FB Network</em>}' containment reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType#getFBNetwork <em>FB
+	 * Network</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @param value the new value of the '<em>FB Network</em>' containment
-	 *              reference.
+	 * @param value the new value of the '<em>FB Network</em>' containment reference.
 	 * @see #getFBNetwork()
-	 * @generated
-	 */
+	 * @generated */
 	void setFBNetwork(FBNetwork value);
 
 } // CompositeFBType

@@ -44,20 +44,19 @@ public class TestEventEditPart extends TestEditPart implements SpecificLayerEdit
 	@Override
 	protected void updatePos() {
 		if (null != getParentPart()) {
-			Rectangle bounds = getParentPart().getFigure().getBounds();
+			final Rectangle bounds = getParentPart().getFigure().getBounds();
 			int x = 0;
 			if (isInput()) {
 
-				int width = getFigure().getBounds().width;
+				final int width = getFigure().getBounds().width;
 				x = bounds.x - 10 - width - 15 * getModel().getFb().getInterface().getEventInputs().size();
 			} else {
 				x = bounds.x + bounds.width + 10 + 15 * getModel().getFb().getInterface().getEventInputs().size();
 
 			}
-			int y = bounds.y;
+			final int y = bounds.y;
 			if (x != oldx || y != oldy) {
-				getModel().setX(x);
-				getModel().setY(y);
+				getModel().updatePosition(x, y);
 				oldx = x;
 				oldy = y;
 			}
@@ -66,13 +65,13 @@ public class TestEventEditPart extends TestEditPart implements SpecificLayerEdit
 
 	@Override
 	protected IFigure createFigureForModel() {
-		Button bt = new Button(getModel().getInterfaceElement().getName());
+		final Button bt = new Button(getModel().getInterfaceElement().getName());
 		bt.addActionListener(e -> getModel().sendEvent());
 		return bt;
 	}
 
 	@Override
-	public void setValue(String string) {
+	public void setValue(final String string) {
 		// Nothing To do
 
 	}

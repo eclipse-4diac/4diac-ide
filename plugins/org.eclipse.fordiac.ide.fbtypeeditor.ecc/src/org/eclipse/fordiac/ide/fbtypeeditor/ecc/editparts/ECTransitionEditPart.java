@@ -75,7 +75,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 	private final Adapter adapter = new EContentAdapter() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (null == notification.getNewValue()) {
 				// if newValue is null we are in the deletion process
@@ -118,7 +118,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	private final Adapter interfaceAdapter = new EContentAdapter() {
 
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			if (notification.getEventType() == Notification.REMOVE) {
 				if ((notification.getOldValue() == getModel().getConditionEvent())
 						|| ((getModel().getConditionEvent() instanceof AdapterEvent)
@@ -138,7 +138,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 		}
 
-		private void handleCondiationEventUpdate(Notification notification) {
+		private void handleCondiationEventUpdate(final Notification notification) {
 			if (notification.getNewValue() instanceof String) {
 				final String newValue = (String) notification.getNewValue();
 				if ((getModel().getConditionEvent().getName().equals(newValue))
@@ -151,7 +151,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 		}
 
-		private void checkConditionExpression(Notification notification) {
+		private void checkConditionExpression(final Notification notification) {
 			if (notification.getNewValue() instanceof String) {
 				final Object feature = notification.getFeature();
 				if ((LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature))
@@ -228,7 +228,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
 
 			@Override
-			public Command getCommand(Request request) {
+			public Command getCommand(final Request request) {
 				if (RequestConstants.REQ_MOVE.equals(request.getType()) && (request instanceof ChangeBoundsRequest)) {
 					return getTransitionMoveCommand((ChangeBoundsRequest) request);
 				}
@@ -236,13 +236,13 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 
 			@Override
-			public boolean understandsRequest(Request request) {
+			public boolean understandsRequest(final Request request) {
 				return RequestConstants.REQ_MOVE.equals(request.getType());
 
 			}
 
-			private Command getTransitionMoveCommand(ChangeBoundsRequest request) {
-				final Point p = new Point(getModel().getX(), getModel().getY());
+			private Command getTransitionMoveCommand(final ChangeBoundsRequest request) {
+				final Point p = getModel().getPosition().asPoint();
 				final double scaleFactor = ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager().getZoom();
 				p.scale(scaleFactor);
 				p.x += request.getMoveDelta().x;
@@ -252,7 +252,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 
 			@Override
-			protected Command getCreateCommand(CreateRequest request) {
+			protected Command getCreateCommand(final CreateRequest request) {
 				return null;
 			}
 
@@ -298,8 +298,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	}
 
 	protected void refreshLocator() {
-		getManager()
-		.updateRefPosition(new Point(getModel().getX(), getModel().getY()));
+		getManager().updateRefPosition(getModel().getPosition().asPoint());
 	}
 
 	@Override
@@ -344,7 +343,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		}
 	}
 
-	public void highlight(boolean highlight) {
+	public void highlight(final boolean highlight) {
 		final PolylineConnection pc = getConnectionFigure();
 		if (null != pc) {
 			pc.setLineWidth((highlight) ? ConnectionPreferenceValues.HIGHLIGTHED_LINE_WIDTH : NORMAL_WIDTH);
@@ -352,7 +351,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	}
 
 	@Override
-	public DragTracker getDragTracker(Request request) {
+	public DragTracker getDragTracker(final Request request) {
 		return new org.eclipse.gef.tools.DragEditPartsTracker(this) {
 
 			@Override

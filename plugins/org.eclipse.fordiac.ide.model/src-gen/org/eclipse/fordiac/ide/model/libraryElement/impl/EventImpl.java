@@ -32,180 +32,139 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Event</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Event</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getName
- * <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getComment
- * <em>Comment</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#isIsInput
- * <em>Is Input</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getInputConnections
- * <em>Input Connections</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getOutputConnections
- * <em>Output Connections</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getType
- * <em>Type</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getTypeName
- * <em>Type Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getWith
- * <em>With</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getComment <em>Comment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#isIsInput <em>Is Input</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getInputConnections <em>Input
+ * Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getOutputConnections <em>Output
+ * Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getType <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getTypeName <em>Type Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getWith <em>With</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class EventImpl extends EObjectImpl implements Event {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String name = NAME_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String comment = COMMENT_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #isIsInput()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final boolean IS_INPUT_EDEFAULT = false;
 
-	/**
-	 * The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #isIsInput()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected boolean isInput = IS_INPUT_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getInputConnections() <em>Input
-	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/** The cached value of the '{@link #getInputConnections() <em>Input Connections</em>}' reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getInputConnections()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Connection> inputConnections;
 
-	/**
-	 * The cached value of the '{@link #getOutputConnections() <em>Output
-	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/** The cached value of the '{@link #getOutputConnections() <em>Output Connections</em>}' reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getOutputConnections()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Connection> outputConnections;
 
-	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getType() <em>Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getType()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected DataType type;
 
-	/**
-	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getTypeName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String TYPE_NAME_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getTypeName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String typeName = TYPE_NAME_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getWith() <em>With</em>}' containment
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getWith() <em>With</em>}' containment reference list. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @see #getWith()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<With> with;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected EventImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.EVENT;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<With> getWith() {
 		if (with == null) {
@@ -214,31 +173,25 @@ public class EventImpl extends EObjectImpl implements Event {
 		return with;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetworkElement getFBNetworkElement() {
 		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getComment() {
 		return comment;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
@@ -248,21 +201,17 @@ public class EventImpl extends EObjectImpl implements Event {
 					comment));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
@@ -271,21 +220,17 @@ public class EventImpl extends EObjectImpl implements Event {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__NAME, oldName, name));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isIsInput() {
 		return isInput;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setIsInput(boolean newIsInput) {
 		boolean oldIsInput = isInput;
@@ -295,11 +240,9 @@ public class EventImpl extends EObjectImpl implements Event {
 					isInput));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
@@ -309,11 +252,9 @@ public class EventImpl extends EObjectImpl implements Event {
 		return inputConnections;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
@@ -323,11 +264,9 @@ public class EventImpl extends EObjectImpl implements Event {
 		return outputConnections;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public DataType getType() {
 		if (type != null && type.eIsProxy()) {
@@ -342,20 +281,16 @@ public class EventImpl extends EObjectImpl implements Event {
 		return type;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public DataType basicGetType() {
 		return type;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setType(DataType newType) {
 		DataType oldType = type;
@@ -364,21 +299,17 @@ public class EventImpl extends EObjectImpl implements Event {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__TYPE, oldType, type));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getTypeName() {
 		return typeName;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setTypeName(String newTypeName) {
 		String oldTypeName = typeName;
@@ -388,11 +319,9 @@ public class EventImpl extends EObjectImpl implements Event {
 					typeName));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -407,11 +336,9 @@ public class EventImpl extends EObjectImpl implements Event {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -426,11 +353,9 @@ public class EventImpl extends EObjectImpl implements Event {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -457,11 +382,9 @@ public class EventImpl extends EObjectImpl implements Event {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -499,11 +422,9 @@ public class EventImpl extends EObjectImpl implements Event {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -537,11 +458,9 @@ public class EventImpl extends EObjectImpl implements Event {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -566,11 +485,9 @@ public class EventImpl extends EObjectImpl implements Event {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

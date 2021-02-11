@@ -48,8 +48,8 @@ public class MapToCommand extends Command {
 	private final Resource resource;
 	private UnmapCommand unmappFromExistingTarget;
 	private FBNetworkElement targetElement;
-	private Mapping mapping = LibraryElementFactory.eINSTANCE.createMapping();
-	private CompoundCommand createdConnections = new CompoundCommand();
+	private final Mapping mapping = LibraryElementFactory.eINSTANCE.createMapping();
+	private final CompoundCommand createdConnections = new CompoundCommand();
 
 	public MapToCommand(final FBNetworkElement srcElement, final Resource resource) {
 		this.srcElement = srcElement;
@@ -66,7 +66,7 @@ public class MapToCommand extends Command {
 			return false; // already mapped to this resource -> nothing to do -> mapping not possible!
 		}
 
-		boolean supports = deviceSupportsType();
+		final boolean supports = deviceSupportsType();
 		if (!supports) {
 			ErrorMessenger.popUpErrorMessage(Messages.MapToCommand_STATUSMessage_TypeNotSupported);
 		}
@@ -113,7 +113,7 @@ public class MapToCommand extends Command {
 		createdConnections.undo();
 
 		srcElement.setMapping(null); // mapping should be removed first so that all notifiers checking for mapped
-										// state will not invalily afterwards use the resource
+		// state will not invalily afterwards use the resource
 		targetElement.setMapping(null);
 		getTargetFBNetwork().getNetworkElements().remove(targetElement);
 		getAutomationSystem().getMapping().remove(mapping);
@@ -157,33 +157,32 @@ public class MapToCommand extends Command {
 	}
 
 	private FBNetworkElement createTargetFB() {
-		FBCreateCommand targetCreateFB = new FBCreateCommand((FBTypePaletteEntry) srcElement.getPaletteEntry(),
-				getTargetFBNetwork(), srcElement.getX(), srcElement.getY());
+		final FBCreateCommand targetCreateFB = new FBCreateCommand((FBTypePaletteEntry) srcElement.getPaletteEntry(),
+				getTargetFBNetwork(), srcElement.getPosition().getX(), srcElement.getPosition().getY());
 		targetCreateFB.execute();
 		return targetCreateFB.getFB();
 	}
 
 	private FBNetworkElement createTargetStructManipulator() {
-		StructManipulator manipulator = (StructManipulator) createTargetFB();
+		final StructManipulator manipulator = (StructManipulator) createTargetFB();
 		manipulator.setStructType(((StructManipulator) srcElement).getStructType());
 		return manipulator;
 	}
 
 	private FBNetworkElement createTargetTypedSubApp() {
-		CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(
-				(SubApplicationTypePaletteEntry) srcElement.getPaletteEntry(), getTargetFBNetwork(), srcElement.getX(),
-				srcElement.getY());
+		final CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(
+				(SubApplicationTypePaletteEntry) srcElement.getPaletteEntry(), getTargetFBNetwork(),
+				srcElement.getPosition().getX(), srcElement.getPosition().getY());
 		cmd.execute();
 		return cmd.getSubApp();
 	}
 
 	private FBNetworkElement createTargetUntypedSubApp() {
-		SubApp element = LibraryElementFactory.eINSTANCE.createSubApp();
-		element.setX(srcElement.getX());
-		element.setY(srcElement.getY());
+		final SubApp element = LibraryElementFactory.eINSTANCE.createSubApp();
+		element.setPosition(EcoreUtil.copy(srcElement.getPosition()));
 		element.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		element.setInterface(EcoreUtil.copy(srcElement.getInterface()));
-		for (IInterfaceElement ie : element.getInterface().getAllInterfaceElements()) {
+		for (final IInterfaceElement ie : element.getInterface().getAllInterfaceElements()) {
 			ie.getInputConnections().clear();
 			ie.getOutputConnections().clear();
 		}
@@ -192,12 +191,12 @@ public class MapToCommand extends Command {
 	}
 
 	private void transferFBParams() {
-		List<VarDeclaration> destInputs = targetElement.getInterface().getInputVars();
-		List<VarDeclaration> srcInputs = srcElement.getInterface().getInputVars();
+		final List<VarDeclaration> destInputs = targetElement.getInterface().getInputVars();
+		final List<VarDeclaration> srcInputs = srcElement.getInterface().getInputVars();
 
 		for (int i = 0; i < destInputs.size(); i++) {
-			VarDeclaration srcVar = srcInputs.get(i);
-			VarDeclaration dstVar = destInputs.get(i);
+			final VarDeclaration srcVar = srcInputs.get(i);
+			final VarDeclaration dstVar = destInputs.get(i);
 
 			if ((null != srcVar.getValue()) && (!srcVar.getValue().getValue().isEmpty())) {
 				if (null == dstVar.getValue()) {
@@ -213,7 +212,7 @@ public class MapToCommand extends Command {
 	}
 
 	private void checkConnections() {
-		for (IInterfaceElement interfaceElement : srcElement.getInterface().getAllInterfaceElements()) {
+		for (final IInterfaceElement interfaceElement : srcElement.getInterface().getAllInterfaceElements()) {
 			if (interfaceElement.isIsInput()) {
 				checkInputConnections(interfaceElement);
 			} else {
@@ -222,26 +221,26 @@ public class MapToCommand extends Command {
 		}
 	}
 
-	private void checkInputConnections(IInterfaceElement interfaceElement) {
-		for (Connection connection : interfaceElement.getInputConnections()) {
-			Resource res = connection.getSourceElement().getResource();
+	private void checkInputConnections(final IInterfaceElement interfaceElement) {
+		for (final Connection connection : interfaceElement.getInputConnections()) {
+			final Resource res = connection.getSourceElement().getResource();
 			if (resource.equals(res)) {
 				// we need to create a connection in the target resource
 				addConnectionCreateCommand(
 						connection.getSourceElement().getOpposite()
-								.getInterfaceElement(connection.getSource().getName()),
+						.getInterfaceElement(connection.getSource().getName()),
 						targetElement.getInterfaceElement(interfaceElement.getName()));
 			}
 		}
 	}
 
-	private void checkOutputConnections(IInterfaceElement interfaceElement) {
-		for (Connection connection : interfaceElement.getOutputConnections()) {
+	private void checkOutputConnections(final IInterfaceElement interfaceElement) {
+		for (final Connection connection : interfaceElement.getOutputConnections()) {
 			if (!isSelfConnection(connection)) { // leave self-connection to be handled by the inputs
-				Resource res = connection.getDestinationElement().getResource();
+				final Resource res = connection.getDestinationElement().getResource();
 				if (resource.equals(res)) {
 					// we need to create a connection in the target resource
-					IInterfaceElement destination = connection.getDestinationElement().getOpposite()
+					final IInterfaceElement destination = connection.getDestinationElement().getOpposite()
 							.getInterfaceElement(connection.getDestination().getName());
 					addConnectionCreateCommand(targetElement.getInterfaceElement(interfaceElement.getName()),
 							destination);
@@ -253,12 +252,12 @@ public class MapToCommand extends Command {
 		}
 	}
 
-	private boolean isSelfConnection(Connection connection) {
+	private boolean isSelfConnection(final Connection connection) {
 		return connection.getSourceElement() == connection.getDestinationElement();
 	}
 
-	private void addConnectionCreateCommand(IInterfaceElement source, IInterfaceElement destination) {
-		AbstractConnectionCreateCommand cmd = getConnectionCreatCMD(source);
+	private void addConnectionCreateCommand(final IInterfaceElement source, final IInterfaceElement destination) {
+		final AbstractConnectionCreateCommand cmd = getConnectionCreatCMD(source);
 		if (null != cmd) {
 			cmd.setSource(source);
 			cmd.setDestination(destination);
@@ -266,12 +265,12 @@ public class MapToCommand extends Command {
 		}
 	}
 
-	private void checkForDeleteConnections(IInterfaceElement destination) {
+	private void checkForDeleteConnections(final IInterfaceElement destination) {
 		// TODO model refactoring - determine also connection in the target resource
 		// which maybe have to be deleted
 	}
 
-	private AbstractConnectionCreateCommand getConnectionCreatCMD(IInterfaceElement interfaceElement) {
+	private AbstractConnectionCreateCommand getConnectionCreatCMD(final IInterfaceElement interfaceElement) {
 		if (interfaceElement instanceof Event) {
 			return new EventConnectionCreateCommand(resource.getFBNetwork());
 		} else if (interfaceElement instanceof AdapterDeclaration) {

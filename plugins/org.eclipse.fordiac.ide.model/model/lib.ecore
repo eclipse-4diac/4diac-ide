@@ -1171,6 +1171,28 @@
         eType="#//ServiceInterface"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PositionableElement">
+    <eOperations name="updatePosition" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createPosition();&#xA;pos.setX(x);&#xA;pos.setY(y);&#xA;&#xA;setPosition(pos);"/>
+      </eAnnotations>
+      <eParameters name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
+      <eParameters name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
+    </eOperations>
+    <eOperations name="updatePosition" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="updatePosition(newPos.x, newPos.y);"/>
+      </eAnnotations>
+      <eParameters name="newPos" lowerBound="1" eType="#//Point"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="position" lowerBound="1"
+        eType="#//Position"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Position">
+    <eOperations name="asPoint" lowerBound="1" eType="#//Point">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return new org.eclipse.draw2d.geometry.Point(getX(), getY());"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
         defaultValueLiteral="0"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
@@ -1237,4 +1259,5 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrayStop" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="CommandStack" instanceClassName="org.eclipse.gef.commands.CommandStack"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.draw2d.geometry.Point"/>
 </ecore:EPackage>

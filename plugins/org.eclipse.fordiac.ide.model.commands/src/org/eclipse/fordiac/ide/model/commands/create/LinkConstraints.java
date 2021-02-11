@@ -185,8 +185,9 @@ public final class LinkConstraints {
 	}
 
 	public static boolean isSwapNeeded(final IInterfaceElement source, final FBNetwork parent) {
-		if ((source.eContainer().eContainer() instanceof CompositeFBType)
-				|| (source.getFBNetworkElement().getFbNetwork() != parent)) {
+		if (((source.eContainer() != null) && (source.eContainer().eContainer() instanceof CompositeFBType))
+				|| ((source.getFBNetworkElement() != null)
+						&& (source.getFBNetworkElement().getFbNetwork() != parent))) {
 			// the FBNetwork elements are not in the same resource this means one of both is
 			// a subapp interface element of the containing subapp
 			return !source.isIsInput();

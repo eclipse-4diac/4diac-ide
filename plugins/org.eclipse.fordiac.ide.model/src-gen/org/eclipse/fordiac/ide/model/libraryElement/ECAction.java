@@ -15,33 +15,25 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.ecore.EObject;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>EC
- * Action</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>EC Action</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getAlgorithm
- * <em>Algorithm</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getOutput
- * <em>Output</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState
- * <em>EC State</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getAlgorithm <em>Algorithm</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getOutput <em>Output</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState <em>EC State</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECAction()
  * @model
- * @generated
- */
+ * @generated */
 public interface ECAction extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Algorithm</b></em>' reference. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>Algorithm</b></em>' reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Algorithm</em>' attribute isn't clear, there
-	 * really should be more of a description here...
+	 * If the meaning of the '<em>Algorithm</em>' attribute isn't clear, there really should be more of a description
+	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
@@ -49,27 +41,21 @@ public interface ECAction extends EObject {
 	 * @see #setAlgorithm(Algorithm)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECAction_Algorithm()
 	 * @model
-	 * @generated
-	 */
+	 * @generated */
 	Algorithm getAlgorithm();
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getAlgorithm
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getAlgorithm
 	 * <em>Algorithm</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @param value the new value of the '<em>Algorithm</em>' reference.
 	 * @see #getAlgorithm()
-	 * @generated
-	 */
+	 * @generated */
 	void setAlgorithm(Algorithm value);
 
-	/**
-	 * Returns the value of the '<em><b>Output</b></em>' reference. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>Output</b></em>' reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Output</em>' attribute isn't clear, there really
-	 * should be more of a description here...
+	 * If the meaning of the '<em>Output</em>' attribute isn't clear, there really should be more of a description
+	 * here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
@@ -77,46 +63,35 @@ public interface ECAction extends EObject {
 	 * @see #setOutput(Event)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECAction_Output()
 	 * @model
-	 * @generated
-	 */
+	 * @generated */
 	Event getOutput();
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getOutput
-	 * <em>Output</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getOutput <em>Output</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @param value the new value of the '<em>Output</em>' reference.
 	 * @see #getOutput()
-	 * @generated
-	 */
+	 * @generated */
 	void setOutput(Event value);
 
-	/**
-	 * Returns the value of the '<em><b>EC State</b></em>' container reference. It
-	 * is bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECAction
-	 * <em>EC Action</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** Returns the value of the '<em><b>EC State</b></em>' container reference. It is bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECAction <em>EC Action</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>EC State</em>' container reference.
 	 * @see #setECState(ECState)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECAction_ECState()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState#getECAction
 	 * @model opposite="eCAction" required="true" transient="false"
-	 * @generated
-	 */
+	 * @generated */
 	ECState getECState();
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState
-	 * <em>EC State</em>}' container reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState <em>EC
+	 * State</em>}' container reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @param value the new value of the '<em>EC State</em>' container reference.
 	 * @see #getECState()
-	 * @generated
-	 */
+	 * @generated */
 	void setECState(ECState value);
 
 } // ECAction

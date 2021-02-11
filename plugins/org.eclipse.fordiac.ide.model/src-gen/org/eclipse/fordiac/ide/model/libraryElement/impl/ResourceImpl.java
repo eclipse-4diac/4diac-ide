@@ -33,145 +33,109 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Resource</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Resource</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl#getVarDeclarations
- * <em>Var Declarations</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl#getFBNetwork
- * <em>FB Network</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl#getX
- * <em>X</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl#getY
- * <em>Y</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl#getDevice
- * <em>Device</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl#isDeviceTypeResource
- * <em>Device Type Resource</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl#getVarDeclarations <em>Var
+ * Declarations</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl#getFBNetwork <em>FB Network</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl#getX <em>X</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl#getY <em>Y</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl#getDevice <em>Device</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl#isDeviceTypeResource <em>Device Type
+ * Resource</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class ResourceImpl extends TypedConfigureableObjectImpl implements Resource {
-	/**
-	 * The cached value of the '{@link #getVarDeclarations() <em>Var
-	 * Declarations</em>}' containment reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getVarDeclarations()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<VarDeclaration> varDeclarations;
 
-	/**
-	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}'
-	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
 	 * @see #getFBNetwork()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected FBNetwork fBNetwork;
 
-	/**
-	 * The default value of the '{@link #getX() <em>X</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/** The default value of the '{@link #getX() <em>X</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getX()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String X_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getX() <em>X</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/** The cached value of the '{@link #getX() <em>X</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getX()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String x = X_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getY() <em>Y</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/** The default value of the '{@link #getY() <em>Y</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getY()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String Y_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getY() <em>Y</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/** The cached value of the '{@link #getY() <em>Y</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getY()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String y = Y_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #isDeviceTypeResource() <em>Device Type
-	 * Resource</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #isDeviceTypeResource() <em>Device Type Resource</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #isDeviceTypeResource()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final boolean DEVICE_TYPE_RESOURCE_EDEFAULT = false;
 
-	/**
-	 * The cached value of the '{@link #isDeviceTypeResource() <em>Device Type
-	 * Resource</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #isDeviceTypeResource() <em>Device Type Resource</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #isDeviceTypeResource()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected boolean deviceTypeResource = DEVICE_TYPE_RESOURCE_EDEFAULT;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected ResourceImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.RESOURCE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetwork getFBNetwork() {
 		return fBNetwork;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetFBNetwork(FBNetwork newFBNetwork, NotificationChain msgs) {
 		FBNetwork oldFBNetwork = fBNetwork;
 		fBNetwork = newFBNetwork;
@@ -186,11 +150,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setFBNetwork(FBNetwork newFBNetwork) {
 		if (newFBNetwork != fBNetwork) {
@@ -209,21 +171,17 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 					newFBNetwork, newFBNetwork));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getX() {
 		return x;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setX(String newX) {
 		String oldX = x;
@@ -232,21 +190,17 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.RESOURCE__X, oldX, x));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getY() {
 		return y;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setY(String newY) {
 		String oldY = y;
@@ -255,11 +209,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.RESOURCE__Y, oldY, y));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Device getDevice() {
 		if (eContainerFeatureID() != LibraryElementPackage.RESOURCE__DEVICE)
@@ -267,32 +219,26 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		return (Device) eContainer();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Device basicGetDevice() {
 		if (eContainerFeatureID() != LibraryElementPackage.RESOURCE__DEVICE)
 			return null;
 		return (Device) eInternalContainer();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetDevice(Device newDevice, NotificationChain msgs) {
 		msgs = eBasicSetContainer((InternalEObject) newDevice, LibraryElementPackage.RESOURCE__DEVICE, msgs);
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setDevice(Device newDevice) {
 		if (newDevice != eInternalContainer()
@@ -313,21 +259,17 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 					newDevice));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isDeviceTypeResource() {
 		return deviceTypeResource;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setDeviceTypeResource(boolean newDeviceTypeResource) {
 		boolean oldDeviceTypeResource = deviceTypeResource;
@@ -337,11 +279,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 					oldDeviceTypeResource, deviceTypeResource));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
@@ -351,25 +291,20 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		return varDeclarations;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public AutomationSystem getAutomationSystem() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ResourceType getType() {
-		// this cannot be moved to the annotation class because there we don't have the
-		// super access!!!
+		// this cannot be moved to the annotation class because there we don't have the super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
 		if (type instanceof ResourceType) {
 			return (ResourceType) type;
@@ -377,11 +312,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -394,11 +327,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -413,11 +344,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
@@ -429,11 +358,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -456,11 +383,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -490,11 +415,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -522,11 +445,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -547,11 +468,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == IVarElement.class) {
@@ -565,11 +484,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == IVarElement.class) {
@@ -583,11 +500,9 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

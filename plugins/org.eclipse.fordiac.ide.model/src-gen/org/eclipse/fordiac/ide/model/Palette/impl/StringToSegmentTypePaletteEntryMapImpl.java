@@ -30,9 +30,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>String
- * To Segment Type Palette Entry Map</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>String To Segment Type Palette Entry
+ * Map</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -43,73 +42,58 @@ import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
  * <em>Value</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class StringToSegmentTypePaletteEntryMapImpl extends EObjectImpl
 		implements BasicEMap.Entry<String, SegmentTypePaletteEntry> {
-	/**
-	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getTypedKey()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String KEY_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getTypedKey()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String key = KEY_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getTypedValue()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected SegmentTypePaletteEntry value;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected StringToSegmentTypePaletteEntryMapImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return PalettePackage.Literals.STRING_TO_SEGMENT_TYPE_PALETTE_ENTRY_MAP;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public String getTypedKey() {
 		return key;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public void setTypedKey(String newKey) {
 		String oldKey = key;
 		key = newKey;
@@ -118,11 +102,9 @@ public class StringToSegmentTypePaletteEntryMapImpl extends EObjectImpl
 					PalettePackage.STRING_TO_SEGMENT_TYPE_PALETTE_ENTRY_MAP__KEY, oldKey, key));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public SegmentTypePaletteEntry getTypedValue() {
 		if (value != null && value.eIsProxy()) {
 			InternalEObject oldValue = (InternalEObject) value;
@@ -136,20 +118,16 @@ public class StringToSegmentTypePaletteEntryMapImpl extends EObjectImpl
 		return value;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public SegmentTypePaletteEntry basicGetTypedValue() {
 		return value;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public void setTypedValue(SegmentTypePaletteEntry newValue) {
 		SegmentTypePaletteEntry oldValue = value;
 		value = newValue;
@@ -158,11 +136,9 @@ public class StringToSegmentTypePaletteEntryMapImpl extends EObjectImpl
 					PalettePackage.STRING_TO_SEGMENT_TYPE_PALETTE_ENTRY_MAP__VALUE, oldValue, value));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -177,11 +153,9 @@ public class StringToSegmentTypePaletteEntryMapImpl extends EObjectImpl
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -197,11 +171,9 @@ public class StringToSegmentTypePaletteEntryMapImpl extends EObjectImpl
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -217,11 +189,9 @@ public class StringToSegmentTypePaletteEntryMapImpl extends EObjectImpl
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -234,11 +204,9 @@ public class StringToSegmentTypePaletteEntryMapImpl extends EObjectImpl
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())
@@ -251,18 +219,14 @@ public class StringToSegmentTypePaletteEntryMapImpl extends EObjectImpl
 		return result.toString();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected int hash = -1;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getHash() {
 		if (hash == -1) {
@@ -272,51 +236,41 @@ public class StringToSegmentTypePaletteEntryMapImpl extends EObjectImpl
 		return hash;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setHash(int hash) {
 		this.hash = hash;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getKey() {
 		return getTypedKey();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setKey(String key) {
 		setTypedKey(key);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public SegmentTypePaletteEntry getValue() {
 		return getTypedValue();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public SegmentTypePaletteEntry setValue(SegmentTypePaletteEntry value) {
 		SegmentTypePaletteEntry oldValue = getValue();
@@ -324,11 +278,9 @@ public class StringToSegmentTypePaletteEntryMapImpl extends EObjectImpl
 		return oldValue;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	public EMap<String, SegmentTypePaletteEntry> getEMap() {
 		EObject container = eContainer();

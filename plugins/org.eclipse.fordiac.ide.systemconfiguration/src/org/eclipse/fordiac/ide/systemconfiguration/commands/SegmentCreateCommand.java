@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
  * 				 2019 Johannes Keppler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,9 +9,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo 
+ *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
@@ -50,8 +50,7 @@ public class SegmentCreateCommand extends Command {
 		segment.setColor(ColorHelper.createRandomColor());
 		segment.setPaletteEntry(type);
 		segment.getVarDeclarations().addAll(EcoreUtil.copyAll(type.getSegmentType().getVarDeclaration()));
-		segment.setX(bounds.x);
-		segment.setY(bounds.y);
+		segment.updatePosition(bounds.getTopLeft());
 		segment.setWidth((-1 != bounds.width) ? bounds.width : 300);
 		redo();
 		segment.setName(NameRepository.createUniqueName(segment, type.getSegmentType().getName()));
