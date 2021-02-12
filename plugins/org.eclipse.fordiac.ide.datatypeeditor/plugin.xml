@@ -9,7 +9,8 @@
             contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             default="true"
             class="org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor"
-            id="org.eclipse.fordiac.ide.datatypeeditor.editors.DTPFileEditor">
+            id="org.eclipse.fordiac.ide.datatypeeditor.editors.DTPFileEditor"
+            icon="fordiacimage://ICON_DATA_TYPE">
       </editor>
    </extension>
    <extension
