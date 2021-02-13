@@ -68,10 +68,8 @@ public final class BreadcrumbUtil {
 	}
 
 	public static IEditorPart openParentEditor(final FBNetworkElement model) {
-		EObject parentModel = model.getOuterFBNetworkElement();
-		if (null == parentModel) {
-			parentModel = model.getFbNetwork().getApplication();
-		}
+		final EObject parentModel = model.eContainer().eContainer();  // use eContainer here so that it also works for
+																	  // types
 		return OpenListenerManager.openEditor(parentModel);
 	}
 }

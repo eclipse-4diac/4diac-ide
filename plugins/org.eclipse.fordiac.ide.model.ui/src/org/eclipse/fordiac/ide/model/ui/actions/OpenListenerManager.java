@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2014, 2017 Profactor GbmH, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2021 Profactor GbmH, fortiss GmbH,Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,21 +12,32 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - moved openEditor helper function to EditorUtils
+ *               - added code to handle opening of types and checking their
+ *                 breadcrumb
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.actions;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.ui.Activator;
+import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * The Class OpenListenerManager.
@@ -86,9 +97,8 @@ public enum OpenListenerManager {
 			if (listenerSupportsElement(openListener, elementToOpen)) {
 				final String value = ps.getString(openListener.getHandledClass().getName());
 				openListener.selectionChanged(null, new StructuredSelection(elementToOpen));
-				if ("".equals(value)) { //$NON-NLS-1$
-					return openListener;
-				} else if (value.equals(openListener.getOpenListenerID())) {
+				if (("".equals(value))  //$NON-NLS-1$
+						|| (value.equals(openListener.getOpenListenerID()))) {
 					return openListener;
 				}
 			}
@@ -107,8 +117,38 @@ public enum OpenListenerManager {
 		if (openListener != null) {
 			openListener.run(null);
 			return openListener.getOpenedEditor();
+		} else if (element instanceof LibraryElement) {
+			return openDefaultEditorForFile((LibraryElement) element);
 		}
 		return null;
+	}
+
+	static IEditorPart openDefaultEditorForFile(final LibraryElement element) {
+		final PaletteEntry entry = element.getPaletteEntry();
+		if (null != entry) {
+			final IFile file = entry.getFile();
+			final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
+					.getDefaultEditor(file.getName());
+			try {
+				final IEditorPart part = page.openEditor(new FileEditorInput(file), desc.getId());
+				checkBreadCrumb(part, element);
+				return part;
+			} catch (final PartInitException e) {
+				Activator.getDefault().getLog().error(e.getMessage(), e);
+			}
+		}
+		return null;
+	}
+
+	static void checkBreadCrumb(final IEditorPart part, final LibraryElement element) {
+		if (null != part) {
+			final AbstractBreadCrumbEditor breadCrumbEditor = part.getAdapter(AbstractBreadCrumbEditor.class);
+			if (null != breadCrumbEditor) {
+				breadCrumbEditor.getBreadcrumb().setInput(element);
+			}
+		}
+
 	}
 
 	private void loadOpenListeners() {
