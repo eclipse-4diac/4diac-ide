@@ -16,14 +16,20 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
+import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
+import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.ui.IEditorPart;
 
 public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceElementEditPart {
@@ -73,10 +79,43 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 		}
 	}
 
+	@Override
+	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
+		if (isEvent()) {
+			return new EventNodeEditPolicy() {
+				@Override
+				protected FBNetwork getParentNetwork() {
+					return getSubappNetwork();
+				}
+			};
+		}
+		if (isAdapter()) {
+			return new AdapterNodeEditPolicy() {
+				@Override
+				protected FBNetwork getParentNetwork() {
+					return getSubappNetwork();
+				}
+			};
+		}
+		if (isVariable()) {
+			return new VariableNodeEditPolicy() {
+				@Override
+				protected FBNetwork getParentNetwork() {
+					return getSubappNetwork();
+				}
+			};
+		}
+		return null;
+	}
+
 	private void goToParent() {
 		final IEditorPart newEditor = BreadcrumbUtil.openParentEditor(getModel().getFBNetworkElement());
 		final GraphicalViewer viewer = newEditor.getAdapter(GraphicalViewer.class);
 		BreadcrumbUtil.selectElement(getModel(), viewer);
+	}
+
+	private FBNetwork getSubappNetwork() {
+		return ((SubApp) getModel().getFBNetworkElement()).getSubAppNetwork();
 	}
 
 }
