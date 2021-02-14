@@ -34,68 +34,6 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model abstract="true"
  * @generated */
 public interface Connection extends ConfigurableObject {
-	/** Returns the value of the '<em><b>Dx1</b></em>' attribute. <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Dx1</em>' attribute isn't clear, there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * 
-	 * @return the value of the '<em>Dx1</em>' attribute.
-	 * @see #setDx1(int)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Dx1()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.Int" extendedMetaData="kind='attribute' name='dx1'"
-	 * @generated */
-	int getDx1();
-
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx1 <em>Dx1</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value the new value of the '<em>Dx1</em>' attribute.
-	 * @see #getDx1()
-	 * @generated */
-	void setDx1(int value);
-
-	/** Returns the value of the '<em><b>Dx2</b></em>' attribute. <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Dx2</em>' attribute isn't clear, there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * 
-	 * @return the value of the '<em>Dx2</em>' attribute.
-	 * @see #setDx2(int)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Dx2()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.Int" extendedMetaData="kind='attribute' name='dx2'"
-	 * @generated */
-	int getDx2();
-
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx2 <em>Dx2</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value the new value of the '<em>Dx2</em>' attribute.
-	 * @see #getDx2()
-	 * @generated */
-	void setDx2(int value);
-
-	/** Returns the value of the '<em><b>Dy</b></em>' attribute. <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Dy</em>' attribute isn't clear, there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * 
-	 * @return the value of the '<em>Dy</em>' attribute.
-	 * @see #setDy(int)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Dy()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.Int" extendedMetaData="kind='attribute' name='dy'"
-	 * @generated */
-	int getDy();
-
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDy <em>Dy</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value the new value of the '<em>Dy</em>' attribute.
-	 * @see #getDy()
-	 * @generated */
-	void setDy(int value);
 
 	/** Returns the value of the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
@@ -141,6 +79,14 @@ public interface Connection extends ConfigurableObject {
 	 * @model
 	 * @generated */
 	void checkIfConnectionBroken();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model dx1DataType="org.eclipse.emf.ecore.xml.type.Int" dx1Required="true"
+	 *        dyDataType="org.eclipse.emf.ecore.xml.type.Int" dyRequired="true"
+	 *        dx2DataType="org.eclipse.emf.ecore.xml.type.Int" dx2Required="true"
+	 * @generated */
+	void updateRoutingData(int dx1, int dy, int dx2);
 
 	/** Returns the value of the '<em><b>Broken Connection</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
@@ -203,6 +149,23 @@ public interface Connection extends ConfigurableObject {
 	 * @see #getDestination()
 	 * @generated */
 	void setDestination(IInterfaceElement value);
+
+	/** Returns the value of the '<em><b>Routing Data</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the value of the '<em>Routing Data</em>' reference.
+	 * @see #setRoutingData(ConnectionRoutingData)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_RoutingData()
+	 * @model required="true"
+	 * @generated */
+	ConnectionRoutingData getRoutingData();
+
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getRoutingData <em>Routing
+	 * Data</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value the new value of the '<em>Routing Data</em>' reference.
+	 * @see #getRoutingData()
+	 * @generated */
+	void setRoutingData(ConnectionRoutingData value);
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 

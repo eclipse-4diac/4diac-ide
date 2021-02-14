@@ -197,6 +197,26 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 		return compilerItemProvider;
 	}
 
+	/** This keeps track of the one adapter used for all
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData} instances. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	protected ConnectionRoutingDataItemProvider connectionRoutingDataItemProvider;
+
+	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData}. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public Adapter createConnectionRoutingDataAdapter() {
+		if (connectionRoutingDataItemProvider == null) {
+			connectionRoutingDataItemProvider = new ConnectionRoutingDataItemProvider(this);
+		}
+
+		return connectionRoutingDataItemProvider;
+	}
+
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.Device}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 

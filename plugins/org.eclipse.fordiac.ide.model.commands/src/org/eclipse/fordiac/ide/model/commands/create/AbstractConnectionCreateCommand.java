@@ -19,8 +19,10 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -30,11 +32,7 @@ import org.eclipse.gef.commands.Command;
 
 public abstract class AbstractConnectionCreateCommand extends Command {
 
-	private int connDx1;
-
-	private int connDx2;
-
-	private int connDy;
+	private ConnectionRoutingData routingData;
 
 	/** The parent. */
 	private FBNetwork parent;
@@ -62,17 +60,12 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	protected AbstractConnectionCreateCommand(final FBNetwork parent) {
 		super();
 		// initialize values
-		this.connDx1 = 0;
-		this.connDx2 = 0;
-		this.connDy = 0;
 		this.parent = parent;
 		this.performMappingCheck = true;
 	}
 
-	public void setArrangementConstraints(final int dx1, final int dx2, final int dy) {
-		this.connDx1 = dx1;
-		this.connDx2 = dx2;
-		this.connDy = dy;
+	public void setArrangementConstraints(final ConnectionRoutingData routingData) {
+		this.routingData = EcoreUtil.copy(routingData);
 	}
 
 	public void setSource(final IInterfaceElement source) {
@@ -158,9 +151,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 
 		connection.setSource(source);
 		connection.setDestination(destination);
-		connection.setDx1(connDx1);
-		connection.setDx2(connDx2);
-		connection.setDy(connDy);
+		connection.setRoutingData(routingData);
 
 		parent.addConnection(connection);
 

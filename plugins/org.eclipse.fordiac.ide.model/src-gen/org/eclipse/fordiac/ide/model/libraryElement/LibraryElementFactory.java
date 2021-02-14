@@ -63,6 +63,12 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated */
 	Compiler createCompiler();
 
+	/** Returns a new object of class '<em>Connection Routing Data</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return a new object of class '<em>Connection Routing Data</em>'.
+	 * @generated */
+	ConnectionRoutingData createConnectionRoutingData();
+
 	/** Returns a new object of class '<em>Device</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return a new object of class '<em>Device</em>'.

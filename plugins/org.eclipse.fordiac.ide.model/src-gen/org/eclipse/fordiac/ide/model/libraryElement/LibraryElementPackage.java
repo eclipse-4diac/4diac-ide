@@ -1121,56 +1121,77 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int CONNECTION__ATTRIBUTES = CONFIGURABLE_OBJECT__ATTRIBUTES;
 
-	/** The feature id for the '<em><b>Dx1</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int CONNECTION__DX1 = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
-
-	/** The feature id for the '<em><b>Dx2</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int CONNECTION__DX2 = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
-
-	/** The feature id for the '<em><b>Dy</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int CONNECTION__DY = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
-
 	/** The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int CONNECTION__RES_TYPE_CONNECTION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 3;
+	int CONNECTION__RES_TYPE_CONNECTION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Broken Connection</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
 	 * @generated
 	 * @ordered */
-	int CONNECTION__BROKEN_CONNECTION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 4;
+	int CONNECTION__BROKEN_CONNECTION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/** The feature id for the '<em><b>Source</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int CONNECTION__SOURCE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 5;
+	int CONNECTION__SOURCE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/** The feature id for the '<em><b>Destination</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int CONNECTION__DESTINATION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 6;
+	int CONNECTION__DESTINATION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 3;
+
+	/** The feature id for the '<em><b>Routing Data</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONNECTION__ROUTING_DATA = CONFIGURABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/** The number of structural features of the '<em>Connection</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
 	 * @generated
 	 * @ordered */
-	int CONNECTION_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 7;
+	int CONNECTION_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 5;
+
+	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl
+	 * <em>Connection Routing Data</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConnectionRoutingData()
+	 * @generated */
+	int CONNECTION_ROUTING_DATA = 8;
+
+	/** The feature id for the '<em><b>Dx1</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONNECTION_ROUTING_DATA__DX1 = 0;
+
+	/** The feature id for the '<em><b>Dx2</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONNECTION_ROUTING_DATA__DX2 = 1;
+
+	/** The feature id for the '<em><b>Dy</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONNECTION_ROUTING_DATA__DY = 2;
+
+	/** The number of structural features of the '<em>Connection Routing Data</em>' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CONNECTION_ROUTING_DATA_FEATURE_COUNT = 3;
 
 	/** The meta object id for the
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl <em>Typed Configureable
@@ -2943,24 +2964,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int DATA_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
 
-	/** The feature id for the '<em><b>Dx1</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int DATA_CONNECTION__DX1 = CONNECTION__DX1;
-
-	/** The feature id for the '<em><b>Dx2</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int DATA_CONNECTION__DX2 = CONNECTION__DX2;
-
-	/** The feature id for the '<em><b>Dy</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int DATA_CONNECTION__DY = CONNECTION__DY;
-
 	/** The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
@@ -2986,6 +2989,12 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int DATA_CONNECTION__DESTINATION = CONNECTION__DESTINATION;
+
+	/** The feature id for the '<em><b>Routing Data</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int DATA_CONNECTION__ROUTING_DATA = CONNECTION__ROUTING_DATA;
 
 	/** The number of structural features of the '<em>Data Connection</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -3013,24 +3022,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int EVENT_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
 
-	/** The feature id for the '<em><b>Dx1</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int EVENT_CONNECTION__DX1 = CONNECTION__DX1;
-
-	/** The feature id for the '<em><b>Dx2</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int EVENT_CONNECTION__DX2 = CONNECTION__DX2;
-
-	/** The feature id for the '<em><b>Dy</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int EVENT_CONNECTION__DY = CONNECTION__DY;
-
 	/** The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
@@ -3056,6 +3047,12 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int EVENT_CONNECTION__DESTINATION = CONNECTION__DESTINATION;
+
+	/** The feature id for the '<em><b>Routing Data</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int EVENT_CONNECTION__ROUTING_DATA = CONNECTION__ROUTING_DATA;
 
 	/** The number of structural features of the '<em>Event Connection</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -3083,24 +3080,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ADAPTER_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
 
-	/** The feature id for the '<em><b>Dx1</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int ADAPTER_CONNECTION__DX1 = CONNECTION__DX1;
-
-	/** The feature id for the '<em><b>Dx2</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int ADAPTER_CONNECTION__DX2 = CONNECTION__DX2;
-
-	/** The feature id for the '<em><b>Dy</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int ADAPTER_CONNECTION__DY = CONNECTION__DY;
-
 	/** The feature id for the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
@@ -3126,6 +3105,12 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ADAPTER_CONNECTION__DESTINATION = CONNECTION__DESTINATION;
+
+	/** The feature id for the '<em><b>Routing Data</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int ADAPTER_CONNECTION__ROUTING_DATA = CONNECTION__ROUTING_DATA;
 
 	/** The number of structural features of the '<em>Adapter Connection</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -4240,33 +4225,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	EClass getConnection();
 
-	/** Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx1
-	 * <em>Dx1</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return the meta object for the attribute '<em>Dx1</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx1()
-	 * @see #getConnection()
-	 * @generated */
-	EAttribute getConnection_Dx1();
-
-	/** Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx2
-	 * <em>Dx2</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return the meta object for the attribute '<em>Dx2</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx2()
-	 * @see #getConnection()
-	 * @generated */
-	EAttribute getConnection_Dx2();
-
-	/** Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDy
-	 * <em>Dy</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return the meta object for the attribute '<em>Dy</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getDy()
-	 * @see #getConnection()
-	 * @generated */
-	EAttribute getConnection_Dy();
-
 	/** Returns the meta object for the attribute
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection <em>Res Type
 	 * Connection</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -4306,6 +4264,54 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see #getConnection()
 	 * @generated */
 	EReference getConnection_Destination();
+
+	/** Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getRoutingData <em>Routing Data</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the reference '<em>Routing Data</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getRoutingData()
+	 * @see #getConnection()
+	 * @generated */
+	EReference getConnection_RoutingData();
+
+	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData
+	 * <em>Connection Routing Data</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for class '<em>Connection Routing Data</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData
+	 * @generated */
+	EClass getConnectionRoutingData();
+
+	/** Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDx1 <em>Dx1</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the attribute '<em>Dx1</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDx1()
+	 * @see #getConnectionRoutingData()
+	 * @generated */
+	EAttribute getConnectionRoutingData_Dx1();
+
+	/** Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDx2 <em>Dx2</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the attribute '<em>Dx2</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDx2()
+	 * @see #getConnectionRoutingData()
+	 * @generated */
+	EAttribute getConnectionRoutingData_Dx2();
+
+	/** Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDy <em>Dy</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the attribute '<em>Dy</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDy()
+	 * @see #getConnectionRoutingData()
+	 * @generated */
+	EAttribute getConnectionRoutingData_Dy();
 
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Device <em>Device</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -6351,24 +6357,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated */
 		EClass CONNECTION = eINSTANCE.getConnection();
 
-		/** The meta object literal for the '<em><b>Dx1</b></em>' attribute feature. <!-- begin-user-doc --> <!--
-		 * end-user-doc -->
-		 *
-		 * @generated */
-		EAttribute CONNECTION__DX1 = eINSTANCE.getConnection_Dx1();
-
-		/** The meta object literal for the '<em><b>Dx2</b></em>' attribute feature. <!-- begin-user-doc --> <!--
-		 * end-user-doc -->
-		 *
-		 * @generated */
-		EAttribute CONNECTION__DX2 = eINSTANCE.getConnection_Dx2();
-
-		/** The meta object literal for the '<em><b>Dy</b></em>' attribute feature. <!-- begin-user-doc --> <!--
-		 * end-user-doc -->
-		 *
-		 * @generated */
-		EAttribute CONNECTION__DY = eINSTANCE.getConnection_Dy();
-
 		/** The meta object literal for the '<em><b>Res Type Connection</b></em>' attribute feature. <!-- begin-user-doc
 		 * --> <!-- end-user-doc -->
 		 * 
@@ -6392,6 +6380,39 @@ public interface LibraryElementPackage extends EPackage {
 		 * 
 		 * @generated */
 		EReference CONNECTION__DESTINATION = eINSTANCE.getConnection_Destination();
+
+		/** The meta object literal for the '<em><b>Routing Data</b></em>' reference feature. <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * 
+		 * @generated */
+		EReference CONNECTION__ROUTING_DATA = eINSTANCE.getConnection_RoutingData();
+
+		/** The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl <em>Connection Routing
+		 * Data</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getConnectionRoutingData()
+		 * @generated */
+		EClass CONNECTION_ROUTING_DATA = eINSTANCE.getConnectionRoutingData();
+
+		/** The meta object literal for the '<em><b>Dx1</b></em>' attribute feature. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
+		 * 
+		 * @generated */
+		EAttribute CONNECTION_ROUTING_DATA__DX1 = eINSTANCE.getConnectionRoutingData_Dx1();
+
+		/** The meta object literal for the '<em><b>Dx2</b></em>' attribute feature. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
+		 * 
+		 * @generated */
+		EAttribute CONNECTION_ROUTING_DATA__DX2 = eINSTANCE.getConnectionRoutingData_Dx2();
+
+		/** The meta object literal for the '<em><b>Dy</b></em>' attribute feature. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
+		 * 
+		 * @generated */
+		EAttribute CONNECTION_ROUTING_DATA__DY = eINSTANCE.getConnectionRoutingData_Dy();
 
 		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl
 		 * <em>Device</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->

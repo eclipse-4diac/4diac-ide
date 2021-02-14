@@ -53,8 +53,10 @@ import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.gef.commands.Command;
@@ -130,9 +132,7 @@ public class LayoutCommand extends Command {
 		}
 		for (final org.eclipse.fordiac.ide.model.libraryElement.Connection conn : connEditParts.values()) {
 			// set everything to 0 so that the connection gets routed
-			conn.setDx1(0);
-			conn.setDx2(0);
-			conn.setDy(0);
+			conn.updateRoutingData(0, 0, 0);
 		}
 		// FIXME resetInterfaceElements();
 	}
@@ -369,22 +369,17 @@ public class LayoutCommand extends Command {
 
 	private static void updateModel(final org.eclipse.fordiac.ide.model.libraryElement.Connection connModel,
 			final PointList pointList) {
+		final ConnectionRoutingData routingData = LibraryElementFactory.eINSTANCE.createConnectionRoutingData();
 		if (pointList.size() > 2) {
 			// 3 segments
-			connModel.setDx1(pointList.getPoint(1).x() - pointList.getFirstPoint().x());
-			connModel.setDx2(pointList.getLastPoint().x() - pointList.getPoint(pointList.size() - 2).x());
+			routingData.setDx1(pointList.getPoint(1).x() - pointList.getFirstPoint().x());
 			if (pointList.size() > 4) {
 				// 5 segments
-				connModel.setDy(pointList.getPoint(2).y() - pointList.getFirstPoint().y());
-			} else {
-				connModel.setDy(0);
+				routingData.setDy(pointList.getPoint(2).y() - pointList.getFirstPoint().y());
+				routingData.setDx2(pointList.getLastPoint().x() - pointList.getPoint(pointList.size() - 2).x());
 			}
-		} else {
-			// straight connection
-			connModel.setDx1(0);
-			connModel.setDx2(0);
-			connModel.setDy(0);
 		}
+		connModel.setRoutingData(routingData);
 	}
 
 }

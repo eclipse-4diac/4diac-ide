@@ -627,6 +627,18 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
+	/** Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData <em>Connection Routing Data</em>}'.
+	 * <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData
+	 * @generated */
+	public Adapter createConnectionRoutingDataAdapter() {
+		return null;
+	}
+
 	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Device
 	 * <em>Device</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore
 	 * cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->

@@ -24,6 +24,7 @@ import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.policies.AdjustConnectionEditPolicy;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.gef.EditPolicy;
 
@@ -34,8 +35,8 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 	private static final PrecisionPoint END_POINT = new PrecisionPoint();
 
 	@Override
-	public void route(Connection conn) {
-		PointList points = conn.getPoints();
+	public void route(final Connection conn) {
+		final PointList points = conn.getPoints();
 		points.removeAllPoints();
 
 		if (needsSwap(conn)) {
@@ -63,67 +64,69 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 		conn.setPoints(points);
 	}
 
-	private static void setHideableConnectionBendPoints(HideableConnection conn, final Point sourceP, final Point destP,
-			PointList points) {
+	private static void setHideableConnectionBendPoints(final HideableConnection conn, final Point sourceP, final Point destP,
+			final PointList points) {
 		if (null != conn.getModel()) {
-			valdidateModelRoutingParams(conn.getModel(), sourceP, destP);
-			createBendPointList(sourceP, destP, conn.getModel(), points);
+			final ConnectionRoutingData routingData = conn.getModel().getRoutingData();
+			valdidateModelRoutingParams(routingData, sourceP, destP);
+			createBendPointList(sourceP, destP, routingData, points);
 		}
 	}
 
-	private static void valdidateModelRoutingParams(org.eclipse.fordiac.ide.model.libraryElement.Connection model,
-			Point sourceP, Point destP) {
-		if ((sourceP.y != destP.y) && (model.getDx1() == 0) && (model.getDx2() == 0) && (model.getDy() == 0)) {
-			valdidateConnectionRoutingParams(model, sourceP, destP);
-		}
-	}
-
-	private static void valdidateConnectionRoutingParams(org.eclipse.fordiac.ide.model.libraryElement.Connection conn,
+	private static void valdidateModelRoutingParams(final ConnectionRoutingData routingData,
 			final Point sourceP, final Point destP) {
-		if (0 == conn.getDx1()) {
+		if ((sourceP.y != destP.y) && (routingData.getDx1() == 0) && (routingData.getDx2() == 0)
+				&& (routingData.getDy() == 0)) {
+			valdidateConnectionRoutingParams(routingData, sourceP, destP);
+		}
+	}
+
+	private static void valdidateConnectionRoutingParams(final ConnectionRoutingData routingData,
+			final Point sourceP, final Point destP) {
+		if (0 == routingData.getDx1()) {
 			if ((sourceP.y != destP.y) || requires5SegementConnection(sourceP, destP)) {
 				// this is a new connection which is not a straight line or we need to
 				// regenerate it
 				if (requires5SegementConnection(sourceP, destP)) { // we need a 5 segment line
-					generateInitial5SegmentParams(conn, sourceP, destP);
+					generateInitial5SegmentParams(routingData, sourceP, destP);
 				} else { // we need a 3 segment line
-					generateInitial3SegmentParams(conn, sourceP, destP);
+					generateInitial3SegmentParams(routingData, sourceP, destP);
 				}
 			}
 		} else if ((sourceP.y == destP.y) && !requires5SegementConnection(sourceP, destP)) {
 			// we now have a straight line
-			conn.setDx1(0);
-		} else if (0 == conn.getDx2()) {
+			routingData.setDx1(0);
+		} else if (0 == routingData.getDx2()) {
 			// we have three point connection
 			if (requires5SegementConnection(sourceP, destP)) {
-				generateInitial5SegmentParams(conn, sourceP, destP);
-			} else if ((sourceP.x + conn.getDx1()) > (destP.x - MIN_CONNECTION_FB_DISTANCE)) {
-				conn.setDx1(destP.x - sourceP.x - MIN_CONNECTION_FB_DISTANCE);
+				generateInitial5SegmentParams(routingData, sourceP, destP);
+			} else if ((sourceP.x + routingData.getDx1()) > (destP.x - MIN_CONNECTION_FB_DISTANCE)) {
+				routingData.setDx1(destP.x - sourceP.x - MIN_CONNECTION_FB_DISTANCE);
 			}
 		} else {
 			// we have a five point connection check if we should transform it into a 3
 			// point
 			if (!requires5SegementConnection(sourceP, destP)) {
-				conn.setDx2(0);
-				conn.setDy(0);
-				generateInitial3SegmentParams(conn, sourceP, destP);
+				routingData.setDx2(0);
+				routingData.setDy(0);
+				generateInitial3SegmentParams(routingData, sourceP, destP);
 			}
 		}
 	}
 
-	private static void generateInitial3SegmentParams(org.eclipse.fordiac.ide.model.libraryElement.Connection conn,
+	private static void generateInitial3SegmentParams(final ConnectionRoutingData routingData,
 			final Point sourceP, final Point destP) {
-		conn.setDx1((destP.x - sourceP.x) / 2);
+		routingData.setDx1((destP.x - sourceP.x) / 2);
 	}
 
-	private static void generateInitial5SegmentParams(org.eclipse.fordiac.ide.model.libraryElement.Connection conn,
+	private static void generateInitial5SegmentParams(final ConnectionRoutingData routingData,
 			final Point sourceP, final Point destP) {
-		conn.setDx1(MIN_CONNECTION_FB_DISTANCE); // move it of the side of the fb
-		conn.setDx2(MIN_CONNECTION_FB_DISTANCE); // move it of the side of the fb
-		conn.setDy((destP.y - sourceP.y) / 2);
-		if (0 == conn.getDy()) {
+		routingData.setDx1(MIN_CONNECTION_FB_DISTANCE); // move it of the side of the fb
+		routingData.setDx2(MIN_CONNECTION_FB_DISTANCE); // move it of the side of the fb
+		routingData.setDy((destP.y - sourceP.y) / 2);
+		if (0 == routingData.getDy()) {
 			// if source and dest are on the same height add a bend to it to better show it
-			conn.setDy(2 * MIN_CONNECTION_FB_DISTANCE);
+			routingData.setDy(2 * MIN_CONNECTION_FB_DISTANCE);
 		}
 	}
 
@@ -132,31 +135,31 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 	}
 
 	private static void createBendPointList(final Point sourceP, final Point destP,
-			org.eclipse.fordiac.ide.model.libraryElement.Connection modelConn, PointList points) {
-		if (0 != modelConn.getDx1()) {
-			points.addPoint(sourceP.x + modelConn.getDx1(), sourceP.y);
-			if (0 == modelConn.getDy()) {
+			final ConnectionRoutingData routingData, final PointList points) {
+		if (0 != routingData.getDx1()) {
+			points.addPoint(sourceP.x + routingData.getDx1(), sourceP.y);
+			if (0 == routingData.getDy()) {
 				// we have a three segment connection
-				points.addPoint(new Point(sourceP.x + modelConn.getDx1(), destP.y));
+				points.addPoint(new Point(sourceP.x + routingData.getDx1(), destP.y));
 			} else {
 				// we have a five segment connection
 				final int CORRECTION_FACTOR = 1; // is needed for correct bend point placement
-				points.addPoint(new Point(sourceP.x + modelConn.getDx1(), sourceP.y + modelConn.getDy()));
+				points.addPoint(new Point(sourceP.x + routingData.getDx1(), sourceP.y + routingData.getDy()));
 				points.addPoint(
-						new Point(destP.x - (modelConn.getDx2() + CORRECTION_FACTOR), sourceP.y + modelConn.getDy()));
-				points.addPoint(new Point(destP.x - (modelConn.getDx2() + CORRECTION_FACTOR), destP.y));
+						new Point(destP.x - (routingData.getDx2() + CORRECTION_FACTOR),
+								sourceP.y + routingData.getDy()));
+				points.addPoint(new Point(destP.x - (routingData.getDx2() + CORRECTION_FACTOR), destP.y));
 			}
 		}
 	}
 
-	private static void setCreationBendPoints(final Point sourceP, final Point destP, PointList points) {
-		org.eclipse.fordiac.ide.model.libraryElement.Connection modelConn = LibraryElementFactory.eINSTANCE
-				.createEventConnection();
-		valdidateConnectionRoutingParams(modelConn, sourceP, destP);
-		createBendPointList(sourceP, destP, modelConn, points);
+	private static void setCreationBendPoints(final Point sourceP, final Point destP, final PointList points) {
+		final ConnectionRoutingData routingData = LibraryElementFactory.eINSTANCE.createConnectionRoutingData();
+		valdidateConnectionRoutingParams(routingData, sourceP, destP);
+		createBendPointList(sourceP, destP, routingData, points);
 	}
 
-	private static boolean needsSwap(Connection conn) {
+	private static boolean needsSwap(final Connection conn) {
 		//		if ((conn.getSourceAnchor() instanceof FixedAnchor)
 		//				&& (((FixedAnchor) conn.getSourceAnchor()).getEditPart() instanceof InterfaceEditPart)) {
 		//			InterfaceEditPart ep = (InterfaceEditPart) ((FixedAnchor) conn.getSourceAnchor()).getEditPart();
