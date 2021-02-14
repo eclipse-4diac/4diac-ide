@@ -232,16 +232,15 @@
                label="%contributions.menus.debug.triggerEvent"
                tooltip="%contributions.menus.debug.triggerEventToolTip">
            <visibleWhen checkEnabled="false">
-               <iterate>
-               <or>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart">
-                  </instanceof>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart">
-                  </instanceof>
-                  </or>
-               </iterate>
+				<and>
+					<reference definitionId="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor" />
+					<iterate>
+						<or>
+							<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+							<instanceof value="org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart" />
+						</or>
+					</iterate>
+				</and>
             </visibleWhen>
          </command>
          <command
@@ -250,22 +249,7 @@
                label="%contributions.menus.debug.watch"
                tooltip="%contributions.menus.debug.watchToolTip">
             <visibleWhen checkEnabled="false">
-               <with variable="activeEditorId">
-               	<or>
-		            <equals
-		                  value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
-		            </equals>
-		            <equals
-		                  value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor">
-		            </equals>
-		            <equals
-		                  value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
-		            </equals>
-		            <equals
-		                  value="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer">
-		            </equals>
-		            </or>
-		         </with>
+				<reference definitionId="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor" />
             </visibleWhen>
          </command>
          <command
@@ -274,50 +258,31 @@
                label="%contributions.menus.debug.removeAllWatches"
                tooltip="%contributions.menus.debug.removeAllWatchesToolTip">
             <visibleWhen checkEnabled="false">
-               <or>
-	               <with variable="activeEditorId">
-	               	<or>
-			            <equals
-			                  value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
-			            </equals>
-			            <equals
-			                  value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor">
-			            </equals>
-			            <equals
-			                  value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
-			            </equals>
-			            <equals
-			                  value="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer">
-			            </equals>
-			            </or>
-			         </with>
-				   <iterate>
-	                  <or>
-		                  <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Application">
-		                  </instanceof>
-		                  <instanceof
-		                        value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-		                  </instanceof>
-	                  </or>
-	               </iterate>
-			   </or>
-            </visibleWhen></command>
+            	<or>
+					<reference definitionId="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor" />
+					<iterate>
+						<or>
+							<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Application" />
+							<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem" />
+						</or>
+					</iterate>
+				</or>
+			</visibleWhen></command>
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.force"
                icon="fordiacimage://ICON_FORCE_VALUE"
                label="%contributions.menus.debug.force"
                tooltip="%contributions.menus.debug.forceToolTip">
             <visibleWhen checkEnabled="false">
-               <iterate>
-                  <or>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart">
-                  </instanceof>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart">
-                  </instanceof>
-                  </or>
-               </iterate>
+				<and>
+					<reference definitionId="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor" />
+					<iterate>
+						<or>
+							<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+							<instanceof value="org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart" />
+						</or>
+					</iterate>
+				</and>
             </visibleWhen>
          </command>
          <command
@@ -326,16 +291,15 @@
                label="%contributions.menus.debug.clearForce"
                tooltip="%contributions.menus.debug.clearForceToolTop">
             <visibleWhen checkEnabled="false">
-               <iterate>
-                  <or>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart">
-                  </instanceof>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart">
-                  </instanceof>
-                  </or>
-               </iterate>
+				<and>
+					<reference definitionId="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor" />
+					<iterate>
+						<or>
+							<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+							<instanceof value="org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart" />
+						</or>
+					</iterate>
+				</and>
             </visibleWhen>
          </command>
       </menuContribution>
@@ -369,5 +333,21 @@
             class="org.eclipse.fordiac.ide.monitoring.MonitoringManager">
       </MonitoringManager>
    </extension>
-
+	<extension point="org.eclipse.core.expressions.definitions">
+		<definition id="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor">
+			<and>
+				<with variable="activeEditor">
+					<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
+				</with>
+				<not>
+					<with variable="activeEditorId">
+						<or>
+							<equals value="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor" />
+							<equals  value="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor" />
+						</or>
+					</with>
+				</not>
+			</and>
+		</definition>
+	</extension> 
 </plugin>
