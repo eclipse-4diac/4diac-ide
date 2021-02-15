@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- * 				 2018 - 2020 Johannes Kepler University
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                          Johannes Kepler University,
+ *                          Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,10 +16,14 @@
  *   Alois Zoitl - fixed copy/paste handling
  *               - extracted FBNetworkRootEditPart from FBNetworkEditor
  *               - extracted panning and selection tool
+ *               - improved initial position of canvas to show top left corner of
+ *                 drawing area
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.actions.CopyEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.CutEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
@@ -42,6 +46,7 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -54,6 +59,8 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
@@ -63,6 +70,8 @@ import org.eclipse.ui.actions.ActionFactory;
  * The main editor for FBNetworks.
  */
 public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements ISystemEditor {
+
+	private static final int INITIAL_SCROLL_OFFSET = 5;
 
 	private static final PaletteFlyoutPreferences PALETTE_PREFERENCES = new PaletteFlyoutPreferences(
 			"FBNetworkPalette.Location", //$NON-NLS-1$
@@ -94,6 +103,23 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	 */
 	public FBNetworkEditor() {
 		// empty constructor
+	}
+
+	@Override
+	public void createPartControl(final Composite parent) {
+		super.createPartControl(parent);
+
+		final GraphicalViewer viewer = getGraphicalViewer();
+		if (viewer.getControl() instanceof FigureCanvas) {
+			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+			final FBNetworkRootEditPart rootEditPart = (FBNetworkRootEditPart) getGraphicalViewer().getRootEditPart();
+			Display.getDefault().asyncExec(() -> {
+				viewer.flush();
+				final Rectangle drawingAreaBounds = rootEditPart.getDrawingAreaContainer().getBounds();
+				canvas.scrollTo(drawingAreaBounds.x - INITIAL_SCROLL_OFFSET,
+						drawingAreaBounds.y - INITIAL_SCROLL_OFFSET);
+			});
+		}
 	}
 
 	@Override
@@ -171,9 +197,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 		final Open4DIACElementAction openAction = new Open4DIACElementAction(this);
 		registry.registerAction(openAction);
-
-		// getViewer().addSelectionChangedListener(openAction);
-		// getSelectionActions().add(action.getId());
 
 		super.createActions();
 
