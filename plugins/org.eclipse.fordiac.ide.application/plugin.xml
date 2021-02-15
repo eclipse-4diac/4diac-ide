@@ -181,6 +181,9 @@
             <input
                   type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
+            </input>
          </propertySection>
          <propertySection
          	class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
