@@ -70,7 +70,8 @@ public enum SystemManager {
 
 	/** The listeners. */
 	private final List<DistributedSystemListener> listeners = new ArrayList<>();
-	private final List<AutomationSystemListener> automationSystemListener = new ArrayList<>();
+	private final List<AutomationSystemListener> automationSystemListener = Collections
+			.synchronizedList(new ArrayList<>());
 
 	/** Instantiates a new system manager. */
 	SystemManager() {

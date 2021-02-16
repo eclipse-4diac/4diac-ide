@@ -91,8 +91,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private boolean handleResourceChanged(final IResourceDelta delta) {
-
-		if (delta.getResource().getType() == IResource.FILE && isSystemFile((IFile) delta.getResource())) {
+		if (isExternalSysFileChange(delta)) {
 			systemManager.notifyAutmationSystemListeners((IFile) delta.getResource());
 		} else if (IResourceDelta.OPEN == delta.getFlags()) {
 			// project is opened oder closed
@@ -104,6 +103,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			}
 		}
 		return true;
+	}
+
+	private static boolean isExternalSysFileChange(final IResourceDelta delta) {
+		return delta.getResource().getType() == IResource.FILE && isSystemFile((IFile) delta.getResource())
+				&& delta.getFlags() != IResourceDelta.MARKERS;
 	}
 
 	private boolean handleResourceRemoved(final IResourceDelta delta) {
