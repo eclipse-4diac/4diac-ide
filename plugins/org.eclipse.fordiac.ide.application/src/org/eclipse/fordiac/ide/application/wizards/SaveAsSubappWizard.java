@@ -31,6 +31,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
@@ -49,6 +50,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorDescriptor;
@@ -69,12 +71,23 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 
 	@Override
 	public void addPages() {
-		final IProject project = getSystem().getSystemFile().getProject();
+		final IProject project = checkSubAppEditor();
 		final StructuredSelection selection = new StructuredSelection(project); // select the current project
 		newFilePage = SaveAsWizardPage
 				.createSaveAsSubAppWizardPage(Messages.SaveAsSubApplicationTypeAction_WizardPageName, selection);
 		newFilePage.setFileName(subApp.getName());
 		addPage(newFilePage);
+	}
+
+	private IProject checkSubAppEditor() {
+		IProject project = null;
+		final EObject obj = EcoreUtil.getRootContainer(subApp);
+		if (obj instanceof SubAppType) {
+			project = ((SubAppType) obj).getPaletteEntry().getFile().getProject();
+		} else {
+			project = getSystem().getSystemFile().getProject();
+		}
+		return project;
 	}
 
 	private AutomationSystem getSystem() {
@@ -114,7 +127,7 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 		}
 	}
 
-	private boolean createSubAppTemplateCopy(File[] fileList) {
+	private boolean createSubAppTemplateCopy(final File[] fileList) {
 		if (null != fileList) {
 			for (final File file : fileList) {
 				final String fileName = file.getName().toUpperCase();
@@ -158,7 +171,8 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 
 	private void replaceWithType(final PaletteEntry entry) {
 		CommandUtil.closeOpenedSubApp(subApp.getSubAppNetwork());
-		getSystem().getCommandStack().execute(new UpdateFBTypeCommand(subApp, entry));
+		final CommandStack commandStack = EditorUtils.getCurrentActiveEditor().getAdapter(CommandStack.class);
+		commandStack.execute(new UpdateFBTypeCommand(subApp, entry));
 	}
 
 	private void performTypeSetup(final SubAppType type) {
