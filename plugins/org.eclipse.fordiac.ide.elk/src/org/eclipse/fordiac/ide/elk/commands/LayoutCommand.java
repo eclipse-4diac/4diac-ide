@@ -18,10 +18,6 @@ package org.eclipse.fordiac.ide.elk.commands;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.NotEnabledException;
-import org.eclipse.core.commands.NotHandledException;
-import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.draw2d.AbstractPointListShape;
 import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.IFigure;
@@ -61,8 +57,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.handlers.IHandlerService;
 
 public class LayoutCommand extends Command {
 
@@ -319,15 +313,6 @@ public class LayoutCommand extends Command {
 			updateModel(conn, pointList);
 		});
 		updateFBPositions(graph);
-	}
-
-	private static void resetInterfaceElements() {
-		final IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
-		try {
-			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.resetInterfaces", null); //$NON-NLS-1$
-		} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
-			org.eclipse.fordiac.ide.elk.Activator.getDefault().logError(e.getMessage(), e);
-		}
 	}
 
 	private void updateFBPositions(ElkNode graph) {

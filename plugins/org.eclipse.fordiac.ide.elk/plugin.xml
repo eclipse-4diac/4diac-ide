@@ -10,10 +10,6 @@
         id="org.eclipse.fordiac.ide.elk.layoutUnfoldedSubApp"
         name="Layout unfolded subapp with ELK">
     </command>
-    <command
-        id="org.eclipse.fordiac.ide.elk.resetInterfaces"
-        name="Reset the layouted interfaces">
-    </command>
 </extension>
 <extension point="org.eclipse.ui.handlers">
     <handler
@@ -23,10 +19,6 @@
     <handler
         class="org.eclipse.fordiac.ide.elk.handlers.UnfoldedSubAppLayoutHandler"
         commandId="org.eclipse.fordiac.ide.elk.layoutUnfoldedSubApp">
-    </handler>
-    <handler
-        class="org.eclipse.fordiac.ide.elk.handlers.ResetInterfacesHandler"
-        commandId="org.eclipse.fordiac.ide.elk.resetInterfaces">
     </handler>
 </extension>
 <extension point="org.eclipse.ui.menus">
@@ -83,11 +75,6 @@
          allPopups="false"
          locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">  
       <separator name="layouting stuff" visible="true"/>
-      <command
-            commandId="org.eclipse.fordiac.ide.elk.resetInterfaces"
-            label="Reset Interfaces"
-            style="push">
-               </command>
       <command
             commandId="org.eclipse.fordiac.ide.elk.layout"
             label="Auto Layouting"
