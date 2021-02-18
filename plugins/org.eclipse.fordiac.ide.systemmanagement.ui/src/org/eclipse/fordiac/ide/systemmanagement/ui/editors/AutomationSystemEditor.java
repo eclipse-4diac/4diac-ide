@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -263,7 +264,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		}
 		final SaveAsDialog saveAsDialog = new SaveAsDialog(getSite().getShell());
 		saveAsDialog.setOriginalName(system.getSystemFile().getName());
-
+		saveAsDialog.open();
 		final IPath path = saveAsDialog.getResult();
 		if (path == null) {
 			return;
@@ -391,7 +392,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	private void handleReturnCode(final int returnCode, final IFile file) {
 		switch (returnCode) {
 		case OVERWRITE_CHANGES:
-			// do nothing
+			doSave(new NullProgressMonitor());
 			break;
 		case SAVE_CHANGES:
 			doSaveAs();
