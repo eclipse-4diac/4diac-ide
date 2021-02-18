@@ -16,6 +16,8 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -71,5 +73,20 @@ public final class BreadcrumbUtil {
 		final EObject parentModel = model.eContainer().eContainer();  // use eContainer here so that it also works for
 		// types
 		return OpenListenerManager.openEditor(parentModel);
+	}
+
+	public static boolean isEditableSubApp(SubApp subApp) {
+		if ((null == subApp) || (null != subApp.getType())) {
+			return false;
+		}
+
+		EObject obj = subApp;
+		while (obj.eContainer() != null) {
+			obj = obj.eContainer();
+			if (obj instanceof SubAppType) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

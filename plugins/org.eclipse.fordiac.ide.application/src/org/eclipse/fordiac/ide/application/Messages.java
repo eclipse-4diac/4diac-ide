@@ -165,6 +165,10 @@ public class Messages extends NLS {
 
 	public static String PasteRecreateNotPossible;
 
+	public static String ToggleSubAppRepresentation_Collapse;
+
+	public static String ToggleSubAppRepresentation_Expand;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
