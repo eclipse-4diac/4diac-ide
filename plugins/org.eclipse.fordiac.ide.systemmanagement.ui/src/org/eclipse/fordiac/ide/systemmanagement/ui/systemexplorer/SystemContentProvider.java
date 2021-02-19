@@ -35,6 +35,8 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemmanagement.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -50,12 +52,12 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	}
 
 	@Override
-	public Object[] getElements(Object inputElement) {
+	public Object[] getElements(final Object inputElement) {
 		return getChildren(inputElement);
 	}
 
 	@Override
-	public Object[] getChildren(Object parentElement) {
+	public Object[] getChildren(final Object parentElement) {
 		if (parentElement instanceof IResource) {
 			return getResourceChildren((IResource) parentElement);
 		}
@@ -63,12 +65,12 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	}
 
 	@Override
-	public Object getParent(Object object) {
+	public Object getParent(final Object object) {
 		if (object instanceof IResource) {
 			return ((IResource) object).getParent();
 		}
 		if (object instanceof Application) {
-			Application app = (Application) object;
+			final Application app = (Application) object;
 			// the automation system can be null if the the app was just deleted
 			return (null != app.getAutomationSystem()) ? app.getAutomationSystem().getSystemFile() : null;
 		}
@@ -82,7 +84,7 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	}
 
 	@Override
-	public boolean hasChildren(Object element) {
+	public boolean hasChildren(final Object element) {
 		if (element instanceof IResource) {
 			if (element instanceof IProject) {
 				return ((IProject) element).isAccessible();
@@ -95,21 +97,25 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	}
 
 	private static List<AdapterFactory> createFactoryList() {
-		ArrayList<AdapterFactory> factories = new ArrayList<>();
+		final ArrayList<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new SystemElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());
 		return factories;
 	}
 
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		if (notification.getNotifier() instanceof AutomationSystem) {
 			// as the automation system is changed we need to perform a special refresh here
-			// distributedSystemWorkspaceChanged();
-			AutomationSystem system = (AutomationSystem) notification.getNotifier();
+			final AutomationSystem system = (AutomationSystem) notification.getNotifier();
 			super.notifyChanged(new ViewerNotification(notification, system.getSystemFile()));
 		} else {
 			super.notifyChanged(notification);
+			if (LibraryElementPackage.CONFIGURABLE_OBJECT__NAME == notification
+					.getFeatureID(ConfigurableObject.class)) {
+				// trigger a resorting
+				distributedSystemWorkspaceChanged();
+			}
 		}
 	}
 
@@ -120,17 +126,18 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 		}
 	}
 
-	private Object[] getResourceChildren(IResource resource) {
+	private Object[] getResourceChildren(final IResource resource) {
 		if (resource instanceof IWorkspaceRoot) {
 			// show only 4diac or closed projects
-			IWorkspaceRoot root = (IWorkspaceRoot) resource;
-			return Arrays.stream(root.getProjects()).filter(proj -> projectToShow(proj)).collect(Collectors.toList())
+			final IWorkspaceRoot root = (IWorkspaceRoot) resource;
+			return Arrays.stream(root.getProjects()).filter(SystemContentProvider::projectToShow)
+					.collect(Collectors.toList())
 					.toArray(new IProject[0]);
 		}
 		if (((resource instanceof IProject) && ((IProject) resource).isOpen()) || (resource instanceof IFolder)) {
 			try {
 				return ((IContainer) resource).members();
-			} catch (CoreException e) {
+			} catch (final CoreException e) {
 				Activator.getDefault().logError("Could not read project children", e); //$NON-NLS-1$
 			}
 		}
@@ -143,11 +150,11 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 		return new Object[0];
 	}
 
-	private static boolean projectToShow(IProject proj) {
+	private static boolean projectToShow(final IProject proj) {
 		// if the project is closed or a 4diac project return true
 		try {
 			return !proj.isOpen() || proj.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID);
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			Activator.getDefault().logError("Could not read project nature", e); //$NON-NLS-1$
 		}
 		return false;
