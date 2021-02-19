@@ -23,10 +23,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.ui;bundle-version="[1.11.0,2.0.0)",
  org.eclipse.ui.views.properties.tabbed,
- org.eclipse.fordiac.ide.model.commands
+ org.eclipse.fordiac.ide.model.commands,
+ org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.13.0.qualifier
+Bundle-Version: 1.13.1.qualifier
 Bundle-Name: Function Block Type Editor (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.Activator
 Bundle-ManifestVersion: 2

@@ -207,7 +207,8 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		final FBNetworkElement srcElement = getSource().getFBNetworkElement();
 		final FBNetworkElement dstElement = getDestination().getFBNetworkElement();
 
-		if ((srcElement instanceof SubApp) || (dstElement instanceof SubApp)) {
+		if ((srcElement != null) && (dstElement != null)
+				&& ((srcElement instanceof SubApp) || (dstElement instanceof SubApp))) {
 			// we only need to check the parent if both ends are subapps
 			final FBNetwork srcNetwork = srcElement.getFbNetwork();
 			final FBNetwork dstNetwork = dstElement.getFbNetwork();

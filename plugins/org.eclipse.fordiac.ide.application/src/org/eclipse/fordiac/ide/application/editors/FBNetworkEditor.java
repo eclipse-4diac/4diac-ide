@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- * 				 2018 - 2020 Johannes Kepler University
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                          Johannes Kepler University,
+ *                          Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,10 +16,14 @@
  *   Alois Zoitl - fixed copy/paste handling
  *               - extracted FBNetworkRootEditPart from FBNetworkEditor
  *               - extracted panning and selection tool
+ *               - improved initial position of canvas to show top left corner of
+ *                 drawing area
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.actions.CopyEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.CutEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
@@ -36,6 +40,8 @@ import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementAction;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.ContextMenuProvider;
@@ -51,15 +57,21 @@ import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 
 /**
  * The main editor for FBNetworks.
  */
 public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements ISystemEditor {
+
+	private static final int INITIAL_SCROLL_OFFSET = 5;
 
 	private static final PaletteFlyoutPreferences PALETTE_PREFERENCES = new PaletteFlyoutPreferences(
 			"FBNetworkPalette.Location", //$NON-NLS-1$
@@ -94,6 +106,31 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	}
 
 	@Override
+	public void createPartControl(final Composite parent) {
+		super.createPartControl(parent);
+
+		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
+		if (viewer.getControl() instanceof FigureCanvas) {
+			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+			final FBNetworkRootEditPart rootEditPart = (FBNetworkRootEditPart) getGraphicalViewer().getRootEditPart();
+			Display.getDefault().asyncExec(() -> {
+				viewer.flush();
+				// if an editpart is selected then the viewer has bee created with something to be shown centered
+				// therefore we will not show the initial position
+				// do not use getSelection() here because it will return always at least one element
+				if (viewer.getSelectedEditParts().isEmpty()) {
+					final Rectangle drawingAreaBounds = rootEditPart.getDrawingAreaContainer().getBounds();
+					canvas.scrollTo(drawingAreaBounds.x - INITIAL_SCROLL_OFFSET,
+							drawingAreaBounds.y - INITIAL_SCROLL_OFFSET);
+				} else {
+					// if we have a selected edit part we want to show it in the middle
+					viewer.revealEditPart((EditPart) viewer.getSelectedEditParts().get(0));
+				}
+			});
+		}
+	}
+
+	@Override
 	protected EditPartFactory getEditPartFactory() {
 		return new ElementEditPartFactory(this);
 	}
@@ -102,6 +139,12 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
 		return new FBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager, getPalette());
+	}
+
+	@Override
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+		super.selectionChanged(part, selection);
+		updateActions(getSelectionActions());
 	}
 
 	protected Palette getPalette() {
@@ -119,6 +162,11 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		super.configureGraphicalViewer();
 		getGraphicalControl().addListener(SWT.Activate, this::handleActivationChanged);
 		getGraphicalControl().addListener(SWT.Deactivate, this::handleActivationChanged);
+		final ActionRegistry registry = getActionRegistry();
+		final Open4DIACElementAction openAction = (Open4DIACElementAction) registry
+				.getAction(Open4DIACElementAction.ID);
+		getGraphicalViewer().addSelectionChangedListener(openAction);
+
 	}
 
 	@Override
@@ -134,7 +182,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
 		final ActionRegistry registry = getActionRegistry();
@@ -155,6 +202,9 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		action = new UpdateFBTypeAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
+
+		final Open4DIACElementAction openAction = new Open4DIACElementAction(this);
+		registry.registerAction(openAction);
 
 		super.createActions();
 
@@ -228,7 +278,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		// empty
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(final Class adapter) {
 		if (adapter == FBNetwork.class) {

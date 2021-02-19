@@ -29,14 +29,13 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction;
-import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -46,7 +45,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	private UnfoldedSubappContentNetwork subappContents;
 	private InstanceComment instanceComment;
 
-	private Adapter subAppInterfaceAdapter = new EContentAdapter() {
+	private final Adapter subAppInterfaceAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			switch (notification.getEventType()) {
@@ -76,7 +75,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 					if (notification.getNewValue() instanceof IInterfaceElement) {
 						refreshChildren();
 					}
-					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(notification.getFeature())) { 
+					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
+							.equals(notification.getFeature())) {
 						refreshChildren();
 						refreshInterfaceEditParts();
 					}
@@ -86,7 +86,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 					if (notification.getOldValue() instanceof IInterfaceElement) {
 						refreshChildren();
 					}
-					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(notification.getFeature())) { 
+					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
+							.equals(notification.getFeature())) {
 						refreshChildren();
 						refreshInterfaceEditParts();
 					}
@@ -113,7 +114,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	}
 	@Override
 	protected List<Object> getModelChildren() {
-		List<Object> children = super.getModelChildren();
+		final List<Object> children = super.getModelChildren();
 		if (getModel().isUnfolded()) {
 			children.add(getSubappContents());
 			children.add(getInstanceComment());
@@ -181,21 +182,22 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	@Override
 	public void performRequest(final Request request) {
 		if (request.getType().equals(RequestConstants.REQ_OPEN)) {
-			if (null != getModel().getPaletteEntry()) {
-				// we have a type open the sub-app type editor
-				FBNetworkElementFigure.openTypeInEditor(getModel());
-			} else {
-				SubApp subApp = getModel();
-				if ((null == subApp.getSubAppNetwork()) && subApp.isMapped()) {
-					// we are mapped and the mirrored subapp located in the resource, get the one
-					// from the application
-					subApp = (SubApp) subApp.getOpposite();
-				}
-				new OpenSubApplicationEditorAction(subApp).run();
-			}
+			openSubAppEditor();
 		} else {
 			super.performRequest(request);
 		}
+	}
+	private void openSubAppEditor() {
+		SubApp subApp = getModel();
+		if (subAppIsMapped(subApp)) {
+			subApp = (SubApp) subApp.getOpposite();
+		}
+		OpenListenerManager.openEditor(subApp);
+
+	}
+
+	private boolean subAppIsMapped(final SubApp subApp) {
+		return null == getModel().getPaletteEntry() && (null == subApp.getSubAppNetwork()) && subApp.isMapped();
 	}
 
 	@Override
@@ -205,7 +207,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	}
 
 	@Override
-	protected void addChildVisual(EditPart childEditPart, int index) {
+	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		if (childEditPart instanceof UnfoldedSubappContentEditPart) {
 			getFigure().getBottom().add(((UnfoldedSubappContentEditPart) childEditPart).getFigure(), 1);
 		} else if (childEditPart instanceof InstanceCommentEditPart) {
@@ -216,7 +218,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	}
 
 	@Override
-	protected void removeChildVisual(EditPart childEditPart) {
+	protected void removeChildVisual(final EditPart childEditPart) {
 		if (childEditPart instanceof UnfoldedSubappContentEditPart) {
 			getFigure().getBottom().remove(((UnfoldedSubappContentEditPart) childEditPart).getFigure());
 		} else if (childEditPart instanceof InstanceCommentEditPart) {

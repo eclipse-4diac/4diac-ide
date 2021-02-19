@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,10 @@
  *   Alois Zoitl - initial implementation and/or documentation
  *               - implemented first version of gotoMarker for FB markers
  *               - extracted breadcrumb based editor to model.ui
+ *   Alois Zoitl, Bianca Wiesmayr, Michael Oberlehner, Lukas Wais, Daniel Lindhuber
+ *     - initial implementation of breadcrumb navigation location
+ *   Michael Oberlehner, Alois Zoitl
+ *               - implemented save and restore state
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.editors;
 
@@ -19,20 +23,32 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.ui.Activator;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.INavigationLocation;
+import org.eclipse.ui.INavigationLocationProvider;
+import org.eclipse.ui.IPersistableEditor;
+import org.eclipse.ui.NavigationLocation;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.EditorPart;
@@ -40,13 +56,22 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 
 public abstract class AbstractBreadCrumbEditor extends MultiPageEditorPart
-implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker {
+implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker,
+INavigationLocationProvider, IPersistableEditor {
+
+	private static final String TAG_BREADCRUMB_HIERACHY = "FORDIAC_BREADCRUMB_HIERACHY"; //$NON-NLS-1$
+	private static final String TAG_GRAPHICAL_VIEWER_ZOOM = "FORDIAC_GRAPHICAL_VIEWER_ZOOM"; //$NON-NLS-1$
+	private static final String TAG_GRAPHICAL_VIEWER_HOR_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_HOR_SCROLL"; //$NON-NLS-1$
+	private static final String TAG_GRAPHICAL_VIEWER_VER_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_VER_SCROLL"; //$NON-NLS-1$
 
 	private final Map<Object, Integer> modelToEditorNum = new HashMap<>();
 
 	private BreadcrumbWidget breadcrumb;
+	// the memento we got for recreating the editor state
+	private IMemento memento;
 
-	protected BreadcrumbWidget getBreadcrumb() {
+
+	public BreadcrumbWidget getBreadcrumb() {
 		return breadcrumb;
 	}
 
@@ -58,10 +83,35 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 	public void createPartControl(final Composite parent) {
 		parent.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true).spacing(0, 0).create());
 		breadcrumb = new BreadcrumbWidget(parent);
-		breadcrumb.addSelectionChangedListener(
-				event -> handleBreadCrumbSelection(((StructuredSelection) event.getSelection()).getFirstElement()));
 		super.createPartControl(parent);
 		((CTabFolder) getContainer()).setTabHeight(0); // we don't want the tabs to be seen
+		initializeBreadcrumb();
+		String itemPath = null;
+		if (null != memento) {
+			itemPath = memento.getString(TAG_BREADCRUMB_HIERACHY);
+		}
+		setInitialModel(getInitialModel(itemPath));
+		memento = null;
+		// only add the selection change listener when our editor is full up
+		breadcrumb.addSelectionChangedListener(
+				event -> handleBreadCrumbSelection(((StructuredSelection) event.getSelection()).getFirstElement()));
+	}
+
+	private void initializeBreadcrumb() {
+		getBreadcrumb().setContentProvider(createBreadcrumbContentProvider());
+		getBreadcrumb().setLabelProvider(createBreadcrumbLabelProvider());
+	}
+
+	protected void setInitialModel(final Object model) {
+		getBreadcrumb().setInput(model);
+		final int pagenum = modelToEditorNum.computeIfAbsent(model, this::createEditor).intValue();
+		if (-1 != pagenum) {
+			setActivePage(pagenum);
+			final GraphicalViewer viewer = getEditor(pagenum).getAdapter(GraphicalViewer.class);
+			if ((null != viewer) && (null != memento)) {
+				restoreGraphicalViewerState(viewer, memento);
+			}
+		}
 	}
 
 	@Override
@@ -71,10 +121,11 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 		return pageContainer;
 	}
 
-	private void handleBreadCrumbSelection(final Object element) {
-		final int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor);
+	void handleBreadCrumbSelection(final Object element) {
+		final int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor).intValue();
 		if (-1 != pagenum) {
 			setActivePage(pagenum);
+			getSite().getPage().getNavigationHistory().markLocation(this);
 		}
 	}
 
@@ -135,6 +186,76 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 		}
 	}
 
+	@Override
+	public INavigationLocation createEmptyNavigationLocation() {
+		return null;
+	}
+
+	@Override
+	public INavigationLocation createNavigationLocation() {
+		final Object modelItem = breadcrumb.getActiveItem().getModel();
+		return (modelItem != null) ? new BreadcrumbNavigationLocation(this, modelItem) : null;
+	}
+
+	@Override
+	public void saveState(final IMemento memento) {
+		final StringBuilder itemPath = new StringBuilder();
+		BreadcrumbNavigationLocation.generateItemPath(itemPath, getBreadcrumb().getActiveItem().getModel(),
+				getBreadcrumb().getContentProvider(), getBreadcrumb().getLabelProvider());
+		memento.putString(TAG_BREADCRUMB_HIERACHY, itemPath.substring(1));
+
+		final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
+		if (null != viewer) {
+			// we have a graphical viewer store its state
+			saveGraphicalViewerState(viewer, memento);
+		}
+	}
+
+	protected static void saveGraphicalViewerState(final GraphicalViewer viewer, final IMemento memento) {
+		if (viewer.getRootEditPart() instanceof ScalableFreeformRootEditPart) {
+			memento.putFloat(TAG_GRAPHICAL_VIEWER_ZOOM,
+					(float)
+					((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getZoomManager().getZoom());
+		}
+
+		if (viewer.getControl() instanceof FigureCanvas) {
+			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+			final Point location = canvas.getViewport().getViewLocation();
+			memento.putInteger(TAG_GRAPHICAL_VIEWER_HOR_SCROLL, location.x);
+			memento.putInteger(TAG_GRAPHICAL_VIEWER_VER_SCROLL, location.y);
+		}
+	}
+
+	@Override
+	public void restoreState(final IMemento memento) {
+		// store memento to be used during create part control to setup the editor with the saved state
+		this.memento = memento;
+	}
+
+	private static void restoreGraphicalViewerState(final GraphicalViewer viewer, final IMemento memento) {
+		if (viewer.getRootEditPart() instanceof ScalableFreeformRootEditPart) {
+			final Float zoom = memento.getFloat(TAG_GRAPHICAL_VIEWER_ZOOM);
+			if (null != zoom) {
+				((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getZoomManager().setZoom(zoom.doubleValue());
+			}
+		}
+
+		if (viewer.getControl() instanceof FigureCanvas) {
+			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+			final Integer xLocation = memento.getInteger(TAG_GRAPHICAL_VIEWER_HOR_SCROLL);
+			final Integer yLocation = memento.getInteger(TAG_GRAPHICAL_VIEWER_VER_SCROLL);
+			if ((null != xLocation) && (yLocation != null)) {
+				// we have to wait to set the scroll position until the editor is drawn and the canvas is setup
+				Display.getDefault().asyncExec(() -> {
+					canvas.scrollTo(xLocation.intValue(), yLocation.intValue());
+				});
+
+			}
+		}
+
+	}
+
+
 	public abstract CommandStack getCommandStack();
 
 	protected abstract void gotoFBNetworkElement(final Object object);
@@ -142,4 +263,90 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGoto
 	protected abstract EditorPart createEditorPart(final Object model);
 
 	protected abstract IEditorInput createEditorInput(final Object model);
+
+	protected abstract AdapterFactoryContentProvider createBreadcrumbContentProvider();
+
+	protected abstract AdapterFactoryLabelProvider createBreadcrumbLabelProvider();
+
+	/** retrieve the model element that this bread crumb editor should how after creation
+	 *
+	 * @param itemPath a string representation that may point to an element in a model hierarchy if null then the root
+	 *                 model element should be provided
+	 * @return the model element for which the first editor should be shown. */
+	protected abstract Object getInitialModel(String itemPath);
+
+	private static class BreadcrumbNavigationLocation extends NavigationLocation {
+
+		private final Object model;
+		private final AdapterFactoryContentProvider contentProvider;
+		private final AdapterFactoryLabelProvider labelProvider;
+
+		protected BreadcrumbNavigationLocation(final AbstractBreadCrumbEditor editorPart, final Object model) {
+			super(editorPart);
+			this.model = model;
+			contentProvider = editorPart.getBreadcrumb().getContentProvider();
+			labelProvider = editorPart.getBreadcrumb().getLabelProvider();
+		}
+
+		@Override
+		public String getText() {
+			final StringBuilder sb = new StringBuilder();
+			generateItemPath(sb, model, contentProvider, labelProvider);
+			return sb.substring(1);
+		}
+
+		public static void generateItemPath(final StringBuilder sb, final Object model,
+				final AdapterFactoryContentProvider adapterFactoryContentProvider,
+				final AdapterFactoryLabelProvider adapterFactoryLabelProvider) {
+			if (model == null) {
+				return;
+			}
+			generateItemPath(sb, adapterFactoryContentProvider.getParent(model), adapterFactoryContentProvider,
+					adapterFactoryLabelProvider);
+			sb.append("."); //$NON-NLS-1$
+			sb.append(adapterFactoryLabelProvider.getText(model));
+		}
+
+		private Object getModel() {
+			return model;
+		}
+
+		@Override
+		protected AbstractBreadCrumbEditor getEditorPart() {
+			return (AbstractBreadCrumbEditor) super.getEditorPart();
+		}
+
+		@Override
+		public void saveState(final IMemento memento) {
+			// TODO consider if and how editor state can be saved
+		}
+
+		@Override
+		public void restoreState(final IMemento memento) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void restoreLocation() {
+			final IEditorPart part= getEditorPart();
+			if (part instanceof AbstractBreadCrumbEditor) {
+				final AbstractBreadCrumbEditor editor= getEditorPart();
+				editor.getBreadcrumb().setInput(model);
+			}
+		}
+
+		@Override
+		public boolean mergeInto(final INavigationLocation currentLocation) {
+			if (currentLocation instanceof BreadcrumbNavigationLocation) {
+				return this.model == ((BreadcrumbNavigationLocation) currentLocation).getModel();
+			}
+			return false;
+		}
+
+		@Override
+		public void update() {
+			// TODO Auto-generated method stub
+		}
+
+	}
 }

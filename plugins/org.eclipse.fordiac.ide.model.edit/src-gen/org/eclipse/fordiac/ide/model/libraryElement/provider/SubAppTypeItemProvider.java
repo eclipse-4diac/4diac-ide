@@ -38,7 +38,7 @@ public class SubAppTypeItemProvider extends CompositeFBTypeItemProvider {
 	 *
 	 * @generated
 	 */
-	public SubAppTypeItemProvider(AdapterFactory adapterFactory) {
+	public SubAppTypeItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -49,7 +49,7 @@ public class SubAppTypeItemProvider extends CompositeFBTypeItemProvider {
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -63,21 +63,17 @@ public class SubAppTypeItemProvider extends CompositeFBTypeItemProvider {
 	 * @generated not
 	 */
 	@Override
-	public Object getImage(Object object) {
+	public Object getImage(final Object object) {
 		return overlayImage(object, FordiacImage.ICON_SUB_APP_TYPE.getImage());
 	}
 
-	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated not */
 	@Override
-	public String getText(Object object) {
-		String label = ((SubAppType) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_SubAppType_type") : //$NON-NLS-1$
-				getString("_UI_SubAppType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+	public String getText(final Object object) {
+		final String label = ((SubAppType) object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_SubAppType_type") : label; //$NON-NLS-1$
 	}
 
 	/**
@@ -88,7 +84,7 @@ public class SubAppTypeItemProvider extends CompositeFBTypeItemProvider {
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 		super.notifyChanged(notification);
 	}
@@ -101,7 +97,7 @@ public class SubAppTypeItemProvider extends CompositeFBTypeItemProvider {
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

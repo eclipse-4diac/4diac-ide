@@ -19,7 +19,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.EditPart;
@@ -28,6 +27,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -37,11 +37,11 @@ public class UnmapHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		CompoundCommand cmd = new CompoundCommand();
-		FBNetworkEditor fbEditor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
-		CommandStack stack = fbEditor.getCommandStack();
-		for (FBNetworkElement element : selectedNetworkElements) {
-			Command unmapCmd = new UnmapCommand(element);
+		final CompoundCommand cmd = new CompoundCommand();
+		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
+		final CommandStack stack = editor.getAdapter(CommandStack.class);
+		for (final FBNetworkElement element : selectedNetworkElements) {
+			final Command unmapCmd = new UnmapCommand(element);
 			if (unmapCmd.canExecute()) {
 				cmd.add(unmapCmd);
 			}
@@ -57,8 +57,8 @@ public class UnmapHandler extends AbstractHandler {
 		setBaseEnabled(!getMappedFBList(getSelectedElements(evaluationContext)).isEmpty());
 	}
 
-	protected List<?> getSelectedElements(Object evaluationContext){
-		ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
+	protected List<?> getSelectedElements(Object evaluationContext) {
+		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof StructuredSelection) {
 			return ((StructuredSelection) selection).toList();

@@ -25,7 +25,7 @@ public class ElementaryDataTypeCompatibility {
 
 	public static boolean isLRealCompatibleWith(final DataType other) {
 		return (other == ElementaryTypes.LREAL || other == GenericTypes.ANY_REAL)
-				|| (other == GenericTypes.ANY_MAGNITUDE) || (other == GenericTypes.ANY);
+				|| isAnyNumCompatibleWith(other);
 	}
 
 	public static boolean isUsintCompatibleWith(final DataType other) {

@@ -38,7 +38,6 @@ import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionOfFb;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -121,12 +120,11 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 						&& (((EditPart) editPart).getModel() instanceof FBNetworkElement))) {
 					final FBNetworkElement dragEditPartModel = (FBNetworkElement) ((EditPart) editPart).getModel();
 					if (dragEditPartModel.isNestedInSubApp()) {
-						final SubApp outerSubApp = (SubApp) dragEditPartModel.getOuterFBNetworkElement();
 						final SubAppForFBNetworkEditPart outerSubAppEdit = (SubAppForFBNetworkEditPart) ((AbstractFBNElementEditPart) editPart)
 								.getParent().getParent();
 
 						final MoveElementFromSubAppCommand moveElementFromSubappCommand = new MoveElementFromSubAppCommand(
-								outerSubApp, dragEditPartModel, outerSubAppEdit.getFigure().getBounds(),
+								dragEditPartModel, outerSubAppEdit.getFigure().getBounds(),
 								MoveOperation.DRAG_AND_DROP_TO_ROOT);
 						moveElementFromSubappCommand.setMouseMoveDelta(mouseMoveDelta);
 						commandos.add(moveElementFromSubappCommand);

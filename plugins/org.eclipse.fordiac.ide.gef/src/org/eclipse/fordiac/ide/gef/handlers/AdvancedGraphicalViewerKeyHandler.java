@@ -10,9 +10,9 @@
  * Contributors:
  *   Bianca Wiesmayr - initial implementation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.gef.handles;
+package org.eclipse.fordiac.ide.gef.handlers;
 
-import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;

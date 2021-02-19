@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
+ * 				 2019 - 2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,8 +20,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
 import java.util.List;
 
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
@@ -29,6 +29,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.MoveBendpointCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
@@ -38,13 +39,12 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEdit
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
-import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
@@ -54,7 +54,9 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.ConnectionEditPolicy;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
@@ -64,7 +66,6 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
 public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
@@ -76,9 +77,14 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
-			if (null != notification.getNewValue()) {
-				// if newValue is null we are most probably in the deletion process, no update
-				// is needed
+			if (null == notification.getNewValue()) {
+				// if newValue is null we are in the deletion process
+				// refresh only when the event was deleted, must not refresh deleted transition
+				if ((notification.getOldValue() instanceof Event) || "1".equals(notification.getOldValue())) { //$NON-NLS-1$
+					refresh();
+					// tooltip does not contain transition condition, no refresh needed
+				}
+			} else {
 				refreshTransitionTooltip();
 				refresh();
 			}
@@ -93,7 +99,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	};
 
 	private void updateOrderLabel() {
-		ECTransition transition = getModel();
+		final ECTransition transition = getModel();
 		if (null != transition.getSource()) {
 			if (transition.getSource().getOutTransitions().size() > 1) {
 				getConnectionFigure().setTransitionOrder(Integer.toString(transition.getPriority()));
@@ -134,7 +140,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 		private void handleCondiationEventUpdate(Notification notification) {
 			if (notification.getNewValue() instanceof String) {
-				String newValue = (String) notification.getNewValue();
+				final String newValue = (String) notification.getNewValue();
 				if ((getModel().getConditionEvent().getName().equals(newValue))
 						|| ((getModel().getConditionEvent() instanceof AdapterEvent)
 								&& (((AdapterEvent) getModel().getConditionEvent()).getAdapterDeclaration().getName()
@@ -147,11 +153,11 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 		private void checkConditionExpression(Notification notification) {
 			if (notification.getNewValue() instanceof String) {
-				Object feature = notification.getFeature();
+				final Object feature = notification.getFeature();
 				if ((LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature))
 						&& (null != getModel().getConditionExpression())
 						&& (-1 != getModel().getConditionExpression().indexOf(notification.getOldStringValue()))) {
-					String expresion = STStringTokenHandling.replaceSTToken(getModel().getConditionExpression(),
+					final String expresion = STStringTokenHandling.replaceSTToken(getModel().getConditionExpression(),
 							notification.getOldStringValue(), notification.getNewStringValue());
 					getModel().setConditionExpression(expresion);
 					refresh();
@@ -190,23 +196,30 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
 
-			protected Command getDirectEditCommand(final DirectEditRequest request) {
+			@Override
+			protected CompoundCommand getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof AbstractConnectionEditPart) {
-					Integer value = (Integer) request.getCellEditor().getValue();
-					if (null != value) {
-						int selected = value.intValue();
-						List<String> events = ECCContentAndLabelProvider
+					final String[] values = (String[]) request.getCellEditor().getValue();
+					if (null != values) {
+						final int selected = Integer.parseInt(values[0]);
+						final List<String> events = ECCContentAndLabelProvider
 								.getTransitionConditionEventNames(getBasicFBType());
 						String ev = null;
 						if ((0 <= selected) && (selected < events.size())) {
 							ev = events.get(selected);
 						}
-						return new ChangeConditionEventCommand(getModel(), ev != null ? ev : "1");
+
+						final CompoundCommand commands = new CompoundCommand();
+						commands.add(new ChangeConditionExpressionCommand(getModel(), values[1]));
+						commands.add(new ChangeConditionEventCommand(getModel(), ev != null ? ev : "1"));
+
+						return commands;
 					}
 				}
 				return null;
 			}
 
+			@Override
 			protected void showCurrentEditValue(final DirectEditRequest request) {
 				// handled by the direct edit manager
 			}
@@ -229,8 +242,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 
 			private Command getTransitionMoveCommand(ChangeBoundsRequest request) {
-				Point p = new Point(getModel().getX(), getModel().getY());
-				double scaleFactor = ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager().getZoom();
+				final Point p = new Point(getModel().getX(), getModel().getY());
+				final double scaleFactor = ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager().getZoom();
 				p.scale(scaleFactor);
 				p.x += request.getMoveDelta().x;
 				p.y += request.getMoveDelta().y;
@@ -259,20 +272,17 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	}
 
 	protected DirectEditManager createDirectEditManager() {
-		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(getNameLabel()),
-				getNameLabel());
+		return new ECTransitionDirectEditManager(this, getModel(), getFigure().getLabel(), getZoomManager(),
+				(FigureCanvas) getViewer().getControl());
 	}
 
 	public void performDirectEdit() {
-
-		List<String> eventNames = ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType());
-		int selected = (getModel().getConditionEvent() != null)
-				? eventNames.indexOf(getModel().getConditionEvent().getName())
-				: eventNames.size() - 1;
-		((ComboDirectEditManager) getManager()).updateComboData(eventNames);
-		((ComboDirectEditManager) getManager()).setSelectedItem(selected);
 		getManager().show();
 
+	}
+
+	private ZoomManager getZoomManager() {
+		return ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager();
 	}
 
 	public BasicFBType getBasicFBType() {
@@ -280,22 +290,16 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 	}
 
-	private DirectEditManager getManager() {
+	private ECTransitionDirectEditManager getManager() {
 		if (null == manager) {
 			manager = createDirectEditManager();
 		}
-		return manager;
-	}
-
-	// This is used for the DirectEditManager's Locator
-	protected Label getNameLabel() {
-		Label transitionLabel = new Label();
-		transitionLabel.setLocation(new Point(getModel().getX(), getModel().getY()));
-		return transitionLabel;
+		return (ECTransitionDirectEditManager) manager;
 	}
 
 	protected void refreshLocator() {
-		getManager().setLocator(new ComboCellEditorLocator(getNameLabel()));
+		getManager()
+		.updateRefPosition(new Point(getModel().getX(), getModel().getY()));
 	}
 
 	@Override
@@ -309,7 +313,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		ECTransitionFigure figure = new ECTransitionFigure(getModel());
+		final ECTransitionFigure figure = new ECTransitionFigure(getModel());
 		figure.setLineWidth(NORMAL_WIDTH);
 		return figure;
 	}
@@ -341,7 +345,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	}
 
 	public void highlight(boolean highlight) {
-		PolylineConnection pc = getConnectionFigure();
+		final PolylineConnection pc = getConnectionFigure();
 		if (null != pc) {
 			pc.setLineWidth((highlight) ? ConnectionPreferenceValues.HIGHLIGTHED_LINE_WIDTH : NORMAL_WIDTH);
 		}

@@ -12,10 +12,8 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util.action;
+package org.eclipse.fordiac.ide.model.ui.actions;
 
-import org.eclipse.fordiac.ide.util.IOpenListener;
-import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.jface.action.Action;
 
 /**

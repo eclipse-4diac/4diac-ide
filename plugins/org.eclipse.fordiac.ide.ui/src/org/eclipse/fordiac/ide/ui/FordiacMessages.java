@@ -103,6 +103,10 @@ public final class FordiacMessages extends NLS {
 	public static String FordiacPreferencePage_LABEL_DefaultAdapterConnectorColor;  // NOSONAR
 	public static String FordiacPreferencePage_LABEL_PreferencePageDescription;  // NOSONAR
 
+	public static String TableCopyPaste_TEXT_Copy;  // NOSONAR
+	public static String TableCopyPaste_TEXT_Paste;  // NOSONAR
+	public static String TableCopyPaste_TEXT_Cut;  // NOSONAR
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, FordiacMessages.class);

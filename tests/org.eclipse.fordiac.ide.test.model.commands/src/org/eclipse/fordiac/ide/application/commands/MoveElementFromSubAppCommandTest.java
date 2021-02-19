@@ -63,10 +63,10 @@ public class MoveElementFromSubAppCommandTest extends FBNetworkTestBase {
 		final SubApp sub = (SubApp) s.getFbNetwork().getNetworkElements().get(0);
 		final FBNetworkElement elem = sub.getSubAppNetwork().getNetworkElements().get(0);
 		s.setCommand(
-				new MoveElementFromSubAppCommand(sub, elem, new Rectangle(0, 0, 0, 0), MoveOperation.CONTEXT_MENU));
+				new MoveElementFromSubAppCommand(elem, new Rectangle(0, 0, 0, 0), MoveOperation.CONTEXT_MENU));
 		return commandExecution(s);
 	}
-	
+
 	private static void verifyMoveFB(final State s, final State o, final TestFunction t) {
 		t.test(s.getFbNetwork().getNetworkElements().size(), 2);
 		final SubApp sub = (SubApp) s.getFbNetwork().getElementNamed(SUBAPP);
@@ -147,8 +147,8 @@ public class MoveElementFromSubAppCommandTest extends FBNetworkTestBase {
 						new ExecutionDescription<>("move Functionblock from SubApp", //$NON-NLS-1$
 								MoveElementFromSubAppCommandTest::moveFB, //
 								MoveElementFromSubAppCommandTest::verifyMoveFB //
-						)) //
-		));
+								)) //
+				));
 
 		a.addAll(describeCommand("Start with two FBs in SubAppNetwork", //$NON-NLS-1$
 				MoveElementFromSubAppCommandTest::initState, //
@@ -157,18 +157,18 @@ public class MoveElementFromSubAppCommandTest extends FBNetworkTestBase {
 						new ExecutionDescription<>("Create Data Connections", //$NON-NLS-1$
 								MoveElementFromSubAppCommandTest::addDataConnection, //
 								MoveElementFromSubAppCommandTest::verifyDataConnection //
-						), //
+								), //
 						new ExecutionDescription<>("Create Event Connections", //$NON-NLS-1$
 								MoveElementFromSubAppCommandTest::addEventConnection, //
 								MoveElementFromSubAppCommandTest::verifyEventConnection //
-						), //
+								), //
 						new ExecutionDescription<>("move Functionblock from SubApp", //$NON-NLS-1$
 								MoveElementFromSubAppCommandTest::moveFB, //
 								MoveElementFromSubAppCommandTest::verifyMoveFBwithConnections //
-						)) //
-		));
+								)) //
+				));
 
 		return a;
 	}
-		
+
 }

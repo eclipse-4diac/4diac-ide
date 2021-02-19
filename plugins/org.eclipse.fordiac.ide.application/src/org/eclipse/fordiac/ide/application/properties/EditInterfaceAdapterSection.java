@@ -33,27 +33,26 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(IInterfaceElement interfaceElement, boolean isInput) {
-		AdapterType last = getLastUsedAdapterType(getType().getInterface(), interfaceElement, isInput);
-		int pos = getInsertingIndex(interfaceElement, isInput);
+	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+		final AdapterType last = getLastUsedAdapterType(getType().getInterface(), interfaceElement, isInput);
+		final int pos = getInsertingIndex(interfaceElement, isInput);
 		return new CreateSubAppInterfaceElementCommand(last, getCreationName(interfaceElement),
 				getType().getInterface(), isInput, pos);
 	}
 
 	@Override
-	protected InsertInterfaceElementCommand newInsertCommand(IInterfaceElement interfaceElement, boolean isInput,
-			int index) {
-		AdapterType last = getLastUsedAdapterType(getType().getInterface(), interfaceElement, isInput);
+	protected InsertInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
+			final int index) {
+		final AdapterType last = getLastUsedAdapterType(getType().getInterface(), interfaceElement, isInput);
 		return new InsertSubAppInterfaceElementCommand(interfaceElement, last, getType().getInterface(), isInput,
 				index);
 	}
 
 	@Override
-	protected SubApp getInputType(Object input) {
+	protected SubApp getInputType(final Object input) {
 		if (input instanceof SubAppForFBNetworkEditPart) {
 			return ((SubAppForFBNetworkEditPart) input).getModel();
 		}
@@ -67,17 +66,17 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	}
 
 	@Override
-	protected DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection) {
+	protected DeleteInterfaceCommand newDeleteCommand(final IInterfaceElement selection) {
 		return new DeleteSubAppInterfaceElementCommand(selection);
 	}
 
 	@Override
-	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean moveUp) {
+	protected ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection, final boolean moveUp) {
 		return new ChangeSubAppInterfaceOrderCommand(selection, moveUp);
 	}
 
 	@Override
-	protected ChangeTypeCommand newChangeTypeCommand(VarDeclaration data, DataType newType) {
+	protected ChangeTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
 		return new ChangeSubAppIETypeCommand(data, newType);
 	}
 
@@ -86,8 +85,4 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 		return (SubApp) type;
 	}
 
-	@Override
-	protected TypeLibrary getTypeLibrary() {
-		return getType().getFbNetwork().getAutomationSystem().getPalette().getTypeLibrary();
-	}
 }

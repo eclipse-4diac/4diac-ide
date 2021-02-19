@@ -181,6 +181,9 @@
             <input
                   type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
+            </input>
          </propertySection>
          <propertySection
          	class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
@@ -320,17 +323,8 @@
          </propertySection>
       </propertySections>
    </extension>
-   <extension point="org.eclipse.core.expressions.propertyTesters">
-    	<propertyTester
-          class="org.eclipse.fordiac.ide.application.properties.MoveToParentPropertyTester"
-          id="org.eclipse.fordiac.ide.application.properties.moveToParentPropertyTester"
-          namespace="org.eclipse.fordiac.ide.application.properties"
-          properties="parentIsSubApp"
-          type="java.lang.Object">
-    	</propertyTester>
- 	</extension>
    <extension
-         point="org.eclipse.fordiac.ide.util.openListener">
+         point="org.eclipse.fordiac.ide.model.ui.openListener">
       <openListener
             class="org.eclipse.fordiac.ide.application.actions.OpenApplicationEditorAction"
             icon="fordiacimage://ICON_APPLICATION"
@@ -339,7 +333,7 @@
       </openListener>
    </extension>
    <extension
-         point="org.eclipse.fordiac.ide.util.openListener">
+         point="org.eclipse.fordiac.ide.model.ui.openListener">
       <openListener
             class="org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"
             icon="fordiacimage://ICON_SUB_APP"
@@ -400,14 +394,19 @@
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
-            id="org.eclipse.fordiac.ide.application.commands.unfoldSubApp"
-            name="Toggle SubApp Representation">
+            id="org.eclipse.fordiac.ide.application.commands.expandSubApp"
+            name="Expand Subapp">
+      </command>
+      <command
+           categoryId="org.eclipse.fordiac.ide.commands.category"
+           id="org.eclipse.fordiac.ide.application.commands.collapseSubApp"
+           name="Collapse Subapp">
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.SaveAsSubappTypeHandler"
             id="org.eclipse.fordiac.ide.application.commands.saveAsSubappType"
-            name="Save as Subapplication Type">
+            name="Save to Type Library">
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
@@ -578,7 +577,14 @@
       </handler>
       <handler
             class="org.eclipse.fordiac.ide.application.handlers.ToggleSubAppRepresentation"
-            commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp">
+            commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp">
+            <activeWhen>
+                <reference definitionId="org.eclipse.fordiac.ide.application.SubAppSelection" />
+            </activeWhen>
+      </handler>
+      <handler
+      	    class="org.eclipse.fordiac.ide.application.handlers.ToggleSubAppRepresentation"
+            commandId="org.eclipse.fordiac.ide.application.commands.collapseSubApp">
             <activeWhen>
                 <reference definitionId="org.eclipse.fordiac.ide.application.SubAppSelection" />
             </activeWhen>
@@ -679,7 +685,8 @@
       </menuContribution>            
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">
             <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp" />
-            <command commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.collapseSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent" />
@@ -689,14 +696,14 @@
                   commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes">
             </command>
             <command commandId= "org.eclipse.fordiac.ide.application.commands.convertToStruct"
-            		label="Convert to Struct">
+            		label="Extract Struct">
                 <visibleWhen checkEnabled="true">
                 	<with variable="activeEditor">
                 		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
                 	</with>
             	</visibleWhen>
             </command>
-      </menuContribution>            
+      </menuContribution>
       
       <menuContribution
          allPopups="false"
@@ -704,7 +711,7 @@
       <separator name="layouting stuff" visible="true"/>
       <command
             commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct"
-            label="Convert to Struct"
+            label="Extract Struct"
             style="push">
             <visibleWhen checkEnabled="true">
             		<reference
@@ -729,14 +736,14 @@
                      class="org.eclipse.fordiac.ide.application.handlers.MapToContributionItem"
                      id="org.eclipse.fordiac.ide.application.commands.mapTo">
                </dynamic>
-               <visibleWhen>
+               <visibleWhen
+                     checkEnabled="true">
                     <and>
-                        <with
-                           variable="activeEditorId">
-                        <equals
-                              value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
-                        </equals>
-                     </with>
+                        <with variable="activeEditor">
+                  			<adapt
+                       			 type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+                    		</adapt>
+            			</with>
                      </and>
                </visibleWhen>
             </menu>
@@ -814,14 +821,12 @@
           <visibleWhen checkEnabled="true">
           		<or>
                 	<and> 
-                		<with variable="activeEditorId">
-                    		<equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
-                		</with>
+						<with variable="activeEditor">
+							<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+						</with>
                     	<reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection" />
                 	</and>
-                	<test
-                		property="org.eclipse.fordiac.ide.application.properties.parentIsSubApp">
-                	</test>
+                	<test property="org.eclipse.fordiac.ide.application.properties.parentIsSubApp" />
                 </or>
             </visibleWhen>
          </command>
@@ -832,13 +837,6 @@
             <visibleWhen
                   checkEnabled="false">
                 <and> 
-                	<with variable="activeEditorId">
-               			<or>
-		            		<equals value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor" />
-		            		<equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
-		            		<equals value="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor" />
-		            	</or>
-	            	</with>
 	            	<with variable="activeEditor">
                     	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
             		</with>
@@ -865,14 +863,41 @@
                </reference>
             </visibleWhen>
          </command>
-         <command commandId="org.eclipse.fordiac.ide.application.commands.unfoldSubApp">
+         
+         <command commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp">
             <visibleWhen
                   checkEnabled="false">
-               <reference
-                     definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
-               </reference>
+                <with variable="selection">
+            		<count value="1" />
+            		<iterate ifEmpty="false">
+            			<and> 
+            			<reference 
+            		       	definitionId="org.eclipse.fordiac.ide.application.SubAppInstanceSelection">
+               			</reference>
+            			<not>
+            				<test
+                				property="org.eclipse.fordiac.ide.elk.properties.isUnfoldedSubApp" forcePluginActivation="true">
+                			</test>
+            			</not>
+               			</and>
+            		</iterate>
+            	</with>
             </visibleWhen>
          </command>
+         
+         <command commandId="org.eclipse.fordiac.ide.application.commands.collapseSubApp">
+ 			<visibleWhen checkEnabled="false">
+            	<with variable="selection">
+            		<count value="1" />
+            		<iterate>
+            			<test
+                			property="org.eclipse.fordiac.ide.elk.properties.isUnfoldedSubApp" forcePluginActivation="true">
+                		</test>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+         </command>
+         
          <command
                commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" >
             <visibleWhen checkEnabled="true">
@@ -901,17 +926,21 @@
                   class="org.eclipse.fordiac.ide.application.handlers.MapToContributionItem"
                   id="org.eclipse.fordiac.ide.application.commands.mapTo">
                <visibleWhen
-                     checkEnabled="false">
+                     checkEnabled="true">
                      <and>
-                        <with
-                           variable="activeEditorId">
-                        <equals
-                              value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
-                        </equals>
-                     </with>
-                  <reference
-                        definitionId="org.eclipse.fordiac.ide.application.FBNSelection">
-                  </reference>
+          				<with
+             			     variable="activeEditor">
+								<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+						</with>
+                    	<with variable="activeEditorId">
+                    		<and>
+                    			<not><equals value="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor" /></not>
+                    			<not><equals value="org.eclipse.fordiac.ide.network.CompositeNetworkEditor" /></not>
+                    		</and>
+                   		 </with>
+                  		<reference
+                     	   definitionId="org.eclipse.fordiac.ide.application.FBNSelection">
+                  		</reference>
                      </and>
                </visibleWhen>
             </dynamic>
@@ -939,9 +968,9 @@
                commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
                icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png">
             <visibleWhen checkEnabled="true">
-                <with variable="activeEditorId">
-                    <equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
-                </with>
+	            <with variable="activeEditor">
+	                   <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+	            </with>
             </visibleWhen>
          </command>
          <command
@@ -1112,7 +1141,7 @@
       				</instanceof>
       			</iterate>
       		</with>
-      </definition>
+      </definition>      
       <definition
             id="org.eclipse.fordiac.ide.application.SubAppSelection">
             <with
@@ -1129,16 +1158,31 @@
                   </or>
                </iterate>
             </with>
-      </definition>      
+      </definition>    
+      <definition
+            id="org.eclipse.fordiac.ide.application.SubAppInstanceSelection">
+            <with
+               variable="selection">
+               <iterate>
+                  <or>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.model.libraryElement.SubApp">
+                    </instanceof>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart">
+                    </instanceof>
+                  </or>
+               </iterate>
+            </with>
+      </definition>    
 	   <definition
 	         id="org.eclipse.fordiac.ide.application.FocusOnActivation">
-	       <with variable="activeEditorId">
-       	   		<or>
-			       <equals value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor"/>
-			       <equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor"/>
-			       <equals value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor"/>
-	        	</or>
-		    </with>
+            <with
+                  variable="activeEditor">
+                   <adapt
+                        type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+                   </adapt>
+            </with>
 	   </definition>
 	   <definition
           id="org.eclipse.fordiac.ide.application.FBNSelection">
@@ -1169,7 +1213,7 @@
        <definition
           id="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection">
             <with variable="selection">
-                <iterate operator="and" ifEmpty="false">
+                <iterate operator="or" ifEmpty="false">
                     <instanceof
                           value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
                     </instanceof>
@@ -1178,17 +1222,12 @@
           </definition>
     <definition
           id="org.eclipse.fordiac.ide.application.UnmapAllActivation">
-       <with
-             variable="activeEditorId">
-         <or>
-          <equals
-                value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
-          </equals>
-          <equals
-                value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
-          </equals>
-         </or>
-       </with>
+		<with
+			variable="activeEditor">
+			<adapt
+				type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+			</adapt>
+		</with>
     </definition>
    </extension>   
 </plugin>

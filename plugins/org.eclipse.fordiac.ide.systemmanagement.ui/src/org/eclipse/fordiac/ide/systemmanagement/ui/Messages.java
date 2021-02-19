@@ -21,10 +21,6 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.systemmanagement.ui.messages"; //$NON-NLS-1$
 
-	public static String OpenEditorAction_text;
-
-	public static String OpenEditorProvider_OpenWithMenu_label;
-
 	public static String NewApplicationWizardTitle;
 
 	public static String NewApplicationPage_NewApplicationDescription;

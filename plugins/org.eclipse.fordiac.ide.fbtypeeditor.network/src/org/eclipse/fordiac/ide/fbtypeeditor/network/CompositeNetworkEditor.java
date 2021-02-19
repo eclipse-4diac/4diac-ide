@@ -48,9 +48,7 @@ import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.util.TransferDropTargetListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IWorkbenchPart;
 
 public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEditorPart {
 
@@ -82,12 +80,6 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
 		return new CompositeNetworkEditPartFactory(this);
-	}
-
-	@Override
-	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		super.selectionChanged(part, selection);
-		updateActions(getSelectionActions());
 	}
 
 	@Override

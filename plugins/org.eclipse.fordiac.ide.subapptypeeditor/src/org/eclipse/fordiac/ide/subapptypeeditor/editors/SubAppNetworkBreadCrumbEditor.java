@@ -15,18 +15,29 @@ package org.eclipse.fordiac.ide.subapptypeeditor.editors;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
+import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.fordiac.ide.subapptypeeditor.Activator;
 import org.eclipse.fordiac.ide.subapptypeeditor.providers.TypedSubappProviderAdapterFactory;
+import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -70,14 +81,6 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	}
 
 	@Override
-	public void createPartControl(final Composite parent) {
-		super.createPartControl(parent);
-		getBreadcrumb().setContentProvider(new AdapterFactoryContentProvider(new TypedSubappProviderAdapterFactory()));
-		getBreadcrumb().setLabelProvider(new FBTypeLabelProvider());
-		getBreadcrumb().setInput(getSubAppType());
-	}
-
-	@Override
 	protected Composite createPageContainer(final Composite parent) {
 		final Composite pageContainer = new Composite(parent, SWT.NONE);
 		pageContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -101,20 +104,64 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	protected EditorPart createEditorPart(final Object model) {
 		if (model instanceof SubApp) {
+			if (((SubApp) model).getType() != null) {
+				return new SubappInstanceViewer();
+			}
 			final UnTypedSubAppNetworkEditor editor = new UnTypedSubAppNetworkEditor();
 			editor.setCommonCommandStack(getCommandStack());
 			editor.setTypeLib(getEditorInput().getPaletteEntry().getTypeLibrary());
 			return editor;
 		}
+
+		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
+			return new CompositeInstanceViewer();
+		}
+
 		return null;
 	}
 
 	@Override
 	protected IEditorInput createEditorInput(final Object model) {
 		if (model instanceof SubApp) {
+			if (((SubApp) model).getType() != null) {
+				return createSubappInstanceViewerInput(model);
+			}
 			return new SubApplicationEditorInput((SubApp) model);
 		}
+
+		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
+			return createCompositeInstanceViewerInput(model);
+		}
 		return null;
+	}
+
+	private static IEditorInput createSubappInstanceViewerInput(final Object model) {
+		final EditPart createEditPart = new SubappInstanceViewer().getEditPartFactory().createEditPart(null, model);
+		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
+				((FBNetworkElement) model).getType().getName());
+
+	}
+
+	private static IEditorInput createCompositeInstanceViewerInput(final Object model) {
+		final EditPart createEditPart = new CompositeInstanceViewer().getEditPartFactory().createEditPart(null, model);
+		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
+				((FBNetworkElement) model).getType().getName());
+	}
+
+	@Override
+	protected AdapterFactoryContentProvider createBreadcrumbContentProvider() {
+		return new AdapterFactoryContentProvider(new TypedSubappProviderAdapterFactory());
+	}
+
+	@Override
+	protected AdapterFactoryLabelProvider createBreadcrumbLabelProvider() {
+		return new FBTypeLabelProvider();
+	}
+
+	@Override
+	protected Object getInitialModel(final String itemPath) {
+		// FIXME implement path analysis for typed subapps
+		return getSubAppType();
 	}
 
 	@Override
@@ -157,8 +204,22 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	}
 
 	@Override
-	public boolean outlineSelectionChanged(final Object selectedElement) {
-		// TODO Auto-generated method stub
+	public boolean outlineSelectionChanged(Object selectedElement) {
+		if (selectedElement instanceof FBNetwork) {
+			selectedElement = ((FBNetwork) selectedElement).eContainer();
+		}
+		if ((selectedElement instanceof FBNetworkElement) || (selectedElement instanceof SubAppType)) {
+			EObject refElement = null;
+			if (selectedElement instanceof FB) {
+				refElement = (FB) selectedElement;
+				selectedElement = refElement.eContainer().eContainer();
+			}
+			getBreadcrumb().setInput(selectedElement);
+			if (null != refElement) {
+				BreadcrumbUtil.selectElement(refElement, getActiveEditor());
+			}
+			return true;
+		}
 		return false;
 	}
 

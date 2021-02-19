@@ -18,12 +18,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.SystemConfEditPartFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.ContextMenuProvider;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -60,7 +58,7 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 	@Override
 	protected void setModel(final IEditorInput input) {
 		if (input instanceof SystemConfigurationEditorInput) {
-			SystemConfigurationEditorInput sysConfInput = (SystemConfigurationEditorInput) input;
+			final SystemConfigurationEditorInput sysConfInput = (SystemConfigurationEditorInput) input;
 			sysConf = sysConfInput.getContent();
 		}
 		super.setModel(input);
@@ -91,13 +89,6 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 			return SystemConfPaletteFactory.createPalette(getSystem());
 		}
 		return new PaletteRoot();
-	}
-
-	public void selectElement(TypedConfigureableObject refElement) {
-		Object obj = getViewer().getEditPartRegistry().get(refElement);
-		if (obj instanceof EditPart) {
-			getViewer().selectAndRevealEditPart((EditPart) obj);
-		}
 	}
 
 	@Override

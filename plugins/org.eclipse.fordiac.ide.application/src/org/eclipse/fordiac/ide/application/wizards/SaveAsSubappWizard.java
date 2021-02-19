@@ -16,6 +16,8 @@
  *               - extracted fbnetwork copying code into helper class for re-use
  *               - moved replace source subapp to an wizard option
  *   Lukas Wais  - Adaption to work with new super class
+ *   Lukas Wais,
+ *   Michael Oberlehner - Refactored code for better readability
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.application.wizards;
@@ -82,38 +84,37 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 	@Override
 	public boolean performFinish() {
 		if (perform()) {
-			if (createSubAppTemplateCopy()) { // copy the subapp template so that we don't need to write code for any
-				// basic type information stuff (e.g., version, coments etc.)
-				final PaletteEntry entry = getPaletteEntry();
-				final LibraryElement type = entry.getType();
-				type.setName(TypeLibrary.getTypeNameFromFile(entry.getFile()));
-
-				TypeManagementPreferencesHelper.setupIdentification(type);
-				TypeManagementPreferencesHelper.setupVersionInfo(type);
-				performTypeSetup((SubAppType) type);
-				AbstractBlockTypeExporter.saveType(entry);
-				entry.setType(type);
-
-				if (newFilePage.getOpenType()) {
-					openTypeEditor(entry);
-				}
-
-				if (newFilePage.getReplaceSource()) {
-					replaceWithType(entry);
-				}
-
-				return true;
+			final File[] fileList = getFilesFromTemplateFolder();
+			if (null == fileList) {
+				return false;
 			}
-			return false;
+			createSubAppTemplateCopy(fileList);
+			createSupApplication();
 		}
-
 		return true;
 	}
 
-	private boolean createSubAppTemplateCopy() {
-		final String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
-		final File templateFolder = new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
-		final File[] fileList = templateFolder.listFiles();
+	private void createSupApplication() {
+		final PaletteEntry entry = getPaletteEntry();
+		final LibraryElement type = entry.getType();
+		type.setName(TypeLibrary.getTypeNameFromFile(entry.getFile()));
+
+		TypeManagementPreferencesHelper.setupIdentification(type);
+		TypeManagementPreferencesHelper.setupVersionInfo(type);
+		performTypeSetup((SubAppType) type);
+		AbstractBlockTypeExporter.saveType(entry);
+		entry.setType(type);
+
+		if (newFilePage.getOpenType()) {
+			openTypeEditor(entry);
+		}
+
+		if (newFilePage.getReplaceSource()) {
+			replaceWithType(entry);
+		}
+	}
+
+	private boolean createSubAppTemplateCopy(File[] fileList) {
 		if (null != fileList) {
 			for (final File file : fileList) {
 				final String fileName = file.getName().toUpperCase();
@@ -129,6 +130,12 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 			}
 		}
 		return false;
+	}
+
+	private static File[] getFilesFromTemplateFolder() {
+		final String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
+		final File templateFolder = new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
+		return templateFolder.listFiles();
 	}
 
 	private PaletteEntry getPaletteEntry() {

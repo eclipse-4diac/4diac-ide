@@ -48,11 +48,9 @@ import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 
-/**
- * The Class SystemManager.
+/** The Class SystemManager.
  *
- * @author gebenh
- */
+ * @author gebenh */
 public enum SystemManager {
 
 	INSTANCE;
@@ -72,30 +70,10 @@ public enum SystemManager {
 
 	/** The listeners. */
 	private final List<DistributedSystemListener> listeners = new ArrayList<>();
+	private final List<AutomationSystemListener> automationSystemListener = Collections
+			.synchronizedList(new ArrayList<>());
 
-	/**
-	 * Notify listeners.
-	 */
-	public void notifyListeners() {
-		for (final DistributedSystemListener listener : listeners) {
-			listener.distributedSystemWorkspaceChanged();
-		}
-	}
-
-	/**
-	 * Adds the workspace listener.
-	 *
-	 * @param listener the listener
-	 */
-	public void addWorkspaceListener(final DistributedSystemListener listener) {
-		if (!listeners.contains(listener)) {
-			listeners.add(listener);
-		}
-	}
-
-	/**
-	 * Instantiates a new system manager.
-	 */
+	/** Instantiates a new system manager. */
 	SystemManager() {
 		// Correctly setup the tool library needs to be done before loading any systems
 		// and adding the resource change listener
@@ -103,8 +81,8 @@ public enum SystemManager {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
 	}
 
-	public IProject createNew4diacProject(final String projectName, final IPath location, final boolean importDefaultPalette,
-			final IProgressMonitor monitor) throws CoreException {
+	public IProject createNew4diacProject(final String projectName, final IPath location,
+			final boolean importDefaultPalette, final IProgressMonitor monitor) throws CoreException {
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 		final IProject project = root.getProject(projectName);
@@ -130,7 +108,8 @@ public enum SystemManager {
 	public synchronized AutomationSystem createNewSystem(final IContainer location, final String name) {
 		final IFile systemFile = location.getFile(new Path(name + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT));
 		final Map<IFile, AutomationSystem> projectSystems = getProjectSystems(location.getProject());
-		final AutomationSystem system = projectSystems.computeIfAbsent(systemFile, SystemImporter::createAutomationSystem);
+		final AutomationSystem system = projectSystems.computeIfAbsent(systemFile,
+				SystemImporter::createAutomationSystem);
 		saveSystem(system);
 		return system;
 	}
@@ -140,11 +119,14 @@ public enum SystemManager {
 		notifyListeners();
 	}
 
-	/**
-	 * Remove a system from the set of systems managed by the system manager
+	public synchronized AutomationSystem replaceSystemFromFile(final AutomationSystem system, final IFile file) {
+		removeSystem(system);
+		return SystemManager.INSTANCE.getSystem(file);
+	}
+
+	/** Remove a system from the set of systems managed by the system manager
 	 *
-	 * @param system to be added
-	 */
+	 * @param system to be added */
 	public void removeSystem(final AutomationSystem system) {
 		removeSystem(system.getSystemFile());
 	}
@@ -158,15 +140,13 @@ public enum SystemManager {
 		}
 	}
 
-	/**
-	 * Load system.
+	/** Load system.
 	 *
 	 *
 	 * systemFile xml file for the system
 	 *
-	 * @return the automation system
-	 */
-	private static AutomationSystem loadSystem(final IFile systemFile) {
+	 * @return the automation system */
+	public static AutomationSystem loadSystem(final IFile systemFile) {
 		if (systemFile.exists()) {
 			final SystemImporter sysImporter = new SystemImporter(systemFile);
 			sysImporter.loadElement();
@@ -193,15 +173,17 @@ public enum SystemManager {
 		return result;
 	}
 
-	/**
-	 * Save system.
+	/** Save system.
 	 *
 	 * @param system the system
-	 * @param all    the all
-	 */
+	 * @param all    the all */
 	public static void saveSystem(final AutomationSystem system) {
+		saveSystem(system, system.getSystemFile());
+	}
+
+	public static void saveSystem(final AutomationSystem system, final IFile file) {
 		final SystemExporter systemExporter = new SystemExporter(system);
-		systemExporter.saveSystem(system.getSystemFile());
+		systemExporter.saveSystem(file);
 	}
 
 	public List<AutomationSystem> getSystems() {
@@ -264,8 +246,8 @@ public enum SystemManager {
 				saveTagProvider(system, provider);
 				tagProviderList.add(provider);
 			}
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
 			Activator.getDefault().logError("Error on creating TagProvider instance!", e); //$NON-NLS-1$
 			return null;
 		}
@@ -286,6 +268,34 @@ public enum SystemManager {
 				() -> EditorUtils.closeEditorsFiltered((final IEditorPart editor) -> (editor instanceof ISystemEditor)
 						&& (refSystem.equals(((ISystemEditor) editor).getSystem()))));
 
+	}
+
+	public void addAutomationSystemListener(final AutomationSystemListener automationSystemEditor) {
+		if (!automationSystemListener.contains(automationSystemEditor)) {
+			automationSystemListener.add(automationSystemEditor);
+		}
+	}
+
+	public void removeAutomationSystemListener(final AutomationSystemListener automationSystemEditor) {
+		automationSystemListener.remove(automationSystemEditor);
+	}
+
+	/** Notify listeners. */
+	public void notifyListeners() {
+		listeners.forEach(DistributedSystemListener::distributedSystemWorkspaceChanged);
+	}
+
+	public void notifyAutmationSystemListeners(final IFile file) {
+		automationSystemListener.forEach(l -> l.automationSystemChanged(file));
+	}
+
+	/** Adds the workspace listener.
+	 *
+	 * @param listener the listener */
+	public void addWorkspaceListener(final DistributedSystemListener listener) {
+		if (!listeners.contains(listener)) {
+			listeners.add(listener);
+		}
 	}
 
 }
