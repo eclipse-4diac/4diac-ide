@@ -83,6 +83,11 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 	}
 
 	private Point getTranslatedPartCenter(final IFigure partFigure) {
+		final Rectangle partExtent = translateBoundsToRoute(partFigure);
+		return new Point(partExtent.x + (partExtent.width / 2), partExtent.y + (partExtent.height / 2));
+	}
+
+	public Rectangle translateBoundsToRoute(final IFigure partFigure) {
 		final Viewport viewPort = getFigureCanvas().getViewport();
 		final Rectangle partExtent = partFigure.getBounds().getCopy();
 		IFigure runner = partFigure.getParent();
@@ -90,7 +95,7 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 			runner.translateToParent(partExtent);
 			runner = runner.getParent();
 		}
-		return new Point(partExtent.x + (partExtent.width / 2), partExtent.y + (partExtent.height / 2));
+		return partExtent;
 	}
 
 	/**
