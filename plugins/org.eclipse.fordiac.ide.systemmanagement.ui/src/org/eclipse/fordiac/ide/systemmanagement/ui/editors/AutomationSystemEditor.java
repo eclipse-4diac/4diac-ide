@@ -93,15 +93,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	@Override
-	public void createPartControl(final Composite parent) {
-		super.createPartControl(parent);
-		getBreadcrumb()
-		.setContentProvider(new AdapterFactoryContentProvider(new AutomationSystemProviderAdapterFactory()));
-		getBreadcrumb().setLabelProvider(new SystemLabelProvider());
-		getBreadcrumb().setInput(system);
-	}
-
-	@Override
 	protected Composite createPageContainer(final Composite parent) {
 		final Composite pageContainer = new Composite(parent, SWT.NONE);
 		pageContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
