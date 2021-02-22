@@ -75,7 +75,6 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	private final FBNetwork fbNetwork;
 	private final Palette palette;
 	private NewInstanceDirectEditManager manager;
-	private ModuloFreeformFigure drawingAreaContainer;
 
 	public FBNetworkRootEditPart(final FBNetwork fbNetwork, final Palette palette, final IWorkbenchPartSite site,
 			final ActionRegistry actionRegistry) {
@@ -138,10 +137,6 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		return super.getCommand(request);
 	}
 
-	public FreeformFigure getDrawingAreaContainer() {
-		return drawingAreaContainer;
-	}
-
 	private AbstractCreateFBNetworkElementCommand getDirectEditCommand(final DirectEditRequest request) {
 		final Object value = request.getCellEditor().getValue();
 		final Point refPoint = getInsertPos();
@@ -173,7 +168,8 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 
 		final BackgroundFreeformFigure editorBackground = new BackgroundFreeformFigure();
 		viewPort.setContents(editorBackground);
-		drawingAreaContainer = new ModuloFreeformFigure(); // same size as drawingArea, resizes that
+		final ModuloFreeformFigure drawingAreaContainer = new ModuloFreeformFigure(); // same size as drawingArea,
+																						 // resizes that
 		drawingAreaContainer.setBorder(new SingleLineBorder());
 		editorBackground.setContents(drawingAreaContainer);
 		drawingAreaContainer.setContents(drawingArea);
