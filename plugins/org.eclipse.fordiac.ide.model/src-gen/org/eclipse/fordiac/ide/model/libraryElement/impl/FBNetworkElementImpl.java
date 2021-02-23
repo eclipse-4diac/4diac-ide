@@ -47,7 +47,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implements FBNetworkElement {
 	/** The cached value of the '{@link #getPosition() <em>Position</em>}' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getPosition()
 	 * @generated
 	 * @ordered */
@@ -55,7 +54,6 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 
 	/** The cached value of the '{@link #getInterface() <em>Interface</em>}' containment reference. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #getInterface()
 	 * @generated
 	 * @ordered */
@@ -63,7 +61,6 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 
 	/** The cached value of the '{@link #getMapping() <em>Mapping</em>}' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getMapping()
 	 * @generated
 	 * @ordered */
@@ -347,11 +344,19 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void updatePosition(final Point newPos) {
 		updatePosition(newPos.x, newPos.y);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public boolean isContainedInTypedInstance() {
+		return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

@@ -18,12 +18,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class ChangeFBNetworkElementName extends AbstractChangeElementNameWithOppositeCommand {
 
-	public ChangeFBNetworkElementName(FBNetworkElement element, String name) {
+	public ChangeFBNetworkElementName(final FBNetworkElement element, final String name) {
 		super(element, name);
 	}
 
 	@Override
-	protected INamedElement getOppositeElement(INamedElement element) {
+	public boolean canExecute() {
+		return super.canExecute() && !((FBNetworkElement) getElement()).isContainedInTypedInstance();
+	}
+
+	@Override
+	protected INamedElement getOppositeElement(final INamedElement element) {
 		if (((FBNetworkElement) element).isMapped()) {
 			return ((FBNetworkElement) element).getOpposite();
 		}

@@ -61,7 +61,7 @@ public class ChangeNameCommand extends Command {
 		setName(name);
 	}
 
-	private void setName(String name) {
+	private void setName(final String name) {
 		element.setName(name);
 		if (null != fbNetworkElement) {
 			fbNetworkElement.setName(name);
@@ -69,6 +69,10 @@ public class ChangeNameCommand extends Command {
 		if (null != adapterDeclaration) {
 			adapterDeclaration.setName(name);
 		}
+	}
+
+	protected INamedElement getElement() {
+		return element;
 	}
 
 }

@@ -91,8 +91,8 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 		createInputInfoGroup(parent);
 	}
 
-	protected void createFBInfoGroup(Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
+	protected void createFBInfoGroup(final Composite parent) {
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(4, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, FordiacMessages.InstanceName + ":"); //$NON-NLS-1$
@@ -112,8 +112,8 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 
 	}
 
-	private void createInputInfoGroup(Composite parent) {
-		Group inputGroup = getWidgetFactory().createGroup(parent, FordiacMessages.Inputs);
+	private void createInputInfoGroup(final Composite parent) {
+		final Group inputGroup = getWidgetFactory().createGroup(parent, FordiacMessages.Inputs);
 		inputGroup.setLayout(new GridLayout(1, false));
 		inputGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -126,13 +126,13 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 	}
 
 	private void configureTableLayout(final Table table) {
-		TableColumn column1 = new TableColumn(inputViewer.getTable(), SWT.LEFT);
+		final TableColumn column1 = new TableColumn(inputViewer.getTable(), SWT.LEFT);
 		column1.setText(NAME_PROPERTY);
-		TableColumn column2 = new TableColumn(inputViewer.getTable(), SWT.LEFT);
+		final TableColumn column2 = new TableColumn(inputViewer.getTable(), SWT.LEFT);
 		column2.setText(VALUE_PROPERTY);
-		TableColumn column3 = new TableColumn(inputViewer.getTable(), SWT.LEFT);
+		final TableColumn column3 = new TableColumn(inputViewer.getTable(), SWT.LEFT);
 		column3.setText(COMMENT_PROPERTY);
-		TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 70));
 		layout.addColumnData(new ColumnWeightData(30, 70));
 		layout.addColumnData(new ColumnWeightData(50, 90));
@@ -142,29 +142,34 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 		inputViewer.setColumnProperties(new String[] { NAME_PROPERTY, VALUE_PROPERTY, COMMENT_PROPERTY });
 	}
 
-	private static String getVarDeclarationValue(VarDeclaration v) {
+	private static String getVarDeclarationValue(final VarDeclaration v) {
 		return (v.getValue() != null) ? v.getValue().getValue() : ""; //$NON-NLS-1$
 	}
 
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
-		Object input = ((IStructuredSelection) selection).getFirstElement();
+		final Object input = ((IStructuredSelection) selection).getFirstElement();
 		commandStack = getCommandStack(part, input);
-		if (null == commandStack) { // disable all fields
-			nameText.setEnabled(false);
-			commentText.setEnabled(false);
-			inputViewer.setCellModifier(null);
+		if (null == commandStack) {
+			disableAllFields();
 		}
 		setType(input);
 	}
+
+	protected void disableAllFields() {
+		nameText.setEnabled(false);
+		commentText.setEnabled(false);
+		inputViewer.setCellModifier(null);
+	}
+
 
 	@Override
 	public void refresh() {
 		if (null != type) {
 			Display.getDefault().asyncExec(() -> {
 				if (!nameText.isDisposed() && !nameText.getParent().isDisposed()) {
-					CommandStack commandStackBuffer = commandStack;
+					final CommandStack commandStackBuffer = commandStack;
 					commandStack = null;
 					if (type instanceof AdapterFB) {
 						nameText.setEnabled(false);
@@ -178,8 +183,8 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 		}
 	}
 
-	private ChangeNameCommand getRenameCommand(String newValue) {
-		INamedElement element = getType();
+	private ChangeNameCommand getRenameCommand(final String newValue) {
+		final INamedElement element = getType();
 		if (element instanceof FBNetworkElement) {
 			return new ChangeFBNetworkElementName((FBNetworkElement) element, newValue);
 		}
@@ -206,8 +211,8 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 
 		@Override
 		public void modify(final Object element, final String property, final Object value) {
-			TableItem tableItem = (TableItem) element;
-			Object data = tableItem.getData();
+			final TableItem tableItem = (TableItem) element;
+			final Object data = tableItem.getData();
 			Command cmd = null;
 			switch (property) {
 			case VALUE_PROPERTY:

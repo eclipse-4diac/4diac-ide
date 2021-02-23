@@ -306,6 +306,8 @@
           body="final EObject parent = this.eContainer();if (parent == null) {return false;}final EObject grandParent = parent.eContainer();if (grandParent == null) {return false;}return grandParent instanceof org.eclipse.fordiac.ide.model.libraryElement.SubApp;"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getOuterFBNetworkElement"
           body="&#x9;&#x9;if ((this.eContainer() == null) || !(this.eContainer().eContainer() instanceof FBNetworkElement)) {&#xA;&#x9;&#x9;&#x9;return null;&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;return (FBNetworkElement) this.eContainer().eContainer();"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isContainedInTypedInstance"
+          body="return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//SubApp">
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
