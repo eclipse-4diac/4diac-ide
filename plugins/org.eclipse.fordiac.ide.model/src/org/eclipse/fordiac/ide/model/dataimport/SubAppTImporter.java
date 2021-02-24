@@ -65,7 +65,7 @@ public class SubAppTImporter extends FBTImporter {
 				parseVersionInfo(getElement());
 				break;
 			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				parseCompilerInfo(getElement());
+				getElement().setCompilerInfo(parseCompilerInfo());
 				break;
 			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT:
 				getElement().setInterfaceList(parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));

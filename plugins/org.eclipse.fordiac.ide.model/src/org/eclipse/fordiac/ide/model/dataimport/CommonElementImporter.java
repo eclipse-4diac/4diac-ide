@@ -43,7 +43,6 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -424,7 +423,7 @@ abstract class CommonElementImporter {
 		return getReader().getAttributeValue("", attributeName); //$NON-NLS-1$
 	}
 
-	protected void parseCompilerInfo(final CompilableType ctype) throws TypeImportException, XMLStreamException {
+	protected CompilerInfo parseCompilerInfo() throws TypeImportException, XMLStreamException {
 		final CompilerInfo compilerInfo = LibraryElementFactory.eINSTANCE.createCompilerInfo();
 
 		final String header = getAttributeValue(LibraryElementTags.HEADER_ATTRIBUTE);
@@ -443,7 +442,7 @@ abstract class CommonElementImporter {
 			}
 			return false;
 		});
-		ctype.setCompilerInfo(compilerInfo);
+		return compilerInfo;
 	}
 
 	private void parseCompiler(final CompilerInfo compilerInfo) throws TypeImportException, XMLStreamException {

@@ -32,13 +32,13 @@ public final class ADPImporter extends TypeImporter {
 
 	private AdapterFBType adapterFBType;
 
-	public ADPImporter(IFile typeFile) {
+	public ADPImporter(final IFile typeFile) {
 		super(typeFile);
 	}
 
 	@Override
 	public LibraryElement createRootModelElement() {
-		AdapterType newType = LibraryElementFactory.eINSTANCE.createAdapterType();
+		final AdapterType newType = LibraryElementFactory.eINSTANCE.createAdapterType();
 		adapterFBType = LibraryElementFactory.eINSTANCE.createAdapterFBType();
 		newType.setAdapterFBType(adapterFBType);
 		adapterFBType.setAdapterType(newType);
@@ -53,7 +53,7 @@ public final class ADPImporter extends TypeImporter {
 
 	@Override
 	protected IChildHandler getBaseChildrenHandler() {
-		FBTImporter importer = new FBTImporter(this) {
+		final FBTImporter importer = new FBTImporter(this) {
 			@Override
 			public IChildHandler getBaseChildrenHandler() {
 				return name -> {
@@ -65,7 +65,7 @@ public final class ADPImporter extends TypeImporter {
 						parseVersionInfo(adapterFBType);
 						break;
 					case LibraryElementTags.COMPILER_INFO_ELEMENT:
-						parseCompilerInfo(adapterFBType);
+						adapterFBType.setCompilerInfo(parseCompilerInfo());
 						break;
 					case LibraryElementTags.INTERFACE_LIST_ELEMENT:
 						adapterFBType.setInterfaceList(parseInterfaceList(LibraryElementTags.INTERFACE_LIST_ELEMENT));

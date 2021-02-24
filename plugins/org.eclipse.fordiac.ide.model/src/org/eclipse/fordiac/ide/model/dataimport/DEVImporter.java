@@ -76,7 +76,7 @@ public final class DEVImporter extends TypeImporter {
 				parseVersionInfo(getElement());
 				break;
 			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				parseCompilerInfo(getElement());
+				getElement().setCompilerInfo(parseCompilerInfo());
 				break;
 			case LibraryElementTags.VAR_DECLARATION_ELEMENT:
 				final VarDeclaration v = parseVarDeclaration();
