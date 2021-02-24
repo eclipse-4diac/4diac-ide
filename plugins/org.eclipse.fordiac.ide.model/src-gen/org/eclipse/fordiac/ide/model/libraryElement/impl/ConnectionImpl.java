@@ -77,7 +77,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 
 	/** The cached value of the '{@link #getSource() <em>Source</em>}' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getSource()
 	 * @generated
 	 * @ordered */
@@ -85,7 +85,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 
 	/** The cached value of the '{@link #getDestination() <em>Destination</em>}' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getDestination()
 	 * @generated
 	 * @ordered */
@@ -93,7 +93,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 
 	/** The cached value of the '{@link #getRoutingData() <em>Routing Data</em>}' reference. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getRoutingData()
 	 * @generated
 	 * @ordered */

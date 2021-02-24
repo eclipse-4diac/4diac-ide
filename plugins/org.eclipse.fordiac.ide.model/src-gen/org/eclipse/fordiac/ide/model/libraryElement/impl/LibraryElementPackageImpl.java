@@ -1,22 +1,25 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
-
-import static org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage.RESOURCE;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+
+import org.eclipse.draw2d.geometry.Point;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -25,12 +28,19 @@ import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
+
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
+
 import org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl;
+
 import org.eclipse.fordiac.ide.model.data.DataPackage;
+
 import org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl;
+
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -107,416 +117,417 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+
 import org.eclipse.gef.commands.CommandStack;
 
 /** <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!-- end-user-doc -->
- *
+ * 
  * @generated */
 public class LibraryElementPackageImpl extends EPackageImpl implements LibraryElementPackage {
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass adapterDeclarationEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass adapterTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass algorithmEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass applicationEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass basicFBTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass compilerInfoEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass compilerEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass connectionEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass connectionRoutingDataEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass deviceEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass deviceTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass ecActionEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass eccEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass ecStateEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass ecTransitionEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass eventEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass fbNetworkEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass fbEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass fbNetworkElementEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass fbTypeEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass identificationEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass inputPrimitiveEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass interfaceListEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass linkEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass mappingEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass otherAlgorithmEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass outputPrimitiveEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass resourceEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass resourceTypeNameEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass resourceTypeEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass segmentEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass serviceSequenceEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass serviceTransactionEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass serviceInterfaceFBTypeEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass stAlgorithmEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass subAppEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	private EClass subAppTypeEClass = null;
+	private EClass fbTypeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	private EClass automationSystemEClass = null;
+	private EClass identificationEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	private EClass varDeclarationEClass = null;
+	private EClass inputPrimitiveEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	private EClass versionInfoEClass = null;
+	private EClass interfaceListEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	private EClass withEClass = null;
+	private EClass linkEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	private EClass libraryElementEClass = null;
+	private EClass mappingEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	private EClass compilableTypeEClass = null;
+	private EClass otherAlgorithmEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	private EClass configurableObjectEClass = null;
+	private EClass outputPrimitiveEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass compositeFBTypeEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass textAlgorithmEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass dataConnectionEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass eventConnectionEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass adapterConnectionEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass serviceInterfaceEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass iInterfaceElementEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass valueEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass systemConfigurationEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass iNamedElementEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass resourceTypeFBEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass segmentTypeEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass adapterFBTypeEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass adapterEventEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass serviceEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass typedConfigureableObjectEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass adapterFBEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass primitiveEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass positionableElementEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass positionEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass colorEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass colorizableElementEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass iVarElementEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass attributeDeclarationEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass typedElementEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass simpleFBTypeEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass baseFBTypeEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass structManipulatorEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass demultiplexerEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass multiplexerEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	private EClass localVariableEClass = null;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EClass attributeEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
+	 * @generated */
+	private EClass resourceEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass resourceTypeNameEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass resourceTypeEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass segmentEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass serviceSequenceEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass serviceTransactionEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass serviceInterfaceFBTypeEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass stAlgorithmEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass fbNetworkEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass subAppTypeEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass automationSystemEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass varDeclarationEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass versionInfoEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass withEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass libraryElementEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass compilableTypeEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass configurableObjectEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass compositeFBTypeEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass textAlgorithmEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass dataConnectionEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass eventConnectionEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass adapterConnectionEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass serviceInterfaceEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass iInterfaceElementEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass valueEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass systemConfigurationEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass iNamedElementEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass resourceTypeFBEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass segmentTypeEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass adapterFBTypeEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass adapterEventEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass serviceEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass typedConfigureableObjectEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass adapterFBEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass primitiveEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass positionableElementEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass positionEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass colorEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass colorizableElementEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass iVarElementEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass attributeDeclarationEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass typedElementEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass simpleFBTypeEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass baseFBTypeEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass structManipulatorEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass demultiplexerEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass multiplexerEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass localVariableEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated */
 	private EEnum languageEEnum = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EDataType iProjectEDataType = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EDataType iFileEDataType = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private EDataType commandStackEDataType = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
-	private final EDataType pointEDataType = null;
+	private EDataType pointEDataType = null;
 
 	/** Creates an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry
 	 * EPackage.Registry} by the package package URI value.
@@ -524,7 +535,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * Note: the correct way to create the package is via the static factory method {@link #init init()}, which also
 	 * performs initialization of the package, or returns the registered package, if one already exists. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#eNS_URI
 	 * @see #init()
@@ -534,7 +545,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private static boolean isInited = false;
 
@@ -544,21 +555,20 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * This method is used to initialize {@link LibraryElementPackage#eINSTANCE} when that field is accessed. Clients
 	 * should not invoke it directly. Instead, they should simply access that field to obtain the package. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated */
 	public static LibraryElementPackage init() {
-		if (isInited) {
+		if (isInited)
 			return (LibraryElementPackage) EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
-		}
 
 		// Obtain or create and register package
-		final Object registeredLibraryElementPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		final LibraryElementPackageImpl theLibraryElementPackage = registeredLibraryElementPackage instanceof LibraryElementPackageImpl
+		Object registeredLibraryElementPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		LibraryElementPackageImpl theLibraryElementPackage = registeredLibraryElementPackage instanceof LibraryElementPackageImpl
 				? (LibraryElementPackageImpl) registeredLibraryElementPackage
-						: new LibraryElementPackageImpl();
+				: new LibraryElementPackageImpl();
 
 		isInited = true;
 
@@ -567,13 +577,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(PalettePackage.eNS_URI);
-		final PalettePackageImpl thePalettePackage = (PalettePackageImpl) (registeredPackage instanceof PalettePackageImpl
+		PalettePackageImpl thePalettePackage = (PalettePackageImpl) (registeredPackage instanceof PalettePackageImpl
 				? registeredPackage
-						: PalettePackage.eINSTANCE);
+				: PalettePackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
-		final DataPackageImpl theDataPackage = (DataPackageImpl) (registeredPackage instanceof DataPackageImpl
+		DataPackageImpl theDataPackage = (DataPackageImpl) (registeredPackage instanceof DataPackageImpl
 				? registeredPackage
-						: DataPackage.eINSTANCE);
+				: DataPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theLibraryElementPackage.createPackageContents();
@@ -594,7 +604,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getAdapterDeclaration() {
@@ -602,7 +612,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getAdapterDeclaration_AdapterFB() {
@@ -610,7 +620,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getAdapterDeclaration_PaletteEntry() {
@@ -618,7 +628,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getAdapterType() {
@@ -626,7 +636,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getAdapterType_AdapterFBType() {
@@ -634,7 +644,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getAlgorithm() {
@@ -642,7 +652,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getApplication() {
@@ -650,7 +660,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getApplication_FBNetwork() {
@@ -658,7 +668,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getBasicFBType() {
@@ -666,7 +676,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getBasicFBType_ECC() {
@@ -674,7 +684,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getBasicFBType_Algorithm() {
@@ -682,7 +692,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getCompilerInfo() {
@@ -690,7 +700,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getCompilerInfo_Compiler() {
@@ -698,7 +708,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getCompilerInfo_Classdef() {
@@ -706,7 +716,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getCompilerInfo_Header() {
@@ -714,7 +724,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getCompiler() {
@@ -722,7 +732,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getCompiler_Language() {
@@ -730,7 +740,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getCompiler_Product() {
@@ -738,7 +748,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getCompiler_Vendor() {
@@ -746,7 +756,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getCompiler_Version() {
@@ -754,7 +764,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getConnection() {
@@ -762,7 +772,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getConnection_ResTypeConnection() {
@@ -770,7 +780,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getConnection_BrokenConnection() {
@@ -778,7 +788,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getConnection_Source() {
@@ -786,7 +796,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getConnection_Destination() {
@@ -794,7 +804,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getConnection_RoutingData() {
@@ -802,7 +812,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getConnectionRoutingData() {
@@ -810,7 +820,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getConnectionRoutingData_Dx1() {
@@ -818,7 +828,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getConnectionRoutingData_Dx2() {
@@ -826,7 +836,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getConnectionRoutingData_Dy() {
@@ -834,7 +844,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getDevice() {
@@ -842,7 +852,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getDevice_Resource() {
@@ -850,7 +860,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getDevice_Profile() {
@@ -858,7 +868,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getDevice_InConnections() {
@@ -866,7 +876,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getDeviceType() {
@@ -874,7 +884,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getDeviceType_VarDeclaration() {
@@ -882,7 +892,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getDeviceType_ResourceTypeName() {
@@ -890,7 +900,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getDeviceType_Resource() {
@@ -898,7 +908,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getDeviceType_FBNetwork() {
@@ -906,7 +916,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getDeviceType_Profile() {
@@ -914,7 +924,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getDeviceType_AttributeDeclarations() {
@@ -922,7 +932,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getECAction() {
@@ -930,7 +940,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getECAction_Algorithm() {
@@ -938,7 +948,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getECAction_Output() {
@@ -946,7 +956,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getECAction_ECState() {
@@ -954,7 +964,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getECC() {
@@ -962,7 +972,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getECC_ECState() {
@@ -970,7 +980,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getECC_ECTransition() {
@@ -978,7 +988,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getECC_Start() {
@@ -986,7 +996,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getECC_BasicFBType() {
@@ -994,7 +1004,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getECState() {
@@ -1002,7 +1012,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getECState_ECAction() {
@@ -1010,7 +1020,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getECState_OutTransitions() {
@@ -1018,7 +1028,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getECState_InTransitions() {
@@ -1026,7 +1036,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getECState_ECC() {
@@ -1034,7 +1044,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getECTransition() {
@@ -1042,7 +1052,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getECTransition_Comment() {
@@ -1050,7 +1060,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getECTransition_ConditionExpression() {
@@ -1058,31 +1068,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getECTransition_Destination() {
-		return (EReference) ecTransitionEClass.getEStructuralFeatures().get(3);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getECTransition_ConditionEvent() {
-		return (EReference) ecTransitionEClass.getEStructuralFeatures().get(4);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getECTransition_ECC() {
-		return (EReference) ecTransitionEClass.getEStructuralFeatures().get(5);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getECTransition_Source() {
@@ -1090,7 +1076,31 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
+	 * @generated */
+	@Override
+	public EReference getECTransition_Destination() {
+		return (EReference) ecTransitionEClass.getEStructuralFeatures().get(3);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getECTransition_ConditionEvent() {
+		return (EReference) ecTransitionEClass.getEStructuralFeatures().get(4);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getECTransition_ECC() {
+		return (EReference) ecTransitionEClass.getEStructuralFeatures().get(5);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated */
 	@Override
 	public EClass getEvent() {
@@ -1098,7 +1108,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getEvent_With() {
@@ -1106,47 +1116,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getFBNetwork() {
-		return fbNetworkEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getFBNetwork_NetworkElements() {
-		return (EReference) fbNetworkEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getFBNetwork_DataConnections() {
-		return (EReference) fbNetworkEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getFBNetwork_EventConnections() {
-		return (EReference) fbNetworkEClass.getEStructuralFeatures().get(2);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getFBNetwork_AdapterConnections() {
-		return (EReference) fbNetworkEClass.getEStructuralFeatures().get(3);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getFB() {
@@ -1154,7 +1124,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getFBNetworkElement() {
@@ -1162,7 +1132,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getFBNetworkElement_Interface() {
@@ -1170,7 +1140,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getFBNetworkElement_Mapping() {
@@ -1178,431 +1148,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getFBType() {
-		return fbTypeEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getFBType_InterfaceList() {
-		return (EReference) fbTypeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getFBType_Service() {
-		return (EReference) fbTypeEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getIdentification() {
-		return identificationEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getIdentification_ApplicationDomain() {
-		return (EAttribute) identificationEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getIdentification_Classification() {
-		return (EAttribute) identificationEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getIdentification_Description() {
-		return (EAttribute) identificationEClass.getEStructuralFeatures().get(2);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getIdentification_Function() {
-		return (EAttribute) identificationEClass.getEStructuralFeatures().get(3);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getIdentification_Standard() {
-		return (EAttribute) identificationEClass.getEStructuralFeatures().get(4);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getIdentification_Type() {
-		return (EAttribute) identificationEClass.getEStructuralFeatures().get(5);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getInputPrimitive() {
-		return inputPrimitiveEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getInterfaceList() {
-		return interfaceListEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getInterfaceList_Plugs() {
-		return (EReference) interfaceListEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getInterfaceList_Sockets() {
-		return (EReference) interfaceListEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getInterfaceList_EventInputs() {
-		return (EReference) interfaceListEClass.getEStructuralFeatures().get(2);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getInterfaceList_EventOutputs() {
-		return (EReference) interfaceListEClass.getEStructuralFeatures().get(3);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getInterfaceList_InputVars() {
-		return (EReference) interfaceListEClass.getEStructuralFeatures().get(4);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getInterfaceList_OutputVars() {
-		return (EReference) interfaceListEClass.getEStructuralFeatures().get(5);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getLink() {
-		return linkEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getLink_Segment() {
-		return (EReference) linkEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getLink_Device() {
-		return (EReference) linkEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getMapping() {
-		return mappingEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getMapping_From() {
-		return (EReference) mappingEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getMapping_To() {
-		return (EReference) mappingEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getOtherAlgorithm() {
-		return otherAlgorithmEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getOtherAlgorithm_Language() {
-		return (EAttribute) otherAlgorithmEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getOutputPrimitive() {
-		return outputPrimitiveEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getOutputPrimitive_TestResult() {
-		return (EAttribute) outputPrimitiveEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getResource() {
-		return resourceEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getResource_FBNetwork() {
-		return (EReference) resourceEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getResource_X() {
-		return (EAttribute) resourceEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getResource_Y() {
-		return (EAttribute) resourceEClass.getEStructuralFeatures().get(2);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getResource_Device() {
-		return (EReference) resourceEClass.getEStructuralFeatures().get(3);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getResource_DeviceTypeResource() {
-		return (EAttribute) resourceEClass.getEStructuralFeatures().get(4);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getResourceTypeName() {
-		return resourceTypeNameEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getResourceTypeName_Name() {
-		return (EAttribute) resourceTypeNameEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getResourceType() {
-		return resourceTypeEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getResourceType_VarDeclaration() {
-		return (EReference) resourceTypeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getResourceType_FBNetwork() {
-		return (EReference) resourceTypeEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getResourceType_SupportedFBTypes() {
-		return (EReference) resourceTypeEClass.getEStructuralFeatures().get(2);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getSegment() {
-		return segmentEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getSegment_Width() {
-		return (EAttribute) segmentEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getSegment_VarDeclarations() {
-		return (EReference) segmentEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getSegment_OutConnections() {
-		return (EReference) segmentEClass.getEStructuralFeatures().get(2);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getServiceSequence() {
-		return serviceSequenceEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getServiceSequence_ServiceTransaction() {
-		return (EReference) serviceSequenceEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getServiceSequence_TestResult() {
-		return (EAttribute) serviceSequenceEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getServiceTransaction() {
-		return serviceTransactionEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getServiceTransaction_InputPrimitive() {
-		return (EReference) serviceTransactionEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getServiceTransaction_OutputPrimitive() {
-		return (EReference) serviceTransactionEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getServiceTransaction_TestResult() {
-		return (EAttribute) serviceTransactionEClass.getEStructuralFeatures().get(2);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getServiceInterfaceFBType() {
-		return serviceInterfaceFBTypeEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getSTAlgorithm() {
-		return stAlgorithmEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getSubApp() {
@@ -1610,7 +1156,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getSubApp_SubAppNetwork() {
@@ -1618,775 +1164,231 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EClass getSubAppType() {
-		return subAppTypeEClass;
+	public EClass getFBType() {
+		return fbTypeEClass;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EClass getAutomationSystem() {
-		return automationSystemEClass;
+	public EReference getFBType_InterfaceList() {
+		return (EReference) fbTypeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EReference getAutomationSystem_Application() {
-		return (EReference) automationSystemEClass.getEStructuralFeatures().get(0);
+	public EReference getFBType_Service() {
+		return (EReference) fbTypeEClass.getEStructuralFeatures().get(1);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EReference getAutomationSystem_Mapping() {
-		return (EReference) automationSystemEClass.getEStructuralFeatures().get(1);
+	public EClass getIdentification() {
+		return identificationEClass;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EReference getAutomationSystem_Palette() {
-		return (EReference) automationSystemEClass.getEStructuralFeatures().get(2);
+	public EAttribute getIdentification_ApplicationDomain() {
+		return (EAttribute) identificationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EReference getAutomationSystem_SystemConfiguration() {
-		return (EReference) automationSystemEClass.getEStructuralFeatures().get(3);
+	public EAttribute getIdentification_Classification() {
+		return (EAttribute) identificationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EAttribute getAutomationSystem_SystemFile() {
-		return (EAttribute) automationSystemEClass.getEStructuralFeatures().get(4);
+	public EAttribute getIdentification_Description() {
+		return (EAttribute) identificationEClass.getEStructuralFeatures().get(2);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EAttribute getAutomationSystem_CommandStack() {
-		return (EAttribute) automationSystemEClass.getEStructuralFeatures().get(5);
+	public EAttribute getIdentification_Function() {
+		return (EAttribute) identificationEClass.getEStructuralFeatures().get(3);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EClass getVarDeclaration() {
-		return varDeclarationEClass;
+	public EAttribute getIdentification_Standard() {
+		return (EAttribute) identificationEClass.getEStructuralFeatures().get(4);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EAttribute getVarDeclaration_ArraySize() {
-		return (EAttribute) varDeclarationEClass.getEStructuralFeatures().get(0);
+	public EAttribute getIdentification_Type() {
+		return (EAttribute) identificationEClass.getEStructuralFeatures().get(5);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EReference getVarDeclaration_Withs() {
-		return (EReference) varDeclarationEClass.getEStructuralFeatures().get(1);
+	public EClass getInputPrimitive() {
+		return inputPrimitiveEClass;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EReference getVarDeclaration_Value() {
-		return (EReference) varDeclarationEClass.getEStructuralFeatures().get(2);
+	public EClass getInterfaceList() {
+		return interfaceListEClass;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EClass getVersionInfo() {
-		return versionInfoEClass;
+	public EReference getInterfaceList_Plugs() {
+		return (EReference) interfaceListEClass.getEStructuralFeatures().get(0);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EAttribute getVersionInfo_Author() {
-		return (EAttribute) versionInfoEClass.getEStructuralFeatures().get(0);
+	public EReference getInterfaceList_Sockets() {
+		return (EReference) interfaceListEClass.getEStructuralFeatures().get(1);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EAttribute getVersionInfo_Date() {
-		return (EAttribute) versionInfoEClass.getEStructuralFeatures().get(1);
+	public EReference getInterfaceList_EventInputs() {
+		return (EReference) interfaceListEClass.getEStructuralFeatures().get(2);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EAttribute getVersionInfo_Organization() {
-		return (EAttribute) versionInfoEClass.getEStructuralFeatures().get(2);
+	public EReference getInterfaceList_EventOutputs() {
+		return (EReference) interfaceListEClass.getEStructuralFeatures().get(3);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EAttribute getVersionInfo_Remarks() {
-		return (EAttribute) versionInfoEClass.getEStructuralFeatures().get(3);
+	public EReference getInterfaceList_InputVars() {
+		return (EReference) interfaceListEClass.getEStructuralFeatures().get(4);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EAttribute getVersionInfo_Version() {
-		return (EAttribute) versionInfoEClass.getEStructuralFeatures().get(4);
+	public EReference getInterfaceList_OutputVars() {
+		return (EReference) interfaceListEClass.getEStructuralFeatures().get(5);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EClass getWith() {
-		return withEClass;
+	public EClass getLink() {
+		return linkEClass;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EReference getWith_Variables() {
-		return (EReference) withEClass.getEStructuralFeatures().get(0);
+	public EReference getLink_Segment() {
+		return (EReference) linkEClass.getEStructuralFeatures().get(0);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EClass getLibraryElement() {
-		return libraryElementEClass;
+	public EReference getLink_Device() {
+		return (EReference) linkEClass.getEStructuralFeatures().get(1);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EReference getLibraryElement_VersionInfo() {
-		return (EReference) libraryElementEClass.getEStructuralFeatures().get(0);
+	public EClass getMapping() {
+		return mappingEClass;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EReference getLibraryElement_Identification() {
-		return (EReference) libraryElementEClass.getEStructuralFeatures().get(1);
+	public EReference getMapping_From() {
+		return (EReference) mappingEClass.getEStructuralFeatures().get(0);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EReference getLibraryElement_PaletteEntry() {
-		return (EReference) libraryElementEClass.getEStructuralFeatures().get(2);
+	public EReference getMapping_To() {
+		return (EReference) mappingEClass.getEStructuralFeatures().get(1);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EClass getCompilableType() {
-		return compilableTypeEClass;
+	public EClass getOtherAlgorithm() {
+		return otherAlgorithmEClass;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EReference getCompilableType_CompilerInfo() {
-		return (EReference) compilableTypeEClass.getEStructuralFeatures().get(0);
+	public EAttribute getOtherAlgorithm_Language() {
+		return (EAttribute) otherAlgorithmEClass.getEStructuralFeatures().get(0);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EClass getConfigurableObject() {
-		return configurableObjectEClass;
+	public EClass getOutputPrimitive() {
+		return outputPrimitiveEClass;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
-	public EReference getConfigurableObject_Attributes() {
-		return (EReference) configurableObjectEClass.getEStructuralFeatures().get(0);
+	public EAttribute getOutputPrimitive_TestResult() {
+		return (EAttribute) outputPrimitiveEClass.getEStructuralFeatures().get(0);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getCompositeFBType() {
-		return compositeFBTypeEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getCompositeFBType_FBNetwork() {
-		return (EReference) compositeFBTypeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getTextAlgorithm() {
-		return textAlgorithmEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getTextAlgorithm_Text() {
-		return (EAttribute) textAlgorithmEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getDataConnection() {
-		return dataConnectionEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getEventConnection() {
-		return eventConnectionEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getAdapterConnection() {
-		return adapterConnectionEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getServiceInterface() {
-		return serviceInterfaceEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getIInterfaceElement() {
-		return iInterfaceElementEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getIInterfaceElement_IsInput() {
-		return (EAttribute) iInterfaceElementEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getIInterfaceElement_InputConnections() {
-		return (EReference) iInterfaceElementEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getIInterfaceElement_OutputConnections() {
-		return (EReference) iInterfaceElementEClass.getEStructuralFeatures().get(2);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getIInterfaceElement_Type() {
-		return (EReference) iInterfaceElementEClass.getEStructuralFeatures().get(3);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getIInterfaceElement_TypeName() {
-		return (EAttribute) iInterfaceElementEClass.getEStructuralFeatures().get(4);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getValue() {
-		return valueEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getValue_Value() {
-		return (EAttribute) valueEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getSystemConfiguration() {
-		return systemConfigurationEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getSystemConfiguration_Devices() {
-		return (EReference) systemConfigurationEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getSystemConfiguration_Segments() {
-		return (EReference) systemConfigurationEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getSystemConfiguration_Links() {
-		return (EReference) systemConfigurationEClass.getEStructuralFeatures().get(2);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getINamedElement() {
-		return iNamedElementEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getINamedElement_Name() {
-		return (EAttribute) iNamedElementEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getINamedElement_Comment() {
-		return (EAttribute) iNamedElementEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getResourceTypeFB() {
-		return resourceTypeFBEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getSegmentType() {
-		return segmentTypeEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getSegmentType_VarDeclaration() {
-		return (EReference) segmentTypeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getAdapterFBType() {
-		return adapterFBTypeEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getAdapterFBType_AdapterType() {
-		return (EReference) adapterFBTypeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getAdapterEvent() {
-		return adapterEventEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getAdapterEvent_AdapterDeclaration() {
-		return (EReference) adapterEventEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getService() {
-		return serviceEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getService_ServiceSequence() {
-		return (EReference) serviceEClass.getEStructuralFeatures().get(2);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getTypedConfigureableObject() {
-		return typedConfigureableObjectEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getTypedConfigureableObject_PaletteEntry() {
-		return (EReference) typedConfigureableObjectEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getAdapterFB() {
-		return adapterFBEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getAdapterFB_AdapterDecl() {
-		return (EReference) adapterFBEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getPrimitive() {
-		return primitiveEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getPrimitive_Event() {
-		return (EAttribute) primitiveEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getPrimitive_Parameters() {
-		return (EAttribute) primitiveEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getPrimitive_Interface() {
-		return (EReference) primitiveEClass.getEStructuralFeatures().get(2);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getPositionableElement() {
-		return positionableElementEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getPositionableElement_Position() {
-		return (EReference) positionableElementEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getPosition() {
-		return positionEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getPosition_X() {
-		return (EAttribute) positionEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getPosition_Y() {
-		return (EAttribute) positionEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getColor() {
-		return colorEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getColor_Red() {
-		return (EAttribute) colorEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getColor_Green() {
-		return (EAttribute) colorEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getColor_Blue() {
-		return (EAttribute) colorEClass.getEStructuralFeatures().get(2);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getColorizableElement() {
-		return colorizableElementEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getColorizableElement_Color() {
-		return (EReference) colorizableElementEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getIVarElement() {
-		return iVarElementEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getIVarElement_VarDeclarations() {
-		return (EReference) iVarElementEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getAttributeDeclaration() {
-		return attributeDeclarationEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getAttributeDeclaration_InitialValue() {
-		return (EAttribute) attributeDeclarationEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getTypedElement() {
-		return typedElementEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getTypedElement_Type() {
-		return (EAttribute) typedElementEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getSimpleFBType() {
-		return simpleFBTypeEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getSimpleFBType_Algorithm() {
-		return (EReference) simpleFBTypeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getBaseFBType() {
-		return baseFBTypeEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getBaseFBType_InternalVars() {
-		return (EReference) baseFBTypeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getStructManipulator() {
-		return structManipulatorEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EReference getStructManipulator_StructType() {
-		return (EReference) structManipulatorEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getDemultiplexer() {
-		return demultiplexerEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getMultiplexer() {
-		return multiplexerEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EClass getLocalVariable() {
-		return localVariableEClass;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getLocalVariable_ArrayStart() {
-		return (EAttribute) localVariableEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public EAttribute getLocalVariable_ArrayStop() {
-		return (EAttribute) localVariableEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EClass getAttribute() {
@@ -2394,7 +1396,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getAttribute_AttributeDeclaration() {
@@ -2402,7 +1404,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EAttribute getAttribute_Value() {
@@ -2410,7 +1412,719 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
+	 * @generated */
+	@Override
+	public EClass getResource() {
+		return resourceEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getResource_FBNetwork() {
+		return (EReference) resourceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getResource_X() {
+		return (EAttribute) resourceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getResource_Y() {
+		return (EAttribute) resourceEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getResource_Device() {
+		return (EReference) resourceEClass.getEStructuralFeatures().get(3);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getResource_DeviceTypeResource() {
+		return (EAttribute) resourceEClass.getEStructuralFeatures().get(4);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getResourceTypeName() {
+		return resourceTypeNameEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getResourceTypeName_Name() {
+		return (EAttribute) resourceTypeNameEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getResourceType() {
+		return resourceTypeEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getResourceType_VarDeclaration() {
+		return (EReference) resourceTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getResourceType_FBNetwork() {
+		return (EReference) resourceTypeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getResourceType_SupportedFBTypes() {
+		return (EReference) resourceTypeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getSegment() {
+		return segmentEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getSegment_Width() {
+		return (EAttribute) segmentEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getSegment_VarDeclarations() {
+		return (EReference) segmentEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getSegment_OutConnections() {
+		return (EReference) segmentEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getServiceSequence() {
+		return serviceSequenceEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getServiceSequence_ServiceTransaction() {
+		return (EReference) serviceSequenceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getServiceSequence_TestResult() {
+		return (EAttribute) serviceSequenceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getServiceTransaction() {
+		return serviceTransactionEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getServiceTransaction_InputPrimitive() {
+		return (EReference) serviceTransactionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getServiceTransaction_OutputPrimitive() {
+		return (EReference) serviceTransactionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getServiceTransaction_TestResult() {
+		return (EAttribute) serviceTransactionEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getServiceInterfaceFBType() {
+		return serviceInterfaceFBTypeEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getSTAlgorithm() {
+		return stAlgorithmEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getFBNetwork() {
+		return fbNetworkEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getFBNetwork_NetworkElements() {
+		return (EReference) fbNetworkEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getFBNetwork_DataConnections() {
+		return (EReference) fbNetworkEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getFBNetwork_EventConnections() {
+		return (EReference) fbNetworkEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getFBNetwork_AdapterConnections() {
+		return (EReference) fbNetworkEClass.getEStructuralFeatures().get(3);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getSubAppType() {
+		return subAppTypeEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getAutomationSystem() {
+		return automationSystemEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getAutomationSystem_Application() {
+		return (EReference) automationSystemEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getAutomationSystem_Mapping() {
+		return (EReference) automationSystemEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getAutomationSystem_Palette() {
+		return (EReference) automationSystemEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getAutomationSystem_SystemConfiguration() {
+		return (EReference) automationSystemEClass.getEStructuralFeatures().get(3);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getAutomationSystem_SystemFile() {
+		return (EAttribute) automationSystemEClass.getEStructuralFeatures().get(4);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getAutomationSystem_CommandStack() {
+		return (EAttribute) automationSystemEClass.getEStructuralFeatures().get(5);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getVarDeclaration() {
+		return varDeclarationEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getVarDeclaration_ArraySize() {
+		return (EAttribute) varDeclarationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getVarDeclaration_Withs() {
+		return (EReference) varDeclarationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getVarDeclaration_Value() {
+		return (EReference) varDeclarationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getVersionInfo() {
+		return versionInfoEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getVersionInfo_Author() {
+		return (EAttribute) versionInfoEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getVersionInfo_Date() {
+		return (EAttribute) versionInfoEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getVersionInfo_Organization() {
+		return (EAttribute) versionInfoEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getVersionInfo_Remarks() {
+		return (EAttribute) versionInfoEClass.getEStructuralFeatures().get(3);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getVersionInfo_Version() {
+		return (EAttribute) versionInfoEClass.getEStructuralFeatures().get(4);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getWith() {
+		return withEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getWith_Variables() {
+		return (EReference) withEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getLibraryElement() {
+		return libraryElementEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getLibraryElement_VersionInfo() {
+		return (EReference) libraryElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getLibraryElement_Identification() {
+		return (EReference) libraryElementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getLibraryElement_PaletteEntry() {
+		return (EReference) libraryElementEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getCompilableType() {
+		return compilableTypeEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getCompilableType_CompilerInfo() {
+		return (EReference) compilableTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getConfigurableObject() {
+		return configurableObjectEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getConfigurableObject_Attributes() {
+		return (EReference) configurableObjectEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getCompositeFBType() {
+		return compositeFBTypeEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getCompositeFBType_FBNetwork() {
+		return (EReference) compositeFBTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getTextAlgorithm() {
+		return textAlgorithmEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getTextAlgorithm_Text() {
+		return (EAttribute) textAlgorithmEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getDataConnection() {
+		return dataConnectionEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getEventConnection() {
+		return eventConnectionEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getAdapterConnection() {
+		return adapterConnectionEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getServiceInterface() {
+		return serviceInterfaceEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getIInterfaceElement() {
+		return iInterfaceElementEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getIInterfaceElement_IsInput() {
+		return (EAttribute) iInterfaceElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getIInterfaceElement_InputConnections() {
+		return (EReference) iInterfaceElementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getIInterfaceElement_OutputConnections() {
+		return (EReference) iInterfaceElementEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getIInterfaceElement_Type() {
+		return (EReference) iInterfaceElementEClass.getEStructuralFeatures().get(3);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getIInterfaceElement_TypeName() {
+		return (EAttribute) iInterfaceElementEClass.getEStructuralFeatures().get(4);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getValue() {
+		return valueEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getValue_Value() {
+		return (EAttribute) valueEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getSystemConfiguration() {
+		return systemConfigurationEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getSystemConfiguration_Devices() {
+		return (EReference) systemConfigurationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getSystemConfiguration_Segments() {
+		return (EReference) systemConfigurationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getSystemConfiguration_Links() {
+		return (EReference) systemConfigurationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getINamedElement() {
+		return iNamedElementEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getINamedElement_Name() {
+		return (EAttribute) iNamedElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getINamedElement_Comment() {
+		return (EAttribute) iNamedElementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getResourceTypeFB() {
+		return resourceTypeFBEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getSegmentType() {
+		return segmentTypeEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getSegmentType_VarDeclaration() {
+		return (EReference) segmentTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getAdapterFBType() {
+		return adapterFBTypeEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getAdapterFBType_AdapterType() {
+		return (EReference) adapterFBTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getAdapterEvent() {
+		return adapterEventEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getAdapterEvent_AdapterDeclaration() {
+		return (EReference) adapterEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getService() {
+		return serviceEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated */
 	@Override
 	public EReference getService_RightInterface() {
@@ -2418,7 +2132,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EReference getService_LeftInterface() {
@@ -2426,7 +2140,303 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
+	 * @generated */
+	@Override
+	public EReference getService_ServiceSequence() {
+		return (EReference) serviceEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getTypedConfigureableObject() {
+		return typedConfigureableObjectEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getTypedConfigureableObject_PaletteEntry() {
+		return (EReference) typedConfigureableObjectEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getAdapterFB() {
+		return adapterFBEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getAdapterFB_AdapterDecl() {
+		return (EReference) adapterFBEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getPrimitive() {
+		return primitiveEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getPrimitive_Event() {
+		return (EAttribute) primitiveEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getPrimitive_Parameters() {
+		return (EAttribute) primitiveEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getPrimitive_Interface() {
+		return (EReference) primitiveEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getPositionableElement() {
+		return positionableElementEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getPositionableElement_Position() {
+		return (EReference) positionableElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getPosition() {
+		return positionEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getPosition_X() {
+		return (EAttribute) positionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getPosition_Y() {
+		return (EAttribute) positionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getColor() {
+		return colorEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getColor_Red() {
+		return (EAttribute) colorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getColor_Green() {
+		return (EAttribute) colorEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getColor_Blue() {
+		return (EAttribute) colorEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getColorizableElement() {
+		return colorizableElementEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getColorizableElement_Color() {
+		return (EReference) colorizableElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getIVarElement() {
+		return iVarElementEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getIVarElement_VarDeclarations() {
+		return (EReference) iVarElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getAttributeDeclaration() {
+		return attributeDeclarationEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getAttributeDeclaration_InitialValue() {
+		return (EAttribute) attributeDeclarationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getTypedElement() {
+		return typedElementEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getTypedElement_Type() {
+		return (EAttribute) typedElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getSimpleFBType() {
+		return simpleFBTypeEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getSimpleFBType_Algorithm() {
+		return (EReference) simpleFBTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getBaseFBType() {
+		return baseFBTypeEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getBaseFBType_InternalVars() {
+		return (EReference) baseFBTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getStructManipulator() {
+		return structManipulatorEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getStructManipulator_StructType() {
+		return (EReference) structManipulatorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getDemultiplexer() {
+		return demultiplexerEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getMultiplexer() {
+		return multiplexerEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getLocalVariable() {
+		return localVariableEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getLocalVariable_ArrayStart() {
+		return (EAttribute) localVariableEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getLocalVariable_ArrayStop() {
+		return (EAttribute) localVariableEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated */
 	@Override
 	public EEnum getLanguage() {
@@ -2434,7 +2444,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EDataType getIProject() {
@@ -2442,7 +2452,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EDataType getIFile() {
@@ -2450,7 +2460,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EDataType getCommandStack() {
@@ -2458,7 +2468,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EDataType getPoint() {
@@ -2466,7 +2476,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public LibraryElementFactory getLibraryElementFactory() {
@@ -2474,18 +2484,17 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private boolean isCreated = false;
 
 	/** Creates the meta-model objects for the package. This method is guarded to have no affect on any invocation but
 	 * its first. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	public void createPackageContents() {
-		if (isCreated) {
+		if (isCreated)
 			return;
-		}
 		isCreated = true;
 
 		// Create classes and their features
@@ -2801,21 +2810,21 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		iProjectEDataType = createEDataType(IPROJECT);
 		iFileEDataType = createEDataType(IFILE);
 		commandStackEDataType = createEDataType(COMMAND_STACK);
+		pointEDataType = createEDataType(POINT);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	private boolean isInitialized = false;
 
 	/** Complete the initialization of the package and its meta-model. This method is guarded to have no affect on any
 	 * invocation but its first. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	public void initializePackageContents() {
-		if (isInitialized) {
+		if (isInitialized)
 			return;
-		}
 		isInitialized = true;
 
 		// Initialize package
@@ -2824,10 +2833,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		final PalettePackage thePalettePackage = (PalettePackage) EPackage.Registry.INSTANCE
+		PalettePackage thePalettePackage = (PalettePackage) EPackage.Registry.INSTANCE
 				.getEPackage(PalettePackage.eNS_URI);
-		final DataPackage theDataPackage = (DataPackage) EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
-		final XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
+		DataPackage theDataPackage = (DataPackage) EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
+		XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
 				.getEPackage(XMLTypePackage.eNS_URI);
 
 		// Create type parameters
@@ -2990,8 +2999,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getConnection_RoutingData(), this.getConnectionRoutingData(), null, "routingData", null, 1, 1, //$NON-NLS-1$
-				ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+				Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(connectionEClass, this.getFBNetworkElement(), "getSourceElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -3005,17 +3014,22 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(connectionEClass, null, "checkIfConnectionBroken", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		op = addEOperation(connectionEClass, null, "updateRoutingData", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getInt(), "dx1", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getInt(), "dy", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getInt(), "dx2", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(connectionRoutingDataEClass, ConnectionRoutingData.class, "ConnectionRoutingData", !IS_ABSTRACT, //$NON-NLS-1$
-				!IS_INTERFACE,IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getConnectionRoutingData_Dx1(), theXMLTypePackage.getInt(), "dx1", null, 0, 1, //$NON-NLS-1$
-				ConnectionRoutingData.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getConnectionRoutingData_Dx2(), theXMLTypePackage.getInt(), "dx2", null, 0, 1, //$NON-NLS-1$
-				ConnectionRoutingData.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getConnectionRoutingData_Dy(), theXMLTypePackage.getInt(), "dy", null, 0, 1, //$NON-NLS-1$
-				ConnectionRoutingData.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getConnectionRoutingData_Dx1(), theXMLTypePackage.getInt(), "dx1", "0", 0, 1, //$NON-NLS-1$ //$NON-NLS-2$
+				ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConnectionRoutingData_Dx2(), theXMLTypePackage.getInt(), "dx2", "0", 0, 1, //$NON-NLS-1$ //$NON-NLS-2$
+				ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConnectionRoutingData_Dy(), theXMLTypePackage.getInt(), "dy", "0", 0, 1, //$NON-NLS-1$ //$NON-NLS-2$
+				ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deviceEClass, Device.class, "Device", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getDevice_Resource(), this.getResource(), this.getResource_Device(), "resource", null, 0, -1, //$NON-NLS-1$
@@ -3231,8 +3245,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		op = addEOperation(interfaceListEClass, null, "getAllInterfaceElements", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		final EGenericType g1 = createEGenericType(ecorePackage.getEEList());
-		final EGenericType g2 = createEGenericType(this.getIInterfaceElement());
+		EGenericType g1 = createEGenericType(ecorePackage.getEEList());
+		EGenericType g2 = createEGenericType(this.getIInterfaceElement());
 		g1.getETypeArguments().add(g2);
 		initEOperation(op, g1);
 
@@ -3698,12 +3712,21 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 				PositionableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		op = addEOperation(positionableElementEClass, null, "updatePosition", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getInt(), "x", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getInt(), "y", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(positionableElementEClass, null, "updatePosition", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getPoint(), "newPos", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(positionEClass, Position.class, "Position", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPosition_X(), theXMLTypePackage.getInt(), "x", "0", 0, 1, Position.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
 				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPosition_Y(), theXMLTypePackage.getInt(), "y", "0", 0, 1, Position.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
 				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(positionEClass, this.getPoint(), "asPoint", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(colorEClass, Color.class, "Color", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getColor_Red(), theXMLTypePackage.getInt(), "red", "1", 0, 1, Color.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
@@ -3784,6 +3807,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEDataType(iFileEDataType, IFile.class, "IFile", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEDataType(commandStackEDataType, CommandStack.class, "CommandStack", IS_SERIALIZABLE, //$NON-NLS-1$
 				!IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(pointEDataType, Point.class, "Point", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);
@@ -3795,10 +3819,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 	/** Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	protected void createExtendedMetaDataAnnotations() {
-		final String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
 		addAnnotation(getAdapterType_AdapterFBType(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 				"name", "Service", //$NON-NLS-1$ //$NON-NLS-2$
 				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$

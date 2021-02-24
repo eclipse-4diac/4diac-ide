@@ -19,20 +19,20 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
 public abstract class AbstractConnectionCreateCommand extends Command {
 
-	private ConnectionRoutingData routingData;
+	private final ConnectionRoutingData routingData;
 
 	/** The parent. */
 	private FBNetwork parent;
@@ -62,10 +62,13 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		// initialize values
 		this.parent = parent;
 		this.performMappingCheck = true;
+		routingData = LibraryElementFactory.eINSTANCE.createConnectionRoutingData();
 	}
 
 	public void setArrangementConstraints(final ConnectionRoutingData routingData) {
-		this.routingData = EcoreUtil.copy(routingData);
+		this.routingData.setDx1(routingData.getDx1());
+		this.routingData.setDx2(routingData.getDx1());
+		this.routingData.setDy(routingData.getDy());
 	}
 
 	public void setSource(final IInterfaceElement source) {
@@ -148,7 +151,6 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		checkSourceAndTarget();
 
 		connection = createConnectionElement();
-
 		connection.setSource(source);
 		connection.setDestination(destination);
 		connection.setRoutingData(routingData);

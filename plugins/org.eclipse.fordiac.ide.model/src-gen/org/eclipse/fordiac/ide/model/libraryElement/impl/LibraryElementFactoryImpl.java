@@ -1,27 +1,34 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+
 import org.eclipse.draw2d.geometry.Point;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -92,6 +99,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+
 import org.eclipse.gef.commands.CommandStack;
 
 /** <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
@@ -103,12 +111,12 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	public static LibraryElementFactory init() {
 		try {
-			final LibraryElementFactory theLibraryElementFactory = (LibraryElementFactory) EPackage.Registry.INSTANCE
+			LibraryElementFactory theLibraryElementFactory = (LibraryElementFactory) EPackage.Registry.INSTANCE
 					.getEFactory(LibraryElementPackage.eNS_URI);
 			if (theLibraryElementFactory != null) {
 				return theLibraryElementFactory;
 			}
-		} catch (final Exception exception) {
+		} catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new LibraryElementFactoryImpl();
@@ -125,7 +133,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * 
 	 * @generated */
 	@Override
-	public EObject create(final EClass eClass) {
+	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 		case LibraryElementPackage.ADAPTER_DECLARATION:
 			return createAdapterDeclaration();
@@ -139,6 +147,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			return createCompilerInfo();
 		case LibraryElementPackage.COMPILER:
 			return createCompiler();
+		case LibraryElementPackage.CONNECTION_ROUTING_DATA:
+			return createConnectionRoutingData();
 		case LibraryElementPackage.DEVICE:
 			return createDevice();
 		case LibraryElementPackage.DEVICE_TYPE:
@@ -270,7 +280,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * 
 	 * @generated */
 	@Override
-	public Object createFromString(final EDataType eDataType, final String initialValue) {
+	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
 		case LibraryElementPackage.LANGUAGE:
 			return createLanguageFromString(eDataType, initialValue);
@@ -280,6 +290,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			return createIFileFromString(eDataType, initialValue);
 		case LibraryElementPackage.COMMAND_STACK:
 			return createCommandStackFromString(eDataType, initialValue);
+		case LibraryElementPackage.POINT:
+			return createPointFromString(eDataType, initialValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -289,7 +301,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * 
 	 * @generated */
 	@Override
-	public String convertToString(final EDataType eDataType, final Object instanceValue) {
+	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
 		case LibraryElementPackage.LANGUAGE:
 			return convertLanguageToString(eDataType, instanceValue);
@@ -299,6 +311,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			return convertIFileToString(eDataType, instanceValue);
 		case LibraryElementPackage.COMMAND_STACK:
 			return convertCommandStackToString(eDataType, instanceValue);
+		case LibraryElementPackage.POINT:
+			return convertPointToString(eDataType, instanceValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -309,7 +323,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public AdapterDeclaration createAdapterDeclaration() {
-		final AdapterDeclarationImpl adapterDeclaration = new AdapterDeclarationImpl();
+		AdapterDeclarationImpl adapterDeclaration = new AdapterDeclarationImpl();
 		return adapterDeclaration;
 	}
 
@@ -318,7 +332,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public AdapterType createAdapterType() {
-		final AdapterTypeImpl adapterType = new AdapterTypeImpl();
+		AdapterTypeImpl adapterType = new AdapterTypeImpl();
 		return adapterType;
 	}
 
@@ -327,7 +341,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Application createApplication() {
-		final ApplicationImpl application = new ApplicationImpl();
+		ApplicationImpl application = new ApplicationImpl();
 		return application;
 	}
 
@@ -336,7 +350,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public BasicFBType createBasicFBType() {
-		final BasicFBTypeImpl basicFBType = new BasicFBTypeImpl();
+		BasicFBTypeImpl basicFBType = new BasicFBTypeImpl();
 		return basicFBType;
 	}
 
@@ -345,7 +359,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public CompilerInfo createCompilerInfo() {
-		final CompilerInfoImpl compilerInfo = new CompilerInfoImpl();
+		CompilerInfoImpl compilerInfo = new CompilerInfoImpl();
 		return compilerInfo;
 	}
 
@@ -354,7 +368,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public org.eclipse.fordiac.ide.model.libraryElement.Compiler createCompiler() {
-		final CompilerImpl compiler = new CompilerImpl();
+		CompilerImpl compiler = new CompilerImpl();
 		return compiler;
 	}
 
@@ -363,7 +377,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ConnectionRoutingData createConnectionRoutingData() {
-		final ConnectionRoutingDataImpl connectionRoutingData = new ConnectionRoutingDataImpl();
+		ConnectionRoutingDataImpl connectionRoutingData = new ConnectionRoutingDataImpl();
 		return connectionRoutingData;
 	}
 
@@ -372,7 +386,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Device createDevice() {
-		final DeviceImpl device = new DeviceImpl();
+		DeviceImpl device = new DeviceImpl();
 		return device;
 	}
 
@@ -381,7 +395,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public DeviceType createDeviceType() {
-		final DeviceTypeImpl deviceType = new DeviceTypeImpl();
+		DeviceTypeImpl deviceType = new DeviceTypeImpl();
 		return deviceType;
 	}
 
@@ -390,7 +404,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ECAction createECAction() {
-		final ECActionImpl ecAction = new ECActionImpl();
+		ECActionImpl ecAction = new ECActionImpl();
 		return ecAction;
 	}
 
@@ -399,7 +413,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ECC createECC() {
-		final ECCImpl ecc = new ECCImpl();
+		ECCImpl ecc = new ECCImpl();
 		return ecc;
 	}
 
@@ -408,7 +422,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ECState createECState() {
-		final ECStateImpl ecState = new ECStateImpl();
+		ECStateImpl ecState = new ECStateImpl();
 		return ecState;
 	}
 
@@ -417,7 +431,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ECTransition createECTransition() {
-		final ECTransitionImpl ecTransition = new ECTransitionImpl();
+		ECTransitionImpl ecTransition = new ECTransitionImpl();
 		return ecTransition;
 	}
 
@@ -426,7 +440,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Event createEvent() {
-		final EventImpl event = new EventImpl();
+		EventImpl event = new EventImpl();
 		return event;
 	}
 
@@ -434,17 +448,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * 
 	 * @generated */
 	@Override
-	public FBNetwork createFBNetwork() {
-		final FBNetworkImpl fbNetwork = new FBNetworkImpl();
-		return fbNetwork;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
 	public FB createFB() {
-		final FBImpl fb = new FBImpl();
+		FBImpl fb = new FBImpl();
 		return fb;
 	}
 
@@ -453,7 +458,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public FBNetworkElement createFBNetworkElement() {
-		final FBNetworkElementImpl fbNetworkElement = new FBNetworkElementImpl();
+		FBNetworkElementImpl fbNetworkElement = new FBNetworkElementImpl();
 		return fbNetworkElement;
 	}
 
@@ -461,8 +466,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * 
 	 * @generated */
 	@Override
+	public SubApp createSubApp() {
+		SubAppImpl subApp = new SubAppImpl();
+		return subApp;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
 	public FBType createFBType() {
-		final FBTypeImpl fbType = new FBTypeImpl();
+		FBTypeImpl fbType = new FBTypeImpl();
 		return fbType;
 	}
 
@@ -471,7 +485,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Identification createIdentification() {
-		final IdentificationImpl identification = new IdentificationImpl();
+		IdentificationImpl identification = new IdentificationImpl();
 		return identification;
 	}
 
@@ -480,7 +494,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public InputPrimitive createInputPrimitive() {
-		final InputPrimitiveImpl inputPrimitive = new InputPrimitiveImpl();
+		InputPrimitiveImpl inputPrimitive = new InputPrimitiveImpl();
 		return inputPrimitive;
 	}
 
@@ -489,7 +503,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public InterfaceList createInterfaceList() {
-		final InterfaceListImpl interfaceList = new InterfaceListImpl();
+		InterfaceListImpl interfaceList = new InterfaceListImpl();
 		return interfaceList;
 	}
 
@@ -498,7 +512,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Link createLink() {
-		final LinkImpl link = new LinkImpl();
+		LinkImpl link = new LinkImpl();
 		return link;
 	}
 
@@ -507,7 +521,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Mapping createMapping() {
-		final MappingImpl mapping = new MappingImpl();
+		MappingImpl mapping = new MappingImpl();
 		return mapping;
 	}
 
@@ -516,7 +530,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public OtherAlgorithm createOtherAlgorithm() {
-		final OtherAlgorithmImpl otherAlgorithm = new OtherAlgorithmImpl();
+		OtherAlgorithmImpl otherAlgorithm = new OtherAlgorithmImpl();
 		return otherAlgorithm;
 	}
 
@@ -525,7 +539,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public OutputPrimitive createOutputPrimitive() {
-		final OutputPrimitiveImpl outputPrimitive = new OutputPrimitiveImpl();
+		OutputPrimitiveImpl outputPrimitive = new OutputPrimitiveImpl();
 		return outputPrimitive;
 	}
 
@@ -533,8 +547,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * 
 	 * @generated */
 	@Override
+	public Attribute createAttribute() {
+		AttributeImpl attribute = new AttributeImpl();
+		return attribute;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
 	public Resource createResource() {
-		final ResourceImpl resource = new ResourceImpl();
+		ResourceImpl resource = new ResourceImpl();
 		return resource;
 	}
 
@@ -543,7 +566,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ResourceTypeName createResourceTypeName() {
-		final ResourceTypeNameImpl resourceTypeName = new ResourceTypeNameImpl();
+		ResourceTypeNameImpl resourceTypeName = new ResourceTypeNameImpl();
 		return resourceTypeName;
 	}
 
@@ -552,7 +575,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ResourceType createResourceType() {
-		final ResourceTypeImpl resourceType = new ResourceTypeImpl();
+		ResourceTypeImpl resourceType = new ResourceTypeImpl();
 		return resourceType;
 	}
 
@@ -561,7 +584,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Segment createSegment() {
-		final SegmentImpl segment = new SegmentImpl();
+		SegmentImpl segment = new SegmentImpl();
 		return segment;
 	}
 
@@ -570,7 +593,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ServiceSequence createServiceSequence() {
-		final ServiceSequenceImpl serviceSequence = new ServiceSequenceImpl();
+		ServiceSequenceImpl serviceSequence = new ServiceSequenceImpl();
 		return serviceSequence;
 	}
 
@@ -579,7 +602,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ServiceTransaction createServiceTransaction() {
-		final ServiceTransactionImpl serviceTransaction = new ServiceTransactionImpl();
+		ServiceTransactionImpl serviceTransaction = new ServiceTransactionImpl();
 		return serviceTransaction;
 	}
 
@@ -588,7 +611,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ServiceInterfaceFBType createServiceInterfaceFBType() {
-		final ServiceInterfaceFBTypeImpl serviceInterfaceFBType = new ServiceInterfaceFBTypeImpl();
+		ServiceInterfaceFBTypeImpl serviceInterfaceFBType = new ServiceInterfaceFBTypeImpl();
 		return serviceInterfaceFBType;
 	}
 
@@ -597,7 +620,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public STAlgorithm createSTAlgorithm() {
-		final STAlgorithmImpl stAlgorithm = new STAlgorithmImpl();
+		STAlgorithmImpl stAlgorithm = new STAlgorithmImpl();
 		return stAlgorithm;
 	}
 
@@ -605,9 +628,9 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * 
 	 * @generated */
 	@Override
-	public SubApp createSubApp() {
-		final SubAppImpl subApp = new SubAppImpl();
-		return subApp;
+	public FBNetwork createFBNetwork() {
+		FBNetworkImpl fbNetwork = new FBNetworkImpl();
+		return fbNetwork;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -615,7 +638,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public SubAppType createSubAppType() {
-		final SubAppTypeImpl subAppType = new SubAppTypeImpl();
+		SubAppTypeImpl subAppType = new SubAppTypeImpl();
 		return subAppType;
 	}
 
@@ -624,7 +647,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public AutomationSystem createAutomationSystem() {
-		final AutomationSystemImpl automationSystem = new AutomationSystemImpl();
+		AutomationSystemImpl automationSystem = new AutomationSystemImpl();
 		return automationSystem;
 	}
 
@@ -633,7 +656,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public VarDeclaration createVarDeclaration() {
-		final VarDeclarationImpl varDeclaration = new VarDeclarationImpl();
+		VarDeclarationImpl varDeclaration = new VarDeclarationImpl();
 		return varDeclaration;
 	}
 
@@ -642,7 +665,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public VersionInfo createVersionInfo() {
-		final VersionInfoImpl versionInfo = new VersionInfoImpl();
+		VersionInfoImpl versionInfo = new VersionInfoImpl();
 		return versionInfo;
 	}
 
@@ -651,7 +674,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public With createWith() {
-		final WithImpl with = new WithImpl();
+		WithImpl with = new WithImpl();
 		return with;
 	}
 
@@ -660,7 +683,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public LibraryElement createLibraryElement() {
-		final LibraryElementImpl libraryElement = new LibraryElementImpl();
+		LibraryElementImpl libraryElement = new LibraryElementImpl();
 		return libraryElement;
 	}
 
@@ -669,7 +692,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public CompilableType createCompilableType() {
-		final CompilableTypeImpl compilableType = new CompilableTypeImpl();
+		CompilableTypeImpl compilableType = new CompilableTypeImpl();
 		return compilableType;
 	}
 
@@ -678,7 +701,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ConfigurableObject createConfigurableObject() {
-		final ConfigurableObjectImpl configurableObject = new ConfigurableObjectImpl();
+		ConfigurableObjectImpl configurableObject = new ConfigurableObjectImpl();
 		return configurableObject;
 	}
 
@@ -687,7 +710,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public CompositeFBType createCompositeFBType() {
-		final CompositeFBTypeImpl compositeFBType = new CompositeFBTypeImpl();
+		CompositeFBTypeImpl compositeFBType = new CompositeFBTypeImpl();
 		return compositeFBType;
 	}
 
@@ -696,7 +719,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public DataConnection createDataConnection() {
-		final DataConnectionImpl dataConnection = new DataConnectionImpl();
+		DataConnectionImpl dataConnection = new DataConnectionImpl();
 		return dataConnection;
 	}
 
@@ -705,7 +728,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public EventConnection createEventConnection() {
-		final EventConnectionImpl eventConnection = new EventConnectionImpl();
+		EventConnectionImpl eventConnection = new EventConnectionImpl();
 		return eventConnection;
 	}
 
@@ -714,7 +737,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public AdapterConnection createAdapterConnection() {
-		final AdapterConnectionImpl adapterConnection = new AdapterConnectionImpl();
+		AdapterConnectionImpl adapterConnection = new AdapterConnectionImpl();
 		return adapterConnection;
 	}
 
@@ -723,7 +746,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ServiceInterface createServiceInterface() {
-		final ServiceInterfaceImpl serviceInterface = new ServiceInterfaceImpl();
+		ServiceInterfaceImpl serviceInterface = new ServiceInterfaceImpl();
 		return serviceInterface;
 	}
 
@@ -732,7 +755,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Value createValue() {
-		final ValueImpl value = new ValueImpl();
+		ValueImpl value = new ValueImpl();
 		return value;
 	}
 
@@ -741,7 +764,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public SystemConfiguration createSystemConfiguration() {
-		final SystemConfigurationImpl systemConfiguration = new SystemConfigurationImpl();
+		SystemConfigurationImpl systemConfiguration = new SystemConfigurationImpl();
 		return systemConfiguration;
 	}
 
@@ -750,7 +773,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ResourceTypeFB createResourceTypeFB() {
-		final ResourceTypeFBImpl resourceTypeFB = new ResourceTypeFBImpl();
+		ResourceTypeFBImpl resourceTypeFB = new ResourceTypeFBImpl();
 		return resourceTypeFB;
 	}
 
@@ -759,7 +782,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public SegmentType createSegmentType() {
-		final SegmentTypeImpl segmentType = new SegmentTypeImpl();
+		SegmentTypeImpl segmentType = new SegmentTypeImpl();
 		return segmentType;
 	}
 
@@ -768,7 +791,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public AdapterFBType createAdapterFBType() {
-		final AdapterFBTypeImpl adapterFBType = new AdapterFBTypeImpl();
+		AdapterFBTypeImpl adapterFBType = new AdapterFBTypeImpl();
 		return adapterFBType;
 	}
 
@@ -777,7 +800,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public AdapterEvent createAdapterEvent() {
-		final AdapterEventImpl adapterEvent = new AdapterEventImpl();
+		AdapterEventImpl adapterEvent = new AdapterEventImpl();
 		return adapterEvent;
 	}
 
@@ -786,7 +809,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Service createService() {
-		final ServiceImpl service = new ServiceImpl();
+		ServiceImpl service = new ServiceImpl();
 		return service;
 	}
 
@@ -795,7 +818,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public TypedConfigureableObject createTypedConfigureableObject() {
-		final TypedConfigureableObjectImpl typedConfigureableObject = new TypedConfigureableObjectImpl();
+		TypedConfigureableObjectImpl typedConfigureableObject = new TypedConfigureableObjectImpl();
 		return typedConfigureableObject;
 	}
 
@@ -804,7 +827,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public AdapterFB createAdapterFB() {
-		final AdapterFBImpl adapterFB = new AdapterFBImpl();
+		AdapterFBImpl adapterFB = new AdapterFBImpl();
 		return adapterFB;
 	}
 
@@ -813,7 +836,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Primitive createPrimitive() {
-		final PrimitiveImpl primitive = new PrimitiveImpl();
+		PrimitiveImpl primitive = new PrimitiveImpl();
 		return primitive;
 	}
 
@@ -822,7 +845,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public PositionableElement createPositionableElement() {
-		final PositionableElementImpl positionableElement = new PositionableElementImpl();
+		PositionableElementImpl positionableElement = new PositionableElementImpl();
 		return positionableElement;
 	}
 
@@ -831,7 +854,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Position createPosition() {
-		final PositionImpl position = new PositionImpl();
+		PositionImpl position = new PositionImpl();
 		return position;
 	}
 
@@ -840,7 +863,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Color createColor() {
-		final ColorImpl color = new ColorImpl();
+		ColorImpl color = new ColorImpl();
 		return color;
 	}
 
@@ -849,7 +872,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public ColorizableElement createColorizableElement() {
-		final ColorizableElementImpl colorizableElement = new ColorizableElementImpl();
+		ColorizableElementImpl colorizableElement = new ColorizableElementImpl();
 		return colorizableElement;
 	}
 
@@ -858,7 +881,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public AttributeDeclaration createAttributeDeclaration() {
-		final AttributeDeclarationImpl attributeDeclaration = new AttributeDeclarationImpl();
+		AttributeDeclarationImpl attributeDeclaration = new AttributeDeclarationImpl();
 		return attributeDeclaration;
 	}
 
@@ -867,7 +890,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public SimpleFBType createSimpleFBType() {
-		final SimpleFBTypeImpl simpleFBType = new SimpleFBTypeImpl();
+		SimpleFBTypeImpl simpleFBType = new SimpleFBTypeImpl();
 		return simpleFBType;
 	}
 
@@ -876,7 +899,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public BaseFBType createBaseFBType() {
-		final BaseFBTypeImpl baseFBType = new BaseFBTypeImpl();
+		BaseFBTypeImpl baseFBType = new BaseFBTypeImpl();
 		return baseFBType;
 	}
 
@@ -885,7 +908,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Demultiplexer createDemultiplexer() {
-		final DemultiplexerImpl demultiplexer = new DemultiplexerImpl();
+		DemultiplexerImpl demultiplexer = new DemultiplexerImpl();
 		return demultiplexer;
 	}
 
@@ -894,7 +917,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public Multiplexer createMultiplexer() {
-		final MultiplexerImpl multiplexer = new MultiplexerImpl();
+		MultiplexerImpl multiplexer = new MultiplexerImpl();
 		return multiplexer;
 	}
 
@@ -903,92 +926,81 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated */
 	@Override
 	public LocalVariable createLocalVariable() {
-		final LocalVariableImpl localVariable = new LocalVariableImpl();
+		LocalVariableImpl localVariable = new LocalVariableImpl();
 		return localVariable;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	@Override
-	public Attribute createAttribute() {
-		final AttributeImpl attribute = new AttributeImpl();
-		return attribute;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	public Language createLanguageFromString(final EDataType eDataType, final String initialValue) {
-		final Language result = Language.get(initialValue);
+	public Language createLanguageFromString(EDataType eDataType, String initialValue) {
+		Language result = Language.get(initialValue);
 		if (result == null)
-		 {
 			throw new IllegalArgumentException(
 					"The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		}
 		return result;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	public String convertLanguageToString(final EDataType eDataType, final Object instanceValue) {
+	public String convertLanguageToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	public IProject createIProjectFromString(final EDataType eDataType, final String initialValue) {
+	public IProject createIProjectFromString(EDataType eDataType, String initialValue) {
 		return (IProject) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	public String convertIProjectToString(final EDataType eDataType, final Object instanceValue) {
+	public String convertIProjectToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	public IFile createIFileFromString(final EDataType eDataType, final String initialValue) {
+	public IFile createIFileFromString(EDataType eDataType, String initialValue) {
 		return (IFile) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	public String convertIFileToString(final EDataType eDataType, final Object instanceValue) {
+	public String convertIFileToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	public CommandStack createCommandStackFromString(final EDataType eDataType, final String initialValue) {
+	public CommandStack createCommandStackFromString(EDataType eDataType, String initialValue) {
 		return (CommandStack) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	public String convertCommandStackToString(final EDataType eDataType, final Object instanceValue) {
+	public String convertCommandStackToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	public Point createPointFromString(final EDataType eDataType, final String initialValue) {
+	public Point createPointFromString(EDataType eDataType, String initialValue) {
 		return (Point) super.createFromString(eDataType, initialValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	public String convertPointToString(final EDataType eDataType, final Object instanceValue) {
+	public String convertPointToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
