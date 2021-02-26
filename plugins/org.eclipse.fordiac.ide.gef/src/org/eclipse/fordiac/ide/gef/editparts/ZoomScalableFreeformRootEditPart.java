@@ -192,6 +192,14 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		}
 
 		@Override
+		public void mouseDown(final MouseEvent me, final EditPartViewer viewer) {
+			if (viewer instanceof AdvancedScrollingGraphicalViewer) {
+				bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer);
+			}
+			super.mouseDown(me, viewer);
+		}
+
+		@Override
 		public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
 			if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
 				final Point oldViewPort = ((AdvancedScrollingGraphicalViewer) viewer).getViewLocation();
