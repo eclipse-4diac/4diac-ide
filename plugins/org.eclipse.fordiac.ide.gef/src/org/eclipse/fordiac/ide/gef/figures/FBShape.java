@@ -36,6 +36,7 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
@@ -84,7 +85,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 
 	private UnderlineAlphaLabel typeLabel;
 
-	public FBShape(FBType fbType) {
+	public FBShape(final FBType fbType) {
 		configureMainFigure();
 		createFBFigureShape(fbType);
 		setTypeLabelFont();
@@ -151,7 +152,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	@Override
-	public void setAlpha(int value) {
+	public void setAlpha(final int value) {
 		super.setAlpha(value);
 
 		bottom.setAlpha(value);
@@ -175,12 +176,13 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	@Override
-	protected void fillShape(Graphics graphics) {
+	protected void fillShape(final Graphics graphics) {
 		// not used
+		drawShadow(graphics);
 	}
 
 	@Override
-	protected void outlineShape(Graphics graphics) {
+	protected void outlineShape(final Graphics graphics) {
 		// not used
 	}
 
@@ -188,7 +190,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		setFillXOR(false);
 		setOpaque(false);
 
-		GridLayout mainLayout = new GridLayout(1, true);
+		final GridLayout mainLayout = new GridLayout(1, true);
 		mainLayout.marginHeight = 0;
 		mainLayout.marginWidth = 0;
 		mainLayout.horizontalSpacing = 0;
@@ -197,26 +199,26 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	private void createFBFigureShape(final FBType fbType) {
-		Color borderColor = getBorderColor(fbType);
+		final Color borderColor = getBorderColor(fbType);
 
-		Figure fbFigureContainer = createFigureContainer();
+		final Figure fbFigureContainer = createFigureContainer();
 		createFBTop(fbFigureContainer, DiagramPreferences.CORNER_DIM, borderColor);
 		configureFBMiddle(fbType, fbFigureContainer, borderColor);
 		createFBBottom(fbFigureContainer, DiagramPreferences.CORNER_DIM, borderColor);
 	}
 
-	private void createFBBottom(Figure fbFigureContainer, int cornerDim, Color borderColor) {
+	private void createFBBottom(final Figure fbFigureContainer, final int cornerDim, final Color borderColor) {
 		bottom = new AdvancedRoundedRectangle(PositionConstants.SOUTH | PositionConstants.EAST | PositionConstants.WEST,
 				borderColor);
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
-		GridLayout bottomLayout = new GridLayout(3, false);
+		final GridLayout bottomLayout = new GridLayout(3, false);
 		bottomLayout.marginHeight = 4;
 		bottomLayout.marginWidth = 0;
 		bottomLayout.horizontalSpacing = 0;
 		bottomLayout.verticalSpacing = 0;
 		bottom.setLayoutManager(bottomLayout);
 
-		GridData bottomLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+		final GridData bottomLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		bottomLayoutData.verticalAlignment = SWT.TOP;
 
@@ -226,26 +228,26 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		setBottomIOs(bottom);
 	}
 
-	private void configureFBMiddle(final FBType fbType, Figure fbFigureContainer, Color borderColor) {
-		Figure middleContainer = new Figure();
-		BorderLayout borderLayout = new BorderLayout();
+	private void configureFBMiddle(final FBType fbType, final Figure fbFigureContainer, final Color borderColor) {
+		final Figure middleContainer = new Figure();
+		final BorderLayout borderLayout = new BorderLayout();
 		middleContainer.setLayoutManager(borderLayout);
 		borderLayout.setHorizontalSpacing(10);
 		middleContainer.setBorder(new MarginBorder(0, 7, 0, 7));
 
 		fbFigureContainer.add(middleContainer);
-		GridData middleLayouData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		final GridData middleLayouData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		fbFigureContainer.setConstraint(middleContainer, middleLayouData);
 
 		setupTypeNameAndVersion(fbType, middleContainer, borderColor);
 	}
 
-	private void createFBTop(Figure fbFigureContainer, int cornerDim, Color borderColor) {
+	private void createFBTop(final Figure fbFigureContainer, final int cornerDim, final Color borderColor) {
 		top = new AdvancedRoundedRectangle(PositionConstants.NORTH | PositionConstants.EAST | PositionConstants.WEST,
 				borderColor);
 		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 
-		GridLayout topLayout = new GridLayout(3, false);
+		final GridLayout topLayout = new GridLayout(3, false);
 		topLayout.marginHeight = 4;
 		topLayout.marginWidth = 0;
 		topLayout.horizontalSpacing = 0;
@@ -253,7 +255,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		top.setLayoutManager(topLayout);
 
 		fbFigureContainer.add(top);
-		GridData topLayoutData = new GridData(
+		final GridData topLayoutData = new GridData(
 				GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
 		fbFigureContainer.setConstraint(top, topLayoutData);
 
@@ -261,11 +263,11 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	private Figure createFigureContainer() {
-		Figure fbFigureContainer = new Figure();
+		final Figure fbFigureContainer = new Figure();
 		add(fbFigureContainer);
 		setConstraint(fbFigureContainer, new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 
-		GridLayout gridLayout = new GridLayout(1, true);
+		final GridLayout gridLayout = new GridLayout(1, true);
 		gridLayout.marginHeight = 0;
 		gridLayout.marginWidth = 0;
 		gridLayout.horizontalSpacing = 0;
@@ -274,9 +276,9 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		return fbFigureContainer;
 	}
 
-	private void setupTopIOs(IFigure parent) {
-		ToolbarLayout topInputsLayout = new ToolbarLayout(false);
-		GridData topInputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+	private void setupTopIOs(final IFigure parent) {
+		final ToolbarLayout topInputsLayout = new ToolbarLayout(false);
+		final GridData topInputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		eventInputs.setLayoutManager(topInputsLayout);
 		//
@@ -284,8 +286,8 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		parent.setConstraint(eventInputs, topInputsLayoutData);
 
 		//
-		ToolbarLayout topOutputsLayout = new ToolbarLayout(false);
-		GridData topOutputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL
+		final ToolbarLayout topOutputsLayout = new ToolbarLayout(false);
+		final GridData topOutputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		topOutputsLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		eventOutputs.setLayoutManager(topOutputsLayout);
@@ -293,11 +295,11 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		parent.setConstraint(eventOutputs, topOutputsLayoutData);
 	}
 
-	private void setBottomIOs(IFigure parent) {
-		Figure bottomInputArea = new Figure();
+	private void setBottomIOs(final IFigure parent) {
+		final Figure bottomInputArea = new Figure();
 		bottomInputArea.setLayoutManager(new ToolbarLayout(false));
 
-		GridData bottomInputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+		final GridData bottomInputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		bottomInputsLayoutData.verticalAlignment = SWT.TOP;
 
@@ -310,11 +312,11 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		sockets.setLayoutManager(new ToolbarLayout(false));
 		bottomInputArea.add(sockets);
 
-		Figure bottomOutputArea = new Figure();
+		final Figure bottomOutputArea = new Figure();
 		bottomOutputArea.setLayoutManager(new ToolbarLayout(false));
 		((ToolbarLayout) bottomOutputArea.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 
-		GridData bottomOutputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+		final GridData bottomOutputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		parent.add(bottomOutputArea);
 		parent.setConstraint(bottomOutputArea, bottomOutputsLayoutData);
@@ -328,19 +330,19 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		bottomOutputArea.add(plugs);
 	}
 
-	protected void setupTypeNameAndVersion(final FBType type, Figure container, Color borderColor) {
+	protected void setupTypeNameAndVersion(final FBType type, final Figure container, final Color borderColor) {
 		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, borderColor);
 
 		container.add(middle, BorderLayout.CENTER);
 		middle.setCornerDimensions(new Dimension());
 
-		GridLayout middleLayout = new GridLayout(1, true);
+		final GridLayout middleLayout = new GridLayout(1, true);
 		middleLayout.marginHeight = 2;
 		middleLayout.verticalSpacing = 1;
 
 		middle.setLayoutManager(middleLayout);
 
-		String typeName = (null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET;
+		final String typeName = (null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET;
 
 		typeLabel = new UnderlineAlphaLabel(null != typeName ? typeName : FordiacMessages.ND);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
@@ -351,7 +353,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	@Override
-	public void setBackgroundColor(Color bg) {
+	public void setBackgroundColor(final Color bg) {
 		// set border color
 		super.setBackgroundColor(bg);
 		if (bg == null) {
@@ -359,18 +361,66 @@ public class FBShape extends Shape implements IFontUpdateListener {
 			middle.setBorderColor(getLocalForegroundColor());
 			bottom.setBorderColor(getLocalForegroundColor());
 		} else {
-			Color darkerColor = ColorHelper.darker(bg);
+			final Color darkerColor = ColorHelper.darker(bg);
 			((AdvancedRoundedRectangle) top).setBorderColor(darkerColor);
 			middle.setBorderColor(darkerColor);
 			bottom.setBorderColor(darkerColor);
 		}
 	}
 
-	private static Color getBorderColor(LibraryElement type) {
+	private static Color getBorderColor(final LibraryElement type) {
 		if (type instanceof AdapterFBType) {
 			return PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
 		}
 		return ColorConstants.gray;
+	}
+
+	private void drawShadow(final Graphics graphics) {
+		final int shadow = 6;
+
+		graphics.pushState();
+		graphics.setBackgroundColor(ColorConstants.black);
+		graphics.setAlpha(20);
+
+		final Rectangle topShadowRect = top.getBounds().getExpanded(2, 2);
+		final Rectangle middleShadowRect = middle.getBounds().getExpanded(2, 0);
+		final Rectangle bottomShadowRect = bottom.getBounds().getExpanded(2, 2);
+
+
+		final Rectangle clipRect = topShadowRect.getCopy();
+		clipRect.union(middleShadowRect);
+		clipRect.union(bottomShadowRect);
+		clipRect.width += shadow;
+		clipRect.height += shadow;
+		graphics.setClip(clipRect);
+
+		drawShadowFigure(graphics, topShadowRect, middleShadowRect, bottomShadowRect);
+
+		topShadowRect.shrink(1, 1);
+		middleShadowRect.shrink(1, 0);
+		bottomShadowRect.shrink(1, 1);
+		drawShadowFigure(graphics, topShadowRect, middleShadowRect, bottomShadowRect);
+		final double horInc = 0.66;  // emulate a roughly 30° shadow angle
+		double horI = 0;
+		for (int i = 0; i <= shadow; i++) {
+			horI += horInc;
+			topShadowRect.translate((int) horI, 1);
+			middleShadowRect.translate((int) horI, 1);
+			bottomShadowRect.translate((int) horI, 1);
+			drawShadowFigure(graphics, topShadowRect, middleShadowRect, bottomShadowRect);
+			if (horI > 1.0) {
+				horI -= 1.0;
+			}
+		}
+
+		graphics.popState();
+	}
+
+	private static void drawShadowFigure(final Graphics graphics, final Rectangle topShadowRect,
+			final Rectangle middleShadowRect, final Rectangle bottomShadowRect) {
+		graphics.fillRoundRectangle(topShadowRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
+		graphics.fillRectangle(middleShadowRect);
+		graphics.fillRoundRectangle(bottomShadowRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
 	}
 
 }
