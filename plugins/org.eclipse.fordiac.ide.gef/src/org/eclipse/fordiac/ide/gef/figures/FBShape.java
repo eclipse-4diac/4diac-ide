@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
- * 				 2020        Primetals Technologies Germany GmbH
+ * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University Linz,
+ *                          Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,11 +19,12 @@
  *               - extracted common FB shape for interface and fbn editors
  *   Bianca Wiesmayr - edited appearance of FBs
  *   Daniel Lindhuber - changed layout of top part
+ *   Alois Zoitl - Added shadow border, removed sharp border
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
+import org.eclipse.draw2d.AbstractBackground;
 import org.eclipse.draw2d.BorderLayout;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
@@ -36,34 +37,29 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.gef.draw2d.AdvancedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
-import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 
 public class FBShape extends Shape implements IFontUpdateListener {
+
+	private static final int FB_NOTCH_INSET = 9;
 
 	/** The top. */
 	private RoundedRectangle top;
 
 	/** The middle. */
-	private AdvancedRoundedRectangle middle;
+	private RoundedRectangle middle;
 
 	/** The bottom. */
-	private AdvancedRoundedRectangle bottom;
+	private RoundedRectangle bottom;
 
 	/** The event inputs. */
 	private final Figure eventInputs = new Figure();
@@ -89,6 +85,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		configureMainFigure();
 		createFBFigureShape(fbType);
 		setTypeLabelFont();
+		setBorder(new FBShapeShadowBorder());
 	}
 
 	/**
@@ -143,11 +140,11 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		return top;
 	}
 
-	public AdvancedRoundedRectangle getMiddle() {
+	public RoundedRectangle getMiddle() {
 		return middle;
 	}
 
-	public AdvancedRoundedRectangle getBottom() {
+	public RoundedRectangle getBottom() {
 		return bottom;
 	}
 
@@ -178,12 +175,20 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	@Override
 	protected void fillShape(final Graphics graphics) {
 		// not used
-		drawShadow(graphics);
 	}
 
 	@Override
 	protected void outlineShape(final Graphics graphics) {
 		// not used
+	}
+
+	@Override
+	public void paintFigure(final Graphics graphics) {
+		// paint figure of shape does not check for background borders, needed for drop shadow
+		if (getBorder() instanceof AbstractBackground) {
+			((AbstractBackground) getBorder()).paintBackground(this, graphics, NO_INSETS);
+		}
+		super.paintFigure(graphics);
 	}
 
 	private void configureMainFigure() {
@@ -199,17 +204,15 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	private void createFBFigureShape(final FBType fbType) {
-		final Color borderColor = getBorderColor(fbType);
-
 		final Figure fbFigureContainer = createFigureContainer();
-		createFBTop(fbFigureContainer, DiagramPreferences.CORNER_DIM, borderColor);
-		configureFBMiddle(fbType, fbFigureContainer, borderColor);
-		createFBBottom(fbFigureContainer, DiagramPreferences.CORNER_DIM, borderColor);
+		createFBTop(fbFigureContainer, DiagramPreferences.CORNER_DIM);
+		configureFBMiddle(fbType, fbFigureContainer);
+		createFBBottom(fbFigureContainer, DiagramPreferences.CORNER_DIM);
 	}
 
-	private void createFBBottom(final Figure fbFigureContainer, final int cornerDim, final Color borderColor) {
-		bottom = new AdvancedRoundedRectangle(PositionConstants.SOUTH | PositionConstants.EAST | PositionConstants.WEST,
-				borderColor);
+	private void createFBBottom(final Figure fbFigureContainer, final int cornerDim) {
+		bottom = new RoundedRectangle();
+		bottom.setOutline(false);
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 		final GridLayout bottomLayout = new GridLayout(3, false);
 		bottomLayout.marginHeight = 4;
@@ -228,23 +231,23 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		setBottomIOs(bottom);
 	}
 
-	private void configureFBMiddle(final FBType fbType, final Figure fbFigureContainer, final Color borderColor) {
+	private void configureFBMiddle(final FBType fbType, final Figure fbFigureContainer) {
 		final Figure middleContainer = new Figure();
 		final BorderLayout borderLayout = new BorderLayout();
 		middleContainer.setLayoutManager(borderLayout);
 		borderLayout.setHorizontalSpacing(10);
-		middleContainer.setBorder(new MarginBorder(0, 7, 0, 7));
+		middleContainer.setBorder(new MarginBorder(0, FB_NOTCH_INSET, 0, FB_NOTCH_INSET));
 
 		fbFigureContainer.add(middleContainer);
 		final GridData middleLayouData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		fbFigureContainer.setConstraint(middleContainer, middleLayouData);
 
-		setupTypeNameAndVersion(fbType, middleContainer, borderColor);
+		setupTypeNameAndVersion(fbType, middleContainer);
 	}
 
-	private void createFBTop(final Figure fbFigureContainer, final int cornerDim, final Color borderColor) {
-		top = new AdvancedRoundedRectangle(PositionConstants.NORTH | PositionConstants.EAST | PositionConstants.WEST,
-				borderColor);
+	private void createFBTop(final Figure fbFigureContainer, final int cornerDim) {
+		top = new RoundedRectangle();
+		top.setOutline(false);
 		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 
 		final GridLayout topLayout = new GridLayout(3, false);
@@ -330,9 +333,9 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		bottomOutputArea.add(plugs);
 	}
 
-	protected void setupTypeNameAndVersion(final FBType type, final Figure container, final Color borderColor) {
-		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, borderColor);
-
+	protected void setupTypeNameAndVersion(final FBType type, final Figure container) {
+		middle = new RoundedRectangle();
+		middle.setOutline(false);
 		container.add(middle, BorderLayout.CENTER);
 		middle.setCornerDimensions(new Dimension());
 
@@ -350,77 +353,6 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		typeLabel.setIcon(ResultListLabelProvider.getTypeImage(type));
 		middle.add(typeLabel);
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
-	}
-
-	@Override
-	public void setBackgroundColor(final Color bg) {
-		// set border color
-		super.setBackgroundColor(bg);
-		if (bg == null) {
-			((AdvancedRoundedRectangle) top).setBorderColor(getLocalForegroundColor());
-			middle.setBorderColor(getLocalForegroundColor());
-			bottom.setBorderColor(getLocalForegroundColor());
-		} else {
-			final Color darkerColor = ColorHelper.darker(bg);
-			((AdvancedRoundedRectangle) top).setBorderColor(darkerColor);
-			middle.setBorderColor(darkerColor);
-			bottom.setBorderColor(darkerColor);
-		}
-	}
-
-	private static Color getBorderColor(final LibraryElement type) {
-		if (type instanceof AdapterFBType) {
-			return PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
-		}
-		return ColorConstants.gray;
-	}
-
-	private void drawShadow(final Graphics graphics) {
-		final int shadow = 6;
-
-		graphics.pushState();
-		graphics.setBackgroundColor(ColorConstants.black);
-		graphics.setAlpha(20);
-
-		final Rectangle topShadowRect = top.getBounds().getExpanded(2, 2);
-		final Rectangle middleShadowRect = middle.getBounds().getExpanded(2, 0);
-		final Rectangle bottomShadowRect = bottom.getBounds().getExpanded(2, 2);
-
-
-		final Rectangle clipRect = topShadowRect.getCopy();
-		clipRect.union(middleShadowRect);
-		clipRect.union(bottomShadowRect);
-		clipRect.width += shadow;
-		clipRect.height += shadow;
-		graphics.setClip(clipRect);
-
-		drawShadowFigure(graphics, topShadowRect, middleShadowRect, bottomShadowRect);
-
-		topShadowRect.shrink(1, 1);
-		middleShadowRect.shrink(1, 0);
-		bottomShadowRect.shrink(1, 1);
-		drawShadowFigure(graphics, topShadowRect, middleShadowRect, bottomShadowRect);
-		final double horInc = 0.66;  // emulate a roughly 30° shadow angle
-		double horI = 0;
-		for (int i = 0; i <= shadow; i++) {
-			horI += horInc;
-			topShadowRect.translate((int) horI, 1);
-			middleShadowRect.translate((int) horI, 1);
-			bottomShadowRect.translate((int) horI, 1);
-			drawShadowFigure(graphics, topShadowRect, middleShadowRect, bottomShadowRect);
-			if (horI > 1.0) {
-				horI -= 1.0;
-			}
-		}
-
-		graphics.popState();
-	}
-
-	private static void drawShadowFigure(final Graphics graphics, final Rectangle topShadowRect,
-			final Rectangle middleShadowRect, final Rectangle bottomShadowRect) {
-		graphics.fillRoundRectangle(topShadowRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
-		graphics.fillRectangle(middleShadowRect);
-		graphics.fillRoundRectangle(bottomShadowRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
 	}
 
 }
