@@ -27,7 +27,10 @@ import java.util.stream.Collectors;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
@@ -36,12 +39,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 
 public final class NameRepository {
@@ -52,6 +60,45 @@ public final class NameRepository {
 	private NameRepository() {
 		// empty private constructor
 	}
+
+	public static String createUniqueTypeName(final LibraryElement type) {
+		final TypeLibrary typeLibrary = type.getTypeLibrary();
+		final Palette blockTypeLib = typeLibrary.getBlockTypeLib();
+		String typeName = type.getName();
+
+		if(type instanceof DataType) {
+			final DataTypeLibrary dataTypeLibrary = typeLibrary.getDataTypeLibrary();
+			while (dataTypeLibrary.getTypeIfExists(typeName) != null) {
+				typeName = createUniqueName(type.getName(), typeName);
+			}
+			return typeName;
+		}
+
+		if (type instanceof FBType) {
+			while (blockTypeLib.getFBTypeEntry(typeName) != null) {
+				typeName = createUniqueName(type.getName(), typeName);
+			}
+			return typeName;
+		}
+
+		if (type instanceof SubAppType) {
+			while (blockTypeLib.getSubAppTypeEntry(typeName) != null) {
+				typeName = createUniqueName(type.getName(), typeName);
+			}
+			return typeName;
+		}
+
+		if (type instanceof AdapterType) {
+			while (blockTypeLib.getAdapterTypeEntry(typeName) != null) {
+				typeName = createUniqueName(type.getName(), typeName);
+			}
+			return typeName;
+		}
+
+		return null;
+
+	}
+
 
 	/**
 	 * Check and if necessary adapt the given name proposal so that it is a valid
@@ -111,7 +158,7 @@ public final class NameRepository {
 		return true;
 	}
 
-	private static Set<String> getRefNames(INamedElement refElement) {
+	private static Set<String> getRefNames(final INamedElement refElement) {
 		EList<? extends INamedElement> elementsList = null;
 
 		// TODO consider moving this instance of cascade into the model utilizing the
@@ -153,7 +200,7 @@ public final class NameRepository {
 					"Refenrence list for given class not available: " + refElement.getClass().toString()); //$NON-NLS-1$
 		}
 
-		return elementsList.stream().filter(element -> element != refElement).map(element -> element.getName())
+		return elementsList.stream().filter(element -> element != refElement).map(INamedElement::getName)
 				.collect(Collectors.toSet());
 	}
 
@@ -169,22 +216,27 @@ public final class NameRepository {
 	 * @param nameProposal     a proposal for a name as starting point
 	 * @return a unique name
 	 */
-	private static String getUniqueName(Set<String> existingNameList, String nameProposal) {
+	private static String getUniqueName(final Set<String> existingNameList, final String nameProposal) {
 		String temp = nameProposal;
 		while (existingNameList.contains(temp)) {
-			if (END_IN_NUMBER_PATTERN.matcher(temp).matches()) {
-				final Matcher matchNumber = GET_LAST_NUMBER_PATTERN.matcher(temp);
-				matchNumber.find();
-				final int number = Integer.parseInt(temp.substring(matchNumber.start(), matchNumber.end())) + 1;
-				temp = temp.substring(0, matchNumber.start()) + number; // $NON-NLS-1$
-			} else {
-				temp = nameProposal + "_" + 1; //$NON-NLS-1$
-			}
+			temp = createUniqueName(nameProposal, temp);
 		}
 		return temp;
 	}
 
-	private static String checkReservedKeyWords(String name) {
+	private static String createUniqueName(final String nameProposal, String temp) {
+		if (END_IN_NUMBER_PATTERN.matcher(temp).matches()) {
+			final Matcher matchNumber = GET_LAST_NUMBER_PATTERN.matcher(temp);
+			matchNumber.find();
+			final int number = Integer.parseInt(temp.substring(matchNumber.start(), matchNumber.end())) + 1;
+			temp = temp.substring(0, matchNumber.start()) + number; // $NON-NLS-1$
+		} else {
+			temp = nameProposal + "_" + 1; //$NON-NLS-1$
+		}
+		return temp;
+	}
+
+	private static String checkReservedKeyWords(final String name) {
 		if (RESERVED_KEYWORDS.contains(name.toUpperCase())) {
 			return name + "1"; //$NON-NLS-1$
 		}

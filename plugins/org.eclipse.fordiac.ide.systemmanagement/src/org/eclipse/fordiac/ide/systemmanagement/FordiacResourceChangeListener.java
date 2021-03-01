@@ -32,7 +32,10 @@ import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
@@ -132,7 +135,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private boolean handleResourceMovedFrom(final IResourceDelta delta) {
 		if (IResource.FILE == delta.getResource().getType()) {
 			handleFileMove(delta);
-			//			return false;
+			// return false;
 		}
 		return true;
 	}
@@ -177,14 +180,50 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				renameSystemFileCopy(file);
 			} else {
 				final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
-				if (!typeLib.containsType(file)) {
+				final PaletteEntry paletteEntryForFile = typeLib.getPaletteEntryForFile(file);
+
+				if (paletteEntryForFile == null) {
 					final PaletteEntry entry = typeLib.createPaletteEntry(file);
 					if (null != entry) {
 						updatePaletteEntry(file, entry);
 					}
+				} else { // type exists
+					autoRenameExistingType(file, paletteEntryForFile);
 				}
+
 			}
 		}
+	}
+
+	protected static void autoRenameExistingType(final IFile file, final PaletteEntry paletteEntryForFile) {
+
+		final WorkspaceJob job = new WorkspaceJob("Check copied type file: " + file.getName()) {
+			@Override
+			public IStatus runInWorkspace(final IProgressMonitor monitor) {
+				final LibraryElement type = paletteEntryForFile.getType();
+				final String oldName = type.getName();
+				final String newName = NameRepository.createUniqueTypeName(type);
+				if (newName == null || newName.equals(oldName)) {
+					return Status.CANCEL_STATUS;
+				}
+				final String oldPath = file.getFullPath().toOSString();
+				final String newPath = replaceLast(oldPath, oldName, newName);
+
+				try {// this will trigger handleFileMove() and further handleFileRename(). file.move() is a workaround
+					// to rename a file
+					file.move(new Path(newPath), true, new NullProgressMonitor());
+				} catch (final CoreException e) {
+					e.printStackTrace();
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setRule(file.getProject());
+		job.schedule();
+	}
+
+	public static String replaceLast(final String text, final String regex, final String replacement) {
+		return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	static final Pattern systemNamePattern = Pattern
@@ -225,13 +264,21 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private void handleFileRename(final IResourceDelta delta, final IFile src) {
-		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
-
+		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath()); // targetFile
 		if (isSystemFile(file)) {
 			renameSystemFile(file);
 		} else {
-			final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src);
+			handleTypeRename(delta, src, file);
+		}
+	}
+
+	private static void handleTypeRename(final IResourceDelta delta, final IFile src, final IFile file) {
+		final TypeLibrary typeLibrary = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
+		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src);
+		if (src.equals(entry.getFile())) {
 			updatePaletteEntry(file, entry);
+		} else {
+			updatePaletteEntry(file, typeLibrary.createPaletteEntry(file));
 		}
 	}
 

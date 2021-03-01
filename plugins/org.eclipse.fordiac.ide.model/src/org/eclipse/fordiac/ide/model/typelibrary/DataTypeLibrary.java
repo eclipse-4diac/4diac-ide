@@ -116,6 +116,16 @@ public final class DataTypeLibrary {
 		return type;
 	}
 
+	public DataType getTypeIfExists(final String name) {
+
+		final DataType dataType = typeMap.get(name.toUpperCase());
+		if (dataType != null) {
+			return dataType;
+		}
+
+		return getDerivedType(name);
+	}
+
 	public List<StructuredType> getStructuredTypes() {
 		final List<StructuredType> types = getDerivedDataTypes().entrySet().stream()
 				.filter(entry -> (entry.getValue().getType() instanceof StructuredType))
