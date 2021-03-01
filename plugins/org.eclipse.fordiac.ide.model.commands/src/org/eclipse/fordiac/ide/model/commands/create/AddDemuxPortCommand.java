@@ -16,30 +16,47 @@ package org.eclipse.fordiac.ide.model.commands.create;
 import static org.eclipse.fordiac.ide.model.LibraryElementTags.DEMUX_VISIBLE_CHILDREN;
 import static org.eclipse.fordiac.ide.model.LibraryElementTags.VARIABLE_SEPARATOR;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.StructManipulation;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.data.DataFactory;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.gef.commands.Command;
 
-public class AddDemuxPortCommand extends AbstractCreationCommand {
+public class AddDemuxPortCommand extends Command {
 
 	private Demultiplexer type;
-	private String oldVisibleChildren;
+	private final String oldVisibleChildren;
 	private String newVisibleChildren;
-	private String varName;
+	private final String varName;
+	private Demultiplexer oldMux;
+
+	private final StructuredType struct;
+	private StructuredType configuredStruct; // contains the required ports
+	private ChangeStructCommand cmd;
+
 
 	public AddDemuxPortCommand(Demultiplexer type, String name) {
 		this.type = type;
 		this.varName = name;
+		struct = type.getTypeLibrary().getDataTypeLibrary().getStructuredType(type.getStructType().getName());
 		oldVisibleChildren = type.getAttributeValue(DEMUX_VISIBLE_CHILDREN);
 	}
 
 	private String getNewAttributeValue() {
 		if (null == oldVisibleChildren) { // default configuration
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 			type.getStructType().getMemberVariables()
-					.forEach(var -> sb.append(var.getName() + VARIABLE_SEPARATOR));
+			.forEach(var -> sb.append(var.getName() + VARIABLE_SEPARATOR));
 			if (!type.getStructType().getMemberVariables().isEmpty()) {
 				sb.deleteCharAt(sb.length() - 1);
 			}
@@ -55,7 +72,27 @@ public class AddDemuxPortCommand extends AbstractCreationCommand {
 	@Override
 	public void execute() {
 		newVisibleChildren = getNewAttributeValue();
+		createChangeStructCommand();
+		cmd.execute();
+		oldMux = type;
+		type = (Demultiplexer) cmd.getNewMux();
 		setVisibleChildrenAttribute(newVisibleChildren);
+	}
+
+	private void createChangeStructCommand() {
+		configuredStruct = DataFactory.eINSTANCE.createStructuredType();
+		configuredStruct.setName(type.getStructType().getName());
+		final List<String> visibleChildrenNames = Arrays
+				.asList(newVisibleChildren.trim().split(LibraryElementTags.VARIABLE_SEPARATOR));
+		final List<VarDeclaration> varDecls = new ArrayList<>();
+		for (final VarDeclaration varDeclaration : getVarDeclarations(visibleChildrenNames)) {
+			final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			var.setName(varDeclaration.getName());
+			var.setType(varDeclaration.getType());
+			varDecls.add(var);
+		}
+		configuredStruct.getMemberVariables().addAll(varDecls);
+		cmd = new ChangeStructCommand(type, configuredStruct);
 	}
 
 	@Override
@@ -68,11 +105,15 @@ public class AddDemuxPortCommand extends AbstractCreationCommand {
 
 	@Override
 	public void redo() {
+		cmd.redo();
+		type = (Demultiplexer) cmd.getNewMux();
 		setVisibleChildrenAttribute(newVisibleChildren);
 	}
 
 	@Override
 	public void undo() {
+		type = oldMux;
+		cmd.undo();
 		if (oldVisibleChildren == null) {
 			type.deleteAttribute(DEMUX_VISIBLE_CHILDREN);
 		} else {
@@ -80,12 +121,24 @@ public class AddDemuxPortCommand extends AbstractCreationCommand {
 		}
 	}
 
-	@Override
-	public Object getCreatedElement() {
-		return type.getInterfaceElement(varName);
-	}
-
 	private void setVisibleChildrenAttribute(String value) {
 		type.setAttribute(DEMUX_VISIBLE_CHILDREN, FordiacKeywords.STRING, value, ""); //$NON-NLS-1$
+	}
+
+	private List<VarDeclaration> getVarDeclarations(List<String> varDeclNames) {
+		final List<VarDeclaration> vars = new ArrayList<>();
+		varDeclNames.forEach(name -> {
+			final VarDeclaration varDecl = EcoreUtil
+					.copy(StructManipulation.findVarDeclarationInStruct(struct, name));
+			if (null != varDecl) {
+				varDecl.setName(name);
+				vars.add(varDecl);
+			}
+		});
+		return vars;
+	}
+
+	public Demultiplexer getType() {
+		return type;
 	}
 }

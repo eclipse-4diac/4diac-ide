@@ -23,105 +23,108 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Struct Manipulator</b></em>'. <!--
- * end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Struct
+ * Manipulator</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl#getStructType <em>Struct
- * Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl#getStructType
+ * <em>Struct Type</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public abstract class StructManipulatorImpl extends FBImpl implements StructManipulator {
-	/** The cached value of the '{@link #getStructType() <em>Struct Type</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
+	/**
+	 * The cached value of the '{@link #getStructType() <em>Struct Type</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getStructType()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected StructuredType structType;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	protected StructManipulatorImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.STRUCT_MANIPULATOR;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	public StructuredType getStructType() {
-		if (structType != null && structType.eIsProxy()) {
-			InternalEObject oldStructType = (InternalEObject) structType;
+		if ((structType != null) && structType.eIsProxy()) {
+			final InternalEObject oldStructType = (InternalEObject) structType;
 			structType = (StructuredType) eResolveProxy(oldStructType);
 			if (structType != oldStructType) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE, oldStructType, structType));
+				}
 			}
 		}
 		return structType;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	public StructuredType basicGetStructType() {
 		return structType;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	public void setStructTypeGen(StructuredType newStructType) {
-		StructuredType oldStructType = structType;
-		structType = newStructType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE,
-					oldStructType, structType));
-	}
-
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	public void setStructType(StructuredType newStructType) {
-		if ((null == getStructType()) || (!getStructType().getName().equals(newStructType.getName()))) {
-			setStructTypeGen(newStructType);
-			setMemberVariablesAsPorts(newStructType);
-			setAttribute("StructuredType", "STRING", getStructType().getName(), COMMENT_EDEFAULT); //$NON-NLS-1$ //$NON-NLS-2$
+		final StructuredType oldStructType = structType;
+		structType = newStructType;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE,
+					oldStructType, structType));
 		}
 	}
 
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
-	public void setAttribute(String attributeName, String type, String value, String comment) {
-		super.setAttribute(attributeName, type, value, comment);
-		if ("StructuredType".equals(attributeName)) { //$NON-NLS-1$
-			StructuredType newStructType = getTypeLibrary().getDataTypeLibrary().getStructuredType(value);
-			if ((null == getStructType()) || (!getStructType().getName().equals(newStructType.getName()))) {
-				setStructTypeGen(newStructType);
-				setMemberVariablesAsPorts(newStructType);
-			}
-		}
+	public void setStructTypeElementsAtInterface(final StructuredType newStruct) {
+		org.eclipse.fordiac.ide.model.StructManipulation.setStructTypeElementsAtInterface(this, newStruct);
 	}
 
-	/** sets all member variables of a given StructuredType as ports of the StructManipulator.
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @param newStructType the StructuredType containing member variables */
-	protected abstract void setMemberVariablesAsPorts(StructuredType newStructType);
-
-	/* <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -135,9 +138,11 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -150,9 +155,11 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -165,9 +172,11 @@ public abstract class StructManipulatorImpl extends FBImpl implements StructMani
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

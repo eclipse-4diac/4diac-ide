@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2014 Profactor GmbH, fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
+ * 				 2019 - 2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,15 +14,13 @@
  *   Bianca Wiesmayr - adapted ChangeTypeCommand for multiplexer use, sets struct
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.application.properties;
+package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
-import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
@@ -202,8 +200,11 @@ public class ChangeStructCommand extends Command {
 		newMux.setPaletteEntry(entry);
 		newMux.setInterface(EcoreUtil.copy(oldMux.getType().getInterfaceList()));
 		newMux.setName(oldMux.getName());
+
 		newMux.setPosition(EcoreUtil.copy(oldMux.getPosition()));
-		newMux.setStructType(newStruct);
+		newMux.getAttributes().addAll(EcoreUtil.copyAll(oldMux.getAttributes()));
+		newMux.deleteAttribute("VisibleChildren"); // TODO use constant
+		newMux.setStructTypeElementsAtInterface(newStruct);
 		createValues();
 		replaceFBs(oldMux, newMux);
 	}

@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.application.properties;
 import org.eclipse.fordiac.ide.model.commands.create.AddDemuxPortCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteDemuxPortCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -28,7 +27,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class DemultiplexerSection extends StructManipulatorSection {
 	@Override
 	protected TreeViewer createTreeViewer(Composite parent) {
-		CheckboxTreeViewer v = new CheckboxTreeViewer(parent);
+		final CheckboxTreeViewer v = new CheckboxTreeViewer(parent);
 		v.setUseHashlookup(true);
 		return v;
 	}
@@ -41,7 +40,7 @@ public class DemultiplexerSection extends StructManipulatorSection {
 			@Override
 			public boolean isChecked(Object element) {
 				if (null != element) {
-					TreeNode node = (TreeNode) element;
+					final TreeNode node = (TreeNode) element;
 					return null != getType().getInterfaceElement(node.getPathName());
 				}
 				return false;
@@ -56,14 +55,18 @@ public class DemultiplexerSection extends StructManipulatorSection {
 		getViewer().addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {
-				TreeNode node = (TreeNode) event.getElement();
-				Command cmd;
+				final TreeNode node = (TreeNode) event.getElement();
+
 				if (event.getChecked()) {
-					cmd = new AddDemuxPortCommand(getType(), getCreationName(node));
+					final AddDemuxPortCommand cmd = new AddDemuxPortCommand(getType(), getCreationName(node));
+					executeCommand(cmd);
+					selectNewStructManipulatorFB(cmd.getType());
 				} else {
-					cmd = new DeleteDemuxPortCommand(getType(), getCreationName(node));
+					final DeleteDemuxPortCommand cmd = new DeleteDemuxPortCommand(getType(), getCreationName(node));
+					executeCommand(cmd);
+					selectNewStructManipulatorFB(cmd.getType());
 				}
-				executeCommand(cmd);
+
 			}
 
 			private String getCreationName(TreeNode node) {

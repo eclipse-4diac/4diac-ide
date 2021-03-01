@@ -165,7 +165,7 @@ public class MapToCommand extends Command {
 
 	private FBNetworkElement createTargetStructManipulator() {
 		final StructManipulator manipulator = (StructManipulator) createTargetFB();
-		manipulator.setStructType(((StructManipulator) srcElement).getStructType());
+		manipulator.setStructTypeElementsAtInterface(((StructManipulator) srcElement).getStructType());
 		return manipulator;
 	}
 
@@ -244,7 +244,7 @@ public class MapToCommand extends Command {
 							.getInterfaceElement(connection.getDestination().getName());
 					addConnectionCreateCommand(targetElement.getInterfaceElement(interfaceElement.getName()),
 							destination);
-					if (destination instanceof AdapterDeclaration || destination instanceof VarDeclaration) {
+					if ((destination instanceof AdapterDeclaration) || (destination instanceof VarDeclaration)) {
 						checkForDeleteConnections(destination);
 					}
 				}
