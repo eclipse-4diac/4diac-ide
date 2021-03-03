@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -152,13 +152,13 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 					int index = (Integer) request.getCellEditor().getValue();
 					if (index > 0 && index < ((ComboDirectEditManager) getManager()).getComboBox().getItemCount()) {
 						String typeName = ((ComboDirectEditManager) getManager()).getComboBox().getItem(index);
-						ChangeTypeCommand cmd;
+						ChangeDataTypeCommand cmd;
 						if (getCastedModel() instanceof AdapterDeclaration) {
 							// TODO change to own command in order to update cfb internals
-							cmd = new ChangeTypeCommand((VarDeclaration) getCastedModel(),
+							cmd = new ChangeDataTypeCommand((VarDeclaration) getCastedModel(),
 									typeLib.getBlockTypeLib().getAdapterTypeEntry(typeName).getType());
 						} else {
-							cmd = new ChangeTypeCommand((VarDeclaration) getCastedModel(),
+							cmd = new ChangeDataTypeCommand((VarDeclaration) getCastedModel(),
 									typeLib.getDataTypeLibrary().getType(typeName));
 						}
 						return cmd;

@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateMemberVariableCommand;
@@ -239,7 +239,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				if (type == null) {
 					return;
 				}
-				cmd = new ChangeTypeCommand(data, type);
+				cmd = new ChangeDataTypeCommand(data, type);
 				break;
 			case COMMENT:
 				cmd = new ChangeCommentCommand(data, value.toString());

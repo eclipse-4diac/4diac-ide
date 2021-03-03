@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -198,8 +198,8 @@ public class InterfaceElementSection extends AbstractSection {
 
 	@SuppressWarnings("static-method") // this method allows sub-classes to provide own change type commands, e.g.,
 	// subapps
-	protected ChangeTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
-		return new ChangeTypeCommand(data, newType);
+	protected ChangeDataTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
+		return new ChangeDataTypeCommand(data, newType);
 	}
 
 	@Override

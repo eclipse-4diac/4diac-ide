@@ -27,7 +27,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
@@ -123,11 +123,11 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	}
 
 	private int getInsertionIndex() {
-		final VarDeclaration alg = getLastSelectedVariable();
-		if (null == alg) {
+		final VarDeclaration var = getLastSelectedVariable();
+		if (null == var) {
 			return getType().getInternalVars().size();
 		}
-		return getType().getInternalVars().indexOf(alg) + 1;
+		return getType().getInternalVars().indexOf(var) + 1;
 	}
 
 	private VarDeclaration getLastSelectedVariable() {
@@ -224,7 +224,7 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 				if (type == null) {
 					return;
 				}
-				cmd = new ChangeTypeCommand(data, type);
+				cmd = new ChangeDataTypeCommand(data, type);
 				break;
 			case IV_COMMENT:
 				cmd = new ChangeCommentCommand(data, value.toString());
