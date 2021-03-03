@@ -49,7 +49,7 @@ public class AddElementsToSubAppCommand extends Command {
 	private org.eclipse.swt.graphics.Point offset;
 
 
-	public AddElementsToSubAppCommand(SubApp targetSubApp, List<?> selection) {
+	public AddElementsToSubAppCommand(final SubApp targetSubApp, final List<?> selection) {
 		this.targetSubApp = targetSubApp;
 		fillElementList(selection);
 	}
@@ -82,7 +82,7 @@ public class AddElementsToSubAppCommand extends Command {
 		modifiedConns.execute();
 	}
 
-	private void ensureUniqueName(FBNetworkElement element) {
+	private void ensureUniqueName(final FBNetworkElement element) {
 		// ensure unique name in new network
 		if (!NameRepository.isValidName(element, element.getName())) {
 			final String uniqueName = NameRepository.createUniqueName(element, element.getName());
@@ -122,19 +122,24 @@ public class AddElementsToSubAppCommand extends Command {
 		return -offset.y + FBNetworkHelper.Y_OFFSET_FROM_TOP_LEFT_CORNER;
 	}
 
-	private void fillElementList(List<?> selection) {
-		for (final Object ne : selection) {
-			if ((ne instanceof EditPart) && (((EditPart) ne).getModel() instanceof FBNetworkElement)) {
-				final FBNetworkElement element = (FBNetworkElement) ((EditPart) ne).getModel();
-				elementsToAdd.add(element);
-				if (element.isMapped()) {
-					unmappingCmds.add(new UnmapCommand(element));
-				}
+	private void fillElementList(final List<?> selection) {
+		for (final Object fbNetworkElement : selection) {
+			if ((fbNetworkElement instanceof EditPart) && (((EditPart) fbNetworkElement).getModel() instanceof FBNetworkElement)) {
+				addElement((FBNetworkElement) ((EditPart) fbNetworkElement).getModel());
+			} else if (fbNetworkElement instanceof FBNetworkElement) {
+				addElement((FBNetworkElement) fbNetworkElement);
 			}
 		}
 	}
 
-	private void checkElementConnections(FBNetworkElement fbNetworkElement) {
+	protected void addElement(final FBNetworkElement element) {
+		elementsToAdd.add(element);
+		if (element.isMapped()) {
+			unmappingCmds.add(new UnmapCommand(element));
+		}
+	}
+
+	private void checkElementConnections(final FBNetworkElement fbNetworkElement) {
 		for (final IInterfaceElement ie : fbNetworkElement.getInterface().getAllInterfaceElements()) {
 			if (ie.isIsInput()) {
 				for (final Connection con : ie.getInputConnections()) {
@@ -149,7 +154,7 @@ public class AddElementsToSubAppCommand extends Command {
 
 	}
 
-	private void checkConnection(Connection con, IInterfaceElement opposite, IInterfaceElement ownIE) {
+	private void checkConnection(final Connection con, final IInterfaceElement opposite, final IInterfaceElement ownIE) {
 		if ((opposite.getFBNetworkElement() != null) && elementsToAdd.contains(opposite.getFBNetworkElement())) {
 			moveConIntoSubApp(con);
 		} else if ((opposite.getFBNetworkElement() != null) && targetSubApp.equals(opposite.getFBNetworkElement())) {
@@ -160,13 +165,13 @@ public class AddElementsToSubAppCommand extends Command {
 		}
 	}
 
-	private void moveConIntoSubApp(Connection con) {
+	private void moveConIntoSubApp(final Connection con) {
 		targetSubApp.getSubAppNetwork().addConnection(con);
 		movedConns.add(con);
 	}
 
-	private void moveInterfaceCrossingConIntoSubApp(Connection con, IInterfaceElement opposite,
-			IInterfaceElement ownIE) {
+	private void moveInterfaceCrossingConIntoSubApp(final Connection con, final IInterfaceElement opposite,
+			final IInterfaceElement ownIE) {
 		final List<Connection> internalCons = opposite.isIsInput() ? opposite.getOutputConnections()
 				: opposite.getInputConnections();
 		final List<Connection> outCons = opposite.isIsInput() ? opposite.getInputConnections()
@@ -194,7 +199,7 @@ public class AddElementsToSubAppCommand extends Command {
 	 *
 	 * @param con the connection to be investigated
 	 * @param ie  the interface element on the inside of the subapp as reference for creating the */
-	private void handleModifyConnection(Connection con, IInterfaceElement ie) {
+	private void handleModifyConnection(final Connection con, final IInterfaceElement ie) {
 		final String subAppIEName = generateSubAppIEName(ie);
 		IInterfaceElement subAppIE = targetSubApp.getInterfaceElement(subAppIEName);
 		boolean addInternalCon = false;
@@ -206,7 +211,7 @@ public class AddElementsToSubAppCommand extends Command {
 		createConnModificationCommands(con, subAppIE, addInternalCon);
 	}
 
-	private IInterfaceElement createInterfaceElement(IInterfaceElement ie, String subAppIEName) {
+	private IInterfaceElement createInterfaceElement(final IInterfaceElement ie, final String subAppIEName) {
 		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(ie.getType(),
 				targetSubApp.getInterface(), ie.isIsInput(), -1);
 		cmd.execute();
@@ -218,11 +223,11 @@ public class AddElementsToSubAppCommand extends Command {
 		return cmd.getInterfaceElement();
 	}
 
-	private static String generateSubAppIEName(IInterfaceElement ie) {
+	private static String generateSubAppIEName(final IInterfaceElement ie) {
 		return ie.getFBNetworkElement().getName() + "_" + ie.getName(); //$NON-NLS-1$
 	}
 
-	void createConnModificationCommands(Connection con, IInterfaceElement subAppIE, boolean addInternalCon) {
+	void createConnModificationCommands(final Connection con, final IInterfaceElement subAppIE, final boolean addInternalCon) {
 		modifiedConns.add(new DeleteConnectionCommand(con));
 
 		final AbstractConnectionCreateCommand connectionCreateCmd = getCreateConnectionCommand(
@@ -250,8 +255,8 @@ public class AddElementsToSubAppCommand extends Command {
 		}
 	}
 
-	private static AbstractConnectionCreateCommand getCreateConnectionCommand(FBNetwork fbNetwork,
-			IInterfaceElement subAppIE) {
+	private static AbstractConnectionCreateCommand getCreateConnectionCommand(final FBNetwork fbNetwork,
+			final IInterfaceElement subAppIE) {
 		AbstractConnectionCreateCommand cmd = null;
 		if (subAppIE instanceof Event) {
 			cmd = new EventConnectionCreateCommand(fbNetwork);

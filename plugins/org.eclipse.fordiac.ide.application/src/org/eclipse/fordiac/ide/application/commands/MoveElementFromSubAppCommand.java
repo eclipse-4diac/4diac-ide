@@ -42,15 +42,15 @@ import org.eclipse.gef.commands.CompoundCommand;
 
 public class MoveElementFromSubAppCommand extends Command {
 
-	private final SubApp sourceSubApp;
-	private final FBNetworkElement element;
+	protected final SubApp sourceSubApp;
+	protected final FBNetworkElement element;
 	private final Rectangle targetRect;
 	private org.eclipse.fordiac.ide.model.libraryElement.Position oldPos; // for undo
 	private org.eclipse.fordiac.ide.model.libraryElement.Position newPos; // for redo
 	private final CompoundCommand unmappingCmds = new CompoundCommand(); // stores all needed unmap commands
-	private final List<Connection> movedConns = new ArrayList<>();
-	private final CompoundCommand modifiedConns = new CompoundCommand();
-	private final CompoundCommand changedSubAppIEs = new CompoundCommand();
+	private final CompoundCommand delecteConnectionsAndInterfaceElements = new CompoundCommand();
+	private final CompoundCommand createConnectionsCommands = new CompoundCommand();
+	private final CompoundCommand createSubAppInterfaceElementCommands = new CompoundCommand();
 	private org.eclipse.draw2d.geometry.Point mouseMoveDelta;
 	private Position side;
 	private ChangeNameCommand setUniqueName;
@@ -64,7 +64,7 @@ public class MoveElementFromSubAppCommand extends Command {
 		DRAG_AND_DROP_TO_ROOT, DRAG_AND_DROP_TO_SUBAPP, CONTEXT_MENU
 	}
 
-	private final MoveOperation moveOperation;
+	private MoveOperation moveOperation;
 
 	public MoveElementFromSubAppCommand(final FBNetworkElement element, final Rectangle targetRect,
 			final MoveOperation moveOperation) {
@@ -82,14 +82,12 @@ public class MoveElementFromSubAppCommand extends Command {
 
 	@Override
 	public void execute() {
-		oldPos = element.getPosition();
-		if (element.isMapped()) {
-			unmappingCmds.add(new UnmapCommand(element));
-		}
-		unmappingCmds.execute();
-		final EList<FBNetworkElement> sourceFBNetwork = sourceSubApp.getSubAppNetwork().getNetworkElements();
+		removeElementFromSubapp();
+		moveElementToParent();
+	}
+
+	protected void moveElementToParent() {
 		final EList<FBNetworkElement> parentFBNetwork = sourceSubApp.getFbNetwork().getNetworkElements();
-		sourceFBNetwork.remove(element);
 		parentFBNetwork.add(element);
 
 		// ensure unique name in new network
@@ -99,36 +97,65 @@ public class MoveElementFromSubAppCommand extends Command {
 			setUniqueName.execute();
 		}
 
-		side = checkElementConnections(element);
 		positionElement(element, side);
-		modifiedConns.execute();
+		createConnectionsCommands.execute();
+	}
+
+	protected void removeElementFromSubapp() {
+		oldPos = element.getPosition();
+		if (element.isMapped()) {
+			unmappingCmds.add(new UnmapCommand(element));
+		}
+		unmappingCmds.execute();
+		final EList<FBNetworkElement> sourceFBNetwork = sourceSubApp.getSubAppNetwork().getNetworkElements();
+
+		sourceFBNetwork.remove(element);
+		side = checkElementConnections(element);
+		delecteConnectionsAndInterfaceElements.execute();
 	}
 
 	@Override
 	public void redo() {
+		redoMoveToParent();
+		redoRemoveFromSubapp();
+	}
+
+	protected void redoRemoveFromSubapp() {
+		delecteConnectionsAndInterfaceElements.redo();
+		sourceSubApp.getSubAppNetwork().getNetworkElements().remove(element);
+	}
+
+	protected void redoMoveToParent() {
 		unmappingCmds.redo();
 		sourceSubApp.getFbNetwork().getNetworkElements().add(element);
 		if (null != setUniqueName) {
 			setUniqueName.redo();
 		}
-		movedConns.forEach(con -> sourceSubApp.getFbNetwork().addConnection(con));
-		changedSubAppIEs.redo();
-		modifiedConns.redo();
+		createSubAppInterfaceElementCommands.redo();
+		createConnectionsCommands.redo();
 		element.setPosition(newPos);
 	}
 
 	@Override
 	public void undo() {
-		newPos = element.getPosition();
-		modifiedConns.undo();
-		changedSubAppIEs.undo();
-		movedConns.forEach(con -> sourceSubApp.getSubAppNetwork().addConnection(con));
-		sourceSubApp.getSubAppNetwork().getNetworkElements().add(element);
-		if (null != setUniqueName) {
+		undoRemoveFromSubApp();
+		undoMoveToParent();
+	}
+
+	protected void undoMoveToParent() {
+		createConnectionsCommands.undo();
+		if (setUniqueName != null) {
 			setUniqueName.undo();
 		}
+		createSubAppInterfaceElementCommands.undo();
 		unmappingCmds.undo();
 		element.setPosition(oldPos);
+	}
+
+	protected void undoRemoveFromSubApp() {
+		newPos = element.getPosition();
+		delecteConnectionsAndInterfaceElements.undo();
+		sourceSubApp.getSubAppNetwork().getNetworkElements().add(element);
 	}
 
 	public Position getSide() {
@@ -209,7 +236,8 @@ public class MoveElementFromSubAppCommand extends Command {
 		return pos == null ? Position.BELOW : pos;
 	}
 
-	private Position checkConnection(final Connection con, final IInterfaceElement opposite, final IInterfaceElement ie) {
+	private Position checkConnection(final Connection con, final IInterfaceElement opposite,
+			final IInterfaceElement ie) {
 		if ((opposite.getFBNetworkElement() instanceof SubApp) && opposite.getFBNetworkElement().equals(sourceSubApp)) {
 			handleCrossingConnections(con, opposite, ie.isIsInput());
 			return ie.isIsInput() ? Position.LEFT : Position.RIGHT;
@@ -227,7 +255,7 @@ public class MoveElementFromSubAppCommand extends Command {
 			subAppIE = createInterfaceElement(ie, subAppIEName, !isInput);
 		}
 
-		modifiedConns.add(new DeleteConnectionCommand(con));
+		delecteConnectionsAndInterfaceElements.add(new DeleteConnectionCommand(con));
 
 		createConnection(isInput ? con.getSource() : subAppIE, isInput ? subAppIE : con.getDestination(),
 				con.getSource(), sourceSubApp.getSubAppNetwork());
@@ -235,7 +263,8 @@ public class MoveElementFromSubAppCommand extends Command {
 				con.getDestination(), sourceSubApp.getFbNetwork());
 	}
 
-	private void handleCrossingConnections(final Connection con, final IInterfaceElement opposite, final boolean isInput) {
+	private void handleCrossingConnections(final Connection con, final IInterfaceElement opposite,
+			final boolean isInput) {
 
 		final List<Connection> internalCons = isInput ? opposite.getOutputConnections()
 				: opposite.getInputConnections();
@@ -243,17 +272,17 @@ public class MoveElementFromSubAppCommand extends Command {
 
 		if (1 == internalCons.size()) {
 			// our connection is the last one lets remove the interface element
-			modifiedConns.add(new DeleteSubAppInterfaceElementCommand(opposite));
+			delecteConnectionsAndInterfaceElements.add(new DeleteSubAppInterfaceElementCommand(opposite));
 			for (final Connection outCon : outCons) {
-				modifiedConns.add(new DeleteConnectionCommand(outCon));
+				delecteConnectionsAndInterfaceElements.add(new DeleteConnectionCommand(outCon));
 				createConnection(isInput ? outCon.getSource() : con.getSource(),
 						isInput ? con.getDestination() : outCon.getDestination(), con.getDestination(),
 								sourceSubApp.getFbNetwork());
 			}
 		} else {
-			modifiedConns.add(new DeleteConnectionCommand(con));
+			delecteConnectionsAndInterfaceElements.add(new DeleteConnectionCommand(con));
 			for (final Connection outCon : outCons) {
-				modifiedConns.add(new DeleteConnectionCommand(outCon));
+				delecteConnectionsAndInterfaceElements.add(new DeleteConnectionCommand(outCon));
 				createConnection(outCon.getSource(), outCon.getDestination(), con.getDestination(),
 						sourceSubApp.getFbNetwork());
 				createConnection(isInput ? outCon.getSource() : con.getSource(),
@@ -263,24 +292,25 @@ public class MoveElementFromSubAppCommand extends Command {
 		}
 	}
 
-	private void createConnection(final IInterfaceElement source, final IInterfaceElement destination, final IInterfaceElement subappIE,
-			final FBNetwork network) {
+	private void createConnection(final IInterfaceElement source, final IInterfaceElement destination,
+			final IInterfaceElement subappIE, final FBNetwork network) {
 		final AbstractConnectionCreateCommand cmd = getCreateConnectionCommand(network, subappIE);
 		cmd.setSource(source);
 		cmd.setDestination(destination);
-		modifiedConns.add(cmd);
+		createConnectionsCommands.add(cmd);
 	}
 
-	private IInterfaceElement createInterfaceElement(final IInterfaceElement ie, final String subAppIEName, final boolean isInput) {
-		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(ie.getType(),
-				sourceSubApp.getInterface(), isInput, -1);
-		cmd.execute();
-		cmd.getInterfaceElement().setName(subAppIEName);
-		if (null != cmd.getMirroredElement()) {
-			cmd.getMirroredElement().getInterfaceElement().setName(subAppIEName);
+	private IInterfaceElement createInterfaceElement(final IInterfaceElement ie, final String subAppIEName,
+			final boolean isInput) {
+		final CreateSubAppInterfaceElementCommand createSubAppInterfaceElementCommand = new CreateSubAppInterfaceElementCommand(
+				ie.getType(), sourceSubApp.getInterface(), isInput, -1);
+		createSubAppInterfaceElementCommand.execute();
+		createSubAppInterfaceElementCommand.getInterfaceElement().setName(subAppIEName);
+		if (null != createSubAppInterfaceElementCommand.getMirroredElement()) {
+			createSubAppInterfaceElementCommand.getMirroredElement().getInterfaceElement().setName(subAppIEName);
 		}
-		changedSubAppIEs.add(cmd);
-		return cmd.getInterfaceElement();
+		createSubAppInterfaceElementCommands.add(createSubAppInterfaceElementCommand);
+		return createSubAppInterfaceElementCommand.getInterfaceElement();
 	}
 
 	private static String generateSubAppIEName(final IInterfaceElement ie) {
@@ -302,6 +332,10 @@ public class MoveElementFromSubAppCommand extends Command {
 
 	public void setMouseMoveDelta(final org.eclipse.draw2d.geometry.Point mouseMoveDelta) {
 		this.mouseMoveDelta = mouseMoveDelta;
+	}
+
+	public void setMoveOperation(final MoveOperation moveOperation) {
+		this.moveOperation = moveOperation;
 	}
 
 }

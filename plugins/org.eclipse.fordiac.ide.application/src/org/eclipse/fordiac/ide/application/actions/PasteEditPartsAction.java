@@ -16,15 +16,23 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.actions.CopyPasteMessage.CopyStatus;
+import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
+import org.eclipse.fordiac.ide.application.commands.CutAndPasteFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
+import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -39,19 +47,15 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
-/**
- * The Class PasteEditPartsAction.
- */
+/** The Class PasteEditPartsAction. */
 public class PasteEditPartsAction extends SelectionAction {
 
 	private Point pasteRefPosition;
 
-	/**
-	 * Instantiates a new paste edit parts action.
+	/** Instantiates a new paste edit parts action.
 	 *
-	 * @param editor the editor
-	 */
-	public PasteEditPartsAction(IWorkbenchPart editor) {
+	 * @param editor the editor */
+	public PasteEditPartsAction(final IWorkbenchPart editor) {
 		super(editor);
 	}
 
@@ -69,10 +73,11 @@ public class PasteEditPartsAction extends SelectionAction {
 		return new CompoundCommand();
 	}
 
-	private List<? extends Object> getClipboardContents() {
+	private static List<? extends Object> getClipboardContents() {
 		final Object obj = Clipboard.getDefault().getContents();
-		if (obj instanceof List) {
-			return (List<?>)obj;
+		if (obj instanceof CopyPasteMessage) {
+			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) obj;
+			return copyPasteMessage.getData();
 		}
 		return Collections.emptyList();
 	}
@@ -87,7 +92,7 @@ public class PasteEditPartsAction extends SelectionAction {
 	}
 
 	@Override
-	public void runWithEvent(Event event) {
+	public void runWithEvent(final Event event) {
 		if (event.widget instanceof FigureCanvas) {
 			// handles insertion via copy&paste
 			setMouseLocationAsPastePos(event);
@@ -95,7 +100,7 @@ public class PasteEditPartsAction extends SelectionAction {
 		super.runWithEvent(event);
 	}
 
-	public void setMouseLocationAsPastePos(Event event) {
+	public void setMouseLocationAsPastePos(final Event event) {
 		final FigureCanvas figureCanvas = (FigureCanvas) event.widget;
 		final org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
 		Point mouseLocation = Display.getCurrent().getCursorLocation();
@@ -114,15 +119,88 @@ public class PasteEditPartsAction extends SelectionAction {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.jface.action.Action#run()
-	 */
+	 * @see org.eclipse.jface.action.Action#run() */
 	@Override
 	public void run() {
-		execute(createPasteCommand());
+		if (Clipboard.getDefault().getContents() instanceof CopyPasteMessage) {
+			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) Clipboard.getDefault().getContents();
+			if (isCutFromSubappToParentSubapp(copyPasteMessage)) {
+				handleCutFromSubappToParentSubapp(copyPasteMessage);
+			} else if (isCutFromRootToSubapp(copyPasteMessage)) {
+				handleCutFromRootToSubapp(copyPasteMessage);
+			} else {
+				if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP) {
+					copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
+					execute(copyPasteMessage.getDeleteCommandos());
+				}
+				execute(createPasteCommand());
+			}
+
+		}
 		pasteRefPosition = null;
+	}
+
+	private void handleCutFromRootToSubapp(final CopyPasteMessage copyPasteMessage) {
+		final SubApp targetSubapp = ((SubAppForFBNetworkEditPart) getSelectedObjects().get(0)).getModel();
+		copyPasteMessage.getDeleteCommandos().undo();
+		final AddElementsToSubAppCommand addElementsToSubAppCommand = new AddElementsToSubAppCommand(targetSubapp,
+				Arrays.asList(copyPasteMessage.getData().get(0)));
+		execute(addElementsToSubAppCommand);
+
+	}
+
+	private boolean isCutFromRootToSubapp(final CopyPasteMessage copyPasteMessage) {
+		if (!(getSelectedObjects().get(0) instanceof SubAppForFBNetworkEditPart)) {
+			return false;
+		}
+		return copyPasteMessage.getCopyStatus() == CopyStatus.CUT;
+	}
+
+	protected boolean isCutFromSubappToParentSubapp(final CopyPasteMessage copyPasteMessage) {
+
+		if (copyPasteMessage.getCopyStatus() != CopyStatus.CUT_FROM_SUBAPP) {
+			return false;
+		}
+
+		final List selectedObjects = getSelectedObjects();
+		if (selectedObjects.size() > 1) {
+			return false;
+		}
+
+		final CompoundCommand catAndPasteFromSubAppCommand = copyPasteMessage.getCutAndPasteFromSubAppCommandos();
+		final CutAndPasteFromSubAppCommand cutAndPasteFromSubAppCommand = (CutAndPasteFromSubAppCommand) catAndPasteFromSubAppCommand
+				.getChildren()[0];
+		final SubApp sourceSubApp = cutAndPasteFromSubAppCommand.getSourceSubApp();
+
+		if (selectedObjects.get(0) instanceof FBNetworkEditPart) {
+			final FBNetworkEditPart networkEdit = (FBNetworkEditPart) selectedObjects.get(0);
+			if (networkEdit.getParent() instanceof FBNetworkRootEditPart) {
+				if (sourceSubApp.eContainer().equals(networkEdit.getModel())) {
+					return true;
+				}
+			}
+
+		}
+
+		if (!(selectedObjects.get(0) instanceof SubAppForFBNetworkEditPart)) {
+			return false;
+		}
+
+		final SubApp selectedSubapp = ((SubAppForFBNetworkEditPart) selectedObjects.get(0)).getModel();
+
+		if (!sourceSubApp.getOuterFBNetworkElement().equals(selectedSubapp)) {
+			return false;
+		}
+
+		return copyPasteMessage.isCutFromSubApp();
+	}
+
+	protected void handleCutFromSubappToParentSubapp(final CopyPasteMessage copyPasteMessage) {
+		execute(copyPasteMessage.getCutAndPasteFromSubAppCommandos());
+		Clipboard.getDefault().setContents(new Object()); // Clear clipboard afterwards to prevent double
+		// pasting
 	}
 
 	protected FBNetwork getFBNetwork() {
@@ -132,11 +210,11 @@ public class PasteEditPartsAction extends SelectionAction {
 		return null;
 	}
 
-	public void setPastRefPosition(Point pt) {
+	public void setPastRefPosition(final Point pt) {
 		pasteRefPosition = pt;
 	}
 
-	public void setPastRefPosition(org.eclipse.draw2d.geometry.Point point) {
+	public void setPastRefPosition(final org.eclipse.draw2d.geometry.Point point) {
 		setPastRefPosition(new Point(point.x, point.y));
 	}
 

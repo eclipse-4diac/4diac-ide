@@ -15,9 +15,14 @@ package org.eclipse.fordiac.ide.application.actions;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.actions.CopyPasteMessage.CopyStatus;
+import org.eclipse.fordiac.ide.application.commands.CutAndPasteFromSubAppCommand;
+import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.Clipboard;
@@ -26,43 +31,81 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
-/**
- * Cut action which will use the copy part and delete the selected FBs
- *
- */
+/** Cut action which will use the copy part and delete the selected FBs */
 public class CutEditPartsAction extends CopyEditPartsAction {
 
-	/**
-	 * Instantiates a new copy edit parts action.
+	/** Instantiates a new copy edit parts action.
 	 *
-	 * @param editor the editor
-	 */
-	public CutEditPartsAction(IEditorPart editor) {
+	 * @param editor the editor */
+	public CutEditPartsAction(final IEditorPart editor) {
 		super(editor);
 		setId(ActionFactory.CUT.getId());
 		setText(Messages.CutEditPartsAction_Text);
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		final ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT_DISABLED));
 	}
 
 	@Override
 	public void run() {
-		List<Object> templates = getSelectedTemplates();
-		execute(getFBDeleteCommands(templates));
-		// add the src FBNetwork to the model as the cut deletes the FBs from the
-		// network and we therefore loose the source fbnetwork for checks in pasting
+		final List<Object> templates = getSelectedTemplates();
+		final CopyPasteMessage message = new CopyPasteMessage(CopyStatus.CUT, templates);
+		final CompoundCommand cutAndPasteFromSubAppCommand = isCutFromSubapp(templates);
+		final Command fbDeleteCommands = getFBDeleteCommands(templates);
+		message.setDeleteCommandos(new CompoundCommand());
+		message.getDeleteCommandos().add(fbDeleteCommands);
+
+		if (!cutAndPasteFromSubAppCommand.isEmpty()) {
+			execute(cutAndPasteFromSubAppCommand);
+			message.setCutAndPasteFromSubAppCommandos(cutAndPasteFromSubAppCommand);
+			message.setCopyInfo(CopyStatus.CUT_FROM_SUBAPP);
+		} else {
+			// add the src FBNetwork to the model as the cut deletes the FBs from the
+			// network and we therefore loose the source fbnetwork for checks in pasting
+			execute(fbDeleteCommands);
+		}
 		templates.add(getWorkbenchPart().getAdapter(FBNetwork.class));
-		Clipboard.getDefault().setContents(templates);
+		Clipboard.getDefault().setContents(message);
 	}
 
-	private static Command getFBDeleteCommands(List<Object> templates) {
-		CompoundCommand cmd = new CompoundCommand();
-		for (Object obj : templates) {
+	private static Command getFBDeleteCommands(final List<Object> templates) {
+		final CompoundCommand cmd = new CompoundCommand();
+		for (final Object obj : templates) {
 			if (obj instanceof FBNetworkElement) {
 				cmd.add(new DeleteFBNetworkElementCommand((FBNetworkElement) obj));
 			}
 		}
 		return cmd;
+	}
+
+	private static CompoundCommand isCutFromSubapp(final List<Object> templates) {
+		final CompoundCommand cmd = new CompoundCommand();
+		FBNetworkElement parent = null;
+		for (final Object obj : templates) {
+			if (obj instanceof FBNetworkElement) {
+				final FBNetworkElement fbNetworkElement = (FBNetworkElement) obj;
+				if (isNotPartOfSameSubapp(parent, fbNetworkElement)) {
+					return new CompoundCommand();
+				}
+				final CutAndPasteFromSubAppCommand moveElementFromSubAppCommand = createCutAndPasteCommand(
+						fbNetworkElement);
+				cmd.add(moveElementFromSubAppCommand);
+				parent = fbNetworkElement.getOuterFBNetworkElement();
+			}
+		}
+		return cmd;
+	}
+
+	protected static boolean isNotPartOfSameSubapp(final FBNetworkElement parent,
+			final FBNetworkElement fbNetworkElement) {
+		return !fbNetworkElement.isNestedInSubApp()
+				|| parent != null && !parent.equals(fbNetworkElement.getOuterFBNetworkElement());
+	}
+
+	protected static CutAndPasteFromSubAppCommand createCutAndPasteCommand(final FBNetworkElement fbNetworkElement) {
+		final GraphicalViewer adapter = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
+		final AbstractFBNElementEditPart fbEditPart = (AbstractFBNElementEditPart) adapter.getEditPartRegistry()
+				.get(fbNetworkElement);
+		return new CutAndPasteFromSubAppCommand(fbNetworkElement, fbEditPart.getFigure().getBounds());
 	}
 }
