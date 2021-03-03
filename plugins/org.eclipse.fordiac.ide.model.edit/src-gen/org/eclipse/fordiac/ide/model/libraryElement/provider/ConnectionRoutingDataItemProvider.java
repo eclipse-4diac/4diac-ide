@@ -39,22 +39,31 @@ import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData}
+/**
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData}
  * object. <!-- begin-user-doc --> <!-- end-user-doc -->
  * 
- * @generated */
+ * @generated
+ */
 public class ConnectionRoutingDataItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
-	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public ConnectionRoutingDataItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -67,67 +76,84 @@ public class ConnectionRoutingDataItemProvider extends ItemProviderAdapter imple
 		return itemPropertyDescriptors;
 	}
 
-	/** This adds a property descriptor for the Dx1 feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Dx1 feature. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addDx1PropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_ConnectionRoutingData_dx1_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_ConnectionRoutingData_dx1_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ConnectionRoutingData_type"),  //$NON-NLS-1$
+								"_UI_ConnectionRoutingData_type"), //$NON-NLS-1$
 						LibraryElementPackage.Literals.CONNECTION_ROUTING_DATA__DX1, true, false, false,
 						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
 	}
 
-	/** This adds a property descriptor for the Dx2 feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Dx2 feature. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addDx2PropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_ConnectionRoutingData_dx2_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_ConnectionRoutingData_dx2_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ConnectionRoutingData_type"),  //$NON-NLS-1$
+								"_UI_ConnectionRoutingData_type"), //$NON-NLS-1$
 						LibraryElementPackage.Literals.CONNECTION_ROUTING_DATA__DX2, true, false, false,
 						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
 	}
 
-	/** This adds a property descriptor for the Dy feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Dy feature. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addDyPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_ConnectionRoutingData_dy_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_ConnectionRoutingData_dy_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ConnectionRoutingData_type"),  //$NON-NLS-1$
+								"_UI_ConnectionRoutingData_type"), //$NON-NLS-1$
 						LibraryElementPackage.Literals.CONNECTION_ROUTING_DATA__DY, true, false, false,
 						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
 	}
 
-	/** This returns ConnectionRoutingData.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns ConnectionRoutingData.gif. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object getImage(Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/ConnectionRoutingData")); //$NON-NLS-1$
 	}
 
-	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getText(Object object) {
 		ConnectionRoutingData connectionRoutingData = (ConnectionRoutingData) object;
 		return getString("_UI_ConnectionRoutingData_type") + " " + connectionRoutingData.getDx1(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
-	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
@@ -144,18 +170,24 @@ public class ConnectionRoutingDataItemProvider extends ItemProviderAdapter imple
 		}
 	}
 
-	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
-	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 
-	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Return the resource locator for this item provider's resources. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
 		return FordiacEditPlugin.INSTANCE;

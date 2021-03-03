@@ -29,63 +29,80 @@ import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Service</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Service</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getRightInterface <em>Right
- * Interface</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getLeftInterface <em>Left
- * Interface</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getServiceSequence <em>Service
- * Sequence</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getRightInterface
+ * <em>Right Interface</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getLeftInterface
+ * <em>Left Interface</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getServiceSequence
+ * <em>Service Sequence</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class ServiceImpl extends EObjectImpl implements Service {
-	/** The cached value of the '{@link #getRightInterface() <em>Right Interface</em>}' containment reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getRightInterface() <em>Right
+	 * Interface</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getRightInterface()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ServiceInterface rightInterface;
 
-	/** The cached value of the '{@link #getLeftInterface() <em>Left Interface</em>}' containment reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getLeftInterface() <em>Left Interface</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getLeftInterface()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ServiceInterface leftInterface;
 
-	/** The cached value of the '{@link #getServiceSequence() <em>Service Sequence</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getServiceSequence() <em>Service
+	 * Sequence</em>}' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getServiceSequence()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<ServiceSequence> serviceSequence;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected ServiceImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.SERVICE;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<ServiceSequence> getServiceSequence() {
 		if (serviceSequence == null) {
@@ -95,9 +112,11 @@ public class ServiceImpl extends EObjectImpl implements Service {
 		return serviceSequence;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ServiceInterface getRightInterface() {
 		if (rightInterface != null && rightInterface.eIsProxy()) {
@@ -121,16 +140,20 @@ public class ServiceImpl extends EObjectImpl implements Service {
 		return rightInterface;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public ServiceInterface basicGetRightInterface() {
 		return rightInterface;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetRightInterface(ServiceInterface newRightInterface, NotificationChain msgs) {
 		ServiceInterface oldRightInterface = rightInterface;
 		rightInterface = newRightInterface;
@@ -145,9 +168,11 @@ public class ServiceImpl extends EObjectImpl implements Service {
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setRightInterface(ServiceInterface newRightInterface) {
 		if (newRightInterface != rightInterface) {
@@ -166,9 +191,11 @@ public class ServiceImpl extends EObjectImpl implements Service {
 					newRightInterface, newRightInterface));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ServiceInterface getLeftInterface() {
 		if (leftInterface != null && leftInterface.eIsProxy()) {
@@ -192,16 +219,20 @@ public class ServiceImpl extends EObjectImpl implements Service {
 		return leftInterface;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public ServiceInterface basicGetLeftInterface() {
 		return leftInterface;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetLeftInterface(ServiceInterface newLeftInterface, NotificationChain msgs) {
 		ServiceInterface oldLeftInterface = leftInterface;
 		leftInterface = newLeftInterface;
@@ -216,9 +247,11 @@ public class ServiceImpl extends EObjectImpl implements Service {
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setLeftInterface(ServiceInterface newLeftInterface) {
 		if (newLeftInterface != leftInterface) {
@@ -237,9 +270,11 @@ public class ServiceImpl extends EObjectImpl implements Service {
 					newLeftInterface, newLeftInterface));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -254,9 +289,11 @@ public class ServiceImpl extends EObjectImpl implements Service {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -275,9 +312,11 @@ public class ServiceImpl extends EObjectImpl implements Service {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -298,9 +337,11 @@ public class ServiceImpl extends EObjectImpl implements Service {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -319,9 +360,11 @@ public class ServiceImpl extends EObjectImpl implements Service {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

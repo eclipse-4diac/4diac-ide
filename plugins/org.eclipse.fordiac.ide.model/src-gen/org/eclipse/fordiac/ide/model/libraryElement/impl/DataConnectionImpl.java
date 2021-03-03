@@ -18,37 +18,47 @@ import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Data Connection</b></em>'. <!-- end-user-doc
- * -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Data
+ * Connection</b></em>'. <!-- end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class DataConnectionImpl extends ConnectionImpl implements DataConnection {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected DataConnectionImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.DATA_CONNECTION;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public VarDeclaration getDataSource() {
 		return org.eclipse.fordiac.ide.model.Annotations.getDataSource(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public VarDeclaration getDataDestination() {
 		return org.eclipse.fordiac.ide.model.Annotations.getDataDestination(this);

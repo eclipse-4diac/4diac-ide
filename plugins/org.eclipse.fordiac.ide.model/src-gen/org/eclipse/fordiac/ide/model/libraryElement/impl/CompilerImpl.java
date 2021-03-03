@@ -20,115 +20,149 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Compiler</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Compiler</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getLanguage <em>Language</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getProduct <em>Product</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getVendor <em>Vendor</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getVersion <em>Version</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getLanguage
+ * <em>Language</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getProduct
+ * <em>Product</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getVendor
+ * <em>Vendor</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getVersion
+ * <em>Version</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide.model.libraryElement.Compiler {
-	/** The default value of the '{@link #getLanguage() <em>Language</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getLanguage() <em>Language</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getLanguage()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final Language LANGUAGE_EDEFAULT = Language.C;
 
-	/** The cached value of the '{@link #getLanguage() <em>Language</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getLanguage() <em>Language</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getLanguage()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Language language = LANGUAGE_EDEFAULT;
 
-	/** This is true if the Language attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This is true if the Language attribute has been set. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected boolean languageESet;
 
-	/** The default value of the '{@link #getProduct() <em>Product</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getProduct() <em>Product</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getProduct()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String PRODUCT_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getProduct() <em>Product</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getProduct() <em>Product</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getProduct()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String product = PRODUCT_EDEFAULT;
 
-	/** The default value of the '{@link #getVendor() <em>Vendor</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getVendor() <em>Vendor</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getVendor()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String VENDOR_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getVendor() <em>Vendor</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getVendor() <em>Vendor</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getVendor()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String vendor = VENDOR_EDEFAULT;
 
-	/** The default value of the '{@link #getVersion() <em>Version</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getVersion()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String VERSION_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getVersion() <em>Version</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getVersion()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String version = VERSION_EDEFAULT;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected CompilerImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.COMPILER;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Language getLanguage() {
 		return language;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setLanguage(Language newLanguage) {
 		Language oldLanguage = language;
@@ -140,9 +174,11 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 					language, !oldLanguageESet));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void unsetLanguage() {
 		Language oldLanguage = language;
@@ -154,25 +190,31 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 					oldLanguage, LANGUAGE_EDEFAULT, oldLanguageESet));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean isSetLanguage() {
 		return languageESet;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getProduct() {
 		return product;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setProduct(String newProduct) {
 		String oldProduct = product;
@@ -182,17 +224,21 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 					product));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getVendor() {
 		return vendor;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setVendor(String newVendor) {
 		String oldVendor = vendor;
@@ -202,17 +248,21 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 					vendor));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getVersion() {
 		return version;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setVersion(String newVersion) {
 		String oldVersion = version;
@@ -222,9 +272,11 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 					version));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -241,9 +293,11 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -265,9 +319,11 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -289,9 +345,11 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -308,9 +366,11 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String toString() {
 		if (eIsProxy())

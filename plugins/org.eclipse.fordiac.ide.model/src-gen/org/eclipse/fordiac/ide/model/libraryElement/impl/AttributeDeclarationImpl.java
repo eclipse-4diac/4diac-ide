@@ -24,112 +24,140 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedElement;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Attribute Declaration</b></em>'. <!--
- * end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Attribute Declaration</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl#getName
+ * <em>Name</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl#getComment
  * <em>Comment</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl#getType <em>Type</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl#getInitialValue <em>Initial
- * Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl#getType
+ * <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeDeclarationImpl#getInitialValue
+ * <em>Initial Value</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDeclaration {
-	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String name = NAME_EDEFAULT;
 
-	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String comment = COMMENT_EDEFAULT;
 
-	/** The default value of the '{@link #getType() <em>Type</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getType()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final BaseType1 TYPE_EDEFAULT = BaseType1.STRING;
 
-	/** The cached value of the '{@link #getType() <em>Type</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getType()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected BaseType1 type = TYPE_EDEFAULT;
 
-	/** The default value of the '{@link #getInitialValue() <em>Initial Value</em>}' attribute. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/**
+	 * The default value of the '{@link #getInitialValue() <em>Initial Value</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getInitialValue()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String INITIAL_VALUE_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getInitialValue() <em>Initial Value</em>}' attribute. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getInitialValue() <em>Initial Value</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getInitialValue()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String initialValue = INITIAL_VALUE_EDEFAULT;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected AttributeDeclarationImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getName() {
 		return name;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
@@ -139,17 +167,21 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 					oldName, name));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getComment() {
 		return comment;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
@@ -159,17 +191,21 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 					oldComment, comment));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public BaseType1 getType() {
 		return type;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setType(BaseType1 newType) {
 		BaseType1 oldType = type;
@@ -179,17 +215,21 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 					oldType, type));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getInitialValue() {
 		return initialValue;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setInitialValue(String newInitialValue) {
 		String oldInitialValue = initialValue;
@@ -199,9 +239,11 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 					LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE, oldInitialValue, initialValue));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -218,9 +260,11 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -242,9 +286,11 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -266,9 +312,11 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -285,9 +333,11 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == TypedElement.class) {
@@ -301,9 +351,11 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == TypedElement.class) {
@@ -317,9 +369,11 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String toString() {
 		if (eIsProxy())

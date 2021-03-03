@@ -13,32 +13,38 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Connection</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Connection</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx1 <em>Dx1</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx2 <em>Dx2</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDy <em>Dy</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection <em>Res Type
- * Connection</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection <em>Broken
- * Connection</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource <em>Source</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination <em>Destination</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection
+ * <em>Res Type Connection</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection
+ * <em>Broken Connection</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource
+ * <em>Source</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination
+ * <em>Destination</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getRoutingData
+ * <em>Routing Data</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection()
  * @model abstract="true"
- * @generated */
+ * @generated
+ */
 public interface Connection extends ConfigurableObject {
 
-	/** Returns the value of the '<em><b>Res Type Connection</b></em>' attribute. <!-- begin-user-doc -->
+	/**
+	 * Returns the value of the '<em><b>Res Type Connection</b></em>' attribute.
+	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Res Type Connection</em>' attribute isn't clear, there really should be more of a
-	 * description here...
+	 * If the meaning of the '<em>Res Type Connection</em>' attribute isn't clear,
+	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
@@ -46,52 +52,67 @@ public interface Connection extends ConfigurableObject {
 	 * @see #setResTypeConnection(boolean)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_ResTypeConnection()
 	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 * @generated */
+	 * @generated
+	 */
 	boolean isResTypeConnection();
 
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection
-	 * <em>Res Type Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection
+	 * <em>Res Type Connection</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @param value the new value of the '<em>Res Type Connection</em>' attribute.
 	 * @see #isResTypeConnection()
-	 * @generated */
+	 * @generated
+	 */
 	void setResTypeConnection(boolean value);
 
-	/** <!-- begin-user-doc -->
+	/**
+	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Resource Connection</em>' attribute isn't clear, there really should be more of a
-	 * description here...
+	 * If the meaning of the '<em>Resource Connection</em>' attribute isn't clear,
+	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated */
+	 * @generated
+	 */
 	boolean isResourceConnection();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated */
+	 * @generated
+	 */
 	FBNetwork getFBNetwork();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model
-	 * @generated */
+	 * @generated
+	 */
 	void checkIfConnectionBroken();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model dx1DataType="org.eclipse.emf.ecore.xml.type.Int" dx1Required="true"
 	 *        dyDataType="org.eclipse.emf.ecore.xml.type.Int" dyRequired="true"
 	 *        dx2DataType="org.eclipse.emf.ecore.xml.type.Int" dx2Required="true"
-	 * @generated */
+	 * @generated
+	 */
 	void updateRoutingData(int dx1, int dy, int dx2);
 
-	/** Returns the value of the '<em><b>Broken Connection</b></em>' attribute. <!-- begin-user-doc -->
+	/**
+	 * Returns the value of the '<em><b>Broken Connection</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Broken Connection</em>' attribute isn't clear, there really should be more of a
-	 * description here...
+	 * If the meaning of the '<em>Broken Connection</em>' attribute isn't clear,
+	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
@@ -99,84 +120,113 @@ public interface Connection extends ConfigurableObject {
 	 * @see #setBrokenConnection(boolean)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_BrokenConnection()
 	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 * @generated */
+	 * @generated
+	 */
 	boolean isBrokenConnection();
 
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection
-	 * <em>Broken Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection
+	 * <em>Broken Connection</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @param value the new value of the '<em>Broken Connection</em>' attribute.
 	 * @see #isBrokenConnection()
-	 * @generated */
+	 * @generated
+	 */
 	void setBrokenConnection(boolean value);
 
-	/** Returns the value of the '<em><b>Source</b></em>' reference. It is bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections <em>Output
-	 * Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Returns the value of the '<em><b>Source</b></em>' reference. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections
+	 * <em>Output Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Source</em>' reference.
 	 * @see #setSource(IInterfaceElement)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Source()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections
 	 * @model opposite="outputConnections"
-	 * @generated */
+	 * @generated
+	 */
 	IInterfaceElement getSource();
 
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource
 	 * <em>Source</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @param value the new value of the '<em>Source</em>' reference.
 	 * @see #getSource()
-	 * @generated */
+	 * @generated
+	 */
 	void setSource(IInterfaceElement value);
 
-	/** Returns the value of the '<em><b>Destination</b></em>' reference. It is bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections <em>Input
-	 * Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Returns the value of the '<em><b>Destination</b></em>' reference. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections
+	 * <em>Input Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Destination</em>' reference.
 	 * @see #setDestination(IInterfaceElement)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Destination()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections
 	 * @model opposite="inputConnections"
-	 * @generated */
+	 * @generated
+	 */
 	IInterfaceElement getDestination();
 
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination
-	 * <em>Destination</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination
+	 * <em>Destination</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @param value the new value of the '<em>Destination</em>' reference.
 	 * @see #getDestination()
-	 * @generated */
+	 * @generated
+	 */
 	void setDestination(IInterfaceElement value);
 
-	/** Returns the value of the '<em><b>Routing Data</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Returns the value of the '<em><b>Routing Data</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Routing Data</em>' reference.
 	 * @see #setRoutingData(ConnectionRoutingData)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_RoutingData()
 	 * @model required="true"
-	 * @generated */
+	 * @generated
+	 */
 	ConnectionRoutingData getRoutingData();
 
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getRoutingData <em>Routing
-	 * Data</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getRoutingData
+	 * <em>Routing Data</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @param value the new value of the '<em>Routing Data</em>' reference.
 	 * @see #getRoutingData()
-	 * @generated */
+	 * @generated
+	 */
 	void setRoutingData(ConnectionRoutingData value);
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated */
+	 * @generated
+	 */
 	FBNetworkElement getSourceElement();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated */
+	 * @generated
+	 */
 	FBNetworkElement getDestinationElement();
 
 } // Connection

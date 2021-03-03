@@ -17,21 +17,27 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Input Primitive</b></em>'. <!-- end-user-doc
- * -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Input
+ * Primitive</b></em>'. <!-- end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class InputPrimitiveImpl extends PrimitiveImpl implements InputPrimitive {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected InputPrimitiveImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.INPUT_PRIMITIVE;

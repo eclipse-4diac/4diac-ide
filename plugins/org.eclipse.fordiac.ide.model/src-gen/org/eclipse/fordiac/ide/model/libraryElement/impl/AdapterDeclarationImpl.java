@@ -24,55 +24,67 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** <!-- begin-user-doc --> An implementation of the model object ' <em><b>Adapter Declaration</b></em>'. <!--
- * end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '
+ * <em><b>Adapter Declaration</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getAdapterFB <em>Adapter
- * FB</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getPaletteEntry <em>Palette
- * Entry</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getAdapterFB
+ * <em>Adapter FB</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getPaletteEntry
+ * <em>Palette Entry</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class AdapterDeclarationImpl extends VarDeclarationImpl implements AdapterDeclaration {
 
-	/** The cached value of the '{@link #getAdapterFB() <em>Adapter FB</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getAdapterFB() <em>Adapter FB</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getAdapterFB()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected AdapterFB adapterFB;
 
-	/** The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}' reference. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getPaletteEntry()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected AdapterTypePaletteEntry paletteEntry;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected AdapterDeclarationImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.ADAPTER_DECLARATION;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public AdapterFB getAdapterFB() {
 		if (adapterFB != null && adapterFB.eIsProxy()) {
@@ -87,16 +99,20 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 		return adapterFB;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public AdapterFB basicGetAdapterFB() {
 		return adapterFB;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetAdapterFB(AdapterFB newAdapterFB, NotificationChain msgs) {
 		AdapterFB oldAdapterFB = adapterFB;
 		adapterFB = newAdapterFB;
@@ -111,9 +127,11 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setAdapterFB(AdapterFB newAdapterFB) {
 		if (newAdapterFB != adapterFB) {
@@ -132,9 +150,11 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 					newAdapterFB, newAdapterFB));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public AdapterTypePaletteEntry getPaletteEntry() {
 		if (paletteEntry != null && paletteEntry.eIsProxy()) {
@@ -149,16 +169,20 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 		return paletteEntry;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public AdapterTypePaletteEntry basicGetPaletteEntry() {
 		return paletteEntry;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setPaletteEntry(AdapterTypePaletteEntry newPaletteEntry) {
 		AdapterTypePaletteEntry oldPaletteEntry = paletteEntry;
@@ -168,18 +192,22 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 					LibraryElementPackage.ADAPTER_DECLARATION__PALETTE_ENTRY, oldPaletteEntry, paletteEntry));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public AdapterType getType() {
 		// this code can not be moved to a model annotations class
 		return (AdapterType) super.getType();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -193,9 +221,11 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -206,9 +236,11 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -225,9 +257,11 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -243,9 +277,11 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -261,9 +297,11 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements Adapte
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

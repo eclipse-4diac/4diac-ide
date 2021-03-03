@@ -24,51 +24,66 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Link</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Link</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl#getSegment <em>Segment</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl#getDevice <em>Device</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl#getSegment
+ * <em>Segment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LinkImpl#getDevice
+ * <em>Device</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class LinkImpl extends ConfigurableObjectImpl implements Link {
-	/** The cached value of the '{@link #getSegment() <em>Segment</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getSegment() <em>Segment</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getSegment()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Segment segment;
 
-	/** The cached value of the '{@link #getDevice() <em>Device</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getDevice() <em>Device</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getDevice()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Device device;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected LinkImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.LINK;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Segment getSegment() {
 		if (segment != null && segment.eIsProxy()) {
@@ -83,16 +98,20 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 		return segment;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public Segment basicGetSegment() {
 		return segment;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetSegment(Segment newSegment, NotificationChain msgs) {
 		Segment oldSegment = segment;
 		segment = newSegment;
@@ -107,9 +126,11 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setSegment(Segment newSegment) {
 		if (newSegment != segment) {
@@ -128,9 +149,11 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 					newSegment));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Device getDevice() {
 		if (device != null && device.eIsProxy()) {
@@ -145,16 +168,20 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 		return device;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public Device basicGetDevice() {
 		return device;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetDevice(Device newDevice, NotificationChain msgs) {
 		Device oldDevice = device;
 		device = newDevice;
@@ -169,9 +196,11 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setDevice(Device newDevice) {
 		if (newDevice != device) {
@@ -190,9 +219,11 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 					newDevice));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -211,9 +242,11 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -226,9 +259,11 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -245,9 +280,11 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -263,9 +300,11 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -281,9 +320,11 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

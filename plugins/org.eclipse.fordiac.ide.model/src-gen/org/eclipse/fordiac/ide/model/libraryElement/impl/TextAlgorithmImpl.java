@@ -19,58 +19,73 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Text Algorithm</b></em>'. <!-- end-user-doc
- * -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Text
+ * Algorithm</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextAlgorithmImpl#getText <em>Text</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextAlgorithmImpl#getText
+ * <em>Text</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlgorithm {
-	/** The default value of the '{@link #getText() <em>Text</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * The default value of the '{@link #getText() <em>Text</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getText()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String TEXT_EDEFAULT = null;
-	/** The cached value of the '{@link #getText() <em>Text</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * The cached value of the '{@link #getText() <em>Text</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getText()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String text = TEXT_EDEFAULT;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected TextAlgorithmImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.TEXT_ALGORITHM;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getText() {
 		return text;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setText(String newText) {
 		String oldText = text;
@@ -80,9 +95,11 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 					text));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -93,9 +110,11 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -108,9 +127,11 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -123,9 +144,11 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -136,9 +159,11 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String toString() {
 		if (eIsProxy())

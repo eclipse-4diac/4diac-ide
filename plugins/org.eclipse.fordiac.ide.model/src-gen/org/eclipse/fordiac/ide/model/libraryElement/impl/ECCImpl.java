@@ -31,61 +31,80 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>ECC</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>ECC</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl#getECState <em>EC State</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl#getECTransition <em>EC Transition</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl#getStart <em>Start</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl#getBasicFBType <em>Basic FB Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl#getECState
+ * <em>EC State</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl#getECTransition
+ * <em>EC Transition</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl#getStart
+ * <em>Start</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl#getBasicFBType
+ * <em>Basic FB Type</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class ECCImpl extends EObjectImpl implements ECC {
-	/** The cached value of the '{@link #getECState() <em>EC State</em>}' containment reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getECState() <em>EC State</em>}' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getECState()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<ECState> eCState;
 
-	/** The cached value of the '{@link #getECTransition() <em>EC Transition</em>}' containment reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getECTransition() <em>EC Transition</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getECTransition()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<ECTransition> eCTransition;
 
-	/** The cached value of the '{@link #getStart() <em>Start</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getStart() <em>Start</em>}' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getStart()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ECState start;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected ECCImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.ECC;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<ECState> getECState() {
 		if (eCState == null) {
@@ -95,9 +114,11 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		return eCState;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<ECTransition> getECTransition() {
 		if (eCTransition == null) {
@@ -107,9 +128,11 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		return eCTransition;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ECState getStart() {
 		if (start != null && start.eIsProxy()) {
@@ -124,16 +147,20 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		return start;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public ECState basicGetStart() {
 		return start;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setStart(ECState newStart) {
 		ECState oldStart = start;
@@ -142,9 +169,11 @@ public class ECCImpl extends EObjectImpl implements ECC {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ECC__START, oldStart, start));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public BasicFBType getBasicFBType() {
 		if (eContainerFeatureID() != LibraryElementPackage.ECC__BASIC_FB_TYPE)
@@ -152,26 +181,32 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		return (BasicFBType) eContainer();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public BasicFBType basicGetBasicFBType() {
 		if (eContainerFeatureID() != LibraryElementPackage.ECC__BASIC_FB_TYPE)
 			return null;
 		return (BasicFBType) eInternalContainer();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetBasicFBType(BasicFBType newBasicFBType, NotificationChain msgs) {
 		msgs = eBasicSetContainer((InternalEObject) newBasicFBType, LibraryElementPackage.ECC__BASIC_FB_TYPE, msgs);
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setBasicFBType(BasicFBType newBasicFBType) {
 		if (newBasicFBType != eInternalContainer()
@@ -192,9 +227,11 @@ public class ECCImpl extends EObjectImpl implements ECC {
 					newBasicFBType, newBasicFBType));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -212,9 +249,11 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -229,9 +268,11 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
@@ -243,9 +284,11 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -266,9 +309,11 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -293,9 +338,11 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -317,9 +364,11 @@ public class ECCImpl extends EObjectImpl implements ECC {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

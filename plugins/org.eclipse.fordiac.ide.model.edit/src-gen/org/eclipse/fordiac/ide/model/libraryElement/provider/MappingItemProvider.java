@@ -34,22 +34,31 @@ import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 
-/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.Mapping} object. <!--
+/**
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.Mapping} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
  * 
- * @generated */
+ * @generated
+ */
 public class MappingItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
-	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public MappingItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -61,9 +70,12 @@ public class MappingItemProvider extends ItemProviderAdapter implements IEditing
 		return itemPropertyDescriptors;
 	}
 
-	/** This adds a property descriptor for the From feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the From feature. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addFromPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
@@ -72,9 +84,12 @@ public class MappingItemProvider extends ItemProviderAdapter implements IEditing
 						LibraryElementPackage.Literals.MAPPING__FROM, true, false, false, null, null, null));
 	}
 
-	/** This adds a property descriptor for the To feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the To feature. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addToPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
@@ -83,27 +98,34 @@ public class MappingItemProvider extends ItemProviderAdapter implements IEditing
 						LibraryElementPackage.Literals.MAPPING__TO, true, false, false, null, null, null));
 	}
 
-	/** This returns Mapping.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns Mapping.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object getImage(Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/Mapping")); //$NON-NLS-1$
 	}
 
-	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getText(Object object) {
 		return getString("_UI_Mapping_type"); //$NON-NLS-1$
 	}
 
-	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
-	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
@@ -119,18 +141,24 @@ public class MappingItemProvider extends ItemProviderAdapter implements IEditing
 		}
 	}
 
-	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
-	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 
-	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Return the resource locator for this item provider's resources. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
 		return FordiacEditPlugin.INSTANCE;

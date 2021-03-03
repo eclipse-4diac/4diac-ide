@@ -13,23 +13,29 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Sub App</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Sub
+ * App</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork <em>Sub App Network</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork
+ * <em>Sub App Network</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp()
  * @model
- * @generated */
+ * @generated
+ */
 public interface SubApp extends FBNetworkElement {
-	/** Returns the value of the '<em><b>Sub App Network</b></em>' containment reference. <!-- begin-user-doc -->
+	/**
+	 * Returns the value of the '<em><b>Sub App Network</b></em>' containment
+	 * reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Sub App Network</em>' containment reference isn't clear, there really should be more
-	 * of a description here...
+	 * If the meaning of the '<em>Sub App Network</em>' containment reference isn't
+	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
@@ -37,28 +43,38 @@ public interface SubApp extends FBNetworkElement {
 	 * @see #setSubAppNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp_SubAppNetwork()
 	 * @model containment="true" resolveProxies="true"
-	 * @generated */
+	 * @generated
+	 */
 	FBNetwork getSubAppNetwork();
 
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork <em>Sub App
-	 * Network</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork
+	 * <em>Sub App Network</em>}' containment reference. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @param value the new value of the '<em>Sub App Network</em>' containment reference.
+	 * @param value the new value of the '<em>Sub App Network</em>' containment
+	 *              reference.
 	 * @see #getSubAppNetwork()
-	 * @generated */
+	 * @generated
+	 */
 	void setSubAppNetwork(FBNetwork value);
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	SubAppType getType();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 * @generated */
+	 * @generated
+	 */
 	boolean isUnfolded();
 
 } // SubApp

@@ -28,59 +28,76 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Basic FB Type</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Basic
+ * FB Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl#getECC <em>ECC</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl#getAlgorithm <em>Algorithm</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl#getECC
+ * <em>ECC</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl#getAlgorithm
+ * <em>Algorithm</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
-	/** The cached value of the '{@link #getECC() <em>ECC</em>}' containment reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getECC() <em>ECC</em>}' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getECC()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ECC eCC;
 
-	/** The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' containment reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getAlgorithm()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<Algorithm> algorithm;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected BasicFBTypeImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.BASIC_FB_TYPE;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ECC getECC() {
 		return eCC;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetECC(ECC newECC, NotificationChain msgs) {
 		ECC oldECC = eCC;
 		eCC = newECC;
@@ -95,9 +112,11 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setECC(ECC newECC) {
 		if (newECC != eCC) {
@@ -116,9 +135,11 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 					newECC));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<Algorithm> getAlgorithm() {
 		if (algorithm == null) {
@@ -128,17 +149,21 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 		return algorithm;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Algorithm getAlgorithmNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -152,9 +177,11 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -167,9 +194,11 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -182,9 +211,11 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -202,9 +233,11 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -220,9 +253,11 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

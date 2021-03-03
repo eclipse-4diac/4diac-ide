@@ -15,42 +15,51 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Service Sequence</b></em>'. <!-- end-user-doc
- * -->
+/**
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Service
+ * Sequence</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceTransaction <em>Service
- * Transaction</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult <em>Test Result</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceTransaction
+ * <em>Service Transaction</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult
+ * <em>Test Result</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceSequence()
  * @model
- * @generated */
+ * @generated
+ */
 public interface ServiceSequence extends INamedElement {
-	/** Returns the value of the '<em><b>Service Transaction</b></em>' containment reference list. The list contents are
-	 * of type {@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction}. <!-- begin-user-doc -->
+	/**
+	 * Returns the value of the '<em><b>Service Transaction</b></em>' containment
+	 * reference list. The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction}. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Service Transaction</em>' containment reference list isn't clear, there really should
-	 * be more of a description here...
+	 * If the meaning of the '<em>Service Transaction</em>' containment reference
+	 * list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
-	 * @return the value of the '<em>Service Transaction</em>' containment reference list.
+	 * @return the value of the '<em>Service Transaction</em>' containment reference
+	 *         list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceSequence_ServiceTransaction()
-	 * @model containment="true" extendedMetaData="kind='element' name='ServiceTransaction'
-	 *        namespace='##targetNamespace'"
-	 * @generated */
+	 * @model containment="true" extendedMetaData="kind='element'
+	 *        name='ServiceTransaction' namespace='##targetNamespace'"
+	 * @generated
+	 */
 	EList<ServiceTransaction> getServiceTransaction();
 
-	/** Returns the value of the '<em><b>Test Result</b></em>' attribute. The default value is <code>"0"</code>. <!--
-	 * begin-user-doc -->
+	/**
+	 * Returns the value of the '<em><b>Test Result</b></em>' attribute. The default
+	 * value is <code>"0"</code>. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Test Result</em>' attribute isn't clear, there really should be more of a description
-	 * here...
+	 * If the meaning of the '<em>Test Result</em>' attribute isn't clear, there
+	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
@@ -59,39 +68,52 @@ public interface ServiceSequence extends INamedElement {
 	 * @see #unsetTestResult()
 	 * @see #setTestResult(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceSequence_TestResult()
-	 * @model default="0" unsettable="true" dataType="org.eclipse.emf.ecore.xml.type.Int" volatile="true"
+	 * @model default="0" unsettable="true"
+	 *        dataType="org.eclipse.emf.ecore.xml.type.Int" volatile="true"
 	 *        ordered="false"
-	 * @generated */
+	 * @generated
+	 */
 	int getTestResult();
 
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult
-	 * <em>Test Result</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult
+	 * <em>Test Result</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @param value the new value of the '<em>Test Result</em>' attribute.
 	 * @see #isSetTestResult()
 	 * @see #unsetTestResult()
 	 * @see #getTestResult()
-	 * @generated */
+	 * @generated
+	 */
 	void setTestResult(int value);
 
-	/** Unsets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult
-	 * <em>Test Result</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Unsets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult
+	 * <em>Test Result</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @see #isSetTestResult()
 	 * @see #getTestResult()
 	 * @see #setTestResult(int)
-	 * @generated */
+	 * @generated
+	 */
 	void unsetTestResult();
 
-	/** Returns whether the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult <em>Test Result</em>}'
-	 * attribute is set. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Returns whether the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult
+	 * <em>Test Result</em>}' attribute is set. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @return whether the value of the '<em>Test Result</em>' attribute is set.
 	 * @see #unsetTestResult()
 	 * @see #getTestResult()
 	 * @see #setTestResult(int)
-	 * @generated */
+	 * @generated
+	 */
 	boolean isSetTestResult();
 
 	public static final int NOT_TESTED = 0;

@@ -32,175 +32,224 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Var Declaration</b></em>'. <!-- end-user-doc
- * -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Var
+ * Declaration</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getName <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getComment <em>Comment</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#isIsInput <em>Is Input</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getInputConnections <em>Input
- * Connections</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getOutputConnections <em>Output
- * Connections</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getType <em>Type</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getTypeName <em>Type Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getArraySize <em>Array
- * Size</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getWiths <em>Withs</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getValue <em>Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getName
+ * <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getComment
+ * <em>Comment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#isIsInput
+ * <em>Is Input</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getInputConnections
+ * <em>Input Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getOutputConnections
+ * <em>Output Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getType
+ * <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getTypeName
+ * <em>Type Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getArraySize
+ * <em>Array Size</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getWiths
+ * <em>Withs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getValue
+ * <em>Value</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
-	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String name = NAME_EDEFAULT;
 
-	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String comment = COMMENT_EDEFAULT;
 
-	/** The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #isIsInput()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final boolean IS_INPUT_EDEFAULT = false;
 
-	/** The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #isIsInput()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected boolean isInput = IS_INPUT_EDEFAULT;
 
-	/** The cached value of the '{@link #getInputConnections() <em>Input Connections</em>}' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getInputConnections() <em>Input
+	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getInputConnections()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<Connection> inputConnections;
 
-	/** The cached value of the '{@link #getOutputConnections() <em>Output Connections</em>}' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getOutputConnections() <em>Output
+	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getOutputConnections()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<Connection> outputConnections;
 
-	/** The cached value of the '{@link #getType() <em>Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * The cached value of the '{@link #getType() <em>Type</em>}' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getType()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected DataType type;
 
-	/** The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getTypeName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String TYPE_NAME_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getTypeName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String typeName = TYPE_NAME_EDEFAULT;
 
-	/** The default value of the '{@link #getArraySize() <em>Array Size</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getArraySize() <em>Array Size</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getArraySize()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final int ARRAY_SIZE_EDEFAULT = 0;
 
-	/** The cached value of the '{@link #getArraySize() <em>Array Size</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getArraySize() <em>Array Size</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getArraySize()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected int arraySize = ARRAY_SIZE_EDEFAULT;
 
-	/** The cached value of the '{@link #getWiths() <em>Withs</em>}' reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getWiths() <em>Withs</em>}' reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getWiths()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<With> withs;
 
-	/** The cached value of the '{@link #getValue() <em>Value</em>}' containment reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getValue()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Value value;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected VarDeclarationImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.VAR_DECLARATION;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public int getArraySize() {
 		return arraySize;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setArraySize(int newArraySize) {
 		int oldArraySize = arraySize;
@@ -210,17 +259,21 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 					oldArraySize, arraySize));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getComment() {
 		return comment;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
@@ -230,17 +283,21 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 					oldComment, comment));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getName() {
 		return name;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
@@ -250,17 +307,21 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 					name));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean isIsInput() {
 		return isInput;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setIsInput(boolean newIsInput) {
 		boolean oldIsInput = isInput;
@@ -270,9 +331,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 					oldIsInput, isInput));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public DataType getType() {
 		if (type != null && type.eIsProxy()) {
@@ -287,16 +350,20 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		return type;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public DataType basicGetType() {
 		return type;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setType(DataType newType) {
 		DataType oldType = type;
@@ -306,17 +373,21 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 					type));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getTypeName() {
 		return typeName;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setTypeName(String newTypeName) {
 		String oldTypeName = typeName;
@@ -326,9 +397,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 					oldTypeName, typeName));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<With> getWiths() {
 		if (withs == null) {
@@ -338,25 +411,31 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		return withs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean isArray() {
 		return org.eclipse.fordiac.ide.model.Annotations.isArray(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public FBNetworkElement getFBNetworkElement() {
 		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Value getValue() {
 		if (value != null && value.eIsProxy()) {
@@ -380,16 +459,20 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		return value;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public Value basicGetValue() {
 		return value;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetValue(Value newValue, NotificationChain msgs) {
 		Value oldValue = value;
 		value = newValue;
@@ -404,9 +487,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setValue(Value newValue) {
 		if (newValue != value) {
@@ -425,9 +510,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 					newValue, newValue));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
@@ -438,9 +525,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		return inputConnections;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
@@ -451,9 +540,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		return outputConnections;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -470,9 +561,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -489,9 +582,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -524,9 +619,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -570,9 +667,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -612,9 +711,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -643,9 +744,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String toString() {
 		if (eIsProxy())

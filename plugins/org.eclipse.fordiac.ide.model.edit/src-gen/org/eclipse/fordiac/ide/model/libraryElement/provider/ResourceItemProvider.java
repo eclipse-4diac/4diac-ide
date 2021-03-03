@@ -29,21 +29,30 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
-/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.Resource} object. <!--
+/**
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.Resource} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
  * 
- * @generated */
+ * @generated
+ */
 public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
-	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public ResourceItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -56,9 +65,12 @@ public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
 		return itemPropertyDescriptors;
 	}
 
-	/** This adds a property descriptor for the X feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the X feature. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addXPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
@@ -68,9 +80,12 @@ public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/** This adds a property descriptor for the Y feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Y feature. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addYPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
@@ -80,42 +95,51 @@ public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/** This adds a property descriptor for the Device Type Resource feature. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * This adds a property descriptor for the Device Type Resource feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addDeviceTypeResourcePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Resource_deviceTypeResource_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_Resource_deviceTypeResource_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_Resource_type"),  //$NON-NLS-1$
+								"_UI_Resource_type"), //$NON-NLS-1$
 						LibraryElementPackage.Literals.RESOURCE__DEVICE_TYPE_RESOURCE, true, false, false,
 						ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
-	/** This returns Resource.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns Resource.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated not */
+	 * @generated not
+	 */
 	@Override
 	public Object getImage(Object object) {
 		return overlayImage(object, FordiacImage.ICON_RESOURCE.getImage());
 	}
 
-	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated not */
+	 * @generated not
+	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((Resource) object).getName();
 		return label == null || label.length() == 0 ? getString("_UI_Resource_type") : label; //$NON-NLS-1$
 	}
 
-	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
-	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
@@ -134,10 +158,13 @@ public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
 		}
 	}
 
-	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
-	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);

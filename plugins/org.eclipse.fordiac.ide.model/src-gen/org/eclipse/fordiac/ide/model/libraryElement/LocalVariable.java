@@ -15,58 +15,81 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Local Variable</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Local
+ * Variable</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStart <em>Array Start</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStop <em>Array Stop</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStart
+ * <em>Array Start</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStop
+ * <em>Array Stop</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLocalVariable()
  * @model
- * @generated */
+ * @generated
+ */
 public interface LocalVariable extends VarDeclaration {
-	/** Returns the value of the '<em><b>Array Start</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Returns the value of the '<em><b>Array Start</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Array Start</em>' attribute.
 	 * @see #setArrayStart(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLocalVariable_ArrayStart()
 	 * @model dataType="org.eclipse.emf.ecore.xml.type.Int"
-	 * @generated */
+	 * @generated
+	 */
 	int getArrayStart();
 
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStart <em>Array
-	 * Start</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStart
+	 * <em>Array Start</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @param value the new value of the '<em>Array Start</em>' attribute.
 	 * @see #getArrayStart()
-	 * @generated */
+	 * @generated
+	 */
 	void setArrayStart(int value);
 
-	/** Returns the value of the '<em><b>Array Stop</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Returns the value of the '<em><b>Array Stop</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Array Stop</em>' attribute.
 	 * @see #setArrayStop(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLocalVariable_ArrayStop()
 	 * @model dataType="org.eclipse.emf.ecore.xml.type.Int"
-	 * @generated */
+	 * @generated
+	 */
 	int getArrayStop();
 
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStop <em>Array
-	 * Stop</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStop
+	 * <em>Array Stop</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @param value the new value of the '<em>Array Stop</em>' attribute.
 	 * @see #getArrayStop()
-	 * @generated */
+	 * @generated
+	 */
 	void setArrayStop(int value);
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc --> <!-- begin-model-doc --> overwrite <!-- end-model-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc --> <!-- begin-model-doc -->
+	 * overwrite <!-- end-model-doc -->
 	 * 
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int" unique="false"
-	 * @generated */
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 *        unique="false"
+	 * @generated
+	 */
 	@Override
 	int getArraySize();
 

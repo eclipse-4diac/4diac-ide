@@ -20,127 +20,162 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Version Info</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Version
+ * Info</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl#getAuthor <em>Author</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl#getDate <em>Date</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl#getAuthor
+ * <em>Author</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl#getDate
+ * <em>Date</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl#getOrganization
  * <em>Organization</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl#getRemarks <em>Remarks</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl#getVersion <em>Version</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl#getRemarks
+ * <em>Remarks</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl#getVersion
+ * <em>Version</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
-	/** The default value of the '{@link #getAuthor() <em>Author</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getAuthor() <em>Author</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getAuthor()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String AUTHOR_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getAuthor() <em>Author</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getAuthor() <em>Author</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getAuthor()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String author = AUTHOR_EDEFAULT;
 
-	/** The default value of the '{@link #getDate() <em>Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * The default value of the '{@link #getDate() <em>Date</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getDate()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String DATE_EDEFAULT = "YYYY-MM-DD"; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getDate() <em>Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * The cached value of the '{@link #getDate() <em>Date</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getDate()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String date = DATE_EDEFAULT;
 
-	/** The default value of the '{@link #getOrganization() <em>Organization</em>}' attribute. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/**
+	 * The default value of the '{@link #getOrganization() <em>Organization</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getOrganization()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String ORGANIZATION_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getOrganization() <em>Organization</em>}' attribute. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getOrganization() <em>Organization</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getOrganization()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String organization = ORGANIZATION_EDEFAULT;
 
-	/** The default value of the '{@link #getRemarks() <em>Remarks</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getRemarks() <em>Remarks</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getRemarks()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String REMARKS_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getRemarks() <em>Remarks</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getRemarks() <em>Remarks</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getRemarks()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String remarks = REMARKS_EDEFAULT;
 
-	/** The default value of the '{@link #getVersion() <em>Version</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getVersion()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String VERSION_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getVersion() <em>Version</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getVersion()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String version = VERSION_EDEFAULT;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected VersionInfoImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.VERSION_INFO;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getAuthor() {
 		return author;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setAuthor(String newAuthor) {
 		String oldAuthor = author;
@@ -150,17 +185,21 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 					author));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getDate() {
 		return date;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setDate(String newDate) {
 		String oldDate = date;
@@ -170,17 +209,21 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 					date));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getOrganization() {
 		return organization;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setOrganization(String newOrganization) {
 		String oldOrganization = organization;
@@ -190,17 +233,21 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 					oldOrganization, organization));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getRemarks() {
 		return remarks;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setRemarks(String newRemarks) {
 		String oldRemarks = remarks;
@@ -210,17 +257,21 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 					oldRemarks, remarks));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getVersion() {
 		return version;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setVersion(String newVersion) {
 		String oldVersion = version;
@@ -230,9 +281,11 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 					oldVersion, version));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -251,9 +304,11 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -278,9 +333,11 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -305,9 +362,11 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -326,9 +385,11 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String toString() {
 		if (eIsProxy())

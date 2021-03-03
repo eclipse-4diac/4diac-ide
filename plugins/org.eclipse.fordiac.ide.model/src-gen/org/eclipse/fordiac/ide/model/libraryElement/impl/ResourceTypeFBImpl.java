@@ -17,29 +17,37 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Resource Type FB</b></em>'. <!-- end-user-doc
- * -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Resource Type FB</b></em>'. <!-- end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class ResourceTypeFBImpl extends FBImpl implements ResourceTypeFB {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected ResourceTypeFBImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.RESOURCE_TYPE_FB;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean isResourceTypeFB() {
 		return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB();

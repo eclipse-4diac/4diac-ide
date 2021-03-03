@@ -25,106 +25,134 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>EC Transition</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>EC
+ * Transition</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getComment <em>Comment</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getConditionExpression <em>Condition
- * Expression</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getSource <em>Source</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getComment
+ * <em>Comment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getConditionExpression
+ * <em>Condition Expression</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getSource
+ * <em>Source</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getDestination
  * <em>Destination</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getConditionEvent <em>Condition
- * Event</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getECC <em>ECC</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getConditionEvent
+ * <em>Condition Event</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getECC
+ * <em>ECC</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class ECTransitionImpl extends PositionableElementImpl implements ECTransition {
-	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String comment = COMMENT_EDEFAULT;
 
-	/** The default value of the '{@link #getConditionExpression() <em>Condition Expression</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The default value of the '{@link #getConditionExpression() <em>Condition
+	 * Expression</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getConditionExpression()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String CONDITION_EXPRESSION_EDEFAULT = "1"; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getConditionExpression() <em>Condition Expression</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getConditionExpression() <em>Condition
+	 * Expression</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getConditionExpression()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String conditionExpression = CONDITION_EXPRESSION_EDEFAULT;
 
-	/** The cached value of the '{@link #getSource() <em>Source</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getSource() <em>Source</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getSource()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ECState source;
 
-	/** The cached value of the '{@link #getDestination() <em>Destination</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getDestination() <em>Destination</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getDestination()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ECState destination;
 
-	/** The cached value of the '{@link #getConditionEvent() <em>Condition Event</em>}' reference. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getConditionEvent() <em>Condition
+	 * Event</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getConditionEvent()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Event conditionEvent;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected ECTransitionImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.EC_TRANSITION;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getComment() {
 		return comment;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
@@ -134,17 +162,21 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 					oldComment, comment));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getConditionExpression() {
 		return conditionExpression;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setConditionExpression(String newConditionExpression) {
 		String oldConditionExpression = conditionExpression;
@@ -155,9 +187,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 					conditionExpression));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ECState getDestination() {
 		if (destination != null && destination.eIsProxy()) {
@@ -172,16 +206,20 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		return destination;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public ECState basicGetDestination() {
 		return destination;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetDestination(ECState newDestination, NotificationChain msgs) {
 		ECState oldDestination = destination;
 		destination = newDestination;
@@ -196,9 +234,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setDestination(ECState newDestination) {
 		if (newDestination != destination) {
@@ -217,9 +257,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 					newDestination, newDestination));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Event getConditionEvent() {
 		if (conditionEvent != null && conditionEvent.eIsProxy()) {
@@ -234,16 +276,20 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		return conditionEvent;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public Event basicGetConditionEvent() {
 		return conditionEvent;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setConditionEvent(Event newConditionEvent) {
 		Event oldConditionEvent = conditionEvent;
@@ -253,25 +299,31 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 					oldConditionEvent, conditionEvent));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getConditionText() {
 		return org.eclipse.fordiac.ide.model.Annotations.getConditionText(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public int getPriority() {
 		return getSource().getOutTransitions().indexOf(this) + 1;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ECC getECC() {
 		if (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC)
@@ -279,26 +331,32 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		return (ECC) eContainer();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public ECC basicGetECC() {
 		if (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC)
 			return null;
 		return (ECC) eInternalContainer();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetECC(ECC newECC, NotificationChain msgs) {
 		msgs = eBasicSetContainer((InternalEObject) newECC, LibraryElementPackage.EC_TRANSITION__ECC, msgs);
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setECC(ECC newECC) {
 		if (newECC != eInternalContainer()
@@ -319,9 +377,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 					newECC));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -344,9 +404,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -361,9 +423,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
@@ -374,9 +438,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ECState getSource() {
 		if (source != null && source.eIsProxy()) {
@@ -391,16 +457,20 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		return source;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public ECState basicGetSource() {
 		return source;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetSource(ECState newSource, NotificationChain msgs) {
 		ECState oldSource = source;
 		source = newSource;
@@ -415,9 +485,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setSource(ECState newSource) {
 		if (newSource != source) {
@@ -436,9 +508,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 					newSource, newSource));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -467,9 +541,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -497,9 +573,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -527,9 +605,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -551,9 +631,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String toString() {
 		if (eIsProxy())

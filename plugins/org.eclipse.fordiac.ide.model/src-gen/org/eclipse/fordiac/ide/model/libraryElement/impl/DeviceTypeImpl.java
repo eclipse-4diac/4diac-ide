@@ -31,98 +31,127 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Device Type</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Device
+ * Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getVarDeclaration <em>Var
- * Declaration</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getResourceTypeName <em>Resource Type
- * Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getResource <em>Resource</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getFBNetwork <em>FB Network</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getProfile <em>Profile</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getAttributeDeclarations <em>Attribute
- * Declarations</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getVarDeclaration
+ * <em>Var Declaration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getResourceTypeName
+ * <em>Resource Type Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getResource
+ * <em>Resource</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getFBNetwork
+ * <em>FB Network</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getProfile
+ * <em>Profile</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getAttributeDeclarations
+ * <em>Attribute Declarations</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
-	/** The cached value of the '{@link #getVarDeclaration() <em>Var Declaration</em>}' containment reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getVarDeclaration() <em>Var
+	 * Declaration</em>}' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getVarDeclaration()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<VarDeclaration> varDeclaration;
 
-	/** The cached value of the '{@link #getResourceTypeName() <em>Resource Type Name</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getResourceTypeName() <em>Resource Type
+	 * Name</em>}' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getResourceTypeName()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<ResourceTypeName> resourceTypeName;
 
-	/** The cached value of the '{@link #getResource() <em>Resource</em>}' containment reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getResource() <em>Resource</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getResource()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<Resource> resource;
 
-	/** The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getFBNetwork()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBNetwork fBNetwork;
 
-	/** The default value of the '{@link #getProfile() <em>Profile</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getProfile() <em>Profile</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getProfile()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String PROFILE_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getProfile() <em>Profile</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getProfile() <em>Profile</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getProfile()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String profile = PROFILE_EDEFAULT;
 
-	/** The cached value of the '{@link #getAttributeDeclarations() <em>Attribute Declarations</em>}' containment
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getAttributeDeclarations() <em>Attribute
+	 * Declarations</em>}' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getAttributeDeclarations()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<AttributeDeclaration> attributeDeclarations;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected DeviceTypeImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.DEVICE_TYPE;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<VarDeclaration> getVarDeclaration() {
 		if (varDeclaration == null) {
@@ -132,9 +161,11 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		return varDeclaration;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<ResourceTypeName> getResourceTypeName() {
 		if (resourceTypeName == null) {
@@ -144,9 +175,11 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		return resourceTypeName;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<Resource> getResource() {
 		if (resource == null) {
@@ -156,17 +189,21 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		return resource;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public FBNetwork getFBNetwork() {
 		return fBNetwork;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetFBNetwork(FBNetwork newFBNetwork, NotificationChain msgs) {
 		FBNetwork oldFBNetwork = fBNetwork;
 		fBNetwork = newFBNetwork;
@@ -181,9 +218,11 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setFBNetwork(FBNetwork newFBNetwork) {
 		if (newFBNetwork != fBNetwork) {
@@ -202,17 +241,21 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 					newFBNetwork, newFBNetwork));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getProfile() {
 		return profile;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setProfile(String newProfile) {
 		String oldProfile = profile;
@@ -222,9 +265,11 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 					oldProfile, profile));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<AttributeDeclaration> getAttributeDeclarations() {
 		if (attributeDeclarations == null) {
@@ -234,9 +279,11 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		return attributeDeclarations;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -255,9 +302,11 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -278,9 +327,11 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -313,9 +364,11 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -343,9 +396,11 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -366,9 +421,11 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String toString() {
 		if (eIsProxy())

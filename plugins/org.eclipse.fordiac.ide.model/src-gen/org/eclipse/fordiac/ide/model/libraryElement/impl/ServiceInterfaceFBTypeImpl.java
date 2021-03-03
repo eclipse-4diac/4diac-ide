@@ -17,21 +17,27 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Service Interface FB Type</b></em>'. <!--
- * end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Service
+ * Interface FB Type</b></em>'. <!-- end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class ServiceInterfaceFBTypeImpl extends FBTypeImpl implements ServiceInterfaceFBType {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected ServiceInterfaceFBTypeImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.SERVICE_INTERFACE_FB_TYPE;

@@ -66,7 +66,7 @@ public final class NameRepository {
 		final Palette blockTypeLib = typeLibrary.getBlockTypeLib();
 		String typeName = type.getName();
 
-		if(type instanceof DataType) {
+		if (type instanceof DataType) {
 			final DataTypeLibrary dataTypeLibrary = typeLibrary.getDataTypeLibrary();
 			while (dataTypeLibrary.getTypeIfExists(typeName) != null) {
 				typeName = createUniqueName(type.getName(), typeName);
@@ -98,7 +98,6 @@ public final class NameRepository {
 		return null;
 
 	}
-
 
 	/**
 	 * Check and if necessary adapt the given name proposal so that it is a valid
@@ -144,14 +143,14 @@ public final class NameRepository {
 			return false;
 		}
 		if (element instanceof IInterfaceElement && RESERVED_KEYWORDS.contains(nameProposal)) {
-			ErrorMessenger.popUpErrorMessage(
-					MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, nameProposal));
+			ErrorMessenger
+					.popUpErrorMessage(MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, nameProposal));
 			return false;
 		}
 
 		if (getRefNames(element).contains(nameProposal)) {
-			ErrorMessenger.popUpErrorMessage(
-					MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal));
+			ErrorMessenger
+					.popUpErrorMessage(MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal));
 			return false;
 		}
 
@@ -170,7 +169,11 @@ public final class NameRepository {
 		} else if (refElement instanceof Device) {
 			elementsList = ((Device) refElement).getSystemConfiguration().getDevices();
 		} else if (refElement instanceof FBNetworkElement) {
-			elementsList = ((FBNetworkElement) refElement).getFbNetwork().getNetworkElements();
+			if (refElement.eContainer() instanceof BaseFBType) {
+				elementsList = ((BasicFBType) (refElement.eContainer())).getInternalFbs();
+			} else {
+				elementsList = ((FBNetworkElement) refElement).getFbNetwork().getNetworkElements();
+			}
 		} else if (refElement instanceof Resource) {
 			elementsList = ((Resource) refElement).getDevice().getResource();
 		} else if (refElement instanceof Segment) {

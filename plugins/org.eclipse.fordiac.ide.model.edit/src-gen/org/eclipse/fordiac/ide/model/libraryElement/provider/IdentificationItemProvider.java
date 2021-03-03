@@ -35,22 +35,31 @@ import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.Identification} object.
+/**
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.Identification} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
  * 
- * @generated */
+ * @generated
+ */
 public class IdentificationItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
-	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public IdentificationItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -66,96 +75,119 @@ public class IdentificationItemProvider extends ItemProviderAdapter implements I
 		return itemPropertyDescriptors;
 	}
 
-	/** This adds a property descriptor for the Application Domain feature. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * This adds a property descriptor for the Application Domain feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addApplicationDomainPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Identification_applicationDomain_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_Identification_applicationDomain_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_Identification_type"),  //$NON-NLS-1$
+								"_UI_Identification_type"), //$NON-NLS-1$
 						LibraryElementPackage.Literals.IDENTIFICATION__APPLICATION_DOMAIN, true, false, false,
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/** This adds a property descriptor for the Classification feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Classification feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addClassificationPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Identification_classification_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_Identification_classification_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_Identification_type"),  //$NON-NLS-1$
+								"_UI_Identification_type"), //$NON-NLS-1$
 						LibraryElementPackage.Literals.IDENTIFICATION__CLASSIFICATION, true, false, false,
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/** This adds a property descriptor for the Description feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Description feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addDescriptionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Identification_description_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_Identification_description_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_Identification_type"),  //$NON-NLS-1$
+								"_UI_Identification_type"), //$NON-NLS-1$
 						LibraryElementPackage.Literals.IDENTIFICATION__DESCRIPTION, true, false, false,
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/** This adds a property descriptor for the Function feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Function feature. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addFunctionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Identification_function_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_Identification_function_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_Identification_type"),  //$NON-NLS-1$
+								"_UI_Identification_type"), //$NON-NLS-1$
 						LibraryElementPackage.Literals.IDENTIFICATION__FUNCTION, true, false, false,
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/** This adds a property descriptor for the Standard feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Standard feature. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addStandardPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Identification_standard_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_Identification_standard_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_Identification_type"),  //$NON-NLS-1$
+								"_UI_Identification_type"), //$NON-NLS-1$
 						LibraryElementPackage.Literals.IDENTIFICATION__STANDARD, true, false, false,
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/** This adds a property descriptor for the Type feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Type feature. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addTypePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Identification_type_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_Identification_type_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_Identification_type"),  //$NON-NLS-1$
+								"_UI_Identification_type"), //$NON-NLS-1$
 						LibraryElementPackage.Literals.IDENTIFICATION__TYPE, true, false, false,
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/** This returns Identification.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns Identification.gif. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object getImage(Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/Identification")); //$NON-NLS-1$
 	}
 
-	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((Identification) object).getApplicationDomain();
@@ -163,11 +195,13 @@ public class IdentificationItemProvider extends ItemProviderAdapter implements I
 				getString("_UI_Identification_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
-	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
@@ -187,18 +221,24 @@ public class IdentificationItemProvider extends ItemProviderAdapter implements I
 		}
 	}
 
-	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
-	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 
-	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Return the resource locator for this item provider's resources. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
 		return FordiacEditPlugin.INSTANCE;

@@ -27,76 +27,98 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Compiler Info</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Compiler Info</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl#getCompiler <em>Compiler</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl#getClassdef <em>Classdef</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl#getHeader <em>Header</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl#getCompiler
+ * <em>Compiler</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl#getClassdef
+ * <em>Classdef</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl#getHeader
+ * <em>Header</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
-	/** The cached value of the '{@link #getCompiler() <em>Compiler</em>}' containment reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getCompiler() <em>Compiler</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getCompiler()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<org.eclipse.fordiac.ide.model.libraryElement.Compiler> compiler;
 
-	/** The default value of the '{@link #getClassdef() <em>Classdef</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getClassdef() <em>Classdef</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getClassdef()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String CLASSDEF_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getClassdef() <em>Classdef</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getClassdef() <em>Classdef</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getClassdef()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String classdef = CLASSDEF_EDEFAULT;
 
-	/** The default value of the '{@link #getHeader() <em>Header</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getHeader() <em>Header</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getHeader()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String HEADER_EDEFAULT = ""; //$NON-NLS-1$
 
-	/** The cached value of the '{@link #getHeader() <em>Header</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getHeader() <em>Header</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getHeader()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String header = HEADER_EDEFAULT;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected CompilerInfoImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.COMPILER_INFO;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<org.eclipse.fordiac.ide.model.libraryElement.Compiler> getCompiler() {
 		if (compiler == null) {
@@ -107,17 +129,21 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 		return compiler;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getClassdef() {
 		return classdef;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setClassdef(String newClassdef) {
 		String oldClassdef = classdef;
@@ -127,17 +153,21 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 					oldClassdef, classdef));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getHeader() {
 		return header;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setHeader(String newHeader) {
 		String oldHeader = header;
@@ -147,9 +177,11 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 					oldHeader, header));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -160,9 +192,11 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -177,9 +211,11 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -201,9 +237,11 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -222,9 +260,11 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -239,9 +279,11 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String toString() {
 		if (eIsProxy())

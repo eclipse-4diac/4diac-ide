@@ -23,21 +23,30 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 
-/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer} object.
+/**
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
  * 
- * @generated */
+ * @generated
+ */
 public class DemultiplexerItemProvider extends StructManipulatorItemProvider {
-	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public DemultiplexerItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -47,17 +56,22 @@ public class DemultiplexerItemProvider extends StructManipulatorItemProvider {
 		return itemPropertyDescriptors;
 	}
 
-	/** This returns Demultiplexer.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns Demultiplexer.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated NOT */
+	 * @generated NOT
+	 */
 	@Override
 	public Object getImage(Object object) {
 		return super.getImage(object);
 	}
 
-	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
-	 * @generated NOT */
+	 * @generated NOT
+	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((Demultiplexer) object).getName();
@@ -65,21 +79,26 @@ public class DemultiplexerItemProvider extends StructManipulatorItemProvider {
 				label + " (" + ((Demultiplexer) object).getStructType().getName() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
-	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 		super.notifyChanged(notification);
 	}
 
-	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
-	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);

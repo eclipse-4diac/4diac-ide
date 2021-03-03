@@ -29,21 +29,30 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
-/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive} object.
+/**
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
  * 
- * @generated */
+ * @generated
+ */
 public class OutputPrimitiveItemProvider extends PrimitiveItemProvider {
-	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public OutputPrimitiveItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -54,22 +63,28 @@ public class OutputPrimitiveItemProvider extends PrimitiveItemProvider {
 		return itemPropertyDescriptors;
 	}
 
-	/** This adds a property descriptor for the Test Result feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Test Result feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected void addTestResultPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_OutputPrimitive_TestResult_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_OutputPrimitive_TestResult_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_OutputPrimitive_type"),  //$NON-NLS-1$
+								"_UI_OutputPrimitive_type"), //$NON-NLS-1$
 						LibraryElementPackage.Literals.OUTPUT_PRIMITIVE__TEST_RESULT, true, false, false,
 						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
 	}
 
-	/** This returns OutputPrimitive.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns OutputPrimitive.gif. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
-	 * @generated not */
+	 * @generated not
+	 */
 	@Override
 	public Object getImage(Object object) {
 
@@ -80,9 +95,12 @@ public class OutputPrimitiveItemProvider extends PrimitiveItemProvider {
 		return overlayImage(object, FordiacImage.ICON_RIGHT_OUTPUT_PRIMITIVE.getImage());
 	}
 
-	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated not */
+	 * @generated not
+	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((OutputPrimitive) object).getEvent();
@@ -96,11 +114,13 @@ public class OutputPrimitiveItemProvider extends PrimitiveItemProvider {
 		return retVal;
 	}
 
-	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
-	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
@@ -115,10 +135,13 @@ public class OutputPrimitiveItemProvider extends PrimitiveItemProvider {
 		}
 	}
 
-	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
-	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);

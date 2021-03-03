@@ -31,282 +31,327 @@ import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>FB Network Element</b></em>'. <!--
- * end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB
+ * Network Element</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getPosition <em>Position</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getPosition
+ * <em>Position</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getInterface
  * <em>Interface</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getMapping <em>Mapping</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getMapping
+ * <em>Mapping</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implements FBNetworkElement {
-	/** The cached value of the '{@link #getPosition() <em>Position</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getPosition() <em>Position</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getPosition()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Position position;
 
-	/** The cached value of the '{@link #getInterface() <em>Interface</em>}' containment reference. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getInterface() <em>Interface</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getInterface()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected InterfaceList interface_;
 
-	/** The cached value of the '{@link #getMapping() <em>Mapping</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getMapping() <em>Mapping</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getMapping()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Mapping mapping;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	protected FBNetworkElementImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.FB_NETWORK_ELEMENT;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public Position getPosition() {
 		if (position != null && position.eIsProxy()) {
-			final InternalEObject oldPosition = (InternalEObject) position;
+			InternalEObject oldPosition = (InternalEObject) position;
 			position = (Position) eResolveProxy(oldPosition);
 			if (position != oldPosition) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION, oldPosition, position));
-				}
 			}
 		}
 		return position;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	public Position basicGetPosition() {
 		return position;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	public void setPosition(final Position newPosition) {
-		final Position oldPosition = position;
+	public void setPosition(Position newPosition) {
+		Position oldPosition = position;
 		position = newPosition;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION,
 					oldPosition, position));
-		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public InterfaceList getInterface() {
 		if (interface_ != null && interface_.eIsProxy()) {
-			final InternalEObject oldInterface = (InternalEObject) interface_;
+			InternalEObject oldInterface = (InternalEObject) interface_;
 			interface_ = (InterfaceList) eResolveProxy(oldInterface);
 			if (interface_ != oldInterface) {
-				final InternalEObject newInterface = (InternalEObject) interface_;
+				InternalEObject newInterface = (InternalEObject) interface_;
 				NotificationChain msgs = oldInterface.eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, null, null);
 				if (newInterface.eInternalContainer() == null) {
 					msgs = newInterface.eInverseAdd(this,
 							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, null, msgs);
 				}
-				if (msgs != null) {
+				if (msgs != null)
 					msgs.dispatch();
-				}
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, oldInterface, interface_));
-				}
 			}
 		}
 		return interface_;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	public InterfaceList basicGetInterface() {
 		return interface_;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	public NotificationChain basicSetInterface(final InterfaceList newInterface, NotificationChain msgs) {
-		final InterfaceList oldInterface = interface_;
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public NotificationChain basicSetInterface(InterfaceList newInterface, NotificationChain msgs) {
+		InterfaceList oldInterface = interface_;
 		interface_ = newInterface;
 		if (eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 					LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, oldInterface, newInterface);
-			if (msgs == null) {
+			if (msgs == null)
 				msgs = notification;
-			} else {
+			else
 				msgs.add(notification);
-			}
 		}
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	public void setInterface(final InterfaceList newInterface) {
+	public void setInterface(InterfaceList newInterface) {
 		if (newInterface != interface_) {
 			NotificationChain msgs = null;
-			if (interface_ != null) {
+			if (interface_ != null)
 				msgs = ((InternalEObject) interface_).eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, null, msgs);
-			}
-			if (newInterface != null) {
+			if (newInterface != null)
 				msgs = ((InternalEObject) newInterface).eInverseAdd(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, null, msgs);
-			}
 			msgs = basicSetInterface(newInterface, msgs);
-			if (msgs != null) {
+			if (msgs != null)
 				msgs.dispatch();
-			}
-		} else if (eNotificationRequired()) {
+		} else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE,
 					newInterface, newInterface));
-		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public Mapping getMapping() {
 		if (mapping != null && mapping.eIsProxy()) {
-			final InternalEObject oldMapping = (InternalEObject) mapping;
+			InternalEObject oldMapping = (InternalEObject) mapping;
 			mapping = (Mapping) eResolveProxy(oldMapping);
 			if (mapping != oldMapping) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING, oldMapping, mapping));
-				}
 			}
 		}
 		return mapping;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	public Mapping basicGetMapping() {
 		return mapping;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated not */
+	 * @generated not
+	 */
 	@Override
 	public void setMapping(final Mapping newMapping) {
 		setMappingGen(newMapping);
 		checkConnections();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	public void setMappingGen(final Mapping newMapping) {
-		final Mapping oldMapping = mapping;
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public void setMappingGen(Mapping newMapping) {
+		Mapping oldMapping = mapping;
 		mapping = newMapping;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING,
 					oldMapping, mapping));
-		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public Resource getResource() {
 		return org.eclipse.fordiac.ide.model.Annotations.getResource(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public IInterfaceElement getInterfaceElement(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public FBNetworkElement getOpposite() {
 		return org.eclipse.fordiac.ide.model.Annotations.getOpposite(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public FBNetwork getFbNetwork() {
 		return org.eclipse.fordiac.ide.model.Annotations.getFbNetwork(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public void checkConnections() {
 		org.eclipse.fordiac.ide.model.Annotations.checkConnections(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public boolean isMapped() {
 		return org.eclipse.fordiac.ide.model.Annotations.isMapped(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public FBType getType() {
-		// the base class of all types a FBNetworkElement can be (FB, Subapp, Adapter) is a FBType. Therefore we can
-		// have this here.
+		// the base class of all types a FBNetworkElement can be (FB, Subapp, Adapter)
+		// is a FBType. Therefore we can have this here.
 
-		// this cannot be moved to the annotation class because there we don't have the super access!!!
+		// this cannot be moved to the annotation class because there we don't have the
+		// super access!!!
 
 		return super.getType() instanceof FBType ? (FBType) super.getType() : null;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public boolean isNestedInSubApp() {
 		final EObject parent = this.eContainer();
@@ -320,9 +365,11 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		return grandParent instanceof org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public FBNetworkElement getOuterFBNetworkElement() {
 		if ((this.eContainer() == null) || !(this.eContainer().eContainer() instanceof FBNetworkElement)) {
@@ -331,40 +378,48 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		return (FBNetworkElement) this.eContainer().eContainer();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public void updatePosition(final int x, final int y) {
 		final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE
 				.createPosition();
 		pos.setX(x);
 		pos.setY(y);
+
 		setPosition(pos);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public void updatePosition(final Point newPos) {
 		updatePosition(newPos.x, newPos.y);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
 	public boolean isContainedInTypedInstance() {
 		return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID,
-			final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
 			return basicSetInterface(null, msgs);
@@ -373,37 +428,38 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
-			if (resolve) {
+			if (resolve)
 				return getPosition();
-			}
 			return basicGetPosition();
 		case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
-			if (resolve) {
+			if (resolve)
 				return getInterface();
-			}
 			return basicGetInterface();
 		case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
-			if (resolve) {
+			if (resolve)
 				return getMapping();
-			}
 			return basicGetMapping();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 		case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
 			setPosition((Position) newValue);
@@ -420,11 +476,13 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
 		case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
 			setPosition((Position) null);
@@ -441,11 +499,13 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
 			return position != null;
@@ -458,11 +518,13 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	public int eBaseStructuralFeatureID(final int derivedFeatureID, final Class<?> baseClass) {
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
 			switch (derivedFeatureID) {
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
@@ -474,11 +536,13 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	public int eDerivedStructuralFeatureID(final int baseFeatureID, final Class<?> baseClass) {
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
 			switch (baseFeatureID) {
 			case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:

@@ -23,60 +23,76 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>FB Type</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB
+ * Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl#getInterfaceList <em>Interface
- * List</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl#getService <em>Service</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl#getInterfaceList
+ * <em>Interface List</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl#getService
+ * <em>Service</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class FBTypeImpl extends CompilableTypeImpl implements FBType {
-	/** The cached value of the '{@link #getInterfaceList() <em>Interface List</em>}' containment reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getInterfaceList() <em>Interface List</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getInterfaceList()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected InterfaceList interfaceList;
 
-	/** The cached value of the '{@link #getService() <em>Service</em>}' containment reference. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getService() <em>Service</em>}' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getService()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Service service;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected FBTypeImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.FB_TYPE;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public InterfaceList getInterfaceList() {
 		return interfaceList;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetInterfaceList(InterfaceList newInterfaceList, NotificationChain msgs) {
 		InterfaceList oldInterfaceList = interfaceList;
 		interfaceList = newInterfaceList;
@@ -91,9 +107,11 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setInterfaceList(InterfaceList newInterfaceList) {
 		if (newInterfaceList != interfaceList) {
@@ -112,17 +130,21 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 					newInterfaceList, newInterfaceList));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Service getService() {
 		return service;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetService(Service newService, NotificationChain msgs) {
 		Service oldService = service;
 		service = newService;
@@ -137,9 +159,11 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setService(Service newService) {
 		if (newService != service) {
@@ -158,9 +182,11 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 					newService));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -173,9 +199,11 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -188,9 +216,11 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -206,9 +236,11 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -224,9 +256,11 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

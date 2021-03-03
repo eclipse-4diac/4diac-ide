@@ -29,74 +29,92 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Service Transaction</b></em>'. <!--
- * end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Service
+ * Transaction</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getInputPrimitive <em>Input
- * Primitive</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getOutputPrimitive <em>Output
- * Primitive</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getTestResult <em>Test
- * Result</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getInputPrimitive
+ * <em>Input Primitive</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getOutputPrimitive
+ * <em>Output Primitive</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getTestResult
+ * <em>Test Result</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransaction {
-	/** The cached value of the '{@link #getInputPrimitive() <em>Input Primitive</em>}' containment reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getInputPrimitive() <em>Input
+	 * Primitive</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getInputPrimitive()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected InputPrimitive inputPrimitive;
 
-	/** The cached value of the '{@link #getOutputPrimitive() <em>Output Primitive</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getOutputPrimitive() <em>Output
+	 * Primitive</em>}' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getOutputPrimitive()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<OutputPrimitive> outputPrimitive;
 
-	/** The default value of the '{@link #getTestResult() <em>Test Result</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getTestResult() <em>Test Result</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getTestResult()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final int TEST_RESULT_EDEFAULT = 0;
 
 	private int testResult = TEST_RESULT_EDEFAULT;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected ServiceTransactionImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.SERVICE_TRANSACTION;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public InputPrimitive getInputPrimitive() {
 		return inputPrimitive;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetInputPrimitive(InputPrimitive newInputPrimitive, NotificationChain msgs) {
 		InputPrimitive oldInputPrimitive = inputPrimitive;
 		inputPrimitive = newInputPrimitive;
@@ -111,9 +129,11 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setInputPrimitive(InputPrimitive newInputPrimitive) {
 		if (newInputPrimitive != inputPrimitive) {
@@ -134,9 +154,11 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 					LibraryElementPackage.SERVICE_TRANSACTION__INPUT_PRIMITIVE, newInputPrimitive, newInputPrimitive));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<OutputPrimitive> getOutputPrimitive() {
 		if (outputPrimitive == null) {
@@ -146,9 +168,11 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		return outputPrimitive;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated NOT */
+	 * @generated NOT
+	 */
 	@Override
 	public int getTestResult() {
 		return testResult;
@@ -157,9 +181,11 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		// throw new UnsupportedOperationException();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated NOT */
+	 * @generated NOT
+	 */
 	@Override
 	public void setTestResult(int newTestResult) {
 		int oldTestResult = testResult;
@@ -172,9 +198,11 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		// throw new UnsupportedOperationException();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated NOT */
+	 * @generated NOT
+	 */
 	@Override
 	public void unsetTestResult() {
 		testResult = TEST_RESULT_EDEFAULT;
@@ -183,9 +211,11 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		// throw new UnsupportedOperationException();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated NOT */
+	 * @generated NOT
+	 */
 	@Override
 	public boolean isSetTestResult() {
 		return (testResult != TEST_RESULT_EDEFAULT);
@@ -195,9 +225,11 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		// throw new UnsupportedOperationException();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -210,9 +242,11 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -227,9 +261,11 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -250,9 +286,11 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -271,9 +309,11 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

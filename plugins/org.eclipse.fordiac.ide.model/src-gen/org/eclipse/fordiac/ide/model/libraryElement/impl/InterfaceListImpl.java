@@ -30,91 +30,114 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Interface List</b></em>'. <!-- end-user-doc
- * -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Interface List</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getPlugs <em>Plugs</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getSockets <em>Sockets</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getEventInputs <em>Event
- * Inputs</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getEventOutputs <em>Event
- * Outputs</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getInputVars <em>Input Vars</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getOutputVars <em>Output
- * Vars</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getPlugs
+ * <em>Plugs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getSockets
+ * <em>Sockets</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getEventInputs
+ * <em>Event Inputs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getEventOutputs
+ * <em>Event Outputs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getInputVars
+ * <em>Input Vars</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getOutputVars
+ * <em>Output Vars</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
-	/** The cached value of the '{@link #getPlugs() <em>Plugs</em>}' containment reference list. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getPlugs() <em>Plugs</em>}' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getPlugs()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<AdapterDeclaration> plugs;
 
-	/** The cached value of the '{@link #getSockets() <em>Sockets</em>}' containment reference list. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getSockets() <em>Sockets</em>}' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getSockets()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<AdapterDeclaration> sockets;
 
-	/** The cached value of the '{@link #getEventInputs() <em>Event Inputs</em>}' containment reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getEventInputs() <em>Event Inputs</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getEventInputs()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<Event> eventInputs;
 
-	/** The cached value of the '{@link #getEventOutputs() <em>Event Outputs</em>}' containment reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getEventOutputs() <em>Event Outputs</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getEventOutputs()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<Event> eventOutputs;
 
-	/** The cached value of the '{@link #getInputVars() <em>Input Vars</em>}' containment reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getInputVars() <em>Input Vars</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getInputVars()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<VarDeclaration> inputVars;
 
-	/** The cached value of the '{@link #getOutputVars() <em>Output Vars</em>}' containment reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getOutputVars() <em>Output Vars</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getOutputVars()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<VarDeclaration> outputVars;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected InterfaceListImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.INTERFACE_LIST;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<AdapterDeclaration> getPlugs() {
 		if (plugs == null) {
@@ -124,9 +147,11 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		return plugs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<AdapterDeclaration> getSockets() {
 		if (sockets == null) {
@@ -136,9 +161,11 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		return sockets;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<Event> getEventInputs() {
 		if (eventInputs == null) {
@@ -148,9 +175,11 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		return eventInputs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<Event> getEventOutputs() {
 		if (eventOutputs == null) {
@@ -160,9 +189,11 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		return eventOutputs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<VarDeclaration> getInputVars() {
 		if (inputVars == null) {
@@ -172,9 +203,11 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		return inputVars;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<VarDeclaration> getOutputVars() {
 		if (outputVars == null) {
@@ -184,65 +217,81 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		return outputVars;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<IInterfaceElement> getAllInterfaceElements() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAllInterfaceElements(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Event getEvent(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getEvent(this, name);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public VarDeclaration getVariable(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getVariable(this, name);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public IInterfaceElement getInterfaceElement(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public FBNetworkElement getFBNetworkElement() {
 		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public AdapterDeclaration getAdapter(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getAdapter(this, name);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public InterfaceList copy() {
 		return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -263,9 +312,11 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -286,9 +337,11 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -323,9 +376,11 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -353,9 +408,11 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

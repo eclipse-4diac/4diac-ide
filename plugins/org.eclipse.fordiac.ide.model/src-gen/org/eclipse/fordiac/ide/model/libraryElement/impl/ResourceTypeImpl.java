@@ -29,62 +29,79 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Resource Type</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Resource Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl#getVarDeclaration <em>Var
- * Declaration</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl#getFBNetwork <em>FB Network</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl#getSupportedFBTypes <em>Supported FB
- * Types</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl#getVarDeclaration
+ * <em>Var Declaration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl#getFBNetwork
+ * <em>FB Network</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl#getSupportedFBTypes
+ * <em>Supported FB Types</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType {
-	/** The cached value of the '{@link #getVarDeclaration() <em>Var Declaration</em>}' containment reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getVarDeclaration() <em>Var
+	 * Declaration</em>}' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getVarDeclaration()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<VarDeclaration> varDeclaration;
 
-	/** The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getFBNetwork()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBNetwork fBNetwork;
 
-	/** The cached value of the '{@link #getSupportedFBTypes() <em>Supported FB Types</em>}' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getSupportedFBTypes() <em>Supported FB
+	 * Types</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getSupportedFBTypes()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBType supportedFBTypes;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	protected ResourceTypeImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.RESOURCE_TYPE;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<VarDeclaration> getVarDeclaration() {
 		if (varDeclaration == null) {
@@ -94,17 +111,21 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 		return varDeclaration;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public FBNetwork getFBNetwork() {
 		return fBNetwork;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetFBNetwork(FBNetwork newFBNetwork, NotificationChain msgs) {
 		FBNetwork oldFBNetwork = fBNetwork;
 		fBNetwork = newFBNetwork;
@@ -119,9 +140,11 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setFBNetwork(FBNetwork newFBNetwork) {
 		if (newFBNetwork != fBNetwork) {
@@ -140,9 +163,11 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 					newFBNetwork, newFBNetwork));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public FBType getSupportedFBTypes() {
 		if (supportedFBTypes != null && supportedFBTypes.eIsProxy()) {
@@ -158,16 +183,20 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 		return supportedFBTypes;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	public FBType basicGetSupportedFBTypes() {
 		return supportedFBTypes;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setSupportedFBTypes(FBType newSupportedFBTypes) {
 		FBType oldSupportedFBTypes = supportedFBTypes;
@@ -177,9 +206,11 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 					LibraryElementPackage.RESOURCE_TYPE__SUPPORTED_FB_TYPES, oldSupportedFBTypes, supportedFBTypes));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -192,9 +223,11 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -211,9 +244,11 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -234,9 +269,11 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -255,9 +292,11 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
