@@ -1,6 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008, 2020 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University, Linz, Primetals Technologies Austria GmbH
+ *                          Johannes Kepler University, Linz
+ *               2020, 2021  Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -40,6 +41,7 @@ import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
@@ -47,8 +49,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -81,6 +86,42 @@ abstract class CommonElementImporter {
 		}
 	}
 
+	protected static VarDeclaration getVarNamed(final InterfaceList interfaceList, final String varName,
+			final boolean input) {
+		VarDeclaration retVal;
+		boolean hasType = true;
+
+		if (interfaceList.eContainer() instanceof FB) {
+			// only if it is an FB check if it is typed
+			hasType = (null != ((FB) interfaceList.eContainer()).getPaletteEntry());
+		}
+
+		if (hasType) {
+			// we have a typed FB
+			retVal = interfaceList.getVariable(varName);
+			if ((null != retVal) && (retVal.isIsInput() != input)) {
+				retVal = null;
+			}
+		} else {
+			// if we couldn't load the type create the interface entry
+			retVal = createVarDecl(interfaceList, varName, input);
+		}
+		return retVal;
+	}
+
+	private static VarDeclaration createVarDecl(final InterfaceList interfaceList, final String varName,
+			final boolean input) {
+		final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		var.setName(varName);
+		var.setIsInput(input);
+		if (input) {
+			interfaceList.getInputVars().add(var);
+		} else {
+			interfaceList.getOutputVars().add(var);
+		}
+		return var;
+	}
+
 	private XMLStreamReader reader;
 	private final IFile file;
 	private final TypeLibrary typeLibrary;
@@ -96,6 +137,13 @@ abstract class CommonElementImporter {
 
 	protected Palette getPalette() {
 		return getTypeLibrary().getBlockTypeLib();
+	}
+
+	protected FBTypePaletteEntry getTypeEntry(final String typeFbElement) {
+		if (null != typeFbElement) {
+			return getPalette().getFBTypeEntry(typeFbElement);
+		}
+		return null;
 	}
 
 	protected DataTypeLibrary getDataTypeLibrary() {
@@ -294,12 +342,14 @@ abstract class CommonElementImporter {
 		proceedToEndElementNamed(LibraryElementTags.IDENTIFICATION_ELEMENT);
 	}
 
-	/** Parses the version info.
+	/**
+	 * Parses the version info.
 	 *
 	 * @param elem the library element the version info should be added to.
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	protected void parseVersionInfo(final LibraryElement elem) throws TypeImportException, XMLStreamException {
 		final VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
 
@@ -490,6 +540,27 @@ abstract class CommonElementImporter {
 		}
 		proceedToEndElementNamed(LibraryElementTags.COMPILER_ELEMENT);
 		compilerInfo.getCompiler().add(comp);
+	}
+
+	protected void parseFBChildren(final FBNetworkElement block, final String parentNodeName)
+			throws TypeImportException, XMLStreamException {
+		processChildren(parentNodeName, name -> {
+			switch (name) {
+			case LibraryElementTags.PARAMETER_ELEMENT:
+				final VarDeclaration parameter = parseParameter();
+				final VarDeclaration vInput = getVarNamed(block.getInterface(), parameter.getName(), true);
+				if (null != vInput) {
+					vInput.setValue(parameter.getValue());
+				}
+				return true;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(block);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			default:
+				return false;
+			}
+		});
 	}
 
 	protected boolean isProfileAttribute() {

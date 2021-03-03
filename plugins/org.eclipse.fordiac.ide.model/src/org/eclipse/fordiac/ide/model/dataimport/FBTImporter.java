@@ -2,6 +2,7 @@
  * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2018 TU Wien/ACIN
  * 				 2020 Johannes Kepler University, Linz
+ *               2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +16,7 @@
  *  Peter Gsellmann - incorporating simple fb
  *  Alois Zoitl - Changed XML parsing to Staxx cursor interface for improved
  *  			  parsing performance
+ *  Martin Melik Merkumians - added import of internal FBs
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -31,6 +33,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -46,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
@@ -736,6 +740,19 @@ public class FBTImporter extends TypeImporter {
 				type.getInternalVars().add(v);
 				return true;
 			}
+			if (LibraryElementTags.FB_ELEMENT.equals(name)) {
+				final FB fb = LibraryElementFactory.eINSTANCE.createFB();
+				readNameCommentAttributes(fb);
+				final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+				final FBTypePaletteEntry entry = getTypeEntry(typeFbElement);
+				if (null != entry) {
+					fb.setPaletteEntry(entry);
+					fb.setInterface(fb.getType().getInterfaceList().copy());
+					parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
+					type.getInternalFbs().add(fb);
+					return true;
+				}
+			}
 			return false;
 		});
 	}
@@ -845,8 +862,8 @@ public class FBTImporter extends TypeImporter {
 	 * @throws TypeImportException the FBT import exception
 	 * @throws XMLStreamException
 	 */
-	private void parseAdapterList(final EList<AdapterDeclaration> adpaterList, final String adpaterListName, final boolean isInput)
-			throws TypeImportException, XMLStreamException {
+	private void parseAdapterList(final EList<AdapterDeclaration> adpaterList, final String adpaterListName,
+			final boolean isInput) throws TypeImportException, XMLStreamException {
 		processChildren(adpaterListName, name -> {
 			if (LibraryElementTags.ADAPTER_DECLARATION_ELEMENT.equals(name)) {
 				final AdapterDeclaration a = parseAdapterDeclaration();

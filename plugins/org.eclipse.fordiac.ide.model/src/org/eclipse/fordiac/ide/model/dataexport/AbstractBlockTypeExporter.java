@@ -1,6 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor Gmbh, TU Wien ACIN, fortiss GmbH
  * 				 2018, 2020 Johannes Keppler University
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,7 @@
  *  Alois Zoitl - extracted this helper class from the CommonElementExporter
  *              - changed exporting the Saxx cursor api
  *  Alois Zoitl, Bianca Wiesmayr - extracted code to common base class
+ *  Martin Melik Merkumians - adds export of interal FBs as part of interval variables
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
@@ -29,6 +31,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -88,7 +91,6 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 
 	protected abstract void createBlockTypeSpecificXMLEntries() throws XMLStreamException;
 
-
 	/**
 	 * Adds the interface list.
 	 *
@@ -135,7 +137,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	 * list is empty no element will be created.
 	 *
 	 * @param varList     the list of vars to create the entries for
-	 * @param elementName the name of the xml element holding the event list
+	 * @param elementName the name of the xml element holding the var list
 	 * @throws XMLStreamException
 	 */
 	protected void addVarList(final List<VarDeclaration> varList, final String elementName) throws XMLStreamException {
@@ -145,6 +147,38 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 				if (!(varDecl instanceof AdapterDeclaration)) {
 					addVarDeclaration(varDecl);
 				}
+			}
+			addEndElement();
+		}
+	}
+
+	/**
+	 * Adds a internal var list (i.e., internal vars and internal FBs) to the dom.
+	 * If the given var list is empty no element will be created.
+	 *
+	 * @param varList     the list of vars to create the entries for
+	 * @param elementName the name of the xml element holding the var list
+	 * @throws XMLStreamException
+	 */
+	protected void addInternalVarList(final List<VarDeclaration> varList, final List<FB> fbList,
+			final String elementName) throws XMLStreamException {
+		if (!varList.isEmpty() || !fbList.isEmpty()) {
+			addStartElement(elementName);
+			for (VarDeclaration varDecl : varList) {
+				if (!(varDecl instanceof AdapterDeclaration)) {
+					addVarDeclaration(varDecl);
+				}
+			}
+			for (FB fb : fbList) {
+				addStartElement(LibraryElementTags.FB_ELEMENT);
+				addNameAttribute(fb.getName());
+				if (null != fb.getType()) {
+					addTypeAttribute(fb.getType());
+				}
+				addCommentAttribute(fb);
+
+				addAttributes(fb.getAttributes());
+				addEndElement();
 			}
 			addEndElement();
 		}
@@ -278,7 +312,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		addEmptyStartElement(primNodeName);
 		getWriter().writeAttribute(LibraryElementTags.INTERFACE_ATTRIBUTE,
 				((null != prim.getInterface()) && (null != prim.getInterface().getName()))
-				? prim.getInterface().getName()
+						? prim.getInterface().getName()
 						: ""); //$NON-NLS-1$
 		getWriter().writeAttribute(LibraryElementTags.EVENT_ELEMENT, (null != prim.getEvent()) ? prim.getEvent() : ""); //$NON-NLS-1$
 		if ((null != prim.getParameters()) && (!prim.getParameters().equals(" "))) { //$NON-NLS-1$

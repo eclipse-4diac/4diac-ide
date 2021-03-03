@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2016, 2020 fortiss GmbH, Johannes Kepler University, Linz,
- *                          Primetals Technologies Austria GmbH
+ *               2020, 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +16,8 @@
  *   Bianca Wiesmayr - mux support
  *   Alois Zoitl - added error marker generation for missing fb types and
  *                 connection error
+ *   Martin Melik Merkumians - moved functionality to base class for usage
+ *                 in FBTImporter
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -64,7 +66,8 @@ class FBNetworkImporter extends CommonElementImporter {
 				LibraryElementFactory.eINSTANCE.createInterfaceList());
 	}
 
-	public FBNetworkImporter(final CommonElementImporter importer, final FBNetwork fbNetwork, final InterfaceList interfaceList) {
+	public FBNetworkImporter(final CommonElementImporter importer, final FBNetwork fbNetwork,
+			final InterfaceList interfaceList) {
 		super(importer);
 		this.fbNetwork = fbNetwork;
 		this.interfaceList = interfaceList;
@@ -154,13 +157,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		return mux;
 	}
 
-	private FBTypePaletteEntry getTypeEntry(final String typeFbElement) {
-		if (null != typeFbElement) {
-			return getPalette().getFBTypeEntry(typeFbElement);
-		}
-		return null;
-	}
-
+	@Override
 	protected void parseFBChildren(final FBNetworkElement block, final String parentNodeName)
 			throws TypeImportException, XMLStreamException {
 		processChildren(parentNodeName, name -> {
@@ -197,8 +194,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	private <T extends Connection> T parseConnection(final EClass conType) {
 		@SuppressWarnings("unchecked")
-		final
-		T connection = (T) LibraryElementFactory.eINSTANCE.create(conType);
+		final T connection = (T) LibraryElementFactory.eINSTANCE.create(conType);
 		connection.setResTypeConnection(false);
 
 		final String destinationElement = getAttributeValue(LibraryElementTags.DESTINATION_ATTRIBUTE);
@@ -208,7 +204,8 @@ class FBNetworkImporter extends CommonElementImporter {
 			if (null != destination) {
 				connection.setDestination(destination);
 			} else {
-				// TODO model refactoring - this connection is missing an end point. Add a dummy connection points so
+				// TODO model refactoring - this connection is missing an end point. Add a dummy
+				// connection points so
 				// that the connection can be handled in the according FBNetorwk editor
 				createConnectionErrorMarker("Connection destination not found: " + destinationElement, getFbNetwork(),
 						sourceElement, destinationElement);
@@ -298,8 +295,8 @@ class FBNetworkImporter extends CommonElementImporter {
 		// outputs of the FB
 	}
 
-	private static IInterfaceElement getInterfaceElement(final InterfaceList il, final String interfaceElement, final EClass conType,
-			final boolean isInput) {
+	private static IInterfaceElement getInterfaceElement(final InterfaceList il, final String interfaceElement,
+			final EClass conType, final boolean isInput) {
 		final EList<? extends IInterfaceElement> ieList = getInterfaceElementList(il, conType, isInput);
 		for (final IInterfaceElement ie : ieList) {
 			if (ie.getName().equals(interfaceElement)) {
@@ -309,8 +306,8 @@ class FBNetworkImporter extends CommonElementImporter {
 		return null;
 	}
 
-	private static EList<? extends IInterfaceElement> getInterfaceElementList(final InterfaceList il, final EClass conType,
-			final boolean isInput) {
+	private static EList<? extends IInterfaceElement> getInterfaceElementList(final InterfaceList il,
+			final EClass conType, final boolean isInput) {
 		if (isInput) {
 			if (LibraryElementPackage.eINSTANCE.getEventConnection() == conType) {
 				return il.getEventInputs();
@@ -339,7 +336,8 @@ class FBNetworkImporter extends CommonElementImporter {
 		return fbNetworkElementMap.get(fbName);
 	}
 
-	protected static VarDeclaration getVarNamed(final InterfaceList interfaceList, final String varName, final boolean input) {
+	protected static VarDeclaration getVarNamed(final InterfaceList interfaceList, final String varName,
+			final boolean input) {
 		VarDeclaration retVal;
 		boolean hasType = true;
 
@@ -361,7 +359,8 @@ class FBNetworkImporter extends CommonElementImporter {
 		return retVal;
 	}
 
-	private static VarDeclaration createVarDecl(final InterfaceList interfaceList, final String varName, final boolean input) {
+	private static VarDeclaration createVarDecl(final InterfaceList interfaceList, final String varName,
+			final boolean input) {
 		final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		var.setName(varName);
 		var.setIsInput(input);
