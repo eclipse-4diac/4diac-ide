@@ -1,6 +1,6 @@
 <!DOCTYPE html> 
 <!--
- Copyright (c) 2014, 2017 AIT, fortiss GmbH
+ Copyright (c) 2014, 2021 AIT, fortiss GmbH, Hit robot group
   
  This program and the accompanying materials are made available under the
  terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,8 @@
  Contributors:
    Filip Andren, Monika Wenger, Jose Cabral
      - initial API and implementation and/or initial documentation
+   Tibalt Zhao
+     - Update with visual studio code and msbuildtools. 
 -->
 
 <html lang="en">
@@ -24,59 +26,22 @@
 <h1 id="topOfPage">OPC DA</h1>
 <p>This section will show you how to create an OPC DA Client with 4DIAC and how to use it with FORTE. Download the following packages:</p> 
 <ul>
-	<li><a href="http://sourceforge.net/projects/opcclient/" target="_blank">OPC Client library</a> release 0.4</li>
+	<li><a href="https://github.com/Tibalt/OPC_DA.git" target="_blank">OPC Client library</a> release 0.4</li>
 	<li><a href="http://www.boost.org" target="_blank">Boost Lexical Cast</a></li>
-	<li><a href="http://www.microsoft.com/en-us/download/details.aspx?id=11800" target="_blank">Windows Driver Kit</a></li> 
+	<li><a href="https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16" target="_blank">Visual studio buildtools 2019</a></li> 
 </ul>
 
 <h2>Prepare and compile OPC Client Toolkit</h2>
 <ol>
 	<li>Unzip Boost C++ Libraries</li>
-	<li>Visual Studio Express do not include ATL (Active Template Library) which is necessary to compile OPCClientToolKit. This can be aquired by installing windows driver kit.</li>
-	<li>Unzip OPC Client and open the OPCClientToolKit project in Visual Studio.</li>
-	<li>Add ATL header files to the project: Configuration Properties &rarr; VC++ Directories &rarr; Include Directories
-		<div><img src="../../html/communication/img/opc_VSclientProperties.png" alt="VS Properties"/></div>
-		<div><img src="../../html/communication/img/opc_VSinclude.png" alt="VS Include Directories"/></div>
-		</li>
-	<li>Add the path of ATL header files which are in the windows driver kit installation path. (E.g. C:\WinDDK\7600.16385.1\inc\atl71)</li>
-	<li>Edit the function init() in OPCClient.cpp from:
-<div class="code">
-void COPCClient::init()
-{
-  HRESULT result = CoInitialize(NULL);
-  if (FAILED(result))
-  {
-    throw OPCException("CoInitialize failed");
-  }
+	<li id=msbuildtools>Install visual studio build tools with the components shown in the below. Since <a href="https://docs.microsoft.com/en-us/cpp/porting/visual-cpp-change-history-2003-2015?redirectedfrom=MSDN&view=msvc-160#mfc-and-atl" target="_blank"> Visual studio 2013</a>, atls.lib and atlsd.lib are unified as atls.lib which together with headers could be detected by the msvc, so that no need to specify in CMakeLists.txt for OPC module.
+		<div><img src="../../html/communication/img/opc_VSBuildtoolsInstallation.png" alt="VS Properties"/></div>
 
-  CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL);
-
-  result = CoGetMalloc(MEMCTX_TASK, &amp;iMalloc);
-  if (FAILED(result))
-  {
-    throw OPCException("CoGetMalloc failed");
-  }
-}
-</div>
-
-to: 
-
-<div class="code">
-void COPCClient::init()
-{
-  CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL);
-
-  HRESULT result = CoGetMalloc(MEMCTX_TASK, &amp;iMalloc);
-  if (FAILED(result))
-  {
-    throw OPCException("CoGetMalloc failed");
-  }
-}
-</div>
-
+	
 	</li>
-
-	<li>Build project</li>
+	<li>Clone OPC Client, check out to master branch and open the OPCClientToolKit project in Visual Studio Code, be noticed that Visual Studio Code should be started with visual studio tool chains awared, one way is that start Visual Studio Code in "Developer Command Prompt for VS 2019" shown as below</li>
+		<div><img src="../../html/communication/img/opc_startVSCode.png" alt="VS Properties"/></div>
+	<li>Build project with ctrl+shift+B and choose debug or release which is same with forte.</li>
 	<li>Create the following folder structure: 
 		<ul>
 			<li>[opcclientroot]/include - put header files from OPCClientToolKit project here </li>
@@ -87,21 +52,16 @@ void COPCClient::init()
 
 <h2>Compile FORTE with OPC DA Client Support</h2>
 <ol>
-	<li>Create a MS Visual Project of FORTE with CMake as described in <a href="../../html/installation/visualStudio.html" target="_blank">Compiling and Debugging FORTE with MS Visual Studio Express</a> and add the following variables which are required for OPC Client support:
+	<li>Create a MS Visual Studio Code Project of FORTE with CMake as described in <a href="../../html/installation/visualStudioCode.html" target="_blank">Compiling and Debugging FORTE with MS Visual Studio Code</a> and add the following variables in settings.json which are required for OPC Client support:
 	<ul>
-		<li>Check FORTE_COM_OPC</li>
-		<li>FORTE_COM_OPC_BOOST_ROOT - choose [boostroot] </li>
-		<li>FORTE_COM_OPC_LIB_ROOT - choose [opcclientroot] </li>
+		<li> "FORTE_COM_OPC":"ON",</li>
+      <li>"FORTE_COM_OPC_LIB_ROOT": "Your path to opc lib root",</li>
+
+      <li>"FORTE_COM_OPC_BOOST_ROOT": "Your path to boost root",</li>
 	</ul>
 	</li>
-	<li>Open FORTE Project with MS Visual Studio. </li>
-	<li>Add ATL headers to the FORTE project.
-		<br>forte Properties &rarr; Configuration Properties &rarr; VC++ Directories &rarr; Include Directories &rarr; add ATL headers path ([windowstoolkitroot]/inc/atl71/)</li>
-	<li>Add ATL libraries to the forte project: 
-		<br>forte Properties &rarr; Configuration Properties &rarr; VC++ Directories &rarr; Library Directories &rarr; add ATL library path ([windowstoolkitroot]/lib/ATL/i386/)</li>
-	<li><a href="../../html/installation/visualStudio.html">compile or debug</a> FORTE</li>
-	<li>When running in debug-mode, it is maybe necessary to exclude some native libraries 
-		<br>Forte Properties/Configuration Properties/Linker/Input/Ignore Specific Default libraries/Edit/LIBCMTD</li>
+	<li>Open FORTE Project with MS Visual Studio Code. </li>
+	<li><a href="../../html/installation/visualStudioCode.html">compile or debug</a> FORTE</li>
 </ol>
 
 <h2>Create OPC Client</h2>
