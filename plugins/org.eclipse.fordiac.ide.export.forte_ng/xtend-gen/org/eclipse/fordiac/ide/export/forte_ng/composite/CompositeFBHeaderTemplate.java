@@ -38,7 +38,7 @@ public class CompositeFBHeaderTemplate extends ForteFBTemplate {
   private CompositeFBType type;
   
   public CompositeFBHeaderTemplate(final CompositeFBType type, final String name, final Path prefix) {
-    super(name, prefix);
+    super(name, prefix, "CCompositeFB");
     this.type = type;
   }
   

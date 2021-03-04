@@ -23,7 +23,7 @@ class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
 	@Accessors(PROTECTED_GETTER) ServiceInterfaceFBType type
 
 	new(ServiceInterfaceFBType type, String name, Path prefix) {
-		super(name, prefix)
+		super(name, prefix, "CFunctionBlock")
 		this.type = type
 	}
 
@@ -34,7 +34,7 @@ class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
 		
 		«generateHeaderIncludes»
 		
-		class «FBClassName»: public CFunctionBlock {
+		«generateFBClassHeader»
 		  «generateFBDeclaration»
 		
 		private:
@@ -51,7 +51,9 @@ class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
 		  void executeEvent(int pa_nEIID);
 		
 		public:
-		  FUNCTION_BLOCK_CTOR(«FBClassName») {};
+		   «FBClassName»(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
+		       «baseClass»( pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, m_anFBConnData, m_anFBVarsData) {
+		   };
 		
 		  virtual ~«FBClassName»() = default;
 		};

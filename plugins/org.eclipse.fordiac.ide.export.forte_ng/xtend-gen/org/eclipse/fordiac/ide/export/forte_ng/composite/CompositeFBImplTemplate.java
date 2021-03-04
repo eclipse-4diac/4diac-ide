@@ -59,7 +59,7 @@ public class CompositeFBImplTemplate extends ForteFBTemplate {
   private int fannedOutDataConns = 0;
   
   public CompositeFBImplTemplate(final CompositeFBType type, final String name, final Path prefix) {
-    super(name, prefix);
+    super(name, prefix, "CCompositeFB");
     this.type = type;
     final Function1<FBNetworkElement, Boolean> _function = (FBNetworkElement it) -> {
       FBType _type = it.getType();

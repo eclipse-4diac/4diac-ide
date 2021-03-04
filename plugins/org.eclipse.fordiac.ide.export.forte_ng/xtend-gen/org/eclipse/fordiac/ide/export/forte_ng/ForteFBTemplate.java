@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -48,12 +47,55 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
   @Extension
   private STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
   
-  public ForteFBTemplate(final String name, final Path prefix) {
+  private final String DEFAULT_BASE_CLASS;
+  
+  public ForteFBTemplate(final String name, final Path prefix, final String baseClass) {
     super(name, prefix);
+    this.DEFAULT_BASE_CLASS = baseClass;
   }
   
   @Override
   protected abstract FBType getType();
+  
+  private String baseClass() {
+    String _xifexpression = null;
+    FBType _type = this.getType();
+    CompilerInfo _compilerInfo = null;
+    if (_type!=null) {
+      _compilerInfo=_type.getCompilerInfo();
+    }
+    String _classdef = null;
+    if (_compilerInfo!=null) {
+      _classdef=_compilerInfo.getClassdef();
+    }
+    boolean _tripleNotEquals = (_classdef != null);
+    if (_tripleNotEquals) {
+      String _xifexpression_1 = null;
+      boolean _isEmpty = this.getType().getCompilerInfo().getClassdef().trim().isEmpty();
+      if (_isEmpty) {
+        _xifexpression_1 = this.DEFAULT_BASE_CLASS;
+      } else {
+        _xifexpression_1 = this.getType().getCompilerInfo().getClassdef();
+      }
+      _xifexpression = _xifexpression_1;
+    } else {
+      _xifexpression = this.DEFAULT_BASE_CLASS;
+    }
+    return _xifexpression;
+  }
+  
+  protected CharSequence generateFBClassHeader() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("class ");
+    CharSequence _fBClassName = this.getFBClassName();
+    _builder.append(_fBClassName);
+    _builder.append(": public ");
+    String _baseClass = this.baseClass();
+    _builder.append(_baseClass);
+    _builder.append(" {");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
   
   protected CharSequence generateHeaderIncludes() {
     StringConcatenation _builder = new StringConcatenation();

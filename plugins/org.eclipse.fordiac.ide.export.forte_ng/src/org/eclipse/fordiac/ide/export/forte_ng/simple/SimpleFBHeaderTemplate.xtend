@@ -28,7 +28,7 @@ class SimpleFBHeaderTemplate extends ForteFBTemplate {
 	@Accessors(PROTECTED_GETTER) SimpleFBType type
 
 	new(SimpleFBType type, String name, Path prefix) {
-		super(name, prefix)
+		super(name, prefix, "CSimpleFB")
 		this.type = type
 	}
 
@@ -39,7 +39,7 @@ class SimpleFBHeaderTemplate extends ForteFBTemplate {
 
 		«generateHeaderIncludes»
 
-		class «FBClassName»: public CSimpleFB {
+		«generateFBClassHeader»
 		  «generateFBDeclaration»
 
 		private:
@@ -65,7 +65,7 @@ class SimpleFBHeaderTemplate extends ForteFBTemplate {
 
 		public:
 		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : 
-		       CSimpleFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData) {
+		       «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData) {
 		  };
 
 		  virtual ~«FBClassName»() = default;

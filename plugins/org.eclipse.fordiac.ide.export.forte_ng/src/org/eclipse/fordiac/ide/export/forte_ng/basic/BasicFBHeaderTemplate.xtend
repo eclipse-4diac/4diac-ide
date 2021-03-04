@@ -34,8 +34,9 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 	@Accessors(PROTECTED_GETTER) BasicFBType type
 
 	new(BasicFBType type, String name, Path prefix) {
-		super(name, prefix)
+		super(name, prefix, "CBasicFB")
 		this.type = type
+		
 	}
 
 	override generate() '''
@@ -44,8 +45,8 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 		«generateIncludeGuardStart»
 
 		«generateHeaderIncludes»
-
-		class «FBClassName»: public CBasicFB {
+		
+		«generateFBClassHeader»
 		  «generateFBDeclaration»
 
 		private:
@@ -74,7 +75,7 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 
 		public:
 		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-		       CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData) {
+		      «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData) {
 		  };
 
 		  virtual ~«FBClassName»() = default;

@@ -31,7 +31,7 @@ public class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
   private ServiceInterfaceFBType type;
   
   public ServiceInterfaceFBHeaderTemplate(final ServiceInterfaceFBType type, final String name, final Path prefix) {
-    super(name, prefix);
+    super(name, prefix, "CFunctionBlock");
     this.type = type;
   }
   
