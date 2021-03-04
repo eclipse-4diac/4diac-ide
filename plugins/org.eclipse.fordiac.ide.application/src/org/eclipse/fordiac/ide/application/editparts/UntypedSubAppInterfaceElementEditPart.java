@@ -110,6 +110,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 					refresh();
 				} else if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
 					updateConnectorBorderColor();
+					refreshToolTip();
 				}
 				super.notifyChanged(notification);
 			}
@@ -129,6 +130,10 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	public void refresh() {
 		super.refresh();
 		getNameLabel().setText(getModel().getName());
+		refreshToolTip();
+	}
+
+	private void refreshToolTip() {
 		getFigure().setToolTip(new ToolTipFigure(getModel()));
 	}
 }
