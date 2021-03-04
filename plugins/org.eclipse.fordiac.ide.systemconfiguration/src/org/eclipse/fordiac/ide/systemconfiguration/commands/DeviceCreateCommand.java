@@ -69,8 +69,7 @@ public class DeviceCreateCommand extends Command {
 		device.setPaletteEntry(entry);
 		SystemImporter.createParamters(device);
 		setDeviceProfile();
-		device.setX(bounds.x);
-		device.setY(bounds.y);
+		device.updatePosition(bounds.getTopLeft());
 		parent.getDevices().add(device);
 		// the name needs to be set after the device is added to the network
 		// so that name checking works correctly
@@ -81,8 +80,8 @@ public class DeviceCreateCommand extends Command {
 	}
 
 	private void setDeviceAttributes() {
-		for (AttributeDeclaration attributeDeclaration : entry.getDeviceType().getAttributeDeclarations()) {
-			Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
+		for (final AttributeDeclaration attributeDeclaration : entry.getDeviceType().getAttributeDeclarations()) {
+			final Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 			attribute.setName(attributeDeclaration.getName());
 			attribute.setComment(attributeDeclaration.getComment());
 			attribute.setValue(attributeDeclaration.getInitialValue());
@@ -108,12 +107,12 @@ public class DeviceCreateCommand extends Command {
 	}
 
 	private void createResource() {
-		for (Resource res : entry.getDeviceType().getResource()) {
+		for (final Resource res : entry.getDeviceType().getResource()) {
 			ResourceCreateCommand cmd = null;
 			if (res.getPaletteEntry() != null) {
 				cmd = new ResourceCreateCommand((ResourceTypeEntry) res.getPaletteEntry(), device, true);
 				cmd.execute();
-				Resource copy = cmd.getResource();
+				final Resource copy = cmd.getResource();
 				copy.setName(res.getName());
 			} else {
 				org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault().logInfo("Referenced Resource Type: " //$NON-NLS-1$
@@ -134,21 +133,21 @@ public class DeviceCreateCommand extends Command {
 			type = getResourceType("EMB_RES"); //$NON-NLS-1$
 		}
 		if (null != type) {
-			ResourceCreateCommand cmd = new ResourceCreateCommand(type, device, false);
+			final ResourceCreateCommand cmd = new ResourceCreateCommand(type, device, false);
 			cmd.execute();
 		}
 	}
 
-	private ResourceTypeEntry getResourceType(String resTypeName) {
+	private ResourceTypeEntry getResourceType(final String resTypeName) {
 		return device.getPaletteEntry().getPalette().getResourceTypeEntry(resTypeName);
 	}
 
 	private Color createRandomDeviceColor() {
 		Color randomColor;
 		boolean exist;
-		List<YUV> existingColors = new ArrayList<>();
-		for (Device dev : parent.getDevices()) {
-			Color devcolor = dev.getColor();
+		final List<YUV> existingColors = new ArrayList<>();
+		for (final Device dev : parent.getDevices()) {
+			final Color devcolor = dev.getColor();
 			existingColors.add(new YUV(new RGB(devcolor.getRed(), devcolor.getGreen(), devcolor.getBlue())));
 		}
 		if (existingColors.isEmpty()) {
@@ -156,9 +155,9 @@ public class DeviceCreateCommand extends Command {
 		}
 		do {
 			randomColor = ColorHelper.createRandomColor();
-			YUV randYUV = new YUV(new RGB(randomColor.getRed(), randomColor.getGreen(), randomColor.getBlue()));
+			final YUV randYUV = new YUV(new RGB(randomColor.getRed(), randomColor.getGreen(), randomColor.getBlue()));
 			exist = false;
-			for (YUV yuv : existingColors) {
+			for (final YUV yuv : existingColors) {
 				if (randYUV.nearbyColor(yuv)) {
 					exist = true;
 					break;

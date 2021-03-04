@@ -17,35 +17,28 @@ import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>Resource
- * Type Entry</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Resource Type Entry</b></em>'. <!--
+ * end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getResourceTypeEntry()
  * @model
- * @generated
- */
+ * @generated */
 public interface ResourceTypeEntry extends PaletteEntry {
 
 	ResourceType getResourceType();
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	void setType(LibraryElement type);
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @model kind="operation"
-	 *        dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
-	 * @generated
-	 */
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
+	 * @generated */
 	@Override
 	TypeImporter getTypeImporter();
 

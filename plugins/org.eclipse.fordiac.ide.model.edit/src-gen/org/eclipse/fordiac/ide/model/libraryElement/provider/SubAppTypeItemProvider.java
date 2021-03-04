@@ -24,32 +24,23 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
-/**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.libraryElement.SubAppType} object. <!--
+/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.SubAppType} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
  *
- * @generated
- */
+ * @generated */
 public class SubAppTypeItemProvider extends CompositeFBTypeItemProvider {
-	/**
-	 * This constructs an instance from a factory and a notifier. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
-	public SubAppTypeItemProvider(final AdapterFactory adapterFactory) {
+	 * @generated */
+	public SubAppTypeItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/**
-	 * This returns the property descriptors for the adapted class. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -57,11 +48,9 @@ public class SubAppTypeItemProvider extends CompositeFBTypeItemProvider {
 		return itemPropertyDescriptors;
 	}
 
-	/**
-	 * This returns SubAppType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This returns SubAppType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated not
-	 */
+	 * @generated not */
 	@Override
 	public Object getImage(final Object object) {
 		return overlayImage(object, FordiacImage.ICON_SUB_APP_TYPE.getImage());
@@ -76,28 +65,23 @@ public class SubAppTypeItemProvider extends CompositeFBTypeItemProvider {
 		return label == null || label.length() == 0 ? getString("_UI_SubAppType_type") : label; //$NON-NLS-1$
 	}
 
-	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 */
+	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
+	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 		super.notifyChanged(notification);
 	}
 
-	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 *
-	 * @generated
-	 */
+	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
+	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
-	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

@@ -26,13 +26,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
-public class ChangeTypeCommand extends Command {
+public class ChangeDataTypeCommand extends Command {
 	private final VarDeclaration interfaceElement;
 	private final DataType dataType;
 	private DataType oldDataType;
 	private UpdateFBTypeCommand cmd = null;
 
-	public ChangeTypeCommand(final VarDeclaration interfaceElement, final DataType dataType) {
+	public ChangeDataTypeCommand(final VarDeclaration interfaceElement, final DataType dataType) {
 		super();
 		this.interfaceElement = interfaceElement;
 		this.dataType = dataType;

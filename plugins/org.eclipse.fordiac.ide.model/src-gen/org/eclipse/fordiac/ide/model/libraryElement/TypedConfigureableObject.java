@@ -16,29 +16,25 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>Typed
- * Configureable Object</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Typed Configureable Object</b></em>'. <!--
+ * end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject#getPaletteEntry
- * <em>Palette Entry</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject#getPaletteEntry <em>Palette
+ * Entry</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTypedConfigureableObject()
  * @model
- * @generated
- */
+ * @generated */
 public interface TypedConfigureableObject extends ConfigurableObject {
-	/**
-	 * Returns the value of the '<em><b>Palette Entry</b></em>' reference. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Palette Entry</em>' reference isn't clear, there
-	 * really should be more of a description here...
+	 * If the meaning of the '<em>Palette Entry</em>' reference isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
@@ -46,46 +42,34 @@ public interface TypedConfigureableObject extends ConfigurableObject {
 	 * @see #setPaletteEntry(PaletteEntry)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTypedConfigureableObject_PaletteEntry()
 	 * @model required="true" transient="true"
-	 * @generated
-	 */
+	 * @generated */
 	PaletteEntry getPaletteEntry();
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject#getPaletteEntry
-	 * <em>Palette Entry</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/** Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject#getPaletteEntry <em>Palette
+	 * Entry</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @param value the new value of the '<em>Palette Entry</em>' reference.
 	 * @see #getPaletteEntry()
-	 * @generated
-	 */
+	 * @generated */
 	void setPaletteEntry(PaletteEntry value);
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated
-	 */
+	 * @generated */
 	String getTypeName();
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated
-	 */
+	 * @generated */
 	LibraryElement getType();
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @model kind="operation"
-	 *        dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary"
-	 *        required="true"
-	 * @generated
-	 */
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary" required="true"
+	 * @generated */
 	TypeLibrary getTypeLibrary();
 
 } // TypedConfigureableObject

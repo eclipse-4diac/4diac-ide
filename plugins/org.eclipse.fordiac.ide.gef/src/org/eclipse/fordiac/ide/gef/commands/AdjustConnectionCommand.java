@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2009, 2011, 2012, 2016, 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 Johanes Kepler University 	
- * 
+ * 				 2018 Johanes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - fixed connection adjusting when zoomed  
+ *   Alois Zoitl - fixed connection adjusting when zoomed
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.commands;
 
@@ -22,6 +22,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.gef.commands.Command;
 
 public class AdjustConnectionCommand extends Command {
@@ -32,8 +33,8 @@ public class AdjustConnectionCommand extends Command {
 	private final org.eclipse.fordiac.ide.model.libraryElement.Connection modelConnection;
 	private final double zoom;
 
-	public AdjustConnectionCommand(Connection connection, Point p, int index,
-			org.eclipse.fordiac.ide.model.libraryElement.Connection modelConnection, double zoom) {
+	public AdjustConnectionCommand(final Connection connection, final Point p, final int index,
+			final org.eclipse.fordiac.ide.model.libraryElement.Connection modelConnection, final double zoom) {
 		super();
 		this.connection = connection;
 		this.point = p;
@@ -44,25 +45,26 @@ public class AdjustConnectionCommand extends Command {
 
 	@Override
 	public void execute() {
-		Point sourceP = getSourcePoint();
-		Point destP = getDestinationPoint();
-		int scaledMinDistance = (int) Math.floor(MoveableRouter.MIN_CONNECTION_FB_DISTANCE * zoom);
+		final Point sourceP = getSourcePoint();
+		final Point destP = getDestinationPoint();
+		final int scaledMinDistance = (int) Math.floor(MoveableRouter.MIN_CONNECTION_FB_DISTANCE * zoom);
+		final ConnectionRoutingData routingData = modelConnection.getRoutingData();
 
 		switch (index) {
 		case 1:
 			int newDx1 = Math.max(point.x - sourceP.x, scaledMinDistance);
-			if (0 == modelConnection.getDx2()) {
+			if (0 == routingData.getDx2()) {
 				// we have three segment connection check that we are not beyond the input
 				newDx1 = Math.min(newDx1, destP.x - sourceP.x - scaledMinDistance);
 			}
-			modelConnection.setDx1((int) Math.floor(newDx1 / zoom));
+			routingData.setDx1((int) Math.floor(newDx1 / zoom));
 			break;
 		case 2:
-			modelConnection.setDy((int) Math.floor((point.y - sourceP.y) / zoom));
+			routingData.setDy((int) Math.floor((point.y - sourceP.y) / zoom));
 			break;
 		case 3:
-			int newDx2 = Math.max(destP.x - point.x, scaledMinDistance);
-			modelConnection.setDx2((int) Math.floor(newDx2 / zoom));
+			final int newDx2 = Math.max(destP.x - point.x, scaledMinDistance);
+			routingData.setDx2((int) Math.floor(newDx2 / zoom));
 			break;
 		default:
 			Activator.getDefault().logError(
@@ -73,13 +75,13 @@ public class AdjustConnectionCommand extends Command {
 	}
 
 	private Point getDestinationPoint() {
-		Point destP = connection.getTargetAnchor().getLocation(connection.getTargetAnchor().getReferencePoint())
+		final Point destP = connection.getTargetAnchor().getLocation(connection.getTargetAnchor().getReferencePoint())
 				.getCopy();
 		return destP;
 	}
 
 	private Point getSourcePoint() {
-		Point sourceP = connection.getSourceAnchor().getLocation(connection.getSourceAnchor().getReferencePoint())
+		final Point sourceP = connection.getSourceAnchor().getLocation(connection.getSourceAnchor().getReferencePoint())
 				.getCopy();
 		return sourceP;
 	}

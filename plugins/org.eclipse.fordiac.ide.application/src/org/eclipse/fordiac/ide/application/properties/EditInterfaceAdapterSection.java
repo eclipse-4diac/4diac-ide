@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceAdapterSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
@@ -76,7 +76,7 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	}
 
 	@Override
-	protected ChangeTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
+	protected ChangeDataTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
 		return new ChangeSubAppIETypeCommand(data, newType);
 	}
 

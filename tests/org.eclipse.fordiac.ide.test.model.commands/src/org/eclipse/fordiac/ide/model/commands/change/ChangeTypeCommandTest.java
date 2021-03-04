@@ -27,7 +27,7 @@ public class ChangeTypeCommandTest extends FBNetworkTestBase {
 	private static State changeDataInputType(State state) {
 		final InterfaceList fb = state.getFunctionblock().getFBType().getInterfaceList();
 		
-		state.setCommand(new ChangeTypeCommand(fb.getInputVars().get(0), getDatatypelib().getType(FordiacKeywords.LWORD)));
+		state.setCommand(new ChangeDataTypeCommand(fb.getInputVars().get(0), getDatatypelib().getType(FordiacKeywords.LWORD)));
 		return commandExecution(state);
 	}
 

@@ -32,133 +32,106 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Library
- * Element</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Library Element</b></em>'. <!-- end-user-doc
+ * -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getName
- * <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getComment
- * <em>Comment</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getVersionInfo
- * <em>Version Info</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getComment <em>Comment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getVersionInfo <em>Version
+ * Info</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getIdentification
  * <em>Identification</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getPaletteEntry
- * <em>Palette Entry</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getPaletteEntry <em>Palette
+ * Entry</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String name = NAME_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String comment = COMMENT_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getVersionInfo() <em>Version Info</em>}'
-	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getVersionInfo() <em>Version Info</em>}' containment reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getVersionInfo()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<VersionInfo> versionInfo;
 
-	/**
-	 * The cached value of the '{@link #getIdentification()
-	 * <em>Identification</em>}' containment reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getIdentification() <em>Identification</em>}' containment reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getIdentification()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected Identification identification;
 
-	/**
-	 * The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}' reference. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @see #getPaletteEntry()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected PaletteEntry paletteEntry;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected LibraryElementImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.LIBRARY_ELEMENT;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
@@ -168,21 +141,17 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 					name));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getComment() {
 		return comment;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
@@ -192,11 +161,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 					oldComment, comment));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<VersionInfo> getVersionInfo() {
 		if (versionInfo == null) {
@@ -206,11 +173,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		return versionInfo;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Identification getIdentification() {
 		if (identification != null && identification.eIsProxy()) {
@@ -234,20 +199,16 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		return identification;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Identification basicGetIdentification() {
 		return identification;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetIdentification(Identification newIdentification, NotificationChain msgs) {
 		Identification oldIdentification = identification;
 		identification = newIdentification;
@@ -262,11 +223,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setIdentification(Identification newIdentification) {
 		if (newIdentification != identification) {
@@ -285,21 +244,17 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 					newIdentification, newIdentification));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public PaletteEntry getPaletteEntry() {
 		return paletteEntry;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetPaletteEntry(PaletteEntry newPaletteEntry, NotificationChain msgs) {
 		PaletteEntry oldPaletteEntry = paletteEntry;
 		paletteEntry = newPaletteEntry;
@@ -314,11 +269,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setPaletteEntry(PaletteEntry newPaletteEntry) {
 		if (newPaletteEntry != paletteEntry) {
@@ -337,11 +290,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 					newPaletteEntry, newPaletteEntry));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public TypeLibrary getTypeLibrary() {
 		if (null != getPaletteEntry()) {
@@ -350,11 +301,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -368,11 +317,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -387,11 +334,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -412,11 +357,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -443,11 +386,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -472,11 +413,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -495,11 +434,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

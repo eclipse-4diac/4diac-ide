@@ -23,54 +23,42 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>With</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>With</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl#getVariables
- * <em>Variables</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.WithImpl#getVariables <em>Variables</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class WithImpl extends EObjectImpl implements With {
-	/**
-	 * The cached value of the '{@link #getVariables() <em>Variables</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getVariables() <em>Variables</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getVariables()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected VarDeclaration variables;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected WithImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.WITH;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public VarDeclaration getVariables() {
 		if (variables != null && variables.eIsProxy()) {
@@ -85,20 +73,16 @@ public class WithImpl extends EObjectImpl implements With {
 		return variables;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public VarDeclaration basicGetVariables() {
 		return variables;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetVariables(VarDeclaration newVariables, NotificationChain msgs) {
 		VarDeclaration oldVariables = variables;
 		variables = newVariables;
@@ -113,11 +97,9 @@ public class WithImpl extends EObjectImpl implements With {
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setVariables(VarDeclaration newVariables) {
 		if (newVariables != variables) {
@@ -136,11 +118,9 @@ public class WithImpl extends EObjectImpl implements With {
 					newVariables));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -154,11 +134,9 @@ public class WithImpl extends EObjectImpl implements With {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -169,11 +147,9 @@ public class WithImpl extends EObjectImpl implements With {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -186,11 +162,9 @@ public class WithImpl extends EObjectImpl implements With {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -203,11 +177,9 @@ public class WithImpl extends EObjectImpl implements With {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -220,11 +192,9 @@ public class WithImpl extends EObjectImpl implements With {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

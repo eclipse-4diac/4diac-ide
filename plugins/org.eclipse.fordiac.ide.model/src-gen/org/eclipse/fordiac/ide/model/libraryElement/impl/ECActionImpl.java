@@ -26,68 +26,52 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>EC
- * Action</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>EC Action</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getAlgorithm
- * <em>Algorithm</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getOutput
- * <em>Output</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getECState
- * <em>EC State</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getAlgorithm <em>Algorithm</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getOutput <em>Output</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getECState <em>EC State</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class ECActionImpl extends EObjectImpl implements ECAction {
-	/**
-	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getAlgorithm()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected Algorithm algorithm;
 
-	/**
-	 * The cached value of the '{@link #getOutput() <em>Output</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getOutput() <em>Output</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getOutput()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected Event output;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected ECActionImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.EC_ACTION;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Algorithm getAlgorithm() {
 		if (algorithm != null && algorithm.eIsProxy()) {
@@ -102,20 +86,16 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		return algorithm;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Algorithm basicGetAlgorithm() {
 		return algorithm;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setAlgorithm(Algorithm newAlgorithm) {
 		Algorithm oldAlgorithm = algorithm;
@@ -125,11 +105,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 					oldAlgorithm, algorithm));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Event getOutput() {
 		if (output != null && output.eIsProxy()) {
@@ -144,20 +122,16 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		return output;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Event basicGetOutput() {
 		return output;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setOutput(Event newOutput) {
 		Event oldOutput = output;
@@ -167,11 +141,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 					output));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ECState getECState() {
 		if (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE)
@@ -179,32 +151,26 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		return (ECState) eContainer();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public ECState basicGetECState() {
 		if (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE)
 			return null;
 		return (ECState) eInternalContainer();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetECState(ECState newECState, NotificationChain msgs) {
 		msgs = eBasicSetContainer((InternalEObject) newECState, LibraryElementPackage.EC_ACTION__EC_STATE, msgs);
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setECState(ECState newECState) {
 		if (newECState != eInternalContainer()
@@ -225,11 +191,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 					newECState));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -242,11 +206,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -257,11 +219,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
@@ -273,11 +233,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -298,11 +256,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -321,11 +277,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -344,11 +298,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University Linz
  * 				 2020 Primetals Technologies Germany GmbH
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +12,8 @@
  * Contributors:
  *   Daniel Lindhuber, Bianca Wiesmayr, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber
+ *     - connection collection considering unfolded subapps
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.elk.handlers;
@@ -24,7 +27,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
@@ -33,8 +36,9 @@ import org.eclipse.fordiac.ide.elk.commands.LayoutCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.gef.GraphicalViewer;
@@ -51,13 +55,12 @@ public class LayoutHandler extends AbstractHandler {
 	private final Map<Value, Label> values = new HashMap<>();
 	private final Map<Value, Point> valueLocations = new HashMap<>();
 
-	private String editorId;
+	private IEditorPart editor;
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		clear();
-		editorId = HandlerUtil.getActiveEditorId(event);
-		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
+		editor = HandlerUtil.getActiveEditor(event);
 		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 		if (null != viewer) {
 			collectEditParts(viewer);
@@ -73,7 +76,7 @@ public class LayoutHandler extends AbstractHandler {
 		fbNetworkElements.clear();
 		connections.clear();
 		values.clear();
-		editorId = null;
+		editor = null;
 	}
 
 	private void collectEditParts(GraphicalViewer viewer) {
@@ -101,30 +104,26 @@ public class LayoutHandler extends AbstractHandler {
 	}
 
 	private void handleConnectionCollection(ConnectionEditPart entry) {
-		final Object sourceModel = entry.getSource().getParent().getModel();
-		if ((sourceModel instanceof SubApp) && ((InterfaceEditPart) entry.getSource()).getModel().isIsInput()) {
+		if (isIgnorableConnection(entry)) {
 			return;
 		}
-		if ((sourceModel instanceof SubApp) && ((SubApp) sourceModel).isUnfolded()
-				&& (((SubApp) sourceModel).eContainer().eContainer() instanceof SubApp)) {
-			// nested subapp
-			return;
-		}
-		if ((sourceModel instanceof FB)
-				&& (((FB) sourceModel).eContainer().eContainer() instanceof SubApp)
-				&& !SubAppNetworkEditor.class.getName().equals(editorId)) {
-			return;
-		}
-
 		final IFigure fig = entry.getFigure();
 		if (fig.isVisible()) {
-			/*
-			 * use isVisble instead of isHidden -> the hideConnection command handler does
-			 * not change the "hidden" field but only sets the visibility of the connection
-			 * figure
-			 */
+			/* use isVisble instead of isHidden -> the hideConnection command handler does not change the "hidden" field
+			 * but only sets the visibility of the connection figure */
 			connections.put(entry.getModel(), (org.eclipse.draw2d.Connection) fig);
 		}
+	}
+
+	private boolean isIgnorableConnection(ConnectionEditPart entry) {
+		final EObject sourceModel = (EObject) entry.getSource().getParent().getModel();
+		final IInterfaceElement sourceIE = (IInterfaceElement) entry.getSource().getModel();
+		final Object parent = sourceModel.eContainer().eContainer();
+		final Object editorElement = editor.getAdapter(FBNetwork.class).eContainer();
+
+		return (sourceModel instanceof SubApp && sourceIE.isIsInput() && ((SubApp) sourceModel).isUnfolded()
+				&& sourceModel != editorElement)
+				|| (parent instanceof SubApp && ((SubApp) parent).isUnfolded() && parent != editorElement);
 	}
 
 }

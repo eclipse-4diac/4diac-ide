@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -147,8 +148,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	private static FB convertFBtoMux(final FB fb, final StructManipulator mux) {
 		mux.setName(fb.getName());
 		mux.setComment(fb.getComment());
-		mux.setX(fb.getX());
-		mux.setY(fb.getY());
+		mux.setPosition(fb.getPosition());
 		mux.setPaletteEntry(fb.getPaletteEntry());
 		mux.setInterface(fb.getInterface());
 		return mux;
@@ -255,18 +255,20 @@ class FBNetworkImporter extends CommonElementImporter {
 	}
 
 	private void parseConnectionRouting(final Connection connection) {
+		final ConnectionRoutingData routingData = LibraryElementFactory.eINSTANCE.createConnectionRoutingData();
 		final String dx1Element = getAttributeValue(LibraryElementTags.DX1_ATTRIBUTE);
 		if (null != dx1Element) {
-			connection.setDx1(parseConnectionValue(dx1Element));
+			routingData.setDx1(parseConnectionValue(dx1Element));
 		}
 		final String dx2Element = getAttributeValue(LibraryElementTags.DX2_ATTRIBUTE);
 		if (null != dx2Element) {
-			connection.setDx2(parseConnectionValue(dx2Element));
+			routingData.setDx2(parseConnectionValue(dx2Element));
 		}
 		final String dyElement = getAttributeValue(LibraryElementTags.DY_ATTRIBUTE);
 		if (null != dyElement) {
-			connection.setDy(parseConnectionValue(dyElement));
+			routingData.setDy(parseConnectionValue(dyElement));
 		}
+		connection.setRoutingData(routingData);
 	}
 
 	private IInterfaceElement getConnectionEndPoint(final String path, final EClass conType, final boolean isInput) {

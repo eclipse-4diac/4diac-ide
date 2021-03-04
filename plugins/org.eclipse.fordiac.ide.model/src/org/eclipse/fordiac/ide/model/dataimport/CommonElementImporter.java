@@ -43,7 +43,6 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -53,6 +52,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -347,13 +347,15 @@ abstract class CommonElementImporter {
 	public void getXandY(final PositionableElement positionableElement) throws TypeImportException {
 		try {
 			final String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
+			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
 			if (null != x) {
-				positionableElement.setX(CoordinateConverter.INSTANCE.convertFrom1499XML(x));
+				pos.setX(CoordinateConverter.INSTANCE.convertFrom1499XML(x));
 			}
 			final String y = getAttributeValue(LibraryElementTags.Y_ATTRIBUTE);
 			if (null != y) {
-				positionableElement.setY(CoordinateConverter.INSTANCE.convertFrom1499XML(y));
+				pos.setY(CoordinateConverter.INSTANCE.convertFrom1499XML(y));
 			}
+			positionableElement.setPosition(pos);
 		} catch (final NumberFormatException nfe) {
 			throw new TypeImportException(Messages.FBTImporter_POSITION_EXCEPTION, nfe);
 		}
@@ -421,7 +423,7 @@ abstract class CommonElementImporter {
 		return getReader().getAttributeValue("", attributeName); //$NON-NLS-1$
 	}
 
-	protected void parseCompilerInfo(final CompilableType ctype) throws TypeImportException, XMLStreamException {
+	protected CompilerInfo parseCompilerInfo() throws TypeImportException, XMLStreamException {
 		final CompilerInfo compilerInfo = LibraryElementFactory.eINSTANCE.createCompilerInfo();
 
 		final String header = getAttributeValue(LibraryElementTags.HEADER_ATTRIBUTE);
@@ -440,7 +442,7 @@ abstract class CommonElementImporter {
 			}
 			return false;
 		});
-		ctype.setCompilerInfo(compilerInfo);
+		return compilerInfo;
 	}
 
 	private void parseCompiler(final CompilerInfo compilerInfo) throws TypeImportException, XMLStreamException {

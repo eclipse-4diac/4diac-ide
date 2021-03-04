@@ -49,7 +49,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	public static final String CONNECTION_ROUTER = "ConnectionRouter"; //$NON-NLS-1$
 
 	/** The Constant CORNER_DIM. */
-	public static final int CORNER_DIM = 14;
+	public static final int CORNER_DIM = 6;
 	public static final int CORNER_DIM_HALF = CORNER_DIM / 2;
 
 	public static final String GRID_SPACING = "GridSpacing"; //$NON-NLS-1$
@@ -90,15 +90,15 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		createGroupLabelSize();
 	}
 
-	private Group createGroup(String title) {
-		Group group = new Group(getFieldEditorParent(), SWT.NONE);
+	private Group createGroup(final String title) {
+		final Group group = new Group(getFieldEditorParent(), SWT.NONE);
 		group.setText(title);
 		return group;
 	}
 
-	private void configGroup(Group group) {
-		GridLayout gridLayout = new GridLayout(2, false);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+	private void configGroup(final Group group) {
+		final GridLayout gridLayout = new GridLayout(2, false);
+		final GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 
 		gridData.horizontalSpan = 2;
@@ -107,8 +107,8 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	}
 
 	private void createGroupLabelSize() {
-		Group labelSize = createGroup(Messages.DiagramPreferences_LabelSize);
-		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(MAX_VALUE_LABEL_SIZE,
+		final Group labelSize = createGroup(Messages.DiagramPreferences_LabelSize);
+		final IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(MAX_VALUE_LABEL_SIZE,
 				Messages.DiagramPreferences_MaximumValueLabelSize, labelSize);
 		integerFieldEditor.setValidRange(0, 120);
 		addField(integerFieldEditor);
@@ -116,21 +116,21 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	}
 
 	private void createGroupRulerGrid() {
-		Group group = createGroup(Messages.DiagramPreferences_FieldEditors_RulerAndGrid);
+		final Group group = createGroup(Messages.DiagramPreferences_FieldEditors_RulerAndGrid);
 		// Add the fields to the group
-		BooleanFieldEditor showRulers = new BooleanFieldEditor(SHOW_RULERS,
+		final BooleanFieldEditor showRulers = new BooleanFieldEditor(SHOW_RULERS,
 				Messages.DiagramPreferences_FieldEditors_ShowRuler, group);
 		addField(showRulers);
 
-		BooleanFieldEditor showGrid = new BooleanFieldEditor(SHOW_GRID,
+		final BooleanFieldEditor showGrid = new BooleanFieldEditor(SHOW_GRID,
 				Messages.DiagramPreferences_FieldEditors_ShowGrid, group);
 		addField(showGrid);
 
-		BooleanFieldEditor snapToGrid = new BooleanFieldEditor(SNAP_TO_GRID,
+		final BooleanFieldEditor snapToGrid = new BooleanFieldEditor(SNAP_TO_GRID,
 				Messages.DiagramPreferences_FieldEditors_SnapToGrid, group);
 		addField(snapToGrid);
 
-		IntegerFieldEditor gridSpacing = new IntegerFieldEditor(GRID_SPACING,
+		final IntegerFieldEditor gridSpacing = new IntegerFieldEditor(GRID_SPACING,
 				Messages.DiagramPreferences_FieldEditors_GridSpacingInPixels, group);
 		gridSpacing.setTextLimit(10);
 		addField(gridSpacing);
@@ -138,37 +138,36 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	}
 
 	private void createGroupRouter() {
-		Group router = createGroup(Messages.DiagramPreferences_ConnectionRouter);
+		final Group router = createGroup(Messages.DiagramPreferences_ConnectionRouter);
 
-		Map<String, IConnectionRouterFactory> connectionRouter = new HashMap<>();
+		final Map<String, IConnectionRouterFactory> connectionRouter = new HashMap<>();
 
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
 				"ConnectionRouterProvider"); //$NON-NLS-1$
-		for (int i = 0; i < elems.length; i++) {
-			IConfigurationElement element = elems[i];
+		for (final IConfigurationElement element : elems) {
 			try {
-				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				String name = element.getAttribute("name"); //$NON-NLS-1$
+				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
+				final String name = element.getAttribute("name"); //$NON-NLS-1$
 				if (object instanceof IConnectionRouterFactory) {
-					IConnectionRouterFactory routerFactory = (IConnectionRouterFactory) object;
+					final IConnectionRouterFactory routerFactory = (IConnectionRouterFactory) object;
 					connectionRouter.put(name, routerFactory);
 				}
-			} catch (CoreException corex) {
+			} catch (final CoreException corex) {
 				Activator.getDefault().logError("Error loading ConnectionRouter", corex); //$NON-NLS-1$
 			}
 		}
 
-		Set<String> keySet = connectionRouter.keySet();
-		String[][] nameArray = new String[keySet.size()][2];
+		final Set<String> keySet = connectionRouter.keySet();
+		final String[][] nameArray = new String[keySet.size()][2];
 		int i = 0;
-		for (String key : keySet) {
+		for (final String key : keySet) {
 			nameArray[i][0] = key;
 			nameArray[i][1] = key;
 			i++;
 		}
 
-		ComboFieldEditor routerEditor = new ComboFieldEditor(CONNECTION_ROUTER,
+		final ComboFieldEditor routerEditor = new ComboFieldEditor(CONNECTION_ROUTER,
 				Messages.DiagramPreferences_DefaultRouter, nameArray, router);
 		addField(routerEditor);
 		configGroup(router);

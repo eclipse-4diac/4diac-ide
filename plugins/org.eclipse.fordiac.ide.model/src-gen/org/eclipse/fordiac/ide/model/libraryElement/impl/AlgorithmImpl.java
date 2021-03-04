@@ -20,96 +20,75 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Algorithm</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Algorithm</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl#getName
- * <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl#getComment
- * <em>Comment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl#getComment <em>Comment</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public abstract class AlgorithmImpl extends EObjectImpl implements Algorithm {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String name = NAME_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String comment = COMMENT_EDEFAULT;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected AlgorithmImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.ALGORITHM;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getComment() {
 		return comment;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
@@ -119,21 +98,17 @@ public abstract class AlgorithmImpl extends EObjectImpl implements Algorithm {
 					comment));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
@@ -143,11 +118,9 @@ public abstract class AlgorithmImpl extends EObjectImpl implements Algorithm {
 					name));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -160,11 +133,9 @@ public abstract class AlgorithmImpl extends EObjectImpl implements Algorithm {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -180,11 +151,9 @@ public abstract class AlgorithmImpl extends EObjectImpl implements Algorithm {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -200,11 +169,9 @@ public abstract class AlgorithmImpl extends EObjectImpl implements Algorithm {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -217,11 +184,9 @@ public abstract class AlgorithmImpl extends EObjectImpl implements Algorithm {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

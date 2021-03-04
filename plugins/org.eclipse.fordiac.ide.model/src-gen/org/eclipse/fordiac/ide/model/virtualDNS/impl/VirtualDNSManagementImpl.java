@@ -28,189 +28,180 @@ import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection;
 import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement;
 import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '
- * <em><b>Management</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object ' <em><b>Management</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSManagementImpl#getAvailableDNSCollections <em>Available DNS Collections</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSManagementImpl#getActiveVirtualDNS <em>Active Virtual DNS</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSManagementImpl#getAvailableDNSCollections
+ * <em>Available DNS Collections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSManagementImpl#getActiveVirtualDNS <em>Active
+ * Virtual DNS</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class VirtualDNSManagementImpl extends EObjectImpl implements VirtualDNSManagement {
-	/**
-	 * The cached value of the '{@link #getAvailableDNSCollections() <em>Available DNS Collections</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** The cached value of the '{@link #getAvailableDNSCollections() <em>Available DNS Collections</em>}' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getAvailableDNSCollections()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<VirtualDNSCollection> availableDNSCollections;
 
-	/**
-	 * The cached value of the '{@link #getActiveVirtualDNS() <em>Active Virtual DNS</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getActiveVirtualDNS() <em>Active Virtual DNS</em>}' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getActiveVirtualDNS()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected VirtualDNSCollection activeVirtualDNS;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	protected VirtualDNSManagementImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return VirtualDNSPackage.Literals.VIRTUAL_DNS_MANAGEMENT;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public EList<VirtualDNSCollection> getAvailableDNSCollections() {
 		if (availableDNSCollections == null) {
-			availableDNSCollections = new EObjectContainmentEList<VirtualDNSCollection>(VirtualDNSCollection.class, this, VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS);
+			availableDNSCollections = new EObjectContainmentEList<VirtualDNSCollection>(VirtualDNSCollection.class,
+					this, VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS);
 		}
 		return availableDNSCollections;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public VirtualDNSCollection getActiveVirtualDNS() {
 		if (activeVirtualDNS != null && activeVirtualDNS.eIsProxy()) {
-			InternalEObject oldActiveVirtualDNS = (InternalEObject)activeVirtualDNS;
-			activeVirtualDNS = (VirtualDNSCollection)eResolveProxy(oldActiveVirtualDNS);
+			InternalEObject oldActiveVirtualDNS = (InternalEObject) activeVirtualDNS;
+			activeVirtualDNS = (VirtualDNSCollection) eResolveProxy(oldActiveVirtualDNS);
 			if (activeVirtualDNS != oldActiveVirtualDNS) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS, oldActiveVirtualDNS, activeVirtualDNS));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS, oldActiveVirtualDNS,
+							activeVirtualDNS));
 			}
 		}
 		return activeVirtualDNS;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	public VirtualDNSCollection basicGetActiveVirtualDNS() {
 		return activeVirtualDNS;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public void setActiveVirtualDNS(VirtualDNSCollection newActiveVirtualDNS) {
 		VirtualDNSCollection oldActiveVirtualDNS = activeVirtualDNS;
 		activeVirtualDNS = newActiveVirtualDNS;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS, oldActiveVirtualDNS, activeVirtualDNS));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS, oldActiveVirtualDNS,
+					activeVirtualDNS));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS:
-				return ((InternalEList<?>)getAvailableDNSCollections()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
+		case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS:
+			return ((InternalEList<?>) getAvailableDNSCollections()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS:
-				return getAvailableDNSCollections();
-			case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS:
-				if (resolve) return getActiveVirtualDNS();
-				return basicGetActiveVirtualDNS();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS:
+			return getAvailableDNSCollections();
+		case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS:
+			if (resolve)
+				return getActiveVirtualDNS();
+			return basicGetActiveVirtualDNS();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS:
-				getAvailableDNSCollections().clear();
-				getAvailableDNSCollections().addAll((Collection<? extends VirtualDNSCollection>)newValue);
-				return;
-			case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS:
-				setActiveVirtualDNS((VirtualDNSCollection)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS:
+			getAvailableDNSCollections().clear();
+			getAvailableDNSCollections().addAll((Collection<? extends VirtualDNSCollection>) newValue);
+			return;
+		case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS:
+			setActiveVirtualDNS((VirtualDNSCollection) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS:
-				getAvailableDNSCollections().clear();
-				return;
-			case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS:
-				setActiveVirtualDNS((VirtualDNSCollection)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS:
+			getAvailableDNSCollections().clear();
+			return;
+		case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS:
+			setActiveVirtualDNS((VirtualDNSCollection) null);
+			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS:
-				return availableDNSCollections != null && !availableDNSCollections.isEmpty();
-			case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS:
-				return activeVirtualDNS != null;
-			default:
-				return super.eIsSet(featureID);
+		case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS:
+			return availableDNSCollections != null && !availableDNSCollections.isEmpty();
+		case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS:
+			return activeVirtualDNS != null;
+		default:
+			return super.eIsSet(featureID);
 		}
 	}
 

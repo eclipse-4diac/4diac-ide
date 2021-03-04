@@ -65,7 +65,7 @@ public class ECTransitionFigure extends SplineConnection {
 		}
 
 		private static Font getOrderLabelFont() {
-			FontData[] fontData = JFaceResources.getFontRegistry()
+			final FontData[] fontData = JFaceResources.getFontRegistry()
 					.getFontData(org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants.DIAGRAM_FONT).clone();
 			Arrays.stream(fontData).forEach(fd -> fd.setHeight(TRANSITON_ORDER_LABEL_FONT_SIZE));
 			JFaceResources.getFontRegistry().put(TRANSITION_ORDER_LABEL_FONT, fontData);
@@ -73,24 +73,24 @@ public class ECTransitionFigure extends SplineConnection {
 		}
 
 		@Override
-		public void setReferencePoint(Point p) {
+		public void setReferencePoint(final Point p) {
 			// we don't want this decorator to be rotated so that the number keeps readable
 		}
 
 		@Override
-		public void setLocation(Point p) {
+		public void setLocation(final Point p) {
 			// Position the decorator centered on the start of the transition
 			p.x -= getSize().width() / 2;
 			p.y -= getSize().height() / 2;
 			super.setLocation(p);
 		}
 
-		public void setText(String val) {
+		public void setText(final String val) {
 			orderLabel.setText(val);
 			if ("".equals(orderLabel.getText())) { //$NON-NLS-1$
 				setSize(0, 0); // this hides the decorator
 			} else {
-				int dim = orderLabel.getFont().getFontData()[0].getHeight() * 2;
+				final int dim = orderLabel.getFont().getFontData()[0].getHeight() * 2;
 				setSize(dim, dim);
 			}
 		}
@@ -101,7 +101,7 @@ public class ECTransitionFigure extends SplineConnection {
 	private Label condition;
 	private final TransitionOrderDecorator transitionOrderDecorator;
 
-	public ECTransitionFigure(ECTransition ecTransition) {
+	public ECTransitionFigure(final ECTransition ecTransition) {
 		setAntialias(SWT.ON);
 		setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_TRANSITION_COLOR));
 
@@ -115,28 +115,28 @@ public class ECTransitionFigure extends SplineConnection {
 
 		setTargetDecoration(createTargetDecorator());
 
-		ECTransitionToolTipFigure transitionTooltip = new ECTransitionToolTipFigure();
+		final ECTransitionToolTipFigure transitionTooltip = new ECTransitionToolTipFigure();
 		transitionTooltip.setVisible(true);
 		setToolTip(transitionTooltip);
 	}
 
-	public void setConditionText(String conditionText) {
+	public void setConditionText(final String conditionText) {
 		condition.setText(conditionText);
 		conditionBackground.setText(conditionText);
 	}
 
-	public void updateBendPoints(ECTransition ecTransition) {
-		List<Bendpoint> bendPoints = new ArrayList<>();
-		bendPoints.add(new AbsoluteBendpoint(ecTransition.getX(), ecTransition.getY()));
+	public void updateBendPoints(final ECTransition ecTransition) {
+		final List<Bendpoint> bendPoints = new ArrayList<>();
+		bendPoints.add(new AbsoluteBendpoint(ecTransition.getPosition().asPoint()));
 		getConnectionRouter().setConstraint(this, bendPoints);
 	}
 
-	public void setTransitionOrder(String value) {
+	public void setTransitionOrder(final String value) {
 		transitionOrderDecorator.setText(value);
 	}
 
 	private static PolygonDecoration createTargetDecorator() {
-		PolygonDecoration rectDec = new PolygonDecoration();
+		final PolygonDecoration rectDec = new PolygonDecoration();
 		rectDec.setTemplate(PolygonDecoration.TRIANGLE_TIP);
 		rectDec.setScale(7, 4);
 		rectDec.setFill(true);
@@ -146,7 +146,7 @@ public class ECTransitionFigure extends SplineConnection {
 	private static final int VERTICAL_MARGIN = 2;
 	private static final int HORIZONTAL_MARGIN = 4;
 
-	private void createConditionLabel(String conditionText) {
+	private void createConditionLabel(final String conditionText) {
 		condition = new Label(conditionText);
 		condition.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
 		condition.setOpaque(false);
@@ -154,7 +154,7 @@ public class ECTransitionFigure extends SplineConnection {
 		conditionBackground = new SetableAlphaLabel();
 		conditionBackground.setText(conditionText); // needed for correct size
 		conditionBackground
-				.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
+		.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
 		conditionBackground.setAlpha(190);
 		conditionBackground.setOpaque(true);
 
@@ -166,7 +166,7 @@ public class ECTransitionFigure extends SplineConnection {
 	public ECTransitionToolTipFigure getToolTip() {
 		return (ECTransitionToolTipFigure) super.getToolTip();
 	}
-	
+
 	public Label getLabel() {
 		return condition;
 	}

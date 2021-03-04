@@ -15,46 +15,35 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object
- * '<em><b>Event</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Event</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Event#getWith
- * <em>With</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Event#getWith <em>With</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getEvent()
  * @model
- * @generated
- */
+ * @generated */
 public interface Event extends IInterfaceElement {
-	/**
-	 * Returns the value of the '<em><b>With</b></em>' containment reference list.
-	 * The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.libraryElement.With}. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>With</b></em>' containment reference list. The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.With}. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>With</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>With</em>' containment reference list isn't clear, there really should be more of a
+	 * description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>With</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getEvent_With()
-	 * @model containment="true" extendedMetaData="kind='element' name='With'
-	 *        namespace='##targetNamespace'"
-	 * @generated
-	 */
+	 * @model containment="true" extendedMetaData="kind='element' name='With' namespace='##targetNamespace'"
+	 * @generated */
 	EList<With> getWith();
 
-	/**
-	 * returns true if the event is an event input
+	/** returns true if the event is an event input
 	 * 
-	 * @return
-	 */
+	 * @return */
 
 } // Event

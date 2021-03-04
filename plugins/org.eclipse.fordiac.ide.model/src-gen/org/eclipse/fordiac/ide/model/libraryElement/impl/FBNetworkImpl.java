@@ -34,94 +34,73 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object ' <em><b>FB
- * Network</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object ' <em><b>FB Network</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl#getNetworkElements
- * <em>Network Elements</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl#getDataConnections
- * <em>Data Connections</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl#getEventConnections
- * <em>Event Connections</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl#getAdapterConnections
- * <em>Adapter Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl#getNetworkElements <em>Network
+ * Elements</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl#getDataConnections <em>Data
+ * Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl#getEventConnections <em>Event
+ * Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl#getAdapterConnections <em>Adapter
+ * Connections</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
-	/**
-	 * The cached value of the '{@link #getNetworkElements() <em>Network
-	 * Elements</em>}' containment reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getNetworkElements() <em>Network Elements</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getNetworkElements()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<FBNetworkElement> networkElements;
 
-	/**
-	 * The cached value of the '{@link #getDataConnections() <em>Data
-	 * Connections</em>}' containment reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getDataConnections() <em>Data Connections</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getDataConnections()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<DataConnection> dataConnections;
 
-	/**
-	 * The cached value of the '{@link #getEventConnections() <em>Event
-	 * Connections</em>}' containment reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getEventConnections() <em>Event Connections</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getEventConnections()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<EventConnection> eventConnections;
 
-	/**
-	 * The cached value of the '{@link #getAdapterConnections() <em>Adapter
-	 * Connections</em>}' containment reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getAdapterConnections() <em>Adapter Connections</em>}' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getAdapterConnections()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<AdapterConnection> adapterConnections;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected FBNetworkImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.FB_NETWORK;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<FBNetworkElement> getNetworkElements() {
 		if (networkElements == null) {
@@ -131,11 +110,9 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 		return networkElements;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<DataConnection> getDataConnections() {
 		if (dataConnections == null) {
@@ -145,11 +122,9 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 		return dataConnections;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<EventConnection> getEventConnections() {
 		if (eventConnections == null) {
@@ -159,11 +134,9 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 		return eventConnections;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<AdapterConnection> getAdapterConnections() {
 		if (adapterConnections == null) {
@@ -173,121 +146,97 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 		return adapterConnections;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void addConnection(final Connection connection) {
 		org.eclipse.fordiac.ide.model.Annotations.addConnection(this, connection);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void removeConnection(final Connection connection) {
 		org.eclipse.fordiac.ide.model.Annotations.removeConnection(this, connection);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isApplicationNetwork() {
 		return org.eclipse.fordiac.ide.model.Annotations.isApplicationNetwork(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isSubApplicationNetwork() {
 		return org.eclipse.fordiac.ide.model.Annotations.isSubApplicationNetwork(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isResourceNetwork() {
 		return org.eclipse.fordiac.ide.model.Annotations.isResourceNetwork(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isCFBTypeNetwork() {
 		return org.eclipse.fordiac.ide.model.Annotations.isCFBTypeNetwork(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public AutomationSystem getAutomationSystem() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Application getApplication() {
 		return org.eclipse.fordiac.ide.model.Annotations.getApplication(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FB getFBNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getFBNamed(this, name);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public SubApp getSubAppNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getSubAppNamed(this, name);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetworkElement getElementNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getElementNamed(this, name);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -304,11 +253,9 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -325,11 +272,9 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -356,11 +301,9 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -382,11 +325,9 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

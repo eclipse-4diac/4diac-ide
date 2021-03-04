@@ -22,64 +22,52 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Composite FB Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Composite FB Type</b></em>'. <!-- end-user-doc
+ * -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompositeFBTypeImpl#getFBNetwork
- * <em>FB Network</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompositeFBTypeImpl#getFBNetwork <em>FB
+ * Network</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
-	/**
-	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}'
-	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
 	 * @see #getFBNetwork()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected FBNetwork fBNetwork;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected CompositeFBTypeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.COMPOSITE_FB_TYPE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetwork getFBNetwork() {
 		return fBNetwork;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetFBNetwork(FBNetwork newFBNetwork, NotificationChain msgs) {
 		FBNetwork oldFBNetwork = fBNetwork;
 		fBNetwork = newFBNetwork;
@@ -94,11 +82,9 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setFBNetwork(FBNetwork newFBNetwork) {
 		if (newFBNetwork != fBNetwork) {
@@ -117,11 +103,9 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 					newFBNetwork, newFBNetwork));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -132,11 +116,9 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -147,11 +129,9 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -164,11 +144,9 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -181,11 +159,9 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

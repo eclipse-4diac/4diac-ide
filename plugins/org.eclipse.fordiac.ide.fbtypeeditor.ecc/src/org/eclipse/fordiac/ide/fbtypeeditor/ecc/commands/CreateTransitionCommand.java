@@ -75,11 +75,11 @@ public class CreateTransitionCommand extends AbstractCreationCommand {
 	 * @param destination    The end state of the transition
 	 * @param conditionEvent The event triggering the transition
 	 */
-	public CreateTransitionCommand(ECState source, ECState destination, Event conditionEvent) {
+	public CreateTransitionCommand(final ECState source, final ECState destination, final Event conditionEvent) {
 		this.source = source;
-		this.sourceLocation = new Point(this.source.getX(), this.source.getY());
+		this.sourceLocation = source.getPosition().asPoint();
 		this.destination = destination;
-		this.destLocation = new Point(this.destination.getX(), this.destination.getY());
+		this.destLocation = destination.getPosition().asPoint();
 		this.conditionEvent = conditionEvent;
 	}
 
@@ -87,11 +87,11 @@ public class CreateTransitionCommand extends AbstractCreationCommand {
 		return conditionExpression;
 	}
 
-	public void setConditionExpression(String condition) {
+	public void setConditionExpression(final String condition) {
 		this.conditionExpression = condition;
 	}
 
-	public void setConditionEvent(Event conditionEvent) {
+	public void setConditionEvent(final Event conditionEvent) {
 		this.conditionEvent = conditionEvent;
 	}
 
@@ -156,10 +156,7 @@ public class CreateTransitionCommand extends AbstractCreationCommand {
 		// it is necessary to invoke the following code after adding the
 		// transition to the parent, otherwise ECTransitionEditPart will
 		// throw a NPE in the activate method!
-
-		Point bendPoint = calcTransitionBendPoint();
-		transition.setX(bendPoint.x);
-		transition.setY(bendPoint.y);
+		transition.updatePosition(calcTransitionBendPoint());
 		transition.setSource(source);
 		transition.setDestination(destination);
 		transition.setConditionEvent(conditionEvent);
@@ -172,7 +169,7 @@ public class CreateTransitionCommand extends AbstractCreationCommand {
 			}
 		}
 		if (null != viewer) {
-			Object obj = viewer.getEditPartRegistry().get(transition);
+			final Object obj = viewer.getEditPartRegistry().get(transition);
 			if (null != obj) {
 				viewer.select((EditPart) obj);
 			}
@@ -180,7 +177,7 @@ public class CreateTransitionCommand extends AbstractCreationCommand {
 	}
 
 	private Point calcTransitionBendPoint() {
-		Point bendPoint = sourceLocation.getCopy();
+		final Point bendPoint = sourceLocation.getCopy();
 		bendPoint.translate(destLocation.getDifference(sourceLocation).scale(0.5)); // middle between source and dest
 		if (source.equals(destination)) { // self transition
 			bendPoint.translate(SELF_TRANS_OFFSET);
@@ -229,7 +226,7 @@ public class CreateTransitionCommand extends AbstractCreationCommand {
 
 	}
 
-	public void setViewer(EditPartViewer viewer) {
+	public void setViewer(final EditPartViewer viewer) {
 		this.viewer = viewer;
 	}
 

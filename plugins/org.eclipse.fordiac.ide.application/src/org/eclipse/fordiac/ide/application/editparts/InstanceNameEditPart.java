@@ -69,8 +69,8 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 	private final Adapter contentAdapter = new AdapterImpl() {
 
 		@Override
-		public void notifyChanged(Notification notification) {
-			Object feature = notification.getFeature();
+		public void notifyChanged(final Notification notification) {
+			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
 				refreshValue();
 			}
@@ -92,6 +92,7 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		return (InstanceNameFigure) super.getFigure();
 	}
 
+
 	@Override
 	protected void createEditPolicies() {
 		// FBNetwork elements need a special rename command therefore we remove the
@@ -99,7 +100,7 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		removeEditPolicy(EditPolicy.DIRECT_EDIT_ROLE);
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy() {
 			@Override
-			protected Command getDirectEditCommand(DirectEditRequest request) {
+			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof InstanceNameEditPart) {
 					return new ChangeFBNetworkElementName(((InstanceNameEditPart) getHost()).getModel().getRefElement(),
 							(String) request.getCellEditor().getValue());
@@ -116,7 +117,7 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 
 	@Override
 	protected IFigure createFigure() {
-		InstanceNameFigure figure = new InstanceNameFigure();
+		final InstanceNameFigure figure = new InstanceNameFigure();
 		if (isResoruceTypeFBNElement()) {
 			figure.setIcon(FordiacImage.ICON_LOCKED_STATE.getImage());
 		}
@@ -128,7 +129,8 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+		if (!getModel().getRefElement().isContainedInTypedInstance() && (request.getType() == RequestConstants.REQ_DIRECT_EDIT
+				|| request.getType() == RequestConstants.REQ_OPEN)) {
 			performDirectEdit();
 
 		} else {
@@ -156,22 +158,22 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 	}
 
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(ConnectionEditPart connection) {
+	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		return null;
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(ConnectionEditPart connection) {
+	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
 		return null;
 	}
 
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(Request request) {
+	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
 		return null;
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(Request request) {
+	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
 		return null;
 	}
 

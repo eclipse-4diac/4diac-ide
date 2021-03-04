@@ -20,6 +20,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MarginBorder;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
@@ -60,29 +61,29 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 	@Override
 	public void activate() {
 		super.activate();
-		Set set = getViewer().getEditPartRegistry().keySet();
-		for (Object object : set) {
+		final Set set = getViewer().getEditPartRegistry().keySet();
+		for (final Object object : set) {
 			if ((object instanceof IInterfaceElement)
 					&& ((IInterfaceElement) object).equals(getModel().getInterfaceElement())) {
-				EditPart part = (EditPart) getViewer().getEditPartRegistry().get(object);
+				final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(object);
 				if (part instanceof org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart) {
 					parentPart = (org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart) part;
-					IFigure f = parentPart.getFigure();
+					final IFigure f = parentPart.getFigure();
 					f.addAncestorListener(new AncestorListener() {
 
 						@Override
-						public void ancestorRemoved(IFigure ancestor) {
+						public void ancestorRemoved(final IFigure ancestor) {
 							// currently nothing to do here
 						}
 
 						@Override
-						public void ancestorMoved(IFigure ancestor) {
+						public void ancestorMoved(final IFigure ancestor) {
 							refreshPosition();
 
 						}
 
 						@Override
-						public void ancestorAdded(IFigure ancestor) {
+						public void ancestorAdded(final IFigure ancestor) {
 							// currently nothing to do here
 						}
 					});
@@ -98,7 +99,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 	 *
 	 * @param color
 	 */
-	public void setBackgroundColor(Color color) {
+	public void setBackgroundColor(final Color color) {
 		getFigure().setBackgroundColor(color);
 	}
 
@@ -153,12 +154,12 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 	 */
 	protected void updatePos() {
 		if (null != parentPart) {
-			String label = ((Label) getFigure()).getText();
-			Rectangle bounds = parentPart.getFigure().getBounds();
+			final String label = ((Label) getFigure()).getText();
+			final Rectangle bounds = parentPart.getFigure().getBounds();
 
 			int x = 0;
 			if (isInput()) {
-				Font font = ((Label) getFigure()).getFont();
+				final Font font = ((Label) getFigure()).getFont();
 				int width = 50;
 				if (font != null) {
 					width = FigureUtilities.getTextWidth(label, getFigure().getFont());
@@ -169,10 +170,9 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 				x = bounds.x + bounds.width + 10 + 15 * getModel().getFb().getInterface().getEventInputs().size();
 
 			}
-			int y = bounds.y;
+			final int y = bounds.y;
 			if (x != oldx || y != oldy) {
-				getModel().setX(x);
-				getModel().setY(y);
+				getModel().updatePosition(x, y);
 				oldx = x;
 				oldy = y;
 			}
@@ -197,7 +197,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 
 	@Override
 	protected IFigure createFigureForModel() {
-		Label l = new Label();
+		final Label l = new Label();
 		l.setSize(100, 100);
 		l.setOpaque(true);
 		l.setBackgroundColor(org.eclipse.draw2d.ColorConstants.yellow);
@@ -205,9 +205,9 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 		l.setBorder(new MarginBorder(3, 5, 3, 5));
 
 		if (isInput()) {
-			LineBorder lb = new LineBorder() {
+			final LineBorder lb = new LineBorder() {
 				@Override
-				public Insets getInsets(IFigure figure) {
+				public Insets getInsets(final IFigure figure) {
 					return new Insets(3, 5, 3, 5);
 				}
 			};
@@ -243,15 +243,14 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 
 	protected void refreshPosition() {
 		updatePos();
-		Rectangle bounds = null;
 		if (null != getModel()) {
-			bounds = new Rectangle(getModel().getX(), getModel().getY(), 80, -1);
+			final Rectangle bounds = new Rectangle(getModel().getPosition().asPoint(), new Dimension(80, -1));
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}
 
 	@Override
-	public boolean understandsRequest(Request request) {
+	public boolean understandsRequest(final Request request) {
 		if (request.getType() == RequestConstants.REQ_MOVE) {
 			return false;
 		}
@@ -262,7 +261,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 	}
 
 	@Override
-	public void performRequest(Request request) {
+	public void performRequest(final Request request) {
 		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN)
 				&& !isInput()) {
 			return;
@@ -295,7 +294,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 	 *
 	 * @param string the new value
 	 */
-	public void setValue(String string) {
+	public void setValue(final String string) {
 		if (isActive() && getFigure() != null) {
 			((Label) getFigure()).setText(string);
 		}

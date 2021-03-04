@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
@@ -116,8 +116,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	@SuppressWarnings("static-method") // this method allows sub-classes to provide own change type commands, e.g.,
 	// subapps
-	protected ChangeTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
-		return new ChangeTypeCommand(data, newType);
+	protected ChangeDataTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
+		return new ChangeDataTypeCommand(data, newType);
 	}
 
 	public TableViewer getInputsViewer() {

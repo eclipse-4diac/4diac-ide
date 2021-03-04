@@ -29,9 +29,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>System
- * Configuration</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>System Configuration</b></em>'. <!--
+ * end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -40,65 +39,51 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
  * <em>Devices</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl#getSegments
  * <em>Segments</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl#getLinks
- * <em>Links</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl#getLinks <em>Links</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class SystemConfigurationImpl extends EObjectImpl implements SystemConfiguration {
-	/**
-	 * The cached value of the '{@link #getDevices() <em>Devices</em>}' containment
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getDevices() <em>Devices</em>}' containment reference list. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
 	 * @see #getDevices()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Device> devices;
-	/**
-	 * The cached value of the '{@link #getSegments() <em>Segments</em>}'
-	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getSegments() <em>Segments</em>}' containment reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getSegments()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Segment> segments;
-	/**
-	 * The cached value of the '{@link #getLinks() <em>Links</em>}' containment
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getLinks() <em>Links</em>}' containment reference list. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @see #getLinks()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Link> links;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected SystemConfigurationImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.SYSTEM_CONFIGURATION;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<Device> getDevices() {
 		if (devices == null) {
@@ -108,11 +93,9 @@ public class SystemConfigurationImpl extends EObjectImpl implements SystemConfig
 		return devices;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<Segment> getSegments() {
 		if (segments == null) {
@@ -122,11 +105,9 @@ public class SystemConfigurationImpl extends EObjectImpl implements SystemConfig
 		return segments;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<Link> getLinks() {
 		if (links == null) {
@@ -136,41 +117,33 @@ public class SystemConfigurationImpl extends EObjectImpl implements SystemConfig
 		return links;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public AutomationSystem getAutomationSystem() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Segment getSegmentNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getSegmentNamed(this, name);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Device getDeviceNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -185,11 +158,9 @@ public class SystemConfigurationImpl extends EObjectImpl implements SystemConfig
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -204,11 +175,9 @@ public class SystemConfigurationImpl extends EObjectImpl implements SystemConfig
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -231,11 +200,9 @@ public class SystemConfigurationImpl extends EObjectImpl implements SystemConfig
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -254,11 +221,9 @@ public class SystemConfigurationImpl extends EObjectImpl implements SystemConfig
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

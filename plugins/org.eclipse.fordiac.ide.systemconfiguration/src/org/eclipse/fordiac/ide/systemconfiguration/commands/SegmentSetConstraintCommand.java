@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2012, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
  * 				 2019 Johannes Keppler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,12 +9,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl 
+ *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo 
+ *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.gef.RequestConstants;
@@ -53,12 +54,12 @@ public class SegmentSetConstraintCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#canExecute()
 	 */
 	@Override
 	public boolean canExecute() {
-		Object type = request.getType();
+		final Object type = request.getType();
 		// make sure the Request is of a type we support: (Move or
 		// Move_Children/Resize or Resize_Children)
 		return RequestConstants.REQ_MOVE.equals(type) || RequestConstants.REQ_MOVE_CHILDREN.equals(type)
@@ -68,25 +69,23 @@ public class SegmentSetConstraintCommand extends Command {
 
 	/**
 	 * Sets the new Position and Dimension of the affected Segment.
-	 * 
+	 *
 	 * @see #redo()
 	 */
 	@Override
 	public void execute() {
-		oldBounds = new Rectangle(segment.getX(), segment.getY(), segment.getWidth(), -1);
+		oldBounds = new Rectangle(segment.getPosition().asPoint(), new Dimension(segment.getWidth(), -1));
 		redo();
 	}
 
 	/**
 	 * Redo.
-	 * 
+	 *
 	 * @see #execute()
 	 */
 	@Override
 	public void redo() {
-		segment.setX(newBounds.x);
-		segment.setY(newBounds.y);
-
+		segment.updatePosition(newBounds.getTopLeft());
 		segment.setWidth(newBounds.width);
 
 	}
@@ -97,8 +96,7 @@ public class SegmentSetConstraintCommand extends Command {
 	@Override
 	public void undo() {
 		segment.setWidth(oldBounds.width);
-		segment.setX(oldBounds.x);
-		segment.setY(oldBounds.y);
+		segment.updatePosition(oldBounds.getTopLeft());
 	}
 
 }

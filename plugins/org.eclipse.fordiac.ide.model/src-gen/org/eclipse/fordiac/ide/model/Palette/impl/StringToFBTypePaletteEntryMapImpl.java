@@ -30,9 +30,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>String
- * To FB Type Palette Entry Map</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>String To FB Type Palette Entry Map</b></em>'.
+ * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -43,73 +42,58 @@ import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
  * <em>Value</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 		implements BasicEMap.Entry<String, FBTypePaletteEntry> {
-	/**
-	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getTypedKey()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String KEY_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getTypedKey()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String key = KEY_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getTypedValue()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected FBTypePaletteEntry value;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected StringToFBTypePaletteEntryMapImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return PalettePackage.Literals.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public String getTypedKey() {
 		return key;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public void setTypedKey(String newKey) {
 		String oldKey = key;
 		key = newKey;
@@ -118,11 +102,9 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 					PalettePackage.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP__KEY, oldKey, key));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public FBTypePaletteEntry getTypedValue() {
 		if (value != null && value.eIsProxy()) {
 			InternalEObject oldValue = (InternalEObject) value;
@@ -136,20 +118,16 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 		return value;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public FBTypePaletteEntry basicGetTypedValue() {
 		return value;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public void setTypedValue(FBTypePaletteEntry newValue) {
 		FBTypePaletteEntry oldValue = value;
 		value = newValue;
@@ -158,11 +136,9 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 					PalettePackage.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP__VALUE, oldValue, value));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -177,11 +153,9 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -197,11 +171,9 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -217,11 +189,9 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -234,11 +204,9 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())
@@ -251,18 +219,14 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 		return result.toString();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected int hash = -1;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getHash() {
 		if (hash == -1) {
@@ -272,51 +236,41 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 		return hash;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setHash(int hash) {
 		this.hash = hash;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getKey() {
 		return getTypedKey();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setKey(String key) {
 		setTypedKey(key);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBTypePaletteEntry getValue() {
 		return getTypedValue();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBTypePaletteEntry setValue(FBTypePaletteEntry value) {
 		FBTypePaletteEntry oldValue = getValue();
@@ -324,11 +278,9 @@ public class StringToFBTypePaletteEntryMapImpl extends EObjectImpl
 		return oldValue;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	public EMap<String, FBTypePaletteEntry> getEMap() {
 		EObject container = eContainer();

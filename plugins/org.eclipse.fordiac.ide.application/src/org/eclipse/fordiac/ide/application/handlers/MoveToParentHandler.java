@@ -52,7 +52,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class MoveToParentHandler extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 
 		if (null != editor) {
@@ -94,8 +94,8 @@ public class MoveToParentHandler extends AbstractHandler {
 		return ep.getFigure().getBounds();
 	}
 
-	private static GraphicalViewer getSubappParentViewer(FBNetwork fbnetwork, FBNetwork subappNetwork,
-			IEditorPart parent) {
+	private static GraphicalViewer getSubappParentViewer(final FBNetwork fbnetwork, final FBNetwork subappNetwork,
+			final IEditorPart parent) {
 		if (fbnetwork.equals(subappNetwork)) {
 			// source subapp editor, subapp content is opened in editor
 			return getViewer(openEditor(subappNetwork.eContainer().eContainer().eContainer()));
@@ -104,7 +104,7 @@ public class MoveToParentHandler extends AbstractHandler {
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 
@@ -122,7 +122,7 @@ public class MoveToParentHandler extends AbstractHandler {
 		setBaseEnabled(false);
 	}
 
-	private static List<FBNetworkElement> getSelectedFBNElements(ISelection selection) {
+	private static List<FBNetworkElement> getSelectedFBNElements(final ISelection selection) {
 		if (!selection.isEmpty() && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection sel = (IStructuredSelection) selection;
 			return (List<FBNetworkElement>) sel.toList().stream()
@@ -133,14 +133,14 @@ public class MoveToParentHandler extends AbstractHandler {
 		return Collections.emptyList();
 	}
 
-	private static FBNetwork getParent(FBNetworkElement fbNetworkElement) {
+	private static FBNetwork getParent(final FBNetworkElement fbNetworkElement) {
 		return fbNetworkElement.getFbNetwork().eContainer() instanceof SubApp
 				? fbNetworkElement.getFbNetwork()
 						: null;
 	}
 
 	// prevents the FBs from lying on top of one another
-	private static void preventFBPiling(List<MoveElementFromSubAppCommand> commands) {
+	private static void preventFBPiling(final List<MoveElementFromSubAppCommand> commands) {
 		final int OFFSET = 90;
 		int left = 0;
 		int right = 0;
@@ -148,15 +148,15 @@ public class MoveToParentHandler extends AbstractHandler {
 		for (final MoveElementFromSubAppCommand cmd : commands) {
 			switch (cmd.getSide()) {
 			case LEFT:
-				cmd.getElement().setY(cmd.getElement().getY() + (left * OFFSET));
+				cmd.getElement().getPosition().setY(cmd.getElement().getPosition().getY() + (left * OFFSET));
 				left++;
 				break;
 			case RIGHT:
-				cmd.getElement().setY(cmd.getElement().getY() + (right * OFFSET));
+				cmd.getElement().getPosition().setY(cmd.getElement().getPosition().getY() + (right * OFFSET));
 				right++;
 				break;
 			default:
-				cmd.getElement().setY(cmd.getElement().getY() + (below * OFFSET));
+				cmd.getElement().getPosition().setY(cmd.getElement().getPosition().getY() + (below * OFFSET));
 				below++;
 			}
 		}

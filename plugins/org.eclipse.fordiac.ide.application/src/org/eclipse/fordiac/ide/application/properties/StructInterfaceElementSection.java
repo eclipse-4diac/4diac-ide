@@ -21,7 +21,7 @@ import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ChangeSubAppIETypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -288,7 +288,7 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 	}
 
 	@Override
-	protected ChangeTypeCommand newChangeTypeCommand(VarDeclaration data, DataType newType) {
+	protected ChangeDataTypeCommand newChangeTypeCommand(VarDeclaration data, DataType newType) {
 		return new ChangeSubAppIETypeCommand(data, newType);
 	}
 }

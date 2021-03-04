@@ -17,47 +17,36 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '
- * <em><b>FB</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object ' <em><b>FB</b></em>'. <!-- end-user-doc -->
  *
- * @generated
- */
+ * @generated */
 public class FBImpl extends FBNetworkElementImpl implements FB {
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected FBImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.FB;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isResourceTypeFB() {
 		return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isResourceFB() {
 		return org.eclipse.fordiac.ide.model.Annotations.isResourceFB(this);

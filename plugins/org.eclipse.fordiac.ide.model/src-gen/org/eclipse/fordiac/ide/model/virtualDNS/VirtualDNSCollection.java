@@ -16,48 +16,38 @@ package org.eclipse.fordiac.ide.model.virtualDNS;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '
- * <em><b>Collection</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object ' <em><b>Collection</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getVirtualDNSEntries <em>Virtual DNS Entries</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getVirtualDNSEntries <em>Virtual DNS
+ * Entries</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getName <em>Name</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage#getVirtualDNSCollection()
  * @model
- * @generated
- */
+ * @generated */
 public interface VirtualDNSCollection extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Virtual DNS Entries</b></em>' containment
-	 * reference list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry}. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>Virtual DNS Entries</b></em>' containment reference list. The list contents are
+	 * of type {@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry}. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Virtual DNS Entries</em>' containment reference
-	 * list isn't clear, there really should be more of a description here...
+	 * If the meaning of the '<em>Virtual DNS Entries</em>' containment reference list isn't clear, there really should
+	 * be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
-	 * @return the value of the '<em>Virtual DNS Entries</em>' containment reference
-	 *         list.
+	 * @return the value of the '<em>Virtual DNS Entries</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage#getVirtualDNSCollection_VirtualDNSEntries()
 	 * @model containment="true"
-	 * @generated
-	 */
+	 * @generated */
 	EList<VirtualDNSEntry> getVirtualDNSEntries();
 
-	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute. <!--
-	 * begin-user-doc -->
+	/** Returns the value of the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear, there really
-	 * should be more of a description here...
+	 * If the meaning of the '<em>Name</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
@@ -65,17 +55,15 @@ public interface VirtualDNSCollection extends EObject {
 	 * @see #setName(String)
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage#getVirtualDNSCollection_Name()
 	 * @model
-	 * @generated
-	 */
+	 * @generated */
 	String getName();
 
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getName <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getName
+	 * <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
-	 * @generated
-	 */
+	 * @generated */
 	void setName(String value);
 
 	String getValueFor(String name);

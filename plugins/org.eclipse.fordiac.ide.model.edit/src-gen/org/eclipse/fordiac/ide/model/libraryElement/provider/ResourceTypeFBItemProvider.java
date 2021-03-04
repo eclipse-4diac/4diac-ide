@@ -23,30 +23,21 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 
-/**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB} object.
+/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
  * 
- * @generated
- */
+ * @generated */
 public class ResourceTypeFBItemProvider extends FBItemProvider {
-	/**
-	 * This constructs an instance from a factory and a notifier. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public ResourceTypeFBItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/**
-	 * This returns the property descriptors for the adapted class. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -56,23 +47,17 @@ public class ResourceTypeFBItemProvider extends FBItemProvider {
 		return itemPropertyDescriptors;
 	}
 
-	/**
-	 * This returns ResourceTypeFB.gif. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/** This returns ResourceTypeFB.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object getImage(Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/ResourceTypeFB")); //$NON-NLS-1$
 	}
 
-	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getText(Object object) {
 		String label = ((ResourceTypeFB) object).getName();
@@ -80,26 +65,21 @@ public class ResourceTypeFBItemProvider extends FBItemProvider {
 				getString("_UI_ResourceTypeFB_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
+	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 		super.notifyChanged(notification);
 	}
 
-	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
+	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);

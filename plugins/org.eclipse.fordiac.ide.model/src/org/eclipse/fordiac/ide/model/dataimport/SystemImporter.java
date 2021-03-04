@@ -537,8 +537,7 @@ public class SystemImporter extends CommonElementImporter {
 				interfaceList.getEventOutputs().add(eventCopy);
 			}
 			copy.setInterface(interfaceList);
-			copy.setX(element.getX());
-			copy.setY(element.getY());
+			copy.setPosition(EcoreUtil.copy(element.getPosition()));
 		}
 
 		for (final EventConnection eventCon : type.getFBNetwork().getEventConnections()) {

@@ -17,41 +17,32 @@ import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>FB Type
- * Palette Entry</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>FB Type Palette Entry</b></em>'. <!--
+ * end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getFBTypePaletteEntry()
  * @model
- * @generated
- */
+ * @generated */
 public interface FBTypePaletteEntry extends PaletteEntry {
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true"
-	 * @generated
-	 */
+	 * @generated */
 	FBType getFBType();
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	void setType(LibraryElement type);
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @model kind="operation"
-	 *        dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
-	 * @generated
-	 */
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
+	 * @generated */
 	@Override
 	TypeImporter getTypeImporter();
 

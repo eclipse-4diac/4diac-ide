@@ -23,37 +23,29 @@ import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Resource Type Entry</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Resource Type Entry</b></em>'. <!--
+ * end-user-doc -->
  *
- * @generated
- */
+ * @generated */
 public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceTypeEntry {
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected ResourceTypeEntryImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return PalettePackage.Literals.RESOURCE_TYPE_ENTRY;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ResourceType getResourceType() {
 		LibraryElement type = getType();
@@ -63,11 +55,9 @@ public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceT
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setType(final LibraryElement type) {
 		if (type instanceof ResourceType) {
@@ -82,11 +72,9 @@ public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceT
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public TypeImporter getTypeImporter() {
 		return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(getFile());

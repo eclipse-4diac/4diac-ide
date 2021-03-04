@@ -23,37 +23,29 @@ import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Sub
- * Application Type Palette Entry</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Sub Application Type Palette Entry</b></em>'.
+ * <!-- end-user-doc -->
  *
- * @generated
- */
+ * @generated */
 public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl implements SubApplicationTypePaletteEntry {
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected SubApplicationTypePaletteEntryImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return PalettePackage.Literals.SUB_APPLICATION_TYPE_PALETTE_ENTRY;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public SubAppType getSubApplicationType() {
 		LibraryElement type = getType();
@@ -63,11 +55,9 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setType(final LibraryElement type) {
 		if (type instanceof SubAppType) {
@@ -82,11 +72,9 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public TypeImporter getTypeImporter() {
 		return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(getFile());

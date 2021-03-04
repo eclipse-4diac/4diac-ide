@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2016 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -25,16 +25,13 @@ public class MoveBendpointCommand extends Command {
 	/** The e c transition. */
 	private final ECTransition eCTransition;
 
-	/** The point. */
 	private final Point point;
+	private Point oldPoint;
 
-	/** The old pos. */
-	private int oldX;
-	private int oldY;
 
 	/**
 	 * Instantiates a new move bendpoint command.
-	 * 
+	 *
 	 * @param transition the transition
 	 * @param point      the point
 	 */
@@ -46,36 +43,33 @@ public class MoveBendpointCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
 	public void execute() {
-		oldX = eCTransition.getX();
-		oldY = eCTransition.getY();
+		oldPoint = eCTransition.getPosition().asPoint();
 		redo();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
 	public void undo() {
-		eCTransition.setX(oldX);
-		eCTransition.setY(oldY);
+		eCTransition.updatePosition(oldPoint);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override
 	public void redo() {
-		eCTransition.setX(point.x);
-		eCTransition.setY(point.y);
+		eCTransition.updatePosition(point);
 	}
 
 }

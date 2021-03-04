@@ -20,6 +20,8 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IWorkbenchPart;
 
 public class InterfaceSection extends AbstractInterfaceSection {
 
@@ -37,6 +39,19 @@ public class InterfaceSection extends AbstractInterfaceSection {
 			return (FBNetworkElement) input;
 		}
 		return null;
+	}
+
+	@Override
+	public void setInput(final IWorkbenchPart part, final ISelection selection) {
+		super.setInput(part, selection);
+		if (getType().isContainedInTypedInstance()) {
+			disableAllFields();
+		}
+	}
+
+	@Override
+	protected FBNetworkElement getType() {
+		return (FBNetworkElement) super.getType();
 	}
 
 }

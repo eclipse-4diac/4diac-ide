@@ -29,144 +29,111 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Entry</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Entry</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getLabel
- * <em>Label</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getFile
- * <em>File</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getLastModificationTimestamp
- * <em>Last Modification Timestamp</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getType
- * <em>Type</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getPalette
- * <em>Palette</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getLabel <em>Label</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getFile <em>File</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getLastModificationTimestamp <em>Last
+ * Modification Timestamp</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getType <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getPalette <em>Palette</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEntry {
-	/**
-	 * The default value of the '{@link #getLabel() <em>Label</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getLabel() <em>Label</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @see #getLabel()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String LABEL_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getLabel() <em>Label</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @see #getLabel()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String label = LABEL_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getFile() <em>File</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getFile() <em>File</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getFile()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final IFile FILE_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getFile() <em>File</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getFile() <em>File</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getFile()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected IFile file = FILE_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getLastModificationTimestamp() <em>Last
-	 * Modification Timestamp</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The default value of the '{@link #getLastModificationTimestamp() <em>Last Modification Timestamp</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getLastModificationTimestamp()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final long LAST_MODIFICATION_TIMESTAMP_EDEFAULT = 0L;
 
-	/**
-	 * The cached value of the '{@link #getLastModificationTimestamp() <em>Last
-	 * Modification Timestamp</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getLastModificationTimestamp() <em>Last Modification Timestamp</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getLastModificationTimestamp()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected long lastModificationTimestamp = LAST_MODIFICATION_TIMESTAMP_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getType() <em>Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getType()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected LibraryElement type;
 
-	/**
-	 * The cached value of the '{@link #getPalette() <em>Palette</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getPalette() <em>Palette</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getPalette()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected Palette palette;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected PaletteEntryImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return PalettePackage.Literals.PALETTE_ENTRY;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getLabel() {
 		return label;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setLabel(String newLabel) {
 		String oldLabel = label;
@@ -176,21 +143,17 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 					label));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public IFile getFile() {
 		return file;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setFile(IFile newFile) {
 		IFile oldFile = file;
@@ -199,21 +162,17 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_ENTRY__FILE, oldFile, file));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public long getLastModificationTimestamp() {
 		return lastModificationTimestamp;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setLastModificationTimestamp(long newLastModificationTimestamp) {
 		long oldLastModificationTimestamp = lastModificationTimestamp;
@@ -224,11 +183,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 					lastModificationTimestamp));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated not
-	 */
+	 * @generated not */
 	@Override
 	public LibraryElement getType() {
 		if (type != null && type.eIsProxy()) {
@@ -249,11 +206,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		return type;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetType(LibraryElement newType, NotificationChain msgs) {
 		LibraryElement oldType = type;
 		type = newType;
@@ -268,11 +223,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setType(LibraryElement newType) {
 		if (newType != type) {
@@ -291,21 +244,17 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 					newType));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Palette getPalette() {
 		return palette;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setPalette(Palette newPalette) {
 		Palette oldPalette = palette;
@@ -315,31 +264,25 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 					palette));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getProjectRelativeTypePath() {
 		return getFile().getProjectRelativePath().toOSString();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public LibraryElement loadType() {
 		return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.loadType(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public TypeImporter getTypeImporter() {
 		// TODO: implement this method
@@ -347,21 +290,17 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public TypeLibrary getTypeLibrary() {
 		return getPalette().getTypeLibrary();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -375,11 +314,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -390,11 +327,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -413,11 +348,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -442,11 +375,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -471,11 +402,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -494,11 +423,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

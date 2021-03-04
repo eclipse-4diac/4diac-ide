@@ -46,13 +46,12 @@ import org.eclipse.swt.graphics.Point;
 public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	private int childrenNumber = 0;
 	private Point p;
-	private Adapter adapter = new EContentAdapter() {
+	private final Adapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 
-			Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature) ||
-					LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature)) {
+			final Object feature = notification.getFeature();
+			if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)) {
 				p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
 				p.x -= 40;
 				getChildren().forEach(ep->((EditPart)ep).refresh());
@@ -69,7 +68,7 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	};
 
 	@Override
-	public void setModel(Object model) {
+	public void setModel(final Object model) {
 		super.setModel(model);
 		p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
 		p.x -= 40;
@@ -93,7 +92,7 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	}
 
 	@Override
-	public void installEditPolicy(Object key, EditPolicy editPolicy) {
+	public void installEditPolicy(final Object key, final EditPolicy editPolicy) {
 		if (!(editPolicy instanceof ModifiedNonResizeableEditPolicy)) {
 			super.installEditPolicy(key, editPolicy);
 		} else {
@@ -102,7 +101,7 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 			super.installEditPolicy(key, new ModifiedNonResizeableEditPolicy() {
 
 				@Override
-				public EditPart getTargetEditPart(Request request) {
+				public EditPart getTargetEditPart(final Request request) {
 					return getParent().getTargetEditPart(request);
 				}
 			});
@@ -122,7 +121,7 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 				// ausrechnen?
 				// return a command that can move a "ViewEditPart"
 				if ((child.getModel() instanceof PositionableElement) && (constraint instanceof Rectangle)) {
-					Rectangle constraintRect = (Rectangle) constraint;
+					final Rectangle constraintRect = (Rectangle) constraint;
 					constraintRect.x += p.x;
 					constraintRect.y += p.y;
 
@@ -142,10 +141,10 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	@Override
 	protected IFigure createFigure() {
 
-		IFigure figure = new Figure() {
+		final IFigure figure = new Figure() {
 			@Override
-			public Dimension getPreferredSize(int wHint, int hHint) {
-				Dimension dim = super.getPreferredSize(wHint, hHint);
+			public Dimension getPreferredSize(final int wHint, final int hHint) {
+				final Dimension dim = super.getPreferredSize(wHint, hHint);
 				return dim;
 			}
 		};
@@ -155,7 +154,7 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 
 		figure.setLayoutManager(new XYLayout() {
 			@Override
-			public Dimension calculatePreferredSize(IFigure container, int wHint, int hHint) {
+			public Dimension calculatePreferredSize(final IFigure container, final int wHint, final int hHint) {
 				return super.calculatePreferredSize(container, wHint, hHint);
 			}
 
@@ -164,9 +163,9 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	}
 
 	@Override
-	public void setLayoutConstraint(EditPart child, IFigure childFigure, Object constraint) {
+	public void setLayoutConstraint(final EditPart child, final IFigure childFigure, final Object constraint) {
 		if (constraint instanceof Rectangle) {
-			Rectangle rectConstraint = (Rectangle) constraint;
+			final Rectangle rectConstraint = (Rectangle) constraint;
 			if (child instanceof ValueEditPart) {
 				rectConstraint.performTranslate(-getFigure().getBounds().x - HOR_BORDER_WIDTH,
 						-getFigure().getBounds().y - VER_BORDER_WIDTH);

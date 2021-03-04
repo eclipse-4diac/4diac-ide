@@ -14,6 +14,8 @@
  *                 invoked, this included clean-up and the use of a compound
  *                 command for a better undo redo behavior
  *               - added checking and opening of parent editors
+ *  Lukas Wais	 - added setEnabled and getSelectedSubApp
+ *  			   from ToggleSubAppRepresentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -33,8 +35,10 @@ import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class FlattenSubApplication extends AbstractHandler {
@@ -65,6 +69,14 @@ public class FlattenSubApplication extends AbstractHandler {
 		return mainCmd;
 	}
 
+	@Override
+	public void setEnabled(Object evaluationContext) {
+		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
+		final SubApp subApp = getSelectedSubApp(selection);
+
+		setBaseEnabled(BreadcrumbUtil.isEditableSubApp(subApp));
+	}
+
 	private static SubApp getSubApp(Object currentElement) {
 		if (currentElement instanceof SubApp) {
 			return (SubApp) currentElement;
@@ -72,6 +84,16 @@ public class FlattenSubApplication extends AbstractHandler {
 			return ((SubAppForFBNetworkEditPart) currentElement).getModel();
 		} else if (currentElement instanceof UISubAppNetworkEditPart) {
 			return (SubApp) ((UISubAppNetworkEditPart) currentElement).getModel().eContainer();
+		}
+		return null;
+	}
+
+	private static SubApp getSelectedSubApp(Object selection) {
+		if (selection instanceof IStructuredSelection) {
+			final IStructuredSelection structSel = ((IStructuredSelection) selection);
+			if (!structSel.isEmpty() && (structSel.size() == 1)) {
+				return getSubApp(structSel.getFirstElement());
+			}
 		}
 		return null;
 	}

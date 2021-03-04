@@ -13,15 +13,13 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>Service
- * Interface</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Service Interface</b></em>'. <!-- end-user-doc
+ * -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceInterface()
  * @model
- * @generated
- */
+ * @generated */
 public interface ServiceInterface extends INamedElement {
 
 } // ServiceInterface

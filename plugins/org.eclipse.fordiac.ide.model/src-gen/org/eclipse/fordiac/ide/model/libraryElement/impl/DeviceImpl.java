@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -33,430 +34,365 @@ import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '
- * <em><b>Device</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object ' <em><b>Device</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getX
- * <em>X</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getY
- * <em>Y</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getColor
- * <em>Color</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getVarDeclarations
- * <em>Var Declarations</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getResource
- * <em>Resource</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getProfile
- * <em>Profile</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getInConnections
- * <em>In Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getPosition <em>Position</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getColor <em>Color</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getVarDeclarations <em>Var
+ * Declarations</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getResource <em>Resource</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getProfile <em>Profile</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getInConnections <em>In
+ * Connections</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
-	/**
-	 * The default value of the '{@link #getX() <em>X</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @see #getX()
+	/** The cached value of the '{@link #getPosition() <em>Position</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @see #getPosition()
 	 * @generated
-	 * @ordered
-	 */
-	protected static final int X_EDEFAULT = 0;
+	 * @ordered */
+	protected Position position;
 
-	/**
-	 * The cached value of the '{@link #getX() <em>X</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @see #getX()
-	 * @generated
-	 * @ordered
-	 */
-	protected int x = X_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getY() <em>Y</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @see #getY()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int Y_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getY() <em>Y</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @see #getY()
-	 * @generated
-	 * @ordered
-	 */
-	protected int y = Y_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getColor() <em>Color</em>}' containment
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getColor() <em>Color</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getColor()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected Color color;
 
-	/**
-	 * The cached value of the '{@link #getVarDeclarations() <em>Var
-	 * Declarations</em>}' containment reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getVarDeclarations()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<VarDeclaration> varDeclarations;
 
-	/**
-	 * The cached value of the '{@link #getResource() <em>Resource</em>}'
-	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/** The cached value of the '{@link #getResource() <em>Resource</em>}' containment reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getResource()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Resource> resource;
 
-	/**
-	 * The default value of the '{@link #getProfile() <em>Profile</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getProfile() <em>Profile</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getProfile()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String PROFILE_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getProfile() <em>Profile</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getProfile() <em>Profile</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getProfile()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String profile = PROFILE_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getInConnections() <em>In Connections</em>}'
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/** The cached value of the '{@link #getInConnections() <em>In Connections</em>}' reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getInConnections()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Link> inConnections;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	protected DeviceImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.DEVICE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public Position getPosition() {
+		if (position != null && position.eIsProxy()) {
+			final InternalEObject oldPosition = (InternalEObject) position;
+			position = (Position) eResolveProxy(oldPosition);
+			if (position != oldPosition) {
+				if (eNotificationRequired()) {
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEVICE__POSITION,
+							oldPosition, position));
+				}
+			}
+		}
+		return position;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	public Position basicGetPosition() {
+		return position;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public void setPosition(final Position newPosition) {
+		final Position oldPosition = position;
+		position = newPosition;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__POSITION, oldPosition,
+					position));
+		}
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public EList<Resource> getResource() {
 		if (resource == null) {
-			resource = new EObjectContainmentWithInverseEList<Resource>(Resource.class, this,
+			resource = new EObjectContainmentWithInverseEList<>(Resource.class, this,
 					LibraryElementPackage.DEVICE__RESOURCE, LibraryElementPackage.RESOURCE__DEVICE);
 		}
 		return resource;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
-	public int getX() {
-		return x;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
-	public void setX(int newX) {
-		int oldX = x;
-		x = newX;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__X, oldX, x));
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
-	public int getY() {
-		return y;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
-	public void setY(int newY) {
-		int oldY = y;
-		y = newY;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__Y, oldY, y));
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public Color getColor() {
 		if (color != null && color.eIsProxy()) {
-			InternalEObject oldColor = (InternalEObject) color;
+			final InternalEObject oldColor = (InternalEObject) color;
 			color = (Color) eResolveProxy(oldColor);
 			if (color != oldColor) {
-				InternalEObject newColor = (InternalEObject) color;
+				final InternalEObject newColor = (InternalEObject) color;
 				NotificationChain msgs = oldColor.eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, null);
 				if (newColor.eInternalContainer() == null) {
 					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR,
 							null, msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEVICE__COLOR,
 							oldColor, color));
+				}
 			}
 		}
 		return color;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	public Color basicGetColor() {
 		return color;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	public NotificationChain basicSetColor(Color newColor, NotificationChain msgs) {
-		Color oldColor = color;
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	public NotificationChain basicSetColor(final Color newColor, NotificationChain msgs) {
+		final Color oldColor = color;
 		color = newColor;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 					LibraryElementPackage.DEVICE__COLOR, oldColor, newColor);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public void setColor(Color newColor) {
+	public void setColor(final Color newColor) {
 		if (newColor != color) {
 			NotificationChain msgs = null;
-			if (color != null)
+			if (color != null) {
 				msgs = ((InternalEObject) color).eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, msgs);
-			if (newColor != null)
+			}
+			if (newColor != null) {
 				msgs = ((InternalEObject) newColor).eInverseAdd(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, msgs);
+			}
 			msgs = basicSetColor(newColor, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__COLOR, newColor,
 					newColor));
+		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
-			varDeclarations = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this,
+			varDeclarations = new EObjectContainmentEList.Resolving<>(VarDeclaration.class, this,
 					LibraryElementPackage.DEVICE__VAR_DECLARATIONS);
 		}
 		return varDeclarations;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public String getProfile() {
 		return profile;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public void setProfile(String newProfile) {
-		String oldProfile = profile;
+	public void setProfile(final String newProfile) {
+		final String oldProfile = profile;
 		profile = newProfile;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEVICE__PROFILE, oldProfile,
 					profile));
+		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public EList<Link> getInConnections() {
 		if (inConnections == null) {
-			inConnections = new EObjectWithInverseResolvingEList<Link>(Link.class, this,
+			inConnections = new EObjectWithInverseResolvingEList<>(Link.class, this,
 					LibraryElementPackage.DEVICE__IN_CONNECTIONS, LibraryElementPackage.LINK__DEVICE);
 		}
 		return inConnections;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public AutomationSystem getAutomationSystem() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public SystemConfiguration getSystemConfiguration() {
 		return org.eclipse.fordiac.ide.model.Annotations.getSystemConfiguration(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public DeviceType getType() {
-		// this cannot be moved to the annotation class because there we don't have the
-		// super access!!!
-		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
+		// this cannot be moved to the annotation class because there we don't have the super access!!!
+		final org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
 		if (type instanceof DeviceType) {
 			return (DeviceType) type;
 		}
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public Resource getResourceNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getResourceNamed(this, name);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public void updatePosition(final int x, final int y) {
+		final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE
+				.createPosition();
+		pos.setX(x);
+		pos.setY(y);
+		setPosition(pos);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
+	@Override
+	public void updatePosition(final Point newPos) {
+		updatePosition(newPos.x, newPos.y);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public Color getColorGen() {
 		if (color != null && color.eIsProxy()) {
-			InternalEObject oldColor = (InternalEObject) color;
+			final InternalEObject oldColor = (InternalEObject) color;
 			color = (Color) eResolveProxy(oldColor);
 			if (color != oldColor) {
-				InternalEObject newColor = (InternalEObject) color;
+				final InternalEObject newColor = (InternalEObject) color;
 				NotificationChain msgs = oldColor.eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, null);
 				if (newColor.eInternalContainer() == null) {
 					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR,
 							null, msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEVICE__COLOR,
 							oldColor, color));
+				}
 			}
 		}
 		return color;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseAdd(final InternalEObject otherEnd, final int featureID,
+			final NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.DEVICE__RESOURCE:
 			return ((InternalEList<InternalEObject>) (InternalEList<?>) getResource()).basicAdd(otherEnd, msgs);
@@ -467,13 +403,12 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID,
+			final NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.DEVICE__COLOR:
 			return basicSetColor(null, msgs);
@@ -488,21 +423,21 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.DEVICE__X:
-			return getX();
-		case LibraryElementPackage.DEVICE__Y:
-			return getY();
+		case LibraryElementPackage.DEVICE__POSITION:
+			if (resolve) {
+				return getPosition();
+			}
+			return basicGetPosition();
 		case LibraryElementPackage.DEVICE__COLOR:
-			if (resolve)
+			if (resolve) {
 				return getColor();
+			}
 			return basicGetColor();
 		case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
 			return getVarDeclarations();
@@ -517,20 +452,15 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.DEVICE__X:
-			setX((Integer) newValue);
-			return;
-		case LibraryElementPackage.DEVICE__Y:
-			setY((Integer) newValue);
+		case LibraryElementPackage.DEVICE__POSITION:
+			setPosition((Position) newValue);
 			return;
 		case LibraryElementPackage.DEVICE__COLOR:
 			setColor((Color) newValue);
@@ -556,19 +486,14 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.DEVICE__X:
-			setX(X_EDEFAULT);
-			return;
-		case LibraryElementPackage.DEVICE__Y:
-			setY(Y_EDEFAULT);
+		case LibraryElementPackage.DEVICE__POSITION:
+			setPosition((Position) null);
 			return;
 		case LibraryElementPackage.DEVICE__COLOR:
 			setColor((Color) null);
@@ -591,18 +516,14 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.DEVICE__X:
-			return x != X_EDEFAULT;
-		case LibraryElementPackage.DEVICE__Y:
-			return y != Y_EDEFAULT;
+		case LibraryElementPackage.DEVICE__POSITION:
+			return position != null;
 		case LibraryElementPackage.DEVICE__COLOR:
 			return color != null;
 		case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
@@ -618,19 +539,15 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+	public int eBaseStructuralFeatureID(final int derivedFeatureID, final Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
 			switch (derivedFeatureID) {
-			case LibraryElementPackage.DEVICE__X:
-				return LibraryElementPackage.POSITIONABLE_ELEMENT__X;
-			case LibraryElementPackage.DEVICE__Y:
-				return LibraryElementPackage.POSITIONABLE_ELEMENT__Y;
+			case LibraryElementPackage.DEVICE__POSITION:
+				return LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION;
 			default:
 				return -1;
 			}
@@ -654,19 +571,15 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+	public int eDerivedStructuralFeatureID(final int baseFeatureID, final Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
 			switch (baseFeatureID) {
-			case LibraryElementPackage.POSITIONABLE_ELEMENT__X:
-				return LibraryElementPackage.DEVICE__X;
-			case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
-				return LibraryElementPackage.DEVICE__Y;
+			case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
+				return LibraryElementPackage.DEVICE__POSITION;
 			default:
 				return -1;
 			}
@@ -690,22 +603,17 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (x: "); //$NON-NLS-1$
-		result.append(x);
-		result.append(", y: "); //$NON-NLS-1$
-		result.append(y);
-		result.append(", profile: "); //$NON-NLS-1$
+		final StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (profile: "); //$NON-NLS-1$
 		result.append(profile);
 		result.append(')');
 		return result.toString();

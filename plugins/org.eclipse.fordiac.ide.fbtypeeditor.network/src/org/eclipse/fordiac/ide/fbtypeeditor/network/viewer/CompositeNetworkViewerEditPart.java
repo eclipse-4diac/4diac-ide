@@ -108,4 +108,9 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 		});
 	}
 
+	@Override
+	public void performRequest(final Request request) {
+		// do nothing as this is a viewer
+	}
+
 }

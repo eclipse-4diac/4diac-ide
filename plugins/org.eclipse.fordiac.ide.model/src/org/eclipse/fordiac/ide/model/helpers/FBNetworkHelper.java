@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Point;
 
@@ -41,18 +42,18 @@ public final class FBNetworkHelper {
 	 *                      FBNetwork should be contained in
 	 * @return the copied FBNetwork
 	 */
-	public static FBNetwork copyFBNetWork(FBNetwork srcNetwork, InterfaceList destInterface) {
-		FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
+	public static FBNetwork copyFBNetWork(final FBNetwork srcNetwork, final InterfaceList destInterface) {
+		final FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		dstNetwork.getNetworkElements().addAll(EcoreUtil.copyAll(srcNetwork.getNetworkElements()));
 		checkForAdapterFBs(dstNetwork, destInterface);
 		createConnections(srcNetwork, dstNetwork, destInterface);
 		return dstNetwork;
 	}
 
-	private static void checkForAdapterFBs(FBNetwork dstNetwork, InterfaceList destInterface) {
-		for (FBNetworkElement elem : dstNetwork.getNetworkElements()) {
+	private static void checkForAdapterFBs(final FBNetwork dstNetwork, final InterfaceList destInterface) {
+		for (final FBNetworkElement elem : dstNetwork.getNetworkElements()) {
 			if (elem instanceof AdapterFB) {
-				AdapterDeclaration adapter = destInterface.getAdapter(elem.getName());
+				final AdapterDeclaration adapter = destInterface.getAdapter(elem.getName());
 				if (null != adapter) {
 					((AdapterFB) elem).setAdapterDecl(adapter);
 				}
@@ -60,33 +61,33 @@ public final class FBNetworkHelper {
 		}
 	}
 
-	private static void createConnections(FBNetwork srcNetwork, FBNetwork dstNetwork, InterfaceList destInterface) {
-		for (Connection connection : srcNetwork.getEventConnections()) {
+	private static void createConnections(final FBNetwork srcNetwork, final FBNetwork dstNetwork, final InterfaceList destInterface) {
+		for (final Connection connection : srcNetwork.getEventConnections()) {
 			dstNetwork.getEventConnections()
-					.add((EventConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
+			.add((EventConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
 		}
 
-		for (Connection connection : srcNetwork.getDataConnections()) {
+		for (final Connection connection : srcNetwork.getDataConnections()) {
 			dstNetwork.getDataConnections()
-					.add((DataConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
+			.add((DataConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
 		}
 
-		for (Connection connection : srcNetwork.getAdapterConnections()) {
+		for (final Connection connection : srcNetwork.getAdapterConnections()) {
 			dstNetwork.getAdapterConnections()
-					.add((AdapterConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
+			.add((AdapterConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
 		}
 	}
 
-	private static Connection createConnection(FBNetwork srcNetwork, InterfaceList destInterface, FBNetwork dstNetwork,
-			Connection connection) {
-		Connection newConn = EcoreUtil.copy(connection);
+	private static Connection createConnection(final FBNetwork srcNetwork, final InterfaceList destInterface, final FBNetwork dstNetwork,
+			final Connection connection) {
+		final Connection newConn = EcoreUtil.copy(connection);
 		newConn.setSource(getInterfaceElement(connection.getSource(), destInterface, dstNetwork, srcNetwork));
 		newConn.setDestination(getInterfaceElement(connection.getDestination(), destInterface, dstNetwork, srcNetwork));
 		return newConn;
 	}
 
-	private static IInterfaceElement getInterfaceElement(IInterfaceElement ie, InterfaceList typeInterface,
-			FBNetwork dstNetwork, FBNetwork srcNetwork) {
+	private static IInterfaceElement getInterfaceElement(final IInterfaceElement ie, final InterfaceList typeInterface,
+			final FBNetwork dstNetwork, final FBNetwork srcNetwork) {
 		if (null == ie.getFBNetworkElement()) {
 			return typeInterface.getInterfaceElement(ie.getName());
 		}
@@ -94,7 +95,7 @@ public final class FBNetworkHelper {
 		if (!srcNetwork.equals(ie.getFBNetworkElement().getFbNetwork())) {
 			return typeInterface.getInterfaceElement(ie.getName());
 		}
-		FBNetworkElement element = dstNetwork.getElementNamed(ie.getFBNetworkElement().getName());
+		final FBNetworkElement element = dstNetwork.getElementNamed(ie.getFBNetworkElement().getName());
 		if (null == element) {
 			return null;
 		}
@@ -106,15 +107,16 @@ public final class FBNetworkHelper {
 	 * subapp/...
 	 */
 
-	public static Point getTopLeftCornerOfFBNetwork(List<?> selection) {
+	public static Point getTopLeftCornerOfFBNetwork(final List<?> selection) {
 		Assert.isNotNull(selection);
-		Point pt = new Point(0, 0);
+		final Point pt = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
 		Object fb = null;
-		for (Object sel : selection) {
+		for (final Object sel : selection) {
 			fb = (sel instanceof EditPart) ? ((EditPart) sel).getModel() : sel;
 			if (fb instanceof FBNetworkElement) {
-				pt.x = (pt.x == 0) ? ((FBNetworkElement) fb).getX() : Math.min(pt.x, ((FBNetworkElement) fb).getX());
-				pt.y = (pt.y == 0) ? ((FBNetworkElement) fb).getY() : Math.min(pt.y, ((FBNetworkElement) fb).getY());
+				final Position pos = ((FBNetworkElement) fb).getPosition();
+				pt.x = Math.min(pt.x, pos.getX());
+				pt.y = Math.min(pt.y, pos.getY());
 			}
 		}
 		return pt;
@@ -123,21 +125,23 @@ public final class FBNetworkHelper {
 	public static final int Y_OFFSET_FROM_TOP_LEFT_CORNER = 80; // from top-left corner of container
 	public static final int X_OFFSET_FROM_TOP_LEFT_CORNER = 150;
 
-	public static void moveFBNetworkByOffset(Iterable<FBNetworkElement> fbNetwork, int xOffset, int yOffset) {
-		for (FBNetworkElement el : fbNetwork) {
-			el.setX(el.getX() - xOffset);
-			el.setY(el.getY() - yOffset);
+	public static void moveFBNetworkByOffset(final Iterable<FBNetworkElement> fbNetwork, final int xOffset, final int yOffset) {
+		for (final FBNetworkElement el : fbNetwork) {
+			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+			pos.setX(el.getPosition().getX() - xOffset);
+			pos.setY(el.getPosition().getY() - xOffset);
+			el.setPosition(pos);
 		}
 	}
 
-	public static Point removeXYOffsetForFBNetwork(List<FBNetworkElement> fbNetwork) {
-		Point offset = getTopLeftCornerOfFBNetwork(fbNetwork);
+	public static Point removeXYOffsetForFBNetwork(final List<FBNetworkElement> fbNetwork) {
+		final Point offset = getTopLeftCornerOfFBNetwork(fbNetwork);
 		moveFBNetworkByOffset(fbNetwork, offset.x - X_OFFSET_FROM_TOP_LEFT_CORNER,
 				offset.y - Y_OFFSET_FROM_TOP_LEFT_CORNER);
 		return offset;
 	}
 
-	public static void moveFBNetworkByOffset(List<FBNetworkElement> fbNetwork, Point offset) {
+	public static void moveFBNetworkByOffset(final List<FBNetworkElement> fbNetwork, final Point offset) {
 		moveFBNetworkByOffset(fbNetwork, offset.x, offset.y);
 	}
 

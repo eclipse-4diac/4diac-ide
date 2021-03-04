@@ -31,27 +31,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Demultiplexer</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Demultiplexer</b></em>'. <!-- end-user-doc -->
  *
- * @generated
- */
+ * @generated */
 public class DemultiplexerImpl extends StructManipulatorImpl implements Demultiplexer {
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected DemultiplexerImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.DEMULTIPLEXER;
@@ -104,10 +97,7 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 		return super.deleteAttribute(attributeName);
 	}
 
-	/**
-	 * sets all member variables of the passed StructuredType as output ports
-	 *
-	 */
+	/** sets all member variables of the passed StructuredType as output ports */
 	@Override
 	protected void setMemberVariablesAsPorts(StructuredType newStructType) {
 		// create member variables of struct as data output ports

@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class SEGImporter extends TypeImporter {
 
-	public SEGImporter(IFile typeFile) {
+	public SEGImporter(final IFile typeFile) {
 		super(typeFile);
 	}
 
@@ -60,10 +60,10 @@ public final class SEGImporter extends TypeImporter {
 				parseVersionInfo(getElement());
 				break;
 			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				parseCompilerInfo(getElement());
+				getElement().setCompilerInfo(parseCompilerInfo());
 				break;
 			case LibraryElementTags.VAR_DECLARATION_ELEMENT:
-				VarDeclaration v = parseVarDeclaration();
+				final VarDeclaration v = parseVarDeclaration();
 				v.setIsInput(true);
 				getElement().getVarDeclaration().add(v);
 				break;

@@ -21,20 +21,18 @@ package org.eclipse.fordiac.ide.model.commands.create;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
 public abstract class AbstractConnectionCreateCommand extends Command {
 
-	private int connDx1;
-
-	private int connDx2;
-
-	private int connDy;
+	private final ConnectionRoutingData routingData;
 
 	/** The parent. */
 	private FBNetwork parent;
@@ -62,17 +60,15 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	protected AbstractConnectionCreateCommand(final FBNetwork parent) {
 		super();
 		// initialize values
-		this.connDx1 = 0;
-		this.connDx2 = 0;
-		this.connDy = 0;
 		this.parent = parent;
 		this.performMappingCheck = true;
+		routingData = LibraryElementFactory.eINSTANCE.createConnectionRoutingData();
 	}
 
-	public void setArrangementConstraints(final int dx1, final int dx2, final int dy) {
-		this.connDx1 = dx1;
-		this.connDx2 = dx2;
-		this.connDy = dy;
+	public void setArrangementConstraints(final ConnectionRoutingData routingData) {
+		this.routingData.setDx1(routingData.getDx1());
+		this.routingData.setDx2(routingData.getDx1());
+		this.routingData.setDy(routingData.getDy());
 	}
 
 	public void setSource(final IInterfaceElement source) {
@@ -155,12 +151,9 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		checkSourceAndTarget();
 
 		connection = createConnectionElement();
-
 		connection.setSource(source);
 		connection.setDestination(destination);
-		connection.setDx1(connDx1);
-		connection.setDx2(connDx2);
-		connection.setDy(connDy);
+		connection.setRoutingData(routingData);
 
 		parent.addConnection(connection);
 

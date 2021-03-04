@@ -21,74 +21,58 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '
- * <em><b>Value</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object ' <em><b>Value</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl#getValue
- * <em>Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class ValueImpl extends EObjectImpl implements Value {
-	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/** The default value of the '{@link #getValue() <em>Value</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @see #getValue()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String VALUE_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/** The cached value of the '{@link #getValue() <em>Value</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @see #getValue()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String value = VALUE_EDEFAULT;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected ValueImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.VALUE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getValue() {
 		return value;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setValue(String newValue) {
 		String oldValue = value;
@@ -97,21 +81,17 @@ public class ValueImpl extends EObjectImpl implements Value {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VALUE__VALUE, oldValue, value));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public VarDeclaration getVarDeclaration() {
 		return org.eclipse.fordiac.ide.model.Annotations.getVarDeclaration(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -122,11 +102,9 @@ public class ValueImpl extends EObjectImpl implements Value {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -139,11 +117,9 @@ public class ValueImpl extends EObjectImpl implements Value {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -156,11 +132,9 @@ public class ValueImpl extends EObjectImpl implements Value {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -171,11 +145,9 @@ public class ValueImpl extends EObjectImpl implements Value {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

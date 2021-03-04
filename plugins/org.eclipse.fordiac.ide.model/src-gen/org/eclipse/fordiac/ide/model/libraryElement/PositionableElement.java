@@ -13,81 +13,51 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object
- * '<em><b>Positionable Element</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Positionable Element</b></em>'. <!--
+ * end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getX
- * <em>X</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getY
- * <em>Y</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getPosition <em>Position</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPositionableElement()
  * @model
- * @generated
- */
+ * @generated */
 public interface PositionableElement extends EObject {
-	/**
-	 * Returns the value of the '<em><b>X</b></em>' attribute. The default value is
-	 * <code>"0"</code>. <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>X</em>' attribute isn't clear, there really should
-	 * be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
+	/** Returns the value of the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @return the value of the '<em>X</em>' attribute.
-	 * @see #setX(int)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPositionableElement_X()
-	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Int"
-	 * @generated
-	 */
-	int getX();
+	 * @return the value of the '<em>Position</em>' reference.
+	 * @see #setPosition(Position)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPositionableElement_Position()
+	 * @model required="true"
+	 * @generated */
+	Position getPosition();
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getX
-	 * <em>X</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getPosition
+	 * <em>Position</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @param value the new value of the '<em>X</em>' attribute.
-	 * @see #getX()
-	 * @generated
-	 */
-	void setX(int value);
+	 * @param value the new value of the '<em>Position</em>' reference.
+	 * @see #getPosition()
+	 * @generated */
+	void setPosition(Position value);
 
-	/**
-	 * Returns the value of the '<em><b>Y</b></em>' attribute. The default value is
-	 * <code>"0"</code>. <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Y</em>' attribute isn't clear, there really should
-	 * be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @return the value of the '<em>Y</em>' attribute.
-	 * @see #setY(int)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPositionableElement_Y()
-	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Int"
-	 * @generated
-	 */
-	int getY();
+	 * @model xDataType="org.eclipse.emf.ecore.xml.type.Int" xRequired="true"
+	 *        yDataType="org.eclipse.emf.ecore.xml.type.Int" yRequired="true"
+	 * @generated */
+	void updatePosition(int x, int y);
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getY
-	 * <em>Y</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @param value the new value of the '<em>Y</em>' attribute.
-	 * @see #getY()
-	 * @generated
-	 */
-	void setY(int value);
+	 * @model newPosDataType="org.eclipse.fordiac.ide.model.libraryElement.Point" newPosRequired="true"
+	 * @generated */
+	void updatePosition(Point newPos);
 
 } // PositionableElement

@@ -28,144 +28,87 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
-import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 
-/**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement}
+/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement}
  * object. <!-- begin-user-doc --> <!-- end-user-doc -->
  * 
- * @generated
- */
+ * @generated */
 public class PositionableElementItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
-	/**
-	 * This constructs an instance from a factory and a notifier. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public PositionableElementItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/**
-	 * This returns the property descriptors for the adapted class. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addXPropertyDescriptor(object);
-			addYPropertyDescriptor(object);
+			addPositionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
-	/**
-	 * This adds a property descriptor for the X feature. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This adds a property descriptor for the Position feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
-	protected void addXPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_PositionableElement_x_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_x_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_PositionableElement_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__X, true, false, false,
-						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+	 * @generated */
+	protected void addPositionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(
+				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_PositionableElement_position_feature"), //$NON-NLS-1$
+				getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_position_feature", //$NON-NLS-1$ //$NON-NLS-2$
+						"_UI_PositionableElement_type"),  //$NON-NLS-1$
+				LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__POSITION, true, false, true, null, null, null));
 	}
 
-	/**
-	 * This adds a property descriptor for the Y feature. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This returns PositionableElement.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
-	protected void addYPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_PositionableElement_y_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_y_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_PositionableElement_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__Y, true, false, false,
-						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
-	}
-
-	/**
-	 * This returns PositionableElement.gif. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object getImage(Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/PositionableElement")); //$NON-NLS-1$
 	}
 
-	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getText(Object object) {
-		PositionableElement positionableElement = (PositionableElement) object;
-		return getString("_UI_PositionableElement_type") + " " + positionableElement.getX(); //$NON-NLS-1$ //$NON-NLS-2$
+		return getString("_UI_PositionableElement_type"); //$NON-NLS-1$
 	}
 
-	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
+	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
-
-		switch (notification.getFeatureID(PositionableElement.class)) {
-		case LibraryElementPackage.POSITIONABLE_ELEMENT__X:
-		case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-			return;
-		default:
-			super.notifyChanged(notification);
-			return;
-		}
+		super.notifyChanged(notification);
 	}
 
-	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
+	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 
-	/**
-	 * Return the resource locator for this item provider's resources. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ResourceLocator getResourceLocator() {
 		return FordiacEditPlugin.INSTANCE;

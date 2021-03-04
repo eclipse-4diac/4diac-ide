@@ -48,6 +48,7 @@ import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -112,14 +113,15 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
 		if (viewer.getControl() instanceof FigureCanvas) {
 			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
-			final FBNetworkRootEditPart rootEditPart = (FBNetworkRootEditPart) getGraphicalViewer().getRootEditPart();
+			final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
+					.getRootEditPart();
 			Display.getDefault().asyncExec(() -> {
 				viewer.flush();
 				// if an editpart is selected then the viewer has bee created with something to be shown centered
 				// therefore we will not show the initial position
 				// do not use getSelection() here because it will return always at least one element
 				if (viewer.getSelectedEditParts().isEmpty()) {
-					final Rectangle drawingAreaBounds = rootEditPart.getDrawingAreaContainer().getBounds();
+					final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
 					canvas.scrollTo(drawingAreaBounds.x - INITIAL_SCROLL_OFFSET,
 							drawingAreaBounds.y - INITIAL_SCROLL_OFFSET);
 				} else {

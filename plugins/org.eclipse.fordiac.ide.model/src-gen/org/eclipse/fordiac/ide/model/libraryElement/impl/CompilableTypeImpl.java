@@ -22,54 +22,44 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Compilable Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Compilable Type</b></em>'. <!-- end-user-doc
+ * -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl#getCompilerInfo
- * <em>Compiler Info</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilableTypeImpl#getCompilerInfo <em>Compiler
+ * Info</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class CompilableTypeImpl extends LibraryElementImpl implements CompilableType {
-	/**
-	 * The cached value of the '{@link #getCompilerInfo() <em>Compiler Info</em>}'
-	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getCompilerInfo() <em>Compiler Info</em>}' containment reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getCompilerInfo()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected CompilerInfo compilerInfo;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected CompilableTypeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.COMPILABLE_TYPE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public CompilerInfo getCompilerInfo() {
 		if (compilerInfo != null && compilerInfo.eIsProxy()) {
@@ -93,20 +83,16 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 		return compilerInfo;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public CompilerInfo basicGetCompilerInfo() {
 		return compilerInfo;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetCompilerInfo(CompilerInfo newCompilerInfo, NotificationChain msgs) {
 		CompilerInfo oldCompilerInfo = compilerInfo;
 		compilerInfo = newCompilerInfo;
@@ -121,11 +107,9 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setCompilerInfo(CompilerInfo newCompilerInfo) {
 		if (newCompilerInfo != compilerInfo) {
@@ -144,11 +128,9 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 					newCompilerInfo, newCompilerInfo));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -159,11 +141,9 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -176,11 +156,9 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -193,11 +171,9 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -210,11 +186,9 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

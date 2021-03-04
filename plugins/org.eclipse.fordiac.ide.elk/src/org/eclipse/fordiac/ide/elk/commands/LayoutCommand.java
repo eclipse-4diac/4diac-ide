@@ -53,8 +53,11 @@ import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.gef.commands.Command;
 
@@ -70,7 +73,7 @@ public class LayoutCommand extends Command {
 	private final Map<ElkEdge, org.eclipse.fordiac.ide.model.libraryElement.Connection> connEditParts = new HashMap<>();
 	private final Map<ElkNode, FBNetworkElement> nodeMapping = new HashMap<>();
 
-	private final Map<FBNetworkElement, Point> oldFBPositions = new HashMap<>();
+	private final Map<FBNetworkElement, Position> oldFBPositions = new HashMap<>();
 
 	private ElkNode layoutGraph;
 
@@ -85,9 +88,9 @@ public class LayoutCommand extends Command {
 	 * @param connections       Maps a Connection to its figure
 	 * @param values            Maps a Value to its figure
 	 * @param valueLocations    Maps a Value to its Location(left upper corner) */
-	public LayoutCommand(Map<FBNetworkElement, FBNetworkElementFigure> fbNetworkElements,
-			Map<org.eclipse.fordiac.ide.model.libraryElement.Connection, org.eclipse.draw2d.Connection> connections,
-			Map<Value, Label> values, Map<Value, Point> valueLocations) {
+	public LayoutCommand(final Map<FBNetworkElement, FBNetworkElementFigure> fbNetworkElements,
+			final Map<org.eclipse.fordiac.ide.model.libraryElement.Connection, org.eclipse.draw2d.Connection> connections,
+			final Map<Value, Label> values, final Map<Value, Point> valueLocations) {
 		super();
 		this.fbNetworkElements = fbNetworkElements;
 		this.connections = connections;
@@ -105,7 +108,7 @@ public class LayoutCommand extends Command {
 
 		// save FB positions for undo
 		for (final FBNetworkElement elem : nodeMapping.values()) {
-			oldFBPositions.put(elem, new Point(elem.getX(), elem.getY()));
+			oldFBPositions.put(elem, elem.getPosition());
 		}
 
 		setGraphProperties(layoutGraph);
@@ -125,15 +128,11 @@ public class LayoutCommand extends Command {
 	@Override
 	public void undo() {
 		for (final FBNetworkElement elem : nodeMapping.values()) {
-			final Point p = oldFBPositions.get(elem);
-			elem.setX(p.x);
-			elem.setY(p.y);
+			elem.setPosition(oldFBPositions.get(elem));
 		}
 		for (final org.eclipse.fordiac.ide.model.libraryElement.Connection conn : connEditParts.values()) {
 			// set everything to 0 so that the connection gets routed
-			conn.setDx1(0);
-			conn.setDx2(0);
-			conn.setDy(0);
+			conn.updateRoutingData(0, 0, 0);
 		}
 		// FIXME resetInterfaceElements();
 	}
@@ -160,7 +159,7 @@ public class LayoutCommand extends Command {
 		return elkGraph;
 	}
 
-	private void setGraphProperties(ElkNode layoutGraph) {
+	private void setGraphProperties(final ElkNode layoutGraph) {
 		final double SPACING = 50.0;
 		layoutGraph.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.layered"); //$NON-NLS-1$
 		layoutGraph.setProperty(CoreOptions.EDGE_ROUTING, EdgeRouting.ORTHOGONAL);
@@ -180,7 +179,7 @@ public class LayoutCommand extends Command {
 		layoutGraph.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_FAVOR_STRAIGHT_EDGES, false);
 	}
 
-	private void createValueLabels(ElkNode elkGraph) {
+	private void createValueLabels(final ElkNode elkGraph) {
 		for (final Value elem : values.keySet()) {
 			final Point point = valueLocations.get(elem);
 			final ElkPort port = getPort(point, elem.getVarDeclaration(), elkGraph);
@@ -193,11 +192,11 @@ public class LayoutCommand extends Command {
 		}
 	}
 
-	private ElkPort getPort(Point point, IInterfaceElement interfaceElement, ElkNode graph) {
+	private ElkPort getPort(final Point point, final IInterfaceElement interfaceElement, final ElkNode graph) {
 		return ports.computeIfAbsent(interfaceElement, ie -> createPort(point, ie, graph));
 	}
 
-	private static void setPortProperties(ElkPort port, boolean isInput) {
+	private static void setPortProperties(final ElkPort port, final boolean isInput) {
 		if (isInput) {
 			port.setProperty(CoreOptions.PORT_SIDE, PortSide.WEST);
 		} else {
@@ -205,7 +204,7 @@ public class LayoutCommand extends Command {
 		}
 	}
 
-	private static void setNodeProperties(ElkNode node) {
+	private static void setNodeProperties(final ElkNode node) {
 		node.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_BK_FIXED_ALIGNMENT, FixedAlignment.NONE);
 		node.setProperty(LayeredMetaDataProvider.CROSSING_MINIMIZATION_STRATEGY,
 				CrossingMinimizationStrategy.INTERACTIVE);
@@ -214,36 +213,36 @@ public class LayoutCommand extends Command {
 		node.setProperty(CoreOptions.NODE_LABELS_PLACEMENT, NodeLabelPlacement.insideTopCenter());
 	}
 
-	private ElkPort createPort(Point point, IInterfaceElement interfaceElement, ElkNode graph) {
+	private ElkPort createPort(final Point point, final IInterfaceElement interfaceElement, final ElkNode graph) {
 		ElkNode node = (null != interfaceElement.getFBNetworkElement())
 				? nodes.get(interfaceElement.getFBNetworkElement())
 						: graph;
-				boolean isSubApp = false;
-				if (node == null) {
-					// untyped subapp interfaces
-					node = graph;
-					isSubApp = true;
-				} else if (interfaceElement.getFBNetworkElement() == null) {
-					// typed subapp and composite interfaces
-					isSubApp = true;
-				}
-				final ElkPort port = ElkGraphUtil.createPort(node);
-				ElkGraphUtil.createLabel(interfaceElement.getName(), port);
-				// dont set the location for the interface ports so that they will be properly
-				// handled by elk
-				if (!isSubApp) {
-					port.setLocation(point.preciseX() - node.getX(), point.preciseY() - node.getY());
-					setPortProperties(port, interfaceElement.isIsInput());
-				} else if (interfaceElement.isIsInput()) {
-					// set the input interface inset according to the graph padding
-					port.setLocation(maxIOLabelSize, -1);
-				}
-				// needs dimensions for interface edit parts -> should not be too close together
-				port.setDimensions(3, 3);
-				return port;
+		boolean isSubApp = false;
+		if (node == null) {
+			// untyped subapp interfaces
+			node = graph;
+			isSubApp = true;
+		} else if (interfaceElement.getFBNetworkElement() == null) {
+			// typed subapp and composite interfaces
+			isSubApp = true;
+		}
+		final ElkPort port = ElkGraphUtil.createPort(node);
+		ElkGraphUtil.createLabel(interfaceElement.getName(), port);
+		// dont set the location for the interface ports so that they will be properly
+		// handled by elk
+		if (!isSubApp) {
+			port.setLocation(point.preciseX() - node.getX(), point.preciseY() - node.getY());
+			setPortProperties(port, interfaceElement.isIsInput());
+		} else if (interfaceElement.isIsInput()) {
+			// set the input interface inset according to the graph padding
+			port.setLocation(maxIOLabelSize, -1);
+		}
+		// needs dimensions for interface edit parts -> should not be too close together
+		port.setDimensions(3, 3);
+		return port;
 	}
 
-	private void createFBNetworkElementNodes(ElkNode elkGraph) {
+	private void createFBNetworkElementNodes(final ElkNode elkGraph) {
 		for (final FBNetworkElement elem : fbNetworkElements.keySet()) {
 			final ElkNode networkElemElkNode = ElkGraphUtil.createNode(elkGraph);
 			setNodeProperties(networkElemElkNode);
@@ -259,7 +258,7 @@ public class LayoutCommand extends Command {
 		}
 	}
 
-	private void createConnectionNodes(ElkNode elkGraph) {
+	private void createConnectionNodes(final ElkNode elkGraph) {
 		for (final org.eclipse.fordiac.ide.model.libraryElement.Connection conn : connections.keySet()) {
 			final Connection connFig = connections.get(conn);
 
@@ -279,7 +278,7 @@ public class LayoutCommand extends Command {
 		}
 	}
 
-	private void updateLayout(ElkNode graph) {
+	private void updateLayout(final ElkNode graph) {
 		/*
 		 * interface elements need to be reset before every layout attempt
 		 *
@@ -315,7 +314,7 @@ public class LayoutCommand extends Command {
 		updateFBPositions(graph);
 	}
 
-	private void updateFBPositions(ElkNode graph) {
+	private void updateFBPositions(final ElkNode graph) {
 		graph.getChildren().forEach(node -> {
 			final FBNetworkElement elem = nodeMapping.get(node);
 			final FBNetworkElementFigure fig = fbNetworkElements.get(elem);
@@ -324,13 +323,12 @@ public class LayoutCommand extends Command {
 				if (fig.getLabelBounds().width() > fig.getFBBounds().width()) {
 					x = node.getX() - (fig.getFBBounds().x() - fig.getLabelBounds().x());
 				}
-				elem.setX((int) x);
-				elem.setY((int) node.getY());
+				elem.updatePosition((int) x, (int) node.getY());
 			}
 		});
 	}
 
-	private static void layoutSubAppInterfaces(ConnectionEditPart part, ElkPort startPort, ElkPort endPort) {
+	private static void layoutSubAppInterfaces(final ConnectionEditPart part, final ElkPort startPort, final ElkPort endPort) {
 		if (part.getSource() instanceof SubAppInternalInterfaceEditPart) {
 			final SubAppInternalInterfaceEditPart interfacePart = (SubAppInternalInterfaceEditPart) part.getSource();
 			freeInterfaceFigure(interfacePart);
@@ -361,7 +359,7 @@ public class LayoutCommand extends Command {
 		}
 	}
 
-	private static void freeInterfaceFigure(InterfaceEditPart interfacePart) {
+	private static void freeInterfaceFigure(final InterfaceEditPart interfacePart) {
 		if (interfacePart.getParent() instanceof UISubAppNetworkEditPart) {
 			((EditorWithInterfaceEditPart) interfacePart.getParent()).enableElkLayouting(interfacePart);
 		} else if (interfacePart.getParent() instanceof CompositeNetworkEditPart) {
@@ -369,24 +367,19 @@ public class LayoutCommand extends Command {
 		}
 	}
 
-	private static void updateModel(org.eclipse.fordiac.ide.model.libraryElement.Connection connModel,
-			PointList pointList) {
+	private static void updateModel(final org.eclipse.fordiac.ide.model.libraryElement.Connection connModel,
+			final PointList pointList) {
+		final ConnectionRoutingData routingData = LibraryElementFactory.eINSTANCE.createConnectionRoutingData();
 		if (pointList.size() > 2) {
 			// 3 segments
-			connModel.setDx1(pointList.getPoint(1).x() - pointList.getFirstPoint().x());
-			connModel.setDx2(pointList.getLastPoint().x() - pointList.getPoint(pointList.size() - 2).x());
+			routingData.setDx1(pointList.getPoint(1).x() - pointList.getFirstPoint().x());
 			if (pointList.size() > 4) {
 				// 5 segments
-				connModel.setDy(pointList.getPoint(2).y() - pointList.getFirstPoint().y());
-			} else {
-				connModel.setDy(0);
+				routingData.setDy(pointList.getPoint(2).y() - pointList.getFirstPoint().y());
+				routingData.setDx2(pointList.getLastPoint().x() - pointList.getPoint(pointList.size() - 2).x());
 			}
-		} else {
-			// straight connection
-			connModel.setDx1(0);
-			connModel.setDx2(0);
-			connModel.setDy(0);
 		}
+		connModel.setRoutingData(routingData);
 	}
 
 }

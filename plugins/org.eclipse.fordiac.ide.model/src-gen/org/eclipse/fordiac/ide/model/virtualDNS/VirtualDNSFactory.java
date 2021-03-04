@@ -15,55 +15,39 @@ package org.eclipse.fordiac.ide.model.virtualDNS;
 
 import org.eclipse.emf.ecore.EFactory;
 
-/**
- * <!-- begin-user-doc --> The <b>Factory</b> for the model. It provides a
- * create method for each non-abstract class of the model. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> The <b>Factory</b> for the model. It provides a create method for each non-abstract class of
+ * the model. <!-- end-user-doc -->
+ * 
  * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage
- * @generated
- */
+ * @generated */
 public interface VirtualDNSFactory extends EFactory {
-	/**
-	 * The singleton instance of the factory.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * @generated
-	 */
+	/** The singleton instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
 	VirtualDNSFactory eINSTANCE = org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSFactoryImpl.init();
 
-	/**
-	 * Returns a new object of class '<em>Entry</em>'.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** Returns a new object of class '<em>Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Entry</em>'.
-	 * @generated
-	 */
+	 * @generated */
 	VirtualDNSEntry createVirtualDNSEntry();
 
-	/**
-	 * Returns a new object of class '<em>Collection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** Returns a new object of class '<em>Collection</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Collection</em>'.
-	 * @generated
-	 */
+	 * @generated */
 	VirtualDNSCollection createVirtualDNSCollection();
 
-	/**
-	 * Returns a new object of class '<em>Management</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** Returns a new object of class '<em>Management</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Management</em>'.
-	 * @generated
-	 */
+	 * @generated */
 	VirtualDNSManagement createVirtualDNSManagement();
 
-	/**
-	 * Returns the package supported by this factory.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** Returns the package supported by this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the package supported by this factory.
-	 * @generated
-	 */
+	 * @generated */
 	VirtualDNSPackage getVirtualDNSPackage();
 
 } // VirtualDNSFactory

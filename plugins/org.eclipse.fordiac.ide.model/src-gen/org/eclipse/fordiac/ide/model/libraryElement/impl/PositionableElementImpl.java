@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,166 +13,133 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Positionable Element</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Positionable Element</b></em>'. <!--
+ * end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl#getX
- * <em>X</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl#getY
- * <em>Y</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PositionableElementImpl#getPosition
+ * <em>Position</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class PositionableElementImpl extends EObjectImpl implements PositionableElement {
-	/**
-	 * The default value of the '{@link #getX() <em>X</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getPosition() <em>Position</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
-	 * @see #getX()
+	 * @see #getPosition()
 	 * @generated
-	 * @ordered
-	 */
-	protected static final int X_EDEFAULT = 0;
+	 * @ordered */
+	protected Position position;
 
-	/**
-	 * The cached value of the '{@link #getX() <em>X</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @see #getX()
-	 * @generated
-	 * @ordered
-	 */
-	protected int x = X_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getY() <em>Y</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @see #getY()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int Y_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getY() <em>Y</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @see #getY()
-	 * @generated
-	 * @ordered
-	 */
-	protected int y = Y_EDEFAULT;
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	protected PositionableElementImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.POSITIONABLE_ELEMENT;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public int getX() {
-		return x;
+	public Position getPosition() {
+		if (position != null && position.eIsProxy()) {
+			final InternalEObject oldPosition = (InternalEObject) position;
+			position = (Position) eResolveProxy(oldPosition);
+			if (position != oldPosition) {
+				if (eNotificationRequired()) {
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION, oldPosition, position));
+				}
+			}
+		}
+		return position;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
-	public void setX(int newX) {
-		int oldX = x;
-		x = newX;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.POSITIONABLE_ELEMENT__X, oldX,
-					x));
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	public Position basicGetPosition() {
+		return position;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public int getY() {
-		return y;
+	public void setPosition(final Position newPosition) {
+		final Position oldPosition = position;
+		position = newPosition;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION,
+					oldPosition, position));
+		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public void setY(int newY) {
-		int oldY = y;
-		y = newY;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.POSITIONABLE_ELEMENT__Y, oldY,
-					y));
+	public void updatePosition(final int x, final int y) {
+		final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE
+				.createPosition();
+		pos.setX(x);
+		pos.setY(y);
+		setPosition(pos);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public void updatePosition(final Point newPos) {
+		updatePosition(newPos.x, newPos.y);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.POSITIONABLE_ELEMENT__X:
-			return getX();
-		case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
-			return getY();
+		case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
+			if (resolve) {
+				return getPosition();
+			}
+			return basicGetPosition();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.POSITIONABLE_ELEMENT__X:
-			setX((Integer) newValue);
-			return;
-		case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
-			setY((Integer) newValue);
+		case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
+			setPosition((Position) newValue);
 			return;
 		default:
 			super.eSet(featureID, newValue);
@@ -180,19 +147,14 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.POSITIONABLE_ELEMENT__X:
-			setX(X_EDEFAULT);
-			return;
-		case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
-			setY(Y_EDEFAULT);
+		case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
+			setPosition((Position) null);
 			return;
 		default:
 			super.eUnset(featureID);
@@ -200,40 +162,17 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.POSITIONABLE_ELEMENT__X:
-			return x != X_EDEFAULT;
-		case LibraryElementPackage.POSITIONABLE_ELEMENT__Y:
-			return y != Y_EDEFAULT;
+		case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
+			return position != null;
 		default:
 			return super.eIsSet(featureID);
 		}
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy())
-			return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (x: "); //$NON-NLS-1$
-		result.append(x);
-		result.append(", y: "); //$NON-NLS-1$
-		result.append(y);
-		result.append(')');
-		return result.toString();
 	}
 
 } // PositionableElementImpl
