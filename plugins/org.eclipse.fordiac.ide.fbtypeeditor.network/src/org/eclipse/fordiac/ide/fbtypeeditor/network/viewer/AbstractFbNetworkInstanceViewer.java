@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 import java.util.EventObject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
@@ -35,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
@@ -44,6 +46,7 @@ import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.IEditorInput;
 
 public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
@@ -147,7 +150,18 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 
 	protected ScalableFreeformRootEditPart createRootEditPart() {
 		return new FBNetworkRootEditPart(getModel(), fbNetworkElement.getPaletteEntry().getPalette(), getSite(),
-				getActionRegistry());
+				getActionRegistry()) {
+			@Override
+			protected IFigure createFigure() {
+				final IFigure viewPort = super.createFigure();
+				final IFigure backGround = (IFigure) viewPort.getChildren().get(0);
+				final IFigure drawingAreaContainer = (IFigure) backGround.getChildren().get(0);
+				final Color backGroundColor = backGround.getBackgroundColor();
+				backGround.setBackgroundColor(ColorHelper.lighter(backGroundColor));
+				drawingAreaContainer.setBackgroundColor(backGroundColor);
+				return viewPort;
+			}
+		};
 	}
 
 }
