@@ -244,7 +244,6 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 			if (null != editPart) {
 				final SelectionRequest request = new SelectionRequest();
 				request.setLocation(getLocation());
-				// request.setModifiers(getCurrentInput().getModifiers());
 				request.setType(RequestConstants.REQ_OPEN);
 				editPart.performRequest(request);
 			}
@@ -392,8 +391,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		}
 
 		private Rectangle calculateModuloExtent() { // adjust size to be a multiple of the base width/height
-			Rectangle contentsExtent = contents.getFreeformExtent().getCopy();
-			contentsExtent.scale(1.0 / getZoomManager().getZoom());
+			Rectangle contentsExtent = getUnscaledContentsExtent();
 			contentsExtent.shrink(getInsets());  // take any border into our calculation
 			final int x = calcAxisOrigin(contentsExtent.x, BASE_WIDTH);
 			final int y = calcAxisOrigin(contentsExtent.y, BASE_HEIGHT);
@@ -401,6 +399,14 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 			final int height = calcAxisExtent(contentsExtent.y, y, contentsExtent.height, BASE_HEIGHT);
 			contentsExtent = new Rectangle(x, y, width, height);
 			contentsExtent.scale(getZoomManager().getZoom());
+			return contentsExtent;
+		}
+
+		private Rectangle getUnscaledContentsExtent() {
+			final Rectangle contentsExtent = ((FreeformFigure) getContentPane()).getFreeformExtent().getCopy();
+			// add handle and feedback layer so that dragging elements result in growing the modulo extend
+			contentsExtent.union(((FreeformFigure) getLayer(HANDLE_LAYER)).getFreeformExtent());
+			contentsExtent.union(((FreeformFigure) getLayer(FEEDBACK_LAYER)).getFreeformExtent());
 			return contentsExtent;
 		}
 
