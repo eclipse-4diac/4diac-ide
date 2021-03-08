@@ -26,8 +26,6 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariab
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
-import org.eclipse.fordiac.ide.model.structuredtext.validation.AbstractStructuredTextValidator;
-import org.eclipse.fordiac.ide.model.structuredtext.validation.DatetimeLiteral;
 import org.eclipse.xtext.validation.Check;
 
 /**

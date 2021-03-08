@@ -63,9 +63,14 @@ Assign_Stmt returns AssignmentStatement:
 
 Subprog_Ctrl_Stmt returns Statement:
 	Func_Call |
+	FB_Call |
 	//Invocation |
 	{SuperStatement} 'SUPER' '(' ')' |
 	{ReturnStatement} 'RETURN'
+;
+
+FB_Call:
+	fb=[libraryElement::FB]'.'event=[libraryElement::Event]'(' (args += Param_Assign (',' args += Param_Assign)*)? ')'
 ;
 
 Selection_Stmt returns Statement:
