@@ -34,6 +34,15 @@
                   type="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB">
             </input>
          </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties.InternalFbsSectionSimple"
+               filter="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.properties.SimpleFBFilter"
+               id="property.section.ifbs"
+               tab="property.tab.ifbs">
+            <input
+                  type="org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB">
+            </input>
+         </propertySection>
          </propertySections>
          
    </extension>
