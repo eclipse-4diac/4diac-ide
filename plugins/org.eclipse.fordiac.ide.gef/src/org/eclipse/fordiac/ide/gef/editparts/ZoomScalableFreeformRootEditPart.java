@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
@@ -173,6 +174,8 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 
 	}
 
+	private static final Request MARQUEE_REQUEST = new Request(RequestConstants.REQ_SELECTION);
+
 	/**
 	 * MarqueeDragTracker which deselects all elements on right click if nothing so
 	 * that the correct conext menu is shown. We are only here if there is no
@@ -182,6 +185,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	 * boundaries.
 	 */
 	public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
+
 		@Override
 		protected boolean handleButtonDown(final int button) {
 			if (3 == button) {
@@ -249,6 +253,12 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 			}
 		}
 
+		// In the base class version not shown elements can not be selected, as we have now auto-scrolling this is not a
+		// good behavior therefore this overridden version. For details see base class.
+		@Override
+		protected boolean isMarqueeSelectable(final GraphicalEditPart editPart) {
+			return editPart.getTargetEditPart(MARQUEE_REQUEST) == editPart && editPart.isSelectable();
+		}
 	}
 
 	public static final String TOP_LAYER = "TOPLAYER"; //$NON-NLS-1$
