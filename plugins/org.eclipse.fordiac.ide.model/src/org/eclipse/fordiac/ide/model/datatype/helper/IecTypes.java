@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018-2020 Johannes Kepler University
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2018-2021 Johannes Kepler University, Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +9,7 @@
  *
  * Contributors:
  *   Michael Jaeger - initial API and implementation and/or initial documentation
+ *   Alois Zoitl	- added ANY_STRUCT to the generic type list
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.datatype.helper;
 
@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.data.LwordType;
 import org.eclipse.fordiac.ide.model.data.RealType;
 import org.eclipse.fordiac.ide.model.data.SintType;
 import org.eclipse.fordiac.ide.model.data.StringType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType;
 import org.eclipse.fordiac.ide.model.data.TimeType;
 import org.eclipse.fordiac.ide.model.data.UdintType;
@@ -57,9 +58,9 @@ import org.eclipse.fordiac.ide.model.data.WcharType;
 import org.eclipse.fordiac.ide.model.data.WordType;
 import org.eclipse.fordiac.ide.model.data.WstringType;
 
-public class IecTypes {
+public final class IecTypes {
 
-	public static class ElementaryTypes {
+	public static final class ElementaryTypes {
 
 		public static final RealType REAL = DataFactory.eINSTANCE.createRealType();
 		public static final LrealType LREAL = DataFactory.eINSTANCE.createLrealType();
@@ -133,9 +134,13 @@ public class IecTypes {
 			return new DataType[] { REAL, LREAL, USINT, UINT, UDINT, ULINT, SINT, INT, DINT, LINT, TIME, LTIME, BOOL,
 					BYTE, WORD, DWORD, LWORD, STRING, WSTRING, CHAR, WCHAR, DATE_AND_TIME, LDT, TIME_OF_DAY, LTOD };
 		}
+
+		private ElementaryTypes() {
+			throw new UnsupportedOperationException();
+		}
 	}
 
-	public static class GenericTypes {
+	public static final class GenericTypes {
 
 		public static final AnyType ANY = DataFactory.eINSTANCE.createAnyType();
 		public static final AnyElementaryType ANY_ELEMENTARY = DataFactory.eINSTANCE.createAnyElementaryType();
@@ -159,6 +164,8 @@ public class IecTypes {
 
 		public static final AnyDateType ANY_DATE = DataFactory.eINSTANCE.createAnyDateType();
 
+		public static final StructuredType ANY_STRUCT = DataFactory.eINSTANCE.createStructuredType();
+
 		static {
 			ANY.setName(FordiacKeywords.ANY);
 			ANY_ELEMENTARY.setName(FordiacKeywords.ANY_ELEMENTARY);
@@ -181,13 +188,24 @@ public class IecTypes {
 			ANY_CHAR.setName(FordiacKeywords.ANY_CHAR);
 			ANY_DATE.setName(FordiacKeywords.ANY_DATE);
 
+			ANY_STRUCT.setName(FordiacKeywords.ANY_STRUCT);
+
 		}
 
 		public static DataType[] getAllGenericTypes() {
 			return new DataType[] { ANY, ANY_ELEMENTARY, ANY_DERIVED, ANY_MAGNITUDE, ANY_NUM, ANY_REAL, ANY_INT,
-					ANY_UNSIGNED, ANY_SIGNED, ANY_DURATION, ANY_BIT, ANY_CHARS, ANY_STRING, ANY_CHAR, ANY_DATE };
+					ANY_UNSIGNED, ANY_SIGNED, ANY_DURATION, ANY_BIT, ANY_CHARS, ANY_STRING, ANY_CHAR, ANY_DATE,
+					ANY_STRUCT };
 		}
 
+		private GenericTypes() {
+			throw new UnsupportedOperationException();
+		}
+
+	}
+
+	private IecTypes() {
+		throw new UnsupportedOperationException();
 	}
 
 }

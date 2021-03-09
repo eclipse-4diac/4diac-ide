@@ -80,6 +80,12 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StructuredType" eSuperTypes="#//AnyDerivedType">
+    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return (other instanceof StructuredType)&#xA;&#x9;&#x9;&#x9;&#x9;&amp;&amp; ((this == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_STRUCT)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;|| (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_STRUCT)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;|| (getName().equals(other.getName())));"/>
+      </eAnnotations>
+      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="memberVariables" upperBound="-1"
         eType="ecore:EClass lib.ecore#//VarDeclaration" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">

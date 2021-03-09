@@ -21,7 +21,7 @@ import java.lang.reflect.Field;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class FordiacKeywords {
+public final class FordiacKeywords {
 
 	public static final Set<String> RESERVED_KEYWORDS = getKeywords();
 
