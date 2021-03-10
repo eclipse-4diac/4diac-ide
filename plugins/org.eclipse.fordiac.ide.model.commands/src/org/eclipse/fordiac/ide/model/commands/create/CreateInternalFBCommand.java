@@ -19,16 +19,15 @@ import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
 public class CreateInternalFBCommand extends AbstractCreationCommand {
 
 	/** The element where the internal FB is added to */
-	private LibraryElement element;
+	private BaseFBType baseFbType;
 
 	/** Command information */
 	private PaletteEntry fbType;
@@ -40,25 +39,25 @@ public class CreateInternalFBCommand extends AbstractCreationCommand {
 
 	static final String DEFAULT_INTERNAL_FB_NAME = "InternalFB1"; //$NON-NLS-1$
 
-	protected CreateInternalFBCommand(final LibraryElement element) {
-		this(element, 0, null, null);
+	protected CreateInternalFBCommand(final BaseFBType baseFbType) {
+		this(baseFbType, 0, null, null);
 	}
 
-	public CreateInternalFBCommand(final LibraryElement element, final int index, final String name,
+	public CreateInternalFBCommand(final BaseFBType baseFbType, final int index, final String name,
 			final PaletteEntry fbType) {
-		this.element = element;
+		this.baseFbType = baseFbType;
 		this.fbType = fbType;
 		if (null == fbType) {
-			EMap<String, FBTypePaletteEntry> typeLib = element.getTypeLibrary().getBlockTypeLib().getFbTypes();
+			EMap<String, FBTypePaletteEntry> typeLib = baseFbType.getTypeLibrary().getBlockTypeLib().getFbTypes();
 			this.fbType = typeLib.get(0).getValue();
 		}
 		this.name = (null != name) ? name : DEFAULT_INTERNAL_FB_NAME;
 		this.index = index;
 	}
 
-	public CreateInternalFBCommand(LibraryElement element, int index, String name, PaletteEntry fbType,
+	public CreateInternalFBCommand(final BaseFBType baseFbType, int index, String name, PaletteEntry fbType,
 			Palette palette) {
-		this.element = element;
+		this.baseFbType = baseFbType;
 		this.fbType = fbType;
 		if (null == fbType) {
 			this.fbType = (PaletteEntry) palette.eContents().get(0);
@@ -73,7 +72,7 @@ public class CreateInternalFBCommand extends AbstractCreationCommand {
 	}
 
 	private EList<FB> getInteralFBList() {
-		BasicFBType type = (BasicFBType) element;
+		BaseFBType type = baseFbType;
 		return type.getInternalFbs();
 	}
 

@@ -15,20 +15,19 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeInternalFBOrderCommand extends Command {
 
 	private final FB fb;
-	private final LibraryElement element;
+	private final BaseFBType baseFbType;
 	private final int oldIndex;
 	private int newIndex;
 
-	public ChangeInternalFBOrderCommand(final LibraryElement element, final FB fb, IndexUpDown updown) {
-		this.element = element;
+	public ChangeInternalFBOrderCommand(final BaseFBType baseFbtype, final FB fb, IndexUpDown updown) {
+		this.baseFbType = baseFbtype;
 		this.fb = fb;
 
 		oldIndex = getInteralFBList().indexOf(fb);
@@ -48,7 +47,7 @@ public class ChangeInternalFBOrderCommand extends Command {
 	}
 
 	private EList<FB> getInteralFBList() {
-		BasicFBType type = (BasicFBType) element;
+		BaseFBType type = baseFbType;
 		return type.getInternalFbs();
 	}
 

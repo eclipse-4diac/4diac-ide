@@ -170,7 +170,7 @@ public final class NameRepository {
 			elementsList = ((Device) refElement).getSystemConfiguration().getDevices();
 		} else if (refElement instanceof FBNetworkElement) {
 			if (refElement.eContainer() instanceof BaseFBType) {
-				elementsList = ((BasicFBType) (refElement.eContainer())).getInternalFbs();
+				elementsList = ((BaseFBType) (refElement.eContainer())).getInternalFbs();
 			} else {
 				elementsList = ((FBNetworkElement) refElement).getFbNetwork().getNetworkElements();
 			}

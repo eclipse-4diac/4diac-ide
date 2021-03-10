@@ -14,15 +14,14 @@
 package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.gef.commands.Command;
 
 public class DeleteInternalFBCommand extends Command {
 
 	/** The type to whose list the new variable is added. */
-	private final LibraryElement element;
+	private final BaseFBType baseFbtype;
 
 	/** The variable that is deleted */
 	private FB fbToDelete;
@@ -30,13 +29,13 @@ public class DeleteInternalFBCommand extends Command {
 	/** The old index. */
 	private int oldIndex;
 
-	public DeleteInternalFBCommand(final LibraryElement element, final FB fb) {
-		this.element = element;
+	public DeleteInternalFBCommand(final BaseFBType baseFbtype, final FB fb) {
+		this.baseFbtype = baseFbtype;
 		this.fbToDelete = fb;
 	}
 
 	private EList<FB> getInteralFBList() {
-		BasicFBType type = (BasicFBType) element;
+		BaseFBType type = baseFbtype;
 		return type.getInternalFbs();
 	}
 
