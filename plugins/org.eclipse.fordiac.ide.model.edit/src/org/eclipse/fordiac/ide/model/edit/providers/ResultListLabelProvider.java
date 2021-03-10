@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.edit.providers;
 
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -29,10 +30,10 @@ import org.eclipse.swt.graphics.Image;
 public class ResultListLabelProvider extends LabelProvider implements IStyledLabelProvider {
 
 	@Override
-	public StyledString getStyledText(Object element) {
+	public StyledString getStyledText(final Object element) {
 		StyledString styledString = null;
 		if (element instanceof PaletteEntry) {
-			PaletteEntry entry = (PaletteEntry) element;
+			final PaletteEntry entry = (PaletteEntry) element;
 			styledString = new StyledString(entry.getLabel());
 			styledString.append(" - " + entry.getType().getComment(), //$NON-NLS-1$
 					StyledString.QUALIFIER_STYLER);
@@ -43,15 +44,15 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 	}
 
 	@Override
-	public Image getImage(Object element) {
+	public Image getImage(final Object element) {
 		if (element instanceof PaletteEntry) {
-			PaletteEntry entry = (PaletteEntry) element;
+			final PaletteEntry entry = (PaletteEntry) element;
 			return getTypeImage(entry.getType());
 		}
 		return null;
 	}
 
-	public static Image getTypeImage(LibraryElement type) {
+	public static Image getTypeImage(final LibraryElement type) {
 		if (type instanceof SubAppType) {
 			return FordiacImage.ICON_SUB_APP_TYPE.getImage();
 		} else if (type instanceof BasicFBType) {
@@ -62,13 +63,15 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 			return FordiacImage.ICON_COMPOSITE_FB.getImage();
 		} else if (type instanceof StructuredType) {
 			return FordiacImage.ICON_DATA_TYPE.getImage();
+		} else if (type instanceof AdapterFBType) {
+			return FordiacImage.ICON_ADAPTER.getImage();
 		} else {
 			return FordiacImage.ICON_SIFB.getImage();
 		}
 	}
 
 	@Override
-	public String getText(Object element) {
+	public String getText(final Object element) {
 		return (element instanceof PaletteEntry) ? String.format("%s - %s", getStyledText(element).toString(), //$NON-NLS-1$
 				((PaletteEntry) element).getFile().getFullPath()) : "-"; //$NON-NLS-1$
 	}
