@@ -33,12 +33,8 @@ public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-
-		if (modelElement instanceof FBNetwork) {
-			return new FBNetworkContainerEditPart();
-		}
 		if (modelElement instanceof IInterfaceElement) {
-			IInterfaceElement element = (IInterfaceElement) modelElement;
+			final IInterfaceElement element = (IInterfaceElement) modelElement;
 			if (element.getFBNetworkElement() instanceof SubApp && null == element.getFBNetworkElement().getType()) {
 				return new UntypedSubAppInterfaceElementEditPartForResource();
 			}
@@ -48,6 +44,11 @@ public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 			return new VirtualInOutputEditPart();
 		}
 		return super.getPartForElement(context, modelElement);
+	}
+
+	@Override
+	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
+		return new FBNetworkContainerEditPart();
 	}
 
 }

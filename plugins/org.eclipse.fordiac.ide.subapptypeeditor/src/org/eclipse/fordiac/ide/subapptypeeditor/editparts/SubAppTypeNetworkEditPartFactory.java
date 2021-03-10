@@ -35,14 +35,15 @@ public class SubAppTypeNetworkEditPartFactory extends CompositeNetworkEditPartFa
 			return new UnfoldedSubappContentEditPart();
 		}
 
-		if (modelElement instanceof FBNetwork) {
-			return new TypedSubAppNetworkEditPart();
-		}
-
 		if (modelElement instanceof SubApp) {
 			return new SubAppForFBNetworkEditPart();
 		}
 		return super.getPartForElement(context, modelElement);
+	}
+
+	@Override
+	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
+		return new TypedSubAppNetworkEditPart();
 	}
 
 }

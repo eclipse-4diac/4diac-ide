@@ -51,17 +51,6 @@ public class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFact
 	 * @throws RuntimeException if no match was found (programming error) */
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-
-		if (modelElement instanceof FBNetwork) {
-			final CompositeNetworkViewerEditPart compositeNetEP = new CompositeNetworkViewerEditPart();
-			compositeNetEP.setFbInstance(fbInstance);
-			if (fbEditPart.getParent() instanceof CompositeNetworkViewerEditPart) {
-				compositeNetEP.setparentInstanceViewerEditPart((CompositeNetworkViewerEditPart) fbEditPart.getParent());
-			}
-			return compositeNetEP;
-
-		}
-
 		if (modelElement instanceof IInterfaceElement) {
 			final IInterfaceElement iElement = (IInterfaceElement) modelElement;
 			if (iElement.eContainer().eContainer() instanceof CompositeFBType) {
@@ -91,6 +80,16 @@ public class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFact
 			return new ConnectionEditPartRO();
 		}
 		return super.getPartForElement(context, modelElement);
+	}
+
+	@Override
+	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
+		final CompositeNetworkViewerEditPart compositeNetEP = new CompositeNetworkViewerEditPart();
+		compositeNetEP.setFbInstance(fbInstance);
+		if (fbEditPart.getParent() instanceof CompositeNetworkViewerEditPart) {
+			compositeNetEP.setparentInstanceViewerEditPart((CompositeNetworkViewerEditPart) fbEditPart.getParent());
+		}
+		return compositeNetEP;
 	}
 
 }

@@ -580,14 +580,9 @@
                 <with variable="selection">
             		<count value="1" />
             		<iterate ifEmpty="false">
-            			<and> 
-	            			<reference 
-	            		       	definitionId="org.eclipse.fordiac.ide.application.SubAppInstanceSelection">
-	               			</reference>
-	            			<not>
-	            				<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
-	            			</not>
-               			</and>
+            			<reference 
+            		       	definitionId="org.eclipse.fordiac.ide.application.SubAppInstanceSelection">
+               			</reference>
             		</iterate>
             	</with>
             </activeWhen>
@@ -883,14 +878,9 @@
                 <with variable="selection">
             		<count value="1" />
             		<iterate ifEmpty="false">
-            			<and> 
-	            			<reference 
-	            		       	definitionId="org.eclipse.fordiac.ide.application.SubAppInstanceSelection">
-	               			</reference>
-	            			<not>
-	            				<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
-	            			</not>
-               			</and>
+            			<reference 
+            		       	definitionId="org.eclipse.fordiac.ide.application.SubAppInstanceSelection">
+               			</reference>
             		</iterate>
             	</with>
             </visibleWhen>
