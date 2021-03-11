@@ -4,7 +4,6 @@
 package org.eclipse.fordiac.ide.model.xtext.fbt.ui;
 
 import com.google.inject.Provider;
-import org.eclipse.fordiac.ide.model.xtext.fbt.ui.AbstractFBTypeUiModule;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
 import org.eclipse.xtext.resource.containers.IAllContainersState;

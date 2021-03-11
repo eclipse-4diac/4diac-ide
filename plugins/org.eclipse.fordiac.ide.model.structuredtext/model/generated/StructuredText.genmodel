@@ -110,7 +110,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference StructuredText.ecore#//Call/args"/>
     </genClasses>
     <genClasses ecoreClass="StructuredText.ecore#//Argument">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute StructuredText.ecore#//Argument/var"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference StructuredText.ecore#//Argument/var"/>
     </genClasses>
     <genClasses ecoreClass="StructuredText.ecore#//InArgument">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference StructuredText.ecore#//InArgument/expr"/>

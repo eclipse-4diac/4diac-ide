@@ -2408,19 +2408,14 @@ ruleParam_Assign_In returns [EObject current=null]
 		(
 			(
 				(
-					lv_var_0_0=RULE_ID
-					{
-						newLeafNode(lv_var_0_0, grammarAccess.getParam_Assign_InAccess().getVarIDTerminalRuleCall_0_0_0());
-					}
 					{
 						if ($current==null) {
 							$current = createModelElement(grammarAccess.getParam_Assign_InRule());
 						}
-						setWithLastConsumed(
-							$current,
-							"var",
-							lv_var_0_0,
-							"org.eclipse.fordiac.ide.model.structuredtext.StructuredText.ID");
+					}
+					otherlv_0=RULE_ID
+					{
+						newLeafNode(otherlv_0, grammarAccess.getParam_Assign_InAccess().getVarVarDeclarationCrossReference_0_0_0());
 					}
 				)
 			)
@@ -2483,19 +2478,14 @@ ruleParam_Assign_Out returns [EObject current=null]
 		)?
 		(
 			(
-				lv_var_1_0=RULE_ID
-				{
-					newLeafNode(lv_var_1_0, grammarAccess.getParam_Assign_OutAccess().getVarIDTerminalRuleCall_1_0());
-				}
 				{
 					if ($current==null) {
 						$current = createModelElement(grammarAccess.getParam_Assign_OutRule());
 					}
-					setWithLastConsumed(
-						$current,
-						"var",
-						lv_var_1_0,
-						"org.eclipse.fordiac.ide.model.structuredtext.StructuredText.ID");
+				}
+				otherlv_1=RULE_ID
+				{
+					newLeafNode(otherlv_1, grammarAccess.getParam_Assign_OutAccess().getVarVarDeclarationCrossReference_1_0());
 				}
 			)
 		)

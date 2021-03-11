@@ -73,6 +73,11 @@ import org.eclipse.fordiac.ide.model.FordiacKeywords
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
 import java.text.MessageFormat
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FB_Call
+import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.OutArgument
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 
 class STAlgorithmFilter {
 
@@ -253,11 +258,79 @@ class STAlgorithmFilter {
 		throw new UnsupportedOperationException(stmt.eClass + " not supported");
 	}
 
-	def protected dispatch generateStatement(
-		AssignmentStatement stmt) '''«stmt.variable.generateExpression» = «stmt.expression.generateExpression»;'''
+	def protected dispatch generateStatement(AssignmentStatement stmt) '''
+		«stmt.variable.generateExpression» = «stmt.expression.generateExpression»;
+	'''
 
 	def protected dispatch generateStatement(Call stmt) {
 		return stmt.generateExpression
+	}
+	
+	def protected dispatch generateStatement(FB_Call fbCall) '''
+		«generateInAssignments(fbCall)»
+		mInternalFBs[«internalFbIndexFromName(fbCall.fb)»]->receiveInputEvent(«eventIndexFromName(fbCall)», nullptr);
+		«generateOutAssignments(fbCall)»
+	'''
+	
+	def generateInAssignments(FB_Call call) {
+		val inArgs = call.args.filter(InArgument)
+		'''
+		«FOR inArg : inArgs»
+		mInternalFBs[«internalFbIndexFromName(call.fb)»]->getDI(«getInputIndex(inArg.^var)»)->setValue(«inArg.expr.generateExpression»);
+		«ENDFOR»
+		'''
+	}
+	
+	def getInputIndex(VarDeclaration varDeclaration) {
+		val interfaceList = varDeclaration.eContainer as InterfaceList
+		var index = 0
+		for(input : interfaceList.inputVars) {
+			if(input === varDeclaration) {
+				return index
+			}
+			index++
+		}
+	}
+	
+	def generateOutAssignments(FB_Call call) {
+		val outArgs = call.args.filter(OutArgument)
+		'''
+		«FOR outArg : outArgs»
+		«outArg.expr.generateExpression».setValue(*mInternalFBs[«internalFbIndexFromName(call.fb)»]->getDO(«getOutputIndex(outArg.^var)»));
+		«ENDFOR»
+		'''
+	}
+	
+		def getOutputIndex(VarDeclaration varDeclaration) {
+		val interfaceList = varDeclaration.eContainer as InterfaceList
+		var index = 0
+		for(input : interfaceList.outputVars) {
+			if(input === varDeclaration) {
+				return index
+			}
+			index++
+		}
+	}
+	
+	def eventIndexFromName(FB_Call fbCall) {
+		var index = 0;
+		for(inputEvent : fbCall.fb.interface.eventInputs) {
+			if(fbCall.event === inputEvent) {
+				return index;
+			}
+			index++;
+		}
+	}
+	
+	def internalFbIndexFromName(FB fb) {
+		val fbType = fb.eContainer as BaseFBType
+		var index = 0;
+		for(internalFb: fbType.internalFbs) {
+			if(fb === internalFb) {
+				return index;
+			}
+			index++;
+		}
 	}
 
 	def protected dispatch generateStatement(ReturnStatement stmt) '''return;'''
@@ -383,16 +456,15 @@ class STAlgorithmFilter {
 
 	def protected dispatch CharSequence generateExpression(StringLiteral expr) '''"«expr.value.convertToJavaString»"'''
 
-	def protected dispatch CharSequence generateExpression(
-		ArrayVariable expr) '''«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»«index.generateExpression»«ENDFOR»'''
+	def protected dispatch CharSequence generateExpression(ArrayVariable expr) '''
+		«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»«index.generateExpression»«ENDFOR»
+	'''
 
-	def protected dispatch CharSequence generateExpression(AdapterVariable expr) {
+	def protected dispatch CharSequence generateExpression(AdapterVariable expr)
 		'''«expr.curr.generateExpression».«expr.^var.name»()«if(!(expr.eContainer instanceof AdapterVariable))expr.generateBitaccess»'''
-	}
 
-	def protected dispatch CharSequence generateExpression(AdapterRoot expr) {
+	def protected dispatch CharSequence generateExpression(AdapterRoot expr) 
 		'''«expr.adapter.generateVarAccess»'''
-	}
 
 	def generateStructAdapterVarAccess(EList<VarDeclaration> list)
 		'''«FOR variable : list BEFORE '.' SEPARATOR '.' »«variable.name»()«ENDFOR»'''

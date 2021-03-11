@@ -9495,9 +9495,13 @@ rule__Param_Assign_In__VarAssignment_0_0
 	}
 :
 	(
-		{ before(grammarAccess.getParam_Assign_InAccess().getVarIDTerminalRuleCall_0_0_0()); }
-		RULE_ID
-		{ after(grammarAccess.getParam_Assign_InAccess().getVarIDTerminalRuleCall_0_0_0()); }
+		{ before(grammarAccess.getParam_Assign_InAccess().getVarVarDeclarationCrossReference_0_0_0()); }
+		(
+			{ before(grammarAccess.getParam_Assign_InAccess().getVarVarDeclarationIDTerminalRuleCall_0_0_0_1()); }
+			RULE_ID
+			{ after(grammarAccess.getParam_Assign_InAccess().getVarVarDeclarationIDTerminalRuleCall_0_0_0_1()); }
+		)
+		{ after(grammarAccess.getParam_Assign_InAccess().getVarVarDeclarationCrossReference_0_0_0()); }
 	)
 ;
 finally {
@@ -9544,9 +9548,13 @@ rule__Param_Assign_Out__VarAssignment_1
 	}
 :
 	(
-		{ before(grammarAccess.getParam_Assign_OutAccess().getVarIDTerminalRuleCall_1_0()); }
-		RULE_ID
-		{ after(grammarAccess.getParam_Assign_OutAccess().getVarIDTerminalRuleCall_1_0()); }
+		{ before(grammarAccess.getParam_Assign_OutAccess().getVarVarDeclarationCrossReference_1_0()); }
+		(
+			{ before(grammarAccess.getParam_Assign_OutAccess().getVarVarDeclarationIDTerminalRuleCall_1_0_1()); }
+			RULE_ID
+			{ after(grammarAccess.getParam_Assign_OutAccess().getVarVarDeclarationIDTerminalRuleCall_1_0_1()); }
+		)
+		{ after(grammarAccess.getParam_Assign_OutAccess().getVarVarDeclarationCrossReference_1_0()); }
 	)
 ;
 finally {

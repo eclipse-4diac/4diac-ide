@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.export.forte_ng.st;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,6 +36,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser;
@@ -56,11 +60,13 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseClause;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseIfClause;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ExitStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FB_Call;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IntLiteral;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.OutArgument;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.RealLiteral;
@@ -556,11 +562,144 @@ public class STAlgorithmFilter {
     CharSequence _generateExpression_1 = this.generateExpression(stmt.getExpression());
     _builder.append(_generateExpression_1);
     _builder.append(";");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
   protected CharSequence _generateStatement(final Call stmt) {
     return this.generateExpression(stmt);
+  }
+  
+  protected CharSequence _generateStatement(final FB_Call fbCall) {
+    StringConcatenation _builder = new StringConcatenation();
+    CharSequence _generateInAssignments = this.generateInAssignments(fbCall);
+    _builder.append(_generateInAssignments);
+    _builder.newLineIfNotEmpty();
+    _builder.append("mInternalFBs[");
+    Integer _internalFbIndexFromName = this.internalFbIndexFromName(fbCall.getFb());
+    _builder.append(_internalFbIndexFromName);
+    _builder.append("]->receiveInputEvent(");
+    Integer _eventIndexFromName = this.eventIndexFromName(fbCall);
+    _builder.append(_eventIndexFromName);
+    _builder.append(", nullptr);");
+    _builder.newLineIfNotEmpty();
+    CharSequence _generateOutAssignments = this.generateOutAssignments(fbCall);
+    _builder.append(_generateOutAssignments);
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  public CharSequence generateInAssignments(final FB_Call call) {
+    CharSequence _xblockexpression = null;
+    {
+      final Iterable<InArgument> inArgs = Iterables.<InArgument>filter(call.getArgs(), InArgument.class);
+      StringConcatenation _builder = new StringConcatenation();
+      {
+        for(final InArgument inArg : inArgs) {
+          _builder.append("mInternalFBs[");
+          Integer _internalFbIndexFromName = this.internalFbIndexFromName(call.getFb());
+          _builder.append(_internalFbIndexFromName);
+          _builder.append("]->getDI(");
+          Integer _inputIndex = this.getInputIndex(inArg.getVar());
+          _builder.append(_inputIndex);
+          _builder.append(")->setValue(");
+          CharSequence _generateExpression = this.generateExpression(inArg.getExpr());
+          _builder.append(_generateExpression);
+          _builder.append(");");
+          _builder.newLineIfNotEmpty();
+        }
+      }
+      _xblockexpression = _builder;
+    }
+    return _xblockexpression;
+  }
+  
+  public Integer getInputIndex(final VarDeclaration varDeclaration) {
+    EObject _eContainer = varDeclaration.eContainer();
+    final InterfaceList interfaceList = ((InterfaceList) _eContainer);
+    int index = 0;
+    EList<VarDeclaration> _inputVars = interfaceList.getInputVars();
+    for (final VarDeclaration input : _inputVars) {
+      {
+        if ((input == varDeclaration)) {
+          return Integer.valueOf(index);
+        }
+        index++;
+      }
+    }
+    return null;
+  }
+  
+  public CharSequence generateOutAssignments(final FB_Call call) {
+    CharSequence _xblockexpression = null;
+    {
+      final Iterable<OutArgument> outArgs = Iterables.<OutArgument>filter(call.getArgs(), OutArgument.class);
+      StringConcatenation _builder = new StringConcatenation();
+      {
+        for(final OutArgument outArg : outArgs) {
+          CharSequence _generateExpression = this.generateExpression(outArg.getExpr());
+          _builder.append(_generateExpression);
+          _builder.append(".setValue(*mInternalFBs[");
+          Integer _internalFbIndexFromName = this.internalFbIndexFromName(call.getFb());
+          _builder.append(_internalFbIndexFromName);
+          _builder.append("]->getDO(");
+          Integer _outputIndex = this.getOutputIndex(outArg.getVar());
+          _builder.append(_outputIndex);
+          _builder.append("));");
+          _builder.newLineIfNotEmpty();
+        }
+      }
+      _xblockexpression = _builder;
+    }
+    return _xblockexpression;
+  }
+  
+  public Integer getOutputIndex(final VarDeclaration varDeclaration) {
+    EObject _eContainer = varDeclaration.eContainer();
+    final InterfaceList interfaceList = ((InterfaceList) _eContainer);
+    int index = 0;
+    EList<VarDeclaration> _outputVars = interfaceList.getOutputVars();
+    for (final VarDeclaration input : _outputVars) {
+      {
+        if ((input == varDeclaration)) {
+          return Integer.valueOf(index);
+        }
+        index++;
+      }
+    }
+    return null;
+  }
+  
+  public Integer eventIndexFromName(final FB_Call fbCall) {
+    int index = 0;
+    EList<Event> _eventInputs = fbCall.getFb().getInterface().getEventInputs();
+    for (final Event inputEvent : _eventInputs) {
+      {
+        Event _event = fbCall.getEvent();
+        boolean _tripleEquals = (_event == inputEvent);
+        if (_tripleEquals) {
+          return Integer.valueOf(index);
+        }
+        index++;
+      }
+    }
+    return null;
+  }
+  
+  public Integer internalFbIndexFromName(final FB fb) {
+    EObject _eContainer = fb.eContainer();
+    final BaseFBType fbType = ((BaseFBType) _eContainer);
+    int index = 0;
+    EList<FB> _internalFbs = fbType.getInternalFbs();
+    for (final FB internalFb : _internalFbs) {
+      {
+        if ((fb == internalFb)) {
+          return Integer.valueOf(index);
+        }
+        index++;
+      }
+    }
+    return null;
   }
   
   protected CharSequence _generateStatement(final ReturnStatement stmt) {
@@ -1076,6 +1215,7 @@ public class STAlgorithmFilter {
         _builder.append("]");
       }
     }
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -1317,6 +1457,8 @@ public class STAlgorithmFilter {
       return _generateStatement((ContinueStatement)stmt);
     } else if (stmt instanceof ExitStatement) {
       return _generateStatement((ExitStatement)stmt);
+    } else if (stmt instanceof FB_Call) {
+      return _generateStatement((FB_Call)stmt);
     } else if (stmt instanceof ForStatement) {
       return _generateStatement((ForStatement)stmt);
     } else if (stmt instanceof IfStatement) {

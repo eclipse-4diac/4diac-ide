@@ -6,9 +6,12 @@ package org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage;
@@ -29,24 +32,14 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class ArgumentImpl extends MinimalEObjectImpl.Container implements Argument
 {
   /**
-   * The default value of the '{@link #getVar() <em>Var</em>}' attribute.
+   * The cached value of the '{@link #getVar() <em>Var</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getVar()
    * @generated
    * @ordered
    */
-  protected static final String VAR_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getVar() <em>Var</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getVar()
-   * @generated
-   * @ordered
-   */
-  protected String var = VAR_EDEFAULT;
+  protected VarDeclaration var;
 
   /**
    * <!-- begin-user-doc -->
@@ -75,7 +68,27 @@ public class ArgumentImpl extends MinimalEObjectImpl.Container implements Argume
    * @generated
    */
   @Override
-  public String getVar()
+  public VarDeclaration getVar()
+  {
+    if (var != null && var.eIsProxy())
+    {
+      InternalEObject oldVar = (InternalEObject)var;
+      var = (VarDeclaration)eResolveProxy(oldVar);
+      if (var != oldVar)
+      {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, StructuredTextPackage.ARGUMENT__VAR, oldVar, var));
+      }
+    }
+    return var;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public VarDeclaration basicGetVar()
   {
     return var;
   }
@@ -86,9 +99,9 @@ public class ArgumentImpl extends MinimalEObjectImpl.Container implements Argume
    * @generated
    */
   @Override
-  public void setVar(String newVar)
+  public void setVar(VarDeclaration newVar)
   {
-    String oldVar = var;
+    VarDeclaration oldVar = var;
     var = newVar;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.ARGUMENT__VAR, oldVar, var));
@@ -105,7 +118,8 @@ public class ArgumentImpl extends MinimalEObjectImpl.Container implements Argume
     switch (featureID)
     {
       case StructuredTextPackage.ARGUMENT__VAR:
-        return getVar();
+        if (resolve) return getVar();
+        return basicGetVar();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -121,7 +135,7 @@ public class ArgumentImpl extends MinimalEObjectImpl.Container implements Argume
     switch (featureID)
     {
       case StructuredTextPackage.ARGUMENT__VAR:
-        setVar((String)newValue);
+        setVar((VarDeclaration)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -138,7 +152,7 @@ public class ArgumentImpl extends MinimalEObjectImpl.Container implements Argume
     switch (featureID)
     {
       case StructuredTextPackage.ARGUMENT__VAR:
-        setVar(VAR_EDEFAULT);
+        setVar((VarDeclaration)null);
         return;
     }
     super.eUnset(featureID);
@@ -155,26 +169,9 @@ public class ArgumentImpl extends MinimalEObjectImpl.Container implements Argume
     switch (featureID)
     {
       case StructuredTextPackage.ARGUMENT__VAR:
-        return VAR_EDEFAULT == null ? var != null : !VAR_EDEFAULT.equals(var);
+        return var != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (var: ");
-    result.append(var);
-    result.append(')');
-    return result.toString();
   }
 
 } //ArgumentImpl

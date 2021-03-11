@@ -11,7 +11,6 @@
 package org.eclipse.fordiac.ide.model.structuredtext.ui;
 
 import org.eclipse.fordiac.ide.model.structuredtext.ExpressionRuntimeModule;
-import org.eclipse.fordiac.ide.model.structuredtext.ui.ExpressionUiModule;
 import org.eclipse.fordiac.ide.model.structuredtext.ui.internal.StructuredtextActivator;
 import org.osgi.framework.BundleContext;
 

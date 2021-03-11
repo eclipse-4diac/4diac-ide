@@ -1407,26 +1407,30 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Group cGroup_0 = (Group)cGroup.eContents().get(0);
 		private final Assignment cVarAssignment_0_0 = (Assignment)cGroup_0.eContents().get(0);
-		private final RuleCall cVarIDTerminalRuleCall_0_0_0 = (RuleCall)cVarAssignment_0_0.eContents().get(0);
+		private final CrossReference cVarVarDeclarationCrossReference_0_0_0 = (CrossReference)cVarAssignment_0_0.eContents().get(0);
+		private final RuleCall cVarVarDeclarationIDTerminalRuleCall_0_0_0_1 = (RuleCall)cVarVarDeclarationCrossReference_0_0_0.eContents().get(1);
 		private final Keyword cColonEqualsSignKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Assignment cExprAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cExprExpressionParserRuleCall_1_0 = (RuleCall)cExprAssignment_1.eContents().get(0);
 		
 		//Param_Assign_In InArgument:
-		//	(var=ID ':=')? expr=Expression;
+		//	(var=[libraryElement::VarDeclaration] ':=')? expr=Expression;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//(var=ID ':=')? expr=Expression
+		//(var=[libraryElement::VarDeclaration] ':=')? expr=Expression
 		public Group getGroup() { return cGroup; }
 		
-		//(var=ID ':=')?
+		//(var=[libraryElement::VarDeclaration] ':=')?
 		public Group getGroup_0() { return cGroup_0; }
 		
-		//var=ID
+		//var=[libraryElement::VarDeclaration]
 		public Assignment getVarAssignment_0_0() { return cVarAssignment_0_0; }
 		
+		//[libraryElement::VarDeclaration]
+		public CrossReference getVarVarDeclarationCrossReference_0_0_0() { return cVarVarDeclarationCrossReference_0_0_0; }
+		
 		//ID
-		public RuleCall getVarIDTerminalRuleCall_0_0_0() { return cVarIDTerminalRuleCall_0_0_0; }
+		public RuleCall getVarVarDeclarationIDTerminalRuleCall_0_0_0_1() { return cVarVarDeclarationIDTerminalRuleCall_0_0_0_1; }
 		
 		//':='
 		public Keyword getColonEqualsSignKeyword_0_1() { return cColonEqualsSignKeyword_0_1; }
@@ -1443,16 +1447,17 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 		private final Assignment cNotAssignment_0 = (Assignment)cGroup.eContents().get(0);
 		private final Keyword cNotNOTKeyword_0_0 = (Keyword)cNotAssignment_0.eContents().get(0);
 		private final Assignment cVarAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cVarIDTerminalRuleCall_1_0 = (RuleCall)cVarAssignment_1.eContents().get(0);
+		private final CrossReference cVarVarDeclarationCrossReference_1_0 = (CrossReference)cVarAssignment_1.eContents().get(0);
+		private final RuleCall cVarVarDeclarationIDTerminalRuleCall_1_0_1 = (RuleCall)cVarVarDeclarationCrossReference_1_0.eContents().get(1);
 		private final Keyword cEqualsSignGreaterThanSignKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		private final Assignment cExprAssignment_3 = (Assignment)cGroup.eContents().get(3);
 		private final RuleCall cExprVariableParserRuleCall_3_0 = (RuleCall)cExprAssignment_3.eContents().get(0);
 		
 		//Param_Assign_Out OutArgument:
-		//	not?='NOT'? var=ID '=>' expr=Variable;
+		//	not?='NOT'? var=[libraryElement::VarDeclaration] '=>' expr=Variable;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//not?='NOT'? var=ID '=>' expr=Variable
+		//not?='NOT'? var=[libraryElement::VarDeclaration] '=>' expr=Variable
 		public Group getGroup() { return cGroup; }
 		
 		//not?='NOT'?
@@ -1461,11 +1466,14 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 		//'NOT'
 		public Keyword getNotNOTKeyword_0_0() { return cNotNOTKeyword_0_0; }
 		
-		//var=ID
+		//var=[libraryElement::VarDeclaration]
 		public Assignment getVarAssignment_1() { return cVarAssignment_1; }
 		
+		//[libraryElement::VarDeclaration]
+		public CrossReference getVarVarDeclarationCrossReference_1_0() { return cVarVarDeclarationCrossReference_1_0; }
+		
 		//ID
-		public RuleCall getVarIDTerminalRuleCall_1_0() { return cVarIDTerminalRuleCall_1_0; }
+		public RuleCall getVarVarDeclarationIDTerminalRuleCall_1_0_1() { return cVarVarDeclarationIDTerminalRuleCall_1_0_1; }
 		
 		//'=>'
 		public Keyword getEqualsSignGreaterThanSignKeyword_2() { return cEqualsSignGreaterThanSignKeyword_2; }
@@ -3424,7 +3432,7 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 	}
 	
 	//Param_Assign_In InArgument:
-	//	(var=ID ':=')? expr=Expression;
+	//	(var=[libraryElement::VarDeclaration] ':=')? expr=Expression;
 	public Param_Assign_InElements getParam_Assign_InAccess() {
 		return pParam_Assign_In;
 	}
@@ -3434,7 +3442,7 @@ public class StructuredTextGrammarAccess extends AbstractElementFinder.AbstractG
 	}
 	
 	//Param_Assign_Out OutArgument:
-	//	not?='NOT'? var=ID '=>' expr=Variable;
+	//	not?='NOT'? var=[libraryElement::VarDeclaration] '=>' expr=Variable;
 	public Param_Assign_OutElements getParam_Assign_OutAccess() {
 		return pParam_Assign_Out;
 	}

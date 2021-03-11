@@ -25,9 +25,9 @@ import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECState
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
 
 class BasicFBHeaderTemplate extends ForteFBTemplate {
 
@@ -52,7 +52,12 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 		  «generateFBInterfaceDeclaration»
 
 		  «generateFBInterfaceSpecDeclaration»
-
+		
+		«IF !type.internalFbs.empty»
+		  static const size_t csmAmountOfInternalFBs = «type.internalFbs.size»;
+		  «generateInternalFbDefinition»
+		  
+		«ENDIF»
 		«IF !type.internalVars.isEmpty»
 		  «generateInternalVarDelcaration(type)»
         «ENDIF»
@@ -73,11 +78,25 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 		  «type.generateBasicFBDataArray»
 
 		public:
+		  «IF type.internalFbs.empty»
 		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
 		       CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData) {
+		  «ELSE»
+		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
+		  	   CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData, scmInternalFBs, csmAmountOfInternalFBs) {
+		  «ENDIF»
 		  };
-
+		
+		  «IF !type.internalFbs.empty»
+		  virtual ~«FBClassName»() {
+		    for(size_t i = 0; i < csmAmountOfInternalFBs; ++i){
+		      delete mInternalFBs[i];
+		    }
+		    delete[] mInternalFBs;
+		  };
+		  «ELSE»
 		  virtual ~«FBClassName»() = default;
+		  «ENDIF»
 		};
 
 		«generateIncludeGuardEnd»
@@ -86,6 +105,9 @@ class BasicFBHeaderTemplate extends ForteFBTemplate {
 
 	override protected generateHeaderIncludes() '''
 		#include "basicfb.h"
+		«IF !type.internalFbs.isEmpty»
+		#include "typelib.h"
+		«ENDIF»
 		«(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).generateTypeIncludes»
 		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
 

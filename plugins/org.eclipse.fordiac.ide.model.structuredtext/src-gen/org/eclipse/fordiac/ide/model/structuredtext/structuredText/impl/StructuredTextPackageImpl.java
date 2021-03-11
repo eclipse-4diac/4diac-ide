@@ -947,9 +947,9 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
-  public EAttribute getArgument_Var()
+  public EReference getArgument_Var()
   {
-    return (EAttribute)argumentEClass.getEStructuralFeatures().get(0);
+    return (EReference)argumentEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1705,7 +1705,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     createEReference(callEClass, CALL__ARGS);
 
     argumentEClass = createEClass(ARGUMENT);
-    createEAttribute(argumentEClass, ARGUMENT__VAR);
+    createEReference(argumentEClass, ARGUMENT__VAR);
 
     inArgumentEClass = createEClass(IN_ARGUMENT);
     createEReference(inArgumentEClass, IN_ARGUMENT__EXPR);
@@ -1918,7 +1918,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     initEReference(getCall_Args(), this.getArgument(), null, "args", null, 0, -1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(argumentEClass, Argument.class, "Argument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getArgument_Var(), ecorePackage.getEString(), "var", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getArgument_Var(), theLibraryElementPackage.getVarDeclaration(), null, "var", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(inArgumentEClass, InArgument.class, "InArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getInArgument_Expr(), this.getExpression(), null, "expr", null, 0, 1, InArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

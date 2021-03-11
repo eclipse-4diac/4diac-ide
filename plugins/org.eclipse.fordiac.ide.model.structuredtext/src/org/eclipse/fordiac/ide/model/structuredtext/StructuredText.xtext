@@ -201,11 +201,11 @@ Param_Assign returns Argument:
 ;
 
 Param_Assign_In returns InArgument:
-	((var=ID ':=')? expr=Expression)
+	((var=[libraryElement::VarDeclaration] ':=')? expr=Expression)
 ;
 
 Param_Assign_Out returns OutArgument:
-	not?='NOT'? var=ID '=>' expr=Variable
+	not?='NOT'? var=[libraryElement::VarDeclaration] '=>' expr=Variable
 ;
 
 Variable returns Variable:

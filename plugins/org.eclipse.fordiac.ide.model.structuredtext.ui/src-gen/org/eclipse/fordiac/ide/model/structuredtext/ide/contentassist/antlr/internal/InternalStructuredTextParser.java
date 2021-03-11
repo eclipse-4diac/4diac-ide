@@ -5017,11 +5017,24 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
             case RULE_ID:
                 {
                 switch ( input.LA(2) ) {
+                case B:
+                case D:
+                case W:
+                case X:
+                case ColonEqualsSign:
+                case LeftSquareBracket:
+                    {
+                    alt1=1;
+                    }
+                    break;
                 case FullStop:
                     {
                     int LA1_6 = input.LA(3);
 
-                    if ( (LA1_6==RULE_ID) ) {
+                    if ( (LA1_6==DT||LA1_6==LT||LA1_6==T||LA1_6==RULE_UNSIGNED_INT) ) {
+                        alt1=1;
+                    }
+                    else if ( (LA1_6==RULE_ID) ) {
                         int LA1_7 = input.LA(4);
 
                         if ( (LA1_7==LeftParenthesis) ) {
@@ -5037,25 +5050,12 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
                             throw nvae;
                         }
                     }
-                    else if ( (LA1_6==DT||LA1_6==LT||LA1_6==T||LA1_6==RULE_UNSIGNED_INT) ) {
-                        alt1=1;
-                    }
                     else {
                         NoViableAltException nvae =
                             new NoViableAltException("", 1, 6, input);
 
                         throw nvae;
                     }
-                    }
-                    break;
-                case B:
-                case D:
-                case W:
-                case X:
-                case ColonEqualsSign:
-                case LeftSquareBracket:
-                    {
-                    alt1=1;
                     }
                     break;
                 case LeftParenthesis:
@@ -6002,11 +6002,11 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
                 {
                 int LA8_1 = input.LA(2);
 
-                if ( (LA8_1==EqualsSignGreaterThanSign) ) {
-                    alt8=2;
-                }
-                else if ( (LA8_1==EOF||(LA8_1>=B && LA8_1<=AND)||LA8_1==MOD||(LA8_1>=XOR && LA8_1<=AsteriskAsterisk)||(LA8_1>=ColonEqualsSign && LA8_1<=LessThanSignGreaterThanSign)||LA8_1==GreaterThanSignEqualsSign||LA8_1==OR||(LA8_1>=Ampersand && LA8_1<=Solidus)||(LA8_1>=LessThanSign && LA8_1<=GreaterThanSign)||LA8_1==LeftSquareBracket) ) {
+                if ( (LA8_1==EOF||(LA8_1>=B && LA8_1<=AND)||LA8_1==MOD||(LA8_1>=XOR && LA8_1<=AsteriskAsterisk)||(LA8_1>=ColonEqualsSign && LA8_1<=LessThanSignGreaterThanSign)||LA8_1==GreaterThanSignEqualsSign||LA8_1==OR||(LA8_1>=Ampersand && LA8_1<=Solidus)||(LA8_1>=LessThanSign && LA8_1<=GreaterThanSign)||LA8_1==LeftSquareBracket) ) {
                     alt8=1;
+                }
+                else if ( (LA8_1==EqualsSignGreaterThanSign) ) {
+                    alt8=2;
                 }
                 else {
                     NoViableAltException nvae =
@@ -6061,11 +6061,11 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
                 if ( (LA8_3==RULE_ID) ) {
                     int LA8_5 = input.LA(3);
 
-                    if ( (LA8_5==EqualsSignGreaterThanSign) ) {
-                        alt8=2;
-                    }
-                    else if ( (LA8_5==EOF||(LA8_5>=B && LA8_5<=AND)||LA8_5==MOD||(LA8_5>=XOR && LA8_5<=AsteriskAsterisk)||(LA8_5>=LessThanSignEqualsSign && LA8_5<=LessThanSignGreaterThanSign)||LA8_5==GreaterThanSignEqualsSign||LA8_5==OR||(LA8_5>=Ampersand && LA8_5<=Solidus)||(LA8_5>=LessThanSign && LA8_5<=GreaterThanSign)||LA8_5==LeftSquareBracket) ) {
+                    if ( (LA8_5==EOF||(LA8_5>=B && LA8_5<=AND)||LA8_5==MOD||(LA8_5>=XOR && LA8_5<=AsteriskAsterisk)||(LA8_5>=LessThanSignEqualsSign && LA8_5<=LessThanSignGreaterThanSign)||LA8_5==GreaterThanSignEqualsSign||LA8_5==OR||(LA8_5>=Ampersand && LA8_5<=Solidus)||(LA8_5>=LessThanSign && LA8_5<=GreaterThanSign)||LA8_5==LeftSquareBracket) ) {
                         alt8=1;
+                    }
+                    else if ( (LA8_5==EqualsSignGreaterThanSign) ) {
+                        alt8=2;
                     }
                     else {
                         NoViableAltException nvae =
@@ -6165,11 +6165,11 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
                 if ( (LA9_1==FullStop) ) {
                     int LA9_5 = input.LA(3);
 
-                    if ( (LA9_5==RULE_UNSIGNED_INT) ) {
-                        alt9=1;
-                    }
-                    else if ( (LA9_5==DT||LA9_5==LT||LA9_5==T||LA9_5==RULE_ID) ) {
+                    if ( (LA9_5==DT||LA9_5==LT||LA9_5==T||LA9_5==RULE_ID) ) {
                         alt9=2;
+                    }
+                    else if ( (LA9_5==RULE_UNSIGNED_INT) ) {
+                        alt9=1;
                     }
                     else {
                         NoViableAltException nvae =
@@ -6196,11 +6196,11 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
                 if ( (LA9_2==FullStop) ) {
                     int LA9_5 = input.LA(3);
 
-                    if ( (LA9_5==RULE_UNSIGNED_INT) ) {
-                        alt9=1;
-                    }
-                    else if ( (LA9_5==DT||LA9_5==LT||LA9_5==T||LA9_5==RULE_ID) ) {
+                    if ( (LA9_5==DT||LA9_5==LT||LA9_5==T||LA9_5==RULE_ID) ) {
                         alt9=2;
+                    }
+                    else if ( (LA9_5==RULE_UNSIGNED_INT) ) {
+                        alt9=1;
                     }
                     else {
                         NoViableAltException nvae =
@@ -6227,11 +6227,11 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
                 if ( (LA9_3==FullStop) ) {
                     int LA9_5 = input.LA(3);
 
-                    if ( (LA9_5==RULE_UNSIGNED_INT) ) {
-                        alt9=1;
-                    }
-                    else if ( (LA9_5==DT||LA9_5==LT||LA9_5==T||LA9_5==RULE_ID) ) {
+                    if ( (LA9_5==DT||LA9_5==LT||LA9_5==T||LA9_5==RULE_ID) ) {
                         alt9=2;
+                    }
+                    else if ( (LA9_5==RULE_UNSIGNED_INT) ) {
+                        alt9=1;
                     }
                     else {
                         NoViableAltException nvae =
@@ -6255,17 +6255,14 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
                 {
                 int LA9_4 = input.LA(2);
 
-                if ( (LA9_4==EOF||LA9_4==END_REPEAT||LA9_4==THEN||(LA9_4>=B && LA9_4<=AND)||LA9_4==MOD||(LA9_4>=XOR && LA9_4<=AsteriskAsterisk)||(LA9_4>=ColonEqualsSign && LA9_4<=LessThanSignGreaterThanSign)||LA9_4==GreaterThanSignEqualsSign||(LA9_4>=BY && LA9_4<=DO)||(LA9_4>=OF && LA9_4<=TO)||LA9_4==Ampersand||(LA9_4>=RightParenthesis && LA9_4<=HyphenMinus)||(LA9_4>=Solidus && LA9_4<=GreaterThanSign)||(LA9_4>=LeftSquareBracket && LA9_4<=RightSquareBracket)) ) {
-                    alt9=1;
-                }
-                else if ( (LA9_4==FullStop) ) {
+                if ( (LA9_4==FullStop) ) {
                     int LA9_5 = input.LA(3);
 
-                    if ( (LA9_5==RULE_UNSIGNED_INT) ) {
-                        alt9=1;
-                    }
-                    else if ( (LA9_5==DT||LA9_5==LT||LA9_5==T||LA9_5==RULE_ID) ) {
+                    if ( (LA9_5==DT||LA9_5==LT||LA9_5==T||LA9_5==RULE_ID) ) {
                         alt9=2;
+                    }
+                    else if ( (LA9_5==RULE_UNSIGNED_INT) ) {
+                        alt9=1;
                     }
                     else {
                         NoViableAltException nvae =
@@ -6273,6 +6270,9 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
                         throw nvae;
                     }
+                }
+                else if ( (LA9_4==EOF||LA9_4==END_REPEAT||LA9_4==THEN||(LA9_4>=B && LA9_4<=AND)||LA9_4==MOD||(LA9_4>=XOR && LA9_4<=AsteriskAsterisk)||(LA9_4>=ColonEqualsSign && LA9_4<=LessThanSignGreaterThanSign)||LA9_4==GreaterThanSignEqualsSign||(LA9_4>=BY && LA9_4<=DO)||(LA9_4>=OF && LA9_4<=TO)||LA9_4==Ampersand||(LA9_4>=RightParenthesis && LA9_4<=HyphenMinus)||(LA9_4>=Solidus && LA9_4<=GreaterThanSign)||(LA9_4>=LeftSquareBracket && LA9_4<=RightSquareBracket)) ) {
+                    alt9=1;
                 }
                 else {
                     NoViableAltException nvae =
@@ -29534,21 +29534,29 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Param_Assign_In__VarAssignment_0_0"
-    // InternalStructuredTextParser.g:9492:1: rule__Param_Assign_In__VarAssignment_0_0 : ( RULE_ID ) ;
+    // InternalStructuredTextParser.g:9492:1: rule__Param_Assign_In__VarAssignment_0_0 : ( ( RULE_ID ) ) ;
     public final void rule__Param_Assign_In__VarAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9496:1: ( ( RULE_ID ) )
-            // InternalStructuredTextParser.g:9497:2: ( RULE_ID )
+            // InternalStructuredTextParser.g:9496:1: ( ( ( RULE_ID ) ) )
+            // InternalStructuredTextParser.g:9497:2: ( ( RULE_ID ) )
             {
-            // InternalStructuredTextParser.g:9497:2: ( RULE_ID )
-            // InternalStructuredTextParser.g:9498:3: RULE_ID
+            // InternalStructuredTextParser.g:9497:2: ( ( RULE_ID ) )
+            // InternalStructuredTextParser.g:9498:3: ( RULE_ID )
             {
-             before(grammarAccess.getParam_Assign_InAccess().getVarIDTerminalRuleCall_0_0_0()); 
+             before(grammarAccess.getParam_Assign_InAccess().getVarVarDeclarationCrossReference_0_0_0()); 
+            // InternalStructuredTextParser.g:9499:3: ( RULE_ID )
+            // InternalStructuredTextParser.g:9500:4: RULE_ID
+            {
+             before(grammarAccess.getParam_Assign_InAccess().getVarVarDeclarationIDTerminalRuleCall_0_0_0_1()); 
             match(input,RULE_ID,FOLLOW_2); 
-             after(grammarAccess.getParam_Assign_InAccess().getVarIDTerminalRuleCall_0_0_0()); 
+             after(grammarAccess.getParam_Assign_InAccess().getVarVarDeclarationIDTerminalRuleCall_0_0_0_1()); 
+
+            }
+
+             after(grammarAccess.getParam_Assign_InAccess().getVarVarDeclarationCrossReference_0_0_0()); 
 
             }
 
@@ -29571,17 +29579,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Param_Assign_In__ExprAssignment_1"
-    // InternalStructuredTextParser.g:9507:1: rule__Param_Assign_In__ExprAssignment_1 : ( ruleExpression ) ;
+    // InternalStructuredTextParser.g:9511:1: rule__Param_Assign_In__ExprAssignment_1 : ( ruleExpression ) ;
     public final void rule__Param_Assign_In__ExprAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9511:1: ( ( ruleExpression ) )
-            // InternalStructuredTextParser.g:9512:2: ( ruleExpression )
+            // InternalStructuredTextParser.g:9515:1: ( ( ruleExpression ) )
+            // InternalStructuredTextParser.g:9516:2: ( ruleExpression )
             {
-            // InternalStructuredTextParser.g:9512:2: ( ruleExpression )
-            // InternalStructuredTextParser.g:9513:3: ruleExpression
+            // InternalStructuredTextParser.g:9516:2: ( ruleExpression )
+            // InternalStructuredTextParser.g:9517:3: ruleExpression
             {
              before(grammarAccess.getParam_Assign_InAccess().getExprExpressionParserRuleCall_1_0()); 
             pushFollow(FOLLOW_2);
@@ -29612,21 +29620,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Param_Assign_Out__NotAssignment_0"
-    // InternalStructuredTextParser.g:9522:1: rule__Param_Assign_Out__NotAssignment_0 : ( ( NOT ) ) ;
+    // InternalStructuredTextParser.g:9526:1: rule__Param_Assign_Out__NotAssignment_0 : ( ( NOT ) ) ;
     public final void rule__Param_Assign_Out__NotAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9526:1: ( ( ( NOT ) ) )
-            // InternalStructuredTextParser.g:9527:2: ( ( NOT ) )
+            // InternalStructuredTextParser.g:9530:1: ( ( ( NOT ) ) )
+            // InternalStructuredTextParser.g:9531:2: ( ( NOT ) )
             {
-            // InternalStructuredTextParser.g:9527:2: ( ( NOT ) )
-            // InternalStructuredTextParser.g:9528:3: ( NOT )
+            // InternalStructuredTextParser.g:9531:2: ( ( NOT ) )
+            // InternalStructuredTextParser.g:9532:3: ( NOT )
             {
              before(grammarAccess.getParam_Assign_OutAccess().getNotNOTKeyword_0_0()); 
-            // InternalStructuredTextParser.g:9529:3: ( NOT )
-            // InternalStructuredTextParser.g:9530:4: NOT
+            // InternalStructuredTextParser.g:9533:3: ( NOT )
+            // InternalStructuredTextParser.g:9534:4: NOT
             {
              before(grammarAccess.getParam_Assign_OutAccess().getNotNOTKeyword_0_0()); 
             match(input,NOT,FOLLOW_2); 
@@ -29657,21 +29665,29 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Param_Assign_Out__VarAssignment_1"
-    // InternalStructuredTextParser.g:9541:1: rule__Param_Assign_Out__VarAssignment_1 : ( RULE_ID ) ;
+    // InternalStructuredTextParser.g:9545:1: rule__Param_Assign_Out__VarAssignment_1 : ( ( RULE_ID ) ) ;
     public final void rule__Param_Assign_Out__VarAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9545:1: ( ( RULE_ID ) )
-            // InternalStructuredTextParser.g:9546:2: ( RULE_ID )
+            // InternalStructuredTextParser.g:9549:1: ( ( ( RULE_ID ) ) )
+            // InternalStructuredTextParser.g:9550:2: ( ( RULE_ID ) )
             {
-            // InternalStructuredTextParser.g:9546:2: ( RULE_ID )
-            // InternalStructuredTextParser.g:9547:3: RULE_ID
+            // InternalStructuredTextParser.g:9550:2: ( ( RULE_ID ) )
+            // InternalStructuredTextParser.g:9551:3: ( RULE_ID )
             {
-             before(grammarAccess.getParam_Assign_OutAccess().getVarIDTerminalRuleCall_1_0()); 
+             before(grammarAccess.getParam_Assign_OutAccess().getVarVarDeclarationCrossReference_1_0()); 
+            // InternalStructuredTextParser.g:9552:3: ( RULE_ID )
+            // InternalStructuredTextParser.g:9553:4: RULE_ID
+            {
+             before(grammarAccess.getParam_Assign_OutAccess().getVarVarDeclarationIDTerminalRuleCall_1_0_1()); 
             match(input,RULE_ID,FOLLOW_2); 
-             after(grammarAccess.getParam_Assign_OutAccess().getVarIDTerminalRuleCall_1_0()); 
+             after(grammarAccess.getParam_Assign_OutAccess().getVarVarDeclarationIDTerminalRuleCall_1_0_1()); 
+
+            }
+
+             after(grammarAccess.getParam_Assign_OutAccess().getVarVarDeclarationCrossReference_1_0()); 
 
             }
 
@@ -29694,17 +29710,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Param_Assign_Out__ExprAssignment_3"
-    // InternalStructuredTextParser.g:9556:1: rule__Param_Assign_Out__ExprAssignment_3 : ( ruleVariable ) ;
+    // InternalStructuredTextParser.g:9564:1: rule__Param_Assign_Out__ExprAssignment_3 : ( ruleVariable ) ;
     public final void rule__Param_Assign_Out__ExprAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9560:1: ( ( ruleVariable ) )
-            // InternalStructuredTextParser.g:9561:2: ( ruleVariable )
+            // InternalStructuredTextParser.g:9568:1: ( ( ruleVariable ) )
+            // InternalStructuredTextParser.g:9569:2: ( ruleVariable )
             {
-            // InternalStructuredTextParser.g:9561:2: ( ruleVariable )
-            // InternalStructuredTextParser.g:9562:3: ruleVariable
+            // InternalStructuredTextParser.g:9569:2: ( ruleVariable )
+            // InternalStructuredTextParser.g:9570:3: ruleVariable
             {
              before(grammarAccess.getParam_Assign_OutAccess().getExprVariableParserRuleCall_3_0()); 
             pushFollow(FOLLOW_2);
@@ -29735,17 +29751,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Variable__PartAssignment_1"
-    // InternalStructuredTextParser.g:9571:1: rule__Variable__PartAssignment_1 : ( ruleMultibit_Part_Access ) ;
+    // InternalStructuredTextParser.g:9579:1: rule__Variable__PartAssignment_1 : ( ruleMultibit_Part_Access ) ;
     public final void rule__Variable__PartAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9575:1: ( ( ruleMultibit_Part_Access ) )
-            // InternalStructuredTextParser.g:9576:2: ( ruleMultibit_Part_Access )
+            // InternalStructuredTextParser.g:9583:1: ( ( ruleMultibit_Part_Access ) )
+            // InternalStructuredTextParser.g:9584:2: ( ruleMultibit_Part_Access )
             {
-            // InternalStructuredTextParser.g:9576:2: ( ruleMultibit_Part_Access )
-            // InternalStructuredTextParser.g:9577:3: ruleMultibit_Part_Access
+            // InternalStructuredTextParser.g:9584:2: ( ruleMultibit_Part_Access )
+            // InternalStructuredTextParser.g:9585:3: ruleMultibit_Part_Access
             {
              before(grammarAccess.getVariableAccess().getPartMultibit_Part_AccessParserRuleCall_1_0()); 
             pushFollow(FOLLOW_2);
@@ -29776,17 +29792,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Variable_Subscript__IndexAssignment_1_2"
-    // InternalStructuredTextParser.g:9586:1: rule__Variable_Subscript__IndexAssignment_1_2 : ( ruleExpression ) ;
+    // InternalStructuredTextParser.g:9594:1: rule__Variable_Subscript__IndexAssignment_1_2 : ( ruleExpression ) ;
     public final void rule__Variable_Subscript__IndexAssignment_1_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9590:1: ( ( ruleExpression ) )
-            // InternalStructuredTextParser.g:9591:2: ( ruleExpression )
+            // InternalStructuredTextParser.g:9598:1: ( ( ruleExpression ) )
+            // InternalStructuredTextParser.g:9599:2: ( ruleExpression )
             {
-            // InternalStructuredTextParser.g:9591:2: ( ruleExpression )
-            // InternalStructuredTextParser.g:9592:3: ruleExpression
+            // InternalStructuredTextParser.g:9599:2: ( ruleExpression )
+            // InternalStructuredTextParser.g:9600:3: ruleExpression
             {
              before(grammarAccess.getVariable_SubscriptAccess().getIndexExpressionParserRuleCall_1_2_0()); 
             pushFollow(FOLLOW_2);
@@ -29817,17 +29833,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Variable_Subscript__IndexAssignment_1_3_1"
-    // InternalStructuredTextParser.g:9601:1: rule__Variable_Subscript__IndexAssignment_1_3_1 : ( ruleExpression ) ;
+    // InternalStructuredTextParser.g:9609:1: rule__Variable_Subscript__IndexAssignment_1_3_1 : ( ruleExpression ) ;
     public final void rule__Variable_Subscript__IndexAssignment_1_3_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9605:1: ( ( ruleExpression ) )
-            // InternalStructuredTextParser.g:9606:2: ( ruleExpression )
+            // InternalStructuredTextParser.g:9613:1: ( ( ruleExpression ) )
+            // InternalStructuredTextParser.g:9614:2: ( ruleExpression )
             {
-            // InternalStructuredTextParser.g:9606:2: ( ruleExpression )
-            // InternalStructuredTextParser.g:9607:3: ruleExpression
+            // InternalStructuredTextParser.g:9614:2: ( ruleExpression )
+            // InternalStructuredTextParser.g:9615:3: ruleExpression
             {
              before(grammarAccess.getVariable_SubscriptAccess().getIndexExpressionParserRuleCall_1_3_1_0()); 
             pushFollow(FOLLOW_2);
@@ -29858,21 +29874,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Variable_Adapter__VarAssignment_1_2"
-    // InternalStructuredTextParser.g:9616:1: rule__Variable_Adapter__VarAssignment_1_2 : ( ( ruleVariable_Name ) ) ;
+    // InternalStructuredTextParser.g:9624:1: rule__Variable_Adapter__VarAssignment_1_2 : ( ( ruleVariable_Name ) ) ;
     public final void rule__Variable_Adapter__VarAssignment_1_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9620:1: ( ( ( ruleVariable_Name ) ) )
-            // InternalStructuredTextParser.g:9621:2: ( ( ruleVariable_Name ) )
+            // InternalStructuredTextParser.g:9628:1: ( ( ( ruleVariable_Name ) ) )
+            // InternalStructuredTextParser.g:9629:2: ( ( ruleVariable_Name ) )
             {
-            // InternalStructuredTextParser.g:9621:2: ( ( ruleVariable_Name ) )
-            // InternalStructuredTextParser.g:9622:3: ( ruleVariable_Name )
+            // InternalStructuredTextParser.g:9629:2: ( ( ruleVariable_Name ) )
+            // InternalStructuredTextParser.g:9630:3: ( ruleVariable_Name )
             {
              before(grammarAccess.getVariable_AdapterAccess().getVarVarDeclarationCrossReference_1_2_0()); 
-            // InternalStructuredTextParser.g:9623:3: ( ruleVariable_Name )
-            // InternalStructuredTextParser.g:9624:4: ruleVariable_Name
+            // InternalStructuredTextParser.g:9631:3: ( ruleVariable_Name )
+            // InternalStructuredTextParser.g:9632:4: ruleVariable_Name
             {
              before(grammarAccess.getVariable_AdapterAccess().getVarVarDeclarationVariable_NameParserRuleCall_1_2_0_1()); 
             pushFollow(FOLLOW_2);
@@ -29907,21 +29923,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__AdapterRoot__AdapterAssignment_1"
-    // InternalStructuredTextParser.g:9635:1: rule__AdapterRoot__AdapterAssignment_1 : ( ( ruleAdapter_Name ) ) ;
+    // InternalStructuredTextParser.g:9643:1: rule__AdapterRoot__AdapterAssignment_1 : ( ( ruleAdapter_Name ) ) ;
     public final void rule__AdapterRoot__AdapterAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9639:1: ( ( ( ruleAdapter_Name ) ) )
-            // InternalStructuredTextParser.g:9640:2: ( ( ruleAdapter_Name ) )
+            // InternalStructuredTextParser.g:9647:1: ( ( ( ruleAdapter_Name ) ) )
+            // InternalStructuredTextParser.g:9648:2: ( ( ruleAdapter_Name ) )
             {
-            // InternalStructuredTextParser.g:9640:2: ( ( ruleAdapter_Name ) )
-            // InternalStructuredTextParser.g:9641:3: ( ruleAdapter_Name )
+            // InternalStructuredTextParser.g:9648:2: ( ( ruleAdapter_Name ) )
+            // InternalStructuredTextParser.g:9649:3: ( ruleAdapter_Name )
             {
              before(grammarAccess.getAdapterRootAccess().getAdapterVarDeclarationCrossReference_1_0()); 
-            // InternalStructuredTextParser.g:9642:3: ( ruleAdapter_Name )
-            // InternalStructuredTextParser.g:9643:4: ruleAdapter_Name
+            // InternalStructuredTextParser.g:9650:3: ( ruleAdapter_Name )
+            // InternalStructuredTextParser.g:9651:4: ruleAdapter_Name
             {
              before(grammarAccess.getAdapterRootAccess().getAdapterVarDeclarationAdapter_NameParserRuleCall_1_0_1()); 
             pushFollow(FOLLOW_2);
@@ -29956,21 +29972,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Multibit_Part_Access__DwordaccessAssignment_0_0"
-    // InternalStructuredTextParser.g:9654:1: rule__Multibit_Part_Access__DwordaccessAssignment_0_0 : ( ( D ) ) ;
+    // InternalStructuredTextParser.g:9662:1: rule__Multibit_Part_Access__DwordaccessAssignment_0_0 : ( ( D ) ) ;
     public final void rule__Multibit_Part_Access__DwordaccessAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9658:1: ( ( ( D ) ) )
-            // InternalStructuredTextParser.g:9659:2: ( ( D ) )
+            // InternalStructuredTextParser.g:9666:1: ( ( ( D ) ) )
+            // InternalStructuredTextParser.g:9667:2: ( ( D ) )
             {
-            // InternalStructuredTextParser.g:9659:2: ( ( D ) )
-            // InternalStructuredTextParser.g:9660:3: ( D )
+            // InternalStructuredTextParser.g:9667:2: ( ( D ) )
+            // InternalStructuredTextParser.g:9668:3: ( D )
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getDwordaccessDKeyword_0_0_0()); 
-            // InternalStructuredTextParser.g:9661:3: ( D )
-            // InternalStructuredTextParser.g:9662:4: D
+            // InternalStructuredTextParser.g:9669:3: ( D )
+            // InternalStructuredTextParser.g:9670:4: D
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getDwordaccessDKeyword_0_0_0()); 
             match(input,D,FOLLOW_2); 
@@ -30001,17 +30017,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Multibit_Part_Access__IndexAssignment_0_1"
-    // InternalStructuredTextParser.g:9673:1: rule__Multibit_Part_Access__IndexAssignment_0_1 : ( rulePartial_Value ) ;
+    // InternalStructuredTextParser.g:9681:1: rule__Multibit_Part_Access__IndexAssignment_0_1 : ( rulePartial_Value ) ;
     public final void rule__Multibit_Part_Access__IndexAssignment_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9677:1: ( ( rulePartial_Value ) )
-            // InternalStructuredTextParser.g:9678:2: ( rulePartial_Value )
+            // InternalStructuredTextParser.g:9685:1: ( ( rulePartial_Value ) )
+            // InternalStructuredTextParser.g:9686:2: ( rulePartial_Value )
             {
-            // InternalStructuredTextParser.g:9678:2: ( rulePartial_Value )
-            // InternalStructuredTextParser.g:9679:3: rulePartial_Value
+            // InternalStructuredTextParser.g:9686:2: ( rulePartial_Value )
+            // InternalStructuredTextParser.g:9687:3: rulePartial_Value
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getIndexPartial_ValueParserRuleCall_0_1_0()); 
             pushFollow(FOLLOW_2);
@@ -30042,21 +30058,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Multibit_Part_Access__WordaccessAssignment_1_0"
-    // InternalStructuredTextParser.g:9688:1: rule__Multibit_Part_Access__WordaccessAssignment_1_0 : ( ( W ) ) ;
+    // InternalStructuredTextParser.g:9696:1: rule__Multibit_Part_Access__WordaccessAssignment_1_0 : ( ( W ) ) ;
     public final void rule__Multibit_Part_Access__WordaccessAssignment_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9692:1: ( ( ( W ) ) )
-            // InternalStructuredTextParser.g:9693:2: ( ( W ) )
+            // InternalStructuredTextParser.g:9700:1: ( ( ( W ) ) )
+            // InternalStructuredTextParser.g:9701:2: ( ( W ) )
             {
-            // InternalStructuredTextParser.g:9693:2: ( ( W ) )
-            // InternalStructuredTextParser.g:9694:3: ( W )
+            // InternalStructuredTextParser.g:9701:2: ( ( W ) )
+            // InternalStructuredTextParser.g:9702:3: ( W )
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getWordaccessWKeyword_1_0_0()); 
-            // InternalStructuredTextParser.g:9695:3: ( W )
-            // InternalStructuredTextParser.g:9696:4: W
+            // InternalStructuredTextParser.g:9703:3: ( W )
+            // InternalStructuredTextParser.g:9704:4: W
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getWordaccessWKeyword_1_0_0()); 
             match(input,W,FOLLOW_2); 
@@ -30087,17 +30103,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Multibit_Part_Access__IndexAssignment_1_1"
-    // InternalStructuredTextParser.g:9707:1: rule__Multibit_Part_Access__IndexAssignment_1_1 : ( rulePartial_Value ) ;
+    // InternalStructuredTextParser.g:9715:1: rule__Multibit_Part_Access__IndexAssignment_1_1 : ( rulePartial_Value ) ;
     public final void rule__Multibit_Part_Access__IndexAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9711:1: ( ( rulePartial_Value ) )
-            // InternalStructuredTextParser.g:9712:2: ( rulePartial_Value )
+            // InternalStructuredTextParser.g:9719:1: ( ( rulePartial_Value ) )
+            // InternalStructuredTextParser.g:9720:2: ( rulePartial_Value )
             {
-            // InternalStructuredTextParser.g:9712:2: ( rulePartial_Value )
-            // InternalStructuredTextParser.g:9713:3: rulePartial_Value
+            // InternalStructuredTextParser.g:9720:2: ( rulePartial_Value )
+            // InternalStructuredTextParser.g:9721:3: rulePartial_Value
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getIndexPartial_ValueParserRuleCall_1_1_0()); 
             pushFollow(FOLLOW_2);
@@ -30128,21 +30144,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Multibit_Part_Access__ByteaccessAssignment_2_0"
-    // InternalStructuredTextParser.g:9722:1: rule__Multibit_Part_Access__ByteaccessAssignment_2_0 : ( ( B ) ) ;
+    // InternalStructuredTextParser.g:9730:1: rule__Multibit_Part_Access__ByteaccessAssignment_2_0 : ( ( B ) ) ;
     public final void rule__Multibit_Part_Access__ByteaccessAssignment_2_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9726:1: ( ( ( B ) ) )
-            // InternalStructuredTextParser.g:9727:2: ( ( B ) )
+            // InternalStructuredTextParser.g:9734:1: ( ( ( B ) ) )
+            // InternalStructuredTextParser.g:9735:2: ( ( B ) )
             {
-            // InternalStructuredTextParser.g:9727:2: ( ( B ) )
-            // InternalStructuredTextParser.g:9728:3: ( B )
+            // InternalStructuredTextParser.g:9735:2: ( ( B ) )
+            // InternalStructuredTextParser.g:9736:3: ( B )
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getByteaccessBKeyword_2_0_0()); 
-            // InternalStructuredTextParser.g:9729:3: ( B )
-            // InternalStructuredTextParser.g:9730:4: B
+            // InternalStructuredTextParser.g:9737:3: ( B )
+            // InternalStructuredTextParser.g:9738:4: B
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getByteaccessBKeyword_2_0_0()); 
             match(input,B,FOLLOW_2); 
@@ -30173,17 +30189,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Multibit_Part_Access__IndexAssignment_2_1"
-    // InternalStructuredTextParser.g:9741:1: rule__Multibit_Part_Access__IndexAssignment_2_1 : ( rulePartial_Value ) ;
+    // InternalStructuredTextParser.g:9749:1: rule__Multibit_Part_Access__IndexAssignment_2_1 : ( rulePartial_Value ) ;
     public final void rule__Multibit_Part_Access__IndexAssignment_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9745:1: ( ( rulePartial_Value ) )
-            // InternalStructuredTextParser.g:9746:2: ( rulePartial_Value )
+            // InternalStructuredTextParser.g:9753:1: ( ( rulePartial_Value ) )
+            // InternalStructuredTextParser.g:9754:2: ( rulePartial_Value )
             {
-            // InternalStructuredTextParser.g:9746:2: ( rulePartial_Value )
-            // InternalStructuredTextParser.g:9747:3: rulePartial_Value
+            // InternalStructuredTextParser.g:9754:2: ( rulePartial_Value )
+            // InternalStructuredTextParser.g:9755:3: rulePartial_Value
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getIndexPartial_ValueParserRuleCall_2_1_0()); 
             pushFollow(FOLLOW_2);
@@ -30214,21 +30230,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Multibit_Part_Access__BitaccessAssignment_3_0"
-    // InternalStructuredTextParser.g:9756:1: rule__Multibit_Part_Access__BitaccessAssignment_3_0 : ( ( X ) ) ;
+    // InternalStructuredTextParser.g:9764:1: rule__Multibit_Part_Access__BitaccessAssignment_3_0 : ( ( X ) ) ;
     public final void rule__Multibit_Part_Access__BitaccessAssignment_3_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9760:1: ( ( ( X ) ) )
-            // InternalStructuredTextParser.g:9761:2: ( ( X ) )
+            // InternalStructuredTextParser.g:9768:1: ( ( ( X ) ) )
+            // InternalStructuredTextParser.g:9769:2: ( ( X ) )
             {
-            // InternalStructuredTextParser.g:9761:2: ( ( X ) )
-            // InternalStructuredTextParser.g:9762:3: ( X )
+            // InternalStructuredTextParser.g:9769:2: ( ( X ) )
+            // InternalStructuredTextParser.g:9770:3: ( X )
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getBitaccessXKeyword_3_0_0()); 
-            // InternalStructuredTextParser.g:9763:3: ( X )
-            // InternalStructuredTextParser.g:9764:4: X
+            // InternalStructuredTextParser.g:9771:3: ( X )
+            // InternalStructuredTextParser.g:9772:4: X
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getBitaccessXKeyword_3_0_0()); 
             match(input,X,FOLLOW_2); 
@@ -30259,17 +30275,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Multibit_Part_Access__IndexAssignment_3_1"
-    // InternalStructuredTextParser.g:9775:1: rule__Multibit_Part_Access__IndexAssignment_3_1 : ( rulePartial_Value ) ;
+    // InternalStructuredTextParser.g:9783:1: rule__Multibit_Part_Access__IndexAssignment_3_1 : ( rulePartial_Value ) ;
     public final void rule__Multibit_Part_Access__IndexAssignment_3_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9779:1: ( ( rulePartial_Value ) )
-            // InternalStructuredTextParser.g:9780:2: ( rulePartial_Value )
+            // InternalStructuredTextParser.g:9787:1: ( ( rulePartial_Value ) )
+            // InternalStructuredTextParser.g:9788:2: ( rulePartial_Value )
             {
-            // InternalStructuredTextParser.g:9780:2: ( rulePartial_Value )
-            // InternalStructuredTextParser.g:9781:3: rulePartial_Value
+            // InternalStructuredTextParser.g:9788:2: ( rulePartial_Value )
+            // InternalStructuredTextParser.g:9789:3: rulePartial_Value
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getIndexPartial_ValueParserRuleCall_3_1_0()); 
             pushFollow(FOLLOW_2);
@@ -30300,21 +30316,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Multibit_Part_Access__BitaccessAssignment_4_0"
-    // InternalStructuredTextParser.g:9790:1: rule__Multibit_Part_Access__BitaccessAssignment_4_0 : ( ( FullStop ) ) ;
+    // InternalStructuredTextParser.g:9798:1: rule__Multibit_Part_Access__BitaccessAssignment_4_0 : ( ( FullStop ) ) ;
     public final void rule__Multibit_Part_Access__BitaccessAssignment_4_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9794:1: ( ( ( FullStop ) ) )
-            // InternalStructuredTextParser.g:9795:2: ( ( FullStop ) )
+            // InternalStructuredTextParser.g:9802:1: ( ( ( FullStop ) ) )
+            // InternalStructuredTextParser.g:9803:2: ( ( FullStop ) )
             {
-            // InternalStructuredTextParser.g:9795:2: ( ( FullStop ) )
-            // InternalStructuredTextParser.g:9796:3: ( FullStop )
+            // InternalStructuredTextParser.g:9803:2: ( ( FullStop ) )
+            // InternalStructuredTextParser.g:9804:3: ( FullStop )
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getBitaccessFullStopKeyword_4_0_0()); 
-            // InternalStructuredTextParser.g:9797:3: ( FullStop )
-            // InternalStructuredTextParser.g:9798:4: FullStop
+            // InternalStructuredTextParser.g:9805:3: ( FullStop )
+            // InternalStructuredTextParser.g:9806:4: FullStop
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getBitaccessFullStopKeyword_4_0_0()); 
             match(input,FullStop,FOLLOW_2); 
@@ -30345,17 +30361,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Multibit_Part_Access__IndexAssignment_4_1"
-    // InternalStructuredTextParser.g:9809:1: rule__Multibit_Part_Access__IndexAssignment_4_1 : ( rulePartial_Value ) ;
+    // InternalStructuredTextParser.g:9817:1: rule__Multibit_Part_Access__IndexAssignment_4_1 : ( rulePartial_Value ) ;
     public final void rule__Multibit_Part_Access__IndexAssignment_4_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9813:1: ( ( rulePartial_Value ) )
-            // InternalStructuredTextParser.g:9814:2: ( rulePartial_Value )
+            // InternalStructuredTextParser.g:9821:1: ( ( rulePartial_Value ) )
+            // InternalStructuredTextParser.g:9822:2: ( rulePartial_Value )
             {
-            // InternalStructuredTextParser.g:9814:2: ( rulePartial_Value )
-            // InternalStructuredTextParser.g:9815:3: rulePartial_Value
+            // InternalStructuredTextParser.g:9822:2: ( rulePartial_Value )
+            // InternalStructuredTextParser.g:9823:3: rulePartial_Value
             {
              before(grammarAccess.getMultibit_Part_AccessAccess().getIndexPartial_ValueParserRuleCall_4_1_0()); 
             pushFollow(FOLLOW_2);
@@ -30386,21 +30402,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Variable_Primary__VarAssignment"
-    // InternalStructuredTextParser.g:9824:1: rule__Variable_Primary__VarAssignment : ( ( ruleVariable_Name ) ) ;
+    // InternalStructuredTextParser.g:9832:1: rule__Variable_Primary__VarAssignment : ( ( ruleVariable_Name ) ) ;
     public final void rule__Variable_Primary__VarAssignment() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9828:1: ( ( ( ruleVariable_Name ) ) )
-            // InternalStructuredTextParser.g:9829:2: ( ( ruleVariable_Name ) )
+            // InternalStructuredTextParser.g:9836:1: ( ( ( ruleVariable_Name ) ) )
+            // InternalStructuredTextParser.g:9837:2: ( ( ruleVariable_Name ) )
             {
-            // InternalStructuredTextParser.g:9829:2: ( ( ruleVariable_Name ) )
-            // InternalStructuredTextParser.g:9830:3: ( ruleVariable_Name )
+            // InternalStructuredTextParser.g:9837:2: ( ( ruleVariable_Name ) )
+            // InternalStructuredTextParser.g:9838:3: ( ruleVariable_Name )
             {
              before(grammarAccess.getVariable_PrimaryAccess().getVarVarDeclarationCrossReference_0()); 
-            // InternalStructuredTextParser.g:9831:3: ( ruleVariable_Name )
-            // InternalStructuredTextParser.g:9832:4: ruleVariable_Name
+            // InternalStructuredTextParser.g:9839:3: ( ruleVariable_Name )
+            // InternalStructuredTextParser.g:9840:4: ruleVariable_Name
             {
              before(grammarAccess.getVariable_PrimaryAccess().getVarVarDeclarationVariable_NameParserRuleCall_0_1()); 
             pushFollow(FOLLOW_2);
@@ -30435,17 +30451,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Int_Literal__TypeAssignment_0_0"
-    // InternalStructuredTextParser.g:9843:1: rule__Int_Literal__TypeAssignment_0_0 : ( ruleInt_Type_Name ) ;
+    // InternalStructuredTextParser.g:9851:1: rule__Int_Literal__TypeAssignment_0_0 : ( ruleInt_Type_Name ) ;
     public final void rule__Int_Literal__TypeAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9847:1: ( ( ruleInt_Type_Name ) )
-            // InternalStructuredTextParser.g:9848:2: ( ruleInt_Type_Name )
+            // InternalStructuredTextParser.g:9855:1: ( ( ruleInt_Type_Name ) )
+            // InternalStructuredTextParser.g:9856:2: ( ruleInt_Type_Name )
             {
-            // InternalStructuredTextParser.g:9848:2: ( ruleInt_Type_Name )
-            // InternalStructuredTextParser.g:9849:3: ruleInt_Type_Name
+            // InternalStructuredTextParser.g:9856:2: ( ruleInt_Type_Name )
+            // InternalStructuredTextParser.g:9857:3: ruleInt_Type_Name
             {
              before(grammarAccess.getInt_LiteralAccess().getTypeInt_Type_NameEnumRuleCall_0_0_0()); 
             pushFollow(FOLLOW_2);
@@ -30476,21 +30492,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Int_Literal__ValueAssignment_1"
-    // InternalStructuredTextParser.g:9858:1: rule__Int_Literal__ValueAssignment_1 : ( ( rule__Int_Literal__ValueAlternatives_1_0 ) ) ;
+    // InternalStructuredTextParser.g:9866:1: rule__Int_Literal__ValueAssignment_1 : ( ( rule__Int_Literal__ValueAlternatives_1_0 ) ) ;
     public final void rule__Int_Literal__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9862:1: ( ( ( rule__Int_Literal__ValueAlternatives_1_0 ) ) )
-            // InternalStructuredTextParser.g:9863:2: ( ( rule__Int_Literal__ValueAlternatives_1_0 ) )
+            // InternalStructuredTextParser.g:9870:1: ( ( ( rule__Int_Literal__ValueAlternatives_1_0 ) ) )
+            // InternalStructuredTextParser.g:9871:2: ( ( rule__Int_Literal__ValueAlternatives_1_0 ) )
             {
-            // InternalStructuredTextParser.g:9863:2: ( ( rule__Int_Literal__ValueAlternatives_1_0 ) )
-            // InternalStructuredTextParser.g:9864:3: ( rule__Int_Literal__ValueAlternatives_1_0 )
+            // InternalStructuredTextParser.g:9871:2: ( ( rule__Int_Literal__ValueAlternatives_1_0 ) )
+            // InternalStructuredTextParser.g:9872:3: ( rule__Int_Literal__ValueAlternatives_1_0 )
             {
              before(grammarAccess.getInt_LiteralAccess().getValueAlternatives_1_0()); 
-            // InternalStructuredTextParser.g:9865:3: ( rule__Int_Literal__ValueAlternatives_1_0 )
-            // InternalStructuredTextParser.g:9865:4: rule__Int_Literal__ValueAlternatives_1_0
+            // InternalStructuredTextParser.g:9873:3: ( rule__Int_Literal__ValueAlternatives_1_0 )
+            // InternalStructuredTextParser.g:9873:4: rule__Int_Literal__ValueAlternatives_1_0
             {
             pushFollow(FOLLOW_2);
             rule__Int_Literal__ValueAlternatives_1_0();
@@ -30523,17 +30539,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Real_Literal__TypeAssignment_0_0"
-    // InternalStructuredTextParser.g:9873:1: rule__Real_Literal__TypeAssignment_0_0 : ( ruleReal_Type_Name ) ;
+    // InternalStructuredTextParser.g:9881:1: rule__Real_Literal__TypeAssignment_0_0 : ( ruleReal_Type_Name ) ;
     public final void rule__Real_Literal__TypeAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9877:1: ( ( ruleReal_Type_Name ) )
-            // InternalStructuredTextParser.g:9878:2: ( ruleReal_Type_Name )
+            // InternalStructuredTextParser.g:9885:1: ( ( ruleReal_Type_Name ) )
+            // InternalStructuredTextParser.g:9886:2: ( ruleReal_Type_Name )
             {
-            // InternalStructuredTextParser.g:9878:2: ( ruleReal_Type_Name )
-            // InternalStructuredTextParser.g:9879:3: ruleReal_Type_Name
+            // InternalStructuredTextParser.g:9886:2: ( ruleReal_Type_Name )
+            // InternalStructuredTextParser.g:9887:3: ruleReal_Type_Name
             {
              before(grammarAccess.getReal_LiteralAccess().getTypeReal_Type_NameEnumRuleCall_0_0_0()); 
             pushFollow(FOLLOW_2);
@@ -30564,17 +30580,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Real_Literal__ValueAssignment_1"
-    // InternalStructuredTextParser.g:9888:1: rule__Real_Literal__ValueAssignment_1 : ( ruleReal_Value ) ;
+    // InternalStructuredTextParser.g:9896:1: rule__Real_Literal__ValueAssignment_1 : ( ruleReal_Value ) ;
     public final void rule__Real_Literal__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9892:1: ( ( ruleReal_Value ) )
-            // InternalStructuredTextParser.g:9893:2: ( ruleReal_Value )
+            // InternalStructuredTextParser.g:9900:1: ( ( ruleReal_Value ) )
+            // InternalStructuredTextParser.g:9901:2: ( ruleReal_Value )
             {
-            // InternalStructuredTextParser.g:9893:2: ( ruleReal_Value )
-            // InternalStructuredTextParser.g:9894:3: ruleReal_Value
+            // InternalStructuredTextParser.g:9901:2: ( ruleReal_Value )
+            // InternalStructuredTextParser.g:9902:3: ruleReal_Value
             {
              before(grammarAccess.getReal_LiteralAccess().getValueReal_ValueParserRuleCall_1_0()); 
             pushFollow(FOLLOW_2);
@@ -30605,17 +30621,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Bool_Literal__TypeAssignment_0_0"
-    // InternalStructuredTextParser.g:9903:1: rule__Bool_Literal__TypeAssignment_0_0 : ( ruleBool_Type_Name ) ;
+    // InternalStructuredTextParser.g:9911:1: rule__Bool_Literal__TypeAssignment_0_0 : ( ruleBool_Type_Name ) ;
     public final void rule__Bool_Literal__TypeAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9907:1: ( ( ruleBool_Type_Name ) )
-            // InternalStructuredTextParser.g:9908:2: ( ruleBool_Type_Name )
+            // InternalStructuredTextParser.g:9915:1: ( ( ruleBool_Type_Name ) )
+            // InternalStructuredTextParser.g:9916:2: ( ruleBool_Type_Name )
             {
-            // InternalStructuredTextParser.g:9908:2: ( ruleBool_Type_Name )
-            // InternalStructuredTextParser.g:9909:3: ruleBool_Type_Name
+            // InternalStructuredTextParser.g:9916:2: ( ruleBool_Type_Name )
+            // InternalStructuredTextParser.g:9917:3: ruleBool_Type_Name
             {
              before(grammarAccess.getBool_LiteralAccess().getTypeBool_Type_NameEnumRuleCall_0_0_0()); 
             pushFollow(FOLLOW_2);
@@ -30646,17 +30662,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Bool_Literal__ValueAssignment_1"
-    // InternalStructuredTextParser.g:9918:1: rule__Bool_Literal__ValueAssignment_1 : ( ruleBool_Value ) ;
+    // InternalStructuredTextParser.g:9926:1: rule__Bool_Literal__ValueAssignment_1 : ( ruleBool_Value ) ;
     public final void rule__Bool_Literal__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9922:1: ( ( ruleBool_Value ) )
-            // InternalStructuredTextParser.g:9923:2: ( ruleBool_Value )
+            // InternalStructuredTextParser.g:9930:1: ( ( ruleBool_Value ) )
+            // InternalStructuredTextParser.g:9931:2: ( ruleBool_Value )
             {
-            // InternalStructuredTextParser.g:9923:2: ( ruleBool_Value )
-            // InternalStructuredTextParser.g:9924:3: ruleBool_Value
+            // InternalStructuredTextParser.g:9931:2: ( ruleBool_Value )
+            // InternalStructuredTextParser.g:9932:3: ruleBool_Value
             {
              before(grammarAccess.getBool_LiteralAccess().getValueBool_ValueParserRuleCall_1_0()); 
             pushFollow(FOLLOW_2);
@@ -30687,17 +30703,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Char_Literal__TypeAssignment_0_0"
-    // InternalStructuredTextParser.g:9933:1: rule__Char_Literal__TypeAssignment_0_0 : ( ruleString_Type_Name ) ;
+    // InternalStructuredTextParser.g:9941:1: rule__Char_Literal__TypeAssignment_0_0 : ( ruleString_Type_Name ) ;
     public final void rule__Char_Literal__TypeAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9937:1: ( ( ruleString_Type_Name ) )
-            // InternalStructuredTextParser.g:9938:2: ( ruleString_Type_Name )
+            // InternalStructuredTextParser.g:9945:1: ( ( ruleString_Type_Name ) )
+            // InternalStructuredTextParser.g:9946:2: ( ruleString_Type_Name )
             {
-            // InternalStructuredTextParser.g:9938:2: ( ruleString_Type_Name )
-            // InternalStructuredTextParser.g:9939:3: ruleString_Type_Name
+            // InternalStructuredTextParser.g:9946:2: ( ruleString_Type_Name )
+            // InternalStructuredTextParser.g:9947:3: ruleString_Type_Name
             {
              before(grammarAccess.getChar_LiteralAccess().getTypeString_Type_NameEnumRuleCall_0_0_0()); 
             pushFollow(FOLLOW_2);
@@ -30728,17 +30744,17 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Char_Literal__LengthAssignment_0_1"
-    // InternalStructuredTextParser.g:9948:1: rule__Char_Literal__LengthAssignment_0_1 : ( RULE_UNSIGNED_INT ) ;
+    // InternalStructuredTextParser.g:9956:1: rule__Char_Literal__LengthAssignment_0_1 : ( RULE_UNSIGNED_INT ) ;
     public final void rule__Char_Literal__LengthAssignment_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9952:1: ( ( RULE_UNSIGNED_INT ) )
-            // InternalStructuredTextParser.g:9953:2: ( RULE_UNSIGNED_INT )
+            // InternalStructuredTextParser.g:9960:1: ( ( RULE_UNSIGNED_INT ) )
+            // InternalStructuredTextParser.g:9961:2: ( RULE_UNSIGNED_INT )
             {
-            // InternalStructuredTextParser.g:9953:2: ( RULE_UNSIGNED_INT )
-            // InternalStructuredTextParser.g:9954:3: RULE_UNSIGNED_INT
+            // InternalStructuredTextParser.g:9961:2: ( RULE_UNSIGNED_INT )
+            // InternalStructuredTextParser.g:9962:3: RULE_UNSIGNED_INT
             {
              before(grammarAccess.getChar_LiteralAccess().getLengthUNSIGNED_INTTerminalRuleCall_0_1_0()); 
             match(input,RULE_UNSIGNED_INT,FOLLOW_2); 
@@ -30765,21 +30781,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Char_Literal__ValueAssignment_1"
-    // InternalStructuredTextParser.g:9963:1: rule__Char_Literal__ValueAssignment_1 : ( ( rule__Char_Literal__ValueAlternatives_1_0 ) ) ;
+    // InternalStructuredTextParser.g:9971:1: rule__Char_Literal__ValueAssignment_1 : ( ( rule__Char_Literal__ValueAlternatives_1_0 ) ) ;
     public final void rule__Char_Literal__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9967:1: ( ( ( rule__Char_Literal__ValueAlternatives_1_0 ) ) )
-            // InternalStructuredTextParser.g:9968:2: ( ( rule__Char_Literal__ValueAlternatives_1_0 ) )
+            // InternalStructuredTextParser.g:9975:1: ( ( ( rule__Char_Literal__ValueAlternatives_1_0 ) ) )
+            // InternalStructuredTextParser.g:9976:2: ( ( rule__Char_Literal__ValueAlternatives_1_0 ) )
             {
-            // InternalStructuredTextParser.g:9968:2: ( ( rule__Char_Literal__ValueAlternatives_1_0 ) )
-            // InternalStructuredTextParser.g:9969:3: ( rule__Char_Literal__ValueAlternatives_1_0 )
+            // InternalStructuredTextParser.g:9976:2: ( ( rule__Char_Literal__ValueAlternatives_1_0 ) )
+            // InternalStructuredTextParser.g:9977:3: ( rule__Char_Literal__ValueAlternatives_1_0 )
             {
              before(grammarAccess.getChar_LiteralAccess().getValueAlternatives_1_0()); 
-            // InternalStructuredTextParser.g:9970:3: ( rule__Char_Literal__ValueAlternatives_1_0 )
-            // InternalStructuredTextParser.g:9970:4: rule__Char_Literal__ValueAlternatives_1_0
+            // InternalStructuredTextParser.g:9978:3: ( rule__Char_Literal__ValueAlternatives_1_0 )
+            // InternalStructuredTextParser.g:9978:4: rule__Char_Literal__ValueAlternatives_1_0
             {
             pushFollow(FOLLOW_2);
             rule__Char_Literal__ValueAlternatives_1_0();
@@ -30812,21 +30828,21 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
 
 
     // $ANTLR start "rule__Time_Literal__LiteralAssignment"
-    // InternalStructuredTextParser.g:9978:1: rule__Time_Literal__LiteralAssignment : ( ( rule__Time_Literal__LiteralAlternatives_0 ) ) ;
+    // InternalStructuredTextParser.g:9986:1: rule__Time_Literal__LiteralAssignment : ( ( rule__Time_Literal__LiteralAlternatives_0 ) ) ;
     public final void rule__Time_Literal__LiteralAssignment() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalStructuredTextParser.g:9982:1: ( ( ( rule__Time_Literal__LiteralAlternatives_0 ) ) )
-            // InternalStructuredTextParser.g:9983:2: ( ( rule__Time_Literal__LiteralAlternatives_0 ) )
+            // InternalStructuredTextParser.g:9990:1: ( ( ( rule__Time_Literal__LiteralAlternatives_0 ) ) )
+            // InternalStructuredTextParser.g:9991:2: ( ( rule__Time_Literal__LiteralAlternatives_0 ) )
             {
-            // InternalStructuredTextParser.g:9983:2: ( ( rule__Time_Literal__LiteralAlternatives_0 ) )
-            // InternalStructuredTextParser.g:9984:3: ( rule__Time_Literal__LiteralAlternatives_0 )
+            // InternalStructuredTextParser.g:9991:2: ( ( rule__Time_Literal__LiteralAlternatives_0 ) )
+            // InternalStructuredTextParser.g:9992:3: ( rule__Time_Literal__LiteralAlternatives_0 )
             {
              before(grammarAccess.getTime_LiteralAccess().getLiteralAlternatives_0()); 
-            // InternalStructuredTextParser.g:9985:3: ( rule__Time_Literal__LiteralAlternatives_0 )
-            // InternalStructuredTextParser.g:9985:4: rule__Time_Literal__LiteralAlternatives_0
+            // InternalStructuredTextParser.g:9993:3: ( rule__Time_Literal__LiteralAlternatives_0 )
+            // InternalStructuredTextParser.g:9993:4: rule__Time_Literal__LiteralAlternatives_0
             {
             pushFollow(FOLLOW_2);
             rule__Time_Literal__LiteralAlternatives_0();

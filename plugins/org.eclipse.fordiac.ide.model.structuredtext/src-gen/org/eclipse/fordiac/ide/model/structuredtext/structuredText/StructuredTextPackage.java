@@ -635,7 +635,7 @@ public interface StructuredTextPackage extends EPackage
   int ARGUMENT = 15;
 
   /**
-   * The feature id for the '<em><b>Var</b></em>' attribute.
+   * The feature id for the '<em><b>Var</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -663,7 +663,7 @@ public interface StructuredTextPackage extends EPackage
   int IN_ARGUMENT = 16;
 
   /**
-   * The feature id for the '<em><b>Var</b></em>' attribute.
+   * The feature id for the '<em><b>Var</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -700,7 +700,7 @@ public interface StructuredTextPackage extends EPackage
   int OUT_ARGUMENT = 17;
 
   /**
-   * The feature id for the '<em><b>Var</b></em>' attribute.
+   * The feature id for the '<em><b>Var</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2116,15 +2116,15 @@ public interface StructuredTextPackage extends EPackage
   EClass getArgument();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument#getVar <em>Var</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument#getVar <em>Var</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Var</em>'.
+   * @return the meta object for the reference '<em>Var</em>'.
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument#getVar()
    * @see #getArgument()
    * @generated
    */
-  EAttribute getArgument_Var();
+  EReference getArgument_Var();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument <em>In Argument</em>}'.
@@ -3193,12 +3193,12 @@ public interface StructuredTextPackage extends EPackage
     EClass ARGUMENT = eINSTANCE.getArgument();
 
     /**
-     * The meta object literal for the '<em><b>Var</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Var</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ARGUMENT__VAR = eINSTANCE.getArgument_Var();
+    EReference ARGUMENT__VAR = eINSTANCE.getArgument_Var();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.InArgumentImpl <em>In Argument</em>}' class.

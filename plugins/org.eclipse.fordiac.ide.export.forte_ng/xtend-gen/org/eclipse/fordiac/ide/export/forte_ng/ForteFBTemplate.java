@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -32,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
@@ -903,6 +903,45 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     int _plus = (_size_4 + _size_5);
     _builder.append(_plus);
     _builder.append(");");
+    return _builder;
+  }
+  
+  public CharSequence generateInternalFbDefinition() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("static const SCFB_FBInstanceData scmInternalFBs[];");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence generateInteralFbDeclarations(final BaseFBType type) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("const SCFB_FBInstanceData ");
+    CharSequence _fBClassName = this.getFBClassName();
+    _builder.append(_fBClassName);
+    _builder.append("::scmInternalFBs[] = {");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    {
+      EList<FB> _internalFbs = type.getInternalFbs();
+      boolean _hasElements = false;
+      for(final FB elem : _internalFbs) {
+        if (!_hasElements) {
+          _hasElements = true;
+        } else {
+          _builder.appendImmediate(",\n", "  ");
+        }
+        _builder.append("{");
+        CharSequence _fORTEString = this.getFORTEString(elem.getName());
+        _builder.append(_fORTEString, "  ");
+        _builder.append(", ");
+        CharSequence _fORTEString_1 = this.getFORTEString(elem.getType().getName());
+        _builder.append(_fORTEString_1, "  ");
+        _builder.append("}");
+      }
+    }
+    _builder.newLineIfNotEmpty();
+    _builder.append("};");
+    _builder.newLine();
     return _builder;
   }
 }
