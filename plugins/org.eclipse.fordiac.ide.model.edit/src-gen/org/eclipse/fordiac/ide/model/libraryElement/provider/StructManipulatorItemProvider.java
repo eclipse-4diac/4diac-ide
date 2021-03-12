@@ -26,30 +26,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
-/**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator}
+/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator}
  * object. <!-- begin-user-doc --> <!-- end-user-doc -->
  * 
- * @generated
- */
+ * @generated */
 public class StructManipulatorItemProvider extends FBItemProvider {
-	/**
-	 * This constructs an instance from a factory and a notifier. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public StructManipulatorItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/**
-	 * This returns the property descriptors for the adapted class. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -60,38 +51,29 @@ public class StructManipulatorItemProvider extends FBItemProvider {
 		return itemPropertyDescriptors;
 	}
 
-	/**
-	 * This adds a property descriptor for the Struct Type feature. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This adds a property descriptor for the Struct Type feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected void addStructTypePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_StructManipulator_structType_feature"), //$NON-NLS-1$
 				getString("_UI_PropertyDescriptor_description", "_UI_StructManipulator_structType_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_StructManipulator_type"), //$NON-NLS-1$
+						"_UI_StructManipulator_type"),  //$NON-NLS-1$
 				LibraryElementPackage.Literals.STRUCT_MANIPULATOR__STRUCT_TYPE, true, false, true, null, null, null));
 	}
 
-	/**
-	 * This returns StructManipulator.gif. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/** This returns StructManipulator.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated NOT
-	 */
+	 * @generated NOT */
 	@Override
 	public Object getImage(Object object) {
 		return overlayImage(object, FordiacImage.ICON_SIFB.getImage());
 	}
 
-	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getText(Object object) {
 		String label = ((StructManipulator) object).getName();
@@ -99,26 +81,21 @@ public class StructManipulatorItemProvider extends FBItemProvider {
 				getString("_UI_StructManipulator_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
+	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 		super.notifyChanged(notification);
 	}
 
-	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
+	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);

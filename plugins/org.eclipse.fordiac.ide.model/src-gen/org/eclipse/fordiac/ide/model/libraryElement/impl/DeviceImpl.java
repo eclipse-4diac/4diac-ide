@@ -40,125 +40,97 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '
- * <em><b>Device</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object ' <em><b>Device</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getPosition
- * <em>Position</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getColor
- * <em>Color</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getVarDeclarations
- * <em>Var Declarations</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getResource
- * <em>Resource</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getProfile
- * <em>Profile</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getInConnections
- * <em>In Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getPosition <em>Position</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getColor <em>Color</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getVarDeclarations <em>Var
+ * Declarations</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getResource <em>Resource</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getProfile <em>Profile</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getInConnections <em>In
+ * Connections</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
-	/**
-	 * The cached value of the '{@link #getPosition() <em>Position</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getPosition() <em>Position</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getPosition()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected Position position;
 
-	/**
-	 * The cached value of the '{@link #getColor() <em>Color</em>}' containment
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getColor() <em>Color</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getColor()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected Color color;
 
-	/**
-	 * The cached value of the '{@link #getVarDeclarations() <em>Var
-	 * Declarations</em>}' containment reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getVarDeclarations()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<VarDeclaration> varDeclarations;
 
-	/**
-	 * The cached value of the '{@link #getResource() <em>Resource</em>}'
-	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getResource() <em>Resource</em>}' containment reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getResource()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Resource> resource;
 
-	/**
-	 * The default value of the '{@link #getProfile() <em>Profile</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getProfile() <em>Profile</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getProfile()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String PROFILE_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getProfile() <em>Profile</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getProfile() <em>Profile</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getProfile()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String profile = PROFILE_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getInConnections() <em>In Connections</em>}'
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getInConnections() <em>In Connections</em>}' reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getInConnections()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Link> inConnections;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected DeviceImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.DEVICE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Position getPosition() {
 		if (position != null && position.eIsProxy()) {
@@ -173,20 +145,16 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return position;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Position basicGetPosition() {
 		return position;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setPosition(Position newPosition) {
 		Position oldPosition = position;
@@ -196,11 +164,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 					position));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<Resource> getResource() {
 		if (resource == null) {
@@ -210,11 +176,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return resource;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Color getColor() {
 		if (color != null && color.eIsProxy()) {
@@ -238,20 +202,16 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return color;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Color basicGetColor() {
 		return color;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetColor(Color newColor, NotificationChain msgs) {
 		Color oldColor = color;
 		color = newColor;
@@ -266,11 +226,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setColor(Color newColor) {
 		if (newColor != color) {
@@ -289,11 +247,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 					newColor));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
@@ -303,21 +259,17 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return varDeclarations;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getProfile() {
 		return profile;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setProfile(String newProfile) {
 		String oldProfile = profile;
@@ -327,11 +279,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 					profile));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<Link> getInConnections() {
 		if (inConnections == null) {
@@ -341,35 +291,28 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return inConnections;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public AutomationSystem getAutomationSystem() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public SystemConfiguration getSystemConfiguration() {
 		return org.eclipse.fordiac.ide.model.Annotations.getSystemConfiguration(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public DeviceType getType() {
-		// this cannot be moved to the annotation class because there we don't have the
-		// super access!!!
+		// this cannot be moved to the annotation class because there we don't have the super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
 		if (type instanceof DeviceType) {
 			return (DeviceType) type;
@@ -377,21 +320,17 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Resource getResourceNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getResourceNamed(this, name);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void updatePosition(final int x, final int y) {
 		final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE
@@ -402,21 +341,17 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		setPosition(pos);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void updatePosition(final Point newPos) {
 		updatePosition(newPos.x, newPos.y);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Color getColorGen() {
 		if (color != null && color.eIsProxy()) {
@@ -440,11 +375,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return color;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -458,11 +391,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -479,11 +410,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -508,11 +437,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -544,11 +471,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -576,11 +501,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -601,11 +524,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
@@ -635,11 +556,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
@@ -669,11 +588,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

@@ -41,4 +41,11 @@ public interface StructuredType extends AnyDerivedType {
 	 * @generated */
 	EList<VarDeclaration> getMemberVariables();
 
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true" otherRequired="true"
+	 * @generated */
+	@Override
+	boolean isCompatibleWith(DataType other);
+
 } // StructuredType

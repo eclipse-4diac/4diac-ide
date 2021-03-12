@@ -64,7 +64,7 @@ abstract class ForteLibraryElementTemplate extends ExportTemplate {
 		«FOR include : vars.map[it.typeName].sort.toSet»
 			#include "forte_«include.toLowerCase».h"
 			«IF include.startsWith("ANY")»
-				#ERROR type contains variables of type ANY. Please check the usage of these variables as we can not gurantee correct usage on export!
+				#error type contains variables of type ANY. Please check the usage of these variables as we can not gurantee correct usage on export!
 			«ENDIF»
 		«ENDFOR»
 		«IF vars.exists[array]»

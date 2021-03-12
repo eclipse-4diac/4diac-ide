@@ -34,12 +34,27 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 
 	extension STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter
+	
+	final String DEFAULT_BASE_CLASS
 
-	new(String name, Path prefix) {
+	new(String name, Path prefix, String baseClass) {
 		super(name, prefix)
+		this.DEFAULT_BASE_CLASS = baseClass
 	}
 
 	override protected FBType getType()
+	
+	def protected baseClass() {
+		if(type?.compilerInfo?.classdef !== null) {
+			type.compilerInfo.classdef.trim.isEmpty ? DEFAULT_BASE_CLASS : type.compilerInfo.classdef 
+		} else {
+			DEFAULT_BASE_CLASS
+		}
+	}
+	
+	def protected generateFBClassHeader() '''
+	class «FBClassName»: public «baseClass» {
+	'''
 
 	def protected generateHeaderIncludes() '''
 		«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateTypeIncludes»

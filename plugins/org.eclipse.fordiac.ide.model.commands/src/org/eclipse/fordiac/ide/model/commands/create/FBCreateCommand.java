@@ -68,10 +68,10 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	public void execute() {
 		super.execute();
 		if (getFB() instanceof Multiplexer) {
-			((Multiplexer) getFB()).setStructType(
+			((Multiplexer) getFB()).setStructTypeElementsAtInterface(
 					(StructuredType) paletteEntry.getFBType().getInterfaceList().getOutputVars().get(0).getType());
 		} else if (getFB() instanceof Demultiplexer) {
-			((Demultiplexer) getFB()).setStructType(
+			((Demultiplexer) getFB()).setStructTypeElementsAtInterface(
 					(StructuredType) paletteEntry.getFBType().getInterfaceList().getInputVars().get(0).getType());
 		}
 	}

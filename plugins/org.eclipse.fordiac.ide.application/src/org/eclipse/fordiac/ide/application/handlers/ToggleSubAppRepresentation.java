@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -42,7 +41,7 @@ import org.eclipse.ui.menus.UIElement;
 public class ToggleSubAppRepresentation extends AbstractHandler implements IElementUpdater {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final SubApp subapp = (SubApp) ((EditPart) selection.getFirstElement()).getModel();
 		final ToggleSubAppRepresentationCommand cmd = new ToggleSubAppRepresentationCommand(subapp);
@@ -55,15 +54,16 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final SubApp subApp = getSelectedSubApp(selection);
 
-		setBaseEnabled(BreadcrumbUtil.isEditableSubApp(subApp));
+		// for now we only allow untyped subapps to be expanded or collapsed
+		setBaseEnabled(((null != subApp) && (null == subApp.getType())));
 	}
 
 	@Override
-	public void updateElement(UIElement element, Map parameters) {
+	public void updateElement(final UIElement element, final Map parameters) {
 		final GraphicalViewer viewer = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
 		final EditPart editPart = (EditPart) viewer.getSelectedEditParts().get(0);
 
@@ -84,7 +84,7 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		}
 	}
 
-	private static SubApp getSelectedSubApp(Object selection) {
+	private static SubApp getSelectedSubApp(final Object selection) {
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structSel = ((IStructuredSelection) selection);
 			if (!structSel.isEmpty() && (structSel.size() == 1)) {
@@ -94,7 +94,7 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		return null;
 	}
 
-	private static SubApp getSubApp(Object currentElement) {
+	private static SubApp getSubApp(final Object currentElement) {
 		if (currentElement instanceof SubApp) {
 			return (SubApp) currentElement;
 		} else if (currentElement instanceof SubAppForFBNetworkEditPart) {

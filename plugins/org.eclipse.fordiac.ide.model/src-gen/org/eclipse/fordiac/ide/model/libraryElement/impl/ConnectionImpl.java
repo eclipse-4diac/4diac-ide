@@ -25,132 +25,105 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Connection</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Connection</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isResTypeConnection
- * <em>Res Type Connection</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isBrokenConnection
- * <em>Broken Connection</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getSource
- * <em>Source</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDestination
- * <em>Destination</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getRoutingData
- * <em>Routing Data</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isResTypeConnection <em>Res Type
+ * Connection</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isBrokenConnection <em>Broken
+ * Connection</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getSource <em>Source</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDestination <em>Destination</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getRoutingData <em>Routing
+ * Data</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public abstract class ConnectionImpl extends ConfigurableObjectImpl implements Connection {
-	/**
-	 * The default value of the '{@link #isResTypeConnection() <em>Res Type
-	 * Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #isResTypeConnection() <em>Res Type Connection</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #isResTypeConnection()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final boolean RES_TYPE_CONNECTION_EDEFAULT = false;
 
-	/**
-	 * The cached value of the '{@link #isResTypeConnection() <em>Res Type
-	 * Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #isResTypeConnection() <em>Res Type Connection</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #isResTypeConnection()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected boolean resTypeConnection = RES_TYPE_CONNECTION_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #isBrokenConnection() <em>Broken
-	 * Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #isBrokenConnection() <em>Broken Connection</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #isBrokenConnection()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final boolean BROKEN_CONNECTION_EDEFAULT = false;
 
-	/**
-	 * The cached value of the '{@link #isBrokenConnection() <em>Broken
-	 * Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #isBrokenConnection() <em>Broken Connection</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #isBrokenConnection()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected boolean brokenConnection = BROKEN_CONNECTION_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getSource() <em>Source</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getSource() <em>Source</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getSource()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected IInterfaceElement source;
 
-	/**
-	 * The cached value of the '{@link #getDestination() <em>Destination</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getDestination() <em>Destination</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getDestination()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected IInterfaceElement destination;
 
-	/**
-	 * The cached value of the '{@link #getRoutingData() <em>Routing Data</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getRoutingData() <em>Routing Data</em>}' reference. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @see #getRoutingData()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected ConnectionRoutingData routingData;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected ConnectionImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.CONNECTION;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isResTypeConnection() {
 		return resTypeConnection;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setResTypeConnection(boolean newResTypeConnection) {
 		boolean oldResTypeConnection = resTypeConnection;
@@ -160,41 +133,33 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 					oldResTypeConnection, resTypeConnection));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isResourceConnection() {
 		return org.eclipse.fordiac.ide.model.Annotations.isResourceConnection(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetwork getFBNetwork() {
 		return org.eclipse.fordiac.ide.model.Annotations.getFBNetwork(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void checkIfConnectionBroken() {
 		org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void updateRoutingData(final int dx1, final int dy, final int dx2) {
 		final ConnectionRoutingData newRoutingData = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE
@@ -205,21 +170,17 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		setRoutingData(newRoutingData);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isBrokenConnection() {
 		return brokenConnection;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setBrokenConnection(boolean newBrokenConnection) {
 		boolean oldBrokenConnection = brokenConnection;
@@ -229,11 +190,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 					oldBrokenConnection, brokenConnection));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public IInterfaceElement getSource() {
 		if (source != null && source.eIsProxy()) {
@@ -248,20 +207,16 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		return source;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public IInterfaceElement basicGetSource() {
 		return source;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetSource(IInterfaceElement newSource, NotificationChain msgs) {
 		IInterfaceElement oldSource = source;
 		source = newSource;
@@ -285,11 +240,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public void setSourceGen(IInterfaceElement newSource) {
 		if (newSource != source) {
 			NotificationChain msgs = null;
@@ -307,11 +260,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 					newSource));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public IInterfaceElement getDestination() {
 		if (destination != null && destination.eIsProxy()) {
@@ -326,20 +277,16 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		return destination;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public IInterfaceElement basicGetDestination() {
 		return destination;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetDestination(IInterfaceElement newDestination, NotificationChain msgs) {
 		IInterfaceElement oldDestination = destination;
 		destination = newDestination;
@@ -363,11 +310,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public void setDestinationGen(IInterfaceElement newDestination) {
 		if (newDestination != destination) {
 			NotificationChain msgs = null;
@@ -385,11 +330,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 					newDestination, newDestination));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ConnectionRoutingData getRoutingData() {
 		if (routingData != null && routingData.eIsProxy()) {
@@ -404,20 +347,16 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		return routingData;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public ConnectionRoutingData basicGetRoutingData() {
 		return routingData;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setRoutingData(ConnectionRoutingData newRoutingData) {
 		ConnectionRoutingData oldRoutingData = routingData;
@@ -427,31 +366,25 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 					oldRoutingData, routingData));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetworkElement getSourceElement() {
 		return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetworkElement getDestinationElement() {
 		return org.eclipse.fordiac.ide.model.Annotations.getDestinationElement(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -470,11 +403,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -487,11 +418,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -516,11 +445,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -545,11 +472,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -574,11 +499,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -597,11 +520,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

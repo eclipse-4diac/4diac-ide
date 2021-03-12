@@ -46,7 +46,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEntry {
 	/** The default value of the '{@link #getLabel() <em>Label</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getLabel()
 	 * @generated
 	 * @ordered */
@@ -54,7 +54,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 
 	/** The cached value of the '{@link #getLabel() <em>Label</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getLabel()
 	 * @generated
 	 * @ordered */

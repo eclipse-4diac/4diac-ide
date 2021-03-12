@@ -53,7 +53,7 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
   private STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
   
   public BasicFBImplTemplate(final BasicFBType type, final String name, final Path prefix) {
-    super(name, prefix);
+    super(name, prefix, "CBasicFB");
     this.type = type;
   }
   

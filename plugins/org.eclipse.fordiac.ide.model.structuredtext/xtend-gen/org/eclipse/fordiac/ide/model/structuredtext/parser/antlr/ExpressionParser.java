@@ -10,6 +10,8 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext.parser.antlr;
 
+import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser;
+
 @SuppressWarnings("all")
 public class ExpressionParser extends StructuredTextParser {
   @Override

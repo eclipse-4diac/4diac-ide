@@ -33,8 +33,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -140,13 +142,21 @@ class FBNetworkImporter extends CommonElementImporter {
 			// indicate that FB is missing for usage in outline views
 		}
 
+
 		getXandY(fb);
 
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 
 		fbNetwork.getNetworkElements().add(fb);
 		fbNetworkElementMap.put(fb.getName(), fb);
+
+		if (fb instanceof StructManipulator) {
+			final Attribute attr = fb.getAttribute("StructuredType"); //$NON-NLS-1$
+			final StructuredType structType = getTypeLibrary().getDataTypeLibrary().getStructuredType(attr.getValue());
+			((StructManipulator) fb).setStructTypeElementsAtInterface(structType);
+		}
 	}
+
 
 	private static FB convertFBtoMux(final FB fb, final StructManipulator mux) {
 		mux.setName(fb.getName());

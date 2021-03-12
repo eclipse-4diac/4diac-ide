@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.model.structuredtext.converter;
 
 import java.text.SimpleDateFormat;
+import org.eclipse.fordiac.ide.model.structuredtext.converter.DateValueConverter;
 
 @SuppressWarnings("all")
 public class Date_LiteralValueConverter extends DateValueConverter {

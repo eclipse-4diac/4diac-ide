@@ -36,31 +36,22 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
-/**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList} object.
+/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
  * 
- * @generated
- */
+ * @generated */
 public class InterfaceListItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
-	/**
-	 * This constructs an instance from a factory and a notifier. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public InterfaceListItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/**
-	 * This returns the property descriptors for the adapted class. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -70,15 +61,12 @@ public class InterfaceListItemProvider extends ItemProviderAdapter implements IE
 		return itemPropertyDescriptors;
 	}
 
-	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an
-	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
-	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
@@ -93,48 +81,38 @@ public class InterfaceListItemProvider extends ItemProviderAdapter implements IE
 		return childrenFeatures;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to
-		// use for
+		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
-	/**
-	 * This returns InterfaceList.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This returns InterfaceList.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated not
-	 */
+	 * @generated not */
 	@Override
 	public Object getImage(Object object) {
 		return overlayImage(object, FordiacImage.ICON_INTERFACE_LIST.getImage());
 	}
 
-	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getText(Object object) {
 		return getString("_UI_InterfaceList_type"); //$NON-NLS-1$
 	}
 
-	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
+	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
@@ -154,13 +132,10 @@ public class InterfaceListItemProvider extends ItemProviderAdapter implements IE
 		}
 	}
 
-	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
+	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
@@ -202,13 +177,10 @@ public class InterfaceListItemProvider extends ItemProviderAdapter implements IE
 				LibraryElementFactory.eINSTANCE.createLocalVariable()));
 	}
 
-	/**
-	 * This returns the label text for
-	 * {@link org.eclipse.emf.edit.command.CreateChildCommand}. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	/** This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
 		Object childFeature = feature;
@@ -228,12 +200,9 @@ public class InterfaceListItemProvider extends ItemProviderAdapter implements IE
 		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
-	/**
-	 * Return the resource locator for this item provider's resources. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ResourceLocator getResourceLocator() {
 		return FordiacEditPlugin.INSTANCE;

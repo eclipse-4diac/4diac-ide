@@ -28,113 +28,90 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Service
- * Sequence</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Service Sequence</b></em>'. <!-- end-user-doc
+ * -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getName
- * <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getComment
- * <em>Comment</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getServiceTransaction
- * <em>Service Transaction</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getTestResult
- * <em>Test Result</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getComment <em>Comment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getServiceTransaction <em>Service
+ * Transaction</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getTestResult <em>Test
+ * Result</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String name = NAME_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String comment = COMMENT_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getServiceTransaction() <em>Service
-	 * Transaction</em>}' containment reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getServiceTransaction() <em>Service Transaction</em>}' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getServiceTransaction()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<ServiceTransaction> serviceTransaction;
 
-	/**
-	 * The default value of the '{@link #getTestResult() <em>Test Result</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getTestResult() <em>Test Result</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getTestResult()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int TEST_RESULT_EDEFAULT = 0;
 
 	private int testResult = TEST_RESULT_EDEFAULT;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected ServiceSequenceImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.SERVICE_SEQUENCE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<ServiceTransaction> getServiceTransaction() {
 		if (serviceTransaction == null) {
@@ -144,11 +121,9 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 		return serviceTransaction;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated NOT
-	 */
+	 * @generated NOT */
 	@Override
 	public int getTestResult() {
 		return testResult;
@@ -157,11 +132,9 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 		// throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated NOT
-	 */
+	 * @generated NOT */
 	@Override
 	public void setTestResult(int newTestResult) {
 		int oldTestResult = testResult;
@@ -175,11 +148,9 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 		// throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated NOT
-	 */
+	 * @generated NOT */
 	@Override
 	public void unsetTestResult() {
 		testResult = TEST_RESULT_EDEFAULT;
@@ -188,11 +159,9 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 		// throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated NOT
-	 */
+	 * @generated NOT */
 	@Override
 	public boolean isSetTestResult() {
 		return (testResult != TEST_RESULT_EDEFAULT);
@@ -202,21 +171,17 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 		// throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getComment() {
 		return comment;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
@@ -226,21 +191,17 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 					oldComment, comment));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
@@ -250,11 +211,9 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 					name));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -265,11 +224,9 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -286,11 +243,9 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -314,11 +269,9 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -340,11 +293,9 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -361,11 +312,9 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

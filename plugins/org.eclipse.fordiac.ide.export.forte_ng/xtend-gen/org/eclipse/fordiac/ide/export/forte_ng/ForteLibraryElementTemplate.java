@@ -139,7 +139,7 @@ public abstract class ForteLibraryElementTemplate extends ExportTemplate {
         {
           boolean _startsWith = include.startsWith("ANY");
           if (_startsWith) {
-            _builder.append("#ERROR type contains variables of type ANY. Please check the usage of these variables as we can not gurantee correct usage on export!");
+            _builder.append("#error type contains variables of type ANY. Please check the usage of these variables as we can not gurantee correct usage on export!");
             _builder.newLine();
           }
         }

@@ -35,137 +35,106 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object ' <em><b>EC
- * State</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object ' <em><b>EC State</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getName
- * <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getComment
- * <em>Comment</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getPosition
- * <em>Position</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getECAction
- * <em>EC Action</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getOutTransitions
- * <em>Out Transitions</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getInTransitions
- * <em>In Transitions</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getECC
- * <em>ECC</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getComment <em>Comment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getPosition <em>Position</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getECAction <em>EC Action</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getOutTransitions <em>Out
+ * Transitions</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getInTransitions <em>In
+ * Transitions</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getECC <em>ECC</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class ECStateImpl extends EObjectImpl implements ECState {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getName()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String name = NAME_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
 
-	/**
-	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getComment()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected String comment = COMMENT_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getPosition() <em>Position</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getPosition() <em>Position</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getPosition()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected Position position;
 
-	/**
-	 * The cached value of the '{@link #getECAction() <em>EC Action</em>}'
-	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getECAction() <em>EC Action</em>}' containment reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getECAction()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<ECAction> eCAction;
 
-	/**
-	 * The cached value of the '{@link #getOutTransitions() <em>Out
-	 * Transitions</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/** The cached value of the '{@link #getOutTransitions() <em>Out Transitions</em>}' reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getOutTransitions()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<ECTransition> outTransitions;
 
-	/**
-	 * The cached value of the '{@link #getInTransitions() <em>In Transitions</em>}'
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getInTransitions() <em>In Transitions</em>}' reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getInTransitions()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<ECTransition> inTransitions;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected ECStateImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.EC_STATE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<ECAction> getECAction() {
 		if (eCAction == null) {
@@ -175,21 +144,17 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		return eCAction;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getComment() {
 		return comment;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
@@ -199,11 +164,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 					comment));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Position getPosition() {
 		if (position != null && position.eIsProxy()) {
@@ -218,20 +181,16 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		return position;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Position basicGetPosition() {
 		return position;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setPosition(Position newPosition) {
 		Position oldPosition = position;
@@ -241,21 +200,17 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 					position));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setName(String newName) {
 		String oldName = name;
@@ -264,11 +219,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_STATE__NAME, oldName, name));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<ECTransition> getOutTransitions() {
 		if (outTransitions == null) {
@@ -278,11 +231,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		return outTransitions;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<ECTransition> getInTransitions() {
 		if (inTransitions == null) {
@@ -292,21 +243,17 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		return inTransitions;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean isStartState() {
 		return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void updatePosition(final int x, final int y) {
 		final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE
@@ -317,21 +264,17 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		setPosition(pos);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void updatePosition(final Point newPos) {
 		updatePosition(newPos.x, newPos.y);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public ECC getECC() {
 		if (eContainerFeatureID() != LibraryElementPackage.EC_STATE__ECC)
@@ -339,32 +282,26 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		return (ECC) eContainer();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public ECC basicGetECC() {
 		if (eContainerFeatureID() != LibraryElementPackage.EC_STATE__ECC)
 			return null;
 		return (ECC) eInternalContainer();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetECC(ECC newECC, NotificationChain msgs) {
 		msgs = eBasicSetContainer((InternalEObject) newECC, LibraryElementPackage.EC_STATE__ECC, msgs);
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setECC(ECC newECC) {
 		if (newECC != eInternalContainer()
@@ -384,11 +321,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_STATE__ECC, newECC, newECC));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -408,11 +343,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -429,11 +362,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
@@ -444,11 +375,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -475,11 +404,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -514,11 +441,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -549,11 +474,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -576,11 +499,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
@@ -594,11 +515,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
@@ -612,11 +531,9 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

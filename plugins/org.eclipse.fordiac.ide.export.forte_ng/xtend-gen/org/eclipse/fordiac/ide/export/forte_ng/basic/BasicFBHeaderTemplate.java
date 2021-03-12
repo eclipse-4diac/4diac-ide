@@ -46,7 +46,7 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
   private BasicFBType type;
   
   public BasicFBHeaderTemplate(final BasicFBType type, final String name, final Path prefix) {
-    super(name, prefix);
+    super(name, prefix, "CBasicFB");
     this.type = type;
   }
   
@@ -65,10 +65,8 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     _builder.append(_generateHeaderIncludes);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
-    _builder.append("class ");
-    CharSequence _fBClassName = this.getFBClassName();
-    _builder.append(_fBClassName);
-    _builder.append(": public CBasicFB {");
+    CharSequence _generateFBClassHeader = this.generateFBClassHeader();
+    _builder.append(_generateFBClassHeader);
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
     CharSequence _generateFBDeclaration = this.generateFBDeclaration();
@@ -168,8 +166,8 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
       boolean _isEmpty_3 = this.type.getInternalFbs().isEmpty();
       if (_isEmpty_3) {
         _builder.append("  ");
-        CharSequence _fBClassName_1 = this.getFBClassName();
-        _builder.append(_fBClassName_1, "  ");
+        CharSequence _fBClassName = this.getFBClassName();
+        _builder.append(_fBClassName, "  ");
         _builder.append("(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :");
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
@@ -188,8 +186,8 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
         _builder.newLineIfNotEmpty();
       } else {
         _builder.append("  ");
-        CharSequence _fBClassName_2 = this.getFBClassName();
-        _builder.append(_fBClassName_2, "  ");
+        CharSequence _fBClassName_1 = this.getFBClassName();
+        _builder.append(_fBClassName_1, "  ");
         _builder.append("(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :");
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
@@ -218,8 +216,8 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
       if (_not_5) {
         _builder.append("  ");
         _builder.append("virtual ~");
-        CharSequence _fBClassName_3 = this.getFBClassName();
-        _builder.append(_fBClassName_3, "  ");
+        CharSequence _fBClassName_2 = this.getFBClassName();
+        _builder.append(_fBClassName_2, "  ");
         _builder.append("() {");
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
@@ -244,8 +242,8 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
       } else {
         _builder.append("  ");
         _builder.append("virtual ~");
-        CharSequence _fBClassName_4 = this.getFBClassName();
-        _builder.append(_fBClassName_4, "  ");
+        CharSequence _fBClassName_3 = this.getFBClassName();
+        _builder.append(_fBClassName_3, "  ");
         _builder.append("() = default;");
         _builder.newLineIfNotEmpty();
       }

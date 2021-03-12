@@ -11,6 +11,7 @@
 package org.eclipse.fordiac.ide.model.structuredtext.ui;
 
 import com.google.inject.Injector;
+import org.eclipse.fordiac.ide.model.structuredtext.ui.ExtendedStructuredTextActivator;
 import org.eclipse.xtext.ui.guice.AbstractGuiceAwareExecutableExtensionFactory;
 import org.osgi.framework.Bundle;
 

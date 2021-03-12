@@ -24,74 +24,59 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Adapter
- * Type</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Adapter Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl#getAdapterFBType
- * <em>Adapter FB Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl#getAdapterFBType <em>Adapter FB
+ * Type</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
-	/**
-	 * The cached value of the '{@link #getAdapterFBType() <em>Adapter FB
-	 * Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getAdapterFBType() <em>Adapter FB Type</em>}' reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
 	 * @see #getAdapterFBType()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected AdapterFBType adapterFBType;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected AdapterTypeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.ADAPTER_TYPE;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public InterfaceList getInterfaceList() {
 		return org.eclipse.fordiac.ide.model.Annotations.getInterfaceList(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public AdapterFBType getAdapterFBType() {
 		return adapterFBType;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setAdapterFBType(AdapterFBType newAdapterFBType) {
 		AdapterFBType oldAdapterFBType = adapterFBType;
@@ -101,21 +86,17 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 					oldAdapterFBType, adapterFBType));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public AdapterFBType getPlugType() {
 		return org.eclipse.fordiac.ide.model.Annotations.getPlugType(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public AdapterFBType getSocketType() {
 		return org.eclipse.fordiac.ide.model.Annotations.getSocketType(this);
@@ -129,11 +110,9 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 		return super.basicSetPaletteEntry(newPaletteEntry, msgs);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -144,11 +123,9 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -161,11 +138,9 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -178,11 +153,9 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

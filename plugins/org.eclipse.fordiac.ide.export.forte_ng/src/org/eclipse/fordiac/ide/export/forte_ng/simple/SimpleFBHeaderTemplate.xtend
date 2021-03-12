@@ -28,7 +28,7 @@ class SimpleFBHeaderTemplate extends ForteFBTemplate {
 	@Accessors(PROTECTED_GETTER) SimpleFBType type
 
 	new(SimpleFBType type, String name, Path prefix) {
-		super(name, prefix)
+		super(name, prefix, "CSimpleFB")
 		this.type = type
 	}
 
@@ -39,7 +39,7 @@ class SimpleFBHeaderTemplate extends ForteFBTemplate {
 
 		«generateHeaderIncludes»
 
-		class «FBClassName»: public CSimpleFB {
+		«generateFBClassHeader»
 		  «generateFBDeclaration»
 
 		private:

@@ -25,118 +25,91 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Connection Routing Data</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Connection Routing Data</b></em>'. <!--
+ * end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl#getDx1
- * <em>Dx1</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl#getDx2
- * <em>Dx2</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl#getDy
- * <em>Dy</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl#getDx1 <em>Dx1</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl#getDx2 <em>Dx2</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl#getDy <em>Dy</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class ConnectionRoutingDataImpl extends EObjectImpl implements ConnectionRoutingData {
-	/**
-	 * The default value of the '{@link #getDx1() <em>Dx1</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getDx1() <em>Dx1</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @see #getDx1()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int DX1_EDEFAULT = 0;
 
-	/**
-	 * The cached value of the '{@link #getDx1() <em>Dx1</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getDx1() <em>Dx1</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @see #getDx1()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected int dx1 = DX1_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getDx2() <em>Dx2</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getDx2() <em>Dx2</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @see #getDx2()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int DX2_EDEFAULT = 0;
 
-	/**
-	 * The cached value of the '{@link #getDx2() <em>Dx2</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getDx2() <em>Dx2</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @see #getDx2()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected int dx2 = DX2_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getDy() <em>Dy</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getDy() <em>Dy</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getDy()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int DY_EDEFAULT = 0;
 
-	/**
-	 * The cached value of the '{@link #getDy() <em>Dy</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getDy() <em>Dy</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getDy()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected int dy = DY_EDEFAULT;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected ConnectionRoutingDataImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.CONNECTION_ROUTING_DATA;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getDx1() {
 		return dx1;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setDx1(int newDx1) {
 		int oldDx1 = dx1;
@@ -146,21 +119,17 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 					oldDx1, dx1));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getDx2() {
 		return dx2;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setDx2(int newDx2) {
 		int oldDx2 = dx2;
@@ -170,21 +139,17 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 					oldDx2, dx2));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getDy() {
 		return dy;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setDy(int newDy) {
 		int oldDy = dy;
@@ -194,11 +159,9 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 					oldDy, dy));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -213,11 +176,9 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -236,11 +197,9 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -259,11 +218,9 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -278,11 +235,9 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

@@ -61,19 +61,19 @@ public interface PalettePackage extends EPackage {
 	int PALETTE = 0;
 
 	/** The feature id for the '<em><b>Type Library</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int PALETTE__TYPE_LIBRARY = 0;
 
 	/** The feature id for the '<em><b>Adapter Types</b></em>' map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int PALETTE__ADAPTER_TYPES = 1;
 
 	/** The feature id for the '<em><b>Device Types</b></em>' map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int PALETTE__DEVICE_TYPES = 2;
@@ -85,25 +85,25 @@ public interface PalettePackage extends EPackage {
 	int PALETTE__FB_TYPES = 3;
 
 	/** The feature id for the '<em><b>Resource Types</b></em>' map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int PALETTE__RESOURCE_TYPES = 4;
 
 	/** The feature id for the '<em><b>Segment Types</b></em>' map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int PALETTE__SEGMENT_TYPES = 5;
 
 	/** The feature id for the '<em><b>Sub App Types</b></em>' map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int PALETTE__SUB_APP_TYPES = 6;
 
 	/** The number of structural features of the '<em>Palette</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int PALETTE_FEATURE_COUNT = 7;
@@ -308,13 +308,13 @@ public interface PalettePackage extends EPackage {
 	int PALETTE_ENTRY__TYPE = 3;
 
 	/** The feature id for the '<em><b>Palette</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int PALETTE_ENTRY__PALETTE = 4;
 
 	/** The number of structural features of the '<em>Entry</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int PALETTE_ENTRY_FEATURE_COUNT = 5;
@@ -385,7 +385,7 @@ public interface PalettePackage extends EPackage {
 	int ADAPTER_TYPE_PALETTE_ENTRY__TYPE = PALETTE_ENTRY__TYPE;
 
 	/** The feature id for the '<em><b>Palette</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int ADAPTER_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
@@ -431,7 +431,7 @@ public interface PalettePackage extends EPackage {
 	int DATA_TYPE_PALETTE_ENTRY__TYPE = PALETTE_ENTRY__TYPE;
 
 	/** The feature id for the '<em><b>Palette</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int DATA_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
@@ -469,7 +469,7 @@ public interface PalettePackage extends EPackage {
 	int DEVICE_TYPE_PALETTE_ENTRY__TYPE = PALETTE_ENTRY__TYPE;
 
 	/** The feature id for the '<em><b>Palette</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int DEVICE_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
@@ -507,7 +507,7 @@ public interface PalettePackage extends EPackage {
 	int FB_TYPE_PALETTE_ENTRY__TYPE = PALETTE_ENTRY__TYPE;
 
 	/** The feature id for the '<em><b>Palette</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int FB_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
@@ -545,7 +545,7 @@ public interface PalettePackage extends EPackage {
 	int RESOURCE_TYPE_ENTRY__TYPE = PALETTE_ENTRY__TYPE;
 
 	/** The feature id for the '<em><b>Palette</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int RESOURCE_TYPE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
@@ -583,7 +583,7 @@ public interface PalettePackage extends EPackage {
 	int SEGMENT_TYPE_PALETTE_ENTRY__TYPE = PALETTE_ENTRY__TYPE;
 
 	/** The feature id for the '<em><b>Palette</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int SEGMENT_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;
@@ -629,7 +629,7 @@ public interface PalettePackage extends EPackage {
 	int SUB_APPLICATION_TYPE_PALETTE_ENTRY__TYPE = PALETTE_ENTRY__TYPE;
 
 	/** The feature id for the '<em><b>Palette</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int SUB_APPLICATION_TYPE_PALETTE_ENTRY__PALETTE = PALETTE_ENTRY__PALETTE;

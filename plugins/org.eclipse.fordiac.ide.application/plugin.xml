@@ -564,9 +564,7 @@
             class="org.eclipse.fordiac.ide.application.handlers.FlattenSubApplication"
             commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp">
             <activeWhen>
-                <not>
-            		<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
-            	</not>
+            	<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
             </activeWhen>
       </handler>
       <handler
@@ -584,9 +582,7 @@
 	            			<reference 
 	            		       	definitionId="org.eclipse.fordiac.ide.application.SubAppInstanceSelection">
 	               			</reference>
-	            			<not>
-	            				<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
-	            			</not>
+	            			<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
                			</and>
             		</iterate>
             	</with>
@@ -729,9 +725,7 @@
                   commandId="org.eclipse.fordiac.ide.application.commands.changeType"
                   label="Change Type">
                 <visibleWhen checkEnabled="false">
-                	<not>
-                		<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
-                	</not>
+                	<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
                 </visibleWhen>
             </command>
             <menu
@@ -869,9 +863,7 @@
 	            			<reference 
 	            		       	definitionId="org.eclipse.fordiac.ide.application.SubAppInstanceSelection">
 	               			</reference>
-	            			<not>
-	            				<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
-	            			</not>
+	            			<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
                			</and>
             		</iterate>
             	</with>
@@ -887,9 +879,7 @@
 	            			<reference 
 	            		       	definitionId="org.eclipse.fordiac.ide.application.SubAppInstanceSelection">
 	               			</reference>
-	            			<not>
-	            				<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
-	            			</not>
+	            			<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
                			</and>
             		</iterate>
             	</with>
@@ -995,10 +985,8 @@
         <command
               commandId="org.eclipse.fordiac.ide.application.commands.changeType"
               label="Change Type">
-            <visibleWhen>
-            	<not>
-            		<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
-            	</not>
+            <visibleWhen checkEnabled="false">
+            	<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
             </visibleWhen>
         </command>
          <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType">
@@ -1014,9 +1002,7 @@
 	               <reference
 	                     definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
 	               </reference>
-	               <not>
-		           		<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
-		           </not>
+		           <test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
 	        	</and>
             </visibleWhen>
          </command>

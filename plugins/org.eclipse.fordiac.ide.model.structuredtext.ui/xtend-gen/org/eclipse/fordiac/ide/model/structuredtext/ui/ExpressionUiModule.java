@@ -12,6 +12,7 @@ package org.eclipse.fordiac.ide.model.structuredtext.ui;
 
 import com.google.inject.Provider;
 import org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr.ExpressionParser;
+import org.eclipse.fordiac.ide.model.structuredtext.ui.StructuredTextUiModule;
 import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.swt.SWT;

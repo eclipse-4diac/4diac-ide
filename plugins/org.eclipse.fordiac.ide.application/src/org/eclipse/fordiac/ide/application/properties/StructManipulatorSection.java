@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -68,6 +69,9 @@ public class StructManipulatorSection extends AbstractSection {
 		if (input instanceof StructManipulatorEditPart) {
 			return ((StructManipulatorEditPart) input).getModel();
 		}
+		if (input instanceof StructManipulator) {
+			return ((StructManipulator) input);
+		}
 		return null;
 	}
 
@@ -84,7 +88,7 @@ public class StructManipulatorSection extends AbstractSection {
 	}
 
 	private void createStructSelector(Composite composite) {
-		Composite structComp = getWidgetFactory().createComposite(composite);
+		final Composite structComp = getWidgetFactory().createComposite(composite);
 		structComp.setLayout(new GridLayout(3, false));
 		structComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
@@ -106,29 +110,17 @@ public class StructManipulatorSection extends AbstractSection {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (null != getType()) {
-					int index = muxStructSelector.getSelectionIndex();
-					String newStructName = muxStructSelector.getItem(index);
+					final int index = muxStructSelector.getSelectionIndex();
+					final String newStructName = muxStructSelector.getItem(index);
 					disableOpenEditorForAnyType(newStructName);
-					boolean newStructSelected = !newStructName.contentEquals(getType().getStructType().getName());
+					final boolean newStructSelected = !newStructName.contentEquals(getType().getStructType().getName());
 					if (newStructSelected && (null != getDatatypeLibrary())) {
-						StructuredType newStruct = getDatatypeLibrary().getStructuredType(newStructName);
-						ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
+						final StructuredType newStruct = getDatatypeLibrary().getStructuredType(newStructName);
+						final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
 						commandStack.execute(cmd);
-						selectNewStructManipulatorFB(cmd);
+						selectNewStructManipulatorFB(cmd.getNewMux());
 						refresh();
 					}
-				}
-			}
-
-			private void selectNewStructManipulatorFB(ChangeStructCommand cmd) {
-				GraphicalViewer viewer = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-						.getActiveEditor().getAdapter(GraphicalViewer.class);
-				if (null != viewer) {
-					viewer.flush();
-					Object obj = viewer.getEditPartRegistry().get(cmd.getNewMux());
-					viewer.select((EditPart) obj);
-					setInput(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor(),
-							viewer.getSelection());
 				}
 			}
 
@@ -143,6 +135,18 @@ public class StructManipulatorSection extends AbstractSection {
 				e -> OpenStructMenu.openStructEditor(getType().getStructType().getPaletteEntry().getFile()));
 	}
 
+	protected void selectNewStructManipulatorFB(StructManipulator newMux) {
+		final GraphicalViewer viewer = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor().getAdapter(GraphicalViewer.class);
+		if (null != viewer) {
+			viewer.flush();
+			final Object obj = viewer.getEditPartRegistry().get(newMux);
+			viewer.select((EditPart) obj);
+			setInput(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor(),
+					viewer.getSelection());
+		}
+	}
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
@@ -150,7 +154,7 @@ public class StructManipulatorSection extends AbstractSection {
 		parent.setLayout(new GridLayout(1, true));
 		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		createStructSelector(parent);
-		Group memberVarGroup = getWidgetFactory().createGroup(parent,
+		final Group memberVarGroup = getWidgetFactory().createGroup(parent,
 				Messages.StructManipulatorSection_Contained_variables);
 		createMemberVariableViewer(memberVarGroup);
 		memberVarGroup.setLayout(new GridLayout(1, true));
@@ -172,12 +176,12 @@ public class StructManipulatorSection extends AbstractSection {
 	}
 
 	private void createContextMenu(Control ctrl) {
-		Menu openEditorMenu = new Menu(memberVarViewer.getTree());
-		MenuItem openItem = new MenuItem(openEditorMenu, SWT.NONE);
+		final Menu openEditorMenu = new Menu(memberVarViewer.getTree());
+		final MenuItem openItem = new MenuItem(openEditorMenu, SWT.NONE);
 		openItem.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				StructuredType sel = getSelectedStructuredType();
+				final StructuredType sel = getSelectedStructuredType();
 				if (sel != null) {
 					OpenStructMenu.openStructEditor(sel.getPaletteEntry().getFile());
 				}
@@ -205,8 +209,8 @@ public class StructManipulatorSection extends AbstractSection {
 	}
 
 	private StructuredType getSelectedStructuredType() {
-		TreeNode selected = (TreeNode) memberVarViewer.getTree().getSelection()[0].getData();
-		VarDeclaration varDecl = selected.getVariable();
+		final TreeNode selected = (TreeNode) memberVarViewer.getTree().getSelection()[0].getData();
+		final VarDeclaration varDecl = selected.getVariable();
 		if (varDecl.getType() instanceof StructuredType) {
 			return (StructuredType) varDecl.getType();
 		}
@@ -214,9 +218,9 @@ public class StructManipulatorSection extends AbstractSection {
 	}
 
 	private static void configureTreeLayout(TreeViewer viewer) {
-		TreeViewerColumn col1 = new TreeViewerColumn(viewer, SWT.LEFT);
-		TreeViewerColumn col2 = new TreeViewerColumn(viewer, SWT.LEFT);
-		TreeViewerColumn col3 = new TreeViewerColumn(viewer, SWT.LEFT);
+		final TreeViewerColumn col1 = new TreeViewerColumn(viewer, SWT.LEFT);
+		final TreeViewerColumn col2 = new TreeViewerColumn(viewer, SWT.LEFT);
+		final TreeViewerColumn col3 = new TreeViewerColumn(viewer, SWT.LEFT);
 
 		col1.getColumn().setText(Messages.StructManipulatorSection_MEMBERVAR_COLUMN_NAME);
 		col2.getColumn().setText(Messages.StructManipulatorSection_MEMBERVAR_COLUMN_TYPE);
@@ -236,9 +240,9 @@ public class StructManipulatorSection extends AbstractSection {
 
 	private void fillStructTypeCombo() {
 		memberVarViewer.setInput(getType());
-		String structName = getType().getStructType().getName();
+		final String structName = getType().getStructType().getName();
 		muxStructSelector.removeAll();
-		for (StructuredType dtp : getDatatypeLibrary().getStructuredTypesSorted()) {
+		for (final StructuredType dtp : getDatatypeLibrary().getStructuredTypesSorted()) {
 			muxStructSelector.add(dtp.getName());
 			if (dtp.getName().contentEquals(structName)) {
 				muxStructSelector.select(muxStructSelector.getItemCount() - 1);
@@ -249,7 +253,7 @@ public class StructManipulatorSection extends AbstractSection {
 	@Override
 	public void setInput(IWorkbenchPart part, ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
-		Object input = ((IStructuredSelection) selection).getFirstElement();
+		final Object input = ((IStructuredSelection) selection).getFirstElement();
 		commandStack = getCommandStack(part, input);
 		if (null == commandStack) { // disable all fields
 			muxLabel.setEnabled(false);
@@ -263,7 +267,7 @@ public class StructManipulatorSection extends AbstractSection {
 	private DataTypeLibrary getDatatypeLibrary() {
 		try {
 			return getType().getFbNetwork().getAutomationSystem().getPalette().getTypeLibrary().getDataTypeLibrary();
-		} catch (NullPointerException e) {
+		} catch (final NullPointerException e) {
 			return null;
 		}
 	}
@@ -286,7 +290,7 @@ public class StructManipulatorSection extends AbstractSection {
 
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			VarDeclaration parentVar = ((TreeNode) parentElement).getVariable();
+			final VarDeclaration parentVar = ((TreeNode) parentElement).getVariable();
 			return getMemberVariableNodes((StructuredType) parentVar.getType(),
 					((TreeNode) parentElement).getPathName());
 		}
@@ -311,7 +315,7 @@ public class StructManipulatorSection extends AbstractSection {
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
 			if (element instanceof TreeNode) {
-				VarDeclaration var = ((TreeNode) element).getVariable();
+				final VarDeclaration var = ((TreeNode) element).getVariable();
 				switch (columnIndex) {
 				case 0:
 					return var.getName();
@@ -328,9 +332,9 @@ public class StructManipulatorSection extends AbstractSection {
 	}
 
 	protected static class TreeNode {
-		private VarDeclaration variable;
-		private String parentVarName;
-		private String pathName;
+		private final VarDeclaration variable;
+		private final String parentVarName;
+		private final String pathName;
 
 		public TreeNode(VarDeclaration variable, String parentVarName, String pathName) {
 			this.variable = variable;

@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.StructManipulation;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
@@ -30,6 +31,8 @@ import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -40,8 +43,8 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 
 	protected static class State extends CommandTestBase.StateBase {
 
-		private final Demultiplexer demux;
-		private StructuredType struct;
+		private Demultiplexer demux;
+		private final StructuredType struct;
 
 		public Demultiplexer getDemultiplexer() {
 			return demux;
@@ -56,23 +59,34 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			demux = createDemultiplexer();
 		}
 
+		public void setDemultiplexer(Demultiplexer demux) {
+			this.demux = demux;
+		}
+
 		private Demultiplexer createDemultiplexer() {
-			Demultiplexer d = LibraryElementFactory.eINSTANCE.createDemultiplexer();
+			final Demultiplexer d = LibraryElementFactory.eINSTANCE.createDemultiplexer();
 			d.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
-			Event inputEvent = LibraryElementFactory.eINSTANCE.createEvent();
-			Event outputEvent = LibraryElementFactory.eINSTANCE.createEvent();
-			VarDeclaration dataInput = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			final Event inputEvent = LibraryElementFactory.eINSTANCE.createEvent();
+			final Event outputEvent = LibraryElementFactory.eINSTANCE.createEvent();
+			final VarDeclaration dataInput = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			d.getInterface().getEventInputs().add(inputEvent);
 			d.getInterface().getEventOutputs().add(outputEvent);
 			d.getInterface().getInputVars().add(dataInput);
 
-			PaletteEntry dummyType = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
-			dummyType.setLabel("Demux Palette Entry"); //$NON-NLS-1$
-			dummyType.setType(LibraryElementFactory.eINSTANCE.createBasicFBType());
-			typeLib.addPaletteEntry(dummyType);
-			d.setPaletteEntry(dummyType);
+			final PaletteEntry dummyEntry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
+			dummyEntry.setLabel("Demux Palette Entry"); //$NON-NLS-1$
+			final FBType dummyType = LibraryElementFactory.eINSTANCE.createBasicFBType();
+			dummyEntry.setType(dummyType);
+
+			typeLib.addPaletteEntry(dummyEntry);
+			d.setPaletteEntry(dummyEntry);
 
 			d.setStructType(struct);
+			d.setStructTypeElementsAtInterface(struct);
+			final FBNetwork dummyFbN = LibraryElementFactory.eINSTANCE.createFBNetwork();
+			dummyFbN.getNetworkElements().add(d);
+
+			dummyType.setInterfaceList(EcoreUtil.copy(d.getInterface())); // make sure the type has the same interface
 			return d;
 		}
 
@@ -82,13 +96,13 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		}
 
 		private static StructuredType createSampleStruct() {
-			StructuredType outer = createSampleStructType("outerStruct"); //$NON-NLS-1$
-			StructuredType inner = createSampleStructType("innerStruct"); //$NON-NLS-1$
+			final StructuredType outer = createSampleStructType("outerStruct"); //$NON-NLS-1$
+			final StructuredType inner = createSampleStructType("innerStruct"); //$NON-NLS-1$
 
-			VarDeclaration structVAR1 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			final VarDeclaration structVAR1 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			structVAR1.setName("innerstruct1"); //$NON-NLS-1$
 			structVAR1.setType(inner);
-			VarDeclaration structVAR2 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			final VarDeclaration structVAR2 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			structVAR2.setName("innerstruct2"); //$NON-NLS-1$
 			structVAR2.setType(inner);
 			outer.getMemberVariables().add(structVAR1);
@@ -98,19 +112,19 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		}
 
 		private static StructuredType createSampleStructType(String name) {
-			StructuredType type = DataFactory.eINSTANCE.createStructuredType();
+			final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
 			type.setName(name);
-			VarDeclaration var1 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			final VarDeclaration var1 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			var1.setName("VAR1"); //$NON-NLS-1$
-			VarDeclaration var2 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			final VarDeclaration var2 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			var2.setName("VAR2"); //$NON-NLS-1$
-			VarDeclaration var3 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			final VarDeclaration var3 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			var3.setName("VAR3"); //$NON-NLS-1$
-			VarDeclaration var4 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			final VarDeclaration var4 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			var4.setName("VAR4"); //$NON-NLS-1$
-			VarDeclaration var5 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			final VarDeclaration var5 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			var5.setName("VAR5"); //$NON-NLS-1$
-			VarDeclaration var6 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			final VarDeclaration var6 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			var6.setName("VAR6"); //$NON-NLS-1$
 			type.getMemberVariables().add(var1);
 			type.getMemberVariables().add(var2);
@@ -118,7 +132,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			type.getMemberVariables().add(var4);
 			type.getMemberVariables().add(var5);
 			type.getMemberVariables().add(var6);
-			DataTypePaletteEntry dataEntry = PaletteFactory.eINSTANCE.createDataTypePaletteEntry();
+			final DataTypePaletteEntry dataEntry = PaletteFactory.eINSTANCE.createDataTypePaletteEntry();
 			dataEntry.setType(type);
 			dataEntry.setLabel(name);
 			typeLib.getDataTypeLibrary().addPaletteEntry(dataEntry);
@@ -133,12 +147,16 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 
 	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
 			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
-		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
-				CommandTestBase::defaultRedoCommand);
+		return describeCommand(description, initializer, initialVerifier, commands, s -> undoCommand((State) s),
+				s -> redoCommand((State) s));
 	}
+
 
 	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
 		t.test(state.getDemultiplexer());
+		t.test(state.getDemultiplexer().getAttribute(StructManipulation.CHILDREN_ATTRIBUTE) == null);
+		t.test(state.getDemultiplexer().getAttributeValue(StructManipulation.STRUCT_ATTRIBUTE)
+				.equals(state.getStruct().getName()));
 		t.test(state.getStruct().getMemberVariables().size(),
 				state.getDemultiplexer().getInterface().getOutputVars().size());
 	}
@@ -164,27 +182,53 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 	}
 
 	private static State executeDeleteCommand(State state, String name) {
-		state.setCommand(new DeleteDemuxPortCommand(state.getDemultiplexer(), name));
-
-		return commandExecution(state);
+		final DeleteDemuxPortCommand cmd = new DeleteDemuxPortCommand(state.getDemultiplexer(), name);
+		state.setCommand(cmd);
+		final State newState = commandExecution(state);
+		newState.setDemultiplexer(cmd.getType());
+		return newState;
 	}
 
 	private static State executeAddCommand(State state, String name) {
-		state.setCommand(new AddDemuxPortCommand(state.getDemultiplexer(), name));
+		final AddDemuxPortCommand cmd = new AddDemuxPortCommand(state.getDemultiplexer(), name);
+		state.setCommand(cmd);
+		final State newState = commandExecution(state);
+		newState.setDemultiplexer(cmd.getType());
+		return newState;
+	}
 
-		return commandExecution(state);
+	private static State undoCommand(State state) {
+		final State newState = defaultUndoCommand(state);
+		newState.setDemultiplexer(getDemux(state));
+		return newState;
+	}
+
+	private static Demultiplexer getDemux(State state) {
+		Demultiplexer demux;
+		if (state.getCommand() instanceof DeleteDemuxPortCommand) {
+			demux = ((DeleteDemuxPortCommand) state.getCommand()).getType();
+		} else {
+			demux = ((AddDemuxPortCommand) state.getCommand()).getType();
+		}
+		return demux;
+	}
+
+	private static State redoCommand(State s) {
+		final State newState = defaultRedoCommand(s);
+		newState.setDemultiplexer(getDemux(s));
+		return newState;
 	}
 
 	// define here the list of test sequences
 	// multiple execution descriptions are possible -> define in test class
 	protected static List<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
-		List<Arguments> commands = new ArrayList<>();
+		final List<Arguments> commands = new ArrayList<>();
 		// test series 1
 		commands.addAll(describeCommand("Starting from default values", // //$NON-NLS-1$
 				State::new, //
 				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
 				executionDescriptions //
-		));
+				));
 		return commands;
 	}
 
@@ -270,7 +314,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 				new ExecutionDescription<>("Add struct-type variable from empty", // //$NON-NLS-1$
 						(State s) -> executeAddCommand(s, "innerstruct1.VAR1"), //$NON-NLS-1$
 						(State s, State o, TestFunction t) -> verifyAdded(s, o, t, "innerstruct1.VAR1")) // //$NON-NLS-1$
-		); //
+				); //
 
 		return createCommands(executionDescriptions);
 	}

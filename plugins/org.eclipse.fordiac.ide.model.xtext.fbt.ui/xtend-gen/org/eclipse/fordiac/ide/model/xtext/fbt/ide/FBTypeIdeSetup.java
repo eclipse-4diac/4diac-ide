@@ -7,6 +7,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeRuntimeModule;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup;
+import org.eclipse.fordiac.ide.model.xtext.fbt.ide.FBTypeIdeModule;
 import org.eclipse.xtext.util.Modules2;
 
 /**

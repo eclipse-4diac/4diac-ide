@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
@@ -173,6 +174,8 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 
 	}
 
+	private static final Request MARQUEE_REQUEST = new Request(RequestConstants.REQ_SELECTION);
+
 	/**
 	 * MarqueeDragTracker which deselects all elements on right click if nothing so
 	 * that the correct conext menu is shown. We are only here if there is no
@@ -182,6 +185,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	 * boundaries.
 	 */
 	public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
+
 		@Override
 		protected boolean handleButtonDown(final int button) {
 			if (3 == button) {
@@ -244,12 +248,17 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 			if (null != editPart) {
 				final SelectionRequest request = new SelectionRequest();
 				request.setLocation(getLocation());
-				// request.setModifiers(getCurrentInput().getModifiers());
 				request.setType(RequestConstants.REQ_OPEN);
 				editPart.performRequest(request);
 			}
 		}
 
+		// In the base class version not shown elements can not be selected, as we have now auto-scrolling this is not a
+		// good behavior therefore this overridden version. For details see base class.
+		@Override
+		protected boolean isMarqueeSelectable(final GraphicalEditPart editPart) {
+			return editPart.getTargetEditPart(MARQUEE_REQUEST) == editPart && editPart.isSelectable();
+		}
 	}
 
 	public static final String TOP_LAYER = "TOPLAYER"; //$NON-NLS-1$
@@ -392,8 +401,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		}
 
 		private Rectangle calculateModuloExtent() { // adjust size to be a multiple of the base width/height
-			Rectangle contentsExtent = contents.getFreeformExtent().getCopy();
-			contentsExtent.scale(1.0 / getZoomManager().getZoom());
+			Rectangle contentsExtent = getUnscaledContentsExtent();
 			contentsExtent.shrink(getInsets());  // take any border into our calculation
 			final int x = calcAxisOrigin(contentsExtent.x, BASE_WIDTH);
 			final int y = calcAxisOrigin(contentsExtent.y, BASE_HEIGHT);
@@ -401,6 +409,14 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 			final int height = calcAxisExtent(contentsExtent.y, y, contentsExtent.height, BASE_HEIGHT);
 			contentsExtent = new Rectangle(x, y, width, height);
 			contentsExtent.scale(getZoomManager().getZoom());
+			return contentsExtent;
+		}
+
+		private Rectangle getUnscaledContentsExtent() {
+			final Rectangle contentsExtent = ((FreeformFigure) getContentPane()).getFreeformExtent().getCopy();
+			// add handle and feedback layer so that dragging elements result in growing the modulo extend
+			contentsExtent.union(((FreeformFigure) getLayer(HANDLE_LAYER)).getFreeformExtent());
+			contentsExtent.union(((FreeformFigure) getLayer(FEEDBACK_LAYER)).getFreeformExtent());
 			return contentsExtent;
 		}
 

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.structuredtext;
 
 import com.google.inject.Binder;
 import com.google.inject.name.Names;
+import org.eclipse.fordiac.ide.model.structuredtext.AbstractStructuredTextRuntimeModule;
 import org.eclipse.fordiac.ide.model.structuredtext.converter.StructuredTextValueConverterService;
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource;
 import org.eclipse.fordiac.ide.model.structuredtext.scoping.StructuredTextScopeProvider;

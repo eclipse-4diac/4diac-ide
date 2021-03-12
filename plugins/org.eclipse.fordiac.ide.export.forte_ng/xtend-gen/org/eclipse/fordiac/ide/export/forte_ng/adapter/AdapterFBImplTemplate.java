@@ -30,7 +30,7 @@ public class AdapterFBImplTemplate extends ForteFBTemplate {
   private AdapterFBType type;
   
   public AdapterFBImplTemplate(final AdapterFBType type, final String name, final Path prefix) {
-    super(name, prefix);
+    super(name, prefix, "CAdapter");
     this.type = type;
   }
   

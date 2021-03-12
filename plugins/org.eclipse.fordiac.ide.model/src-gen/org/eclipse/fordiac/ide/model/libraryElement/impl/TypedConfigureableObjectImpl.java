@@ -23,54 +23,44 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Typed
- * Configureable Object</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Typed Configureable Object</b></em>'. <!--
+ * end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl#getPaletteEntry
- * <em>Palette Entry</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl#getPaletteEntry <em>Palette
+ * Entry</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl implements TypedConfigureableObject {
-	/**
-	 * The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}' reference. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @see #getPaletteEntry()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected PaletteEntry paletteEntry;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected TypedConfigureableObjectImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.TYPED_CONFIGUREABLE_OBJECT;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public PaletteEntry getPaletteEntry() {
 		if (paletteEntry != null && paletteEntry.eIsProxy()) {
@@ -86,20 +76,16 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 		return paletteEntry;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public PaletteEntry basicGetPaletteEntry() {
 		return paletteEntry;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setPaletteEntry(PaletteEntry newPaletteEntry) {
 		PaletteEntry oldPaletteEntry = paletteEntry;
@@ -109,41 +95,33 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 					LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY, oldPaletteEntry, paletteEntry));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String getTypeName() {
 		return org.eclipse.fordiac.ide.model.Annotations.getTypeName(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public LibraryElement getType() {
 		return org.eclipse.fordiac.ide.model.Annotations.getType(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public TypeLibrary getTypeLibrary() {
 		return org.eclipse.fordiac.ide.model.Annotations.getTypeLibrary(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -156,11 +134,9 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -173,11 +149,9 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -190,11 +164,9 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

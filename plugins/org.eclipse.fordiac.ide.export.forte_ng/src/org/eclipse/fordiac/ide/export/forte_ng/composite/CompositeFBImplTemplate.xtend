@@ -42,7 +42,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 	var fannedOutDataConns = 0
 
 	new(CompositeFBType type, String name, Path prefix) {
-		super(name, prefix)
+		super(name, prefix, "CCompositeFB")
 		this.type = type
 		fbs.addAll(type.FBNetwork.networkElements.filter[!(it.type instanceof AdapterFBType)])
 	}

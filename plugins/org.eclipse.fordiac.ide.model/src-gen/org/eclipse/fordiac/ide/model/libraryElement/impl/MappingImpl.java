@@ -23,66 +23,50 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Mapping</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Mapping</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl#getFrom
- * <em>From</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl#getTo
- * <em>To</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl#getFrom <em>From</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl#getTo <em>To</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class MappingImpl extends EObjectImpl implements Mapping {
-	/**
-	 * The cached value of the '{@link #getFrom() <em>From</em>}' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getFrom() <em>From</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
 	 * @see #getFrom()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected FBNetworkElement from;
 
-	/**
-	 * The cached value of the '{@link #getTo() <em>To</em>}' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getTo() <em>To</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getTo()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected FBNetworkElement to;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected MappingImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.MAPPING;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetworkElement getFrom() {
 		if (from != null && from.eIsProxy()) {
@@ -97,20 +81,16 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 		return from;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public FBNetworkElement basicGetFrom() {
 		return from;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setFrom(FBNetworkElement newFrom) {
 		FBNetworkElement oldFrom = from;
@@ -119,11 +99,9 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.MAPPING__FROM, oldFrom, from));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetworkElement getTo() {
 		if (to != null && to.eIsProxy()) {
@@ -138,20 +116,16 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 		return to;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public FBNetworkElement basicGetTo() {
 		return to;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setTo(FBNetworkElement newTo) {
 		FBNetworkElement oldTo = to;
@@ -160,21 +134,17 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.MAPPING__TO, oldTo, to));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public AutomationSystem getAutomationSystem() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -191,11 +161,9 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -211,11 +179,9 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -231,11 +197,9 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

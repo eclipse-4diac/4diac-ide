@@ -35,114 +35,88 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Segment</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Segment</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getPosition
- * <em>Position</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getColor
- * <em>Color</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getWidth
- * <em>Width</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getVarDeclarations
- * <em>Var Declarations</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getOutConnections
- * <em>Out Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getPosition <em>Position</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getColor <em>Color</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getWidth <em>Width</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getVarDeclarations <em>Var
+ * Declarations</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getOutConnections <em>Out
+ * Connections</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment {
-	/**
-	 * The cached value of the '{@link #getPosition() <em>Position</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getPosition() <em>Position</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getPosition()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected Position position;
 
-	/**
-	 * The cached value of the '{@link #getColor() <em>Color</em>}' containment
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getColor() <em>Color</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getColor()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected Color color;
 
-	/**
-	 * The default value of the '{@link #getWidth() <em>Width</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The default value of the '{@link #getWidth() <em>Width</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getWidth()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected static final int WIDTH_EDEFAULT = 200;
 
-	/**
-	 * The cached value of the '{@link #getWidth() <em>Width</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getWidth() <em>Width</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @see #getWidth()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected int width = WIDTH_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getVarDeclarations() <em>Var
-	 * Declarations</em>}' containment reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see #getVarDeclarations()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<VarDeclaration> varDeclarations;
 
-	/**
-	 * The cached value of the '{@link #getOutConnections() <em>Out
-	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/** The cached value of the '{@link #getOutConnections() <em>Out Connections</em>}' reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getOutConnections()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Link> outConnections;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	protected SegmentImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.SEGMENT;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Position getPosition() {
 		if (position != null && position.eIsProxy()) {
@@ -157,20 +131,16 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		return position;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Position basicGetPosition() {
 		return position;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setPosition(Position newPosition) {
 		Position oldPosition = position;
@@ -180,11 +150,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 					position));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Color getColor() {
 		if (color != null && color.eIsProxy()) {
@@ -208,20 +176,16 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		return color;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public Color basicGetColor() {
 		return color;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetColor(Color newColor, NotificationChain msgs) {
 		Color oldColor = color;
 		color = newColor;
@@ -236,11 +200,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setColor(Color newColor) {
 		if (newColor != color) {
@@ -259,21 +221,17 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 					newColor));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getWidth() {
 		return width;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setWidth(int newWidth) {
 		int oldWidth = width;
@@ -283,11 +241,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 					width));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
@@ -297,11 +253,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		return varDeclarations;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<Link> getOutConnections() {
 		if (outConnections == null) {
@@ -311,15 +265,12 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		return outConnections;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public SegmentType getType() {
-		// this cannot be moved to the annotation class because there we don't have the
-		// super access!!!
+		// this cannot be moved to the annotation class because there we don't have the super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
 		if (type instanceof SegmentType) {
 			return (SegmentType) type;
@@ -327,11 +278,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void updatePosition(final int x, final int y) {
 		final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE
@@ -342,21 +291,17 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		setPosition(pos);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void updatePosition(final Point newPos) {
 		updatePosition(newPos.x, newPos.y);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Color getColorGen() {
 		if (color != null && color.eIsProxy()) {
@@ -380,11 +325,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		return color;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -396,11 +339,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -415,11 +356,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -442,11 +381,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -474,11 +411,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -503,11 +438,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -526,11 +459,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
@@ -552,11 +483,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == PositionableElement.class) {
@@ -578,11 +507,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public String toString() {
 		if (eIsProxy())

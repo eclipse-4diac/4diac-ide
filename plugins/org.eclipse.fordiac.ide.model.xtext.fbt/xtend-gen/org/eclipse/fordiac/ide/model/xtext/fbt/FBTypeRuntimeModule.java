@@ -13,6 +13,7 @@
  */
 package org.eclipse.fordiac.ide.model.xtext.fbt;
 
+import org.eclipse.fordiac.ide.model.xtext.fbt.AbstractFBTypeRuntimeModule;
 import org.eclipse.xtext.serializer.ISerializer;
 import org.eclipse.xtext.serializer.impl.Serializer;
 

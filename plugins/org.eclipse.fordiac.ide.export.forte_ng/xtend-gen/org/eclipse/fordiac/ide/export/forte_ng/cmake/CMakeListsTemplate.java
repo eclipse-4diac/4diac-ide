@@ -22,7 +22,7 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 @SuppressWarnings("all")
 public class CMakeListsTemplate extends ForteFBTemplate {
   public CMakeListsTemplate(final String name, final Path prefix) {
-    super(name, prefix);
+    super(name, prefix, null);
   }
   
   @Override

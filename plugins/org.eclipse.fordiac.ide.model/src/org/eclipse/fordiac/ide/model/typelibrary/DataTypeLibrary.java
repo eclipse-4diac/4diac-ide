@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
@@ -41,7 +42,6 @@ public final class DataTypeLibrary {
 	public DataTypeLibrary() {
 		initElementaryTypes();
 		initGenericTypes();
-		initStructTypes();
 	}
 
 
@@ -56,13 +56,6 @@ public final class DataTypeLibrary {
 	/** Inits the elementary types. */
 	private void initElementaryTypes() {
 		Arrays.asList(ElementaryTypes.getAllElementaryType()).forEach(type -> typeMap.put(type.getName(), type));
-	}
-
-
-	private void initStructTypes() {
-		final StructuredType struct = DataFactory.eINSTANCE.createStructuredType();
-		struct.setName("ANY_STRUCT"); //$NON-NLS-1$
-		typeMap.put(struct.getName(), struct);
 	}
 
 	private void initGenericTypes() {
@@ -130,7 +123,7 @@ public final class DataTypeLibrary {
 		final List<StructuredType> types = getDerivedDataTypes().entrySet().stream()
 				.filter(entry -> (entry.getValue().getType() instanceof StructuredType))
 				.map(entry -> ((StructuredType) entry.getValue().getType())).collect(Collectors.toList());
-		types.add((StructuredType) getType("ANY_STRUCT")); //$NON-NLS-1$
+		types.add((StructuredType) getType(FordiacKeywords.ANY_STRUCT));
 		return types;
 	}
 
@@ -153,7 +146,7 @@ public final class DataTypeLibrary {
 		if (derivedType instanceof StructuredType) {
 			return (StructuredType) derivedType;
 		}
-		return (StructuredType) typeMap.get("ANY_STRUCT"); //$NON-NLS-1$
+		return (StructuredType) typeMap.get(FordiacKeywords.ANY_STRUCT);
 
 	}
 

@@ -11,10 +11,15 @@
  *   Lukas Wais, Bianca Wiesmayr,
  *   Daniel Lindhuber, Michael Oberlehner - initial implementation
  *   										and/or initial documentation
+ *   Lukas Wais, Michael Oberlehner		  - refactored to work correctly with
+ *   										receiver object
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.utilities;
 
+import java.util.List;
+
 import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.ui.IEditorPart;
@@ -26,6 +31,16 @@ public class ViewerPropertyTester extends PropertyTester {
 		final IEditorPart part = EditorUtils.getCurrentActiveEditor();
 		final FBNetwork network = part.getAdapter(FBNetwork.class);
 
-		return null == network;
+		if (receiver instanceof List) {
+			final List<?> selectedElements = (List<?>) receiver;
+			if (selectedElements.size() > 1) {
+				return false;
+			}
+
+			if (selectedElements.get(0) instanceof AbstractFBNetworkEditPart) {
+				return false;
+			}
+		}
+		return null != network;
 	}
 }

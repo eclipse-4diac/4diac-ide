@@ -20,7 +20,7 @@ import java.nio.file.Path
 class CMakeListsTemplate extends ForteFBTemplate {
 
 	new(String name, Path prefix) {
-		super(name, prefix)
+		super(name, prefix, null)
 	}
 
 	override protected getType() {

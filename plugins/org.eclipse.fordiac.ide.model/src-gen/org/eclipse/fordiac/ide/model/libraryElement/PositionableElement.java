@@ -16,62 +16,48 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object
- * '<em><b>Positionable Element</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Positionable Element</b></em>'. <!--
+ * end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getPosition
- * <em>Position</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getPosition <em>Position</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPositionableElement()
  * @model
- * @generated
- */
+ * @generated */
 public interface PositionableElement extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Position</b></em>' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Returns the value of the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return the value of the '<em>Position</em>' reference.
 	 * @see #setPosition(Position)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPositionableElement_Position()
 	 * @model required="true"
-	 * @generated
-	 */
+	 * @generated */
 	Position getPosition();
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getPosition
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getPosition
 	 * <em>Position</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @param value the new value of the '<em>Position</em>' reference.
 	 * @see #getPosition()
-	 * @generated
-	 */
+	 * @generated */
 	void setPosition(Position value);
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model xDataType="org.eclipse.emf.ecore.xml.type.Int" xRequired="true"
 	 *        yDataType="org.eclipse.emf.ecore.xml.type.Int" yRequired="true"
-	 * @generated
-	 */
+	 * @generated */
 	void updatePosition(int x, int y);
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @model newPosDataType="org.eclipse.fordiac.ide.model.libraryElement.Point"
-	 *        newPosRequired="true"
-	 * @generated
-	 */
+	 * @model newPosDataType="org.eclipse.fordiac.ide.model.libraryElement.Point" newPosRequired="true"
+	 * @generated */
 	void updatePosition(Point newPos);
 
 } // PositionableElement

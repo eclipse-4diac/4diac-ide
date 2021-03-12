@@ -23,7 +23,7 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate {
 	@Accessors(PROTECTED_GETTER) ServiceInterfaceFBType type
 
 	new(ServiceInterfaceFBType type, String name, Path prefix) {
-		super(name, prefix)
+		super(name, prefix, "CFunctionBlock")
 		this.type = type
 	}
 

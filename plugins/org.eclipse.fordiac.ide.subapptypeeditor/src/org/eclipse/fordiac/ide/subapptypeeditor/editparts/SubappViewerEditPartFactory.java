@@ -28,8 +28,8 @@ public class SubappViewerEditPartFactory extends CompositeViewerEditPartFactory 
 	}
 
 	@Override
-	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-		if (modelElement instanceof FBNetwork && ((FBNetwork) modelElement).eContainer() instanceof SubAppType) {
+	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
+		if (fbNetwork.eContainer() instanceof SubAppType) {
 			final SubAppInstanceViewerEditPart edit = new SubAppInstanceViewerEditPart();
 			edit.setFbInstance(fbInstance);
 			if (fbEditPart != null && fbEditPart.getParent() instanceof SubAppInstanceViewerEditPart) {
@@ -37,7 +37,7 @@ public class SubappViewerEditPartFactory extends CompositeViewerEditPartFactory 
 			}
 			return edit;
 		}
-		return super.getPartForElement(context, modelElement);
+		return super.getPartForFBNetwork(fbNetwork);
 	}
 
 }
