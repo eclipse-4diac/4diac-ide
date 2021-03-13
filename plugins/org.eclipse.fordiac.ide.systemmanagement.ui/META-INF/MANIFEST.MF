@@ -35,7 +35,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.subapptypeeditor,
  org.eclipse.fordiac.ide.fbtypeeditor.network
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 1.13.1.qualifier
+Bundle-Version: 1.14.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-Activator: org.eclipse.fordiac.ide.systemmanagement.ui.Activator
 Bundle-SymbolicName: org.eclipse.fordiac.ide.systemmanagement.ui;singleton:=true
