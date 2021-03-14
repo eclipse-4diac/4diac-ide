@@ -42,19 +42,23 @@ public class Perspective implements IPerspectiveFactory {
 
 		final IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, 0.20f, layout.getEditorArea()); //$NON-NLS-1$
 		left.addView("org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"); //$NON-NLS-1$
+		left.addView("org.eclipse.fordiac.ide.typemanagement.navigator.view"); //$NON-NLS-1$
 
 		final IFolderLayout bottomLeft = layout.createFolder("bottomLeft", IPageLayout.BOTTOM, 0.7f, "left"); //$NON-NLS-1$ //$NON-NLS-2$
 		bottomLeft.addView(IPageLayout.ID_OUTLINE);
 
+		createBottomEntries(layout);
+
+		addPerspectiveShortcuts();
+
+	}
+
+	private static void createBottomEntries(final IPageLayout layout) {
 		final IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.78f, layout.getEditorArea()); //$NON-NLS-1$
 		bottom.addView(IPageLayout.ID_PROP_SHEET);
 		bottom.addView("org.eclipse.fordiac.ide.systemconfiguration.virtualDNS"); //$NON-NLS-1$
 		bottom.addView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
-
-		left.addView("org.eclipse.fordiac.ide.typemanagement.navigator.view"); //$NON-NLS-1$
-
-		addPerspectiveShortcuts();
-
+		bottom.addView("org.eclipse.ui.views.ProblemView");  //$NON-NLS-1$
 	}
 
 	private void addPerspectiveShortcuts() {
