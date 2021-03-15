@@ -173,23 +173,26 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private void handleFileCopy(final IResourceDelta delta) {
 		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
-		if (file.getProject().isOpen()) {
+		if (file.getProject().isOpen() && delta.getFlags() != IResourceDelta.MARKERS) {
+
 			if (isSystemFile(file)) {
 				// in case of a copied system file we just need to fix the name in the root XML
 				// node
 				renameSystemFileCopy(file);
 			} else {
 				final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
-				final PaletteEntry paletteEntryForFile = typeLib.getPaletteEntryForFile(file);
-
+				final PaletteEntry paletteEntryForFile = TypeLibrary.getPaletteEntryForFile(file);
 				if (paletteEntryForFile == null) {
 					final PaletteEntry entry = typeLib.createPaletteEntry(file);
 					if (null != entry) {
 						updatePaletteEntry(file, entry);
 					}
-				} else { // type exists
-					autoRenameExistingType(file, paletteEntryForFile);
-				}
+				} else
+					if (!file.equals(paletteEntryForFile.getFile())) {
+						// After a file has been copied and the copied file is not the same as the founded palette entry
+						// the file and the resulting type must be renamed with a unique name
+						autoRenameExistingType(file, paletteEntryForFile);
+					}
 
 			}
 		}
