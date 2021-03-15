@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateMemberVariableCommand;
@@ -79,10 +79,10 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	private final CommandStack cmdStack;
 	private final IWorkbenchPart part;
 
-	private final DataType dataType;
+	private final StructuredType dataType;
 
 	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack,
-			final DataType dataType, final DataTypeLibrary dataTypeLibrary, final IWorkbenchPart part) {
+			final StructuredType dataType, final DataTypeLibrary dataTypeLibrary, final IWorkbenchPart part) {
 		super(parent, style);
 		this.cmdStack = cmdStack;
 		this.dataType = dataType;
@@ -128,15 +128,17 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		structViewer.setLabelProvider(new DataLabelProvider());
 		structViewer.setCellModifier(new StructCellModifier());
 
-		structViewer.setInput(((StructuredType) dataType).getMemberVariables());
+		structViewer.setInput(dataType.getMemberVariables());
 	}
 
 	private DataType getDataType() {
-		return (null != getLastSelectedVariable()) ? getLastSelectedVariable().getType() : null;
+		final VarDeclaration var = getLastSelectedVariable();
+		return (null != var) ? var.getType() : null;
 	}
 
 	private String getVarName() {
-		return (null != getLastSelectedVariable()) ? getLastSelectedVariable().getName() : null;
+		final VarDeclaration var = getLastSelectedVariable();
+		return (null != var) ? var.getName() : null;
 	}
 
 	private int getInsertionIndex() {
@@ -156,10 +158,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private StructuredType getType() {
-		if (dataType instanceof StructuredType) {
-			return (StructuredType) dataType;
-		}
-		return null;
+		return dataType;
 	}
 
 	private CellEditor[] createCellEditors(final Table table) {
@@ -267,7 +266,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			final VarDeclaration varEntry = (VarDeclaration) entry;
-			cmd.add(new InsertVariableCommand(((StructuredType) dataType).getMemberVariables(), varEntry, index));
+			cmd.add(new InsertVariableCommand(dataType.getMemberVariables(), varEntry, index));
 		}
 	}
 

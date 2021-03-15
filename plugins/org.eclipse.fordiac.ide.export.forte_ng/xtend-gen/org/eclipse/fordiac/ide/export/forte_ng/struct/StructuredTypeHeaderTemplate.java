@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.export.forte_ng.struct;
 
 import java.nio.file.Path;
+import org.eclipse.fordiac.ide.export.forte_ng.struct.StructBaseTemplate;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.xtend2.lib.StringConcatenation;

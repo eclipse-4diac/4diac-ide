@@ -62,7 +62,7 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class DataTypeEditor extends EditorPart
-		implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISelectionListener {
+implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISelectionListener {
 
 	private DataType dataType;
 	private IFile file;
@@ -78,7 +78,7 @@ public class DataTypeEditor extends EditorPart
 	private final List<String> propertyActions = new ArrayList<>();
 
 	@Override
-	public void stackChanged(CommandStackEvent event) {
+	public void stackChanged(final CommandStackEvent event) {
 		updateActions(stackActions);
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 		editComposite.getViewer().refresh();
@@ -98,13 +98,13 @@ public class DataTypeEditor extends EditorPart
 	}
 
 	@Override
-	protected void firePropertyChange(int property) {
+	protected void firePropertyChange(final int property) {
 		super.firePropertyChange(property);
 		updateActions(propertyActions);
 	}
 
 	@Override
-	public void doSave(IProgressMonitor monitor) {
+	public void doSave(final IProgressMonitor monitor) {
 		final DataTypeExporter exporter = new DataTypeExporter((AnyDerivedType) dataType);
 		try {
 			exporter.saveType(file);
@@ -124,7 +124,7 @@ public class DataTypeEditor extends EditorPart
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		importType(input);
 		setInput(input);
 		setSite(site);
@@ -134,7 +134,7 @@ public class DataTypeEditor extends EditorPart
 		setActionHandlers(site);
 	}
 
-	private void importType(IEditorInput input) throws PartInitException {
+	private void importType(final IEditorInput input) throws PartInitException {
 
 		if (input instanceof FileEditorInput) {
 			file = ((FileEditorInput) input).getFile();
@@ -156,7 +156,7 @@ public class DataTypeEditor extends EditorPart
 		}
 	}
 
-	private void setActionHandlers(IEditorSite site) {
+	private void setActionHandlers(final IEditorSite site) {
 		final ActionRegistry registry = getActionRegistry();
 		final IActionBars bars = site.getActionBars();
 		String id = ActionFactory.UNDO.getId();
@@ -179,9 +179,9 @@ public class DataTypeEditor extends EditorPart
 	}
 
 	@Override
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 		if ((dataType instanceof StructuredType) && (!importFailed)) {
-			editComposite = new StructViewingComposite(parent, 1, commandStack, dataType,
+			editComposite = new StructViewingComposite(parent, 1, commandStack, (StructuredType) dataType,
 					TypeLibrary.getTypeLibrary(file.getProject()).getDataTypeLibrary(), this);
 			editComposite.createPartControl(parent);
 			TableWidgetFactory.enableCopyPasteCut(this);
@@ -195,7 +195,7 @@ public class DataTypeEditor extends EditorPart
 		}
 	}
 
-	private void createErrorComposite(Composite parent, String errorText) {
+	private void createErrorComposite(final Composite parent, final String errorText) {
 		errorComposite = new Composite(parent, SWT.NONE);
 		errorComposite.setLayout(new GridLayout(1, false));
 		final Label label = new Label(errorComposite, SWT.CENTER);
@@ -218,7 +218,7 @@ public class DataTypeEditor extends EditorPart
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor())) {
 			updateActions(selectionActions);
 			firePropertyChange(IEditorPart.PROP_DIRTY);
@@ -239,7 +239,7 @@ public class DataTypeEditor extends EditorPart
 	}
 
 	@Override
-	public <T extends Object> T getAdapter(Class<T> key) {
+	public <T> T getAdapter(final Class<T> key) {
 		if (key == org.eclipse.ui.views.properties.IPropertySheetPage.class) {
 			return key.cast(new TabbedPropertySheetPage(this));
 		}
@@ -263,7 +263,7 @@ public class DataTypeEditor extends EditorPart
 		updateActions(stackActions);
 	}
 
-	private void updateActions(List<String> actionIds) {
+	private void updateActions(final List<String> actionIds) {
 		final ActionRegistry registry = getActionRegistry();
 		actionIds.forEach(id -> {
 			final IAction action = registry.getAction(id);

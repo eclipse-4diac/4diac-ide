@@ -137,7 +137,9 @@ public class SimpleFBHeaderTemplate extends ForteFBTemplate {
     _builder.append("(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : ");
     _builder.newLineIfNotEmpty();
     _builder.append("       ");
-    _builder.append("CSimpleFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
+    String _baseClass = this.baseClass();
+    _builder.append(_baseClass, "       ");
+    _builder.append("(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
     {
       boolean _isEmpty_2 = this.type.getInternalVars().isEmpty();
       boolean _not_2 = (!_isEmpty_2);

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -57,7 +58,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
   @Override
   protected abstract FBType getType();
   
-  private String baseClass() {
+  protected String baseClass() {
     String _xifexpression = null;
     FBType _type = this.getType();
     CompilerInfo _compilerInfo = null;

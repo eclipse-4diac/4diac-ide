@@ -19,6 +19,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.util;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -36,20 +37,20 @@ public final class ColorHelper {
 
 	private static final float VALUE_MULTIPLIER = 0.6F;
 
-	public static Color lighter(Color original) {
+	public static Color lighter(final Color original) {
 		return transformColorLightness(original, 1.0 / VALUE_MULTIPLIER);
 	}
 
-	public static Color transformColorLightness(Color original, double scale) {
+	public static Color transformColorLightness(final Color original, final double scale) {
 		if (null == original) {
 			return null;
 		}
-		double[] hsl = rgbToHSL(original.getRGB());
+		final double[] hsl = rgbToHSL(original.getRGB());
 		hsl[2] = Math.min(1.0, hsl[2] * scale);
 		return ColorManager.getColor(hslToRGB(hsl));
 	}
 
-	public static Color darker(Color original) {
+	public static Color darker(final Color original) {
 		return transformColorLightness(original, VALUE_MULTIPLIER);
 	}
 
@@ -62,19 +63,19 @@ public final class ColorHelper {
 	 * @param rgb the rgb values of the color to convert
 	 * @return the color in hsl space h: 0..360, s: 0..1, l: 0..1
 	 */
-	public static double[] rgbToHSL(RGB rgb) {
+	public static double[] rgbToHSL(final RGB rgb) {
 
-		double r = rgb.red / MAX_RGB_VALUE;
-		double g = rgb.green / MAX_RGB_VALUE;
-		double b = rgb.blue / MAX_RGB_VALUE;
-		double max = Math.max(Math.max(r, g), b);
-		double min = Math.min(Math.min(r, g), b);
+		final double r = rgb.red / MAX_RGB_VALUE;
+		final double g = rgb.green / MAX_RGB_VALUE;
+		final double b = rgb.blue / MAX_RGB_VALUE;
+		final double max = Math.max(Math.max(r, g), b);
+		final double min = Math.min(Math.min(r, g), b);
 
-		double[] hsl = new double[] { 0, 0, (max + min) / 2 };
+		final double[] hsl = new double[] { 0, 0, (max + min) / 2 };
 
 		if (max != min) {
 			// we are not just grey
-			double delta = max - min;
+			final double delta = max - min;
 
 			if (hsl[2] <= 0.5) {
 				hsl[1] = (delta / (max + min));
@@ -107,8 +108,8 @@ public final class ColorHelper {
 	 * @param hsl the color in hsl space h: 0..360, s: 0..1, l: 0..1
 	 * @return the color in rgb space
 	 */
-	public static RGB hslToRGB(double[] hsl) {
-		RGB retVal = new RGB(0, 0, 0);
+	public static RGB hslToRGB(final double[] hsl) {
+		final RGB retVal = new RGB(0, 0, 0);
 
 		if (hsl[1] == 0.0) {
 			if (hsl[0] == 0.0) {
@@ -118,8 +119,8 @@ public final class ColorHelper {
 				SWT.error(SWT.ERROR_INVALID_ARGUMENT);
 			}
 		} else {
-			double m2 = ((hsl[2] <= 0.5) ? (hsl[2] * (1.0 + hsl[1])) : ((hsl[2] + hsl[1]) - (hsl[2] * hsl[1])));
-			double m1 = (2.0 * hsl[2]) - m2;
+			final double m2 = ((hsl[2] <= 0.5) ? (hsl[2] * (1.0 + hsl[1])) : ((hsl[2] + hsl[1]) - (hsl[2] * hsl[1])));
+			final double m1 = (2.0 * hsl[2]) - m2;
 
 			retVal.red = hslValue(m1, m2, hsl[0] + 120.0);
 			retVal.green = hslValue(m1, m2, hsl[0]);
@@ -128,7 +129,7 @@ public final class ColorHelper {
 		return retVal;
 	}
 
-	private static int hslValue(double m1, double m2, double hue) {
+	private static int hslValue(final double m1, final double m2, double hue) {
 		double retVal = m1;
 
 		if (hue > 360.0) {
@@ -149,13 +150,13 @@ public final class ColorHelper {
 	}
 
 	private static final double GOLDEN_RATIO_CONJUGATE = 0.618033988749895;
-	private static Random rand = new Random(System.currentTimeMillis());
+	private static Random rand = new SecureRandom();
 	private static double h = rand.nextDouble(); // static to get different colors
 
 	public static org.eclipse.fordiac.ide.model.libraryElement.Color createRandomColor() {
-		RGB rgbColor = createRandomColor(0.6f, 0.85f);
+		final RGB rgbColor = createRandomColor(0.6f, 0.85f);
 
-		org.eclipse.fordiac.ide.model.libraryElement.Color color = LibraryElementFactory.eINSTANCE.createColor();
+		final org.eclipse.fordiac.ide.model.libraryElement.Color color = LibraryElementFactory.eINSTANCE.createColor();
 		color.setRed(rgbColor.red);
 		color.setGreen(rgbColor.green);
 		color.setBlue(rgbColor.blue);
@@ -173,7 +174,7 @@ public final class ColorHelper {
 	}
 
 	public static org.eclipse.fordiac.ide.model.libraryElement.Color getStartingColor() {
-		org.eclipse.fordiac.ide.model.libraryElement.Color color = LibraryElementFactory.eINSTANCE.createColor();
+		final org.eclipse.fordiac.ide.model.libraryElement.Color color = LibraryElementFactory.eINSTANCE.createColor();
 		color.setRed(255);
 		color.setGreen(190);
 		color.setBlue(111);

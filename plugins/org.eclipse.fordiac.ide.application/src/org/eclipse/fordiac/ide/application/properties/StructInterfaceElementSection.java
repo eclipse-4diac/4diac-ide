@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.application.properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ChangeSubAppIETypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
@@ -40,8 +41,6 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -88,65 +87,47 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 		final Composite comp = typeCombo.getParent();
 		openEditorButton = new Button(comp, SWT.PUSH);
 		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
-		openEditorButton.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				final IWorkbench workbench = PlatformUI.getWorkbench();
-				if (workbench != null) {
-					final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-					if (activeWorkbenchWindow != null) {
-						openStructEditor(activeWorkbenchWindow);
-					}
+		openEditorButton.addListener(SWT.Selection, ev -> {
+			final IWorkbench workbench = PlatformUI.getWorkbench();
+			if (workbench != null) {
+				final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+				if (activeWorkbenchWindow != null) {
+					openStructEditor(activeWorkbenchWindow);
 				}
-			}
-
-			private void openStructEditor(IWorkbenchWindow activeWorkbenchWindow) {
-				final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-
-				final IFile file = getStructuredType().getPaletteEntry().getFile();
-				final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
-				try {
-					activePage.openEditor(new FileEditorInput(file), desc.getId());
-				} catch (final PartInitException e1) {
-					e1.printStackTrace();
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
 
-		typeCombo.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (null != getStructManipulator()) {
-					final int index = typeCombo.getSelectionIndex();
-					final String newStructName = typeCombo.getItem(index);
-					disableButtonForAnyType();
-					final boolean newStructSelected = !newStructName.contentEquals(getStructuredType().getName());
-					if (newStructSelected && (null != getStructManipulator().getTypeLibrary().getDataTypeLibrary())) {
-						final StructuredType newStruct = getStructManipulator().getTypeLibrary().getDataTypeLibrary()
-								.getStructuredType(newStructName);
-						final ChangeStructCommand cmd = new ChangeStructCommand(getStructManipulator(), newStruct);
-						commandStack.execute(cmd);
-						selectNewStructPin(cmd.getNewMux());
-						refresh();
-					}
+		typeCombo.addListener(SWT.Selection, ev -> {
+			if (null != getStructManipulator()) {
+				final int index = typeCombo.getSelectionIndex();
+				final String newStructName = typeCombo.getItem(index);
+				disableButtonForAnyType();
+				final boolean newStructSelected = !newStructName.contentEquals(getStructuredType().getName());
+				if (newStructSelected && (null != getStructManipulator().getTypeLibrary().getDataTypeLibrary())) {
+					final StructuredType newStruct = getStructManipulator().getTypeLibrary().getDataTypeLibrary()
+							.getStructuredType(newStructName);
+					final ChangeStructCommand cmd = new ChangeStructCommand(getStructManipulator(), newStruct);
+					commandStack.execute(cmd);
+					selectNewStructPin(cmd.getNewMux());
+					refresh();
 				}
 			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
-
 		});
 	}
 
-	private void selectNewStructPin(StructManipulator fb) {
+	private void openStructEditor(final IWorkbenchWindow activeWorkbenchWindow) {
+		final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+
+		final IFile file = getStructuredType().getPaletteEntry().getFile();
+		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+		try {
+			activePage.openEditor(new FileEditorInput(file), desc.getId());
+		} catch (final PartInitException e) {
+			ApplicationPlugin.getDefault().logError(e.getMessage(), e);
+		}
+	}
+
+	private void selectNewStructPin(final StructManipulator fb) {
 		final GraphicalViewer viewer = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
 				.getAdapter(GraphicalViewer.class);
 		if (null != viewer) {
@@ -163,7 +144,7 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 		}
 	}
 
-	private void createConnectionDisplaySection(Composite parent) {
+	private void createConnectionDisplaySection(final Composite parent) {
 		group = getWidgetFactory().createGroup(parent, Messages.InterfaceElementSection_ConnectionGroup);
 		group.setLayout(new GridLayout(2, false));
 		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -243,35 +224,34 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 				if ((element.isIsInput() && (null != element.getFBNetworkElement()))
 						|| (!element.isIsInput() && (null == element.getFBNetworkElement()))) {
 					return element.getInputConnections().toArray();
-				} else {
-					return element.getOutputConnections().toArray();
 				}
+				return element.getOutputConnections().toArray();
 			}
-			return new Object[] {};
+			return new Object[0];
 		}
 
 		@Override
-		public Object[] getChildren(Object parentElement) {
+		public Object[] getChildren(final Object parentElement) {
 			if (parentElement instanceof Connection) {
 				final Object[] objects = new Object[2];
 				if (element.isIsInput()) {
 					objects[0] = null != ((Connection) parentElement).getSourceElement()
 							? ((Connection) parentElement).getSourceElement()
-							: element;
+									: element;
 					objects[1] = ((Connection) parentElement).getSource();
 				} else {
 					objects[0] = null != ((Connection) parentElement).getDestinationElement()
 							? ((Connection) parentElement).getDestinationElement()
-							: element;
+									: element;
 					objects[1] = ((Connection) parentElement).getDestination();
 				}
 				return objects;
 			}
-			return null;
+			return new Object[0];
 		}
 
 		@Override
-		public Object getParent(Object element) {
+		public Object getParent(final Object element) {
 			if (element instanceof Connection) {
 				return this.element;
 			}
@@ -279,7 +259,7 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 		}
 
 		@Override
-		public boolean hasChildren(Object element) {
+		public boolean hasChildren(final Object element) {
 			if (element instanceof Connection) {
 				return (null != ((Connection) element).getSource())
 						&& (null != ((Connection) element).getDestination());
@@ -289,7 +269,7 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 	}
 
 	@Override
-	protected ChangeDataTypeCommand newChangeTypeCommand(VarDeclaration data, DataType newType) {
+	protected ChangeDataTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
 		return new ChangeSubAppIETypeCommand(data, newType);
 	}
 }

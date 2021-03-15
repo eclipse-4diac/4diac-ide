@@ -28,9 +28,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertInterfaceElementCommand;
@@ -80,13 +80,13 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public abstract class AbstractEditInterfaceSection extends AbstractSection implements I4diacTableUtil {
 	private static final int TYPE_AND_COMMENT_COLUMN_WIDTH = 100;
 	private static final int NAME_COLUMN_WIDTH = 200;
-	private static final String NAME = "name"; //$NON-NLS-1$
-	private static final String TYPE = "type"; //$NON-NLS-1$
-	private static final String COMMENT = "comment"; //$NON-NLS-1$
+	private static final String NAME_COL = "name"; //$NON-NLS-1$
+	private static final String TYPE_COL = "type"; //$NON-NLS-1$
+	private static final String COMMENT_COL = "comment"; //$NON-NLS-1$
 
 	private TableViewer inputsViewer;
 	private TableViewer outputsViewer;
-	public boolean isInputsViewer;
+	private boolean isInputsViewer;
 	protected boolean createButtons = true;
 
 	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
@@ -108,7 +108,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		} else if (root instanceof AutomationSystem) {
 			return ((AutomationSystem) root).getPalette().getTypeLibrary();
 		}
-		return null;
+		throw new IllegalStateException("Interface edit section shown for wrong element: " + getType()); //$NON-NLS-1$
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		return outputsViewer;
 	}
 
-	public boolean getIsInputsViewer() {
+	public boolean isInputsViewer() {
 		return isInputsViewer;
 	}
 
@@ -242,7 +242,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	}
 
 	protected String[] getColumnProperties() {
-		return new String[] { NAME, TYPE, COMMENT };
+		return new String[] { NAME_COL, TYPE_COL, COMMENT_COL };
 	}
 
 	protected LabelProvider getLabelProvider() {
@@ -309,7 +309,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	protected abstract static class InterfaceContentProvider implements IStructuredContentProvider {
 		private final boolean inputs;
 
-		public InterfaceContentProvider(final boolean inputs) {
+		protected InterfaceContentProvider(final boolean inputs) {
 			this.inputs = inputs;
 		}
 
@@ -322,9 +322,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 			if ((inputElement instanceof FBNetworkElement) || (inputElement instanceof FBType)) {
 				if (inputs) {
 					return getInputs(inputElement);
-				} else {
-					return getOutputs(inputElement);
 				}
+				return getOutputs(inputElement);
 			}
 			return new Object[0];
 		}
@@ -358,7 +357,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 		@Override
 		public boolean canModify(final Object element, final String property) {
-			return !(TYPE.equals(property) && (element instanceof IInterfaceElement)
+			return !(TYPE_COL.equals(property) && (element instanceof IInterfaceElement)
 					&& (!((IInterfaceElement) element).getInputConnections().isEmpty()
 							|| !((IInterfaceElement) element).getOutputConnections().isEmpty()));
 		}
@@ -366,11 +365,11 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		@Override
 		public Object getValue(final Object element, final String property) {
 			switch (property) {
-			case NAME:
+			case NAME_COL:
 				return ((INamedElement) element).getName();
-			case TYPE:
+			case TYPE_COL:
 				return getTypeValue(element, viewer, TYPE_COLUMN_INDEX);
-			case COMMENT:
+			case COMMENT_COL:
 				return ((INamedElement) element).getComment() != null ? ((INamedElement) element).getComment() : ""; //$NON-NLS-1$
 			default:
 				return null;
@@ -384,13 +383,13 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 			Command cmd = null;
 
 			switch (property) {
-			case NAME:
+			case NAME_COL:
 				cmd = new ChangeSubAppIENameCommand((IInterfaceElement) data, value.toString());
 				break;
-			case COMMENT:
+			case COMMENT_COL:
 				cmd = new ChangeCommentCommand((INamedElement) data, value.toString());
 				break;
-			case TYPE:
+			case TYPE_COL:
 				if (data instanceof AdapterDeclaration) {
 					final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
 					final DataType newType = getPalette().getAdapterTypeEntry(dataTypeName).getType();
@@ -425,7 +424,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	@Override
 	public TableViewer getViewer() {
-		return getIsInputsViewer() ? getInputsViewer() : getOutputsViewer();
+		return isInputsViewer() ? getInputsViewer() : getOutputsViewer();
 	}
 
 	@Override

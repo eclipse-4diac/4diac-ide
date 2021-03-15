@@ -115,7 +115,7 @@ public class AlgorithmList implements CommandExecutor {
 
 	private CommandStack commandStack;
 
-	public AlgorithmList(Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
+	public AlgorithmList(final Composite parent, final TabbedPropertySheetWidgetFactory widgetFactory) {
 		composite = widgetFactory.createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		final GridData gridDataVersionViewer = new GridData(GridData.FILL, GridData.FILL, true, true);
@@ -148,8 +148,9 @@ public class AlgorithmList implements CommandExecutor {
 	}
 
 	private String getName() {
-		if (null != getLastSelectedAlgorithm()) {
-			return getLastSelectedAlgorithm().getName();
+		final Algorithm alg = getLastSelectedAlgorithm();
+		if (null != alg) {
+			return alg.getName();
 		}
 		return null;
 	}
@@ -158,12 +159,12 @@ public class AlgorithmList implements CommandExecutor {
 		return composite;
 	}
 
-	public void initialize(BasicFBType type, CommandStack commandStack) {
+	public void initialize(final BasicFBType type, final CommandStack commandStack) {
 		this.type = type;
 		this.commandStack = commandStack;
 	}
 
-	private void createAlgorithmViewer(Composite parent) {
+	private void createAlgorithmViewer(final Composite parent) {
 		algorithmViewer = TableWidgetFactory.createTableViewer(parent);
 		configureTableLayout(algorithmViewer);
 		algorithmViewer.setCellEditors(createAlgorithmCellEditors(algorithmViewer.getTable()));
@@ -173,7 +174,7 @@ public class AlgorithmList implements CommandExecutor {
 		algorithmViewer.setCellModifier(new AlgorithmViewerCellModifier());
 	}
 
-	private static void configureTableLayout(TableViewer tableViewer) {
+	private static void configureTableLayout(final TableViewer tableViewer) {
 		final Table table = tableViewer.getTable();
 		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText(Messages.AlgorithmList_ConfigureTableLayout_Name);
@@ -189,7 +190,7 @@ public class AlgorithmList implements CommandExecutor {
 	}
 
 	@Override
-	public void executeCommand(Command cmd) {
+	public void executeCommand(final Command cmd) {
 		if ((null != type) && (commandStack != null)) {
 			commandStack.execute(cmd);
 		}
