@@ -82,6 +82,11 @@ public enum SystemManager {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
 	}
 
+	public static boolean isSystemFile(final Object entry) {
+		return ((entry instanceof IFile)
+				&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase(((IFile) entry).getFileExtension()));
+	}
+
 	public IProject createNew4diacProject(final String projectName, final IPath location,
 			final boolean importDefaultPalette, final IProgressMonitor monitor) throws CoreException {
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();

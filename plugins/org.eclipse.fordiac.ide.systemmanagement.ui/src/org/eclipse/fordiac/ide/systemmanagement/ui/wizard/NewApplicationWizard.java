@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.commands.NewAppCommand;
-import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FordiacProjectSorter;
 import org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -78,24 +77,24 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 	 * @param openApplication boolean flag indicating if the editor for this
 	 *                        application should be opened after creation
 	 */
-	public void performApplicationCreation(String appName, boolean openApplication) {
-		NewAppCommand cmd = new NewAppCommand(system, appName, ""); //$NON-NLS-1$
+	public void performApplicationCreation(final String appName, final boolean openApplication) {
+		final NewAppCommand cmd = new NewAppCommand(system, appName, ""); //$NON-NLS-1$
 
 		// TODO check how to get the command stack here getCommandStack().execute(cmd);
 
-		IWorkbench workbench = PlatformUI.getWorkbench();
-		IOperationHistory operationHistory = workbench.getOperationSupport().getOperationHistory();
-		IUndoContext undoContext = workbench.getOperationSupport().getUndoContext();
+		final IWorkbench workbench = PlatformUI.getWorkbench();
+		final IOperationHistory operationHistory = workbench.getOperationSupport().getOperationHistory();
+		final IUndoContext undoContext = workbench.getOperationSupport().getUndoContext();
 		cmd.addContext(undoContext);
 
 		try {
 			operationHistory.execute(cmd, null, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
-			Application app = cmd.getApplication();
+			final Application app = cmd.getApplication();
 			if (openApplication && (null != app)) {
 				OpenListenerManager.openEditor(app);
 			}
 
-		} catch (ExecutionException e) {
+		} catch (final ExecutionException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}
@@ -124,8 +123,8 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 		}
 	}
 
-	private static AutomationSystem getSystemFromSelectedObject(Object selObj) {
-		if (FordiacProjectSorter.isSystemFile(selObj)) {
+	private static AutomationSystem getSystemFromSelectedObject(final Object selObj) {
+		if (SystemManager.isSystemFile(selObj)) {
 			return SystemManager.INSTANCE.getSystem((IFile) selObj);
 		}
 		if (selObj instanceof FBNetwork) {
