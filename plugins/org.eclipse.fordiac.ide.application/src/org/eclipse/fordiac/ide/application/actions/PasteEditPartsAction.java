@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -130,7 +131,10 @@ public class PasteEditPartsAction extends SelectionAction {
 				handleCutFromSubappToParentSubapp(copyPasteMessage);
 			} else if (isCutFromRootToSubapp(copyPasteMessage)) {
 				handleCutFromRootToSubapp(copyPasteMessage);
+			} else if (isCutFromSubappToSubapp(copyPasteMessage)) {
+				handleCutFromSubapToSubapp(copyPasteMessage);
 			} else {
+
 				if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP) {
 					copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
 					execute(copyPasteMessage.getDeleteCommandos());
@@ -140,6 +144,21 @@ public class PasteEditPartsAction extends SelectionAction {
 
 		}
 		pasteRefPosition = null;
+	}
+
+	private void handleCutFromSubapToSubapp(final CopyPasteMessage copyPasteMessage) {
+		final SubApp targetSubapp = ((SubAppForFBNetworkEditPart) getSelectedObjects().get(0)).getModel();
+		copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
+		final AddElementsToSubAppCommand addElementsToSubAppCommand = new AddElementsToSubAppCommand(targetSubapp,
+				Arrays.asList(copyPasteMessage.getData().get(0)));
+		execute(addElementsToSubAppCommand);
+	}
+
+	private boolean isCutFromSubappToSubapp(final CopyPasteMessage copyPasteMessage) {
+		if (!(getSelectedObjects().get(0) instanceof SubAppForFBNetworkEditPart)) {
+			return false;
+		}
+		return copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP;
 	}
 
 	private void handleCutFromRootToSubapp(final CopyPasteMessage copyPasteMessage) {
@@ -188,9 +207,14 @@ public class PasteEditPartsAction extends SelectionAction {
 			return false;
 		}
 
+		final FBNetworkElement outerFBNetworkElement = sourceSubApp.getOuterFBNetworkElement();
+
+		if (outerFBNetworkElement == null) {
+			return false;
+		}
 		final SubApp selectedSubapp = ((SubAppForFBNetworkEditPart) selectedObjects.get(0)).getModel();
 
-		if (!sourceSubApp.getOuterFBNetworkElement().equals(selectedSubapp)) {
+		if (!outerFBNetworkElement.equals(selectedSubapp)) {
 			return false;
 		}
 
