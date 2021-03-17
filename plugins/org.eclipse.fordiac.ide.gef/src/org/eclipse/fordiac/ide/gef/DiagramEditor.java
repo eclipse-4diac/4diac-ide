@@ -48,6 +48,7 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
@@ -67,7 +68,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public abstract class DiagramEditor extends GraphicalEditor
-		implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
+implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
@@ -103,15 +104,16 @@ public abstract class DiagramEditor extends GraphicalEditor
 	public void setFocus() {
 		super.setFocus();
 		@SuppressWarnings("unchecked") // method returns child editparts
+		final
 		List<EditPart> children = getGraphicalViewer().getRootEditPart().getChildren();
 		children.forEach(EditPart::refresh);
 	}
 
 	@Override
 	protected void createGraphicalViewer(final Composite parent) {
-		RulerComposite rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
+		final RulerComposite rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
 
-		GraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
+		final GraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
 		viewer.createControl(rulerComp);
 		setGraphicalViewer(viewer);
 		configureGraphicalViewer();
@@ -139,11 +141,11 @@ public abstract class DiagramEditor extends GraphicalEditor
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		AdvancedScrollingGraphicalViewer viewer = (AdvancedScrollingGraphicalViewer) getGraphicalViewer();
+		final AdvancedScrollingGraphicalViewer viewer = (AdvancedScrollingGraphicalViewer) getGraphicalViewer();
 
-		ScalableFreeformRootEditPart root = createRootEditPart();
+		final ScalableFreeformRootEditPart root = createRootEditPart();
 
-		ContextMenuProvider cmp = getContextMenuProvider(viewer, root.getZoomManager());
+		final ContextMenuProvider cmp = getContextMenuProvider(viewer, root.getZoomManager());
 		if (null != cmp) {
 			viewer.setContextMenu(cmp);
 			getSite().registerContextMenu("org.eclipse.fordiac.ide.gef.contextmenu", //$NON-NLS-1$
@@ -153,7 +155,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditPartFactory());
 
-		AdvancedGraphicalViewerKeyHandler keyHandler = new AdvancedGraphicalViewerKeyHandler(viewer);
+		final AdvancedGraphicalViewerKeyHandler keyHandler = new AdvancedGraphicalViewerKeyHandler(viewer);
 		keyHandler.setParent(getCommonKeyHandler());
 		viewer.setKeyHandler(keyHandler);
 
@@ -196,10 +198,10 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 */
 	@Override
 	protected void initializeGraphicalViewer() {
-		GraphicalViewer viewer = getGraphicalViewer();
+		final GraphicalViewer viewer = getGraphicalViewer();
 		viewer.setContents(getModel());
 		// listen for dropped parts
-		TransferDropTargetListener listener = createTransferDropTargetListener();
+		final TransferDropTargetListener listener = createTransferDropTargetListener();
 		if (listener != null) {
 			viewer.addDropTargetListener(createTransferDropTargetListener());
 		}
@@ -339,7 +341,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
-		ActionRegistry registry = getActionRegistry();
+		final ActionRegistry registry = getActionRegistry();
 		IAction action;
 
 		action = new DirectEditAction((IWorkbenchPart) this);
@@ -380,25 +382,10 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getSelectionActions()
-	 */
-	@SuppressWarnings("rawtypes")
 	@Override
-	protected List getSelectionActions() {
-		return super.getSelectionActions();
-	}
-
-	/**
-	 * Gets the sel actions.
-	 *
-	 * @return the sel actions
-	 */
-	@SuppressWarnings("rawtypes")
-	public List getSelActions() {
-		return getSelectionActions();
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+		super.selectionChanged(part, selection);
+		updateActions(getSelectionActions());
 	}
 
 	/*

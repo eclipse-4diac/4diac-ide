@@ -59,12 +59,10 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.util.TransferDropTargetListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 
@@ -84,7 +82,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInput(input);
 		if (input instanceof FBTypeEditorInput) {
-			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			if (untypedInput.getContent() instanceof BasicFBType) {
 				fbType = (BasicFBType) untypedInput.getContent();
 			}
@@ -97,18 +95,18 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		ScrollingGraphicalViewer viewer = getGraphicalViewer();
+		final ScrollingGraphicalViewer viewer = getGraphicalViewer();
 
 		// set the control for the new state action so that it can get the correct
 		// position for state creation
-		IAction action = getActionRegistry().getAction(NewStateAction.CREATE_STATE);
+		final IAction action = getActionRegistry().getAction(NewStateAction.CREATE_STATE);
 		((NewStateAction) action).setViewerControl((FigureCanvas) viewer.getControl());
 		((NewStateAction) action).setZoomManager(getZoomManger());
 	}
 
 	@Override
 	protected KeyHandler getCommonKeyHandler() {
-		KeyHandler keyHandler = super.getCommonKeyHandler();
+		final KeyHandler keyHandler = super.getCommonKeyHandler();
 
 		// bind insert key press to add action action
 		keyHandler.put(KeyStroke.getPressed(SWT.INSERT, 0),
@@ -117,10 +115,10 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	}
 
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer, ZoomManager zoomManager) {
+	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer, final ZoomManager zoomManager) {
 		return new FordiacContextMenuProvider(viewer, zoomManager, getActionRegistry()) {
 			@Override
-			public void buildContextMenu(IMenuManager menu) {
+			public void buildContextMenu(final IMenuManager menu) {
 				super.buildContextMenu(menu);
 
 				IAction action = getRegistry().getAction(NewStateAction.CREATE_STATE);
@@ -140,19 +138,13 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()) {
 
 			@Override
-			public DragTracker getDragTracker(Request req) {
-				MarqueeDragTracker dragTracker = new AdvancedMarqueeDragTracker();
+			public DragTracker getDragTracker(final Request req) {
+				final MarqueeDragTracker dragTracker = new AdvancedMarqueeDragTracker();
 				dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 				return dragTracker;
 			}
 
 		};
-	}
-
-	@Override
-	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		super.selectionChanged(part, selection);
-		updateActions(getSelectionActions());
 	}
 
 	/** The palette root. */
@@ -175,7 +167,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
-		ActionRegistry registry = getActionRegistry();
+		final ActionRegistry registry = getActionRegistry();
 		IAction action;
 
 		action = new NewStateAction(this);
@@ -209,8 +201,8 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	}
 
 	@Override
-	public boolean outlineSelectionChanged(Object selectedElement) {
-		Object obj = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
+	public boolean outlineSelectionChanged(final Object selectedElement) {
+		final Object obj = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
 		if (obj instanceof EditPart) {
 			getGraphicalViewer().select((EditPart) obj);
 			return true;
@@ -226,10 +218,10 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		return false;
 	}
 
-	private void handleActionOutlineSelection(ECAction action) {
+	private void handleActionOutlineSelection(final ECAction action) {
 		Object obj = getGraphicalViewer().getEditPartRegistry().get(action.getECState());
 		if (null != obj) {
-			for (Object element : ((ECStateEditPart) obj).getCurrentChildren()) {
+			for (final Object element : ((ECStateEditPart) obj).getCurrentChildren()) {
 				if ((element instanceof ECActionAlgorithm)
 						&& (action.equals(((ECActionAlgorithm) element).getAction()))) {
 					obj = getGraphicalViewer().getEditPartRegistry().get(element);
@@ -245,13 +237,13 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	private CommandStack commandStack;
 
 	@Override
-	protected void setModel(IEditorInput input) {
+	protected void setModel(final IEditorInput input) {
 		super.setModel(input);
 		setEditDomain(new ECCEditorEditDomain(this, commandStack));
 	}
 
 	@Override
-	public void setCommonCommandStack(CommandStack commandStack) {
+	public void setCommonCommandStack(final CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
 
@@ -287,14 +279,14 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	}
 
 	@Override
-	public void gotoMarker(IMarker marker) {
-		Map<?, ?> map = getGraphicalViewer().getEditPartRegistry();
-		String lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, "Unknown");
+	public void gotoMarker(final IMarker marker) {
+		final Map<?, ?> map = getGraphicalViewer().getEditPartRegistry();
+		final String lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, "Unknown");
 		if (!lineNumber.equals("Unknown")) {
-			int hashCode = Integer.parseInt(lineNumber);
-			for (Object key : map.keySet()) {
+			final int hashCode = Integer.parseInt(lineNumber);
+			for (final Object key : map.keySet()) {
 				if (key.hashCode() == hashCode) {
-					Object obj = getGraphicalViewer().getEditPartRegistry().get(key);
+					final Object obj = getGraphicalViewer().getEditPartRegistry().get(key);
 					if (obj instanceof EditPart) {
 						getGraphicalViewer().select((EditPart) obj);
 						break;
@@ -305,7 +297,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	}
 
 	@Override
-	public boolean isMarkerTarget(IMarker marker) {
+	public boolean isMarkerTarget(final IMarker marker) {
 		if (marker.getAttribute(IMarker.LOCATION, "Unknown").startsWith("ECC")) {
 			return true;
 		}
