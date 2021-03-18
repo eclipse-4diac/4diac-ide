@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -147,7 +148,8 @@ public class PasteEditPartsAction extends SelectionAction {
 	}
 
 	private void handleCutFromSubapToSubapp(final CopyPasteMessage copyPasteMessage) {
-		final SubApp targetSubapp = ((SubAppForFBNetworkEditPart) getSelectedObjects().get(0)).getModel();
+		final Object selection = getSelectedObjects().get(0);
+		final SubApp targetSubapp = createSubapp(selection);
 		copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
 		final AddElementsToSubAppCommand addElementsToSubAppCommand = new AddElementsToSubAppCommand(targetSubapp,
 				Arrays.asList(copyPasteMessage.getData().get(0)));
@@ -155,14 +157,15 @@ public class PasteEditPartsAction extends SelectionAction {
 	}
 
 	private boolean isCutFromSubappToSubapp(final CopyPasteMessage copyPasteMessage) {
-		if (!(getSelectedObjects().get(0) instanceof SubAppForFBNetworkEditPart)) {
+		if (!isSelectionSubapp()) {
 			return false;
 		}
 		return copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP;
 	}
 
 	private void handleCutFromRootToSubapp(final CopyPasteMessage copyPasteMessage) {
-		final SubApp targetSubapp = ((SubAppForFBNetworkEditPart) getSelectedObjects().get(0)).getModel();
+		final Object selection = getSelectedObjects().get(0);
+		final SubApp targetSubapp = createSubapp(selection);
 		copyPasteMessage.getDeleteCommandos().undo();
 		final AddElementsToSubAppCommand addElementsToSubAppCommand = new AddElementsToSubAppCommand(targetSubapp,
 				Arrays.asList(copyPasteMessage.getData().get(0)));
@@ -170,11 +173,26 @@ public class PasteEditPartsAction extends SelectionAction {
 
 	}
 
+	protected static SubApp createSubapp(final Object object) {
+		SubApp targetSubapp = null;
+		if (object instanceof UISubAppNetworkEditPart) {
+			targetSubapp = ((UISubAppNetworkEditPart) object).getSubApp();
+		} else {
+			targetSubapp = ((SubAppForFBNetworkEditPart) object).getModel();
+		}
+		return targetSubapp;
+	}
+
 	private boolean isCutFromRootToSubapp(final CopyPasteMessage copyPasteMessage) {
-		if (!(getSelectedObjects().get(0) instanceof SubAppForFBNetworkEditPart)) {
+		if (!isSelectionSubapp()) {
 			return false;
 		}
 		return copyPasteMessage.getCopyStatus() == CopyStatus.CUT;
+	}
+
+	protected boolean isSelectionSubapp() {
+		return getSelectedObjects().get(0) instanceof SubAppForFBNetworkEditPart
+				|| getSelectedObjects().get(0) instanceof UISubAppNetworkEditPart;
 	}
 
 	protected boolean isCutFromSubappToParentSubapp(final CopyPasteMessage copyPasteMessage) {
@@ -203,7 +221,7 @@ public class PasteEditPartsAction extends SelectionAction {
 
 		}
 
-		if (!(selectedObjects.get(0) instanceof SubAppForFBNetworkEditPart)) {
+		if (!isSelectionSubapp()) {
 			return false;
 		}
 
@@ -212,7 +230,7 @@ public class PasteEditPartsAction extends SelectionAction {
 		if (outerFBNetworkElement == null) {
 			return false;
 		}
-		final SubApp selectedSubapp = ((SubAppForFBNetworkEditPart) selectedObjects.get(0)).getModel();
+		final SubApp selectedSubapp = createSubapp(selectedObjects.get(0));
 
 		if (!outerFBNetworkElement.equals(selectedSubapp)) {
 			return false;
