@@ -19,6 +19,7 @@
  *               - forwarding the getDragDracker request to the parent edit parts
  *                 as with the new interface bar this didn't happen automatically
  *   Daniel Lindhuber - instance comment
+ *   Alois Zoitl - fixed layout of interface bars, cleaned cration code for these
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -54,6 +55,14 @@ import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.swt.events.ControlListener;
 
 public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditPart {
+	private static final int MIN_INTERFACE_BAR_WIDTH = 200;
+	private static final int TOP_BOTTOM_MARGIN = 10;
+	private static final int LEFT_RIGHT_MARGIN = 10;
+	private static final Insets RIGHT_LIST_BORDER_INSET = new Insets(TOP_BOTTOM_MARGIN, 0, TOP_BOTTOM_MARGIN,
+			LEFT_RIGHT_MARGIN);  // no left margin to have interface directly at inner border
+	private static final Insets LEFT_LIST_BORDER_INSET = new Insets(TOP_BOTTOM_MARGIN, LEFT_RIGHT_MARGIN,
+			TOP_BOTTOM_MARGIN, 0);  // no right margin to have interface directly at inner border
+
 	private static final int BASE_WIDTH = 400;
 	private static final int BASE_HEIGHT = 200;
 
@@ -172,51 +181,60 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	}
 
 	private void createLeftInterface(final IFigure mainFigure) {
-		leftInterfaceContainer = new Figure();
-		leftInterfaceContainer.setOpaque(true);
-		leftInterfaceContainer.setBorder(new SingleLineBorder());
-		leftEventContainer = new MinSizeFigure();
-		leftEventContainer.setBorder(new MarginBorder(10, 5, 0, 0));
-		leftEventContainer.setMinimumSize(new Dimension(200, -1));
-		leftVarContainer = new Figure();
-		leftAdapterContainer = new Figure();
-		final ToolbarLayout tbl = new ToolbarLayout(false);
-		final ToolbarLayout tbl1 = new ToolbarLayout(false);
-		final ToolbarLayout tbl2 = new ToolbarLayout(false);
-		final ToolbarLayout tbl3 = new ToolbarLayout(false);
-		leftInterfaceContainer.setLayoutManager(tbl);
-		leftEventContainer.setLayoutManager(tbl1);
-		leftVarContainer.setLayoutManager(tbl2);
-		leftAdapterContainer.setLayoutManager(tbl3);
-		tbl.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		tbl1.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		tbl2.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		tbl3.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		leftInterfaceContainer.add(leftEventContainer);
-		leftInterfaceContainer.add(leftVarContainer);
-		leftInterfaceContainer.add(leftAdapterContainer);
-		mainFigure.add(leftInterfaceContainer, BorderLayout.LEFT);
+		leftInterfaceContainer = createRootContainer(mainFigure, BorderLayout.LEFT);
+		configureLeftContainer(leftInterfaceContainer);
+
+		final Figure leftInnerContainer = createInnerContainer(leftInterfaceContainer, LEFT_LIST_BORDER_INSET);
+		configureLeftContainer(leftInnerContainer);
+
+		leftEventContainer = createInterfaceElementsContainer(leftInnerContainer);
+		configureLeftContainer(leftEventContainer);
+		leftVarContainer = createInterfaceElementsContainer(leftInnerContainer);
+		configureLeftContainer(leftVarContainer);
+		leftAdapterContainer = createInterfaceElementsContainer(leftInnerContainer);
+		configureLeftContainer(leftAdapterContainer);
 	}
 
 	private void createRightInterface(final IFigure mainFigure) {
-		rightInterfaceContainer = new Figure();
-		rightInterfaceContainer.setBorder(new SingleLineBorder());
-		rightInterfaceContainer.setOpaque(true);
-		rightEventContainer = new MinSizeFigure();
-		rightEventContainer.setBorder(new MarginBorder(10, 0, 0, 5));
-		rightEventContainer.setMinimumSize(new Dimension(200, -1));
-		rightVarContainer = new Figure();
-		rightAdapterContainer = new Figure();
+		rightInterfaceContainer = createRootContainer(mainFigure, BorderLayout.RIGHT);
 
-		rightInterfaceContainer.setLayoutManager((new ToolbarLayout(false)));
-		rightEventContainer.setLayoutManager((new ToolbarLayout(false)));
-		rightVarContainer.setLayoutManager((new ToolbarLayout(false)));
-		rightAdapterContainer.setLayoutManager((new ToolbarLayout(false)));
-		rightInterfaceContainer.add(rightEventContainer);
-		rightInterfaceContainer.add(rightVarContainer);
-		rightInterfaceContainer.add(rightAdapterContainer);
-		mainFigure.add(rightInterfaceContainer, BorderLayout.RIGHT);
+		final Figure rightInnerContainer = createInnerContainer(rightInterfaceContainer, RIGHT_LIST_BORDER_INSET);
+
+		rightEventContainer = createInterfaceElementsContainer(rightInnerContainer);
+		rightVarContainer = createInterfaceElementsContainer(rightInnerContainer);
+		rightAdapterContainer = createInterfaceElementsContainer(rightInnerContainer);
 	}
+
+	private static Figure createRootContainer(final IFigure parent, final Integer layoutConstraint) {
+		final Figure rootContainer = new Figure();
+		rootContainer.setLayoutManager(new ToolbarLayout(false));
+		rootContainer.setOpaque(true);
+		rootContainer.setBorder(new SingleLineBorder());
+		parent.add(rootContainer, layoutConstraint);
+		return rootContainer;
+	}
+
+	private static void configureLeftContainer(final Figure container) {
+		((ToolbarLayout) container.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+	}
+
+	private static Figure createInnerContainer(final IFigure parent, final Insets borderInset) {
+		final Figure innerContainer = new MinSizeFigure();
+		innerContainer.setMinimumSize(new Dimension(MIN_INTERFACE_BAR_WIDTH, -1));
+		final ToolbarLayout innerLayout = new ToolbarLayout(false);
+		innerContainer.setLayoutManager(innerLayout);
+		innerContainer.setBorder(new MarginBorder(borderInset));
+		parent.add(innerContainer);
+		return innerContainer;
+	}
+
+	private static Figure createInterfaceElementsContainer(final IFigure parent) {
+		final Figure container = new Figure();
+		container.setLayoutManager(new ToolbarLayout(false));
+		parent.add(container);
+		return container;
+	}
+
 
 	private void createCommentContainer(final IFigure mainFigure) {
 		commentContainer = new Figure();
@@ -225,7 +243,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 			private final Insets insets = new Insets(5); // spacing
 
 			@Override
-			public Insets getInsets(IFigure figure) {
+			public Insets getInsets(final IFigure figure) {
 				return insets;
 			}
 
