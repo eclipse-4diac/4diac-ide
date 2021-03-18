@@ -24,9 +24,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.jface.util.TransferDropTargetListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IWorkbenchPart;
 
 public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements IFBTEditorPart {
 
@@ -55,12 +53,6 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 		// provide this here
 		// we would get the palette of the composite FB type editor
 		return "org.eclipse.fordiac.ide.fbpaletteviewer"; //$NON-NLS-1$
-	}
-
-	@Override
-	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		super.selectionChanged(part, selection);
-		updateActions(getSelectionActions());
 	}
 
 	@Override

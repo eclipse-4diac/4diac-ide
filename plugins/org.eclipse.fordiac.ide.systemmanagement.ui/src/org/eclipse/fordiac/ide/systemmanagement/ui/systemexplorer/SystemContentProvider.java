@@ -89,7 +89,7 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 			if (element instanceof IProject) {
 				return ((IProject) element).isAccessible();
 			}
-			if (FordiacProjectSorter.isSystemFile(element)) {
+			if (SystemManager.isSystemFile(element)) {
 				return true;
 			}
 		}
@@ -142,7 +142,7 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 			}
 		}
 
-		if (FordiacProjectSorter.isSystemFile(resource)) {
+		if (SystemManager.isSystemFile(resource)) {
 			// retrieve the children for the Automation system
 			return super.getChildren(SystemManager.INSTANCE.getSystem((IFile) resource));
 		}

@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.gef;
 
 import java.util.EventObject;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -63,6 +62,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -120,8 +120,8 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		for (Iterator iter = getGraphicalViewer().getRootEditPart().getChildren().iterator(); iter.hasNext();) {
-			EditPart ep = (EditPart) iter.next();
+		for (final Object element : getGraphicalViewer().getRootEditPart().getChildren()) {
+			final EditPart ep = (EditPart) element;
 			ep.refresh();
 		}
 	}
@@ -132,7 +132,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	protected void createGraphicalViewer(final Composite parent) {
 		rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
 
-		AdvancedScrollingGraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
+		final AdvancedScrollingGraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
 		viewer.createControl(rulerComp);
 
 		setGraphicalViewer(viewer);
@@ -171,11 +171,11 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
+		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
 
-		ScalableFreeformRootEditPart root = createRootEditPart();
+		final ScalableFreeformRootEditPart root = createRootEditPart();
 
-		ContextMenuProvider cmp = getContextMenuProvider(viewer, root.getZoomManager());
+		final ContextMenuProvider cmp = getContextMenuProvider(viewer, root.getZoomManager());
 		if (cmp != null) {
 			viewer.setContextMenu(cmp);
 			getSite().registerContextMenu("org.eclipse.fordiac.ide.gef.contextmenu", //$NON-NLS-1$
@@ -185,7 +185,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditPartFactory());
 
-		AdvancedGraphicalViewerKeyHandler keyHandler = new AdvancedGraphicalViewerKeyHandler(viewer);
+		final AdvancedGraphicalViewerKeyHandler keyHandler = new AdvancedGraphicalViewerKeyHandler(viewer);
 		keyHandler.setParent(getCommonKeyHandler());
 		viewer.setKeyHandler(keyHandler);
 
@@ -229,10 +229,10 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 */
 	@Override
 	protected void initializeGraphicalViewer() {
-		GraphicalViewer viewer = getGraphicalViewer();
+		final GraphicalViewer viewer = getGraphicalViewer();
 		viewer.setContents(getModel());
 		// listen for dropped parts
-		TransferDropTargetListener listener = createTransferDropTargetListener();
+		final TransferDropTargetListener listener = createTransferDropTargetListener();
 		if (listener != null) {
 			viewer.addDropTargetListener(listener);
 		}
@@ -252,8 +252,8 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		setModel(input);
 		super.init(site, input);
 		setEditorPartName(input);
-		ActionRegistry registry = getActionRegistry();
-		IActionBars bars = site.getActionBars();
+		final ActionRegistry registry = getActionRegistry();
+		final IActionBars bars = site.getActionBars();
 		String id = ActionFactory.UNDO.getId();
 		bars.setGlobalActionHandler(id, registry.getAction(id));
 		id = ActionFactory.REDO.getId();
@@ -269,7 +269,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		}
 	}
 
-	protected void updateEditorTitle(String newTitle) {
+	protected void updateEditorTitle(final String newTitle) {
 		((UntypedEditorInput) getEditorInput()).setName(newTitle); // update the editor input so that the tooltip and
 		// header bars are correct as well
 		setPartName(newTitle);
@@ -387,7 +387,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
-		ActionRegistry registry = getActionRegistry();
+		final ActionRegistry registry = getActionRegistry();
 		IAction action;
 
 		action = new DirectEditAction((IWorkbenchPart) this);
@@ -427,22 +427,15 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.PRINT.getId(), action);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getSelectionActions()
-	 */
-	@SuppressWarnings("rawtypes")
 	@Override
-	protected List getSelectionActions() {
-		return super.getSelectionActions();
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+		super.selectionChanged(part, selection);
+		updateActions(getSelectionActions());
 	}
 
-	/**
-	 * Gets the sel actions.
+	/** Gets the selection actions list
 	 *
-	 * @return the sel actions
-	 */
+	 * @return the sel actions */
 	@SuppressWarnings("rawtypes")
 	public List getSelActions() {
 		return getSelectionActions();

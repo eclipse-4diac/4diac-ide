@@ -50,7 +50,7 @@ public class BasicFBFilter {
   
   private STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
   
-  public CharSequence lua(final BasicFBType type) {
+  public String lua(final BasicFBType type) {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _luaConstants = LuaConstants.luaConstants(type);
     _builder.append(_luaConstants);
@@ -78,7 +78,7 @@ public class BasicFBFilter {
     _builder.newLine();
     _builder.append("return {ECC = executeEvent, interfaceSpec = interfaceSpec, internalVarsInformation = internalVarsInformation}");
     _builder.newLine();
-    return _builder;
+    return _builder.toString();
   }
   
   private CharSequence luaECC(final ECC ecc, final Iterable<VarDeclaration> variables, final Map<AdapterDeclaration, String> adapterSocketsVariables, final Map<AdapterDeclaration, String> adapterPlugsVariables) {

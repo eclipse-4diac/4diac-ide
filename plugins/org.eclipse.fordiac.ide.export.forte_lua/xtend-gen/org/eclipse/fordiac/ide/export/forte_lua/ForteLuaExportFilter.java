@@ -48,18 +48,18 @@ public class ForteLuaExportFilter implements IExportFilter {
     boolean _matched = false;
     if (type instanceof BasicFBType) {
       _matched=true;
-      System.out.println(this.basicFBFilter.lua(((BasicFBType)type)));
+      Activator.getDefault().logInfo(this.basicFBFilter.lua(((BasicFBType)type)));
     }
     if (!_matched) {
       if (type instanceof CompositeFBType) {
         _matched=true;
-        System.out.println(this.compositeFBFilter.lua(((CompositeFBType)type)));
+        Activator.getDefault().logInfo(this.compositeFBFilter.lua(((CompositeFBType)type)));
       }
     }
     if (!_matched) {
       if (type instanceof AdapterType) {
         _matched=true;
-        System.out.println(this.adapterFilter.lua(((AdapterType)type)));
+        Activator.getDefault().logInfo(this.adapterFilter.lua(((AdapterType)type)));
       }
     }
     if (!_matched) {

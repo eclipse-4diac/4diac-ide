@@ -58,7 +58,7 @@ public enum FordiacImage {
 	ICON_WATCHES_VIEW, ICON_WATCH_INTERFACE_ELEMENTS,
 
 	// to be deleted with removing the tester
-	ICON_FBTest, ICON_TestFailed, ICON_TestOK, ICON_NoTest, ICON_TesterTemplate,
+	ICON_TesterTemplate,
 
 	// Overlay Images
 	OVERLAY_DISTRIBUTED_NATURE;
@@ -73,22 +73,22 @@ public enum FordiacImage {
 	private static int count = 0;
 
 	// FIXME: find a better way to handle overlay images
-	public static Image getErrorOverlayImage(Image image) {
+	public static Image getErrorOverlayImage(final Image image) {
 		if (image == null) {
 			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEC_FIELD_ERROR);
 		}
 		if (!errorImages.containsKey(image)) {
-			DecorationOverlayIcon overlay = new DecorationOverlayIcon(image,
+			final DecorationOverlayIcon overlay = new DecorationOverlayIcon(image,
 					PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR),
 					IDecoration.TOP_LEFT);
 			count++;
-			System.out.println("createErrorOverlayImage " + count);
+			UIPlugin.getDefault().logInfo("createErrorOverlayImage " + count);
 			errorImages.put(image, overlay.createImage());
 		}
 		return errorImages.get(image);
 	}
 
-	private FordiacImage() {
+	FordiacImage() {
 	}
 
 	public Image getImage() {
@@ -117,7 +117,7 @@ public enum FordiacImage {
 
 	public InputStream getImageAsInputStream() throws IOException {
 		InputStream ret = null;
-		URL fileLocation = getImageURL(this.name());
+		final URL fileLocation = getImageURL(this.name());
 		if (null != fileLocation) {
 			ret = fileLocation.openConnection().getInputStream();
 		} else {
@@ -126,10 +126,10 @@ public enum FordiacImage {
 		return ret;
 	}
 
-	private static boolean addImageDescriptor(String name) {
+	private static boolean addImageDescriptor(final String name) {
 		try {
-			URL fileLocation = getImageURL(name);
-			ImageDescriptor id = ImageDescriptor.createFromURL(fileLocation);
+			final URL fileLocation = getImageURL(name);
+			final ImageDescriptor id = ImageDescriptor.createFromURL(fileLocation);
 			JFaceResources.getImageRegistry().put(name, id);
 		} catch (MissingResourceException | IllegalArgumentException e) {
 			return false;
@@ -137,27 +137,27 @@ public enum FordiacImage {
 		return true;
 	}
 
-	private static URL getImageURL(String name) {
-		String fileName = foridacImageProperties.getString(name);
+	private static URL getImageURL(final String name) {
+		final String fileName = foridacImageProperties.getString(name);
 		return FileLocator.find(UIPlugin.getDefault().getBundle(),
 				new Path(IMAGES_DIRECTORY + IPath.SEPARATOR + fileName), null);
 	}
 
 	private static Image getErrorImage() {
-		ISharedImages si = PlatformUI.getWorkbench().getSharedImages();
+		final ISharedImages si = PlatformUI.getWorkbench().getSharedImages();
 		return si.getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
 	}
 
 	private static ImageDescriptor getErrorImageDescriptor() {
-		ISharedImages si = PlatformUI.getWorkbench().getSharedImages();
+		final ISharedImages si = PlatformUI.getWorkbench().getSharedImages();
 		return si.getImageDescriptor(ISharedImages.IMG_OBJS_ERROR_TSK);
 	}
 
-	public static DecorationOverlayIcon createOverlayImage(Image image, ImageDescriptor imageDescriptor) {
+	public static DecorationOverlayIcon createOverlayImage(final Image image, final ImageDescriptor imageDescriptor) {
 		return createOverlayImage(image, imageDescriptor, IDecoration.TOP_LEFT);
 	}
 
-	public static DecorationOverlayIcon createOverlayImage(Image image, ImageDescriptor imageDescriptor, int quadrant) {
+	public static DecorationOverlayIcon createOverlayImage(final Image image, final ImageDescriptor imageDescriptor, final int quadrant) {
 		return new DecorationOverlayIcon(image, imageDescriptor, quadrant);
 	}
 }

@@ -30,7 +30,7 @@ class CompositeFBFilter {
 	List<String> errors = new ArrayList<String>;
 	static final int ADAPTER_MARKER = 0x10000;
 
-	def lua(CompositeFBType type) '''
+	def String lua(CompositeFBType type) '''
 		«type.interfaceList.luaEventConstants»
 		«type.interfaceList.luaFBVariableConstants»
 				

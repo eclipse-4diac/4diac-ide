@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -79,6 +80,11 @@ public enum SystemManager {
 		// and adding the resource change listener
 		TypeLibrary.loadToolLibrary();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
+	}
+
+	public static boolean isSystemFile(final Object entry) {
+		return ((entry instanceof IFile)
+				&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase(((IFile) entry).getFileExtension()));
 	}
 
 	public IProject createNew4diacProject(final String projectName, final IPath location,
@@ -196,7 +202,7 @@ public enum SystemManager {
 			final long startTime = System.currentTimeMillis();
 			final AutomationSystem system = loadSystem(systemFile);
 			final long endTime = System.currentTimeMillis();
-			System.out.println(
+			Activator.getDefault().logInfo(
 					"Loading time for System (" + systemFile.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			return system;
 		});

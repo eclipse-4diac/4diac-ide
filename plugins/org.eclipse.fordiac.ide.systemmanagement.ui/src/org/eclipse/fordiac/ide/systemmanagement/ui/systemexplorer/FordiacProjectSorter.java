@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
 import java.util.Comparator;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.viewers.Viewer;
@@ -26,20 +25,20 @@ public class FordiacProjectSorter extends ViewerComparator {
 		// nothing special to do here
 	}
 
-	public FordiacProjectSorter(Comparator<? super String> comparator) {
+	public FordiacProjectSorter(final Comparator<? super String> comparator) {
 		super(comparator);
 	}
 
 	@Override
-	public int compare(Viewer viewer, Object e1, Object e2) {
-		if (isSystemFile(e1)) {
-			if (isSystemFile(e2)) {
+	public int compare(final Viewer viewer, final Object e1, final Object e2) {
+		if (SystemManager.isSystemFile(e1)) {
+			if (SystemManager.isSystemFile(e2)) {
 				// both are system files: sort alphabetically
 				return super.compare(viewer, e1, e2);
 			}
 			return -1; // system file content before everything else
 		}
-		if (isSystemFile(e2)) {
+		if (SystemManager.isSystemFile(e2)) {
 			return 1; // the second is a system file order it before the first
 		}
 
@@ -54,12 +53,7 @@ public class FordiacProjectSorter extends ViewerComparator {
 		return super.compare(viewer, e1, e2);
 	}
 
-	public static boolean isSystemFile(Object entry) {
-		return ((entry instanceof IFile)
-				&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase(((IFile) entry).getFileExtension()));
-	}
-
-	public static boolean isTypeLibFolder(Object entry) {
+	public static boolean isTypeLibFolder(final Object entry) {
 		return ((entry instanceof IFolder) && SystemManager.TYPE_LIB_FOLDER_NAME.equals(((IFolder) entry).getName()));
 	}
 

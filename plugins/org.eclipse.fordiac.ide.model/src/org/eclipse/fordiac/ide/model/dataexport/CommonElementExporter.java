@@ -266,7 +266,7 @@ abstract class CommonElementExporter {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 		final long endTime = System.currentTimeMillis();
-		System.out.println("Saving time for System: " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$
+		Activator.getDefault().logInfo("Saving time for System: " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	}
 
