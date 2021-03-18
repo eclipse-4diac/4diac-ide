@@ -58,7 +58,7 @@ public enum FordiacImage {
 	ICON_WATCHES_VIEW, ICON_WATCH_INTERFACE_ELEMENTS,
 
 	// to be deleted with removing the tester
-	ICON_FBTest, ICON_TestFailed, ICON_TestOK, ICON_NoTest, ICON_TesterTemplate,
+	ICON_TesterTemplate,
 
 	// Overlay Images
 	OVERLAY_DISTRIBUTED_NATURE;
