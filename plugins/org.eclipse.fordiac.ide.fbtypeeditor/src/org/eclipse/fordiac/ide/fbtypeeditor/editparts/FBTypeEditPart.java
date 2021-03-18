@@ -54,10 +54,10 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 
 	private final Adapter adapter = new EContentAdapter() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (Notification.REMOVING_ADAPTER != notification.getEventType()) {
-				Object feature = notification.getFeature();
+				final Object feature = notification.getFeature();
 				if ((LibraryElementPackage.eINSTANCE.getVersionInfo().equals(feature))
 						|| (LibraryElementPackage.eINSTANCE.getVersionInfo_Version().equals(feature))) {
 					getFigure().updateVersionInfoLabel();
@@ -108,13 +108,13 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	}
 
 	@Override
-	public void setSelected(int value) {
+	public void setSelected(final int value) {
 	}
 
-//	@Override
-//	public void refreshName() {
-//		Display.getDefault().asyncExec(() -> getNameLabel().setText(getINamedElement().getName()));
-//	}
+	//	@Override
+	//	public void refreshName() {
+	//		Display.getDefault().asyncExec(() -> getNameLabel().setText(getINamedElement().getName()));
+	//	}
 
 	@Override
 	protected List<Object> getModelChildren() {
@@ -136,7 +136,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		if (null == plugcont) {
 			plugcont = new PlugContainer(getModel());
 		}
-		ArrayList<Object> temp = new ArrayList<>(6);
+		final ArrayList<Object> temp = new ArrayList<>(6);
 		temp.add(eic);
 		temp.add(eoc);
 		temp.add(vic);
@@ -159,9 +159,9 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceContainerEditPart) {
-			Figure cont = getContainer(childEditPart);
+			final Figure cont = getContainer(childEditPart);
 			if (null != cont) {
 				cont.add(child);
 			}
@@ -171,7 +171,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		}
 	}
 
-	private Figure getContainer(EditPart childEditPart) {
+	private Figure getContainer(final EditPart childEditPart) {
 		if (childEditPart.getModel() instanceof EventInputContainer) {
 			return getFigure().getEventInputs();
 		}
@@ -194,10 +194,10 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	}
 
 	@Override
-	protected void removeChildVisual(EditPart childEditPart) {
-		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+	protected void removeChildVisual(final EditPart childEditPart) {
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceContainerEditPart) {
-			Figure cont = getContainer(childEditPart);
+			final Figure cont = getContainer(childEditPart);
 			if (null != cont) {
 				cont.remove(child);
 			}
@@ -223,10 +223,10 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 
 				@Override
 				public void controlResized(final ControlEvent e) {
-					Point p = getParent().getViewer().getControl().getSize();
-					Dimension dim = getFigure().getPreferredSize(-1, -1);
+					final Point p = getParent().getViewer().getControl().getSize();
+					final Dimension dim = getFigure().getPreferredSize(-1, -1);
 
-					Rectangle rect = new Rectangle((p.x / 2) - (dim.width / 2), (p.y / 2) - (dim.height / 2), -1, -1);
+					final Rectangle rect = new Rectangle((p.x / 2) - (dim.width / 2), (p.y / 2) - (dim.height / 2), -1, -1);
 					// rectangle rect = new Rectangle()
 
 					update(rect);
@@ -240,9 +240,9 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 			};
 			getParent().getViewer().getControl().addControlListener(controlListener);
 		}
-		Point p = getParent().getViewer().getControl().getSize();
-		Dimension dim = getFigure().getPreferredSize(-1, -1);
-		Rectangle rect = new Rectangle((p.x / 2) - (dim.width / 2), (p.y / 2) - (dim.height / 2), -1, -1);
+		final Point p = getParent().getViewer().getControl().getSize();
+		final Dimension dim = getFigure().getPreferredSize(-1, -1);
+		final Rectangle rect = new Rectangle((p.x / 2) - (dim.width / 2), (p.y / 2) - (dim.height / 2), -1, -1);
 		update(rect);
 	}
 

@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -65,7 +66,7 @@ class FBNetworkExporter extends CommonElementExporter {
 	private void addFBNetworkElements(final FBNetwork network) throws XMLStreamException {
 		for (final FBNetworkElement fbnElement : network.getNetworkElements()) {
 			final String nodeName = getFBNElementNodeName(fbnElement);
-			if (null != nodeName) {
+			if (isExportable(nodeName, fbnElement)) {
 				addStartElement(nodeName);
 				addNameAttribute(fbnElement.getName());
 				if (null != fbnElement.getType()) {
@@ -84,6 +85,10 @@ class FBNetworkExporter extends CommonElementExporter {
 				addEndElement();
 			}
 		}
+	}
+
+	private static boolean isExportable(final String nodeName, final FBNetworkElement fbnElement) {
+		return null != nodeName /* && !(fbnElement instanceof ErrorMarkerFBNElement)  //TODO figure out if this is needed*/;
 	}
 
 	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {
@@ -119,19 +124,24 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private void addConnection(final Connection connection, final FBNetwork fbNetwork) throws XMLStreamException {
 		addEmptyStartElement(LibraryElementTags.CONNECTION_ELEMENT);
-		if ((connection.getSource() != null) && (connection.getSource().eContainer() instanceof InterfaceList)) {
+		if (isExportableConnectionEndpoint(connection.getSource())) {
 			getWriter().writeAttribute(LibraryElementTags.SOURCE_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getSource(), fbNetwork));
 		}
 
-		if ((connection.getDestination() != null)
-				&& (connection.getDestination().eContainer() instanceof InterfaceList)) {
+		if (isExportableConnectionEndpoint(connection.getDestination())) {
 			getWriter().writeAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getDestination(), fbNetwork));
 		}
 		addCommentAttribute(connection);
 		addConnectionCoordinates(connection);
 	}
+
+	private static boolean isExportableConnectionEndpoint(final IInterfaceElement endPoint) {
+		return (endPoint != null) && !(endPoint.getFBNetworkElement() instanceof ErrorMarkerFBNElement)
+				&& (endPoint.eContainer() instanceof InterfaceList);
+	}
+
 
 	private static String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement, final FBNetwork fbNetwork) {
 		String retVal = ""; //$NON-NLS-1$

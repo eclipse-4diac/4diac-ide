@@ -90,7 +90,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	private final Adapter colorChangeListener = new AdapterImpl() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getColorizableElement_Color()) {
 				backgroundColorChanged(getFigure());
 			}
@@ -189,7 +189,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
 
 			@Override
-			protected Command getDirectEditCommand(DirectEditRequest request) {
+			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				final Object value = request.getCellEditor().getValue();
 				if (value instanceof PaletteEntry) {
 					return new UpdateFBTypeCommand(getModel(), (PaletteEntry) value);
@@ -198,7 +198,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			}
 
 			@Override
-			protected void showCurrentEditValue(DirectEditRequest request) {
+			protected void showCurrentEditValue(final DirectEditRequest request) {
 				// as we want to change the type we will not show the new type
 			}
 
@@ -233,7 +233,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
-	protected void backgroundColorChanged(IFigure figure) {
+	protected void backgroundColorChanged(final IFigure figure) {
 		Color color = null;
 		if (getModel() != null) {
 			final Device dev = findDevice();
@@ -266,7 +266,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		}
 	}
 
-	private IFigure getTargetFigure(InterfaceEditPart interfaceEditPart) {
+	private IFigure getTargetFigure(final InterfaceEditPart interfaceEditPart) {
 		if (interfaceEditPart.isInput()) {
 			if (interfaceEditPart.isEvent()) {
 				return getFigure().getEventInputs();
@@ -277,6 +277,10 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			if (interfaceEditPart.isVariable()) {
 				return getFigure().getDataInputs();
 			}
+			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
+				return getFigure().getErrorMarkerInput();
+			}
+
 		} else {
 			if (interfaceEditPart.isEvent()) {
 				return getFigure().getEventOutputs();
@@ -287,11 +291,15 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			if (interfaceEditPart.isVariable()) {
 				return getFigure().getDataOutputs();
 			}
+			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
+				return getFigure().getErrorMarkerInput();
+			}
+
 		}
 		return getFigure();
 	}
 
-	private int getInterfaceElementIndex(InterfaceEditPart interfaceEditPart) {
+	private int getInterfaceElementIndex(final InterfaceEditPart interfaceEditPart) {
 		final InterfaceList interfaceList = getModel().getInterface();
 		if (interfaceEditPart.isInput()) {
 			if (interfaceEditPart.isEvent()) {
@@ -303,6 +311,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			if (interfaceEditPart.isVariable()) {
 				return interfaceList.getInputVars().indexOf(interfaceEditPart.getModel());
 			}
+			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
+				return interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
+			}
 		} else {
 			if (interfaceEditPart.isEvent()) {
 				return interfaceList.getEventOutputs().indexOf(interfaceEditPart.getModel());
@@ -312,6 +323,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			}
 			if (interfaceEditPart.isVariable()) {
 				return interfaceList.getOutputVars().indexOf(interfaceEditPart.getModel());
+			}
+			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
+				return interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
 			}
 		}
 		return -1;
@@ -354,7 +368,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			@SuppressWarnings("unchecked")
 			final List<EditPart> children = getChildren();
 			children.stream().filter(e -> e instanceof InstanceNameEditPart)
-					.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
+			.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
 		}
 		super.performRequest(request);
@@ -408,7 +422,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
-	public void setTransparency(int value) {
+	public void setTransparency(final int value) {
 		for (final Object ep : getChildren()) {
 			if (ep instanceof AbstractViewEditPart) {
 				((AbstractViewEditPart) ep).setTransparency(value);
@@ -418,7 +432,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
-	public DragTracker getDragTracker(Request request) {
+	public DragTracker getDragTracker(final Request request) {
 		return new ScrollingDragEditPartsTracker(this);
 	}
 

@@ -76,6 +76,12 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	/** The data outputs. */
 	private final Figure dataOutputs = new Figure();
 
+	/** The sockets. */
+	private final Figure errorMarkerInput = new Figure();
+
+	/** The data outputs. */
+	private final Figure errorMarkerOutput = new Figure();
+
 	/** The plugs. */
 	private final Figure plugs = new Figure();
 
@@ -126,6 +132,14 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	 */
 	public Figure getDataOutputs() {
 		return dataOutputs;
+	}
+
+	public Figure getErrorMarkerInput() {
+		return errorMarkerInput;
+	}
+
+	public Figure getErrorMarkerOutput() {
+		return errorMarkerOutput;
 	}
 
 	public Figure getPlugs() {
@@ -315,6 +329,10 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		sockets.setLayoutManager(new ToolbarLayout(false));
 		bottomInputArea.add(sockets);
 
+		errorMarkerInput.setLayoutManager(new ToolbarLayout(false));
+		bottomInputArea.add(errorMarkerInput);
+
+
 		final Figure bottomOutputArea = new Figure();
 		bottomOutputArea.setLayoutManager(new ToolbarLayout(false));
 		((ToolbarLayout) bottomOutputArea.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
@@ -331,6 +349,11 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		plugs.setLayoutManager(new ToolbarLayout(false));
 		((ToolbarLayout) plugs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomOutputArea.add(plugs);
+
+		errorMarkerOutput.setLayoutManager(new ToolbarLayout(false));
+		((ToolbarLayout) errorMarkerOutput.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		bottomOutputArea.add(errorMarkerOutput);
+
 	}
 
 	protected void setupTypeNameAndVersion(final FBType type, final Figure container) {
@@ -353,6 +376,12 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		typeLabel.setIcon(ResultListLabelProvider.getTypeImage(type));
 		middle.add(typeLabel);
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
+	}
+
+	protected void changeTypeLabelText(final String text) {
+		typeLabel.setText(text
+				+ "\n we should use this space to display the messages of the error markers \n example message 1 \n  example message 2");
+		typeLabel.setIcon(null);
 	}
 
 }

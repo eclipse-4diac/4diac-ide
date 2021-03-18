@@ -25,6 +25,8 @@ import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -35,51 +37,50 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
-/**
- * A factory for creating new EditParts.
- */
+/** A factory for creating new EditParts. */
 public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 
 	public ElementEditPartFactory(final GraphicalEditor editor) {
 		super(editor);
 	}
 
-	/**
-	 * Maps an object to an EditPart.
+	/** Maps an object to an EditPart.
 	 *
-	 * @throws RuntimeException if no match was found (programming error)
-	 */
+	 * @throws RuntimeException if no match was found (programming error) */
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		EditPart part = null;
-		if (modelElement instanceof UnfoldedSubappContentNetwork) {
-			part = new UnfoldedSubappContentEditPart();
-		} else if (modelElement instanceof FBNetwork) {
-			part = getPartForFBNetwork((FBNetwork) modelElement);
-		} else if (modelElement instanceof FB) {
-			if (null != ((FB) modelElement).getType()) {
-				if (((FB) modelElement).getType().getName().contentEquals("STRUCT_MUX")) { //$NON-NLS-1$
-					return new MultiplexerEditPart();
-				} else if (((FB) modelElement).getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
-					return new DemultiplexerEditPart();
+		if (modelElement instanceof ErrorMarkerFBNElement) {
+			part = new ErrorMarkerFBNEditPart();
+		} else
+			if (modelElement instanceof UnfoldedSubappContentNetwork) {
+				part = new UnfoldedSubappContentEditPart();
+			} else if (modelElement instanceof FBNetwork) {
+				part = getPartForFBNetwork((FBNetwork) modelElement);
+			} else if (modelElement instanceof FB) {
+				if (null != ((FB) modelElement).getType()) {
+					if (((FB) modelElement).getType().getName().contentEquals("STRUCT_MUX")) { //$NON-NLS-1$
+						return new MultiplexerEditPart();
+					} else if (((FB) modelElement).getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
+						return new DemultiplexerEditPart();
+					}
 				}
+				part = new FBEditPart();
+			} else if (modelElement instanceof InstanceName) {
+				part = new InstanceNameEditPart();
+			} else if (modelElement instanceof InstanceComment) {
+				part = new InstanceCommentEditPart();
+			} else if (modelElement instanceof Connection) {
+				part = new ConnectionEditPart();
+			} else if (modelElement instanceof SubApp) {
+				part = new SubAppForFBNetworkEditPart();
+			} else if (modelElement instanceof IInterfaceElement) {
+				part = createInterfaceEditPart(modelElement, context);
+			} else if (modelElement instanceof Value) {
+				part = new ValueEditPart();
+			} else {
+				throw createEditpartCreationException(modelElement);
 			}
-			part = new FBEditPart();
-		} else if (modelElement instanceof InstanceName) {
-			part = new InstanceNameEditPart();
-		} else if (modelElement instanceof InstanceComment) {
-			part = new InstanceCommentEditPart();
-		} else if (modelElement instanceof Connection) {
-			part = new ConnectionEditPart();
-		} else if (modelElement instanceof SubApp) {
-			part = new SubAppForFBNetworkEditPart();
-		} else if (modelElement instanceof IInterfaceElement) {
-			part = createInterfaceEditPart(modelElement, context);
-		} else if (modelElement instanceof Value) {
-			part = new ValueEditPart();
-		} else {
-			throw createEditpartCreationException(modelElement);
-		}
 		return part;
 	}
 
@@ -92,8 +93,14 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 	}
 
 	private static EditPart createInterfaceEditPart(final Object modelElement, final EditPart context) {
+
+		if (modelElement instanceof ErrorMarkerInterface) {
+			return new ErrorMarkerInterfaceEditPart();
+		}
+
 		EditPart part;
 		final IInterfaceElement element = (IInterfaceElement) modelElement;
+
 		if ((element.getFBNetworkElement() instanceof StructManipulator)
 				&& (element.getType() instanceof StructuredType)) {
 			if (isMuxOutput(element)) {

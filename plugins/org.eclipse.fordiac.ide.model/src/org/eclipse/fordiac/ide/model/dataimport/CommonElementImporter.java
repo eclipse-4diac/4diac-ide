@@ -219,6 +219,7 @@ abstract class CommonElementImporter {
 		};
 		job.setRule(file.getProject());
 		job.schedule();
+
 	}
 
 	protected abstract LibraryElement createRootModelElement();
