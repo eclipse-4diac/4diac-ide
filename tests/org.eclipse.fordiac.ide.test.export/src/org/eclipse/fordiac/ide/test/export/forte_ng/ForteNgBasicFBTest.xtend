@@ -14,12 +14,13 @@
 
 package org.eclipse.fordiac.ide.test.export.forte_ng
 
+import org.eclipse.fordiac.ide.test.export.ExporterTestBase
+import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeBase
 import org.junit.jupiter.api.Test
 
-import static org.junit.jupiter.api.Assertions.fail
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
-import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeBase
+import static org.junit.jupiter.api.Assertions.fail
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
@@ -39,7 +40,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 
 		for (export : exports) {
 			switch export.getName() {
-				case '''«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h''': {
+				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h''': {
 					headerfileFound = true
 					
 					assertEquals('''
@@ -48,13 +49,13 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 					 ***
 					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
 					 ***
-					 *** Name: «org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
+					 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
 					 *** Description: 
 					 *** Version:
 					 *************************************************************************/
 
-					#ifndef _«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
-					#define _«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
+					#ifndef _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
+					#define _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
 
 					#include "basicfb.h"
 					#include "forte_array_at.h"
@@ -82,20 +83,20 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 
 					public:
 					  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-					       CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr, m_anFBConnData, m_anFBVarsData) {
+					      CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr, m_anFBConnData, m_anFBVarsData) {
 					  };
 
 					  virtual ~«EXPORTED_FUNCTIONBLOCK_NAME»() = default;
 					};
 
-					#endif // _«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
+					#endif // _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
 
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
 					assertNoErrors(export.warnings)
 					assertNoErrors(export.infos)
 				}
-				case '''«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME».cpp''': {
+				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».cpp''': {
 					cppfileFound = true
 					
 					assertEquals('''
@@ -104,21 +105,21 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 					 ***
 					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
 					 ***
-					 *** Name: «org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
+					 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
 					 *** Description: 
 					 *** Version:
 					 *************************************************************************/
 
-					#include "«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h"
+					#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h"
 					#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-					#include "«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_gen.cpp"
+					#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_gen.cpp"
 					#endif
 
 					#include "forte_dword.h"
 					#include "forte_array.h"
 					#include "forte_array_at.h"
 
-					DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringId«org.eclipse.fordiac.ide.test.export.ExporterTestBase.BASICFUNCTIONBLOCK_NAME»)
+					DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringId«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»)
 
 
 

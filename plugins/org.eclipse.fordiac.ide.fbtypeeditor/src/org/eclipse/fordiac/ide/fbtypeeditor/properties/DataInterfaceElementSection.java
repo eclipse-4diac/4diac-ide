@@ -21,6 +21,7 @@ import java.util.Collection;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.fordiac.ide.fbtypeeditor.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
@@ -43,8 +44,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -78,7 +77,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		createEventSection(getRightComposite());
 	}
 
-	private void createDataSection(Composite parent) {
+	private void createDataSection(final Composite parent) {
 		getWidgetFactory().createCLabel(parent, FordiacMessages.ArraySize + ":"); //$NON-NLS-1$
 		arraySizeText = createGroupText(parent, true);
 		arraySizeText.addModifyListener(e -> {
@@ -96,42 +95,33 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	}
 
 	@Override
-	protected void createTypeAndCommentSection(Composite parent) {
+	protected void createTypeAndCommentSection(final Composite parent) {
 		super.createTypeAndCommentSection(parent);
 		openEditorButton = new Button(typeCombo.getParent(), SWT.PUSH);
 		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
-		openEditorButton.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				final IWorkbench workbench = PlatformUI.getWorkbench();
-				if (workbench != null) {
-					final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-					if (activeWorkbenchWindow != null) {
-						openStructEditor(activeWorkbenchWindow);
-					}
+		openEditorButton.addListener(SWT.Selection, ev -> {
+			final IWorkbench workbench = PlatformUI.getWorkbench();
+			if (workbench != null) {
+				final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+				if (activeWorkbenchWindow != null) {
+					openStructEditor(activeWorkbenchWindow);
 				}
-			}
-
-			private void openStructEditor(IWorkbenchWindow activeWorkbenchWindow) {
-				final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-				final IFile file = getType().getType().getPaletteEntry().getFile();
-				final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-						.getDefaultEditor(file.getName());
-				try {
-					activePage.openEditor(new FileEditorInput(file), desc.getId());
-				} catch (final PartInitException e1) {
-					e1.printStackTrace();
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// Nothing to do
 			}
 		});
 	}
 
-	private void createEventSection(Composite parent) {
+	private void openStructEditor(final IWorkbenchWindow activeWorkbenchWindow) {
+		final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+		final IFile file = getType().getType().getPaletteEntry().getFile();
+		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+		try {
+			activePage.openEditor(new FileEditorInput(file), desc.getId());
+		} catch (final PartInitException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
+		}
+	}
+
+	private void createEventSection(final Composite parent) {
 		eventComposite = getWidgetFactory().createGroup(parent, FordiacMessages.With);
 		eventComposite.setLayout(new GridLayout(1, false));
 		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -158,7 +148,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		});
 	}
 
-	private static void configureTableLayout(Table tableWith) {
+	private static void configureTableLayout(final Table tableWith) {
 		final TableColumn column1 = new TableColumn(tableWith, SWT.LEFT);
 		column1.setText(FordiacMessages.Event);
 		final TableColumn column2 = new TableColumn(tableWith, SWT.LEFT);
@@ -205,8 +195,8 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 				withEventsViewer.setInput(getType());
 				Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
 				getType().getWiths().stream().map(with -> withEventsViewer.testFindItem(with.eContainer()))
-						.filter(item -> (item instanceof TableItem))
-						.forEach(item -> ((TableItem) item).setChecked(true));
+				.filter(item -> (item instanceof TableItem))
+				.forEach(item -> ((TableItem) item).setChecked(true));
 			} else {
 				eventComposite.setVisible(false);
 			}

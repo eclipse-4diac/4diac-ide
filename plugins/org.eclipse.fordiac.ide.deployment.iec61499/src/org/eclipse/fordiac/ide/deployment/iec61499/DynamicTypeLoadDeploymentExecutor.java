@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -87,9 +88,9 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private static final String QUERY_PARAMETER = "<Request ID=\"{0}\" Action=\"READ\"><Connection Source=\"{1}\" Destination=\"*\" /></Request>"; //$NON-NLS-1$
 
 	private static final Logger logger = Logger.getLogger(DynamicTypeLoadDeploymentExecutor.class);
-	private ResponseMapping respMapping = new ResponseMapping();
+	private final ResponseMapping respMapping = new ResponseMapping();
 
-	public DynamicTypeLoadDeploymentExecutor(Device dev, IDeviceManagementCommunicationHandler overrideHandler) {
+	public DynamicTypeLoadDeploymentExecutor(final Device dev, final IDeviceManagementCommunicationHandler overrideHandler) {
 		super(dev, overrideHandler);
 		// nothing to do here
 	}
@@ -108,7 +109,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	@Override
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws DeploymentException {
 		// check for the adapters of the FB first
-		Map<String, AdapterType> adapters = getAdapterTypes(fbData.getFb().getType().getInterfaceList());
+		final Map<String, AdapterType> adapters = getAdapterTypes(fbData.getFb().getType().getInterfaceList());
 		if (!adapters.isEmpty()) {
 			createAdapterTypes(adapters);
 		}
@@ -120,21 +121,21 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	}
 
-	private static Map<String, AdapterType> getAdapterTypes(InterfaceList interfaceList) {
-		Map<String, AdapterType> list = new HashMap<>();
+	private static Map<String, AdapterType> getAdapterTypes(final InterfaceList interfaceList) {
+		final Map<String, AdapterType> list = new HashMap<>();
 		interfaceList.getPlugs().forEach(e -> list.put(e.getTypeName(), EcoreUtil.copy(e.getType())));
 		interfaceList.getSockets().forEach(e -> list.put(e.getTypeName(), EcoreUtil.copy(e.getType())));
 		return list;
 	}
 
-	private void checkCreateFBType(FBType fbType) {
+	private void checkCreateFBType(final FBType fbType) {
 		// if the FPType does not exist create it
 		if (!getTypes().contains(fbType.getName())) {
 			try {
 				createFBType(fbType);
-			} catch (DeploymentException ce) {
+			} catch (final DeploymentException ce) {
 				logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed,
-						fbType.getName()));
+						fbType.getName()), ce);
 			}
 		}
 
@@ -147,30 +148,29 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			if (fbType instanceof CompositeFBType) {
 				createFBTypesOfCFB(fbType);
 			}
-			String request = createLuaXmlRequestMessage(fbType);
+			final String request = createLuaXmlRequestMessage(fbType);
 			sendCreateFBTypeREQ(fbType, request);
 		}
 	}
 
-	private void sendCreateFBTypeREQ(final FBType fbType, String request) throws DeploymentException {
+	private void sendCreateFBTypeREQ(final FBType fbType, final String request) throws DeploymentException {
 		try {
-			String result = sendREQ("", request); //$NON-NLS-1$
+			final String result = sendREQ("", request); //$NON-NLS-1$
 			if (result.contains("Reason")) { //$NON-NLS-1$
 				throw new DeploymentException(MessageFormat.format(
 						Messages.DynamicTypeLoadDeploymentExecutor_LUAScriptForFBTypeNotExecuted, fbType.getName()));
-			} else {
-				getTypes().add(fbType.getName());
 			}
-		} catch (IOException e) {
+			getTypes().add(fbType.getName());
+		} catch (final IOException e) {
 			logger.error(
-					MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed, "LUA script")); //$NON-NLS-1$
+					MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed, "LUA script"), e); //$NON-NLS-1$
 		}
 	}
 
 	private void createFBTypesOfCFB(final FBType fbType) throws DeploymentException {
-		for (FBNetworkElement netelem : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
+		for (final FBNetworkElement netelem : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
 			if (!getTypes().contains(netelem.getTypeName())) {
-				Map<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());
+				final Map<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());
 				if (!adapters.isEmpty()) {
 					createAdapterTypes(adapters);
 				}
@@ -180,9 +180,9 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private String createLuaXmlRequestMessage(final FBType fbType) {
-		ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
+		final ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 
-		String escapedLuaScript = escapeXmlCharacters(luaFilter.createLUA(fbType));
+		final String escapedLuaScript = escapeXmlCharacters(luaFilter.createLUA(fbType));
 
 		return MessageFormat.format(CREATE_FB_TYPE, getNextId(), fbType.getName(), escapedLuaScript);
 	}
@@ -195,9 +195,9 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		return luaScript.replace("\'", "&apos;"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	private static boolean isAttribute(Device device, String fbTypeName, String attributeType) {
+	private static boolean isAttribute(final Device device, final String fbTypeName, final String attributeType) {
 		if (null != device.getAttribute(attributeType)) {
-			for (String s : device.getAttributeValue(attributeType).split(",")) { //$NON-NLS-1$
+			for (final String s : device.getAttributeValue(attributeType).split(",")) { //$NON-NLS-1$
 				if (fbTypeName.equals(s.trim())) {
 					return true;
 				}
@@ -206,42 +206,43 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		return false;
 	}
 
-	private static void setAttribute(Device device, String string, Set<String> hashSet) {
+	private static void setAttribute(final Device device, final String string, final Set<String> hashSet) {
 		Display.getDefault().asyncExec(
 				() -> device.setAttribute(string, "STRING", String.join(", ", hashSet), "created during deployment") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		);
+				);
 	}
 
-	public void createAdapterType(final String adapterKey, Map<String, AdapterType> adapters)
+	public void createAdapterType(final String adapterKey, final Map<String, AdapterType> adapters)
 			throws DeploymentException {
 
 		setAttribute(getDevice(), "AdapterType", getAdapterTypes()); //$NON-NLS-1$
 
 		if (!getAdapterTypes().contains(adapterKey) || !isAttribute(getDevice(), adapterKey, "AdapterType")) { //$NON-NLS-1$
-			ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
-			String luaSkript = luaFilter.createLUA(adapters.get(adapterKey));
-			String request = MessageFormat.format(CREATE_ADAPTER_TYPE, getNextId(), adapterKey, luaSkript);
+			final ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
+			final String luaSkript = luaFilter.createLUA(adapters.get(adapterKey));
+			final String request = MessageFormat.format(CREATE_ADAPTER_TYPE, getNextId(), adapterKey, luaSkript);
 			sendCreateAdapterTypeREQ(adapterKey, request);
 		}
 	}
 
-	private void sendCreateAdapterTypeREQ(final String adapterKey, String request) throws DeploymentException {
+	private void sendCreateAdapterTypeREQ(final String adapterKey, final String request) throws DeploymentException {
 		try {
-			String result = sendREQ("", request); //$NON-NLS-1$
+			final String result = sendREQ("", request); //$NON-NLS-1$
 			if (result.contains("Reason")) { //$NON-NLS-1$
 				throw new DeploymentException(MessageFormat.format(
 						Messages.DynamicTypeLoadDeploymentExecutor_LUAScriptForAdapterTypeNotExecuted, adapterKey));
 			}
 			getAdapterTypes().add(adapterKey);
-		} catch (IOException e) {
-			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed, "Adapter")); //$NON-NLS-1$
+		} catch (final IOException e) {
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed, "Adapter"), //$NON-NLS-1$
+					e);
 		}
 	}
 
-	public void queryResourcesWithNetwork(Device dev) {
+	public void queryResourcesWithNetwork(final Device dev) {
 		try {
-			for (org.eclipse.fordiac.ide.deployment.devResponse.Resource resource : queryResources()) {
-				ResourceCreateCommand cmd = new ResourceCreateCommand(getResourceType(dev, resource.getType()), dev,
+			for (final org.eclipse.fordiac.ide.deployment.devResponse.Resource resource : queryResources()) {
+				final ResourceCreateCommand cmd = new ResourceCreateCommand(getResourceType(dev, resource.getType()), dev,
 						false);
 				cmd.execute();
 				cmd.getResource().setName(resource.getName());
@@ -250,14 +251,14 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				queryConnections(cmd.getResource());
 				queryParameters(cmd.getResource());
 			}
-		} catch (Exception e) {
-			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Resources")); //$NON-NLS-1$
+		} catch (final Exception e) {
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Resources"), e); //$NON-NLS-1$
 		}
 	}
 
-	private void queryParameters(Resource res) {
-		for (FBNetworkElement fb : res.getFBNetwork().getNetworkElements()) {
-			for (VarDeclaration inVar : fb.getInterface().getInputVars()) {
+	private void queryParameters(final Resource res) {
+		for (final FBNetworkElement fb : res.getFBNetwork().getNetworkElements()) {
+			for (final VarDeclaration inVar : fb.getInterface().getInputVars()) {
 				if (inVar.getInputConnections().isEmpty()) {
 					queryParameter(res, fb, inVar);
 				}
@@ -265,55 +266,56 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private void queryParameter(Resource res, FBNetworkElement fb, VarDeclaration inVar) {
-		String request = MessageFormat.format(QUERY_PARAMETER, getNextId(), fb.getName() + "." + inVar.getName()); //$NON-NLS-1$
+	private void queryParameter(final Resource res, final FBNetworkElement fb, final VarDeclaration inVar) {
+		final String request = MessageFormat.format(QUERY_PARAMETER, getNextId(), fb.getName() + "." + inVar.getName()); //$NON-NLS-1$
 		try {
-			String result = sendREQ(res.getName(), request);
+			final String result = sendREQ(res.getName(), request);
 			if (result != null) {
 				createParameter(inVar, parseResponse(result));
 			}
-		} catch (Exception e) {
-			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Parameter")); //$NON-NLS-1$
+		} catch (final Exception e) {
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Parameter"), e); //$NON-NLS-1$
 		}
 	}
 
-	private static void createParameter(VarDeclaration inVar, Response response) {
+	private static void createParameter(final VarDeclaration inVar, final Response response) {
 		if (null != response.getConnection()) {
-			Value value = LibraryElementFactory.eINSTANCE.createValue();
+			final Value value = LibraryElementFactory.eINSTANCE.createValue();
 			value.setValue(response.getConnection().getDestination());
 			inVar.setValue(value);
 		}
 	}
 
-	private void queryConnections(Resource res) {
-		String request = MessageFormat.format(QUERY_CONNECTIONS, getNextId(), "*", "*"); //$NON-NLS-1$ //$NON-NLS-2$
+	private void queryConnections(final Resource res) {
+		final String request = MessageFormat.format(QUERY_CONNECTIONS, getNextId(), "*", "*"); //$NON-NLS-1$ //$NON-NLS-2$
 		try {
-			String result = sendREQ(res.getName(), request);
+			final String result = sendREQ(res.getName(), request);
 			if (result != null) {
 				createConnections(res, parseResponse(result));
 			}
-		} catch (Exception e) {
-			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Connections")); //$NON-NLS-1$
+		} catch (final Exception e) {
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Connections"), //$NON-NLS-1$
+					e);
 		}
 	}
 
-	private static void createConnections(Resource res, Response response) {
+	private static void createConnections(final Resource res, final Response response) {
 		if (null != response.getEndpointlist()) {
-			for (org.eclipse.fordiac.ide.deployment.devResponse.Connection connection : response.getEndpointlist()
+			for (final org.eclipse.fordiac.ide.deployment.devResponse.Connection connection : response.getEndpointlist()
 					.getConnection()) {
 				// TODO currently no subapps supported - bug 538333
-				String[] src = connection.getSource().split("\\."); //$NON-NLS-1$
-				FB srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
-				IInterfaceElement srcIE = Annotations.getInterfaceElement(srcFB, src[src.length - 1]);
-				String[] dst = connection.getDestination().split("\\."); //$NON-NLS-1$
-				FB dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
-				IInterfaceElement dstIE = Annotations.getInterfaceElement(dstFB, dst[dst.length - 1]);
+				final String[] src = connection.getSource().split("\\."); //$NON-NLS-1$
+				final FB srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
+				final IInterfaceElement srcIE = Annotations.getInterfaceElement(srcFB, src[src.length - 1]);
+				final String[] dst = connection.getDestination().split("\\."); //$NON-NLS-1$
+				final FB dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
+				final IInterfaceElement dstIE = Annotations.getInterfaceElement(dstFB, dst[dst.length - 1]);
 				createConnectionCommand(res.getFBNetwork(), srcIE, dstIE);
 			}
 		}
 	}
 
-	private static void createConnectionCommand(FBNetwork fbNet, IInterfaceElement srcIE, IInterfaceElement dstIE) {
+	private static void createConnectionCommand(final FBNetwork fbNet, final IInterfaceElement srcIE, final IInterfaceElement dstIE) {
 		AbstractConnectionCreateCommand cmd = null;
 		if (srcIE instanceof Event) {
 			cmd = new EventConnectionCreateCommand(fbNet);
@@ -331,23 +333,23 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private void queryFBNetwork(Resource res) {
-		String request = MessageFormat.format(QUERY_FB_INSTANCES, getNextId());
+	private void queryFBNetwork(final Resource res) {
+		final String request = MessageFormat.format(QUERY_FB_INSTANCES, getNextId());
 		try {
-			String result = sendREQ(res.getName(), request);
+			final String result = sendREQ(res.getName(), request);
 			if (result != null) {
-				InputSource source = new InputSource(new StringReader(result));
-				XMLResource xmlResource = new XMLResourceImpl();
+				final InputSource source = new InputSource(new StringReader(result));
+				final XMLResource xmlResource = new XMLResourceImpl();
 				xmlResource.load(source, respMapping.getLoadOptions());
 				createFBNetwork(res, xmlResource);
 			}
-		} catch (Exception e) {
-			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Networks")); //$NON-NLS-1$
+		} catch (final Exception e) {
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Networks"), e); //$NON-NLS-1$
 		}
 	}
 
-	private void createFBNetwork(Resource res, XMLResource xmlResource) {
-		for (EObject object : xmlResource.getContents()) {
+	private void createFBNetwork(final Resource res, final XMLResource xmlResource) {
+		for (final EObject object : xmlResource.getContents()) {
 			if (object instanceof Response) {
 				createNotExistingAdapterTypes(res);
 				addFBNetworkElements(res, (Response) object);
@@ -355,17 +357,17 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private void createNotExistingAdapterTypes(Resource res) {
-		for (String entryName : getAdapterTypes()) {
+	private void createNotExistingAdapterTypes(final Resource res) {
+		for (final String entryName : getAdapterTypes()) {
 			if (null == res.getDevice().getAutomationSystem().getPalette().getAdapterTypeEntry(entryName)) {
 				addTypeToTypelib(res, entryName, "adp", QUERY_ADAPTER_TYPE); //$NON-NLS-1$
 			}
 		}
 	}
 
-	private void addFBNetworkElements(Resource res, Response object) {
+	private void addFBNetworkElements(final Resource res, final Response object) {
 		int i = 0;
-		for (org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : (object).getFblist().getFbs()) {
+		for (final org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : (object).getFblist().getFbs()) {
 			if (!"E_RESTART".equals(fbresult.getType())) { //$NON-NLS-1$
 				FBTypePaletteEntry entry = res.getDevice().getAutomationSystem().getPalette()
 						.getFBTypeEntry(fbresult.getType());
@@ -373,7 +375,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 					addTypeToTypelib(res, fbresult.getType(), "fbt", QUERY_FB_TYPE); //$NON-NLS-1$
 					entry = res.getDevice().getAutomationSystem().getPalette().getFBTypeEntry(fbresult.getType());
 				}
-				FBCreateCommand fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
+				final FBCreateCommand fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
 				if (fbcmd.canExecute()) {
 					fbcmd.execute();
 					fbcmd.getFB().setName(fbresult.getName());
@@ -383,75 +385,80 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private void addTypeToTypelib(Resource res, String typeName, String extension, String messageType) {
-		String request = MessageFormat.format(messageType, getNextId(), typeName);
+	private void addTypeToTypelib(final Resource res, final String typeName, final String extension, final String messageType) {
+		final String request = MessageFormat.format(messageType, getNextId(), typeName);
 		try {
 			String result = sendREQ(res.getName(), request);
 			if (result != null) {
 				result = result.replaceFirst("<Response ID=\"[0-9]+\">\n", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				result = result.replaceFirst("</Response>", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				if (!result.contains("Reason=\"UNSUPPORTED_TYPE\"") && !result.contains("Reason=\"UNSUPPORTED_CMD\"")) { //$NON-NLS-1$ //$NON-NLS-2$
-					AutomationSystem system = res.getDevice().getAutomationSystem();
-					Path path = Paths.get(system.getSystemFile().getLocation() + File.separator + "generated" //$NON-NLS-1$
+					final AutomationSystem system = res.getDevice().getAutomationSystem();
+					final Path path = Paths.get(system.getSystemFile().getLocation() + File.separator + "generated" //$NON-NLS-1$
 							+ File.separator + typeName + "." + extension); //$NON-NLS-1$
-					File file = new File(path.toString());
+					final File file = new File(path.toString());
 					file.getParentFile().mkdirs();
 					Files.write(path, result.getBytes(), StandardOpenOption.CREATE);
 					TypeLibrary.refreshTypeLib(system.getSystemFile());
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			if (messageType.equals(QUERY_ADAPTER_TYPE)) {
 				logger.error(
-						MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Adapter Type")); //$NON-NLS-1$
+						MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Adapter Type"), //$NON-NLS-1$
+						e);
 			} else {
-				logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "FB Type")); //$NON-NLS-1$
+				logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "FB Type"), //$NON-NLS-1$
+						e);
 			}
 		}
 	}
 
-	private static ResourceTypeEntry getResourceType(Device device, String resTypeName) {
+	private static ResourceTypeEntry getResourceType(final Device device, final String resTypeName) {
 		return device.getPaletteEntry().getPalette().getResourceTypeEntry(resTypeName);
 	}
 
 	private void queryFBTypes() {
-		String request = MessageFormat.format(QUERY_FB_TYPES, getNextId());
+		final String request = MessageFormat.format(QUERY_FB_TYPES, getNextId());
 		try {
-			QueryResponseHandler queryResp = sendQUERY("", request); //$NON-NLS-1$
+			final QueryResponseHandler queryResp = sendQUERY("", request); //$NON-NLS-1$
 			setTypes(queryResp.getQueryResult());
-		} catch (Exception e) {
-			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "FB Types")); //$NON-NLS-1$
+		} catch (final Exception e) {
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "FB Types"), e); //$NON-NLS-1$
 		}
 
 	}
 
 	private void queryAdapterTypes() {
-		String request = MessageFormat.format(QUERY_ADAPTER_TYPES, getNextId());
+		final String request = MessageFormat.format(QUERY_ADAPTER_TYPES, getNextId());
 		try {
-			QueryResponseHandler queryResp = sendQUERY("", request); //$NON-NLS-1$
+			final QueryResponseHandler queryResp = sendQUERY("", request); //$NON-NLS-1$
 			setAdapterTypes(queryResp.getQueryResult());
-		} catch (Exception e1) {
-			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Adapter Types")); //$NON-NLS-1$
+		} catch (final Exception e) {
+			logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_QueryFailed, "Adapter Types"), //$NON-NLS-1$
+					e);
 		}
 
 	}
 
-	private void createAdapterTypes(Map<String, AdapterType> adapters) {
+	private void createAdapterTypes(final Map<String, AdapterType> adapters) {
 		adapters.keySet().forEach(e -> {
 			try {
 				createAdapterType(e, adapters);
-			} catch (DeploymentException ce) {
-				logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed, e));
+			} catch (final DeploymentException ce) {
+				logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed, e), ce);
 			}
 		});
 	}
 
 	private QueryResponseHandler sendQUERY(final String destination, final String request)
 			throws IOException, ParserConfigurationException, SAXException {
-		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-		SAXParser saxParser = saxParserFactory.newSAXParser();
-		QueryResponseHandler handler = new QueryResponseHandler();
-		String response = sendREQ(destination, request);
+		final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+		final SAXParser saxParser = saxParserFactory.newSAXParser();
+		saxParser.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");  //$NON-NLS-1$
+		saxParser.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");  //$NON-NLS-1$
+		final QueryResponseHandler handler = new QueryResponseHandler();
+		final String response = sendREQ(destination, request);
 		saxParser.parse(new InputSource(new StringReader(response)), handler);
 		return handler;
 	}

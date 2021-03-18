@@ -54,21 +54,21 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	private DataTypeDropdown typeDropdown;
 
 	@Override
-	protected CellEditor createTypeCellEditor(TableViewer viewer) {
+	protected CellEditor createTypeCellEditor(final TableViewer viewer) {
 		typeDropdown = new DataTypeDropdown(getDataTypeLib(), viewer);
 		return typeDropdown;
 	}
 
 	@Override
-	protected Object getTypeValue(Object element, TableViewer viewer, int TYPE_COLUMN_INDEX) {
-		VarDeclaration var = (VarDeclaration) element;
+	protected Object getTypeValue(final Object element, final TableViewer viewer, final int TYPE_COLUMN_INDEX) {
+		final VarDeclaration var = (VarDeclaration) element;
 		return var.getTypeName();
 	}
 
 	@Override
-	protected Command createChangeDataTypeCommand(VarDeclaration data, Object value, TableViewer viewer) {
+	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value, final TableViewer viewer) {
 		if (value instanceof String) {
-			DataType dataType = typeDropdown.getType((String) value);
+			final DataType dataType = typeDropdown.getType((String) value);
 			return (dataType == null) ? null : newChangeTypeCommand(data, dataType);
 		}
 		return null;
@@ -93,8 +93,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		return list.toArray(new String[0]);
 	}
 
-	protected DataType getLastUsedDataType(InterfaceList interfaceList, boolean isInput,
-			IInterfaceElement interfaceElement) {
+	protected DataType getLastUsedDataType(final InterfaceList interfaceList, final boolean isInput,
+			final IInterfaceElement interfaceElement) {
 		if (null != interfaceElement) {
 			return interfaceElement.getType();
 		}
@@ -106,7 +106,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	}
 
 	@Override
-	protected int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput) {
+	protected int getInsertingIndex(final IInterfaceElement interfaceElement, final boolean isInput) {
 		if (null != interfaceElement) {
 			final InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
 			return getInsertingIndex(interfaceElement, getDataList(interfaceList, isInput));
@@ -114,22 +114,22 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		return -1;
 	}
 
-	private static EList<VarDeclaration> getDataList(InterfaceList interfaceList, boolean isInput) {
+	private static EList<VarDeclaration> getDataList(final InterfaceList interfaceList, final boolean isInput) {
 		return isInput ? interfaceList.getInputVars() : interfaceList.getOutputVars();
 	}
 
 	@Override
-	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		// can not use instanceof since AdapterImplementation is derived from
 		// VarDeclaration and this would break the addEntry method in the adapter
 		// section
 		if (entry.getClass().equals(VarDeclarationImpl.class)) {
-			cmd.add(newInsertCommand((IInterfaceElement) entry, getIsInputsViewer(), index));
+			cmd.add(newInsertCommand((IInterfaceElement) entry, isInputsViewer(), index));
 		}
 	}
 
 	@Override
-	protected TableLayout createTableLayout(Table table) {
+	protected TableLayout createTableLayout(final Table table) {
 		final TableLayout layout = super.createTableLayout(table);
 		final TableColumn column4 = new TableColumn(table, SWT.LEFT);
 		column4.setText(FordiacMessages.InitialValue);
@@ -148,12 +148,12 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	}
 
 	@Override
-	protected InterfaceCellModifier getCellModifier(TableViewer viewer) {
+	protected InterfaceCellModifier getCellModifier(final TableViewer viewer) {
 		return new DataInterfaceCellModifier(viewer);
 	}
 
 	@Override
-	protected void setCellEditors(TableViewer viewer) {
+	protected void setCellEditors(final TableViewer viewer) {
 		super.setCellEditors(viewer);
 		final CellEditor[] nameTypeCommentEditors = viewer.getCellEditors();
 		viewer.setCellEditors(
@@ -169,12 +169,12 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	protected class DataInterfaceCellModifier extends InterfaceCellModifier {
 
-		public DataInterfaceCellModifier(TableViewer viewer) {
+		public DataInterfaceCellModifier(final TableViewer viewer) {
 			super(viewer);
 		}
 
 		@Override
-		public boolean canModify(Object element, String property) {
+		public boolean canModify(final Object element, final String property) {
 			if (INITIAL_VALUE.equals(property)) {
 				return true;
 			}
@@ -185,7 +185,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		}
 
 		@Override
-		public Object getValue(Object element, String property) {
+		public Object getValue(final Object element, final String property) {
 			switch (property) {
 			case ARRAY_SIZE:
 				final int arraySize = ((VarDeclaration) element).getArraySize();
@@ -201,7 +201,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		}
 
 		@Override
-		public void modify(Object element, String property, Object value) {
+		public void modify(final Object element, final String property, final Object value) {
 			final TableItem tableItem = (TableItem) element;
 			final Object data = tableItem.getData();
 			Command cmd = null;
@@ -225,12 +225,12 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	}
 
 	protected static class DataInterfaceContentProvider extends InterfaceContentProvider {
-		public DataInterfaceContentProvider(boolean inputs) {
+		public DataInterfaceContentProvider(final boolean inputs) {
 			super(inputs);
 		}
 
 		@Override
-		protected Object[] getInputs(Object inputElement) {
+		protected Object[] getInputs(final Object inputElement) {
 			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
 			if (null != interfaceList) {
 				return interfaceList.getInputVars().toArray();
@@ -239,7 +239,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		}
 
 		@Override
-		protected Object[] getOutputs(Object inputElement) {
+		protected Object[] getOutputs(final Object inputElement) {
 			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
 			if (null != interfaceList) {
 				return interfaceList.getOutputVars().toArray();

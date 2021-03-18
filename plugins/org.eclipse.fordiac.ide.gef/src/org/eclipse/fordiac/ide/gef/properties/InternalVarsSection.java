@@ -26,8 +26,8 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
@@ -115,11 +115,13 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	}
 
 	private DataType getDataType() {
-		return (null != getLastSelectedVariable()) ? getLastSelectedVariable().getType() : null;
+		final VarDeclaration var = getLastSelectedVariable();
+		return (null != var) ? var.getType() : null;
 	}
 
 	private String getName() {
-		return (null != getLastSelectedVariable()) ? getLastSelectedVariable().getName() : null;
+		final VarDeclaration var = getLastSelectedVariable();
+		return (null != var) ? var.getName() : null;
 	}
 
 	private int getInsertionIndex() {
@@ -247,12 +249,12 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 		return internalVarsViewer;
 	}
 
-	public Object getEntry(int index) {
+	public Object getEntry(final int index) {
 		return getType().getInternalVars().get(index);
 	}
 
 	@Override
-	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			final VarDeclaration varEntry = (VarDeclaration) entry;
 			cmd.add(new InsertVariableCommand(getType().getInternalVars(), varEntry, index));
@@ -260,14 +262,14 @@ public abstract class InternalVarsSection extends AbstractSection implements I4d
 	}
 
 	@Override
-	public Object removeEntry(int index, CompoundCommand cmd) {
+	public Object removeEntry(final int index, final CompoundCommand cmd) {
 		final VarDeclaration entry = (VarDeclaration) getEntry(index);
 		cmd.add(new DeleteInternalVariableCommand(getType(), entry));
 		return entry;
 	}
 
 	@Override
-	public void executeCompoundCommand(CompoundCommand cmd) {
+	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
 		getViewer().refresh();
 	}

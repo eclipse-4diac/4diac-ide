@@ -59,10 +59,10 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractAttributeSection extends AbstractSection {
 	private TableViewer attributeViewer;
-	private static final String NAME = "name"; //$NON-NLS-1$
-	private static final String VALUE = "value"; //$NON-NLS-1$
-	private static final String TYPE = "type"; //$NON-NLS-1$
-	private static final String COMMENT = "comment"; //$NON-NLS-1$
+	private static final String NAME_COL = "name"; //$NON-NLS-1$
+	private static final String VALUE_COL = "value"; //$NON-NLS-1$
+	private static final String TYPE_COL = "type"; //$NON-NLS-1$
+	private static final String COMMENT_COL = "comment"; //$NON-NLS-1$
 	private Button attributeNew;
 	private Button attributeDelete;
 
@@ -128,19 +128,19 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		attributeViewer.setCellEditors(new CellEditor[] { new TextCellEditor(table),
 				ComboBoxWidgetFactory.createComboBoxCellEditor(table, getDataTypes(), SWT.READ_ONLY),
 				new TextCellEditor(table, SWT.MULTI | SWT.V_SCROLL), new TextCellEditor(table) });
-		attributeViewer.setColumnProperties(new String[] { NAME, TYPE, VALUE, COMMENT });
+		attributeViewer.setColumnProperties(new String[] { NAME_COL, TYPE_COL, VALUE_COL, COMMENT_COL });
 		attributeViewer.setCellModifier(new AttributeCellModifier());
 	}
 
 	private void configureTableLayout() {
 		TableColumn column1 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
-		column1.setText(NAME);
+		column1.setText(NAME_COL);
 		TableColumn column2 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
-		column2.setText(TYPE);
+		column2.setText(TYPE_COL);
 		TableColumn column3 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
-		column3.setText(VALUE);
+		column3.setText(VALUE_COL);
 		TableColumn column4 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
-		column4.setText(COMMENT);
+		column4.setText(COMMENT_COL);
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 70));
 		layout.addColumnData(new ColumnWeightData(30, 70));
@@ -172,7 +172,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	public class AttributeCellModifier implements ICellModifier {
 		@Override
 		public boolean canModify(final Object element, final String property) {
-			if (element instanceof Attribute && TYPE.equals(property)
+			if (element instanceof Attribute && TYPE_COL.equals(property)
 					&& null != ((Attribute) element).getAttributeDeclaration()) {
 				return false;
 			}
@@ -182,13 +182,13 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		@Override
 		public Object getValue(final Object element, final String property) {
 			switch (property) {
-			case NAME:
+			case NAME_COL:
 				return ((Attribute) element).getName();
-			case VALUE:
+			case VALUE_COL:
 				return ((Attribute) element).getValue();
-			case TYPE:
+			case TYPE_COL:
 				return ((Attribute) element).getType().getValue();
-			case COMMENT:
+			case COMMENT_COL:
 				return ((Attribute) element).getComment();
 			default:
 				return null;
@@ -200,16 +200,16 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 			Attribute data = (Attribute) ((TableItem) element).getData();
 			AttributeChangeCommand cmd = null;
 			switch (property) {
-			case NAME:
+			case NAME_COL:
 				cmd = new AttributeChangeCommand(data, value.toString(), null, null, null);
 				break;
-			case VALUE:
+			case VALUE_COL:
 				cmd = new AttributeChangeCommand(data, null, value.toString(), null, null);
 				break;
-			case TYPE:
+			case TYPE_COL:
 				cmd = new AttributeChangeCommand(data, null, null, BaseType1.get((Integer) value), null);
 				break;
-			case COMMENT:
+			case COMMENT_COL:
 				cmd = new AttributeChangeCommand(data, null, null, null, value.toString());
 				break;
 			}

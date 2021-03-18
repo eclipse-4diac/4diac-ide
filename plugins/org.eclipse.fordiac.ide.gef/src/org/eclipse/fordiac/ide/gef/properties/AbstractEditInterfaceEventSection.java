@@ -44,19 +44,19 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 
 	@Override
 	protected String[] fillTypeCombo() {
-		List<String> list = new ArrayList<>();
-		for (DataType dataType : EventTypeLibrary.getInstance().getEventTypes()) {
+		final List<String> list = new ArrayList<>();
+		for (final DataType dataType : EventTypeLibrary.getInstance().getEventTypes()) {
 			list.add(dataType.getName());
 		}
 		return list.toArray(new String[0]);
 	}
 
-	protected DataType getLastUsedEventType(InterfaceList interfaceList, boolean isInput,
-			IInterfaceElement interfaceElement) {
+	protected DataType getLastUsedEventType(final InterfaceList interfaceList, final boolean isInput,
+			final IInterfaceElement interfaceElement) {
 		if (null != interfaceElement) {
 			return interfaceElement.getType();
 		}
-		EList<Event> eventList = getEventList(interfaceList, isInput);
+		final EList<Event> eventList = getEventList(interfaceList, isInput);
 		if (!eventList.isEmpty()) {
 			return eventList.get(eventList.size() - 1).getType();
 		}
@@ -64,33 +64,33 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 	}
 
 	@Override
-	protected int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput) {
+	protected int getInsertingIndex(final IInterfaceElement interfaceElement, final boolean isInput) {
 		if (null != interfaceElement) {
-			InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
+			final InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
 			return getInsertingIndex(interfaceElement, getEventList(interfaceList, isInput));
 		}
 		return -1;
 	}
 
-	private static EList<Event> getEventList(InterfaceList interfaceList, boolean isInput) {
+	private static EList<Event> getEventList(final InterfaceList interfaceList, final boolean isInput) {
 		return isInput ? interfaceList.getEventInputs() : interfaceList.getEventOutputs();
 	}
 
 	@Override
-	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof Event) {
-			cmd.add(newInsertCommand((Event) entry, getIsInputsViewer(), index));
+			cmd.add(newInsertCommand((Event) entry, isInputsViewer(), index));
 		}
 	}
 
 	protected static class EventInterfaceContentProvider extends InterfaceContentProvider {
-		public EventInterfaceContentProvider(boolean inputs) {
+		public EventInterfaceContentProvider(final boolean inputs) {
 			super(inputs);
 		}
 
 		@Override
-		protected Object[] getInputs(Object inputElement) {
-			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+		protected Object[] getInputs(final Object inputElement) {
+			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
 			if (null != interfaceList) {
 				return interfaceList.getEventInputs().toArray();
 			}
@@ -98,8 +98,8 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		}
 
 		@Override
-		protected Object[] getOutputs(Object inputElement) {
-			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+		protected Object[] getOutputs(final Object inputElement) {
+			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
 			if (null != interfaceList) {
 				return interfaceList.getEventOutputs().toArray();
 			}

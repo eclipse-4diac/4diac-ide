@@ -216,7 +216,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					// to rename a file
 					file.move(new Path(newPath), true, new NullProgressMonitor());
 				} catch (final CoreException e) {
-					e.printStackTrace();
+					Activator.getDefault().logError(e.getMessage(), e);
 				}
 				return Status.OK_STATUS;
 			}

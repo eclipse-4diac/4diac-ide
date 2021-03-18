@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISources;
@@ -180,7 +181,7 @@ public class ExportXMIHandler extends AbstractHandler {
       } catch (final Throwable _t) {
         if (_t instanceof IOException) {
           final IOException e = (IOException)_t;
-          e.printStackTrace();
+          Activator.getDefault().logError(e.getMessage(), e);
         } else {
           throw Exceptions.sneakyThrow(_t);
         }
