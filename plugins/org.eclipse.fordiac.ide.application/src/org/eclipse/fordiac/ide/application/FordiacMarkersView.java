@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2010 - 2014 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.jface.util.OpenStrategy;
 import org.eclipse.jface.viewers.ISelection;
@@ -31,22 +32,22 @@ public class FordiacMarkersView extends MarkerSupportView {
 
 	@SuppressWarnings("restriction")
 	@Override
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 		// TODO find a better way, as super.createPartControl normally is
 		// restricted for access
 		super.createPartControl(parent);
-		Object provider = getSite().getSelectionProvider();
+		final Object provider = getSite().getSelectionProvider();
 		if (provider instanceof StructuredViewer) {
 
 			new OpenAndLinkWithEditorHelper((StructuredViewer) provider) {
 				/*
 				 * (non-Javadoc)
-				 * 
+				 *
 				 * @see org.eclipse.ui.OpenAndLinkWithEditorHelper#activate(org.eclipse
 				 * .jface.viewers.ISelection )
 				 */
 				@Override
-				protected void activate(ISelection selection) {
+				protected void activate(final ISelection selection) {
 					final int currentMode = OpenStrategy.getOpenMethod();
 					try {
 						OpenStrategy.setOpenMethod(OpenStrategy.DOUBLE_CLICK);
@@ -58,23 +59,23 @@ public class FordiacMarkersView extends MarkerSupportView {
 
 				/*
 				 * (non-Javadoc)
-				 * 
+				 *
 				 * @see org.eclipse.ui.OpenAndLinkWithEditorHelper#linkToEditor(org .eclipse
 				 * .jface.viewers .ISelection)
 				 */
 				@Override
-				protected void linkToEditor(ISelection selection) {
+				protected void linkToEditor(final ISelection selection) {
 					// Not supported by this part
 				}
 
 				/*
 				 * (non-Javadoc)
-				 * 
+				 *
 				 * @see org.eclipse.ui.OpenAndLinkWithEditorHelper#open(org.eclipse .jface
 				 * .viewers.ISelection, boolean)
 				 */
 				@Override
-				protected void open(ISelection selection, boolean activate) {
+				protected void open(final ISelection selection, final boolean activate) {
 					openMySelectedMarkers();
 				}
 			};
@@ -86,16 +87,16 @@ public class FordiacMarkersView extends MarkerSupportView {
 	 */
 	void openMySelectedMarkers() {
 		@SuppressWarnings("restriction")
+		final
 		IMarker[] markers = getSelectedMarkers();
-		for (int i = 0; i < markers.length; i++) {
-			IMarker marker = markers[i];
+		for (final IMarker marker : markers) {
 			Object markerObject;
 			try {
 				markerObject = marker.getAttribute("org.eclipse.fordiac.ide.application.marker.fb"); //$NON-NLS-1$
 				if (markerObject instanceof FB) {
-					System.out.println("should open markerObject"); //$NON-NLS-1$
+					Activator.getDefault().logWarning("should open markerObject"); //$NON-NLS-1$
 				}
-			} catch (CoreException e) {
+			} catch (final CoreException e) {
 				ApplicationPlugin.getDefault().logError(e.getMessage(), e);
 			}
 		}

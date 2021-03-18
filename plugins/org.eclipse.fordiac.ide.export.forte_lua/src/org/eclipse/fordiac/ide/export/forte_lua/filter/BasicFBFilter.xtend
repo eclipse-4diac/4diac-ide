@@ -38,7 +38,7 @@ class BasicFBFilter {
 	List<String> errors = new ArrayList<String>;
 	STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter
 
-	def lua(BasicFBType type) '''
+	def String lua(BasicFBType type) '''
 		«type.luaConstants»
 		
 		«type.luaAlgorithms»

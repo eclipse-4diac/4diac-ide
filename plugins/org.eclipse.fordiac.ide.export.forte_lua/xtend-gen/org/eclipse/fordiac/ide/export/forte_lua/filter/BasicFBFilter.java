@@ -24,8 +24,6 @@ import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants;
-import org.eclipse.fordiac.ide.export.forte_lua.filter.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -52,7 +50,7 @@ public class BasicFBFilter {
   
   private STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
   
-  public CharSequence lua(final BasicFBType type) {
+  public String lua(final BasicFBType type) {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _luaConstants = LuaConstants.luaConstants(type);
     _builder.append(_luaConstants);
@@ -80,7 +78,7 @@ public class BasicFBFilter {
     _builder.newLine();
     _builder.append("return {ECC = executeEvent, interfaceSpec = interfaceSpec, internalVarsInformation = internalVarsInformation}");
     _builder.newLine();
-    return _builder;
+    return _builder.toString();
   }
   
   private CharSequence luaECC(final ECC ecc, final Iterable<VarDeclaration> variables, final Map<AdapterDeclaration, String> adapterSocketsVariables, final Map<AdapterDeclaration, String> adapterPlugsVariables) {

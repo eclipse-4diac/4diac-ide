@@ -71,8 +71,8 @@ public class SystemExporter extends CommonElementExporter {
 			writeToFile(targetFile);
 		}
 		final long endTime = System.currentTimeMillis();
-		System.out
-		.println("Overall saving time for System (" + system.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		Activator.getDefault()
+				.logInfo("Overall saving time for System (" + system.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	private void addApplications() throws XMLStreamException {

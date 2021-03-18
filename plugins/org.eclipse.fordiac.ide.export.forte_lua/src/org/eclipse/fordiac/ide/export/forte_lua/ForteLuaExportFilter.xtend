@@ -37,9 +37,9 @@ class ForteLuaExportFilter implements IExportFilter {
 
 	override export(IFile typeFile, String destination, boolean forceOverwrite, LibraryElement type) throws ExportException {
 		switch (type) {
-			BasicFBType: System.out.println(type.lua)
-			CompositeFBType: System.out.println(type.lua)
-			AdapterType: System.out.println(type.lua)
+			BasicFBType: Activator.getDefault().logInfo(type.lua)
+			CompositeFBType: Activator.getDefault().logInfo(type.lua)
+			AdapterType: Activator.getDefault().logInfo(type.lua)
 			default: throw new UnsupportedOperationException("Unknown library element type " + type.eClass.name)
 		}
 	}

@@ -206,8 +206,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * @generated
 	 */
 	@Override
-	public void setTestName(String newTestName) {
-		String oldTestName = testName;
+	public void setTestName(final String newTestName) {
+		final String oldTestName = testName;
 		testName = newTestName;
 		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.TEST_DATA__TEST_NAME, oldTestName,
@@ -223,7 +223,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	@Override
 	public Event getEvent() {
 		if (event != null && event.eIsProxy()) {
-			InternalEObject oldEvent = (InternalEObject) event;
+			final InternalEObject oldEvent = (InternalEObject) event;
 			event = (Event) eResolveProxy(oldEvent);
 			if (event != oldEvent) {
 				if (eNotificationRequired()) {
@@ -250,8 +250,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * @generated
 	 */
 	@Override
-	public void setEvent(Event newEvent) {
-		Event oldEvent = event;
+	public void setEvent(final Event newEvent) {
+		final Event oldEvent = event;
 		event = newEvent;
 		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.TEST_DATA__EVENT, oldEvent, event));
@@ -274,8 +274,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * @generated
 	 */
 	@Override
-	public void setTestIntstance(String newTestIntstance) {
-		String oldTestIntstance = testIntstance;
+	public void setTestIntstance(final String newTestIntstance) {
+		final String oldTestIntstance = testIntstance;
 		testIntstance = newTestIntstance;
 		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.TEST_DATA__TEST_INTSTANCE,
@@ -291,7 +291,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	@Override
 	public EList<Event> getEventOutputs() {
 		if (eventOutputs == null) {
-			eventOutputs = new EObjectResolvingEList<Event>(Event.class, this,
+			eventOutputs = new EObjectResolvingEList<>(Event.class, this,
 					TestdataPackage.TEST_DATA__EVENT_OUTPUTS);
 		}
 		return eventOutputs;
@@ -305,7 +305,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	@Override
 	public EList<ValuedVarDecl> getValues() {
 		if (values == null) {
-			values = new EObjectResolvingEList<ValuedVarDecl>(ValuedVarDecl.class, this,
+			values = new EObjectResolvingEList<>(ValuedVarDecl.class, this,
 					TestdataPackage.TEST_DATA__VALUES);
 		}
 		return values;
@@ -319,7 +319,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	@Override
 	public EList<ValuedVarDecl> getResults() {
 		if (results == null) {
-			results = new EObjectResolvingEList<ValuedVarDecl>(ValuedVarDecl.class, this,
+			results = new EObjectResolvingEList<>(ValuedVarDecl.class, this,
 					TestdataPackage.TEST_DATA__RESULTS);
 		}
 		return results;
@@ -341,8 +341,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * @generated NOT
 	 */
 	@Override
-	public void setLine(String newLine) {
-		String oldLine = line;
+	public void setLine(final String newLine) {
+		final String oldLine = line;
 		line = newLine;
 		parseData(line);
 		if (eNotificationRequired()) {
@@ -358,7 +358,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	@Override
 	public FBType getType() {
 		if (type != null && type.eIsProxy()) {
-			InternalEObject oldType = (InternalEObject) type;
+			final InternalEObject oldType = (InternalEObject) type;
 			type = (FBType) eResolveProxy(oldType);
 			if (type != (FBType) oldType) {
 				if (eNotificationRequired()) {
@@ -385,8 +385,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * @generated
 	 */
 	@Override
-	public void setType(FBType newType) {
-		FBType oldType = type;
+	public void setType(final FBType newType) {
+		final FBType oldType = type;
 		type = newType;
 		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.TEST_DATA__TYPE, oldType, type));
@@ -399,7 +399,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
 		case TestdataPackage.TEST_DATA__TEST_NAME:
 			return getTestName();
@@ -434,7 +434,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
 		case TestdataPackage.TEST_DATA__TEST_NAME:
 			setTestName((String) newValue);
@@ -473,7 +473,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
 		case TestdataPackage.TEST_DATA__TEST_NAME:
 			setTestName(TEST_NAME_EDEFAULT);
@@ -509,7 +509,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
 		case TestdataPackage.TEST_DATA__TEST_NAME:
 			return TEST_NAME_EDEFAULT == null ? testName != null : !TEST_NAME_EDEFAULT.equals(testName);
@@ -543,7 +543,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 			return super.toString();
 		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (testName: "); //$NON-NLS-1$
 		result.append(testName);
 		result.append(", testIntstance: "); //$NON-NLS-1$
@@ -554,10 +554,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		return result.toString();
 	}
 
-	private void parseData(String line) {
-		System.out.println(line);
-		String[] lineArray = line.split(";(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))"); //$NON-NLS-1$
-		System.out.println(lineArray.length);
+	private void parseData(final String line) {
+		final String[] lineArray = line.split(";(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))"); //$NON-NLS-1$
 		if (lineArray.length > 1) {
 			setTestName(lineArray[0]);
 			setTestIntstance(lineArray[1]);
@@ -565,21 +563,21 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 		int currentPos = 0;
 		if (type.getInterfaceList() != null) {
-			int nrOfInputs = Integer.parseInt(lineArray[2]);
+			final int nrOfInputs = Integer.parseInt(lineArray[2]);
 			if (lineArray.length > nrOfInputs * 2 + 2) {
-				int nrOfValues = Integer.parseInt(lineArray[2]);
+				final int nrOfValues = Integer.parseInt(lineArray[2]);
 				currentPos = 3;
 				for (int i = 0; i < nrOfValues; i++) { // start at pos 2 //
 					// after
 					// testName and
 					// testInstance
-					String port = lineArray[currentPos];
+					final String port = lineArray[currentPos];
 					currentPos++;
-					String val = lineArray[currentPos];
+					final String val = lineArray[currentPos];
 					currentPos++;
-					VarDeclaration varDec = type.getInterfaceList().getVariable(port);
+					final VarDeclaration varDec = type.getInterfaceList().getVariable(port);
 					if (varDec != null) {
-						ValuedVarDecl data = TestdataFactory.eINSTANCE.createValuedVarDecl();
+						final ValuedVarDecl data = TestdataFactory.eINSTANCE.createValuedVarDecl();
 						data.setValue(val);
 						data.setVarDeclaration(varDec);
 						getValues().add(data);
@@ -588,19 +586,19 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 			}
 			event = type.getInterfaceList().getEvent(lineArray[currentPos]);
 			currentPos++;
-			int nrOfEvents = Integer.parseInt(lineArray[currentPos]);
+			final int nrOfEvents = Integer.parseInt(lineArray[currentPos]);
 			currentPos++;
 			for (int i = 0; i < nrOfEvents; i++) {
-				Event outputEvent = type.getInterfaceList().getEvent(lineArray[currentPos]);
+				final Event outputEvent = type.getInterfaceList().getEvent(lineArray[currentPos]);
 				getEventOutputs().add(outputEvent);
 				currentPos++;
-				int nrOfValues = Integer.parseInt(lineArray[currentPos]);
+				final int nrOfValues = Integer.parseInt(lineArray[currentPos]);
 				currentPos++;
 				for (int j = 0; j < nrOfValues; j++) {
-					VarDeclaration outputVar = type.getInterfaceList().getVariable(lineArray[currentPos]);
+					final VarDeclaration outputVar = type.getInterfaceList().getVariable(lineArray[currentPos]);
 					currentPos++;
-					String result = lineArray[currentPos];
-					ValuedVarDecl var = TestdataFactory.eINSTANCE.createValuedVarDecl();
+					final String result = lineArray[currentPos];
+					final ValuedVarDecl var = TestdataFactory.eINSTANCE.createValuedVarDecl();
 					var.setValue(result);
 					var.setVarDeclaration(outputVar);
 					getResults().add(var);
@@ -611,8 +609,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	}
 
 	@Override
-	public String getValueFor(String text) {
-		for (ValuedVarDecl valueVarDecl : getValues()) {
+	public String getValueFor(final String text) {
+		for (final ValuedVarDecl valueVarDecl : getValues()) {
 			if (valueVarDecl.getVarDeclaration().getName().equals(text)) {
 				return valueVarDecl.getValue();
 			}
@@ -621,8 +619,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	}
 
 	@Override
-	public void setValueFor(String text, String value) {
-		for (ValuedVarDecl valueVarDecl : getValues()) {
+	public void setValueFor(final String text, final String value) {
+		for (final ValuedVarDecl valueVarDecl : getValues()) {
 			if (valueVarDecl.getVarDeclaration().getName().equals(text)) {
 				valueVarDecl.setValue(value);
 			}
@@ -631,8 +629,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	//
 	@Override
-	public String getResultFor(String text) {
-		for (ValuedVarDecl valueVarDecl : getResults()) {
+	public String getResultFor(final String text) {
+		for (final ValuedVarDecl valueVarDecl : getResults()) {
 			if (valueVarDecl.getVarDeclaration() != null) {
 
 				if (valueVarDecl.getVarDeclaration().getName().equals(text)) {
@@ -645,8 +643,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	}
 
 	@Override
-	public void setResultFor(String text, String value) {
-		for (ValuedVarDecl valueVarDecl : getResults()) {
+	public void setResultFor(final String text, final String value) {
+		for (final ValuedVarDecl valueVarDecl : getResults()) {
 			if (valueVarDecl.getVarDeclaration().getName().equals(text)) {
 				valueVarDecl.setValue(value);
 			}
@@ -657,7 +655,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	public String getOutputEvents() {
 		String events = ""; //$NON-NLS-1$
 		for (int i = 0; i < getEventOutputs().size(); i++) {
-			Event e = getEventOutputs().get(i);
+			final Event e = getEventOutputs().get(i);
 			events += e.getName();
 			if (i + 1 < getEventOutputs().size()) {
 				events += ", "; //$NON-NLS-1$
@@ -679,8 +677,8 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		dataLine += event.getWith().size() + ";"; // nr of inputs are the number //$NON-NLS-1$
 		// of connected withs
 
-		for (With with : event.getWith()) {
-			VarDeclaration var = with.getVariables();
+		for (final With with : event.getWith()) {
+			final VarDeclaration var = with.getVariables();
 			dataLine += var.getName() + ";" + getValueFor(var.getName()) + ";"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		dataLine += event.getName() + ";"; //$NON-NLS-1$
@@ -695,7 +693,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		if (type.getInterfaceList().getOutputVars().size() > 0) {
 			dataLine += type.getInterfaceList().getOutputVars().size();
 			dataLine += ";"; //$NON-NLS-1$
-			for (VarDeclaration var : type.getInterfaceList().getOutputVars()) {
+			for (final VarDeclaration var : type.getInterfaceList().getOutputVars()) {
 				dataLine += var.getName() + ";" + getResultFor(var.getName()) + ";"; //$NON-NLS-1$//$NON-NLS-2$
 			}
 		}

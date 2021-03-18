@@ -52,11 +52,11 @@ public final class Utils {
 	 *
 	 * @return the string
 	 */
-	public static String deployNetwork(FBType type, String ipAddress, int port) {
+	public static String deployNetwork(final FBType type, final String ipAddress, final int port) {
 		int id = 0;
 		try (Socket socket = new Socket(InetAddress.getByName(ipAddress), port)) {
-			DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-			DataInputStream inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+			final DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+			final DataInputStream inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 			socket.setSoTimeout(10000);
 
 			// create monitoring resource
@@ -76,7 +76,7 @@ public final class Utils {
 			sendREQ("_" + type.getName() + "_RES", request, outputStream, //$NON-NLS-1$ //$NON-NLS-2$
 					inputStream);
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 			return e.getMessage();
 		}
@@ -93,26 +93,26 @@ public final class Utils {
 	 *
 	 * @return the string
 	 */
-	public static String cleanNetwork(FBType type, String ipAddress, int port, Socket socket) {
+	public static String cleanNetwork(final FBType type, final String ipAddress, final int port, final Socket socket) {
 		int id = 0;
 		try (Socket socketToUse = (null == socket) ? new Socket(InetAddress.getByName(ipAddress), port) : socket) {
 			if (!socketToUse.isConnected()) {
-				SocketAddress endpoint = new InetSocketAddress(InetAddress.getByName(ipAddress), port);
+				final SocketAddress endpoint = new InetSocketAddress(InetAddress.getByName(ipAddress), port);
 				socketToUse.connect(endpoint);
 			}
-			DataOutputStream outputStream = new DataOutputStream(
+			final DataOutputStream outputStream = new DataOutputStream(
 					new BufferedOutputStream(socketToUse.getOutputStream()));
-			DataInputStream inputStream = new DataInputStream(new BufferedInputStream(socketToUse.getInputStream()));
+			final DataInputStream inputStream = new DataInputStream(new BufferedInputStream(socketToUse.getInputStream()));
 
 			socketToUse.setSoTimeout(10000);
 
-			String kill = MessageFormat.format(Messages.FBTester_KillFB, id++, "_" + type.getName() + "_RES"); //$NON-NLS-1$ //$NON-NLS-2$
-			String delete = MessageFormat.format(Messages.FBTester_DeleteFB, id++, "_" + type.getName() + "_RES"); //$NON-NLS-1$ //$NON-NLS-2$
+			final String kill = MessageFormat.format(Messages.FBTester_KillFB, id++, "_" + type.getName() + "_RES"); //$NON-NLS-1$ //$NON-NLS-2$
+			final String delete = MessageFormat.format(Messages.FBTester_DeleteFB, id++, "_" + type.getName() + "_RES"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			sendREQ("", kill, outputStream, inputStream); //$NON-NLS-1$
 			sendREQ("", delete, outputStream, inputStream); //$NON-NLS-1$
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 			return e.getMessage();
 		}
@@ -132,7 +132,7 @@ public final class Utils {
 	 * @throws Exception the exception
 	 */
 	public static synchronized String sendREQ(final String destination, final String request,
-			DataOutputStream outputStream, DataInputStream inputStream) throws Exception {
+			final DataOutputStream outputStream, final DataInputStream inputStream) throws Exception {
 
 		String output = ""; //$NON-NLS-1$
 		if (outputStream != null && inputStream != null) {
@@ -148,17 +148,16 @@ public final class Utils {
 			outputStream.writeBytes(request);
 			outputStream.flush();
 
-			System.out.println(request);
-			StringBuilder response = new StringBuilder();
+			final StringBuilder response = new StringBuilder();
 			@SuppressWarnings("unused")
+			final
 			byte b = inputStream.readByte();
 
-			short size = inputStream.readShort();
+			final short size = inputStream.readShort();
 
 			for (int i = 0; i < size; i++) {
 				response.append((char) inputStream.readByte());
 			}
-			System.out.println(response);
 
 			if (response.toString().contains("Reason")) { //$NON-NLS-1$
 				throw new Exception(response.toString());
