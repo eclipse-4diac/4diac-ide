@@ -3,8 +3,6 @@
  */
 package org.eclipse.fordiac.ide.model.xtext.fbt.ide;
 
-import org.eclipse.fordiac.ide.model.xtext.fbt.ide.AbstractFBTypeIdeModule;
-
 /**
  * Use this class to register ide components.
  */

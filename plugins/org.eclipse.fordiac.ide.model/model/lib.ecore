@@ -1264,7 +1264,9 @@
   <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
   <eClassifiers xsi:type="ecore:EClass" name="StructManipulator" abstract="true" eSuperTypes="#//FB">
     <eOperations name="setStructTypeElementsAtInterface">
-      <eAnnotations/>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="org.eclipse.fordiac.ide.model.StructManipulation.setStructTypeElementsAtInterface(this, newStruct);"/>
+      </eAnnotations>
       <eParameters name="newStruct" eType="ecore:EClass data.ecore#//StructuredType"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="structType" lowerBound="1"

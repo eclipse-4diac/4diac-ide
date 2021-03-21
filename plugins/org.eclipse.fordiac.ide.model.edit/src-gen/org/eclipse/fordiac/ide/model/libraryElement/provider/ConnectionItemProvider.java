@@ -62,12 +62,12 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	 * @generated */
 	protected void addResTypeConnectionPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
-		.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-				getResourceLocator(), getString("_UI_Connection_resTypeConnection_feature"), //$NON-NLS-1$
-				getString("_UI_PropertyDescriptor_description", "_UI_Connection_resTypeConnection_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_Connection_type"),  //$NON-NLS-1$
-				LibraryElementPackage.Literals.CONNECTION__RES_TYPE_CONNECTION, true, false, false,
-				ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Connection_resTypeConnection_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Connection_resTypeConnection_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Connection_type"),  //$NON-NLS-1$
+						LibraryElementPackage.Literals.CONNECTION__RES_TYPE_CONNECTION, true, false, false,
+						ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/** This adds a property descriptor for the Broken Connection feature. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -75,12 +75,12 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	 * @generated */
 	protected void addBrokenConnectionPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
-		.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-				getResourceLocator(), getString("_UI_Connection_brokenConnection_feature"), //$NON-NLS-1$
-				getString("_UI_PropertyDescriptor_description", "_UI_Connection_brokenConnection_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_Connection_type"),  //$NON-NLS-1$
-				LibraryElementPackage.Literals.CONNECTION__BROKEN_CONNECTION, true, false, false,
-				ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Connection_brokenConnection_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Connection_brokenConnection_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Connection_type"),  //$NON-NLS-1$
+						LibraryElementPackage.Literals.CONNECTION__BROKEN_CONNECTION, true, false, false,
+						ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/** This adds a property descriptor for the Source feature. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -88,11 +88,11 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	 * @generated */
 	protected void addSourcePropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
-		.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-				getResourceLocator(), getString("_UI_Connection_source_feature"), //$NON-NLS-1$
-				getString("_UI_PropertyDescriptor_description", "_UI_Connection_source_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_Connection_type"),  //$NON-NLS-1$
-				LibraryElementPackage.Literals.CONNECTION__SOURCE, true, false, true, null, null, null));
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Connection_source_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Connection_source_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Connection_type"),  //$NON-NLS-1$
+						LibraryElementPackage.Literals.CONNECTION__SOURCE, true, false, true, null, null, null));
 	}
 
 	/** This adds a property descriptor for the Destination feature. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -100,11 +100,11 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	 * @generated */
 	protected void addDestinationPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
-		.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-				getResourceLocator(), getString("_UI_Connection_destination_feature"), //$NON-NLS-1$
-				getString("_UI_PropertyDescriptor_description", "_UI_Connection_destination_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_Connection_type"),  //$NON-NLS-1$
-				LibraryElementPackage.Literals.CONNECTION__DESTINATION, true, false, true, null, null, null));
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Connection_destination_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Connection_destination_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Connection_type"),  //$NON-NLS-1$
+						LibraryElementPackage.Literals.CONNECTION__DESTINATION, true, false, true, null, null, null));
 	}
 
 	/** This adds a property descriptor for the Routing Data feature. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -112,11 +112,11 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	 * @generated */
 	protected void addRoutingDataPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
-		.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-				getResourceLocator(), getString("_UI_Connection_routingData_feature"), //$NON-NLS-1$
-				getString("_UI_PropertyDescriptor_description", "_UI_Connection_routingData_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_Connection_type"),  //$NON-NLS-1$
-				LibraryElementPackage.Literals.CONNECTION__ROUTING_DATA, true, false, true, null, null, null));
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Connection_routingData_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Connection_routingData_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Connection_type"),  //$NON-NLS-1$
+						LibraryElementPackage.Literals.CONNECTION__ROUTING_DATA, true, false, true, null, null, null));
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -126,7 +126,7 @@ public class ConnectionItemProvider extends ConfigurableObjectItemProvider {
 	public String getText(final Object object) {
 		final String label = ((Connection) object).getName();
 		return label == null || label.length() == 0 ? getString("_UI_Connection_type") : //$NON-NLS-1$
-			getString("_UI_Connection_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+				getString("_UI_Connection_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by

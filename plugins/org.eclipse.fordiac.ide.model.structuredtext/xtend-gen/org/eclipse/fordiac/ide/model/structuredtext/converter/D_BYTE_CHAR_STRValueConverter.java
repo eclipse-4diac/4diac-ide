@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.model.structuredtext.converter;
 
 import java.io.Reader;
-import org.eclipse.fordiac.ide.model.structuredtext.converter.StringValueConverter;
 import org.eclipse.xtext.conversion.ValueConverterException;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 

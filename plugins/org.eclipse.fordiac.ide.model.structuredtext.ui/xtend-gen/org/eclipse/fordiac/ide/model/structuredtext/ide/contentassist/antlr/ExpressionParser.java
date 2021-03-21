@@ -12,7 +12,6 @@ package org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr;
 
 import java.util.Collection;
 import org.antlr.runtime.RecognitionException;
-import org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr.StructuredTextParser;
 import org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr.internal.InternalStructuredTextParser;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.FollowElement;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.AbstractInternalContentAssistParser;

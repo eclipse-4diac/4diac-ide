@@ -12,7 +12,6 @@ package org.eclipse.fordiac.ide.model.structuredtext;
 
 import com.google.inject.Binder;
 import com.google.inject.name.Names;
-import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextRuntimeModule;
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.ExpressionParser;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.parser.IParser;

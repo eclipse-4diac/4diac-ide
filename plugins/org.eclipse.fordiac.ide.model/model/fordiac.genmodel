@@ -636,7 +636,7 @@
     <genClasses ecoreClass="lib.ecore#//StructManipulator">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>
       <genOperations ecoreOperation="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface"
-          body="return;">
+          body="org.eclipse.fordiac.ide.model.StructManipulation.setStructTypeElementsAtInterface(this, newStruct);">
         <genParameters ecoreParameter="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface/newStruct"/>
       </genOperations>
     </genClasses>
