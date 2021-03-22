@@ -18,7 +18,6 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.messages"; //$NON-NLS-1$
 
-	public static String OutputPrimitiveSection_TestResult;
 	public static String PrimitiveSection_CreateEventSection_Event;
 	public static String PrimitiveSection_CreatePrimitiveSection_Interface;
 	public static String PrimitiveSection_CreatePrimitiveSection_Parameters;

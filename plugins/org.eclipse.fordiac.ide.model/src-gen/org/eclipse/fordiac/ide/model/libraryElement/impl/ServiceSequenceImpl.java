@@ -1,29 +1,36 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
@@ -38,15 +45,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getComment <em>Comment</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getServiceTransaction <em>Service
  * Transaction</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getTestResult <em>Test
- * Result</em>}</li>
  * </ul>
  *
  * @generated */
 public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence {
 	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 *
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered */
@@ -54,7 +59,7 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 
 	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 *
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered */
@@ -84,16 +89,6 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	 * @ordered */
 	protected EList<ServiceTransaction> serviceTransaction;
 
-	/** The default value of the '{@link #getTestResult() <em>Test Result</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @see #getTestResult()
-	 * @generated
-	 * @ordered */
-	protected static final int TEST_RESULT_EDEFAULT = 0;
-
-	private int testResult = TEST_RESULT_EDEFAULT;
-
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
@@ -113,62 +108,20 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	 * 
 	 * @generated */
 	@Override
-	public EList<ServiceTransaction> getServiceTransaction() {
-		if (serviceTransaction == null) {
-			serviceTransaction = new EObjectContainmentEList<ServiceTransaction>(ServiceTransaction.class, this,
-					LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION);
-		}
-		return serviceTransaction;
+	public String getName() {
+		return name;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated NOT */
+	 * 
+	 * @generated */
 	@Override
-	public int getTestResult() {
-		return testResult;
-		// TODO: implement this method to return the 'Test Result' attribute
-		// Ensure that you remove @generated or mark it @generated NOT
-		// throw new UnsupportedOperationException();
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated NOT */
-	@Override
-	public void setTestResult(int newTestResult) {
-		int oldTestResult = testResult;
-		testResult = newTestResult;
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT,
-					oldTestResult, testResult));
-
-		// TODO: implement this method to set the 'Test Result' attribute
-		// Ensure that you remove @generated or mark it @generated NOT
-		// throw new UnsupportedOperationException();
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated NOT */
-	@Override
-	public void unsetTestResult() {
-		testResult = TEST_RESULT_EDEFAULT;
-		// TODO: implement this method to unset the 'Test Result' attribute
-		// Ensure that you remove @generated or mark it @generated NOT
-		// throw new UnsupportedOperationException();
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated NOT */
-	@Override
-	public boolean isSetTestResult() {
-		return (testResult != TEST_RESULT_EDEFAULT);
-		// TODO: implement this method to return whether the 'Test Result' attribute is
-		// set
-		// Ensure that you remove @generated or mark it @generated NOT
-		// throw new UnsupportedOperationException();
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_SEQUENCE__NAME, oldName,
+					name));
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -195,20 +148,12 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	 * 
 	 * @generated */
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_SEQUENCE__NAME, oldName,
-					name));
+	public EList<ServiceTransaction> getServiceTransaction() {
+		if (serviceTransaction == null) {
+			serviceTransaction = new EObjectContainmentEList<ServiceTransaction>(ServiceTransaction.class, this,
+					LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION);
+		}
+		return serviceTransaction;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -236,8 +181,6 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 			return getComment();
 		case LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION:
 			return getServiceTransaction();
-		case LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT:
-			return getTestResult();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -260,9 +203,6 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 			getServiceTransaction().clear();
 			getServiceTransaction().addAll((Collection<? extends ServiceTransaction>) newValue);
 			return;
-		case LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT:
-			setTestResult((Integer) newValue);
-			return;
 		default:
 			super.eSet(featureID, newValue);
 			return;
@@ -284,9 +224,6 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 		case LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION:
 			getServiceTransaction().clear();
 			return;
-		case LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT:
-			unsetTestResult();
-			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -305,8 +242,6 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 		case LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION:
 			return serviceTransaction != null && !serviceTransaction.isEmpty();
-		case LibraryElementPackage.SERVICE_SEQUENCE__TEST_RESULT:
-			return isSetTestResult();
 		default:
 			return super.eIsSet(featureID);
 		}

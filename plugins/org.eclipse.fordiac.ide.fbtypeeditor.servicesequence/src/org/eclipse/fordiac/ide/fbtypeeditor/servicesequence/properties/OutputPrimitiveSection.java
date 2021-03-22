@@ -13,24 +13,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeOutputPrimitiveResultCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
-import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class OutputPrimitiveSection extends PrimitiveSection {
-
-	private Text testResultText;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -38,20 +28,10 @@ public class OutputPrimitiveSection extends PrimitiveSection {
 		createOutputPrimitiveSection(getLeftComposite());
 	}
 
-	private void createOutputPrimitiveSection(Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
+	private void createOutputPrimitiveSection(final Composite parent) {
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, Messages.OutputPrimitiveSection_TestResult);
-		testResultText = createGroupText(composite, true);
-		testResultText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeOutputPrimitiveResultCommand(getType(), testResultText.getText()));
-				addContentAdapter();
-			}
-		});
 	}
 
 	@Override
@@ -59,22 +39,4 @@ public class OutputPrimitiveSection extends PrimitiveSection {
 		return (OutputPrimitive) type;
 	}
 
-	@Override
-	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		super.setInput(part, selection);
-		if (null == commandStack) { // disable all fields
-			testResultText.setEnabled(false);
-		}
-	}
-
-	@Override
-	public void refresh() {
-		super.refresh();
-		CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			testResultText.setText(Integer.toString(getType().getTestResult()));
-		}
-		commandStack = commandStackBuffer;
-	}
 }

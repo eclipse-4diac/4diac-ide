@@ -1993,18 +1993,12 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int OUTPUT_PRIMITIVE__INTERFACE = PRIMITIVE__INTERFACE;
 
-	/** The feature id for the '<em><b>Test Result</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int OUTPUT_PRIMITIVE__TEST_RESULT = PRIMITIVE_FEATURE_COUNT + 0;
-
 	/** The number of structural features of the '<em>Output Primitive</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int OUTPUT_PRIMITIVE_FEATURE_COUNT = PRIMITIVE_FEATURE_COUNT + 1;
+	int OUTPUT_PRIMITIVE_FEATURE_COUNT = PRIMITIVE_FEATURE_COUNT + 0;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl
 	 * <em>Attribute</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2327,18 +2321,12 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int SERVICE_SEQUENCE__SERVICE_TRANSACTION = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
-	/** The feature id for the '<em><b>Test Result</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int SERVICE_SEQUENCE__TEST_RESULT = INAMED_ELEMENT_FEATURE_COUNT + 1;
-
 	/** The number of structural features of the '<em>Service Sequence</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int SERVICE_SEQUENCE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 2;
+	int SERVICE_SEQUENCE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl
 	 * <em>Service Transaction</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2362,18 +2350,12 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int SERVICE_TRANSACTION__OUTPUT_PRIMITIVE = 1;
 
-	/** The feature id for the '<em><b>Test Result</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered */
-	int SERVICE_TRANSACTION__TEST_RESULT = 2;
-
 	/** The number of structural features of the '<em>Service Transaction</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
-	int SERVICE_TRANSACTION_FEATURE_COUNT = 3;
+	int SERVICE_TRANSACTION_FEATURE_COUNT = 2;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceFBTypeImpl
 	 * <em>Service Interface FB Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -4944,16 +4926,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	EClass getOutputPrimitive();
 
-	/** Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive#getTestResult <em>Test Result</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return the meta object for the attribute '<em>Test Result</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive#getTestResult()
-	 * @see #getOutputPrimitive()
-	 * @generated */
-	EAttribute getOutputPrimitive_TestResult();
-
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute
 	 * <em>Attribute</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -5149,16 +5121,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	EReference getServiceSequence_ServiceTransaction();
 
-	/** Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult <em>Test Result</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return the meta object for the attribute '<em>Test Result</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getTestResult()
-	 * @see #getServiceSequence()
-	 * @generated */
-	EAttribute getServiceSequence_TestResult();
-
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction
 	 * <em>Service Transaction</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -5186,16 +5148,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see #getServiceTransaction()
 	 * @generated */
 	EReference getServiceTransaction_OutputPrimitive();
-
-	/** Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getTestResult <em>Test Result</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return the meta object for the attribute '<em>Test Result</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getTestResult()
-	 * @see #getServiceTransaction()
-	 * @generated */
-	EAttribute getServiceTransaction_TestResult();
 
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
 	 * <em>Service Interface FB Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -6857,12 +6809,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated */
 		EClass OUTPUT_PRIMITIVE = eINSTANCE.getOutputPrimitive();
 
-		/** The meta object literal for the '<em><b>Test Result</b></em>' attribute feature. <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * 
-		 * @generated */
-		EAttribute OUTPUT_PRIMITIVE__TEST_RESULT = eINSTANCE.getOutputPrimitive_TestResult();
-
 		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl
 		 * <em>Attribute</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * 
@@ -7003,12 +6949,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated */
 		EReference SERVICE_SEQUENCE__SERVICE_TRANSACTION = eINSTANCE.getServiceSequence_ServiceTransaction();
 
-		/** The meta object literal for the '<em><b>Test Result</b></em>' attribute feature. <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * 
-		 * @generated */
-		EAttribute SERVICE_SEQUENCE__TEST_RESULT = eINSTANCE.getServiceSequence_TestResult();
-
 		/** The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl <em>Service
 		 * Transaction</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -7029,12 +6969,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * 
 		 * @generated */
 		EReference SERVICE_TRANSACTION__OUTPUT_PRIMITIVE = eINSTANCE.getServiceTransaction_OutputPrimitive();
-
-		/** The meta object literal for the '<em><b>Test Result</b></em>' attribute feature. <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * 
-		 * @generated */
-		EAttribute SERVICE_TRANSACTION__TEST_RESULT = eINSTANCE.getServiceTransaction_TestResult();
 
 		/** The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceFBTypeImpl <em>Service Interface FB

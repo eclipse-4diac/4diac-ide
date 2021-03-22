@@ -1,29 +1,36 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -39,8 +46,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
  * Primitive</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getOutputPrimitive <em>Output
  * Primitive</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getTestResult <em>Test
- * Result</em>}</li>
  * </ul>
  *
  * @generated */
@@ -60,16 +65,6 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	 * @generated
 	 * @ordered */
 	protected EList<OutputPrimitive> outputPrimitive;
-
-	/** The default value of the '{@link #getTestResult() <em>Test Result</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @see #getTestResult()
-	 * @generated
-	 * @ordered */
-	protected static final int TEST_RESULT_EDEFAULT = 0;
-
-	private int testResult = TEST_RESULT_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -148,55 +143,6 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated NOT */
-	@Override
-	public int getTestResult() {
-		return testResult;
-		// TODO: implement this method to return the 'Test Result' attribute
-		// Ensure that you remove @generated or mark it @generated NOT
-		// throw new UnsupportedOperationException();
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated NOT */
-	@Override
-	public void setTestResult(int newTestResult) {
-		int oldTestResult = testResult;
-		testResult = newTestResult;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT, oldTestResult, testResult));
-		// TODO: implement this method to set the 'Test Result' attribute
-		// Ensure that you remove @generated or mark it @generated NOT
-		// throw new UnsupportedOperationException();
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated NOT */
-	@Override
-	public void unsetTestResult() {
-		testResult = TEST_RESULT_EDEFAULT;
-		// TODO: implement this method to unset the 'Test Result' attribute
-		// Ensure that you remove @generated or mark it @generated NOT
-		// throw new UnsupportedOperationException();
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated NOT */
-	@Override
-	public boolean isSetTestResult() {
-		return (testResult != TEST_RESULT_EDEFAULT);
-		// TODO: implement this method to return whether the 'Test Result' attribute is
-		// set
-		// Ensure that you remove @generated or mark it @generated NOT
-		// throw new UnsupportedOperationException();
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -220,8 +166,6 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 			return getInputPrimitive();
 		case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
 			return getOutputPrimitive();
-		case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
-			return getTestResult();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -241,9 +185,6 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 			getOutputPrimitive().clear();
 			getOutputPrimitive().addAll((Collection<? extends OutputPrimitive>) newValue);
 			return;
-		case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
-			setTestResult((Integer) newValue);
-			return;
 		default:
 			super.eSet(featureID, newValue);
 			return;
@@ -262,9 +203,6 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 		case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
 			getOutputPrimitive().clear();
 			return;
-		case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
-			unsetTestResult();
-			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -281,8 +219,6 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 			return inputPrimitive != null;
 		case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
 			return outputPrimitive != null && !outputPrimitive.isEmpty();
-		case LibraryElementPackage.SERVICE_TRANSACTION__TEST_RESULT:
-			return isSetTestResult();
 		default:
 			return super.eIsSet(featureID);
 		}

@@ -626,11 +626,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OutputPrimitive" eSuperTypes="#//Primitive">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="TestResult" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int" volatile="true"
-        defaultValueLiteral="0" unsettable="true"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputPrimitive" eSuperTypes="#//Primitive"/>
   <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//INamedElement #//TypedElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeDeclaration" eType="#//AttributeDeclaration"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
@@ -717,9 +713,6 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="TestResult" ordered="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int" volatile="true"
-        defaultValueLiteral="0" unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceTransaction">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputPrimitive" eType="#//InputPrimitive"
@@ -738,9 +731,6 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="TestResult" ordered="false"
-        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
-        volatile="true" defaultValueLiteral="0" unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFBType" eSuperTypes="#//FBType"/>
   <eClassifiers xsi:type="ecore:EClass" name="STAlgorithm" eSuperTypes="#//TextAlgorithm"/>
