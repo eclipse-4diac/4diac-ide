@@ -263,6 +263,13 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 		if (src.getParent().equals(delta.getResource().getParent())) {
 			handleFileRename(delta, src);
+		} else {
+			// file was moved update pallette entry
+			final IFile dst = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
+			final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src);
+			if (null != entry) {
+				entry.setFile(dst);
+			}
 		}
 	}
 
