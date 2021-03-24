@@ -26,6 +26,7 @@ import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
@@ -42,6 +43,7 @@ import org.eclipse.gef.commands.Command;
 public class LayoutCommand extends Command {
 
 	private final Map<AbstractFBNElementEditPart, Position> oldFBPositions = new HashMap<>();
+	private final Map<ConnectionEditPart, ConnectionRoutingData> oldConnectionRoutingData = new HashMap<>();
 	private final LayoutMapping mapping;
 
 	public LayoutCommand(LayoutMapping mapping) {
@@ -51,7 +53,7 @@ public class LayoutCommand extends Command {
 
 	@Override
 	public void execute() {
-		saveFBPositionsForUndo();
+		savePositionsForUndo();
 		updateGraphRecusively(mapping.getLayoutGraph().getChildren());
 	}
 
@@ -72,12 +74,12 @@ public class LayoutCommand extends Command {
 			editPart.getModel().setPosition(oldFBPositions.get(editPart));
 			child.getPorts().forEach(port -> port.getOutgoingEdges().forEach(edge -> {
 				final ConnectionEditPart connEditPart = (ConnectionEditPart) mapping.getGraphMap().get(edge);
-				connEditPart.getModel().updateRoutingData(0, 0, 0); // set everything to 0 so that the connection gets routed
+				connEditPart.getModel().setRoutingData(oldConnectionRoutingData.get(connEditPart));
 			}));
 		});
 	}
 
-	private void saveFBPositionsForUndo() {
+	private void savePositionsForUndo() {
 		savePositionsRecursively(mapping.getLayoutGraph().getChildren());
 	}
 
@@ -86,6 +88,10 @@ public class LayoutCommand extends Command {
 			savePositionsRecursively(child.getChildren());
 			final AbstractFBNElementEditPart editPart = (AbstractFBNElementEditPart) mapping.getGraphMap().get(child);
 			oldFBPositions.put(editPart, editPart.getModel().getPosition());
+			child.getPorts().forEach(port -> {
+				port.getOutgoingEdges().forEach(this::saveConnectionRoutingData);
+				port.getIncomingEdges().forEach(this::saveConnectionRoutingData);
+			});
 		});
 	}
 
@@ -94,11 +100,15 @@ public class LayoutCommand extends Command {
 			updateGraphRecusively(node.getChildren());
 			updateFBPosition(node);
 			node.getPorts().forEach(port -> {
-				// TODO sometimes updates connections twice
 				port.getOutgoingEdges().forEach(this::updateConnections);
 				port.getIncomingEdges().forEach(this::updateConnections);
 			});
 		});
+	}
+
+	private void saveConnectionRoutingData(ElkEdge edge) {
+		oldConnectionRoutingData.computeIfAbsent((ConnectionEditPart) mapping.getGraphMap().get(edge),
+				connEditPart -> EcoreUtil.copy(connEditPart.getModel().getRoutingData()));
 	}
 
 	private void updateFBPosition(ElkNode node) {
