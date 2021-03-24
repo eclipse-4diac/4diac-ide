@@ -101,14 +101,12 @@ public final class InterfaceListCopier {
 		return copy;
 	}
 
-	/**
-	 * copy a list of events with the associated with constructs
+	/** copy a list of events with the associated with constructs
 	 *
 	 * @param destEvents the list of the copied events
 	 * @param copyVars   the list of the data points for the new withs
 	 * @param srcEvents  the source event list
-	 * @param srcVars    the source vars used in the withs
-	 */
+	 * @param srcVars    the source vars used in the withs */
 	private static void copyEventList(final EList<Event> destEvents, final EList<VarDeclaration> copyVars,
 			final EList<Event> srcEvents, final EList<VarDeclaration> srcVars) {
 		srcEvents.forEach(srcEvent -> {
@@ -138,7 +136,8 @@ public final class InterfaceListCopier {
 		}
 	}
 
-	private static void copyAdapterList(final EList<AdapterDeclaration> destAdapters, final EList<AdapterDeclaration> srcAdapters) {
+	private static void copyAdapterList(final EList<AdapterDeclaration> destAdapters,
+			final EList<AdapterDeclaration> srcAdapters) {
 		srcAdapters.forEach(adapter -> {
 			final AdapterDeclaration copy = copyAdapter(adapter);
 			destAdapters.add(copy);
