@@ -7,7 +7,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextRuntimeModule;
 import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetup;
-import org.eclipse.fordiac.ide.model.structuredtext.ide.StructuredTextIdeModule;
 import org.eclipse.xtext.util.Modules2;
 
 /**

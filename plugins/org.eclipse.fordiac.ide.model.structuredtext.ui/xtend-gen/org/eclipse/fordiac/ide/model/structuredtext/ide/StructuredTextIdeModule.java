@@ -3,8 +3,6 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext.ide;
 
-import org.eclipse.fordiac.ide.model.structuredtext.ide.AbstractStructuredTextIdeModule;
-
 /**
  * Use this class to register ide components.
  */
