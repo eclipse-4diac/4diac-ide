@@ -1,7 +1,8 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
  * 				 2018 - 2020 Johannes Kepler University Linz
- * 				 2020 Primetals Technologies Germany GmbH
+ * 				 2020 Primetals Technologies Germany GmbH,
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +17,7 @@
  *   Alois Zoitl - added separate colors for different data types
  *               - fixed hide event and data connection issues
  *               - reworked connection selection and hover feedback
+ *   Lukas Wais	 - reworked connection colors
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -38,6 +40,9 @@ import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.gef.router.RouterUtil;
+import org.eclipse.fordiac.ide.model.data.AnyType;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -215,12 +220,26 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		// if the connections end point fb type could not be loaded it source or
 		// destination may be null
 		IInterfaceElement refElement = getModel().getSource();
-		if (null == refElement) {
+
+		// if one end point is ANY then it the connection should be colored the other way
+		if ((null == refElement)) {
 			refElement = getModel().getDestination();
 		}
+
+		final DataType dataType = refElement.getType();
+		if (dataType instanceof AnyType) {
+			// if we have a more concrete type we use its colour
+			if (dataType == IecTypes.GenericTypes.ANY) {
+				refElement = getModel().getDestination();
+			} else {
+				refElement = getModel().getSource();
+			}
+		}
+
 		if (null != refElement) {
 			return PreferenceGetter.getDataColor(refElement.getType().getName());
 		}
+
 		return PreferenceGetter.getDefaultDataColor();
 	}
 
@@ -258,14 +277,15 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 				public void notifyChanged(Notification notification) {
 					final Object feature = notification.getFeature();
 					refreshVisuals();
-
 					if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
 							|| LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)
 							|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
 						refreshComment();
 					}
+					if (LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)) {
+						getFigure().setForegroundColor(getDataConnectioncolor());
+					}
 				}
-
 			};
 		}
 		return contentAdapter;
