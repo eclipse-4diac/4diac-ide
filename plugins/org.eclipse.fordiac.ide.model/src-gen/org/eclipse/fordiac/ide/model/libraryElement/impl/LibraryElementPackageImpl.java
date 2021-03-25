@@ -17,7 +17,9 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+
 import org.eclipse.draw2d.geometry.Point;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -26,12 +28,19 @@ import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
+
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
+
 import org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl;
+
 import org.eclipse.fordiac.ide.model.data.DataPackage;
+
 import org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl;
+
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -108,6 +117,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+
 import org.eclipse.gef.commands.CommandStack;
 
 /** <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!-- end-user-doc -->
@@ -1373,14 +1383,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * 
 	 * @generated */
 	@Override
-	public EAttribute getOutputPrimitive_TestResult() {
-		return (EAttribute) outputPrimitiveEClass.getEStructuralFeatures().get(0);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
 	public EClass getAttribute() {
 		return attributeEClass;
 	}
@@ -1549,14 +1551,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * 
 	 * @generated */
 	@Override
-	public EAttribute getServiceSequence_TestResult() {
-		return (EAttribute) serviceSequenceEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
 	public EClass getServiceTransaction() {
 		return serviceTransactionEClass;
 	}
@@ -1575,14 +1569,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EReference getServiceTransaction_OutputPrimitive() {
 		return (EReference) serviceTransactionEClass.getEStructuralFeatures().get(1);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	@Override
-	public EAttribute getServiceTransaction_TestResult() {
-		return (EAttribute) serviceTransactionEClass.getEStructuralFeatures().get(2);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2619,7 +2605,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEAttribute(otherAlgorithmEClass, OTHER_ALGORITHM__LANGUAGE);
 
 		outputPrimitiveEClass = createEClass(OUTPUT_PRIMITIVE);
-		createEAttribute(outputPrimitiveEClass, OUTPUT_PRIMITIVE__TEST_RESULT);
 
 		attributeEClass = createEClass(ATTRIBUTE);
 		createEReference(attributeEClass, ATTRIBUTE__ATTRIBUTE_DECLARATION);
@@ -2647,12 +2632,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		serviceSequenceEClass = createEClass(SERVICE_SEQUENCE);
 		createEReference(serviceSequenceEClass, SERVICE_SEQUENCE__SERVICE_TRANSACTION);
-		createEAttribute(serviceSequenceEClass, SERVICE_SEQUENCE__TEST_RESULT);
 
 		serviceTransactionEClass = createEClass(SERVICE_TRANSACTION);
 		createEReference(serviceTransactionEClass, SERVICE_TRANSACTION__INPUT_PRIMITIVE);
 		createEReference(serviceTransactionEClass, SERVICE_TRANSACTION__OUTPUT_PRIMITIVE);
-		createEAttribute(serviceTransactionEClass, SERVICE_TRANSACTION__TEST_RESULT);
 
 		serviceInterfaceFBTypeEClass = createEClass(SERVICE_INTERFACE_FB_TYPE);
 
@@ -3297,9 +3280,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(outputPrimitiveEClass, OutputPrimitive.class, "OutputPrimitive", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getOutputPrimitive_TestResult(), theXMLTypePackage.getInt(), "TestResult", "0", 0, 1, //$NON-NLS-1$ //$NON-NLS-2$
-				OutputPrimitive.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE,
-				!IS_DERIVED, IS_ORDERED);
 
 		initEClass(attributeEClass, Attribute.class, "Attribute", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -3364,9 +3344,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getServiceSequence_ServiceTransaction(), this.getServiceTransaction(), null,
 				"serviceTransaction", null, 0, -1, ServiceSequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getServiceSequence_TestResult(), theXMLTypePackage.getInt(), "TestResult", "0", 0, 1, //$NON-NLS-1$ //$NON-NLS-2$
-				ServiceSequence.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-				!IS_DERIVED, !IS_ORDERED);
 
 		initEClass(serviceTransactionEClass, ServiceTransaction.class, "ServiceTransaction", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3376,9 +3353,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getServiceTransaction_OutputPrimitive(), this.getOutputPrimitive(), null, "outputPrimitive", //$NON-NLS-1$
 				null, 0, -1, ServiceTransaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
 				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getServiceTransaction_TestResult(), theXMLTypePackage.getInt(), "TestResult", "0", 0, 1, //$NON-NLS-1$ //$NON-NLS-2$
-				ServiceTransaction.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, !IS_UNIQUE,
-				!IS_DERIVED, !IS_ORDERED);
 
 		initEClass(serviceInterfaceFBTypeEClass, ServiceInterfaceFBType.class, "ServiceInterfaceFBType", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3824,8 +3798,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		// Create annotations
 		// http:///org/eclipse/emf/ecore/util/ExtendedMetaData
 		createExtendedMetaDataAnnotations();
-		// null
-		createNullAnnotations();
 	}
 
 	/** Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>. <!-- begin-user-doc
@@ -4083,14 +4055,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 				"name", "VarDeclaration", //$NON-NLS-1$ //$NON-NLS-2$
 				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
 		});
-	}
-
-	/** Initializes the annotations for <b>null</b>. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	protected void createNullAnnotations() {
-		String source = null;
-		addAnnotation(structManipulatorEClass.getEOperations().get(0), source, new String[] {});
 	}
 
 } // LibraryElementPackageImpl

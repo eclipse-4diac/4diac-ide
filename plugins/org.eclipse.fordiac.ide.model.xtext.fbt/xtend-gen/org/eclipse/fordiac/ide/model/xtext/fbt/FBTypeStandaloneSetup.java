@@ -13,8 +13,6 @@
  */
 package org.eclipse.fordiac.ide.model.xtext.fbt;
 
-import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetupGenerated;
-
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
  */

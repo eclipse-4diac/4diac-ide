@@ -172,7 +172,9 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
         _builder.append("    ");
-        _builder.append("CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
+        String _baseClass = this.baseClass();
+        _builder.append(_baseClass, "      ");
+        _builder.append("(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
         {
           boolean _isEmpty_4 = this.type.getInternalVars().isEmpty();
           boolean _not_3 = (!_isEmpty_4);
@@ -192,7 +194,9 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
         _builder.append("    ");
-        _builder.append("CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
+        String _baseClass_1 = this.baseClass();
+        _builder.append(_baseClass_1, "      ");
+        _builder.append("(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
         {
           boolean _isEmpty_5 = this.type.getInternalVars().isEmpty();
           boolean _not_4 = (!_isEmpty_5);

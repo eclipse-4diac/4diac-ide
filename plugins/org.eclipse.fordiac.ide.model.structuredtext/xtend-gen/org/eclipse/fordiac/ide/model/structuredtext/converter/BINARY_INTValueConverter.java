@@ -13,8 +13,6 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext.converter;
 
-import org.eclipse.fordiac.ide.model.structuredtext.converter.LongValueConverter;
-
 @SuppressWarnings("all")
 public class BINARY_INTValueConverter extends LongValueConverter {
   @Override

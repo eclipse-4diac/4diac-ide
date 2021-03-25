@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.model.structuredtext.converter;
 
 import java.text.SimpleDateFormat;
-import org.eclipse.fordiac.ide.model.structuredtext.converter.DateValueConverter;
 
 @SuppressWarnings("all")
 public class DaytimeValueConverter extends DateValueConverter {
