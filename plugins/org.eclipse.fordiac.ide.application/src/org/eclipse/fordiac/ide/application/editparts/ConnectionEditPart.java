@@ -63,11 +63,11 @@ import org.eclipse.swt.graphics.Color;
 public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 	private static final class FBNConnectionEndPointHandle extends ScrollingConnectionEndpointHandle {
-		private FBNConnectionEndPointHandle(org.eclipse.gef.ConnectionEditPart owner, int endPoint) {
+		private FBNConnectionEndPointHandle(final org.eclipse.gef.ConnectionEditPart owner, final int endPoint) {
 			super(owner, endPoint);
 			setLocator(new ConnectionLocator(getConnection(), endPoint) {
 				@Override
-				protected Point getLocation(PointList points) {
+				protected Point getLocation(final PointList points) {
 					final Point p = super.getLocation(points);
 					// ensure that the returned point is such that the endpoint handle is on the
 					// connection
@@ -94,7 +94,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		}
 
 		@Override
-		protected void paintHandleCenter(Graphics g, Rectangle r) {
+		protected void paintHandleCenter(final Graphics g, final Rectangle r) {
 			final int xbuf = r.x;
 			final int wbuf = r.width;
 
@@ -158,7 +158,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new FeedbackConnectionEndpointEditPolicy() {
 			@Override
 			protected ConnectionEndpointHandle createConnectionEndPointHandle(
-					org.eclipse.gef.ConnectionEditPart connectionEditPart, int connectionLocator) {
+					final org.eclipse.gef.ConnectionEditPart connectionEditPart, final int connectionLocator) {
 				return new FBNConnectionEndPointHandle(connectionEditPart, connectionLocator);
 			}
 		});
@@ -169,7 +169,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		if (getConnectionFigure().getConnectionRouter() instanceof BendpointPolicyRouter) {
 			installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE,
 					((BendpointPolicyRouter) getConnectionFigure().getConnectionRouter())
-							.getBendpointPolicy(getModel()));
+					.getBendpointPolicy(getModel()));
 		}
 	}
 
@@ -182,7 +182,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			((HideableConnection) connection).setHidden((status != null) && status.equalsIgnoreCase(HIDDEN));
 			if ((getModel() != null) && (getModel().getSourceElement() != null)) {
 				((HideableConnection) connection)
-						.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
+				.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
 			}
 			((HideableConnection) connection).setModel(getModel());
 		}
@@ -214,6 +214,11 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		connection.setToolTip(new ConnectionTooltipFigure(getModel()));
 		connection.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 		return connection;
+	}
+
+	@Override
+	public PolylineConnection getFigure() {
+		return (PolylineConnection) super.getFigure();
 	}
 
 	private Color getDataConnectioncolor() {
@@ -274,7 +279,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		if (contentAdapter == null) {
 			contentAdapter = new AdapterImpl() {
 				@Override
-				public void notifyChanged(Notification notification) {
+				public void notifyChanged(final Notification notification) {
 					final Object feature = notification.getFeature();
 					refreshVisuals();
 					if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
@@ -284,6 +289,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 					}
 					if (LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)) {
 						getFigure().setForegroundColor(getDataConnectioncolor());
+						// reset the line width so that any to struct connections have the right width
+						getFigure().setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 					}
 				}
 			};
@@ -304,9 +311,9 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		}
 	}
 
-	public void setTransparency(int value) {
+	public void setTransparency(final int value) {
 		if (getFigure() instanceof PolylineConnection) {
-			final PolylineConnection connection = ((PolylineConnection) getFigure());
+			final PolylineConnection connection = (getFigure());
 			connection.setAlpha(value);
 			for (final Object fig : connection.getChildren()) {
 				if (fig instanceof Shape) {
