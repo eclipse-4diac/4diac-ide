@@ -1,16 +1,18 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.ecore.EFactory;
@@ -111,12 +113,6 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated */
 	Event createEvent();
 
-	/** Returns a new object of class '<em>FB Network</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return a new object of class '<em>FB Network</em>'.
-	 * @generated */
-	FBNetwork createFBNetwork();
-
 	/** Returns a new object of class '<em>FB</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @return a new object of class '<em>FB</em>'.
@@ -128,6 +124,12 @@ public interface LibraryElementFactory extends EFactory {
 	 * @return a new object of class '<em>FB Network Element</em>'.
 	 * @generated */
 	FBNetworkElement createFBNetworkElement();
+
+	/** Returns a new object of class '<em>Sub App</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return a new object of class '<em>Sub App</em>'.
+	 * @generated */
+	SubApp createSubApp();
 
 	/** Returns a new object of class '<em>FB Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -176,6 +178,12 @@ public interface LibraryElementFactory extends EFactory {
 	 * @return a new object of class '<em>Output Primitive</em>'.
 	 * @generated */
 	OutputPrimitive createOutputPrimitive();
+
+	/** Returns a new object of class '<em>Attribute</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return a new object of class '<em>Attribute</em>'.
+	 * @generated */
+	Attribute createAttribute();
 
 	/** Returns a new object of class '<em>Resource</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -226,11 +234,11 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated */
 	STAlgorithm createSTAlgorithm();
 
-	/** Returns a new object of class '<em>Sub App</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** Returns a new object of class '<em>FB Network</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @return a new object of class '<em>Sub App</em>'.
+	 * @return a new object of class '<em>FB Network</em>'.
 	 * @generated */
-	SubApp createSubApp();
+	FBNetwork createFBNetwork();
 
 	/** Returns a new object of class '<em>Sub App Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -430,12 +438,6 @@ public interface LibraryElementFactory extends EFactory {
 	 * @return a new object of class '<em>Local Variable</em>'.
 	 * @generated */
 	LocalVariable createLocalVariable();
-
-	/** Returns a new object of class '<em>Attribute</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return a new object of class '<em>Attribute</em>'.
-	 * @generated */
-	Attribute createAttribute();
 
 	/** Returns the package supported by this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 

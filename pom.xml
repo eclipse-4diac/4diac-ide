@@ -14,7 +14,7 @@
 
 	<properties>
 		<tycho.version>2.2.0</tycho.version>
-		<tycho-repo.url>http://download.eclipse.org/releases/2020-12</tycho-repo.url>
+		<tycho-repo.url>http://download.eclipse.org/releases/2021-03</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 		<org.eclipse.justj.jre.repository>http://download.eclipse.org/justj/sandbox/jres/14/updates/nightly/latest</org.eclipse.justj.jre.repository>
@@ -80,12 +80,12 @@
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.equinox.executable</id>
-								<versionRange>3.8.1000</versionRange>
+								<versionRange>3.8.1100</versionRange>
 							</requirement>
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.platform</id>
-								<versionRange>4.18.0</versionRange>
+								<versionRange>4.19.0</versionRange>
 							</requirement>
 						</extraRequirements>
 						<profileProperties>

@@ -23,9 +23,11 @@ import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 
 class FBShapeShadowBorder extends AbstractBackground {
 
-	private static final int SHADOW_ALPHA = 25;
+	private static final int SHADOW_ALPHA = 30;
 
-	private static final int SHADOW_SIZE = 6;
+	private static final int SHADOW_SIZE = 4;
+
+	private static final int SHADOW_CORNER_RADIUS = DiagramPreferences.CORNER_DIM + 2;
 
 	protected static final Insets SHADOW_INSETS = new Insets(2, 2, SHADOW_SIZE, SHADOW_SIZE * 2 / 3);
 
@@ -79,7 +81,7 @@ class FBShapeShadowBorder extends AbstractBackground {
 	private static void drawDropShadow(final Graphics graphics, final Rectangle topShadowRect,
 			final Rectangle middleShadowRect, final Rectangle bottomShadowRect) {
 		graphics.setAlpha(SHADOW_ALPHA);
-		final double horInc = 0.8;  // emulate a roughly 30° shadow angle
+		final double horInc = 0.7;  // emulate a roughly 30° shadow angle
 		double horI = 0;
 		for (int i = 0; i < SHADOW_SIZE; i++) {
 			horI += horInc;
@@ -87,7 +89,7 @@ class FBShapeShadowBorder extends AbstractBackground {
 			middleShadowRect.translate((int) horI, 1);
 			bottomShadowRect.translate((int) horI, 1);
 			drawShadowFigure(graphics, topShadowRect, middleShadowRect, bottomShadowRect);
-			if (horI > 1.0) {
+			if (horI >= 1.0) {
 				horI -= 1.0;
 			}
 		}
@@ -95,9 +97,9 @@ class FBShapeShadowBorder extends AbstractBackground {
 
 	private static void drawShadowFigure(final Graphics graphics, final Rectangle topShadowRect,
 			final Rectangle middleShadowRect, final Rectangle bottomShadowRect) {
-		graphics.fillRoundRectangle(topShadowRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
+		graphics.fillRoundRectangle(topShadowRect, SHADOW_CORNER_RADIUS, SHADOW_CORNER_RADIUS);
 		graphics.fillRectangle(middleShadowRect);
-		graphics.fillRoundRectangle(bottomShadowRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
+		graphics.fillRoundRectangle(bottomShadowRect, SHADOW_CORNER_RADIUS, SHADOW_CORNER_RADIUS);
 	}
 
 

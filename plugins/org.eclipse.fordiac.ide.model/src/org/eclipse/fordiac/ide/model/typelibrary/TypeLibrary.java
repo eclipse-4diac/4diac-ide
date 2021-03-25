@@ -363,7 +363,8 @@ public final class TypeLibrary implements TypeLibraryTags {
 		} else {
 			location = new Path(Platform.getInstallLocation().getURL().getFile() + TypeLibraryTags.TYPE_LIBRARY);
 		}
-		if (workspace.validateLinkLocation(link, location).isOK()) {
+		if (workspace.validateLinkLocation(link, location).isOK()
+				&& location.toFile().isDirectory()) {
 			try {
 				link.createLink(location, IResource.NONE, null);
 			} catch (final Exception e) {
