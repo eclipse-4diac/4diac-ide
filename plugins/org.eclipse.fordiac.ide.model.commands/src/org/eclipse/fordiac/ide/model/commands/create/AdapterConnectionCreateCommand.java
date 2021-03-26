@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 public class AdapterConnectionCreateCommand extends AbstractConnectionCreateCommand {
 
-	public AdapterConnectionCreateCommand(FBNetwork parent) {
+	public AdapterConnectionCreateCommand(final FBNetwork parent) {
 		super(parent);
 	}
 
@@ -40,11 +40,10 @@ public class AdapterConnectionCreateCommand extends AbstractConnectionCreateComm
 	}
 
 	@Override
-	protected AbstractConnectionCreateCommand createMirroredConnectionCommand(FBNetwork fbNetwork) {
+	protected AbstractConnectionCreateCommand createMirroredConnectionCommand(final FBNetwork fbNetwork) {
 		return new AdapterConnectionCreateCommand(fbNetwork);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected Class getInterfaceType() {
 		return AdapterDeclaration.class;

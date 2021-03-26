@@ -39,7 +39,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart 
 
 	private InterfaceEditPart referencedInterface;
 
-	private Adapter contentAdapter = new AdapterImpl() {
+	private final Adapter contentAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -59,7 +59,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart 
 		 * Instantiates a new variable output container figure.
 		 */
 		public CommentTypeContainerFigure() {
-			GridLayout layout = new GridLayout(3, false);
+			final GridLayout layout = new GridLayout(3, false);
 			layout.horizontalSpacing = 0;
 			layout.verticalSpacing = 0;
 			layout.marginWidth = 0;
@@ -72,23 +72,23 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart 
 	public void activate() {
 		super.activate();
 		getModel().getReferencedElement().eAdapters().add(contentAdapter);
-		Object part = getViewer().getEditPartRegistry().get(getInterfaceElement());
+		final Object part = getViewer().getEditPartRegistry().get(getInterfaceElement());
 		if (part instanceof InterfaceEditPart) {
 			referencedInterface = (InterfaceEditPart) part;
 			referencedInterface.getFigure().addAncestorListener(new AncestorListener() {
 
 				@Override
-				public void ancestorRemoved(IFigure ancestor) {
+				public void ancestorRemoved(final IFigure ancestor) {
 					// Currently nothing to do here
 				}
 
 				@Override
-				public void ancestorMoved(IFigure ancestor) {
+				public void ancestorMoved(final IFigure ancestor) {
 					refreshVisuals();
 				}
 
 				@Override
-				public void ancestorAdded(IFigure ancestor) {
+				public void ancestorAdded(final IFigure ancestor) {
 					refreshVisuals();
 				}
 			});
@@ -116,7 +116,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart 
 	private void refreshPosition() {
 		if (null != getParent() && null != getInterfaceElement().eContainer()) {
 			Rectangle bounds = null;
-			Point p = calculatePos();
+			final Point p = calculatePos();
 			bounds = new Rectangle(p.x, p.y, getFigureWidth(), -1);
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
@@ -124,14 +124,14 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart 
 
 	private Point calculatePos() {
 		if (null != referencedInterface) {
-			Rectangle bounds = referencedInterface.getFigure().getBounds();
-			InterfaceList interfaceList = ((InterfaceList) getInterfaceElement().eContainer());
+			final Rectangle bounds = referencedInterface.getFigure().getBounds();
+			final InterfaceList interfaceList = ((InterfaceList) getInterfaceElement().eContainer());
 			int dx = 0;
 			if (getInterfaceElement().isIsInput()) {
-				int nrOfInputEvents = interfaceList.getEventInputs().size();
+				final int nrOfInputEvents = interfaceList.getEventInputs().size();
 				dx = -DISTANCE_TO_FB_BORDER - getFigureWidth() - nrOfInputEvents * WITH_SIZE;
 			} else {
-				int nrOfOutputEvents = interfaceList.getEventOutputs().size();
+				final int nrOfOutputEvents = interfaceList.getEventOutputs().size();
 				dx = DISTANCE_TO_FB_BORDER + bounds.width + nrOfOutputEvents * WITH_SIZE;
 			}
 			return new Point(bounds.x + dx, bounds.y);
@@ -162,7 +162,6 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart 
 		// we currently don't have any editpolices for this edit part
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected List getModelChildren() {
 		return getModel().getChildren();

@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
  */
 public class EventConnectionCreateCommand extends AbstractConnectionCreateCommand {
 
-	public EventConnectionCreateCommand(FBNetwork parent) {
+	public EventConnectionCreateCommand(final FBNetwork parent) {
 		super(parent);
 	}
 
@@ -50,13 +50,13 @@ public class EventConnectionCreateCommand extends AbstractConnectionCreateComman
 	}
 
 	private boolean duplicateConnection() {
-		for (Connection con : getSource().getInputConnections()) {
+		for (final Connection con : getSource().getInputConnections()) {
 			// as we are maybe creating a reverse connection we need to check both
 			if ((con.getSource() == getDestination()) || (con.getDestination() == getDestination())) {
 				return true;
 			}
 		}
-		for (Connection con : getSource().getOutputConnections()) {
+		for (final Connection con : getSource().getOutputConnections()) {
 			// as we are maybe creating a reverse connection we need to check both
 			if ((con.getSource() == getDestination()) || (con.getDestination() == getDestination())) {
 				return true;
@@ -67,11 +67,10 @@ public class EventConnectionCreateCommand extends AbstractConnectionCreateComman
 	}
 
 	@Override
-	protected AbstractConnectionCreateCommand createMirroredConnectionCommand(FBNetwork fbNetwork) {
+	protected AbstractConnectionCreateCommand createMirroredConnectionCommand(final FBNetwork fbNetwork) {
 		return new EventConnectionCreateCommand(fbNetwork);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected Class getInterfaceType() {
 		return Event.class;

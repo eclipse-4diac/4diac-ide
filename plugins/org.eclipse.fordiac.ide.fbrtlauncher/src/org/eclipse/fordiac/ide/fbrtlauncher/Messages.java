@@ -20,7 +20,8 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-public class Messages extends NLS {
+@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fbrtlauncher.messages"; //$NON-NLS-1$
 
 	/** The FBRT launcher_ error_ wrong port. */
@@ -50,5 +51,6 @@ public class Messages extends NLS {
 	}
 
 	private Messages() {
+		// empty private constructor
 	}
 }

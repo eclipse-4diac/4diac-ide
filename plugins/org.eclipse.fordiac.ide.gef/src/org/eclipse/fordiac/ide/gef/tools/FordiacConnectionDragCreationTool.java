@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.fordiac.ide.ui.handlers.ErrorMessageHandler;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.commands.Command;
@@ -36,20 +35,20 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 	}
 
 	@Override
-	public void mouseDrag(MouseEvent me, EditPartViewer viewer) {
+	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
 		if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
 			((AdvancedScrollingGraphicalViewer) viewer)
-					.checkScrollPositionDuringDragBounded(me,
-							new Point(
-									MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE
-											+ ConnectionPreferenceValues.HANDLE_SIZE,
-									ConnectionPreferenceValues.HANDLE_SIZE));
+			.checkScrollPositionDuringDragBounded(me,
+					new Point(
+							MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE
+							+ ConnectionPreferenceValues.HANDLE_SIZE,
+							ConnectionPreferenceValues.HANDLE_SIZE));
 		}
 		super.mouseDrag(me, viewer);
 	}
-	
+
 	@Override
-	protected void setCurrentCommand(Command c) {
+	protected void setCurrentCommand(final Command c) {
 		if(null == getCurrentCommand() && null != c) {
 			// Hover started
 			startHover();
@@ -64,11 +63,11 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 		super.setCurrentCommand(c);
 	}
 
-	private void startHover() {
+	private static void startHover() {
 		UIPlugin.getDefault().getEMH().setHover(true);
 	}
 
-	private void stopHover() {
+	private static void stopHover() {
 		UIPlugin.getDefault().getEMH().setHover(false);
 	}
 
