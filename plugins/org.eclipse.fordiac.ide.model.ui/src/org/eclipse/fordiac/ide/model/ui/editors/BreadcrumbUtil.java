@@ -75,8 +75,8 @@ public final class BreadcrumbUtil {
 		return OpenListenerManager.openEditor(parentModel);
 	}
 
-	public static boolean isEditableSubApp(SubApp subApp) {
-		if ((null == subApp) || (null != subApp.getType())) {
+	public static boolean isEditableSubApp(final SubApp subApp) {
+		if ((null == subApp) || (subApp.isTyped())) {
 			return false;
 		}
 

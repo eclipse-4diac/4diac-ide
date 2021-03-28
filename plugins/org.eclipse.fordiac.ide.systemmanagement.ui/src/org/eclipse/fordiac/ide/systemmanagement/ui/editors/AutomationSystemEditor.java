@@ -144,7 +144,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 		if (model instanceof SubApp) {
 
-			if (((SubApp) model).getType() != null) {
+			if (((SubApp) model).isTyped()) {
 				return new SubappInstanceViewer();
 			}
 
@@ -173,7 +173,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return getEditorInput();
 		}
 		if (model instanceof SubApp) {
-			if (((SubApp) model).getType() != null) {
+			if (((SubApp) model).isTyped()) {
 				return createSubappInstanceViewer(model);
 			}
 			return new SubApplicationEditorInput((SubApp) model);

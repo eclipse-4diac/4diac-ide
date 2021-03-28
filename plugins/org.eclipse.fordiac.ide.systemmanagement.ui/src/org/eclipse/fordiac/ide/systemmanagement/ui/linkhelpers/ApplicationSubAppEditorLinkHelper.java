@@ -56,7 +56,7 @@ public class ApplicationSubAppEditorLinkHelper extends AbstractEditorLinkHelper 
 			performEditorSelect(aPage, new ApplicationEditorInput((Application) aSelection.getFirstElement()), null);
 		}
 		if ((aSelection.getFirstElement() instanceof SubApp)
-				&& (null != ((SubApp) aSelection.getFirstElement()).getSubAppNetwork())) {
+				&& (((SubApp) aSelection.getFirstElement()).isTyped())) {
 			// we have an untyped subapp
 			handleUntypedSubApp(aPage, (SubApp) aSelection.getFirstElement());
 		} else if (aSelection.getFirstElement() instanceof FBNetworkElement) {

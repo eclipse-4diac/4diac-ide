@@ -59,7 +59,7 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		final SubApp subApp = getSelectedSubApp(selection);
 
 		// for now we only allow untyped subapps to be expanded or collapsed
-		setBaseEnabled(((null != subApp) && (null == subApp.getType())));
+		setBaseEnabled(((null != subApp) && (!subApp.isTyped())));
 	}
 
 	@Override

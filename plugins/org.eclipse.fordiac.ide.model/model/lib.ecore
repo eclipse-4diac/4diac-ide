@@ -436,7 +436,12 @@
     </eOperations>
     <eOperations name="isUnfolded" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="Attribute attr = this.getAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);&#xA;return (attr != null) &amp;&amp; &quot;true&quot;.equals(attr.getValue()); //$NON-NLS-1$"/>
+        <details key="body" value="org.eclipse.fordiac.ide.model.libraryElement.Attribute attr = this.getAttribute(org.eclipse.fordiac.ide.model.LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);&#xA;return (attr != null) &amp;&amp; &quot;true&quot;.equals(attr.getValue()); //$NON-NLS-1$&#xA;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isTyped" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return (getType() != null);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subAppNetwork" eType="#//FBNetwork"

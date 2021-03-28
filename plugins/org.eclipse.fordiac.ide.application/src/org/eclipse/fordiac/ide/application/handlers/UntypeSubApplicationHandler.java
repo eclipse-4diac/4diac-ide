@@ -32,7 +32,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class UntypeSubApplicationHandler extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		final SubApp subApp = getSelectedSubApp(selection);
@@ -45,13 +45,13 @@ public class UntypeSubApplicationHandler extends AbstractHandler {
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final SubApp subApp = getSelectedSubApp(selection);
-		setBaseEnabled((null != subApp) && (null != subApp.getType()));
+		setBaseEnabled((null != subApp) && (!subApp.isTyped()));
 	}
 
-	private static SubApp getSelectedSubApp(Object selection) {
+	private static SubApp getSelectedSubApp(final Object selection) {
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structSel = ((IStructuredSelection) selection);
 			if (!structSel.isEmpty() && (structSel.size() == 1)) {
@@ -61,7 +61,7 @@ public class UntypeSubApplicationHandler extends AbstractHandler {
 		return null;
 	}
 
-	private static SubApp getSubApp(Object currentElement) {
+	private static SubApp getSubApp(final Object currentElement) {
 		if (currentElement instanceof SubApp) {
 			return (SubApp) currentElement;
 		} else if (currentElement instanceof SubAppForFBNetworkEditPart) {

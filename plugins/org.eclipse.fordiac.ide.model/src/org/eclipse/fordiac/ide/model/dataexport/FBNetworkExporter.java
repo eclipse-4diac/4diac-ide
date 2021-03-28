@@ -75,7 +75,7 @@ class FBNetworkExporter extends CommonElementExporter {
 				addCommentAttribute(fbnElement);
 				addXYAttributes(fbnElement);
 
-				if ((fbnElement instanceof SubApp) && (null == ((SubApp) fbnElement).getType())) {
+				if ((fbnElement instanceof SubApp) && (!((SubApp) fbnElement).isTyped())) {
 					// we have an untyped subapp therefore add the subapp contents to it
 					createUntypedSubAppcontents((SubApp) fbnElement);
 				}

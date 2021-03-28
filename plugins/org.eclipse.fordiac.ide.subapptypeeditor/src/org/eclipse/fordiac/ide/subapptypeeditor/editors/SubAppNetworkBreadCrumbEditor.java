@@ -104,7 +104,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	protected EditorPart createEditorPart(final Object model) {
 		if (model instanceof SubApp) {
-			if (((SubApp) model).getType() != null) {
+			if (((SubApp) model).isTyped()) {
 				return new SubappInstanceViewer();
 			}
 			final UnTypedSubAppNetworkEditor editor = new UnTypedSubAppNetworkEditor();
@@ -123,7 +123,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	protected IEditorInput createEditorInput(final Object model) {
 		if (model instanceof SubApp) {
-			if (((SubApp) model).getType() != null) {
+			if (((SubApp) model).isTyped()) {
 				return createSubappInstanceViewerInput(model);
 			}
 			return new SubApplicationEditorInput((SubApp) model);
