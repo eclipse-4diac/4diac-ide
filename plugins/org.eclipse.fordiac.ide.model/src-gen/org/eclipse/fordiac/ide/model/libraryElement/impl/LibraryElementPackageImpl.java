@@ -69,6 +69,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -503,6 +505,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * 
 	 * @generated */
 	private EClass localVariableEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass errorMarkerFBNElementEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass errorMarkerInterfaceEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -1305,6 +1317,14 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EReference getInterfaceList_OutputVars() {
 		return (EReference) interfaceListEClass.getEStructuralFeatures().get(5);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getInterfaceList_ErrorMarker() {
+		return (EReference) interfaceListEClass.getEStructuralFeatures().get(6);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2423,6 +2443,30 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * 
 	 * @generated */
 	@Override
+	public EClass getErrorMarkerFBNElement() {
+		return errorMarkerFBNElementEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EClass getErrorMarkerInterface() {
+		return errorMarkerInterfaceEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EReference getErrorMarkerInterface_RepairedEndpoint() {
+		return (EReference) errorMarkerInterfaceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
 	public EEnum getLanguage() {
 		return languageEEnum;
 	}
@@ -2592,6 +2636,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(interfaceListEClass, INTERFACE_LIST__EVENT_OUTPUTS);
 		createEReference(interfaceListEClass, INTERFACE_LIST__INPUT_VARS);
 		createEReference(interfaceListEClass, INTERFACE_LIST__OUTPUT_VARS);
+		createEReference(interfaceListEClass, INTERFACE_LIST__ERROR_MARKER);
 
 		linkEClass = createEClass(LINK);
 		createEReference(linkEClass, LINK__SEGMENT);
@@ -2785,6 +2830,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEAttribute(localVariableEClass, LOCAL_VARIABLE__ARRAY_START);
 		createEAttribute(localVariableEClass, LOCAL_VARIABLE__ARRAY_STOP);
 
+		errorMarkerFBNElementEClass = createEClass(ERROR_MARKER_FBN_ELEMENT);
+
+		errorMarkerInterfaceEClass = createEClass(ERROR_MARKER_INTERFACE);
+		createEReference(errorMarkerInterfaceEClass, ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT);
+
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
 
@@ -2888,6 +2938,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		demultiplexerEClass.getESuperTypes().add(this.getStructManipulator());
 		multiplexerEClass.getESuperTypes().add(this.getStructManipulator());
 		localVariableEClass.getESuperTypes().add(this.getVarDeclaration());
+		errorMarkerFBNElementEClass.getESuperTypes().add(this.getFBNetworkElement());
+		errorMarkerInterfaceEClass.getESuperTypes().add(this.getIInterfaceElement());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterDeclarationEClass, AdapterDeclaration.class, "AdapterDeclaration", !IS_ABSTRACT, //$NON-NLS-1$
@@ -3226,6 +3278,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 				InterfaceList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInterfaceList_OutputVars(), this.getVarDeclaration(), null, "outputVars", null, 0, -1, //$NON-NLS-1$
+				InterfaceList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInterfaceList_ErrorMarker(), this.getIInterfaceElement(), null, "errorMarker", null, 0, -1, //$NON-NLS-1$
 				InterfaceList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -3778,6 +3833,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(localVariableEClass, theXMLTypePackage.getInt(), "getArraySize", 0, 1, !IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		initEClass(errorMarkerFBNElementEClass, ErrorMarkerFBNElement.class, "ErrorMarkerFBNElement", !IS_ABSTRACT, //$NON-NLS-1$
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(errorMarkerInterfaceEClass, ErrorMarkerInterface.class, "ErrorMarkerInterface", !IS_ABSTRACT, //$NON-NLS-1$
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getErrorMarkerInterface_RepairedEndpoint(), this.getIInterfaceElement(), null,
+				"repairedEndpoint", null, 0, 1, ErrorMarkerInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
+				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$
 		addEEnumLiteral(languageEEnum, Language.C);
@@ -3943,6 +4007,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		});
 		addAnnotation(getInterfaceList_OutputVars(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 				"name", "OutputVars", //$NON-NLS-1$ //$NON-NLS-2$
+				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		});
+		addAnnotation(getInterfaceList_ErrorMarker(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+				"name", "ErrorMarker", //$NON-NLS-1$ //$NON-NLS-2$
 				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
 		});
 		addAnnotation(getOtherAlgorithm_Language(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$

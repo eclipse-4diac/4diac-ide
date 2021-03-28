@@ -1423,6 +1423,30 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
+	/** Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement <em>Error Marker FBN Element</em>}'.
+	 * <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement
+	 * @generated */
+	public Adapter createErrorMarkerFBNElementAdapter() {
+		return null;
+	}
+
+	/** Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface <em>Error Marker Interface</em>}'. <!--
+	 * begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful to
+	 * ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface
+	 * @generated */
+	public Adapter createErrorMarkerInterfaceAdapter() {
+		return null;
+	}
+
 	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute
 	 * <em>Attribute</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
 	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
