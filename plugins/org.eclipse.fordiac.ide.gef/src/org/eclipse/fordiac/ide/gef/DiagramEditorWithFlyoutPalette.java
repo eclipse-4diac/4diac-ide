@@ -116,7 +116,6 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	/**
 	 * refresh all child editparts when editor gets focus.
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void setFocus() {
 		super.setFocus();
@@ -353,7 +352,6 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(
 	 * java.lang.Class)
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(final Class type) {
 		if (type == ZoomManager.class) {
@@ -384,7 +382,6 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#createActions()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
 		final ActionRegistry registry = getActionRegistry();

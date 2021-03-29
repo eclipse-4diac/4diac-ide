@@ -52,9 +52,9 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 	 * Set of systems which where monitored and where monitoring has to be
 	 * re-enabled after executing the deployment command.
 	 */
-	private Set<AutomationSystem> monitoredSystems = new HashSet<>();
+	private final Set<AutomationSystem> monitoredSystems = new HashSet<>();
 
-	protected void setDevice(Device device) {
+	protected void setDevice(final Device device) {
 		this.device = device;
 	}
 
@@ -68,7 +68,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 		private String lastMessage = ""; //$NON-NLS-1$
 		private String lastCommand = ""; //$NON-NLS-1$
 
-		public OnlineDeploymentErrorCheckListener(AbstractDeploymentCommand currentObject) {
+		public OnlineDeploymentErrorCheckListener(final AbstractDeploymentCommand currentObject) {
 			this.currentObject = currentObject;
 		}
 
@@ -78,12 +78,12 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 		}
 
 		@Override
-		public void postCommandSent(String info, String destination, String command) {
+		public void postCommandSent(final String info, final String destination, final String command) {
 			lastCommand = command;
 		}
 
 		@Override
-		public void postResponseReceived(String response, String source) {
+		public void postResponseReceived(final String response, final String source) {
 			if (response.contains("Reason")) { //$NON-NLS-1$
 				showDeploymentError(response.substring(response.lastIndexOf("Reason") + 8, response.length() - 4), //$NON-NLS-1$
 						source, currentObject, false);
@@ -95,10 +95,10 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 			// nothing to do here
 		}
 
-		public void showDeploymentError(String response, String source, AbstractDeploymentCommand currentElement,
-				boolean showWithConsole) {
-			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			IViewPart view = page.findView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
+		public void showDeploymentError(final String response, final String source, final AbstractDeploymentCommand currentElement,
+				final boolean showWithConsole) {
+			final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			final IViewPart view = page.findView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
 
 			String currentMessage;
 
@@ -114,7 +114,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 			if ((null == view || showWithConsole) && (!lastMessage.equals(currentMessage))) {
 				// when deleting Resources two messages are sent (KILL and delete Resource) and
 				// both failed creating two popups with the same information
-				Shell shell = Display.getDefault().getActiveShell();
+				final Shell shell = Display.getDefault().getActiveShell();
 				MessageDialog.openError(shell, currentElement.getErrorMessageHeader(), currentMessage);
 				lastMessage = currentMessage;
 			}
@@ -122,16 +122,16 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 	}
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		monitoredSystems.clear();
-		List<Object> list = getObjectSelectionArray(event);
-		for (Object currentElement : list) {
+		final List<Object> list = getObjectSelectionArray(event);
+		for (final Object currentElement : list) {
 			if (prepareParametersToExecute(currentElement)) {
-				IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE
+				final IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE
 						.getDeviceManagementInteractor(device);
 				if (null != interactor) {
 					DeploymentCoordinator.INSTANCE.enableOutput(interactor);
-					OnlineDeploymentErrorCheckListener errorChecker = new OnlineDeploymentErrorCheckListener(this);
+					final OnlineDeploymentErrorCheckListener errorChecker = new OnlineDeploymentErrorCheckListener(this);
 					interactor.addDeploymentListener(errorChecker);
 
 					checkAndSaveMonitoringState(device.getAutomationSystem());
@@ -139,7 +139,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 					try (IDeviceManagementInteractorCloser closer = interactor::disconnect) {
 						interactor.connect();
 						executeCommand(interactor);
-					} catch (DeploymentException e) {
+					} catch (final DeploymentException e) {
 						errorChecker.showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID(device), this, true);
 					}
 					interactor.removeDeploymentListener(errorChecker);
@@ -153,8 +153,8 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 		return null;
 	}
 
-	private void checkAndSaveMonitoringState(AutomationSystem system) {
-		AbstractMonitoringManager monMan = AbstractMonitoringManager.getMonitoringManager();
+	private void checkAndSaveMonitoringState(final AutomationSystem system) {
+		final AbstractMonitoringManager monMan = AbstractMonitoringManager.getMonitoringManager();
 		if (monMan.isSystemMonitored(system)) {
 			monMan.disableSystem(system);
 			monitoredSystems.add(system);
@@ -162,13 +162,12 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 	}
 
 	private void reenableMonitoring() {
-		AbstractMonitoringManager monMan = AbstractMonitoringManager.getMonitoringManager();
+		final AbstractMonitoringManager monMan = AbstractMonitoringManager.getMonitoringManager();
 		monitoredSystems.forEach(monMan::enableSystem);
 	}
 
-	@SuppressWarnings("unchecked")
-	private static List<Object> getObjectSelectionArray(ExecutionEvent event) {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
+	private static List<Object> getObjectSelectionArray(final ExecutionEvent event) {
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof StructuredSelection) {
 			return ((StructuredSelection) selection).toList();
 		}

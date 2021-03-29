@@ -82,7 +82,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	/**
 	 * Instantiates a new diagram editor.
 	 */
-	public DiagramEditor() {
+	protected DiagramEditor() {
 	}
 
 	/*
@@ -103,9 +103,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		@SuppressWarnings("unchecked") // method returns child editparts
-		final
-		List<EditPart> children = getGraphicalViewer().getRootEditPart().getChildren();
+		final List<EditPart> children = getGraphicalViewer().getRootEditPart().getChildren();
 		children.forEach(EditPart::refresh);
 	}
 
@@ -308,7 +306,6 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(
 	 * java.lang.Class)
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(final Class type) {
 		if (type == ZoomManager.class) {
@@ -338,7 +335,6 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#createActions()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
 		final ActionRegistry registry = getActionRegistry();

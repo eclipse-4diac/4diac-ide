@@ -57,8 +57,8 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 	private final Adapter contentAdapter = new AdapterImpl() {
 
 		@Override
-		public void notifyChanged(Notification notification) {
-			Object feature = notification.getFeature();
+		public void notifyChanged(final Notification notification) {
+			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
 				refreshValue();
 			}
@@ -87,10 +87,10 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 		removeEditPolicy(EditPolicy.DIRECT_EDIT_ROLE);
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy() {
 			@Override
-			protected Command getDirectEditCommand(DirectEditRequest request) {
+			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof InstanceCommentEditPart) {
-					String str = (String) request.getCellEditor().getValue();
-					final String EMPTY_COMMENT = "[" + Messages.InstanceCommentEditPart_EMPTY_COMMENT + "]"; //$NON-NLS-1$ //$NON-NLS-3$
+					final String str = (String) request.getCellEditor().getValue();
+					final String EMPTY_COMMENT = "[" + Messages.InstanceCommentEditPart_EMPTY_COMMENT + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 					if (!EMPTY_COMMENT.equals(str)) {
 						return new ChangeCommentCommand(
 								((InstanceCommentEditPart) getHost()).getModel().getRefElement(), str);
@@ -140,22 +140,22 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 	}
 
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(ConnectionEditPart connection) {
+	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		return null;
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(ConnectionEditPart connection) {
+	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
 		return null;
 	}
 
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(Request request) {
+	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
 		return null;
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(Request request) {
+	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
 		return null;
 	}
 

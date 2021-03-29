@@ -27,9 +27,9 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public class ResourceContainerEditPart extends AbstractGraphicalEditPart {
 
-	private Adapter contentAdapter = new AdapterImpl() {
+	private final Adapter contentAdapter = new AdapterImpl() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			refreshChildren();
 		}
@@ -53,8 +53,8 @@ public class ResourceContainerEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		Figure fig = new Figure();
-		ToolbarLayout containerFigureLayout = new ToolbarLayout();
+		final Figure fig = new Figure();
+		final ToolbarLayout containerFigureLayout = new ToolbarLayout();
 		containerFigureLayout.setStretchMinorAxis(true);
 		fig.setLayoutManager(containerFigureLayout);
 		return fig;
@@ -70,7 +70,6 @@ public class ResourceContainerEditPart extends AbstractGraphicalEditPart {
 		return (ResourceContainer) super.getModel();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected List getModelChildren() {
 		return getModel().getDevice().getResource();

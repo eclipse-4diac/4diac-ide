@@ -38,7 +38,7 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 
 	public class InterfaceContainerFigure extends Figure {
 		public InterfaceContainerFigure() {
-			FlowLayout layout = new FlowLayout();
+			final FlowLayout layout = new FlowLayout();
 			layout.setMajorSpacing(0);
 			layout.setMinorSpacing(0);
 			layout.setHorizontal(false);
@@ -53,7 +53,7 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 
 	private final Adapter econtentAdapter = new EContentAdapter() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			refreshChildren();
 			super.notifyChanged(notification);
 		}
@@ -103,25 +103,24 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 		return (AbstractContainerElement) super.getModel();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected List getModelChildren() {
 		return getModel().getChildren();
 	}
 
 	@Override
-	protected void addChildVisual(EditPart childEditPart, int index) {
-		if (getContentPane().getChildren().size() == 0) {
+	protected void addChildVisual(final EditPart childEditPart, final int index) {
+		if (getContentPane().getChildren().isEmpty()) {
 			getContentPane().setPreferredSize(null);
 		}
 		super.addChildVisual(childEditPart, index);
 	}
 
 	@Override
-	protected void removeChildVisual(EditPart childEditPart) {
+	protected void removeChildVisual(final EditPart childEditPart) {
 		super.removeChildVisual(childEditPart);
-		if (getContentPane().getChildren().size() == 0) {
-			Dimension dim = TextUtilities.INSTANCE.getTextExtents("INT", //$NON-NLS-1$
+		if (getContentPane().getChildren().isEmpty()) {
+			final Dimension dim = TextUtilities.INSTANCE.getTextExtents("INT", //$NON-NLS-1$
 					getContentPane().getFont());
 			dim.height = (int) (dim.height * 0.66);
 			getContentPane().setPreferredSize(dim);

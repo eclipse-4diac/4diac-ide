@@ -36,7 +36,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	private MapToCommand mapSubappCmd; // can not be in the compound command as it needs to be performed when
 	// subapp interface is finished
 
-	public NewSubAppCommand(FBNetwork fbNetwork, List<?> selection, int x, int y) {
+	public NewSubAppCommand(final FBNetwork fbNetwork, final List<?> selection, final int x, final int y) {
 		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
 		getSubApp().setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
 		addElements = new AddElementsToSubAppCommand(getSubApp(), selection);
@@ -50,7 +50,6 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	private boolean allElementsInSameFBnetwork() {
-		final FBNetworkElement el;
 		for (final Object o : parts) {
 			if (o instanceof EditPart) {
 				final Object model = ((EditPart) o).getModel();
@@ -93,7 +92,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 		super.undo();
 	}
 
-	private void checkMapping(List<?> selection) {
+	private void checkMapping(final List<?> selection) {
 		Resource res = null;
 		for (final Object ne : selection) {
 			if ((ne instanceof EditPart) && (((EditPart) ne).getModel() instanceof FBNetworkElement)) {

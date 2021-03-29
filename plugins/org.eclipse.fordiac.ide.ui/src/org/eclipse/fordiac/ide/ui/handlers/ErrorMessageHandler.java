@@ -48,10 +48,10 @@ import org.osgi.service.event.EventHandler;
 public class ErrorMessageHandler {
 
 	private static final int MOUSE_HOVER_DELAY = 700;
-	
+
 	private boolean isHovering = false;
-	
-	public synchronized void setHover(boolean hovering) {
+
+	public synchronized void setHover(final boolean hovering) {
 		isHovering = hovering;
 		if(!hovering) {
 			messages.stream().forEach(ErrorMessage::setInvalid);
@@ -87,10 +87,10 @@ public class ErrorMessageHandler {
 
 	private boolean eventsRegistered = false;
 
-	private LinkedList<Composite> windows = new LinkedList<>();
+	private final LinkedList<Composite> windows = new LinkedList<>();
 
-	private Set<ErrorMessage> messages = new HashSet<>();
-	
+	private final Set<ErrorMessage> messages = new HashSet<>();
+
 	private static class ErrorMessageDialog extends PopupDialog {
 
 		private static final int MOUSE_CURSOR_OFFSET_Y = 10;
@@ -111,7 +111,7 @@ public class ErrorMessageHandler {
 			return Display.getCurrent().getSystemColor(SWT.COLOR_INFO_FOREGROUND);
 		}
 
-		private ErrorMessageDialog(ErrorMessageHandler container, String errorMsg, int timeout) {
+		private ErrorMessageDialog(final ErrorMessageHandler container, final String errorMsg, final int timeout) {
 			super(null, HOVER_SHELLSTYLE, false, false, false, false, false, null, null);
 			this.errorMsg = errorMsg;
 			this.timeout = timeout;
@@ -157,16 +157,16 @@ public class ErrorMessageHandler {
 		}
 
 		@Override
-		protected Control createDialogArea(Composite parent) {
+		protected Control createDialogArea(final Composite parent) {
 			final Composite warningComposite = new Composite(parent, SWT.NONE);
 			warningComposite.setLayout(new GridLayout(2, false));
 			warningComposite.setLayoutData(new GridData(0, 0, true, false));
 
-			Label image = new Label(warningComposite, SWT.NONE);
+			final Label image = new Label(warningComposite, SWT.NONE);
 			image.setImage(parent.getDisplay().getSystemImage(SWT.ICON_WARNING));
 			image.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-			Label text = new Label(warningComposite, SWT.NONE);
+			final Label text = new Label(warningComposite, SWT.NONE);
 			text.setText(errorMsg); // message is never null (instanceof check in receiver)
 
 			text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
@@ -186,37 +186,37 @@ public class ErrorMessageHandler {
 			return warningComposite;
 		}
 
-		private void clearPopupAfterTimeout(int t) {
+		private void clearPopupAfterTimeout(final int t) {
 			if(!container.isHovering) {
 				getShell().getDisplay().timerExec(t, () -> container.clearDialog(getShell()));
 			}
 		}
 
-		private FocusListener lostFocusListener = new FocusListener() {
+		private final FocusListener lostFocusListener = new FocusListener() {
 			@Override
-			public void focusLost(FocusEvent e) {
+			public void focusLost(final FocusEvent e) {
 				container.clearDialog(getShell());
 			}
 
 			@Override
-			public void focusGained(FocusEvent e) {
+			public void focusGained(final FocusEvent e) {
 				// Nothing to do
 			}
 		};
-		
+
 		private void clearPopupOnLostFocus(final Control focused) {
 			focused.removeFocusListener(lostFocusListener);
 			focused.addFocusListener(lostFocusListener);
 		}
 
-		private KeyListener keypressListener = new KeyListener() {
+		private final KeyListener keypressListener = new KeyListener() {
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyReleased(final KeyEvent e) {
 				// NOP
 			}
 
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyPressed(final KeyEvent e) {
 				container.clearDialog(getShell());
 			}
 		};
@@ -226,14 +226,14 @@ public class ErrorMessageHandler {
 			focused.addKeyListener(keypressListener);
 		}
 
-		private SelectionListener selectionChangeListener = new SelectionListener() {
+		private final SelectionListener selectionChangeListener = new SelectionListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				container.clearDialog(getShell());
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 				// Nothing to do
 			}
 		};
@@ -245,10 +245,10 @@ public class ErrorMessageHandler {
 				table.addSelectionListener(selectionChangeListener);
 			}
 		}
-		
+
 	}
 
-	private synchronized void clearDialog(Composite dialogArea) {
+	private synchronized void clearDialog(final Composite dialogArea) {
 		// This method is not inside ErrorMessageDialog because this would use a
 		// different synchronization reference than used in closeDialog
 		// calling close on a disposed element will fail; must not be reentrant
@@ -257,7 +257,7 @@ public class ErrorMessageHandler {
 		}
 	}
 
-	private synchronized void closeDialog(Composite dialogArea) {
+	private synchronized void closeDialog(final Composite dialogArea) {
 		// calling close on a disposed element will fail; must not be reentrant
 		if (null != dialogArea && !dialogArea.isDisposed()) {
 			windows.remove(dialogArea.getShell());
@@ -267,14 +267,14 @@ public class ErrorMessageHandler {
 	}
 
 	private void removeInvalidMessages() {
-		List<ErrorMessage> toRemove = messages.stream().filter((ErrorMessage m) -> !m.isStillValid()).collect(Collectors.toList());
-		for(ErrorMessage m: toRemove) {
+		final List<ErrorMessage> toRemove = messages.stream().filter((final ErrorMessage m) -> !m.isStillValid()).collect(Collectors.toList());
+		for(final ErrorMessage m: toRemove) {
 			ErrorMessenger.hashCleared(m.hashCode());
 		}
 		messages.removeAll(toRemove);
 	}
 
-	private void showErrorMessageDialog(ErrorMessage m) {
+	private void showErrorMessageDialog(final ErrorMessage m) {
 		if(isHovering) {
 			updateMessageList(m);
 			Display.getDefault().timerExec(MOUSE_HOVER_DELAY, () -> {
@@ -291,14 +291,14 @@ public class ErrorMessageHandler {
 		}
 	}
 
-	private void activateErrorMessageDialog(ErrorMessage m) {
+	private void activateErrorMessageDialog(final ErrorMessage m) {
 		updateMessageList(m);
 		closeAllDialogs();
 		showMessages(m);
 		ErrorMessenger.hashCleared(m.hashCode());
 	}
 
-	private void updateMessageList(ErrorMessage m) {
+	private void updateMessageList(final ErrorMessage m) {
 		messages.add(m);
 		removeInvalidMessages();
 	}
@@ -309,18 +309,18 @@ public class ErrorMessageHandler {
 		}
 	}
 
-	private void showMessages(ErrorMessage m) {
+	private void showMessages(final ErrorMessage m) {
 		if(!messages.isEmpty()) {
 			final String dialogContent = messages.stream().map(ErrorMessage::getMessage).collect(Collectors.joining("\n")); //$NON-NLS-1$
-			
+
 			final ErrorMessageDialog dialog = new ErrorMessageDialog(this, dialogContent, m.getTimeout());
 			dialog.open();
 			windows.push(dialog.getShell());
 		}
 	}
 
-	private EventHandler receiver = (Event event) -> {
-		Object data = event.getProperty(IEventBroker.DATA); //$NON-NLS-1$
+	private final EventHandler receiver = (final Event event) -> {
+		final Object data = event.getProperty(IEventBroker.DATA);
 		if (eventsRegistered && data instanceof ErrorMessage) {
 			showErrorMessageDialog((ErrorMessage)data);
 		}

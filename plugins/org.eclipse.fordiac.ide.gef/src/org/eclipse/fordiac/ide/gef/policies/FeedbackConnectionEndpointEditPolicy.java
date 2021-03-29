@@ -89,25 +89,24 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 		return (PolylineConnection) ((GraphicalEditPart) getHost()).getFigure();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected List createSelectionHandles() {
-		List<ConnectionEndpointHandle> list = new ArrayList<>();
+		final List<ConnectionEndpointHandle> list = new ArrayList<>();
 		list.add(createConnectionEndPointHandle((ConnectionEditPart) getHost(), ConnectionLocator.SOURCE));
 		list.add(createConnectionEndPointHandle((ConnectionEditPart) getHost(), ConnectionLocator.TARGET));
 		return list;
 	}
 
 	@SuppressWarnings("static-method") // allow subclasses to provide special versions of connection handles
-	protected ConnectionEndpointHandle createConnectionEndPointHandle(ConnectionEditPart connectionEditPart,
-			int connectionLocator) {
+	protected ConnectionEndpointHandle createConnectionEndPointHandle(final ConnectionEditPart connectionEditPart,
+			final int connectionLocator) {
 		return new ScrollingConnectionEndpointHandle(connectionEditPart, connectionLocator);
 	}
 
 	@Override
-	public void showTargetFeedback(Request request) {
+	public void showTargetFeedback(final Request request) {
 		if ((request instanceof SelectionRequest) && (null == hoverFeedback) && (null == handles)) {
-			IFigure connFigure = getHostFigure();
+			final IFigure connFigure = getHostFigure();
 			if ((connFigure instanceof PolylineConnection) && (null == hoverFeedback)) {
 				hoverFeedback = createSelectionFeedbackFigure((PolylineConnection) connFigure);
 				addFeedback(hoverFeedback);
@@ -116,7 +115,7 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 	}
 
 	@Override
-	public void eraseTargetFeedback(Request request) {
+	public void eraseTargetFeedback(final Request request) {
 		removeHoverFigure();
 	}
 
@@ -143,8 +142,8 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 		}
 	}
 
-	protected IFigure createSelectionFeedbackFigure(PolylineConnection connFigure) {
-		Polyline figure = new Polyline();
+	protected IFigure createSelectionFeedbackFigure(final PolylineConnection connFigure) {
+		final Polyline figure = new Polyline();
 		figure.setLineWidth(connFigure.getLineWidth() + 5);
 		figure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 		figure.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
@@ -153,7 +152,7 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
+	public void propertyChange(final PropertyChangeEvent evt) {
 		if ((getHost().getSelected() != EditPart.SELECTED_NONE) && (null != selectionFeedback)) {
 			removeSelectionFigure();
 			// update the selection feedback figure to new points

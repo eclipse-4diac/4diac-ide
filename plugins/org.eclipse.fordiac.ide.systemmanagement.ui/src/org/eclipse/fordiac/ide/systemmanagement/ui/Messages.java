@@ -18,7 +18,8 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-public class Messages extends NLS {
+@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.systemmanagement.ui.messages"; //$NON-NLS-1$
 
 	public static String NewApplicationWizardTitle;
@@ -57,6 +58,12 @@ public class Messages extends NLS {
 	public static String PaletteManagementPage_LABEL_DefaultTypeLibrary;
 
 	public static String SystemNameNotValid;
+
+	public static String AutomationSystemEditor_Title;
+	public static String AutomationSystemEditor_Info;
+	public static String AutomationSystemEditor_Discard_Changes;
+	public static String AutomationSystemEditor_Save_Changes;
+	public static String AutomationSystemEditor_Overwrite_Changes;
 
 	static {
 		// initialize resource bundle
