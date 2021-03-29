@@ -193,24 +193,22 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		connection.setTargetDecoration(arrow);
 
 		if (getModel() instanceof EventConnection) {
-			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
 			connection.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON));
 		}
 
 		if (getModel() instanceof AdapterConnection) {
-			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
 			connection.setTargetDecoration(null);
 			connection.setSourceDecoration(null);
 
 		}
 
 		if (getModel() instanceof DataConnection) {
-			connection.setForegroundColor(getDataConnectioncolor());
 			connection.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON));
 
 		}
+		setConnectionColor(connection);
 		connection.setToolTip(new ConnectionTooltipFigure(getModel()));
 		connection.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 		return connection;
@@ -219,6 +217,20 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	@Override
 	public PolylineConnection getFigure() {
 		return (PolylineConnection) super.getFigure();
+	}
+
+	private void setConnectionColor(final PolylineConnection connection) {
+		if (getModel() instanceof EventConnection) {
+			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
+		}
+
+		if (getModel() instanceof AdapterConnection) {
+			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
+		}
+
+		if (getModel() instanceof DataConnection) {
+			connection.setForegroundColor(getDataConnectioncolor());
+		}
 	}
 
 	private Color getDataConnectioncolor() {
@@ -288,7 +300,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 						refreshComment();
 					}
 					if (LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)) {
-						getFigure().setForegroundColor(getDataConnectioncolor());
+						setConnectionColor(getFigure());
 						// reset the line width so that any to struct connections have the right width
 						getFigure().setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 					}
@@ -312,13 +324,11 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	}
 
 	public void setTransparency(final int value) {
-		if (getFigure() instanceof PolylineConnection) {
-			final PolylineConnection connection = (getFigure());
-			connection.setAlpha(value);
-			for (final Object fig : connection.getChildren()) {
-				if (fig instanceof Shape) {
-					((Shape) fig).setAlpha(value);
-				}
+		final PolylineConnection connection = getFigure();
+		connection.setAlpha(value);
+		for (final Object fig : connection.getChildren()) {
+			if (fig instanceof Shape) {
+				((Shape) fig).setAlpha(value);
 			}
 		}
 	}
