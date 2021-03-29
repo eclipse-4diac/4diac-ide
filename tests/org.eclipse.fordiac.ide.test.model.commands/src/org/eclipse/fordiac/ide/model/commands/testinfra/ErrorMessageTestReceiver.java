@@ -61,8 +61,8 @@ public class ErrorMessageTestReceiver {
 
 	private List<String> messages;
 
-	private EventHandler receiver = (Event event) -> {
-		Object message = event.getProperty(IEventBroker.DATA); //$NON-NLS-1$
+	private final EventHandler receiver = (final Event event) -> {
+		final Object message = event.getProperty(IEventBroker.DATA);
 		if (eventsRegistered && message instanceof ErrorMessage) {
 			messages.add(((ErrorMessage) message).getMessage());
 			ErrorMessenger.hashCleared(message.hashCode());

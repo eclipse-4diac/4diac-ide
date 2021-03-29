@@ -69,7 +69,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	 *
 	 * @param pageName the page name
 	 */
-	protected SelectFBTypesWizardPage(final String pageName, IStructuredSelection selection) {
+	protected SelectFBTypesWizardPage(final String pageName, final IStructuredSelection selection) {
 		super(pageName, selection);
 	}
 
@@ -77,40 +77,40 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	private Combo filters;
 
 	private void addAvailableExportFilter(final Group group) {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IConfigurationElement[] elems = registry
 				.getConfigurationElementsFor("org.eclipse.fordiac.ide.export.exportFilter"); //$NON-NLS-1$
 		Arrays.sort(elems, (o1, o2) -> {
 			int sortIndex1 = 0;
 			try {
 				sortIndex1 = Integer.parseInt(o1.getAttribute(SORT_INDEX));
-			} catch (NumberFormatException e1) {
+			} catch (final NumberFormatException e1) {
 			}
 			int sortIndex2 = 0;
 			try {
 				sortIndex2 = Integer.parseInt(o2.getAttribute(SORT_INDEX));
-			} catch (NumberFormatException e2) {
+			} catch (final NumberFormatException e2) {
 			}
 			return sortIndex1 - sortIndex2;
 		});
 		exportFilters.clear();
 		exportFilters.addAll(Arrays.asList(elems));
 
-		Composite composite = new Composite(group, SWT.NONE);
-		GridLayout layout = new GridLayout();
+		final Composite composite = new Composite(group, SWT.NONE);
+		final GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
 
-		Label label = new Label(composite, SWT.NONE);
+		final Label label = new Label(composite, SWT.NONE);
 		label.setText(Messages.SelectFBTypesWizardPage_Exporter);
 
 		filters = new Combo(composite, SWT.NONE);
-		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		final GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 		filters.setLayoutData(data);
 
-		for (IConfigurationElement exportFilter : exportFilters) {
+		for (final IConfigurationElement exportFilter : exportFilters) {
 			filters.add(exportFilter.getAttribute(NAME));
 		}
 
@@ -154,7 +154,6 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		return super.validateSourceGroup();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List getSelectedResources() {
 		return super.getSelectedResources();
@@ -206,9 +205,9 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	 * Loads cached directory, if available.
 	 */
 	private void loadTargetDirctories() {
-		IDialogSettings settings = getDialogSettings();
+		final IDialogSettings settings = getDialogSettings();
 		if (settings != null) {
-			String[] directoryNames = settings.getArray(STORE_DIRECTORY_NAMES_ID);
+			final String[] directoryNames = settings.getArray(STORE_DIRECTORY_NAMES_ID);
 			if (directoryNames == null) {
 				return; // ie.- no settings stored
 			}
@@ -224,9 +223,9 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	 */
 	private void loadLastSelectedFilter() {
 		if (getDialogSettings() != null) {
-			String currentFilterSelectionName = getDialogSettings().get(STORE_CURRENT_FILTER_SELECTION_ID);
+			final String currentFilterSelectionName = getDialogSettings().get(STORE_CURRENT_FILTER_SELECTION_ID);
 			if (currentFilterSelectionName != null) {
-				for (IConfigurationElement filter : exportFilters) {
+				for (final IConfigurationElement filter : exportFilters) {
 					if (filter.getAttribute(NAME).equals(currentFilterSelectionName)) {
 						filters.select(exportFilters.indexOf(filter));
 						break;
@@ -238,7 +237,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 	@Override
 	protected void internalSaveWidgetValues() {
-		IDialogSettings settings = getDialogSettings();
+		final IDialogSettings settings = getDialogSettings();
 		if (settings != null) {
 			// Saves current directory for next session.
 			String[] directoryNames = settings.getArray(STORE_DIRECTORY_NAMES_ID);
@@ -257,19 +256,19 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	}
 
 	@Override
-	protected void createDestinationGroup(Composite parent) {
+	protected void createDestinationGroup(final Composite parent) {
 
-		Font font = parent.getFont();
+		final Font font = parent.getFont();
 		// destination specification group
-		Composite destinationSelectionGroup = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
+		final Composite destinationSelectionGroup = new Composite(parent, SWT.NONE);
+		final GridLayout layout = new GridLayout();
 		layout.numColumns = 3;
 		destinationSelectionGroup.setLayout(layout);
 		destinationSelectionGroup
 				.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
 		destinationSelectionGroup.setFont(font);
 
-		Label destinationLabel = new Label(destinationSelectionGroup, SWT.NONE);
+		final Label destinationLabel = new Label(destinationSelectionGroup, SWT.NONE);
 		destinationLabel.setText(Messages.SelectFBTypesWizardPage_ExportDestination);
 		destinationLabel.setFont(font);
 
@@ -277,20 +276,20 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		destinationNameField = new Combo(destinationSelectionGroup, SWT.SINGLE | SWT.BORDER);
 		destinationNameField.addListener(SWT.Modify, this);
 		destinationNameField.addListener(SWT.Selection, this);
-		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		final GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 		destinationNameField.setLayoutData(data);
 		destinationNameField.setFont(font);
 
 		// destination browse button
-		Button destinationBrowseButton = new Button(destinationSelectionGroup, SWT.PUSH);
+		final Button destinationBrowseButton = new Button(destinationSelectionGroup, SWT.PUSH);
 		destinationBrowseButton.setText(Messages.SelectFBTypesWizardPage_Browse);
 		destinationBrowseButton.addListener(SWT.Selection, event -> {
-			DirectoryDialog dialog = new DirectoryDialog(getContainer().getShell(), SWT.SAVE | SWT.SHEET);
+			final DirectoryDialog dialog = new DirectoryDialog(getContainer().getShell(), SWT.SAVE | SWT.SHEET);
 			dialog.setMessage(Messages.SelectFBTypesWizardPage_SelectADirectoryToExportTo);
 			dialog.setText(Messages.SelectFBTypesWizardPage_ExportToDirectory);
 			dialog.setFilterPath(getDirectory());
-			String selectedDirectoryName = dialog.open();
+			final String selectedDirectoryName = dialog.open();
 
 			if (selectedDirectoryName != null) {
 				setErrorMessage(null);
@@ -306,7 +305,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	}
 
 	@Override
-	protected void createOptionsGroupButtons(Group optionsGroup) {
+	protected void createOptionsGroupButtons(final Group optionsGroup) {
 		super.createOptionsGroupButtons(optionsGroup);
 		addAvailableExportFilter(optionsGroup);
 
@@ -316,7 +315,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		cmake = new Button(optionsGroup, SWT.CHECK);
 		cmake.setText("Export CMakeLists.txt");
 
-		GridData twoColumns = new GridData();
+		final GridData twoColumns = new GridData();
 		twoColumns.grabExcessHorizontalSpace = true;
 		twoColumns.grabExcessVerticalSpace = false;
 		twoColumns.horizontalAlignment = SWT.FILL;
@@ -326,7 +325,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	}
 
 	@Override
-	public void handleEvent(Event event) {
+	public void handleEvent(final Event event) {
 	}
 
 	@Override // this overide is needed to make it public for access by the wizard

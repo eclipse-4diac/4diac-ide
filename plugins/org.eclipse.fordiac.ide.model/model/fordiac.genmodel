@@ -700,7 +700,7 @@
     <genClasses ecoreClass="data.ecore#//StructuredType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//StructuredType/memberVariables"/>
       <genOperations ecoreOperation="data.ecore#//StructuredType/isCompatibleWith"
-          body="return (other instanceof StructuredType)&#xA;&#x9;&#x9;&#x9;&#x9;&amp;&amp; ((this == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_STRUCT)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;|| (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_STRUCT)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;|| (getName().equals(other.getName())));">
+          body="return (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY)&#xA;&#x9;&#x9;&#x9;&#x9;|| (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_DERIVED)&#xA;&#x9;&#x9;&#x9;&#x9;|| ((other instanceof StructuredType)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&amp;&amp; ((this == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_STRUCT)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;|| (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_STRUCT)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;|| (getName().equals(other.getName()))));">
         <genParameters ecoreParameter="data.ecore#//StructuredType/isCompatibleWith/other"/>
       </genOperations>
     </genClasses>

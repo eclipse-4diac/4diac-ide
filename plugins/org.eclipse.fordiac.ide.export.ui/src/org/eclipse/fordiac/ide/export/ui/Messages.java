@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,7 +18,8 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-public class Messages extends NLS {
+@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.export.ui.messages"; //$NON-NLS-1$
 
 	public static String ExportStatusMessageDialog_4diacIDETypeExportErrors;
@@ -77,5 +78,6 @@ public class Messages extends NLS {
 	}
 
 	private Messages() {
+		// empty private constructor
 	}
 }

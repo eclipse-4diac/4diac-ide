@@ -27,13 +27,12 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class DeleteECCAction extends DeleteAction {
 
-	public DeleteECCAction(IWorkbenchPart part) {
+	public DeleteECCAction(final IWorkbenchPart part) {
 		super(part);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Command createDeleteCommand(List objects) {
+	public Command createDeleteCommand(final List objects) {
 		if (objects.isEmpty()) {
 			return null;
 		}
@@ -44,10 +43,10 @@ public class DeleteECCAction extends DeleteAction {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static List<EditPart> getDeleteList(List objects) {
-		List<EditPart> list = new ArrayList<>();
+	private static List<EditPart> getDeleteList(final List objects) {
+		final List<EditPart> list = new ArrayList<>();
 
-		for (Object object : objects) {
+		for (final Object object : objects) {
 			if (object instanceof ECTransitionEditPart) {
 				list.add(0, (EditPart) object); // add the transitions before anything else
 			} else if (object instanceof ECActionAlgorithmEditPart) {
@@ -68,8 +67,8 @@ public class DeleteECCAction extends DeleteAction {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static boolean stateContainedInDeleteList(List objects, ECState eState) {
-		for (Object object : objects) {
+	private static boolean stateContainedInDeleteList(final List objects, final ECState eState) {
+		for (final Object object : objects) {
 			if (object instanceof EditPart && ((EditPart) object).getModel().equals(eState)) {
 				return true;
 			}

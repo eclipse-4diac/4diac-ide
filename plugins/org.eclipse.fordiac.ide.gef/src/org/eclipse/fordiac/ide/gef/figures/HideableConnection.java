@@ -23,7 +23,10 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.data.AnyType;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -38,11 +41,11 @@ public class HideableConnection extends PolylineConnection {
 
 	private boolean hidden = false;
 	private String label = ""; //$NON-NLS-1$
-	private Rectangle moveRect = new Rectangle();
+	private final Rectangle moveRect = new Rectangle();
 	private org.eclipse.fordiac.ide.model.libraryElement.Connection model;
 	private Color lighterColor;
 
-	public void setModel(org.eclipse.fordiac.ide.model.libraryElement.Connection newModel) {
+	public void setModel(final org.eclipse.fordiac.ide.model.libraryElement.Connection newModel) {
 		model = newModel;
 	}
 
@@ -54,7 +57,7 @@ public class HideableConnection extends PolylineConnection {
 		return label;
 	}
 
-	public void setLabel(String label) {
+	public void setLabel(final String label) {
 		this.label = label;
 	}
 
@@ -62,12 +65,12 @@ public class HideableConnection extends PolylineConnection {
 		return hidden;
 	}
 
-	public void setHidden(boolean hidden) {
+	public void setHidden(final boolean hidden) {
 		this.hidden = hidden;
 	}
 
 	@Override
-	public void setForegroundColor(Color fg) {
+	public void setForegroundColor(final Color fg) {
 		super.setForegroundColor(fg);
 		if (isAdapterConnectionOrStructConnection()) {
 			lighterColor = ColorHelper.lighter(fg);
@@ -75,15 +78,15 @@ public class HideableConnection extends PolylineConnection {
 	}
 
 	@Override
-	protected void outlineShape(Graphics g) {
+	protected void outlineShape(final Graphics g) {
 		if (isHidden()) {
 
-			int[] startLine = new int[] { getStart().x, getStart().y, getStart().x + 20, getStart().y };
-			int[] endLine = new int[] { getEnd().x, getEnd().y, getEnd().x - 20, getEnd().y };
+			final int[] startLine = new int[] { getStart().x, getStart().y, getStart().x + 20, getStart().y };
+			final int[] endLine = new int[] { getEnd().x, getEnd().y, getEnd().x - 20, getEnd().y };
 			g.drawPolyline(startLine);
 			g.drawPolyline(endLine);
 
-			Dimension dim = FigureUtilities.getTextExtents(label, g.getFont());
+			final Dimension dim = FigureUtilities.getTextExtents(label, g.getFont());
 			g.drawText(label, new Point(getEnd().x - dim.width - 25, getEnd().y - (dim.height / 2)));
 			moveRect.x = getEnd().x - dim.width - 25;
 			moveRect.y = getEnd().y - (dim.height / 2);
@@ -106,12 +109,20 @@ public class HideableConnection extends PolylineConnection {
 			if (null == refElement) {
 				refElement = model.getDestination();
 			}
+
+			final DataType dataType = refElement.getType();
+			if ((dataType instanceof AnyType) && (dataType == IecTypes.GenericTypes.ANY)
+					&& (refElement == model.getSource())) {
+				// if source is of any type change to destination so that source any target struct are shown correctly
+				refElement = getModel().getDestination();
+			}
+
 			return ((null != refElement) && (refElement.getType() instanceof StructuredType));
 		}
 		return (model instanceof AdapterConnection);
 	}
 
-	private void drawDoublePolyline(Graphics g, PointList beveledPoints) {
+	private void drawDoublePolyline(final Graphics g, final PointList beveledPoints) {
 		g.drawPolyline(beveledPoints);
 		g.setLineWidth(getLineWidth() / NORMAL_DOUBLE_LINE_WIDTH);
 		if (g.getAbsoluteScale() >= 1) {
@@ -122,7 +133,7 @@ public class HideableConnection extends PolylineConnection {
 
 
 	@Override
-	public void setLineWidth(int w) {
+	public void setLineWidth(final int w) {
 		int width = w;
 		if (isAdapterConnectionOrStructConnection()) {
 			width = Math.max(w * DOUBLE_LINE_AMPLIFICATION, NORMAL_DOUBLE_LINE_WIDTH);
@@ -131,16 +142,16 @@ public class HideableConnection extends PolylineConnection {
 	}
 
 	private PointList getBeveledPoints() {
-		PointList beveledPoints = new PointList();
+		final PointList beveledPoints = new PointList();
 
 		beveledPoints.addPoint(getPoints().getFirstPoint());
 
 		for (int i = 1; i < (getPoints().size() - 1); i++) {
-			Point before = getPoints().getPoint(i - 1);
-			Point after = getPoints().getPoint(i + 1);
+			final Point before = getPoints().getPoint(i - 1);
+			final Point after = getPoints().getPoint(i + 1);
 
-			int verDistance = Math.abs(before.y - after.y);
-			int horDistance = Math.abs(before.y - after.y);
+			final int verDistance = Math.abs(before.y - after.y);
+			final int horDistance = Math.abs(before.y - after.y);
 			int bevelSize = BEND_POINT_BEVEL_SIZE;
 			if (verDistance < (2 * BEND_POINT_BEVEL_SIZE)) {
 				bevelSize = verDistance / 2;
@@ -157,7 +168,7 @@ public class HideableConnection extends PolylineConnection {
 		return beveledPoints;
 	}
 
-	private static Point calculatedBeveledPoint(Point refPoint, Point otherPoint, int bevelSize) {
+	private static Point calculatedBeveledPoint(final Point refPoint, final Point otherPoint, final int bevelSize) {
 		if (0 == (refPoint.x - otherPoint.x)) {
 			return new Point(refPoint.x, refPoint.y + (((refPoint.y - otherPoint.y) > 0) ? -bevelSize : bevelSize));
 		}

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.datatypeeditor;
 
 import org.eclipse.osgi.util.NLS;
 
+@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.datatypeeditor.messages"; //$NON-NLS-1$
 	public static String MessageDialogTitle_SaveError;
@@ -30,5 +31,6 @@ public final class Messages extends NLS {
 	}
 
 	private Messages() {
+		// empty private constructor
 	}
 }
