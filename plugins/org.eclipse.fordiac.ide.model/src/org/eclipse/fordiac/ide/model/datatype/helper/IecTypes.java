@@ -192,6 +192,16 @@ public final class IecTypes {
 
 		}
 
+		public static boolean isAnyType(final DataType type) {
+			for (final DataType dt : getAllGenericTypes()) {
+				if (dt == type) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		public static DataType[] getAllGenericTypes() {
 			return new DataType[] { ANY, ANY_ELEMENTARY, ANY_DERIVED, ANY_MAGNITUDE, ANY_NUM, ANY_REAL, ANY_INT,
 					ANY_UNSIGNED, ANY_SIGNED, ANY_DURATION, ANY_BIT, ANY_CHARS, ANY_STRING, ANY_CHAR, ANY_DATE,

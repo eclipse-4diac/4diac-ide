@@ -40,7 +40,6 @@ import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.gef.router.RouterUtil;
-import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
@@ -243,13 +242,12 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			refElement = getModel().getDestination();
 		}
 
-		final DataType dataType = refElement.getType();
-		if (dataType instanceof AnyType) {
-			// if we have a more concrete type we use its colour
-			if (dataType == IecTypes.GenericTypes.ANY) {
+		if (null != refElement) {
+			final DataType dataType = refElement.getType();
+			//check if source is any type
+			if (IecTypes.GenericTypes.isAnyType(dataType) && (refElement == getModel().getSource())) {
+				// take destination for determining the color
 				refElement = getModel().getDestination();
-			} else {
-				refElement = getModel().getSource();
 			}
 		}
 
