@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
@@ -74,7 +74,7 @@ public class FlattenSubApplication extends AbstractHandler {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final SubApp subApp = getSelectedSubApp(selection);
 
-		setBaseEnabled(BreadcrumbUtil.isEditableSubApp(subApp));
+		setBaseEnabled(HandlerHelper.isEditableSubApp(subApp));
 	}
 
 	private static SubApp getSubApp(Object currentElement) {
@@ -111,7 +111,7 @@ public class FlattenSubApplication extends AbstractHandler {
 		if (editor.getAdapter(FBNetwork.class).equals(subApp.getSubAppNetwork())) {
 			// we are invoking the method from within the subapp, switch to the parent
 			// editor
-			BreadcrumbUtil.openEditor(subApp.getFbNetwork().eContainer());
+			HandlerHelper.openEditor(subApp.getFbNetwork().eContainer());
 		}
 	}
 

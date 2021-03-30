@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.UntypeSubAppCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
@@ -37,9 +37,9 @@ public class UntypeSubApplicationHandler extends AbstractHandler {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		final SubApp subApp = getSelectedSubApp(selection);
 		if (null != subApp) {
-			BreadcrumbUtil.getCommandStack(editor).execute(new UntypeSubAppCommand(subApp));
-			BreadcrumbUtil.getViewer(editor).deselectAll();
-			BreadcrumbUtil.selectElement(subApp, BreadcrumbUtil.getViewer(editor));
+			HandlerHelper.getCommandStack(editor).execute(new UntypeSubAppCommand(subApp));
+			HandlerHelper.getViewer(editor).deselectAll();
+			HandlerHelper.selectElement(subApp, HandlerHelper.getViewer(editor));
 		}
 		return Status.OK_STATUS;
 	}

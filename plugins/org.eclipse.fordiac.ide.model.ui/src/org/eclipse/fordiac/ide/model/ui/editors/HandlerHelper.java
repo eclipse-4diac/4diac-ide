@@ -24,8 +24,8 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IEditorPart;
 
-public final class BreadcrumbUtil {
-	private BreadcrumbUtil() {
+public final class HandlerHelper {
+	private HandlerHelper() {
 		// do not instantiate this class
 	}
 

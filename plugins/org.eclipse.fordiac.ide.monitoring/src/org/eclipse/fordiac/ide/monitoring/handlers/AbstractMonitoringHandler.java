@@ -18,7 +18,7 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.RootEditPart;
@@ -37,7 +37,7 @@ public abstract class AbstractMonitoringHandler extends AbstractHandler {
 
 	protected void setEditor(final IEditorPart activeEditor) {
 
-		final GraphicalViewer viewer = BreadcrumbUtil.getViewer(activeEditor);
+		final GraphicalViewer viewer = HandlerHelper.getViewer(activeEditor);
 		if (null != viewer) {
 			rootEditPart = viewer.getRootEditPart();
 		} else {

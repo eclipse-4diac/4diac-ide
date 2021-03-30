@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalViewer;
@@ -83,7 +83,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		}
 		final IEditorPart newEditor = OpenListenerManager.openEditor(subApp);
 		final GraphicalViewer viewer = newEditor.getAdapter(GraphicalViewer.class);
-		BreadcrumbUtil.selectElement(getModel(), viewer);
+		HandlerHelper.selectElement(getModel(), viewer);
 	}
 
 	private DirectEditManager getManager() {

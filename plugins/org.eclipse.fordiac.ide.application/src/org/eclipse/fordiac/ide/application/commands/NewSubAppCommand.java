@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPart;
 
 public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
@@ -125,7 +125,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	private void closeOpenedSubApp() {
-		BreadcrumbUtil.openParentEditor(getSubApp());
+		HandlerHelper.openParentEditor(getSubApp());
 	}
 
 	private SubApp getSubApp() {

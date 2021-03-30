@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -56,7 +56,7 @@ public class SystemConfigurationEditorLinkHelper extends AbstractEditorLinkHelpe
 		if (null != sysConf) {
 			final IEditorInput sysConfInput = new SystemConfigurationEditorInput(sysConf);
 			final IEditorPart editor = activateEditor(aPage, sysConfInput);
-			BreadcrumbUtil.selectElement(refObject, editor);
+			HandlerHelper.selectElement(refObject, editor);
 		}
 
 	}
