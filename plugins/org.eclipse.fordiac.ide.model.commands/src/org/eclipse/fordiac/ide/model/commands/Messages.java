@@ -40,6 +40,7 @@ public final class Messages extends NLS {
 	public static String ViewSetPositionCommand_LABEL_Move;
 	public static String WithExists;
 	public static String ConnectingIncompatibleInterfaceTypes;
+	public static String UntypeSubappCommand_Label;
 
 	static {
 		// initialize resource bundle

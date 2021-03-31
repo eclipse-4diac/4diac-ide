@@ -160,8 +160,6 @@ public final class Messages extends NLS {
 
 	public static String UIFBNetworkContextMenuProvider_ChangeType;
 
-	public static String UntypeSubappCommand_Label;
-
 	public static String UpdateFBTypeAction_Text;
 
 	public static String PasteRecreateNotPossible;
