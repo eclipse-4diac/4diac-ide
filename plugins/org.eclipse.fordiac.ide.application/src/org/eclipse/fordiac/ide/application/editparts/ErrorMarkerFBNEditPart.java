@@ -20,6 +20,9 @@ import org.eclipse.swt.widgets.Display;
 
 public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 
+	private ErrorMarkerFBNeworkElementFigure errorMarkerFBNeworkElementFigure;
+
+
 	@Override
 	public ErrorMarkerFBNElement getModel() {
 		return (ErrorMarkerFBNElement) super.getModel();
@@ -27,12 +30,18 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 
 	@Override
 	protected IFigure createFigureForModel() {
-		final ErrorMarkerFBNeworkElementFigure errorMarkerFBNeworkElementFigure = new ErrorMarkerFBNeworkElementFigure(getModel(), this);
+		errorMarkerFBNeworkElementFigure = new ErrorMarkerFBNeworkElementFigure(getModel(), this);
 		errorMarkerFBNeworkElementFigure.setOpaque(false);
 		errorMarkerFBNeworkElementFigure.setBackgroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
-
+		setText("Error Marker");
 		return errorMarkerFBNeworkElementFigure;
 	}
 
+
+	public void setText(final String text) {
+		if (errorMarkerFBNeworkElementFigure != null) {
+			errorMarkerFBNeworkElementFigure.setErrorMessage(text);
+		}
+	}
 
 }

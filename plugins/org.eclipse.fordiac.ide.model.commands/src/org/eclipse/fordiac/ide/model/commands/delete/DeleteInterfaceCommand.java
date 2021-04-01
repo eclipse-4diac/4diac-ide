@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 -2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,7 +9,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *       - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.model.commands.delete;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -56,6 +57,8 @@ public class DeleteInterfaceCommand extends Command {
 				parent.getSockets().add(oldIndex, (AdapterDeclaration) interfaceElement);
 			} else if (interfaceElement instanceof VarDeclaration) {
 				parent.getInputVars().add(oldIndex, (VarDeclaration) interfaceElement);
+			} else if (interfaceElement instanceof ErrorMarkerInterface) {
+				parent.getErrorMarker().add(oldIndex, interfaceElement);
 			}
 		} else {
 			if (interfaceElement instanceof Event) {
@@ -64,6 +67,8 @@ public class DeleteInterfaceCommand extends Command {
 				parent.getPlugs().add(oldIndex, (AdapterDeclaration) interfaceElement);
 			} else if (interfaceElement instanceof VarDeclaration) {
 				parent.getOutputVars().add(oldIndex, (VarDeclaration) interfaceElement);
+			} else if (interfaceElement instanceof ErrorMarkerInterface) {
+				parent.getErrorMarker().add(oldIndex, interfaceElement);
 			}
 		}
 		if (cmds.canUndo()) {
@@ -87,7 +92,11 @@ public class DeleteInterfaceCommand extends Command {
 			} else if (interfaceElement instanceof VarDeclaration) {
 				oldIndex = parent.getInputVars().indexOf(interfaceElement);
 				parent.getInputVars().remove(interfaceElement);
+			} else if (interfaceElement instanceof ErrorMarkerInterface) {
+				oldIndex = parent.getErrorMarker().indexOf(interfaceElement);
+				parent.getErrorMarker().remove(interfaceElement);
 			}
+
 		} else {
 			if (interfaceElement instanceof Event) {
 				oldIndex = parent.getEventOutputs().indexOf(interfaceElement);
@@ -98,6 +107,9 @@ public class DeleteInterfaceCommand extends Command {
 			} else if (interfaceElement instanceof VarDeclaration) {
 				oldIndex = parent.getOutputVars().indexOf(interfaceElement);
 				parent.getOutputVars().remove(interfaceElement);
+			} else if (interfaceElement instanceof ErrorMarkerInterface) {
+				oldIndex = parent.getErrorMarker().indexOf(interfaceElement);
+				parent.getErrorMarker().remove(interfaceElement);
 			}
 		}
 		if (cmds.canExecute()) {
@@ -106,23 +118,23 @@ public class DeleteInterfaceCommand extends Command {
 	}
 
 	private void handleSubAppConnections() {
-		for (Connection con : interfaceElement.getInputConnections()) {
+		for (final Connection con : interfaceElement.getInputConnections()) {
 			cmds.add(new DeleteConnectionCommand(con));
 		}
-		for (Connection con : interfaceElement.getOutputConnections()) {
+		for (final Connection con : interfaceElement.getOutputConnections()) {
 			cmds.add(new DeleteConnectionCommand(con));
 		}
 	}
 
 	private void handleWiths() {
 		if (interfaceElement instanceof VarDeclaration) {
-			VarDeclaration varDecl = (VarDeclaration) interfaceElement;
-			for (With with : varDecl.getWiths()) {
+			final VarDeclaration varDecl = (VarDeclaration) interfaceElement;
+			for (final With with : varDecl.getWiths()) {
 				cmds.add(new DeleteWithCommand(with));
 			}
 		} else if (interfaceElement instanceof Event) {
-			Event event = (Event) interfaceElement;
-			for (With with : event.getWith()) {
+			final Event event = (Event) interfaceElement;
+			for (final With with : event.getWith()) {
 				cmds.add(new DeleteWithCommand(with));
 			}
 		}

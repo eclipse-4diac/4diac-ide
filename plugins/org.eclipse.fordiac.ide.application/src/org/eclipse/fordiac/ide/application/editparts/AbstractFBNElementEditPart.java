@@ -292,7 +292,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				return getFigure().getDataOutputs();
 			}
 			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
-				return getFigure().getErrorMarkerInput();
+				return getFigure().getErrorMarkerOutput();
 			}
 
 		}

@@ -40,10 +40,7 @@ public class ConnectionHelper {
 		private InterfaceList srcInterfaceList;
 		private IInterfaceElement sourceEndpoint;
 
-		private final FBNetwork fbNetwork;
-
-		public ConnectionBuilder(final FBNetwork fbNetwork, final String source, final String destination) {
-			this.fbNetwork = fbNetwork;
+		public ConnectionBuilder(final String source, final String destination) {
 			this.connectionState = EnumSet.of(ConnectionState.VALID);
 			this.source = source;
 			this.destination = destination;
@@ -181,20 +178,14 @@ public class ConnectionHelper {
 
 		public boolean isMissingConnectionSource() {
 			return connectionState
-					.containsAll(EnumSet.of(ConnectionState.SOURCE_MISSING, ConnectionState.DEST_ENPOINT_EXITS));
+					.containsAll(EnumSet.of(ConnectionState.SOURCE_MISSING, ConnectionState.SOURCE_ENDPOINT_MISSING,
+							ConnectionState.DEST_EXISTS, ConnectionState.DEST_ENPOINT_EXITS));
 		}
 
 		public boolean isMissingConnectionSourceEndpoint() {
 			return connectionState.containsAll(
-					EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING, ConnectionState.DEST_ENPOINT_EXITS));
-		}
-
-		public InterfaceList getdestInterfaceList() {
-			return destInterfaceList;
-		}
-
-		public InterfaceList getsrcInterfaceList() {
-			return srcInterfaceList;
+					EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING, ConnectionState.SOURCE_EXITS,
+							ConnectionState.DEST_ENPOINT_EXITS));
 		}
 
 		public String getSourcePinName() {

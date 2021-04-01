@@ -329,6 +329,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		sockets.setLayoutManager(new ToolbarLayout(false));
 		bottomInputArea.add(sockets);
 
+
 		errorMarkerInput.setLayoutManager(new ToolbarLayout(false));
 		bottomInputArea.add(errorMarkerInput);
 
@@ -353,6 +354,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		errorMarkerOutput.setLayoutManager(new ToolbarLayout(false));
 		((ToolbarLayout) errorMarkerOutput.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomOutputArea.add(errorMarkerOutput);
+
 
 	}
 
@@ -379,8 +381,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	protected void changeTypeLabelText(final String text) {
-		typeLabel.setText(text
-				+ "\n we should use this space to display the messages of the error markers \n example message 1 \n  example message 2");
+		typeLabel.setText(text);
 		typeLabel.setIcon(null);
 	}
 

@@ -20,9 +20,12 @@ public class ErrorMarkerFBNeworkElementFigure extends FBNetworkElementFigure {
 	public ErrorMarkerFBNeworkElementFigure(final FBNetworkElement model, final AbstractFBNElementEditPart editPart) {
 		super(model, editPart);
 		setTransparency(100);
-
-		changeTypeLabelText("Error Marker"); //$NON-NLS-1$
 	}
+
+	public void setErrorMessage(final String text) {
+		changeTypeLabelText(text);
+	}
+
 
 
 }
