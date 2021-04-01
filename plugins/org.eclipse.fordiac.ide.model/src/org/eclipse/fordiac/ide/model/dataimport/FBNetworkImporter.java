@@ -61,6 +61,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	// types interface
 	private final InterfaceList interfaceList;
 
+
 	protected final Map<String, FBNetworkElement> fbNetworkElementMap = new HashMap<>();
 
 	public FBNetworkImporter(final CommonElementImporter importer) {
@@ -210,12 +211,15 @@ class FBNetworkImporter extends CommonElementImporter {
 		final String destinationElement = getAttributeValue(LibraryElementTags.DESTINATION_ATTRIBUTE);
 		final String sourceElement = getAttributeValue(LibraryElementTags.SOURCE_ATTRIBUTE);
 
-		final IInterfaceElement destinationEndPoint = getConnectionEndPoint(destinationElement, conType, true);
-		final IInterfaceElement sourceEndPoint = getConnectionEndPoint(sourceElement, conType, false);
+		final ConnectionBuilder builder = new ConnectionBuilder(fbNetwork, sourceElement, destinationElement);
 
-		final ConnectionBuilder builder = ConnectionBuilder.createConnectionBuilder(
-				destinationElement, destinationEndPoint, sourceElement,
-				sourceEndPoint, getFbNetwork());
+		final IInterfaceElement destinationEndPoint = getConnectionEndPoint(destinationElement, conType, true, builder);
+		builder.setDestinationEndpoint(destinationEndPoint);
+
+		final IInterfaceElement sourceEndPoint = getConnectionEndPoint(sourceElement, conType, false, builder);
+		builder.setSourceEndpoint(sourceEndPoint);
+
+		builder.validate();
 
 		if (builder.isValidConnection()) {
 			connection.setSource(builder.getSourceEndpoint());
@@ -268,13 +272,13 @@ class FBNetworkImporter extends CommonElementImporter {
 		createConnectionErrorMarker(Messages.FBNetworkImporter_ConnectionDestinationMissing, getFbNetwork(),
 				connectionBuilder.getSource(), null);
 
-		FBNetworkElement destinationFb = connectionBuilder.getDestinationElement();
 
-		if (destinationFb == null) {
-			destinationFb = ConnectionHelper.createErrorMarkerFB(connectionBuilder.getDestFbName()); // TODO check if
-																									 // there is already
-																									 // one
-		}
+		final FBNetworkElement destinationFb = ConnectionHelper.createErrorMarkerFB(connectionBuilder.getDestFbName()); // TODO
+		// check
+		// if
+		// there is already
+		// one
+
 		final String pinName = connectionBuilder.getDestinationPinName();
 
 		getFbNetwork().getNetworkElements().add(destinationFb);
@@ -303,7 +307,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		// TODO store createConnectionErrorMarker into global list after the workspace job has been recreated
 
-		final FBNetworkElement destinationFb = builder.getDestinationElement();
+		// final FBNetworkElement destinationFb = builder.getDestinationElement();
 		final String pinName = builder.getDestinationPinName();
 
 		final ErrorMarkerInterface errorMarkerInterface = ConnectionHelper.createErrorMarkerInterface(
@@ -318,7 +322,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		errorMarkerInterface.setRepairedEndpoint(errorMarkerInterface);
 
-		destinationFb.getInterface().getErrorMarker().add(errorMarkerInterface);
+		builder.getdestInterfaceList().getErrorMarker().add(errorMarkerInterface);
 		connection.setSource(builder.getSourceEndpoint());
 		connection.setDestination(errorMarkerInterface);
 
@@ -355,20 +359,33 @@ class FBNetworkImporter extends CommonElementImporter {
 		connection.setRoutingData(routingData);
 	}
 
-	private IInterfaceElement getConnectionEndPoint(final String path, final EClass conType, final boolean isInput) {
+
+	private IInterfaceElement getConnectionEndPoint(final String path, final EClass conType, final boolean isInput,
+			final ConnectionBuilder builder) {
 		if (path == null) {
 			return null;
 		}
 		final String[] split = path.split("\\."); //$NON-NLS-1$
 
 		if (1 == split.length) {
+			if (isInput) {
+				builder.setDestInterfaceList(interfaceList);
+			} else {
+				builder.setSrcInterfaceList(interfaceList);
+			}
+
 			return getContainingInterfaceElement(path, conType, isInput);
 		}
 		if (split.length >= 2) {
 			final FBNetworkElement element = findFBNetworkElement(split[0]);
 			if (null != element) {
-				return getInterfaceElement(element.getInterface(), path.substring(split[0].length() + 1), conType,
-						isInput);
+				final InterfaceList ieList = element.getInterface();
+				if (isInput) {
+					builder.setDestInterfaceList(ieList);
+				} else {
+					builder.setSrcInterfaceList(ieList);
+				}
+				return getInterfaceElement(ieList, path.substring(split[0].length() + 1), conType, isInput);
 			}
 		}
 		return null;

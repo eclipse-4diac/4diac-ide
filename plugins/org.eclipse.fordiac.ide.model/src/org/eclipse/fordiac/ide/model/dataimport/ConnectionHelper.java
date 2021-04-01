@@ -19,7 +19,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -28,80 +30,93 @@ public class ConnectionHelper {
 
 	public static class ConnectionBuilder {
 
-		private final EnumSet<ConnectionState> connectionState;
+		private EnumSet<ConnectionState> connectionState;
 
-		private final String destination;
-		private final FBNetworkElement destinationElement;
-		private final IInterfaceElement destinationEndpoint;
+		private String destination;
+		private InterfaceList destInterfaceList;
+		private IInterfaceElement destinationEndpoint;
 
-		private final String source;
-		private final FBNetworkElement sourceElement;
-		private final IInterfaceElement sourceEndpoint;
+		private String source;
+		private InterfaceList srcInterfaceList;
+		private IInterfaceElement sourceEndpoint;
 
-		private ConnectionBuilder(final EnumSet<ConnectionState> connectionState, final String destination,
-				final FBNetworkElement destinationElement, final IInterfaceElement destinationEndpoint,
-				final String source, final FBNetworkElement sourceElement, final IInterfaceElement sourceEndpoint) {
-			this.connectionState = connectionState;
-			this.destination = destination;
-			this.destinationElement = destinationElement;
-			this.destinationEndpoint = destinationEndpoint;
+		private final FBNetwork fbNetwork;
+
+		public ConnectionBuilder(final FBNetwork fbNetwork, final String source, final String destination) {
+			this.fbNetwork = fbNetwork;
+			this.connectionState = EnumSet.of(ConnectionState.VALID);
 			this.source = source;
-			this.sourceElement = sourceElement;
-			this.sourceEndpoint = sourceEndpoint;
+			this.destination = destination;
 		}
 
-		public static ConnectionBuilder createConnectionBuilder(final String destination,
-				final IInterfaceElement destinationEndpoint, final String source,
-				final IInterfaceElement sourceEndpoint, final FBNetwork fbNetwork) {
+		public void validate() {
 
-			final EnumSet<ConnectionState> states = EnumSet.of(ConnectionState.VALID);
-			states.add(ConnectionState.VALID);
 
-			FBNetworkElement sourceElement = null;
-			FBNetworkElement destinationElement = null;
 
-			if (source != null && getElementFromQualString(source, fbNetwork) != null) {
-				sourceElement = getElementFromQualString(source, fbNetwork);
-				states.add(ConnectionState.SOURCE_EXITS);
-			} else {
-				states.add(ConnectionState.SOURCE_MISSING);
-				states.remove(ConnectionState.VALID);
+			if (sourceEndpoint != null && destinationEndpoint != null) {
+				return;
 			}
 
 			if (sourceEndpoint != null) {
-				states.add(ConnectionState.SOURCE_ENDPOINT_EXISTS);
+				connectionState.add(ConnectionState.SOURCE_ENDPOINT_EXISTS);
 			} else {
-				states.add(ConnectionState.SOURCE_ENDPOINT_MISSING);
-				states.remove(ConnectionState.VALID);
+				connectionState.add(ConnectionState.SOURCE_ENDPOINT_MISSING);
+				connectionState.remove(ConnectionState.VALID);
 			}
 
-			if (destination != null && getElementFromQualString(destination, fbNetwork) != null) {
-				destinationElement = getElementFromQualString(destination, fbNetwork);
-				states.add(ConnectionState.DEST_EXISTS);
+			if (srcInterfaceList != null) {
+				connectionState.add(ConnectionState.SOURCE_EXITS);
 			} else {
-				states.add(ConnectionState.DEST_MISSING);
-				states.remove(ConnectionState.VALID);
+				connectionState.add(ConnectionState.SOURCE_MISSING);
+				connectionState.remove(ConnectionState.VALID);
 			}
+
 
 			if (destinationEndpoint != null) {
-				states.add(ConnectionState.DEST_ENPOINT_EXITS);
+				connectionState.add(ConnectionState.DEST_ENPOINT_EXITS);
 			} else {
-				states.add(ConnectionState.DEST_ENDPOINT_MISSING);
-				states.remove(ConnectionState.VALID);
+				connectionState.add(ConnectionState.DEST_ENDPOINT_MISSING);
+				connectionState.remove(ConnectionState.VALID);
 			}
 
-			return new ConnectionBuilder(states, destination, destinationElement,
-					destinationEndpoint,
-					source, sourceElement, sourceEndpoint);
+			if (destination != null && destInterfaceList != null) {
+				connectionState.add(ConnectionState.DEST_EXISTS);
+			} else {
+				connectionState.add(ConnectionState.DEST_MISSING);
+				connectionState.remove(ConnectionState.VALID);
+			}
 		}
 
-		protected static FBNetworkElement getElementFromQualString(final String source, final FBNetwork fbNetwork) {
+
+		protected static InterfaceList getInterfaceFromQualString(final String source, final FBNetwork fbNetwork) {
+			if (source == null) {
+				return null;
+			}
+
 			final String[] qualNames = source.split("\\."); //$NON-NLS-1$
 			if (qualNames.length == 0) {
 				return null;
 			}
 
-			return fbNetwork.getElementNamed(qualNames[0]);
+			/* final EObject parent = fbNetwork.eContainer();
+			 *
+			 * if (parent instanceof SubApp || ((FBNetworkElement) parent).getType() instanceof CompositeFBType) {
+			 * return (FBNetworkElement) parent; } */
+
+			final FBNetworkElement fbNetworkElement = fbNetwork.getElementNamed(qualNames[0]);
+			if (fbNetworkElement == null) {
+				return getElementFromType(fbNetwork);
+			}
+			return fbNetworkElement.getInterface();
+		}
+
+		private static InterfaceList getElementFromType(final FBNetwork fbNetwork) {
+			if (fbNetwork.eContainer() instanceof FBType) {
+				final FBType type = (FBType) fbNetwork.eContainer();
+				return type.getInterfaceList();
+			}
+
+			return null;
 		}
 
 		public String getSourceFbName() {
@@ -174,12 +189,12 @@ public class ConnectionHelper {
 					EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING, ConnectionState.DEST_ENPOINT_EXITS));
 		}
 
-		public FBNetworkElement getDestinationElement() {
-			return destinationElement;
+		public InterfaceList getdestInterfaceList() {
+			return destInterfaceList;
 		}
 
-		public FBNetworkElement getSourceElement() {
-			return sourceElement;
+		public InterfaceList getsrcInterfaceList() {
+			return srcInterfaceList;
 		}
 
 		public String getSourcePinName() {
@@ -216,6 +231,42 @@ public class ConnectionHelper {
 			}
 
 			return qualNames[1];
+		}
+
+		public InterfaceList getDestInterfaceList() {
+			return destInterfaceList;
+		}
+
+		public void setDestInterfaceList(final InterfaceList destInterfaceList) {
+			this.destInterfaceList = destInterfaceList;
+		}
+
+		public InterfaceList getSrcInterfaceList() {
+			return srcInterfaceList;
+		}
+
+		public void setSrcInterfaceList(final InterfaceList srcInterfaceList) {
+			this.srcInterfaceList = srcInterfaceList;
+		}
+
+		public void setConnectionState(final EnumSet<ConnectionState> connectionState) {
+			this.connectionState = connectionState;
+		}
+
+		public void setDestination(final String destination) {
+			this.destination = destination;
+		}
+
+		public void setDestinationEndpoint(final IInterfaceElement destinationEndpoint) {
+			this.destinationEndpoint = destinationEndpoint;
+		}
+
+		public void setSource(final String source) {
+			this.source = source;
+		}
+
+		public void setSourceEndpoint(final IInterfaceElement sourceEndpoint) {
+			this.sourceEndpoint = sourceEndpoint;
 		}
 
 	}

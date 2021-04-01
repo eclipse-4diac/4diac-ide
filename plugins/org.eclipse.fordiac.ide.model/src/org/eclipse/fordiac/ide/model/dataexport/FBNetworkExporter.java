@@ -66,7 +66,7 @@ class FBNetworkExporter extends CommonElementExporter {
 	private void addFBNetworkElements(final FBNetwork network) throws XMLStreamException {
 		for (final FBNetworkElement fbnElement : network.getNetworkElements()) {
 			final String nodeName = getFBNElementNodeName(fbnElement);
-			if (isExportable(nodeName, fbnElement)) {
+			if (null != nodeName) {
 				addStartElement(nodeName);
 				addNameAttribute(fbnElement.getName());
 				if (null != fbnElement.getType()) {
@@ -85,10 +85,6 @@ class FBNetworkExporter extends CommonElementExporter {
 				addEndElement();
 			}
 		}
-	}
-
-	private static boolean isExportable(final String nodeName, final FBNetworkElement fbnElement) {
-		return null != nodeName /* && !(fbnElement instanceof ErrorMarkerFBNElement)  //TODO figure out if this is needed*/;
 	}
 
 	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {
