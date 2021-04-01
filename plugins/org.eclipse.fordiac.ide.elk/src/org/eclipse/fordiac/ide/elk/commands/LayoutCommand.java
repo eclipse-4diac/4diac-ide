@@ -19,21 +19,11 @@ package org.eclipse.fordiac.ide.elk.commands;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.draw2d.AbstractPointListShape;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
-import org.eclipse.elk.core.service.LayoutMapping;
-import org.eclipse.elk.graph.ElkEdge;
-import org.eclipse.elk.graph.ElkNode;
-import org.eclipse.elk.graph.ElkPort;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
-import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -41,176 +31,63 @@ import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.commands.Command;
 
 public class LayoutCommand extends Command {
+	
+	final Map<FBNetworkElement, Position> positions;
+	final Map<Connection, PointList> connPoints;
+	private final Map<FBNetworkElement, FBNetworkElementFigure> fbFigures;
 
-	private final Map<AbstractFBNElementEditPart, Position> oldFBPositions = new HashMap<>();
-	private final Map<ConnectionEditPart, ConnectionRoutingData> oldConnectionRoutingData = new HashMap<>();
-	private final LayoutMapping mapping;
+	private final Map<FBNetworkElement, Position> oldPositions = new HashMap<>();
+	private final Map<Connection, ConnectionRoutingData> oldRoutingData = new HashMap<>();
 
-	public LayoutCommand(LayoutMapping mapping) {
+	public LayoutCommand(Map<FBNetworkElement, Position> positions, Map<Connection, PointList> connPoints,
+			Map<FBNetworkElement, FBNetworkElementFigure> fbFigures) {
 		super();
-		this.mapping = mapping;
+		this.positions = positions;
+		this.connPoints = connPoints;
+		this.fbFigures = fbFigures;
 	}
 
 	@Override
 	public void execute() {
-		savePositionsForUndo();
-		updateGraphRecusively(mapping.getLayoutGraph().getChildren());
+		saveDataForUndo();
+		updateModelElements();
+		updateFigures();
 	}
 
 	@Override
 	public void redo() {
-		updateGraphRecusively(mapping.getLayoutGraph().getChildren());
+		updateModelElements();
+		updateFigures();
 	}
 
 	@Override
 	public void undo() {
-		undoRecursively(mapping.getLayoutGraph().getChildren());
-	}
-	
-	private void undoRecursively(EList<ElkNode> nodes) {
-		nodes.forEach(child -> {
-			undoRecursively(child.getChildren());
-			final AbstractFBNElementEditPart editPart = (AbstractFBNElementEditPart) mapping.getGraphMap().get(child);
-			editPart.getModel().setPosition(oldFBPositions.get(editPart));
-			child.getPorts().forEach(port -> port.getOutgoingEdges().forEach(edge -> {
-				final ConnectionEditPart connEditPart = (ConnectionEditPart) mapping.getGraphMap().get(edge);
-				connEditPart.getModel().setRoutingData(oldConnectionRoutingData.get(connEditPart));
-			}));
+		oldPositions.forEach(FBNetworkElement::setPosition);
+		oldRoutingData.forEach(Connection::setRoutingData);
+		fbFigures.forEach((elem, fig) -> {
+			final Position pos = oldPositions.get(elem);
+			fig.setLocation(new Point(pos.getX(), pos.getY()));
 		});
 	}
 
-	private void savePositionsForUndo() {
-		savePositionsRecursively(mapping.getLayoutGraph().getChildren());
+	private void saveDataForUndo() {
+		positions.keySet().forEach(elem -> oldPositions.put(elem, EcoreUtil.copy(elem.getPosition())));
+		connPoints.keySet().forEach(conn -> oldRoutingData.put(conn, EcoreUtil.copy(conn.getRoutingData())));
 	}
 
-	private void savePositionsRecursively(EList<ElkNode> nodes) {
-		nodes.forEach(child -> {
-			savePositionsRecursively(child.getChildren());
-			final AbstractFBNElementEditPart editPart = (AbstractFBNElementEditPart) mapping.getGraphMap().get(child);
-			oldFBPositions.put(editPart, editPart.getModel().getPosition());
-			child.getPorts().forEach(port -> {
-				port.getOutgoingEdges().forEach(this::saveConnectionRoutingData);
-				port.getIncomingEdges().forEach(this::saveConnectionRoutingData);
-			});
+	private void updateModelElements() {
+		positions.forEach(FBNetworkElement::setPosition);
+		connPoints.forEach(LayoutCommand::updateModel);
+	}
+
+	private void updateFigures() {
+		fbFigures.forEach((elem, fig) -> {
+			final Position pos = positions.get(elem);
+			fig.setLocation(new Point(pos.getX(), pos.getY()));
 		});
 	}
 
-	private void updateGraphRecusively(EList<ElkNode> nodes) {
-		nodes.forEach(node -> {
-			updateGraphRecusively(node.getChildren());
-			updateFBPosition(node);
-			node.getPorts().forEach(port -> {
-				port.getOutgoingEdges().forEach(this::updateConnections);
-				port.getIncomingEdges().forEach(this::updateConnections);
-			});
-		});
-	}
-
-	private void saveConnectionRoutingData(ElkEdge edge) {
-		oldConnectionRoutingData.computeIfAbsent((ConnectionEditPart) mapping.getGraphMap().get(edge),
-				connEditPart -> EcoreUtil.copy(connEditPart.getModel().getRoutingData()));
-	}
-
-	private void updateFBPosition(ElkNode node) {
-		final AbstractFBNElementEditPart ep = (AbstractFBNElementEditPart) mapping.getGraphMap().get(node);
-		final FBNetworkElement elem = ep.getModel();
-		final FBNetworkElementFigure fig = ep.getFigure();
-
-		if (elem != null) {
-			double x = node.getX();
-			if (fig.getLabelBounds().width() > fig.getFBBounds().width()) {
-				x = node.getX() - (fig.getFBBounds().x() - fig.getLabelBounds().x());
-			}
-			if (node.getParent() != null) {
-				// consider the offset caused by the canvas
-				elem.updatePosition((int) (x + node.getParent().getX()), (int) (node.getY() + node.getParent().getY()));
-			} else {
-				elem.updatePosition((int) x, (int) node.getY());
-			}
-		}
-	}
-
-	// TODO comment or rework
-	private void updateConnections(ElkEdge edge) {
-		final ConnectionEditPart connEditPart = (ConnectionEditPart) mapping.getGraphMap().get(edge);
-		final PointList pointList = ((AbstractPointListShape) connEditPart.getFigure()).getPoints();
-		final ElkPort startPort = (ElkPort) edge.getSources().get(0);
-		final ElkPort endPort = (ElkPort) edge.getTargets().get(0);
-		final ElkNode parent = edge.getContainingNode();
-
-		pointList.removeAllPoints();
-
-		final double x = parent.getX();
-		final double y = parent.getY();
-
-		if (connEditPart.getSource() instanceof SubAppInternalInterfaceEditPart || connEditPart.getSource() instanceof CompositeInternalInterfaceEditPart) {
-			// subapp editor source pin
-			addStartPoint(pointList, startPort, x, y);
-			addBendpoints(edge, pointList, x, y);
-			addEndPoint(pointList, endPort, x, y);
-		} else if (connEditPart.getTarget() instanceof SubAppInternalInterfaceEditPart || connEditPart.getTarget() instanceof CompositeInternalInterfaceEditPart) {
-			// subapp editor target pin
-			addStartPoint(pointList, startPort, x + startPort.getParent().getX(), y + startPort.getParent().getY());
-			addBendpoints(edge, pointList, x, y);
-			addEndPoint(pointList, endPort, 0, 0);
-		} else if (isUnfolded(mapping.getGraphMap().get(parent))) {
-			// inside unfolded subapp
-			handleUnfoldedSubApp(connEditPart, edge, pointList, startPort, endPort, x, y);
-		} else {
-			addStartPoint(pointList, startPort, x + startPort.getParent().getX(), y + startPort.getParent().getY());
-			addBendpoints(edge, pointList, x, y);
-			addEndPoint(pointList, endPort, x, y);
-		}
-
-		((AbstractPointListShape) connEditPart.getFigure()).setPoints(pointList);
-
-		updateModel(connEditPart.getModel(), pointList);
-	}
-	
-	// TODO comment or rework
-	private void handleUnfoldedSubApp(ConnectionEditPart connEditPart, ElkEdge edge, PointList pointList, ElkPort startPort, ElkPort endPort, double x, double y) {
-		final double graphX = mapping.getLayoutGraph().getX();
-		final double graphY = mapping.getLayoutGraph().getY();
-		if (connEditPart.getSource() instanceof UntypedSubAppInterfaceElementEditPart) {
-			// unfolded subapp source pin
-			addStartPoint(pointList, startPort, x + graphX, y + graphY);
-			addBendpoints(edge, pointList, x + graphX, y + graphY);
-			addEndPoint(pointList, endPort, x + graphX, y + graphY);
-		} else if (connEditPart.getTarget() instanceof UntypedSubAppInterfaceElementEditPart) {
-			// unfolded subapp target pin
-			addStartPoint(pointList, startPort, x + graphX + startPort.getParent().getX(), y + graphY + startPort.getParent().getY());
-			addBendpoints(edge, pointList, x + graphX, y + graphY);
-			addEndPoint(pointList, endPort, graphX, graphY);
-		} else {
-			addStartPoint(pointList, startPort, x + graphX + startPort.getParent().getX(), y + graphY + startPort.getParent().getY());
-			addBendpoints(edge, pointList, x + graphX, y + graphY);
-			addEndPoint(pointList, endPort, x + graphX, y + graphY);
-		}
-	}
-	
-	private static boolean isUnfolded(Object editPart) {
-		if (editPart instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) editPart).getModel().isUnfolded();
-		}
-		return false;
-	}
-
-	private static void addEndPoint(PointList pointList, ElkPort endPort, double xOffset, double yOffset) {
-		pointList.addPoint((int) (endPort.getX() + endPort.getParent().getX() + xOffset),
-				(int) (endPort.getY() + endPort.getParent().getY() + yOffset));
-	}
-
-	private static void addStartPoint(PointList pointList, ElkPort startPort, double xOffset, double yOffset) {
-		pointList.addPoint((int) (startPort.getX() + xOffset), (int) (startPort.getY() + yOffset));
-	}
-
-	private static void addBendpoints(ElkEdge edge, PointList pointList, double xOffset, double yOffset) {
-		edge.getSections().forEach(edgeSection ->
-			edgeSection.getBendPoints().forEach(point -> pointList.addPoint((int) (point.getX() + xOffset), (int) (point.getY() + yOffset))));
-	}
-
-	private static void updateModel(final org.eclipse.fordiac.ide.model.libraryElement.Connection connModel,
-			final PointList pointList) {
+	private static void updateModel(final org.eclipse.fordiac.ide.model.libraryElement.Connection connModel, final PointList pointList) {
 		final ConnectionRoutingData routingData = LibraryElementFactory.eINSTANCE.createConnectionRoutingData();
 		if (pointList.size() > 2) {
 			// 3 segments

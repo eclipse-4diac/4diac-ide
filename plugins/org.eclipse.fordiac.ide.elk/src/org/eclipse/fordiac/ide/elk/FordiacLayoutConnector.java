@@ -24,10 +24,12 @@ import java.util.Map;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.elk.core.service.IDiagramLayoutConnector;
 import org.eclipse.elk.core.service.LayoutMapping;
+import org.eclipse.elk.graph.ElkBendPoint;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkGraphElement;
 import org.eclipse.elk.graph.ElkLabel;
@@ -43,10 +45,15 @@ import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.elk.commands.LayoutCommand;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -56,6 +63,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 
+	/* used for building the elk graph */
 	private static final IProperty<AbstractFBNetworkEditPart> NETWORK_EDIT_PART = new Property<>("gef.networkEditPart");
 	private static final IProperty<CommandStack> COMMAND_STACK = new Property<>("gef.commandStack");
 	private static final IProperty<List<ConnectionEditPart>> CONNECTIONS = new Property<>("gef.connections");
@@ -63,6 +71,17 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 
 	private static final PrecisionPoint START_POINT = new PrecisionPoint();
 	private static final PrecisionPoint END_POINT = new PrecisionPoint();
+
+	/* used for applying the layout */
+	private final Map<FBNetworkElement, Position> positions = new HashMap<>();
+	private final Map<Connection, PointList> connPoints = new HashMap<>();
+	private final Map<FBNetworkElement, FBNetworkElementFigure> fbFigures = new HashMap<>();
+
+	private void clear() {
+		positions.clear();
+		connPoints.clear();
+		fbFigures.clear();
+	}
 
 	@Override
 	public LayoutMapping buildLayoutGraph(IWorkbenchPart workbenchPart, Object diagramPart) {
@@ -188,7 +207,7 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 
 	private static void processConnections(LayoutMapping mapping) {
 		for (final ConnectionEditPart conn : mapping.getProperty(CONNECTIONS)) {
-			final org.eclipse.draw2d.Connection connFig = (org.eclipse.draw2d.Connection) conn.getFigure();
+			final org.eclipse.draw2d.Connection connFig = conn.getFigure();
 
 			START_POINT.setLocation(connFig.getSourceAnchor().getLocation(connFig.getSourceAnchor().getReferencePoint()));
 			END_POINT.setLocation(connFig.getTargetAnchor().getLocation(connFig.getTargetAnchor().getReferencePoint()));
@@ -229,8 +248,57 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 
 	@Override
 	public void applyLayout(LayoutMapping mapping, IPropertyHolder settings) {
-		final Command layoutCommand = new LayoutCommand(mapping);
+		clear();
+		final ElkNode graph = mapping.getLayoutGraph();
+		calculateNodePositionsRecursively(mapping, graph, 0, 0);
+
+		final Command layoutCommand = new LayoutCommand(positions, connPoints, fbFigures);
 		mapping.getProperty(COMMAND_STACK).execute(layoutCommand);
+	}
+	
+	private void calculateNodePositionsRecursively(LayoutMapping mapping, ElkNode node, double parentX, double parentY) {
+		final GraphicalEditPart ep = (GraphicalEditPart) mapping.getGraphMap().get(node);
+		final int calculatedX = (int) (node.getX() + parentX);
+		final int calculatedY = (int) (node.getY() + parentY);
+		if (!(ep instanceof AbstractFBNetworkEditPart && !(ep instanceof UnfoldedSubappContentEditPart))) { // the FBNetwork does not need a new position
+			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+			pos.setX(calculatedX);
+			pos.setY(calculatedY);
+			positions.put((FBNetworkElement) ep.getModel(), pos);
+			fbFigures.put((FBNetworkElement) ep.getModel(), (FBNetworkElementFigure) ep.getFigure());
+		}
+		for (final ElkEdge edge : node.getContainedEdges()) {
+			final ConnectionEditPart connEp = (ConnectionEditPart) mapping.getGraphMap().get(edge);
+			final ElkPort startPort = (ElkPort) edge.getSources().get(0);
+			final ElkPort endPort = (ElkPort) edge.getTargets().get(0);
+			final List<ElkBendPoint> bendPoints = edge.getSections().get(0).getBendPoints();
+
+			connPoints.put(connEp.getModel(), createPointList(node, startPort, endPort, bendPoints, calculatedX, calculatedY));
+		}
+		node.getChildren().forEach(child -> calculateNodePositionsRecursively(mapping, child, calculatedX, calculatedY));
+	}
+
+	private static PointList createPointList(ElkNode node, ElkPort startPort, ElkPort endPort,
+			List<ElkBendPoint> bendPoints, int calculatedX, int calculatedY) {
+		final PointList list = new PointList();
+		if (startPort.getParent() == node) {
+			// hierarchical port
+			list.addPoint((int) (startPort.getX() + calculatedX), (int) (startPort.getY() + calculatedY));
+		} else {
+			// simple port
+			list.addPoint((int) (startPort.getX() + startPort.getParent().getX() + calculatedX), (int) (startPort.getY() + startPort.getParent().getY() + calculatedY));
+		}
+		for (final ElkBendPoint point : bendPoints) {
+			list.addPoint((int) (point.getX() + calculatedX), (int) (point.getY() + calculatedY));
+		}
+		if (endPort.getParent() == node) {
+			// hierarchical port
+			list.addPoint((int) (endPort.getX() + calculatedX), (int) (endPort.getY() + calculatedY));
+		} else {
+			// simple port
+			list.addPoint((int) (endPort.getX() + endPort.getParent().getX() + calculatedX), (int) (endPort.getY() + endPort.getParent().getY() + calculatedY));
+		}
+		return list;
 	}
 
 }
