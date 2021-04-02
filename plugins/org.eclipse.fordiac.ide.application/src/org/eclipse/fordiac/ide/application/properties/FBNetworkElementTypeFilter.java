@@ -19,12 +19,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.jface.viewers.IFilter;
 
 /**
- * filter that checks whether object toTest is directly typed (i.e., an instance
- * of a typed subapp or an fbtype) or indirectly typed (i.e., contained in a
- * typed subapp or an fbtype)
+ * filter that checks whether object toTest is a typed fbnetworkelement (i.e.,
+ * an instance of a typed subapp or an fbtype). Untyped subapps are never
+ * counted
  *
  */
-public class TypedFBNetworkElementFilter implements IFilter {
+public class FBNetworkElementTypeFilter implements IFilter {
 	@Override
 	public boolean select(Object toTest) {
 		if (toTest instanceof SubAppForFBNetworkEditPart) {
@@ -35,6 +35,6 @@ public class TypedFBNetworkElementFilter implements IFilter {
 	}
 
 	private static boolean isTyped(final SubApp subapp) {
-		return (subapp.getType() != null) || subapp.isContainedInTypedInstance();
+		return (subapp.getType() != null);
 	}
 }

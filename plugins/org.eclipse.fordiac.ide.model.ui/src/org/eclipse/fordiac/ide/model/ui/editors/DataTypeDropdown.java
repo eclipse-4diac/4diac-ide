@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.model.ui.editors;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -112,7 +113,10 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	// can be overridden to filter the list differently
 	protected List<DataType> getDataTypesSorted() {
-		return library.getDataTypesSorted().stream().filter(Objects::nonNull).collect(Collectors.toList());
+		if (library != null) {
+			return library.getDataTypesSorted().stream().filter(Objects::nonNull).collect(Collectors.toList());
+		}
+		return Collections.emptyList();
 	}
 
 	@Override

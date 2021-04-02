@@ -22,8 +22,8 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -142,11 +142,17 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 
 	private DataTypeLibrary getDataTypeLib() {
-		return getTypeLib().getDataTypeLibrary();
+		if (null != getTypeLib()) {
+			return getTypeLib().getDataTypeLibrary();
+		}
+		return new DataTypeLibrary();
 	}
 
 	private Palette getPalette() {
-		return getTypeLib().getBlockTypeLib();
+		if (null != getTypeLib()) {
+			return getTypeLib().getBlockTypeLib();
+		}
+		return null;
 	}
 
 	@Override

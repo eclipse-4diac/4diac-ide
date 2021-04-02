@@ -214,7 +214,7 @@
                class="org.eclipse.fordiac.ide.application.properties.FBTypeInfoSection"
                id="org.eclipse.fordiac.ide.application.properties.FBTypeInfoSection"
                tab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
-	           filter="org.eclipse.fordiac.ide.application.properties.TypedFBNetworkElementFilter">
+	           filter="org.eclipse.fordiac.ide.application.properties.FBNetworkElementTypeFilter">
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.gef.properties.ConnectionSection"

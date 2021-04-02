@@ -30,4 +30,7 @@ public class FBNetworkElementHelper {
 		return false;
 	}
 
+	private FBNetworkElementHelper() {
+		throw new UnsupportedOperationException();
+	}
 }
