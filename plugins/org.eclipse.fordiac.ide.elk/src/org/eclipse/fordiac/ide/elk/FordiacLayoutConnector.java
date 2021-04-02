@@ -42,6 +42,7 @@ import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
+import org.eclipse.fordiac.ide.application.editparts.ErrorMarkerFBNEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
@@ -149,7 +150,7 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 	private static void buildGraphRecursively(LayoutMapping mapping, ElkNode parentLayoutNode, GraphicalEditPart currentEditPart) {
 
 		currentEditPart.getChildren().forEach(child -> {
-			if (child instanceof FBEditPart) {
+			if (child instanceof FBEditPart || child instanceof ErrorMarkerFBNEditPart) {
 				final AbstractFBNElementEditPart childEditPart = (AbstractFBNElementEditPart) child;
 				final ElkNode node = createNode(mapping, childEditPart, parentLayoutNode);
 				buildGraphRecursively(mapping, node, childEditPart);
