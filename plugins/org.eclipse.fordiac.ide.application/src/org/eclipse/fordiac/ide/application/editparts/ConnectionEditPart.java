@@ -40,7 +40,12 @@ import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.gef.router.RouterUtil;
+import org.eclipse.fordiac.ide.model.data.AnyBitType;
+import org.eclipse.fordiac.ide.model.data.AnyIntType;
+import org.eclipse.fordiac.ide.model.data.AnyRealType;
+import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -233,19 +238,19 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	}
 
 	private Color getDataConnectioncolor() {
-		// if the connections end point fb type could not be loaded it source or
-		// destination may be null
 		IInterfaceElement refElement = getModel().getSource();
 
-		// if one end point is ANY then it the connection should be colored the other way
+		// if the connections end point fb type could not be loaded it source or
+		// destination may be null
 		if ((null == refElement)) {
 			refElement = getModel().getDestination();
 		}
 
 		if (null != refElement) {
 			final DataType dataType = refElement.getType();
-			//check if source is any type
-			if (IecTypes.GenericTypes.isAnyType(dataType) && (refElement == getModel().getSource())) {
+			//check if source is not of type for which we can determine the color
+			if (!isColoredDataype(dataType) && (refElement == getModel().getSource())) {
+				// if source is of a non defined color type the connection should be colored the other way
 				// take destination for determining the color
 				refElement = getModel().getDestination();
 			}
@@ -256,6 +261,12 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		}
 
 		return PreferenceGetter.getDefaultDataColor();
+	}
+
+	private static boolean isColoredDataype(final DataType dataType) {
+		return (dataType == IecTypes.ElementaryTypes.BOOL) || (dataType instanceof AnyBitType)
+				|| (dataType instanceof AnyIntType) || (dataType instanceof AnyRealType)
+				|| (dataType instanceof AnyStringType) || (dataType instanceof StructuredType);
 	}
 
 	@Override
