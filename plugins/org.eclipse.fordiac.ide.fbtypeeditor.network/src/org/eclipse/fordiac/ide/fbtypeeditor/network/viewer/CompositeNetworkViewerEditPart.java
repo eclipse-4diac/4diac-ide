@@ -18,6 +18,7 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -56,6 +57,11 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 
 	public void setFbInstance(final FBNetworkElement fbInstance) {
 		this.fbInstance = fbInstance;
+	}
+
+	@Override
+	protected InterfaceList getInterfaceList() {
+		return fbInstance.getInterface();
 	}
 
 	@Override

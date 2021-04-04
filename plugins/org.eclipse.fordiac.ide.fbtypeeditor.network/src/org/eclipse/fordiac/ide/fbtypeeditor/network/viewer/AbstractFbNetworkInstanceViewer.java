@@ -28,19 +28,13 @@ import org.eclipse.fordiac.ide.gef.DiagramEditor;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -50,20 +44,23 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.IEditorInput;
 
 public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
-	protected FBNetworkElement fbNetworkElement;
-	protected CompositeFBType fbType;
-	protected EditPart fbEditPart;
-
-	protected abstract CompositeFBType createFbType(final CompositeFBType type, final InterfaceList interfaceList);
+	private FBNetworkElement fbNetworkElement;
+	private EditPart fbEditPart;
 
 
+	// subclasses need to override this method and return the fbnetwork contained in fbNetworkElement
 	@Override
-	public abstract EditPartFactory getEditPartFactory();
+	public abstract FBNetwork getModel();
+
+	protected FBNetworkElement getFbNetworkElement() {
+		return fbNetworkElement;
+	}
+
 
 	@Override
 	protected void initializeGraphicalViewer() {
 		final GraphicalViewer viewer = getGraphicalViewer();
-		if (fbType.getFBNetwork() != null) {
+		if (fbNetworkElement != null) {
 			viewer.setContents(getModel());
 		}
 	}
@@ -76,20 +73,12 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 
 		if (input instanceof CompositeAndSubAppInstanceViewerInput) {
 			final CompositeAndSubAppInstanceViewerInput untypedInput = (CompositeAndSubAppInstanceViewerInput) input;
-			final Object content = untypedInput.getContent();
-			if ((content instanceof SubApp && ((SubApp) content).getType() instanceof SubAppType)
-					|| (content instanceof FB) && (((FB) content).getType() instanceof CompositeFBType)) {
-				fbNetworkElement = (FBNetworkElement) content;
-				final String name = getNameHierarchy();
-				setPartName(name);
-				// we need to copy the type so that we have an instance specific network
-				fbType = createFbType((CompositeFBType) fbNetworkElement.getType(), fbNetworkElement.getInterface());
-				fbType.setName(name); // we set the name of the type so internal function blocks can generate their
-				// hierarchy name from it
-				fbEditPart = untypedInput.getFbEditPart();
-				((CompositeAndSubAppInstanceViewerInput) input).setName(name); // the tooltip will show the whole name when
-				// hovering
-			}
+			fbNetworkElement = untypedInput.getContent();
+			final String name = getNameHierarchy();
+			setPartName(name);
+			fbEditPart = untypedInput.getFbEditPart();
+			// the tooltip will show the whole name when hovering
+			((CompositeAndSubAppInstanceViewerInput) input).setName(name);
 		}
 	}
 
@@ -101,7 +90,6 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 
 	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
-		//
 		return null;
 	}
 
@@ -113,13 +101,6 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 	@Override
 	public String getFileName() {
 		return null;
-	}
-
-
-
-	@Override
-	public FBNetwork getModel() {
-		return fbType.getFBNetwork();
 	}
 
 	@Override
@@ -147,10 +128,10 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 	}
 
 	@Override
-
 	protected ScalableFreeformRootEditPart createRootEditPart() {
-		return new FBNetworkRootEditPart(getModel(), fbNetworkElement.getPaletteEntry().getPalette(), getSite(),
-				getActionRegistry()) {
+		return new FBNetworkRootEditPart(getModel(), null, // viewers don't need a palette to simplify things just set
+															 // it null
+				getSite(), getActionRegistry()) {
 			@Override
 			protected IFigure createFigure() {
 				final IFigure viewPort = super.createFigure();

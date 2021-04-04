@@ -123,29 +123,28 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	protected IEditorInput createEditorInput(final Object model) {
 		if (model instanceof SubApp) {
-			if (((SubApp) model).isTyped()) {
-				return createSubappInstanceViewerInput(model);
+			final SubApp subApp = (SubApp) model;
+			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
+				return createSubappInstanceViewerInput(subApp);
 			}
-			return new SubApplicationEditorInput((SubApp) model);
+			return new SubApplicationEditorInput(subApp);
 		}
 
 		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
-			return createCompositeInstanceViewerInput(model);
+			return createCompositeInstanceViewerInput((FB) model);
 		}
 		return null;
 	}
 
-	private static IEditorInput createSubappInstanceViewerInput(final Object model) {
+	private static IEditorInput createSubappInstanceViewerInput(final SubApp model) {
 		final EditPart createEditPart = new SubappInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-				((FBNetworkElement) model).getType().getName());
+		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model);
 
 	}
 
-	private static IEditorInput createCompositeInstanceViewerInput(final Object model) {
+	private static IEditorInput createCompositeInstanceViewerInput(final FB model) {
 		final EditPart createEditPart = new CompositeInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-				((FBNetworkElement) model).getType().getName());
+		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model);
 	}
 
 	@Override

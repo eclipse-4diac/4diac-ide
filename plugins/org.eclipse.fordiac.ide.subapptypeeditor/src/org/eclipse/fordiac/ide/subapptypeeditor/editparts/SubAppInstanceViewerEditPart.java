@@ -14,11 +14,18 @@
 package org.eclipse.fordiac.ide.subapptypeeditor.editparts;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeNetworkViewerEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.EditPart;
 
 public class SubAppInstanceViewerEditPart extends CompositeNetworkViewerEditPart {
 	@Override
 	protected boolean isVarVisible(final EditPart childEditPart) {
 		return true;
+	}
+
+	@Override
+	protected InterfaceList getInterfaceList() {
+		return ((FBNetworkElement) getModel().eContainer()).getInterface();
 	}
 }

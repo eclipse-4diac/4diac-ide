@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.ui.IEditorInput;
@@ -32,8 +33,7 @@ public class FBNetworkElementHelper {
 		case AUTOMATION_SYSTEM_EDITOR:
 			return handleAutomationSystemEditor(element);
 		default:
-			return false;
-
+			return isInSubAppType(element);
 		}
 	}
 
@@ -45,7 +45,7 @@ public class FBNetworkElementHelper {
 		EObject obj = element;
 		while (obj.eContainer() != null) {
 			obj = obj.eContainer();
-			if (obj instanceof CompositeFBType) {
+			if ((obj instanceof SubApp) && ((SubApp) obj).isTyped()) {
 				return true;
 			}
 		}

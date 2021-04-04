@@ -22,7 +22,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
@@ -92,19 +91,12 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 		if ((null == subAppNetwork) && subapp.isTyped()) {
 			// the subapp currently does not have a subappnetwork and it is typed, copy the subapp network from the type
 			// to the instance
-			subAppNetwork = loadTypeSubappNetwork(subapp);
+			subAppNetwork = subapp.loadSubAppNetwork();
 		}
 		if (null != subAppNetwork && !subAppNetwork.eAdapters().contains(subAppNetworkItemProvider)) {
 			// register to the subappnetwork changes so that the viewer is updated
 			subAppNetwork.eAdapters().add(subAppNetworkItemProvider);
 		}
-		return subAppNetwork;
-	}
-
-	private static FBNetwork loadTypeSubappNetwork(final SubApp subApp) {
-		final FBNetwork subAppNetwork = FBNetworkHelper.copyFBNetWork(subApp.getType().getFBNetwork(),
-				subApp.getInterface());
-		subApp.setSubAppNetwork(subAppNetwork);
 		return subAppNetwork;
 	}
 }

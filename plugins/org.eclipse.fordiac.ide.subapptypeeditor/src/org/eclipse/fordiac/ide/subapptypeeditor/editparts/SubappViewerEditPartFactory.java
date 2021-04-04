@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.subapptypeeditor.editparts;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeViewerEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
@@ -29,9 +28,9 @@ public class SubappViewerEditPartFactory extends CompositeViewerEditPartFactory 
 
 	@Override
 	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
-		if (fbNetwork.eContainer() instanceof SubAppType) {
+		if (getFbInstance() == fbNetwork.eContainer()) {
 			final SubAppInstanceViewerEditPart edit = new SubAppInstanceViewerEditPart();
-			edit.setFbInstance(fbInstance);
+			edit.setFbInstance(getFbInstance());
 			if (fbEditPart != null && fbEditPart.getParent() instanceof SubAppInstanceViewerEditPart) {
 				edit.setparentInstanceViewerEditPart((SubAppInstanceViewerEditPart) fbEditPart.getParent());
 			}

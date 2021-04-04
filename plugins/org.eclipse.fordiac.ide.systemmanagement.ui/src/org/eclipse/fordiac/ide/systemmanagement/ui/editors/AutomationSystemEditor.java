@@ -144,11 +144,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		}
 
 		if (model instanceof SubApp) {
-
-			if (((SubApp) model).isTyped()) {
+			if ((((SubApp) model).isTyped()) || (((SubApp) model).isContainedInTypedInstance())) {
 				return new SubappInstanceViewer();
 			}
-
 			return new SubAppNetworkEditor();
 		}
 
@@ -174,14 +172,15 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return getEditorInput();
 		}
 		if (model instanceof SubApp) {
-			if (((SubApp) model).isTyped()) {
-				return createSubappInstanceViewer(model);
+			final SubApp subApp = (SubApp) model;
+			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
+				return createSubappInstanceViewer(subApp);
 			}
-			return new SubApplicationEditorInput((SubApp) model);
+			return new SubApplicationEditorInput(subApp);
 		}
 
 		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
-			return createCompositeInstanceViewer(model);
+			return createCompositeInstanceViewer((FB) model);
 		}
 
 		if (model instanceof Application) {
@@ -199,17 +198,15 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		return null;
 	}
 
-	private static IEditorInput createSubappInstanceViewer(final Object model) {
+	private static IEditorInput createSubappInstanceViewer(final FBNetworkElement model) {
 		final EditPart createEditPart = new SubappInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-				((FBNetworkElement) model).getType().getName());
+		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model);
 
 	}
 
-	private static IEditorInput createCompositeInstanceViewer(final Object model) {
+	private static IEditorInput createCompositeInstanceViewer(final FBNetworkElement model) {
 		final EditPart createEditPart = new CompositeInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-				((FBNetworkElement) model).getType().getName());
+		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model);
 	}
 
 	@Override
@@ -349,6 +346,13 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			retVal = network.getElementNamed(element);
 			if (retVal instanceof SubApp) {
 				network = ((SubApp) retVal).getSubAppNetwork();
+				if (null == network) {
+					network = ((SubApp) retVal).loadSubAppNetwork();
+				}
+				if (null == network) {
+					// we couldn't load the network, memento seems to be broken
+					return null;
+				}
 			} else {
 				return null;
 			}

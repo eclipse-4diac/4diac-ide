@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.util.UntypedEditorInput;
 import org.eclipse.gef.EditPart;
 import org.eclipse.ui.IPersistableElement;
@@ -29,9 +30,8 @@ public class CompositeAndSubAppInstanceViewerInput extends UntypedEditorInput {
 		this.fbEditPart = fbEditPart;
 	}
 
-	public CompositeAndSubAppInstanceViewerInput(final EditPart fbEditPart, final Object content,
-			final String name) {
-		super(content, name);
+	public CompositeAndSubAppInstanceViewerInput(final EditPart fbEditPart, final FBNetworkElement content) {
+		super(content, content.getName());
 		this.fbEditPart = fbEditPart;
 	}
 
@@ -43,6 +43,11 @@ public class CompositeAndSubAppInstanceViewerInput extends UntypedEditorInput {
 	@Override
 	public IPersistableElement getPersistable() {
 		return null;
+	}
+
+	@Override
+	public FBNetworkElement getContent() {
+		return (FBNetworkElement) super.getContent();
 	}
 
 }
