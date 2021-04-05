@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -139,7 +139,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return new SystemEditor();
 		}
 
-		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
+		if (model instanceof CFBInstance) {
 			return new CompositeInstanceViewer();
 		}
 
@@ -179,7 +179,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return new SubApplicationEditorInput(subApp);
 		}
 
-		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
+		if (model instanceof CFBInstance) {
 			return createCompositeInstanceViewer((FB) model);
 		}
 

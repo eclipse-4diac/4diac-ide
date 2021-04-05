@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -113,7 +113,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			return editor;
 		}
 
-		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
+		if (model instanceof CFBInstance) {
 			return new CompositeInstanceViewer();
 		}
 
@@ -130,7 +130,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			return new SubApplicationEditorInput(subApp);
 		}
 
-		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
+		if (model instanceof CFBInstance) {
 			return createCompositeInstanceViewerInput((FB) model);
 		}
 		return null;

@@ -18,7 +18,7 @@ package org.eclipse.fordiac.ide.model.ui.actions;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -87,7 +87,7 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 	}
 
 	private static boolean isTypedComposite(final Object obj) {
-		return ((FB) obj).getType() instanceof CompositeFBType;
+		return (obj instanceof CFBInstance);
 	}
 
 	private static boolean isFBInAppOrSubApp(final FB fb) {
