@@ -20,34 +20,23 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
-/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence} object.
+/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
  *
  * @generated */
-public class ServiceSequenceItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
-		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class CFBInstanceItemProvider extends FBItemProvider {
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	public ServiceSequenceItemProvider(final AdapterFactory adapterFactory) {
+	public CFBInstanceItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -59,36 +48,8 @@ public class ServiceSequenceItemProvider extends ItemProviderAdapter implements 
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
-			addCommentPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/** This adds a property descriptor for the Name feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	protected void addNamePropertyDescriptor(final Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_INamedElement_name_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_INamedElement_type"),  //$NON-NLS-1$
-						LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
-	}
-
-	/** This adds a property descriptor for the Comment feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	protected void addCommentPropertyDescriptor(final Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_INamedElement_comment_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_INamedElement_type"),  //$NON-NLS-1$
-						LibraryElementPackage.Literals.INAMED_ELEMENT__COMMENT, true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/** This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
@@ -101,7 +62,7 @@ public class ServiceSequenceItemProvider extends ItemProviderAdapter implements 
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.SERVICE_SEQUENCE__SERVICE_TRANSACTION);
+			childrenFeatures.add(LibraryElementPackage.Literals.CFB_INSTANCE__CFB_NETWORK);
 		}
 		return childrenFeatures;
 	}
@@ -117,12 +78,12 @@ public class ServiceSequenceItemProvider extends ItemProviderAdapter implements 
 		return super.getChildFeature(object, child);
 	}
 
-	/** This returns ServiceSequence.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** This returns CFBInstance.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated not */
 	@Override
 	public Object getImage(final Object object) {
-		return overlayImage(object, FordiacImage.ICON_SERVICE_SEQUENCE.getImage());
+		return overlayImage(object, FordiacImage.ICON_COMPOSITE_FB.getImage());
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -130,8 +91,8 @@ public class ServiceSequenceItemProvider extends ItemProviderAdapter implements 
 	 * @generated not */
 	@Override
 	public String getText(final Object object) {
-		final String label = ((ServiceSequence) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_ServiceSequence_type") : label; //$NON-NLS-1$
+		// we are fine with the base class implementation
+		return super.getText(object);
 	}
 
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
@@ -143,12 +104,8 @@ public class ServiceSequenceItemProvider extends ItemProviderAdapter implements 
 	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ServiceSequence.class)) {
-		case LibraryElementPackage.SERVICE_SEQUENCE__NAME:
-		case LibraryElementPackage.SERVICE_SEQUENCE__COMMENT:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-			return;
-		case LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION:
+		switch (notification.getFeatureID(CFBInstance.class)) {
+		case LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		default:
@@ -165,17 +122,8 @@ public class ServiceSequenceItemProvider extends ItemProviderAdapter implements 
 	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors
-				.add(createChildParameter(LibraryElementPackage.Literals.SERVICE_SEQUENCE__SERVICE_TRANSACTION,
-						LibraryElementFactory.eINSTANCE.createServiceTransaction()));
-	}
-
-	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return FordiacEditPlugin.INSTANCE;
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.CFB_INSTANCE__CFB_NETWORK,
+				LibraryElementFactory.eINSTANCE.createFBNetwork()));
 	}
 
 }

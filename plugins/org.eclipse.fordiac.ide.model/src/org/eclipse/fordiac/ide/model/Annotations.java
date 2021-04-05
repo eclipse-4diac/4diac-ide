@@ -190,21 +190,6 @@ public final class Annotations {
 		return retVal;
 	}
 
-	// *** FB ***//
-	public static boolean isResourceFB(final FB fb) {
-		// A fB is a resource FB if the FB is in the fbnetwork of a resource and
-		// the mapping is null or as preperation when we allow to map resource FBs
-		// to applications when the mapping from is equal to the fb
-		if (fb.getFbNetwork().eContainer() instanceof Resource) {
-			return (null == fb.getMapping()) || (fb.equals(fb.getMapping().getFrom()));
-		}
-		return false;
-	}
-
-	public static boolean isResourceTypeFB(final FB fb) {
-		return false;
-	}
-
 	// *** FBNetworkElement ***//
 	public static Resource getResource(final FBNetworkElement fbne) {
 		if (null != fbne.getFbNetwork()) {

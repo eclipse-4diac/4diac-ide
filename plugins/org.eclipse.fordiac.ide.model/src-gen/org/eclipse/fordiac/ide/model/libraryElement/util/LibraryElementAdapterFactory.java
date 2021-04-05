@@ -1,23 +1,29 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
+
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
 import org.eclipse.emf.ecore.EObject;
+
 import org.eclipse.fordiac.ide.model.data.DataType;
+
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -31,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
@@ -47,6 +54,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -517,6 +526,21 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
+		public Adapter caseErrorMarkerFBNElement(ErrorMarkerFBNElement object) {
+			return createErrorMarkerFBNElementAdapter();
+		}
+
+		@Override
+		public Adapter caseErrorMarkerInterface(ErrorMarkerInterface object) {
+			return createErrorMarkerInterfaceAdapter();
+		}
+
+		@Override
+		public Adapter caseCFBInstance(CFBInstance object) {
+			return createCFBInstanceAdapter();
+		}
+
+		@Override
 		public Adapter caseDataType(DataType object) {
 			return createDataTypeAdapter();
 		}
@@ -725,18 +749,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork
-	 * <em>FB Network</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
-	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
-	 * -->
-	 * 
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetwork
-	 * @generated */
-	public Adapter createFBNetworkAdapter() {
-		return null;
-	}
-
 	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.FB
 	 * <em>FB</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore
 	 * cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
@@ -757,6 +769,17 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
 	 * @generated */
 	public Adapter createFBNetworkElementAdapter() {
+		return null;
+	}
+
+	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp <em>Sub
+	 * App</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.SubApp
+	 * @generated */
+	public Adapter createSubAppAdapter() {
 		return null;
 	}
 
@@ -850,6 +873,18 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive
 	 * @generated */
 	public Adapter createOutputPrimitiveAdapter() {
+		return null;
+	}
+
+	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute
+	 * <em>Attribute</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
+	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
+	 * -->
+	 * 
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Attribute
+	 * @generated */
+	public Adapter createAttributeAdapter() {
 		return null;
 	}
 
@@ -948,14 +983,15 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp <em>Sub
-	 * App</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork
+	 * <em>FB Network</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
+	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
+	 * -->
 	 * 
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.SubApp
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetwork
 	 * @generated */
-	public Adapter createSubAppAdapter() {
+	public Adapter createFBNetworkAdapter() {
 		return null;
 	}
 
@@ -1447,15 +1483,15 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute
-	 * <em>Attribute</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
+	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance
+	 * <em>CFB Instance</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
 	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
 	 * -->
 	 * 
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.Attribute
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.CFBInstance
 	 * @generated */
-	public Adapter createAttributeAdapter() {
+	public Adapter createCFBInstanceAdapter() {
 		return null;
 	}
 

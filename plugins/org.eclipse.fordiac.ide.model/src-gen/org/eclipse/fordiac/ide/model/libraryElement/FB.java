@@ -31,6 +31,13 @@ public interface FB extends FBNetworkElement {
 	 * @generated */
 	boolean isResourceTypeFB();
 
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation" required="true"
+	 * @generated */
+	@Override
+	FBType getType();
+
 	/** <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Resource FB</em>' attribute isn't clear, there really should be more of a description

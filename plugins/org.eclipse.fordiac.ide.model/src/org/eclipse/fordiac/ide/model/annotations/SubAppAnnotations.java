@@ -24,7 +24,7 @@ public final class SubAppAnnotations {
 			subAppNetwork = FBNetworkHelper.copyFBNetWork(subApp.getType().getFBNetwork(), subApp.getInterface());
 			subApp.setSubAppNetwork(subAppNetwork);
 		}
-		return subApp.getSubAppNetwork();
+		return subAppNetwork;
 	}
 
 	private SubAppAnnotations() {

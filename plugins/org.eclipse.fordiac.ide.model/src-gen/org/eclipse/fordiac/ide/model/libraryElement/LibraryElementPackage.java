@@ -4133,41 +4133,107 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
 
+	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl <em>CFB
+	 * Instance</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCFBInstance()
+	 * @generated */
+	int CFB_INSTANCE = 78;
+
+	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CFB_INSTANCE__NAME = FB__NAME;
+
+	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CFB_INSTANCE__COMMENT = FB__COMMENT;
+
+	/** The feature id for the '<em><b>Attributes</b></em>' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CFB_INSTANCE__ATTRIBUTES = FB__ATTRIBUTES;
+
+	/** The feature id for the '<em><b>Palette Entry</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CFB_INSTANCE__PALETTE_ENTRY = FB__PALETTE_ENTRY;
+
+	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CFB_INSTANCE__POSITION = FB__POSITION;
+
+	/** The feature id for the '<em><b>Interface</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CFB_INSTANCE__INTERFACE = FB__INTERFACE;
+
+	/** The feature id for the '<em><b>Mapping</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CFB_INSTANCE__MAPPING = FB__MAPPING;
+
+	/** The feature id for the '<em><b>Cfb Network</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CFB_INSTANCE__CFB_NETWORK = FB_FEATURE_COUNT + 0;
+
+	/** The number of structural features of the '<em>CFB Instance</em>' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered */
+	int CFB_INSTANCE_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
+
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}'
 	 * enum. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Language
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated */
-	int LANGUAGE = 78;
+	int LANGUAGE = 79;
 
 	/** The meta object id for the '<em>IProject</em>' data type. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see org.eclipse.core.resources.IProject
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated */
-	int IPROJECT = 79;
+	int IPROJECT = 80;
 
 	/** The meta object id for the '<em>IFile</em>' data type. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see org.eclipse.core.resources.IFile
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated */
-	int IFILE = 80;
+	int IFILE = 81;
 
 	/** The meta object id for the '<em>Command Stack</em>' data type. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see org.eclipse.gef.commands.CommandStack
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
 	 * @generated */
-	int COMMAND_STACK = 81;
+	int COMMAND_STACK = 82;
 
 	/** The meta object id for the '<em>Point</em>' data type. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @see org.eclipse.draw2d.geometry.Point
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPoint()
 	 * @generated */
-	int POINT = 82;
+	int POINT = 83;
 
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 	 * <em>Adapter Declaration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -6307,6 +6373,24 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	EReference getErrorMarkerInterface_RepairedEndpoint();
 
+	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance <em>CFB
+	 * Instance</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for class '<em>CFB Instance</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.CFBInstance
+	 * @generated */
+	EClass getCFBInstance();
+
+	/** Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance#getCfbNetwork <em>Cfb Network</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the containment reference '<em>Cfb Network</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.CFBInstance#getCfbNetwork()
+	 * @see #getCFBInstance()
+	 * @generated */
+	EReference getCFBInstance_CfbNetwork();
+
 	/** Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.libraryElement.Language
 	 * <em>Language</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -7931,6 +8015,20 @@ public interface LibraryElementPackage extends EPackage {
 		 * 
 		 * @generated */
 		EReference ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = eINSTANCE.getErrorMarkerInterface_RepairedEndpoint();
+
+		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl
+		 * <em>CFB Instance</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCFBInstance()
+		 * @generated */
+		EClass CFB_INSTANCE = eINSTANCE.getCFBInstance();
+
+		/** The meta object literal for the '<em><b>Cfb Network</b></em>' containment reference feature. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
+		 * 
+		 * @generated */
+		EReference CFB_INSTANCE__CFB_NETWORK = eINSTANCE.getCFBInstance_CfbNetwork();
 
 		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language
 		 * <em>Language</em>}' enum. <!-- begin-user-doc --> <!-- end-user-doc -->
