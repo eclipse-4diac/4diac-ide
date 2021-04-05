@@ -23,7 +23,7 @@ public class CompositeInstanceViewer extends AbstractFbNetworkInstanceViewer {
 
 	@Override
 	public EditPartFactory getEditPartFactory() {
-		return new CompositeViewerEditPartFactory(this, getFbNetworkElement(), getEditPart());
+		return new CompositeViewerEditPartFactory(this, getFbNetworkElement());
 	}
 
 

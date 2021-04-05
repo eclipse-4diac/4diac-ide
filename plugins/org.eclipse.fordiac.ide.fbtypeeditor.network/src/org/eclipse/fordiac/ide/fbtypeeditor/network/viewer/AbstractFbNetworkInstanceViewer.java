@@ -34,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -45,7 +44,6 @@ import org.eclipse.ui.IEditorInput;
 
 public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 	private FBNetworkElement fbNetworkElement;
-	private EditPart fbEditPart;
 
 
 	// subclasses need to override this method and return the fbnetwork contained in fbNetworkElement
@@ -76,9 +74,8 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 			fbNetworkElement = untypedInput.getContent();
 			final String name = getNameHierarchy();
 			setPartName(name);
-			fbEditPart = untypedInput.getFbEditPart();
 			// the tooltip will show the whole name when hovering
-			((CompositeAndSubAppInstanceViewerInput) input).setName(name);
+			untypedInput.setName(name);
 		}
 	}
 
@@ -123,14 +120,10 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		return retVal.toString();
 	}
 
-	public EditPart getEditPart() {
-		return fbEditPart;
-	}
-
 	@Override
 	protected ScalableFreeformRootEditPart createRootEditPart() {
 		return new FBNetworkRootEditPart(getModel(), null, // viewers don't need a palette to simplify things just set
-															 // it null
+				// it null
 				getSite(), getActionRegistry()) {
 			@Override
 			protected IFigure createFigure() {

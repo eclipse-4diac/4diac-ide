@@ -31,17 +31,14 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 public class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 
 	private final FBNetworkElement fbInstance;
-	protected final EditPart fbEditPart;
 
 	protected FBNetworkElement getFbInstance() {
 		return fbInstance;
 	}
 
-	public CompositeViewerEditPartFactory(final GraphicalEditor editor, final FBNetworkElement fbInstance,
-			final EditPart fbEditPart) {
+	public CompositeViewerEditPartFactory(final GraphicalEditor editor, final FBNetworkElement fbInstance) {
 		super(editor);
 		this.fbInstance = fbInstance;
-		this.fbEditPart = fbEditPart;
 	}
 
 	/** Maps an object to an EditPart.
@@ -87,11 +84,7 @@ public class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFact
 
 	@Override
 	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
-		final CompositeNetworkViewerEditPart compositeNetEP = new CompositeNetworkViewerEditPart();
-		if (fbEditPart.getParent() instanceof CompositeNetworkViewerEditPart) {
-			compositeNetEP.setparentInstanceViewerEditPart((CompositeNetworkViewerEditPart) fbEditPart.getParent());
-		}
-		return compositeNetEP;
+		return new CompositeNetworkViewerEditPart();
 	}
 
 }

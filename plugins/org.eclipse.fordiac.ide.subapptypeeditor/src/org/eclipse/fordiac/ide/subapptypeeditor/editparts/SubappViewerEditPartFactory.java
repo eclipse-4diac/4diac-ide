@@ -21,19 +21,14 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class SubappViewerEditPartFactory extends CompositeViewerEditPartFactory {
 
-	public SubappViewerEditPartFactory(final GraphicalEditor editor, final FBNetworkElement fbInstance,
-			final EditPart fbEditPart2) {
-		super(editor, fbInstance, fbEditPart2);
+	public SubappViewerEditPartFactory(final GraphicalEditor editor, final FBNetworkElement fbInstance) {
+		super(editor, fbInstance);
 	}
 
 	@Override
 	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
 		if (getFbInstance() == fbNetwork.eContainer()) {
-			final SubAppInstanceViewerEditPart edit = new SubAppInstanceViewerEditPart();
-			if (fbEditPart != null && fbEditPart.getParent() instanceof SubAppInstanceViewerEditPart) {
-				edit.setparentInstanceViewerEditPart((SubAppInstanceViewerEditPart) fbEditPart.getParent());
-			}
-			return edit;
+			return new SubAppInstanceViewerEditPart();
 		}
 		return super.getPartForFBNetwork(fbNetwork);
 	}

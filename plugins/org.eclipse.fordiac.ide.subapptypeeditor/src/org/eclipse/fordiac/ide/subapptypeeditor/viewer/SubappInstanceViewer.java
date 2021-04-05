@@ -23,7 +23,7 @@ public class SubappInstanceViewer extends AbstractFbNetworkInstanceViewer {
 
 	@Override
 	public EditPartFactory getEditPartFactory() {
-		return new SubappViewerEditPartFactory(this, getFbNetworkElement(), getEditPart());
+		return new SubappViewerEditPartFactory(this, getFbNetworkElement());
 	}
 
 	@Override

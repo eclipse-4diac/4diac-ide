@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -197,9 +198,9 @@ public final class Annotations {
 			if (container instanceof Resource) {
 				return (Resource) container;
 			}
-			if (container instanceof SubApp) {
-				// if we are in a subapp look recursively for a resource
-				return getResource(((SubApp) container));
+			if ((container instanceof SubApp) || (container instanceof CFBInstance)) {
+				// if we are in a subapp or CFBInstance look recursively for a resource
+				return getResource((FBNetworkElement) container);
 			}
 		}
 		if (fbne.isMapped()) {

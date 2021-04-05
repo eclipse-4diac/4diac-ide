@@ -15,24 +15,12 @@ package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.util.UntypedEditorInput;
-import org.eclipse.gef.EditPart;
 import org.eclipse.ui.IPersistableElement;
 
 public class CompositeAndSubAppInstanceViewerInput extends UntypedEditorInput {
 
-	private EditPart fbEditPart;
-
-	public EditPart getFbEditPart() {
-		return fbEditPart;
-	}
-
-	public void setFbEditPart(final EditPart fbEditPart) {
-		this.fbEditPart = fbEditPart;
-	}
-
-	public CompositeAndSubAppInstanceViewerInput(final EditPart fbEditPart, final FBNetworkElement content) {
+	public CompositeAndSubAppInstanceViewerInput(final FBNetworkElement content) {
 		super(content, content.getName());
-		this.fbEditPart = fbEditPart;
 	}
 
 	@Override

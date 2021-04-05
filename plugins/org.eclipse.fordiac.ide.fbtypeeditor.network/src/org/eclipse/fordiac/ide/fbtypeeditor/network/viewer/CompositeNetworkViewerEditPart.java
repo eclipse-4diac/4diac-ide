@@ -37,28 +37,6 @@ import org.eclipse.gef.requests.CreateRequest;
  */
 public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 
-	private FBNetworkElement fbInstance;
-
-	// the CompositeNetworkEditPart which contained the instance of the
-	// composite FB this editor visualizes
-	private CompositeNetworkViewerEditPart parentInstanceViewerEditPart;
-
-	public CompositeNetworkViewerEditPart getparentInstanceViewerEditPart() {
-		return parentInstanceViewerEditPart;
-	}
-
-	public void setparentInstanceViewerEditPart(final CompositeNetworkViewerEditPart parentEditPart) {
-		this.parentInstanceViewerEditPart = parentEditPart;
-	}
-
-	public FBNetworkElement getFbInstance() {
-		return fbInstance;
-	}
-
-	public void setFbInstance(final FBNetworkElement fbInstance) {
-		this.fbInstance = fbInstance;
-	}
-
 	@Override
 	protected InterfaceList getInterfaceList() {
 		return ((FBNetworkElement) getModel().eContainer()).getInterface();

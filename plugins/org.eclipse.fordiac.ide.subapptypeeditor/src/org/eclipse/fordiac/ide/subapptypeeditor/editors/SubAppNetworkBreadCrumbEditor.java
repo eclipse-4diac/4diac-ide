@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -125,26 +124,15 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 		if (model instanceof SubApp) {
 			final SubApp subApp = (SubApp) model;
 			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
-				return createSubappInstanceViewerInput(subApp);
+				return new CompositeAndSubAppInstanceViewerInput(subApp);
 			}
 			return new SubApplicationEditorInput(subApp);
 		}
 
 		if (model instanceof CFBInstance) {
-			return createCompositeInstanceViewerInput((FB) model);
+			return new CompositeAndSubAppInstanceViewerInput((FB) model);
 		}
 		return null;
-	}
-
-	private static IEditorInput createSubappInstanceViewerInput(final SubApp model) {
-		final EditPart createEditPart = new SubappInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model);
-
-	}
-
-	private static IEditorInput createCompositeInstanceViewerInput(final FB model) {
-		final EditPart createEditPart = new CompositeInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model);
 	}
 
 	@Override

@@ -59,7 +59,6 @@ import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -174,13 +173,13 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		if (model instanceof SubApp) {
 			final SubApp subApp = (SubApp) model;
 			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
-				return createSubappInstanceViewer(subApp);
+				return new CompositeAndSubAppInstanceViewerInput(subApp);
 			}
 			return new SubApplicationEditorInput(subApp);
 		}
 
 		if (model instanceof CFBInstance) {
-			return createCompositeInstanceViewer((FB) model);
+			return new CompositeAndSubAppInstanceViewerInput((FB) model);
 		}
 
 		if (model instanceof Application) {
@@ -196,17 +195,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return new ResourceEditorInput((Resource) model);
 		}
 		return null;
-	}
-
-	private static IEditorInput createSubappInstanceViewer(final FBNetworkElement model) {
-		final EditPart createEditPart = new SubappInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model);
-
-	}
-
-	private static IEditorInput createCompositeInstanceViewer(final FBNetworkElement model) {
-		final EditPart createEditPart = new CompositeInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model);
 	}
 
 	@Override
