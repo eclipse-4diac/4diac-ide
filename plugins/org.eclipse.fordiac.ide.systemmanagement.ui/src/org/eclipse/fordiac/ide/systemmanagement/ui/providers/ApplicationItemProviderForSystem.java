@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015, 2016 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,15 +11,13 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
+package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
-import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.ApplicationItemProvider;
@@ -29,7 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvid
  * a dedicated item provider that will ensure that in the system tree the
  * application will have the content of the application without the intermediate
  * fbnetwork node shown.
- * 
+ *
  * @author alil
  *
  */
@@ -37,38 +35,28 @@ public class ApplicationItemProviderForSystem extends ApplicationItemProvider im
 
 	private FBNetworkItemProvider fbNetworkItemProvider = null;
 
-	public ApplicationItemProviderForSystem(AdapterFactory adapterFactory) {
+	public ApplicationItemProviderForSystem(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
-		fbNetworkItemProvider = new FBNetworkItemProvider(adapterFactory) {
-
-			@Override
-			public void fireNotifyChanged(Notification notification) {
-				FBNetwork network = (FBNetwork) notification.getNotifier();
-				Notification wrappedNotification = ViewerNotification.wrapNotification(notification,
-						network.eContainer());
-				super.fireNotifyChanged(wrappedNotification);
-			}
-
-		};
+		fbNetworkItemProvider = new FBNetworkItemProviderForSystem(adapterFactory);
 	}
 
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
 		return fbNetworkItemProvider.getChildrenFeatures(getFBNetwork(object));
 	}
 
 	@Override
-	public Collection<?> getChildren(Object object) {
+	public Collection<?> getChildren(final Object object) {
 		return fbNetworkItemProvider.getChildren(getFBNetwork(object));
 	}
 
 	@Override
-	public boolean hasChildren(Object object) {
+	public boolean hasChildren(final Object object) {
 		return fbNetworkItemProvider.hasChildren(getFBNetwork(object));
 	}
 
-	private FBNetwork getFBNetwork(Object object) {
-		FBNetwork fbNetwork = ((Application) object).getFBNetwork();
+	private FBNetwork getFBNetwork(final Object object) {
+		final FBNetwork fbNetwork = ((Application) object).getFBNetwork();
 		if (!fbNetwork.eAdapters().contains(fbNetworkItemProvider)) {
 			// register to the fbnetwork changes so that the viewer is updated
 			fbNetwork.eAdapters().add(fbNetworkItemProvider);

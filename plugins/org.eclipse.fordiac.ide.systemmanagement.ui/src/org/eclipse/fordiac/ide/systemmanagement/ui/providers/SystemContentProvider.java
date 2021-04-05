@@ -13,7 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - New Project Explorer layout
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
+package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
 
 import java.util.ArrayList;
 import java.util.Arrays;

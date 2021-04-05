@@ -12,16 +12,14 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *               - added defensive checks when the fbnetwork is null
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
+package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
 
 import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
@@ -41,17 +39,7 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 
 	public SubAppItemProviderForSystem(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
-		subAppNetworkItemProvider = new FBNetworkItemProvider(adapterFactory) {
-
-			@Override
-			public void fireNotifyChanged(final Notification notification) {
-				final FBNetwork network = (FBNetwork) notification.getNotifier();
-				final Notification wrappedNotification = ViewerNotification.wrapNotification(notification,
-						network.eContainer());
-				super.fireNotifyChanged(wrappedNotification);
-			}
-
-		};
+		subAppNetworkItemProvider = new FBNetworkItemProviderForSystem(adapterFactory);
 	}
 
 	@Override

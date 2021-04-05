@@ -417,7 +417,7 @@
          point="org.eclipse.ui.navigator.navigatorContent">
         <navigatorContent
             activeByDefault="true"
-            contentProvider="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentProvider"
+            contentProvider="org.eclipse.fordiac.ide.systemmanagement.ui.providers.SystemContentProvider"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent"
             labelProvider="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider"
             name="System Content"
