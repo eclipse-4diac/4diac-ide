@@ -38,19 +38,19 @@ import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuild
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -115,42 +115,24 @@ class FBNetworkImporter extends CommonElementImporter {
 	}
 
 	protected void parseFB() throws TypeImportException, XMLStreamException {
-		FB fb = LibraryElementFactory.eINSTANCE.createFB();
+		final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		final FB fb = createFBInstance(typeFbElement);
 
 		readNameCommentAttributes(fb);
-
-		final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		final FBTypePaletteEntry entry = getTypeEntry(typeFbElement);
-
-		if (null != entry) {
-			fb.setPaletteEntry(entry);
-			fb.setInterface(fb.getType().getInterfaceList().copy());
-			if ("STRUCT_MUX".equals(fb.getType().getName())) { //$NON-NLS-1$
-				final Multiplexer mux = LibraryElementFactory.eINSTANCE.createMultiplexer();
-				fb = convertFBtoMux(fb, mux);
-			} else if ("STRUCT_DEMUX".equals(fb.getType().getName())) { //$NON-NLS-1$
-				final Demultiplexer demux = LibraryElementFactory.eINSTANCE.createDemultiplexer();
-				fb = convertFBtoMux(fb, demux);
-			}
-		} else {
-			// add it to the fbnetwork so that the error marker can determine the location
-			fbNetwork.getNetworkElements().add(fb);
-			createErrorMarker(
-					MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", typeFbElement, fb.getName()), //$NON-NLS-1$
-					fb);
-
-			// as we don't have type information we create an empty interface list
-			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
-			// TODO add attribute value for missing instance name and
-			// indicate that FB is missing for usage in outline views
-		}
-
 		getXandY(fb);
-
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 
 		fbNetwork.getNetworkElements().add(fb);
 		fbNetworkElementMap.put(fb.getName(), fb);
+
+		if (null == fb.getPaletteEntry()) {
+			// we don't have a type create error marker.
+			// This can only be done after fb has been added to FB network,
+			// so that the error marker can determine the location!
+			createErrorMarker(
+					MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", typeFbElement, fb.getName()), //$NON-NLS-1$
+					fb);
+		}
 
 		if (fb instanceof StructManipulator) {
 			final Attribute attr = fb.getAttribute("StructuredType"); //$NON-NLS-1$
@@ -159,13 +141,30 @@ class FBNetworkImporter extends CommonElementImporter {
 		}
 	}
 
-	private static FB convertFBtoMux(final FB fb, final StructManipulator mux) {
-		mux.setName(fb.getName());
-		mux.setComment(fb.getComment());
-		mux.setPosition(fb.getPosition());
-		mux.setPaletteEntry(fb.getPaletteEntry());
-		mux.setInterface(fb.getInterface());
-		return mux;
+	private FB createFBInstance(final String typeFbElement) {
+		FB fb = LibraryElementFactory.eINSTANCE.createFB();
+		final FBTypePaletteEntry entry = getTypeEntry(typeFbElement);
+
+		if (null != entry) {
+			final FBType type = entry.getFBType();
+			if (type instanceof CompositeFBType) {
+				fb = LibraryElementFactory.eINSTANCE.createCFBInstance();
+			} else {
+				if ("STRUCT_MUX".equals(type.getName())) { //$NON-NLS-1$
+					fb = LibraryElementFactory.eINSTANCE.createMultiplexer();
+				} else if ("STRUCT_DEMUX".equals(type.getName())) { //$NON-NLS-1$
+					fb = LibraryElementFactory.eINSTANCE.createDemultiplexer();
+				}
+			}
+			fb.setInterface(type.getInterfaceList().copy());
+		} else {
+			// as we don't have type information we create an empty interface list
+			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
+			// TODO add attribute value for missing instance name and
+			// indicate that FB is missing for usage in outline views
+		}
+		fb.setPaletteEntry(entry);
+		return fb;
 	}
 
 	@Override

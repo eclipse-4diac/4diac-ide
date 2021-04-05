@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.commands.insert;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -23,12 +24,12 @@ import org.eclipse.gef.commands.Command;
 
 public class InsertFBCommand extends Command {
 
-	private FBType fbTypeEntry;
+	private final FBType fbTypeEntry;
 	private FB internalFB;
-	private EList<FB> internalFbs;
-	private int index;
+	private final EList<FB> internalFbs;
+	private final int index;
 
-	public InsertFBCommand(final EList<FB> internalFbs, final FBType fbTypeEntry, int index) {
+	public InsertFBCommand(final EList<FB> internalFbs, final FBType fbTypeEntry, final int index) {
 		this.internalFbs = internalFbs;
 		this.fbTypeEntry = fbTypeEntry;
 		this.index = index;
@@ -36,7 +37,11 @@ public class InsertFBCommand extends Command {
 
 	@Override
 	public void execute() {
-		internalFB = LibraryElementFactory.eINSTANCE.createFB();
+		if (fbTypeEntry instanceof CompositeFBType) {
+			internalFB = LibraryElementFactory.eINSTANCE.createCFBInstance();
+		} else {
+			internalFB = LibraryElementFactory.eINSTANCE.createFB();
+		}
 		internalFB.setPaletteEntry(fbTypeEntry.getPaletteEntry());
 		internalFB.setComment(""); //$NON-NLS-1$
 		redo();
