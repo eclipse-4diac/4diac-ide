@@ -26,10 +26,6 @@ import org.eclipse.ui.PlatformUI;
 
 public final class EditorUtils {
 
-	public enum EditorKind {
-		TYPE_EDITOR, AUTOMATION_SYSTEM_EDITOR, NONE
-	}
-
 	public static final EditorAction CloseEditor = (final IEditorPart part) -> PlatformUI.getWorkbench()
 			.getActiveWorkbenchWindow().getActivePage().closeEditor(part, false);
 
@@ -51,7 +47,6 @@ public final class EditorUtils {
 		try {
 			editor = activePage.openEditor(input, editorId);
 		} catch (final PartInitException e) {
-			editor = null;
 			UIPlugin.getDefault().logError(e.getMessage(), e);
 		}
 		return editor;
@@ -85,23 +80,4 @@ public final class EditorUtils {
 	public static void closeEditorsFiltered(final EditorFilter filter) {
 		forEachOpenEditorFiltered(filter, CloseEditor);
 	}
-
-	public static EditorKind getEditorKind() {
-		final IEditorPart currentActiveEditor = getCurrentActiveEditor();
-		if (currentActiveEditor == null) {
-			return EditorKind.NONE;
-		}
-		final String editorName = currentActiveEditor.getClass().getSimpleName();
-		switch (editorName) {
-		case "SubAppTypeEditor": //$NON-NLS-1$
-		case "FBTypeEditor"://$NON-NLS-1$
-			return EditorKind.TYPE_EDITOR;
-		case "AutomationSystemEditor"://$NON-NLS-1$
-			return EditorKind.AUTOMATION_SYSTEM_EDITOR;
-		default:
-			return EditorKind.NONE;
-		}
-
-	}
-
 }
