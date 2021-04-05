@@ -30,7 +30,6 @@ public class SubappViewerEditPartFactory extends CompositeViewerEditPartFactory 
 	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
 		if (getFbInstance() == fbNetwork.eContainer()) {
 			final SubAppInstanceViewerEditPart edit = new SubAppInstanceViewerEditPart();
-			edit.setFbInstance(getFbInstance());
 			if (fbEditPart != null && fbEditPart.getParent() instanceof SubAppInstanceViewerEditPart) {
 				edit.setparentInstanceViewerEditPart((SubAppInstanceViewerEditPart) fbEditPart.getParent());
 			}

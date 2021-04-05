@@ -88,7 +88,6 @@ public class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFact
 	@Override
 	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
 		final CompositeNetworkViewerEditPart compositeNetEP = new CompositeNetworkViewerEditPart();
-		compositeNetEP.setFbInstance(fbInstance);
 		if (fbEditPart.getParent() instanceof CompositeNetworkViewerEditPart) {
 			compositeNetEP.setparentInstanceViewerEditPart((CompositeNetworkViewerEditPart) fbEditPart.getParent());
 		}

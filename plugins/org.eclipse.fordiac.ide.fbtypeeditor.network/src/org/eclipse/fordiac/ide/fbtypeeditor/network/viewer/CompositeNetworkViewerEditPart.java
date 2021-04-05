@@ -61,7 +61,7 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 
 	@Override
 	protected InterfaceList getInterfaceList() {
-		return fbInstance.getInterface();
+		return ((FBNetworkElement) getModel().eContainer()).getInterface();
 	}
 
 	@Override

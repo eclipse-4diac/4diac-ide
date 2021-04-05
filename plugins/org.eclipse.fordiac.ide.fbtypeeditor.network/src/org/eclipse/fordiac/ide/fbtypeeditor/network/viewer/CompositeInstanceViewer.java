@@ -15,31 +15,31 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.gef.EditPartFactory;
 
 public class CompositeInstanceViewer extends AbstractFbNetworkInstanceViewer {
-
-	private FBNetwork fbNetworkToView; // the FBNetwork contained in the fbNetworkelement
 
 	@Override
 	public EditPartFactory getEditPartFactory() {
 		return new CompositeViewerEditPartFactory(this, getFbNetworkElement(), getEditPart());
 	}
 
+
 	@Override
 	public FBNetwork getModel() {
-		if (null == fbNetworkToView) {
-			loadFBNetwork();
+		FBNetwork network = getFbNetworkElement().getCfbNetwork();
+		if (null == network) {
+			// the contained network has not been loaded yet, load it now.
+			network = getFbNetworkElement().loadCFBNetwork();
 		}
-		return fbNetworkToView;
+		return network;
 	}
 
-	private void loadFBNetwork() {
-		final CompositeFBType type = (CompositeFBType) getFbNetworkElement().getType();
-		fbNetworkToView = FBNetworkHelper.copyFBNetWork(type.getFBNetwork(), getFbNetworkElement().getInterface());
+	@Override
+	protected CFBInstance getFbNetworkElement() {
+		return (CFBInstance) super.getFbNetworkElement();
 	}
 
 }

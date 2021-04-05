@@ -345,19 +345,34 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		for (final String element : path) {
 			retVal = network.getElementNamed(element);
 			if (retVal instanceof SubApp) {
-				network = ((SubApp) retVal).getSubAppNetwork();
-				if (null == network) {
-					network = ((SubApp) retVal).loadSubAppNetwork();
-				}
-				if (null == network) {
-					// we couldn't load the network, memento seems to be broken
-					return null;
-				}
+				network = getSubAppNetwork((SubApp) retVal);
+			} else if (retVal instanceof CFBInstance) {
+				network = getCFBNetwork((CFBInstance) retVal);
 			} else {
+				return null;
+			}
+			if (null == network) {
+				// we couldn't load the network, memento seems to be broken
 				return null;
 			}
 		}
 		return retVal;
+	}
+
+	private static FBNetwork getSubAppNetwork(final SubApp subApp) {
+		FBNetwork network = subApp.getSubAppNetwork();
+		if (null == network) {
+			network = subApp.loadSubAppNetwork();
+		}
+		return network;
+	}
+
+	private static FBNetwork getCFBNetwork(final CFBInstance cfb) {
+		FBNetwork network = cfb.getCfbNetwork();
+		if (null == network) {
+			network = cfb.loadCFBNetwork();
+		}
+		return network;
 	}
 
 	@Override
