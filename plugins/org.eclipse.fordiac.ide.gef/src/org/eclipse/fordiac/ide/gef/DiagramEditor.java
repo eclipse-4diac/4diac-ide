@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
@@ -37,6 +38,7 @@ import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
+import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -51,6 +53,7 @@ import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -69,6 +72,8 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  */
 public abstract class DiagramEditor extends GraphicalEditor
 implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
+
+	public static final int INITIAL_SCROLL_OFFSET = 5;
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
@@ -108,6 +113,32 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	}
 
 	@Override
+	public void createPartControl(final Composite parent) {
+		super.createPartControl(parent);
+
+		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
+		if (viewer.getControl() instanceof FigureCanvas) {
+			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+			final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
+					.getRootEditPart();
+			Display.getDefault().asyncExec(() -> {
+				viewer.flush();
+				// if an editpart is selected then the viewer has bee created with something to be shown centered
+				// therefore we will not show the initial position
+				// do not use getSelection() here because it will return always at least one element
+				if (viewer.getSelectedEditParts().isEmpty()) {
+					final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
+					canvas.scrollTo(drawingAreaBounds.x - INITIAL_SCROLL_OFFSET,
+							drawingAreaBounds.y - INITIAL_SCROLL_OFFSET);
+				} else {
+					// if we have a selected edit part we want to show it in the middle
+					viewer.revealEditPart((EditPart) viewer.getSelectedEditParts().get(0));
+				}
+			});
+		}
+	}
+
+	@Override
 	protected void createGraphicalViewer(final Composite parent) {
 		final RulerComposite rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
 
@@ -118,7 +149,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		hookGraphicalViewer();
 		initializeGraphicalViewer();
 
-		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
+		rulerComp.setGraphicalViewer(getGraphicalViewer());
 	}
 
 	/**
@@ -139,7 +170,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		final AdvancedScrollingGraphicalViewer viewer = (AdvancedScrollingGraphicalViewer) getGraphicalViewer();
+		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
 
 		final ScalableFreeformRootEditPart root = createRootEditPart();
 
@@ -415,6 +446,11 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	@Override
 	public String getContributorId() {
 		return PROPERTY_CONTRIBUTOR_ID;
+	}
+
+	@Override
+	protected AdvancedScrollingGraphicalViewer getGraphicalViewer() {
+		return (AdvancedScrollingGraphicalViewer) super.getGraphicalViewer();
 	}
 
 }

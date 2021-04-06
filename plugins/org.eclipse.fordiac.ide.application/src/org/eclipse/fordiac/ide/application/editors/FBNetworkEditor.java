@@ -22,8 +22,6 @@
 package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.draw2d.FigureCanvas;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.actions.CopyEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.CutEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
@@ -41,14 +39,12 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementAction;
-import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -59,8 +55,6 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionFactory;
@@ -69,8 +63,6 @@ import org.eclipse.ui.actions.ActionFactory;
  * The main editor for FBNetworks.
  */
 public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements ISystemEditor {
-
-	private static final int INITIAL_SCROLL_OFFSET = 5;
 
 	private static final PaletteFlyoutPreferences PALETTE_PREFERENCES = new PaletteFlyoutPreferences(
 			"FBNetworkPalette.Location", //$NON-NLS-1$
@@ -102,32 +94,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	 */
 	public FBNetworkEditor() {
 		// empty constructor
-	}
-
-	@Override
-	public void createPartControl(final Composite parent) {
-		super.createPartControl(parent);
-
-		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
-		if (viewer.getControl() instanceof FigureCanvas) {
-			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
-			final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
-					.getRootEditPart();
-			Display.getDefault().asyncExec(() -> {
-				viewer.flush();
-				// if an editpart is selected then the viewer has bee created with something to be shown centered
-				// therefore we will not show the initial position
-				// do not use getSelection() here because it will return always at least one element
-				if (viewer.getSelectedEditParts().isEmpty()) {
-					final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
-					canvas.scrollTo(drawingAreaBounds.x - INITIAL_SCROLL_OFFSET,
-							drawingAreaBounds.y - INITIAL_SCROLL_OFFSET);
-				} else {
-					// if we have a selected edit part we want to show it in the middle
-					viewer.revealEditPart((EditPart) viewer.getSelectedEditParts().get(0));
-				}
-			});
-		}
 	}
 
 	@Override

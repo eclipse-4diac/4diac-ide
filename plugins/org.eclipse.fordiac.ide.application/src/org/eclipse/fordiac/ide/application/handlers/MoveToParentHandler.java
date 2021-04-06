@@ -20,7 +20,6 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.getCommandStack;
 import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.getFBNetwork;
-import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.getViewer;
 import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.openEditor;
 
 import java.util.Collections;
@@ -38,6 +37,7 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -75,32 +75,31 @@ public class MoveToParentHandler extends AbstractHandler {
 		return Status.OK_STATUS;
 	}
 
-	private void selectElements(final IEditorPart editor, final List<FBNetworkElement> fbelements) {
-		final GraphicalViewer viewer = getSubappParentViewer(getFBNetwork(editor), getParent(fbelements.get(0)),
-				editor);
+	private static void selectElements(final IEditorPart editor, final List<FBNetworkElement> fbelements) {
+		final GraphicalViewer viewer = getViewer(fbelements.get(0).getFbNetwork(), editor);
 		@SuppressWarnings("unchecked")
-		final List<EditPart> eps = fbelements.stream()
-		.map(el -> (EditPart) viewer.getEditPartRegistry().get(el)).collect(Collectors.toList());
+		final List<EditPart> eps = fbelements.stream().map(el -> (EditPart) viewer.getEditPartRegistry().get(el))
+		.collect(Collectors.toList());
 		viewer.setSelection(new StructuredSelection(eps));
 	}
 
 	private static Rectangle getParentSubappBounds(final IEditorPart editor,
 			final List<FBNetworkElement> fbelements) {
-		final FBNetwork fbnetwork = getFBNetwork(editor);
-		final FBNetwork subappNetwork = getParent(fbelements.get(0));
-		final GraphicalViewer viewer = getSubappParentViewer(fbnetwork, subappNetwork, editor);
+		final FBNetwork subappNetwork = getParentOfParent(fbelements.get(0));
+		final GraphicalViewer viewer = getViewer(subappNetwork, editor);
+		viewer.flush();
 		final GraphicalEditPart ep = (GraphicalEditPart) viewer.getEditPartRegistry()
-				.get(subappNetwork.eContainer());
+				.get(fbelements.get(0).getFbNetwork().eContainer());
 		return ep.getFigure().getBounds();
 	}
 
-	private static GraphicalViewer getSubappParentViewer(final FBNetwork fbnetwork, final FBNetwork subappNetwork,
+	private static GraphicalViewer getViewer(final FBNetwork subappNetwork,
 			final IEditorPart parent) {
-		if (fbnetwork.equals(subappNetwork)) {
-			// source subapp editor, subapp content is opened in editor
-			return getViewer(openEditor(subappNetwork.eContainer().eContainer().eContainer()));
+		if (!getFBNetwork(parent).equals(subappNetwork)) {
+			// source subapp editor, subapp content is not open
+			return BreadcrumbUtil.getViewer(openEditor(subappNetwork.eContainer()));
 		}
-		return getViewer(parent);
+		return BreadcrumbUtil.getViewer(parent);
 	}
 
 	@Override
@@ -109,14 +108,13 @@ public class MoveToParentHandler extends AbstractHandler {
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 
 		final List<FBNetworkElement> fbelements = getSelectedFBNElements(selection);
-		if (!fbelements.isEmpty()) {
-			final FBNetwork parent = getParent(fbelements.get(0));
-			if (null != parent) {
-				final boolean sameParentNetwork = fbelements.stream()
-						.allMatch(el -> parent.equals(el.getFbNetwork()));
-				setBaseEnabled(sameParentNetwork);
-				return;
-			}
+		if ((!fbelements.isEmpty()) && (fbelements.get(0).getFbNetwork().eContainer() instanceof SubApp)) {
+			// we are inside of a subapp
+			final FBNetwork parent = fbelements.get(0).getFbNetwork();
+			final boolean sameParentNetwork = fbelements.stream()
+					.allMatch(el -> parent.equals(el.getFbNetwork()));
+			setBaseEnabled(sameParentNetwork);
+			return;
 		}
 
 		setBaseEnabled(false);
@@ -133,10 +131,8 @@ public class MoveToParentHandler extends AbstractHandler {
 		return Collections.emptyList();
 	}
 
-	private static FBNetwork getParent(final FBNetworkElement fbNetworkElement) {
-		return fbNetworkElement.getFbNetwork().eContainer() instanceof SubApp
-				? fbNetworkElement.getFbNetwork()
-						: null;
+	private static FBNetwork getParentOfParent(final FBNetworkElement fbNetworkElement) {
+		return (FBNetwork) fbNetworkElement.getFbNetwork().eContainer().eContainer();
 	}
 
 	// prevents the FBs from lying on top of one another
