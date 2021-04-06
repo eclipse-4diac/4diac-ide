@@ -97,19 +97,19 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 	// parameter creation function
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
-				new ExecutionDescription<State>("Insert an internal variable into an empty list", //$NON-NLS-1$
+				new ExecutionDescription<>("Insert an internal variable into an empty list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar1, //
 						InsertVariableCommandTest::verifyStateVar1 //
 				), //
-				new ExecutionDescription<State>("Insert an internal variable at the beginning of the list", //$NON-NLS-1$
+				new ExecutionDescription<>("Insert an internal variable at the beginning of the list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar2, //
 						InsertVariableCommandTest::verifyStateVar2 //
 				), //
-				new ExecutionDescription<State>("Add an internal variable in the middle of the list", //$NON-NLS-1$
+				new ExecutionDescription<>("Add an internal variable in the middle of the list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar3, //
 						InsertVariableCommandTest::verifyStateVar3 //
 				), //
-				new ExecutionDescription<State>("Add an internal variable at the end of the list", //$NON-NLS-1$
+				new ExecutionDescription<>("Add an internal variable at the end of the list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar4, //
 						InsertVariableCommandTest::verifyStateVar4 //
 				) //

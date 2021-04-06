@@ -126,7 +126,7 @@ public class ConnectionCommandsTest extends FBNetworkTestBase {
 	private static Collection<Arguments> twoFunctionBlocks(final List<ExecutionDescription<?>> executionDescriptions) {
 		return describeCommand("Start with two functionblocks", // //$NON-NLS-1$
 				ConnectionCommandsTest::initState, //
-				(final State state, final State oldState, final TestFunction t) -> CommandTestBase.verifyNothing(state, oldState, t), //
+				(StateVerifier<State>) CommandTestBase::verifyNothing, //
 				executionDescriptions //
 				);
 	}

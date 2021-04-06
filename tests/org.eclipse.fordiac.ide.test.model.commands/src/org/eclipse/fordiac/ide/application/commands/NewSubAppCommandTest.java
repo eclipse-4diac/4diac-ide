@@ -125,11 +125,11 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 		final Collection<Arguments> a = new ArrayList<>();
 		a.addAll(describeCommand("Start with an empty FBNetwork", //$NON-NLS-1$
 				NewSubAppCommandTest::initEmptyState, //
-				(final State s, final State o, final TestFunction t) -> verifyEmptyInitialState(s, o, t), //
+				(StateVerifier<State>) NewSubAppCommandTest::verifyEmptyInitialState, //
 				List.of( //
 						new ExecutionDescription<>("Create empty SubApp", //$NON-NLS-1$
 								NewSubAppCommandTest::createEmptySubApp, //
-								(final State s, final State o, final TestFunction t) -> verifyEmptySubAppCreation(s, o, t) //
+								NewSubAppCommandTest::verifyEmptySubAppCreation //
 								)) //
 				));
 
@@ -137,33 +137,29 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 
 		a.addAll(describeCommand("Start with two FBs in FBNetwork", //$NON-NLS-1$
 				NewSubAppCommandTest::initState, //
-				(final State s, final State o, final TestFunction t) -> verifyInitialState(s, o, t), //
+				(StateVerifier<State>) NewSubAppCommandTest::verifyInitialState, //
 				List.of( //
 						new ExecutionDescription<>("Create SubApp", //$NON-NLS-1$
 								NewSubAppCommandTest::createSubApp, //
-								(final State s, final State o,
-										final TestFunction t) -> verifySubAppCreation(s, o, t) //
+								NewSubAppCommandTest::verifySubAppCreation //
 								)) //
 				));
 
 		a.addAll(describeCommand("Start with two FBs in FBNetwork", //$NON-NLS-1$
 				NewSubAppCommandTest::initState, //
-				(final State s, final State o, final TestFunction t) -> verifyInitialState(s, o, t), //
+				(StateVerifier<State>) NewSubAppCommandTest::verifyInitialState, //
 				List.of( //
 						new ExecutionDescription<>("Create Data Connections", //$NON-NLS-1$
 								ConnectionCommandsTest::workingAddDataConnection, //
-								(final State s, final State o, final TestFunction t) -> ConnectionCommandsTest
-								.verifyDataConnection(s, o, t) //
+								ConnectionCommandsTest::verifyDataConnection //
 								), //
 						new ExecutionDescription<>("Create Event Connections", //$NON-NLS-1$
 								ConnectionCommandsTest::workingAddEventConnection, //
-								(final State s, final State o, final TestFunction t) -> ConnectionCommandsTest
-								.verifyEventConnection(s, o, t) //
+								ConnectionCommandsTest::verifyEventConnection //
 								), //
 						new ExecutionDescription<>("Create SubApp", //$NON-NLS-1$
 								NewSubAppCommandTest::createSubApp, //
-								(final State s, final State o,
-										final TestFunction t) -> verifySubAppCreationWithConnections(s, o, t) //
+								NewSubAppCommandTest::verifySubAppCreationWithConnections //
 								)) //
 				));
 

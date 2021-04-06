@@ -78,15 +78,15 @@ public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 	// parameter creation function
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
-				new ExecutionDescription<State>("Add Functionblock", //$NON-NLS-1$
+				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						AddNewVersionInfoCommandTest::verifyStateBefore //
 				), //
-				new ExecutionDescription<State>("Add VersionInfo", //$NON-NLS-1$
+				new ExecutionDescription<>("Add VersionInfo", //$NON-NLS-1$
 						AddNewVersionInfoCommandTest::executeCommand, //
 						AddNewVersionInfoCommandTest::verifyState //
 				), //
-				new ExecutionDescription<State>("Add second VersionInfo", //$NON-NLS-1$
+				new ExecutionDescription<>("Add second VersionInfo", //$NON-NLS-1$
 						AddNewVersionInfoCommandTest::executeCommand, //
 						AddNewVersionInfoCommandTest::verifyState2 //
 				) //

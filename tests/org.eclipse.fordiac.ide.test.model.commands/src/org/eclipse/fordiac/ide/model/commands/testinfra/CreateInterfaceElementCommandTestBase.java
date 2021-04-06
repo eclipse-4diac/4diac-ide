@@ -48,7 +48,7 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				CreateInterfaceElementCommandTestBase::initializeState, //
-				(State state, State oldState, TestFunction t) -> verifyInitialState(state, oldState, t), //
+				(StateVerifier<State>) CreateInterfaceElementCommandTestBase::verifyInitialState, //
 				executionDescriptions //
 		));
 

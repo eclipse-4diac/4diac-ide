@@ -142,7 +142,7 @@ public class MoveElementFromSubAppCommandTest extends FBNetworkTestBase {
 
 		a.addAll(describeCommand("Start with two FBs in SubAppNetwork", //$NON-NLS-1$
 				MoveElementFromSubAppCommandTest::initState, //
-				(final State s, final State o, final TestFunction t) -> verifyInitialState(s, o, t), //
+				(StateVerifier<State>) MoveElementFromSubAppCommandTest::verifyInitialState, //
 				List.of( //
 						new ExecutionDescription<>("move Functionblock from SubApp", //$NON-NLS-1$
 								MoveElementFromSubAppCommandTest::moveFB, //
@@ -152,7 +152,7 @@ public class MoveElementFromSubAppCommandTest extends FBNetworkTestBase {
 
 		a.addAll(describeCommand("Start with two FBs in SubAppNetwork", //$NON-NLS-1$
 				MoveElementFromSubAppCommandTest::initState, //
-				(final State s, final State o, final TestFunction t) -> verifyInitialState(s, o, t), //
+				(StateVerifier<State>) MoveElementFromSubAppCommandTest::verifyInitialState, //
 				List.of( //
 						new ExecutionDescription<>("Create Data Connections", //$NON-NLS-1$
 								MoveElementFromSubAppCommandTest::addDataConnection, //

@@ -46,7 +46,7 @@ public abstract class CreateInternalVariableCommandTestBase extends FBNetworkTes
 
 		commands.addAll(describeCommand("Start from default values", //$NON-NLS-1$
 				CreateInternalVariableCommandTestBase::initializeState, //
-				(State state, State oldState, TestFunction t) -> verifyInitialState(state, oldState, t), //
+				(StateVerifier<State>) CreateInternalVariableCommandTestBase::verifyInitialState, //
 				executionDescriptions //
 		));
 

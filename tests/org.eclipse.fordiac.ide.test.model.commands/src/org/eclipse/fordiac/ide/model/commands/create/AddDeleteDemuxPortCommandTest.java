@@ -226,7 +226,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		// test series 1
 		commands.addAll(describeCommand("Starting from default values", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
+				(StateVerifier<State>) AddDeleteDemuxPortCommandTest::verifyDefaultInitialValues, //
 				executionDescriptions //
 				));
 		return commands;

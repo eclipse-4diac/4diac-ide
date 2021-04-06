@@ -90,43 +90,37 @@ public class PasteCommandTest extends FBNetworkTestBase {
 
 		a.addAll(describeCommand("Start with two FBs in FBNetwork", //$NON-NLS-1$
 				PasteCommandTest::initState, //
-				(final State s, final State o, final TestFunction t) -> verifyInitialState(s, o, t), //
+				(StateVerifier<State>) PasteCommandTest::verifyInitialState, //
 				List.of( //
 						new ExecutionDescription<>("Create Data Connections", //$NON-NLS-1$
 								ConnectionCommandsTest::workingAddDataConnection, //
-								(final State s, final State o, final TestFunction t) -> ConnectionCommandsTest
-								.verifyDataConnection(s, o, t) //
+								ConnectionCommandsTest::verifyDataConnection //
 								), //
 						new ExecutionDescription<>("Create Event Connections", //$NON-NLS-1$
 								ConnectionCommandsTest::workingAddEventConnection, //
-								(final State s, final State o, final TestFunction t) -> ConnectionCommandsTest
-								.verifyEventConnection(s, o, t) //
+								ConnectionCommandsTest::verifyEventConnection //
 								), //
 						new ExecutionDescription<>("copy Functionblock", //$NON-NLS-1$
 								PasteCommandTest::copyFB, //
-								(final State s, final State o,
-										final TestFunction t) -> verifyCopyFB(s, o, t) //
+								PasteCommandTest::verifyCopyFB //
 								)) //
 				));
 
 		a.addAll(describeCommand("Start with two FBs in FBNetwork", //$NON-NLS-1$
 				PasteCommandTest::initState, //
-				(final State s, final State o, final TestFunction t) -> verifyInitialState(s, o, t), //
+				(StateVerifier<State>) PasteCommandTest::verifyInitialState, //
 				List.of( //
 						new ExecutionDescription<>("Create Data Connections", //$NON-NLS-1$
 								ConnectionCommandsTest::workingAddDataConnection, //
-								(final State s, final State o, final TestFunction t) -> ConnectionCommandsTest
-								.verifyDataConnection(s, o, t) //
+								ConnectionCommandsTest::verifyDataConnection //
 								), //
 						new ExecutionDescription<>("Create Event Connections", //$NON-NLS-1$
 								ConnectionCommandsTest::workingAddEventConnection, //
-								(final State s, final State o, final TestFunction t) -> ConnectionCommandsTest
-								.verifyEventConnection(s, o, t) //
+								ConnectionCommandsTest::verifyEventConnection //
 								), //
 						new ExecutionDescription<>("copy Functionblock with connections", //$NON-NLS-1$
 								PasteCommandTest::copyFBWithConnections, //
-								(final State s, final State o,
-										final TestFunction t) -> verifyCopyFBWithConnections(s, o, t) //
+								PasteCommandTest::verifyCopyFBWithConnections //
 								)) //
 				));
 
