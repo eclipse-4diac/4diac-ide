@@ -21,14 +21,11 @@ import org.eclipse.jface.viewers.IFilter;
 public class SubappInterfaceEditingFilter implements IFilter {
 
 	@Override
-	public boolean select(Object toTest) {
+	public boolean select(final Object toTest) {
 		if (toTest instanceof SubAppForFBNetworkEditPart) {
 			final SubApp subapp = ((SubAppForFBNetworkEditPart) toTest).getModel();
-			return (subapp.getType() == null) && !subapp.isContainedInTypedInstance(); // only for untyped
+			return (!subapp.isTyped()) && !subapp.isContainedInTypedInstance(); // only for untyped
 		}
-		if (toTest instanceof UISubAppNetworkEditPart) {
-			return true;
-		}
-		return false;
+		return (toTest instanceof UISubAppNetworkEditPart);
 	}
 }

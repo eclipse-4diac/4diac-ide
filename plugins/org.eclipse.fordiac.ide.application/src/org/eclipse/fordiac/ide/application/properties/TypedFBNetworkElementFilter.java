@@ -26,7 +26,7 @@ import org.eclipse.jface.viewers.IFilter;
  */
 public class TypedFBNetworkElementFilter implements IFilter {
 	@Override
-	public boolean select(Object toTest) {
+	public boolean select(final Object toTest) {
 		if (toTest instanceof SubAppForFBNetworkEditPart) {
 			final SubApp subapp = ((SubAppForFBNetworkEditPart) toTest).getModel();
 			return isTyped(subapp);
@@ -35,6 +35,6 @@ public class TypedFBNetworkElementFilter implements IFilter {
 	}
 
 	private static boolean isTyped(final SubApp subapp) {
-		return (subapp.getType() != null) || subapp.isContainedInTypedInstance();
+		return (subapp.isTyped()) || subapp.isContainedInTypedInstance();
 	}
 }

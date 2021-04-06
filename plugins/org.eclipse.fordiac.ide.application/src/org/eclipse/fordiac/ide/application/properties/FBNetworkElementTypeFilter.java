@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.jface.viewers.IFilter;
 
 /**
@@ -26,15 +25,10 @@ import org.eclipse.jface.viewers.IFilter;
  */
 public class FBNetworkElementTypeFilter implements IFilter {
 	@Override
-	public boolean select(Object toTest) {
+	public boolean select(final Object toTest) {
 		if (toTest instanceof SubAppForFBNetworkEditPart) {
-			final SubApp subapp = ((SubAppForFBNetworkEditPart) toTest).getModel();
-			return isTyped(subapp);
+			return ((SubAppForFBNetworkEditPart) toTest).getModel().isTyped();
 		}
 		return (toTest instanceof AbstractFBNElementEditPart);
-	}
-
-	private static boolean isTyped(final SubApp subapp) {
-		return (subapp.getType() != null);
 	}
 }
