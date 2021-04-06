@@ -40,8 +40,12 @@ import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.gef.router.RouterUtil;
-import org.eclipse.fordiac.ide.model.data.AnyType;
+import org.eclipse.fordiac.ide.model.data.AnyBitType;
+import org.eclipse.fordiac.ide.model.data.AnyIntType;
+import org.eclipse.fordiac.ide.model.data.AnyRealType;
+import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -193,24 +197,22 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		connection.setTargetDecoration(arrow);
 
 		if (getModel() instanceof EventConnection) {
-			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
 			connection.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON));
 		}
 
 		if (getModel() instanceof AdapterConnection) {
-			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
 			connection.setTargetDecoration(null);
 			connection.setSourceDecoration(null);
 
 		}
 
 		if (getModel() instanceof DataConnection) {
-			connection.setForegroundColor(getDataConnectioncolor());
 			connection.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON));
 
 		}
+		setConnectionColor(connection);
 		connection.setToolTip(new ConnectionTooltipFigure(getModel()));
 		connection.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 		return connection;
@@ -221,23 +223,36 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		return (PolylineConnection) super.getFigure();
 	}
 
+	private void setConnectionColor(final PolylineConnection connection) {
+		if (getModel() instanceof EventConnection) {
+			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
+		}
+
+		if (getModel() instanceof AdapterConnection) {
+			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
+		}
+
+		if (getModel() instanceof DataConnection) {
+			connection.setForegroundColor(getDataConnectioncolor());
+		}
+	}
+
 	private Color getDataConnectioncolor() {
-		// if the connections end point fb type could not be loaded it source or
-		// destination may be null
 		IInterfaceElement refElement = getModel().getSource();
 
-		// if one end point is ANY then it the connection should be colored the other way
+		// if the connections end point fb type could not be loaded it source or
+		// destination may be null
 		if ((null == refElement)) {
 			refElement = getModel().getDestination();
 		}
 
-		final DataType dataType = refElement.getType();
-		if (dataType instanceof AnyType) {
-			// if we have a more concrete type we use its colour
-			if (dataType == IecTypes.GenericTypes.ANY) {
+		if (null != refElement) {
+			final DataType dataType = refElement.getType();
+			//check if source is not of type for which we can determine the color
+			if (!isColoredDataype(dataType) && (refElement == getModel().getSource())) {
+				// if source is of a non defined color type the connection should be colored the other way
+				// take destination for determining the color
 				refElement = getModel().getDestination();
-			} else {
-				refElement = getModel().getSource();
 			}
 		}
 
@@ -246,6 +261,12 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		}
 
 		return PreferenceGetter.getDefaultDataColor();
+	}
+
+	private static boolean isColoredDataype(final DataType dataType) {
+		return (dataType == IecTypes.ElementaryTypes.BOOL) || (dataType instanceof AnyBitType)
+				|| (dataType instanceof AnyIntType) || (dataType instanceof AnyRealType)
+				|| (dataType instanceof AnyStringType) || (dataType instanceof StructuredType);
 	}
 
 	@Override
@@ -288,7 +309,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 						refreshComment();
 					}
 					if (LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)) {
-						getFigure().setForegroundColor(getDataConnectioncolor());
+						setConnectionColor(getFigure());
 						// reset the line width so that any to struct connections have the right width
 						getFigure().setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 					}
@@ -312,13 +333,11 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	}
 
 	public void setTransparency(final int value) {
-		if (getFigure() instanceof PolylineConnection) {
-			final PolylineConnection connection = (getFigure());
-			connection.setAlpha(value);
-			for (final Object fig : connection.getChildren()) {
-				if (fig instanceof Shape) {
-					((Shape) fig).setAlpha(value);
-				}
+		final PolylineConnection connection = getFigure();
+		connection.setAlpha(value);
+		for (final Object fig : connection.getChildren()) {
+			if (fig instanceof Shape) {
+				((Shape) fig).setAlpha(value);
 			}
 		}
 	}

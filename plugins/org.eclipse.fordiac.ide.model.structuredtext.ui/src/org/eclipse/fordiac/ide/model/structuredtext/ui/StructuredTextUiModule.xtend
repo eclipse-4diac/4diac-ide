@@ -4,6 +4,7 @@
 package org.eclipse.fordiac.ide.model.structuredtext.ui
 
 import com.google.inject.Binder
+import com.google.inject.name.Names
 import org.eclipse.fordiac.ide.model.structuredtext.converter.StructuredTextValueConverterService
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource
 import org.eclipse.fordiac.ide.model.structuredtext.ui.preferences.PreferenceInitializer
@@ -14,7 +15,7 @@ import org.eclipse.xtext.resource.IResourceDescriptions
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.resource.impl.ResourceSetBasedResourceDescriptions
 import org.eclipse.xtext.resource.impl.SimpleResourceDescriptionsBasedContainerManager
-import org.eclipse.xtext.ui.editor.autoedit.DefaultAutoEditStrategyProvider
+import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor
 import org.eclipse.xtext.ui.editor.model.ResourceForIEditorInputFactory
 import org.eclipse.xtext.ui.resource.SimpleResourceSetProvider
 import org.eclipse.xtext.ui.shared.Access
@@ -25,6 +26,12 @@ import org.eclipse.xtext.ui.shared.Access
 class StructuredTextUiModule extends AbstractStructuredTextUiModule {
 	new(AbstractUIPlugin plugin) {
 		super(plugin)
+	}
+
+	override configure(Binder binder) {
+		super.configure(binder)
+		binder.bind(String).annotatedWith(Names.named(
+			(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS))).toInstance(".");
 	}
 
 	def Class<? extends XtextResource> bindXtextResource() {
@@ -39,25 +46,26 @@ class StructuredTextUiModule extends AbstractStructuredTextUiModule {
 		binder.bind(IResourceDescriptions).to(ResourceSetBasedResourceDescriptions)
 	}
 
-	override provideIAllContainersState() { 
+	override provideIAllContainersState() {
 		return Access::getWorkspaceProjectsState()
 	}
 
 	def Class<? extends IValueConverterService> bindIValueConverterService() {
 		return StructuredTextValueConverterService
 	}
-	
+
 	override bindIResourceForEditorInputFactory() { return ResourceForIEditorInputFactory; }
-	
+
 	override bindIResourceSetProvider() {
-    	return SimpleResourceSetProvider;
+		return SimpleResourceSetProvider;
 	}
-	
-	override  bindAbstractEditStrategyProvider() {
-		val autoInsert = ExtendedStructuredTextActivator.getInstance().getPreferenceStore().getBoolean(PreferenceInitializer.AUTO_INSERT);
-		
-		if(autoInsert && autoInsert == true){
-			return DefaultAutoEditStrategyProvider;			
+
+	override bindAbstractEditStrategyProvider() {
+		val autoInsert = ExtendedStructuredTextActivator.getInstance().getPreferenceStore().getBoolean(
+			PreferenceInitializer.AUTO_INSERT);
+
+		if (autoInsert && autoInsert == true) {
+			return StructuredTextAutoEditStrategyProvider;
 		}
 		return EmptyAutoEditStrategyProvider;
 	}

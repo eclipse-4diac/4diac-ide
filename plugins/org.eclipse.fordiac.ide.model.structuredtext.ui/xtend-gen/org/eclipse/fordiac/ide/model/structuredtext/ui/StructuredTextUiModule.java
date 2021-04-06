@@ -5,9 +5,9 @@ package org.eclipse.fordiac.ide.model.structuredtext.ui;
 
 import com.google.inject.Binder;
 import com.google.inject.Provider;
+import com.google.inject.name.Names;
 import org.eclipse.fordiac.ide.model.structuredtext.converter.StructuredTextValueConverterService;
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource;
-import org.eclipse.fordiac.ide.model.structuredtext.ui.preferences.PreferenceInitializer;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.resource.IContainer;
@@ -17,7 +17,7 @@ import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.resource.impl.ResourceSetBasedResourceDescriptions;
 import org.eclipse.xtext.resource.impl.SimpleResourceDescriptionsBasedContainerManager;
 import org.eclipse.xtext.ui.editor.autoedit.AbstractEditStrategyProvider;
-import org.eclipse.xtext.ui.editor.autoedit.DefaultAutoEditStrategyProvider;
+import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor;
 import org.eclipse.xtext.ui.editor.model.IResourceForEditorInputFactory;
 import org.eclipse.xtext.ui.editor.model.ResourceForIEditorInputFactory;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
@@ -31,6 +31,13 @@ import org.eclipse.xtext.ui.shared.Access;
 public class StructuredTextUiModule extends AbstractStructuredTextUiModule {
   public StructuredTextUiModule(final AbstractUIPlugin plugin) {
     super(plugin);
+  }
+  
+  @Override
+  public void configure(final Binder binder) {
+    super.configure(binder);
+    binder.<String>bind(String.class).annotatedWith(
+      Names.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS)).toInstance(".");
   }
   
   public Class<? extends XtextResource> bindXtextResource() {
@@ -66,10 +73,7 @@ public class StructuredTextUiModule extends AbstractStructuredTextUiModule {
   
   @Override
   public Class<? extends AbstractEditStrategyProvider> bindAbstractEditStrategyProvider() {
-    final boolean autoInsert = ExtendedStructuredTextActivator.getInstance().getPreferenceStore().getBoolean(PreferenceInitializer.AUTO_INSERT);
-    if ((autoInsert && (autoInsert == true))) {
-      return DefaultAutoEditStrategyProvider.class;
-    }
-    return EmptyAutoEditStrategyProvider.class;
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method or field StructuredTextAutoEditStrategyProvider is undefined");
   }
 }

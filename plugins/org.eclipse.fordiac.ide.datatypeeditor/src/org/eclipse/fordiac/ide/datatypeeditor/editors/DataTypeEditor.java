@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University, Linz
+ *               2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,8 +21,12 @@ import java.util.List;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.datatypeeditor.Activator;
+import org.eclipse.fordiac.ide.datatypeeditor.DataTypeListener;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
@@ -71,6 +76,7 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 	private Composite errorComposite;
 	private boolean importFailed;
 	private boolean outsideWorkspace;
+	private DataTypeListener listener;
 
 	private ActionRegistry actionRegistry;
 	private final List<String> selectionActions = new ArrayList<>();
@@ -94,6 +100,7 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 		getCommandStack().removeCommandStackEventListener(this);
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		getActionRegistry().dispose();
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(listener);
 		super.dispose();
 	}
 
@@ -146,14 +153,21 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 
 		try {
 			if (null != file) {
-				setPartName(file.getName().substring(0, file.getName().lastIndexOf('.')));
+				setPartName(getDatatypeNameFromFile(file));
 				final DataTypeImporter importer = new DataTypeImporter(file);
 				importer.loadElement();
 				dataType = importer.getElement();
+				listener = new DataTypeListener(file, this);
+				final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+				workspace.addResourceChangeListener(listener);
 			}
 		} catch (final Exception e) {
 			throw new PartInitException(e.getMessage(), e);
 		}
+	}
+
+	private static String getDatatypeNameFromFile(IFile file) {
+		return file.getName().substring(0, file.getName().lastIndexOf('.'));
 	}
 
 	private void setActionHandlers(final IEditorSite site) {
@@ -279,4 +293,14 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 		}
 		return actionRegistry;
 	}
+
+	public void updateDataType(IPath path) {
+		this.file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+		final String name = getDatatypeNameFromFile(file);
+		dataType.setName(name);
+		setPartName(name);
+		setTitle(name);
+		setInput(new FileEditorInput(file));
+	}
+
 }

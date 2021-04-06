@@ -65,9 +65,15 @@ public class StructManipulation {
 	public static void setMemberVariablesAsPorts(StructManipulator muxer, StructuredType newStructType) {
 		if (muxer instanceof Demultiplexer) {
 			if (null == newStructType) {
-				setVariablesAsOutputs(muxer, Collections.emptyList());
+				setVariablesAsOutputs(muxer, Collections.emptyList(), null);
 			} else {
-				setVariablesAsOutputs(muxer, newStructType.getMemberVariables());
+				if (muxer.getAttribute(CHILDREN_ATTRIBUTE) != null) {
+					setVariablesAsOutputs(muxer,
+							collectVisibleChildren(muxer, newStructType).getMemberVariables(),
+							newStructType);
+				} else {
+					setVariablesAsOutputs(muxer, newStructType.getMemberVariables(), newStructType);
+				}
 			}
 		}
 
@@ -80,8 +86,8 @@ public class StructManipulation {
 		}
 	}
 
-	public static StructuredType collectVisibleChildren(StructManipulator muxer, StructuredType newStructType,
-			final Attribute attr) {
+	public static StructuredType collectVisibleChildren(StructManipulator muxer, StructuredType newStructType) {
+		final Attribute attr = muxer.getAttribute(CHILDREN_ATTRIBUTE);
 		final StructuredType configuredStruct = DataFactory.eINSTANCE.createStructuredType();
 		configuredStruct.setName(newStructType.getName());
 		configuredStruct.setComment(newStructType.getComment());
@@ -124,7 +130,8 @@ public class StructManipulation {
 		}
 	}
 
-	public static void setVariablesAsOutputs(StructManipulator muxer, Collection<VarDeclaration> vars) {
+	public static void setVariablesAsOutputs(StructManipulator muxer, Collection<VarDeclaration> vars,
+			StructuredType newStructType) {
 		final Collection<VarDeclaration> list = EcoreUtil.copyAll(vars);
 		list.forEach(varDecl -> {
 			varDecl.setIsInput(false);
@@ -146,6 +153,8 @@ public class StructManipulation {
 		// add data output ports to the interface
 		muxer.getInterface().getOutputVars().clear();
 		muxer.getInterface().getOutputVars().addAll(list);
+		muxer.getInterface().getInputVars().get(0).setType(newStructType); // there should be only one output
+
 	}
 
 	private static Collection<VarDeclaration> getVarDeclarations(StructuredType structType, List<String> varDeclNames) {
