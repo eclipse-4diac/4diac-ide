@@ -29,11 +29,11 @@ import org.junit.jupiter.params.provider.Arguments;
 
 public class NewSubAppCommandTest extends FBNetworkTestBase {
 
-	private static State initEmptyState() {
+	protected static State initEmptyState() {
 		return new State();
 	}
 
-	private static void verifyEmptyInitialState(final State s, final State o, final TestFunction t) {
+	protected static void verifyEmptyInitialState(final State s, final State o, final TestFunction t) {
 		t.test(s.getFbNetwork().getNetworkElements().size(), 0);
 	}
 
@@ -42,14 +42,14 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 		return commandExecution(s);
 	}
 
-	private static void verifyEmptySubAppCreation(final State s, final State o, final TestFunction t) {
+	protected static void verifyEmptySubAppCreation(final State s, final State o, final TestFunction t) {
 		t.test(s.getFbNetwork().getNetworkElements().size(), 1);
 		t.test(s.getFbNetwork().getNetworkElements().get(0) instanceof SubApp);
 		final SubApp subapp = (SubApp) s.getFbNetwork().getNetworkElements().get(0);
 		t.test(subapp.getSubAppNetwork().getNetworkElements().size(), 0);
 	}
 
-	private static State initState() {
+	protected static State initState() {
 		State s = initEmptyState();
 		WithCreateTest.createInterfaceElements(s);
 		s = ConnectionCommandsTest.addIOWiths(s);
@@ -57,7 +57,7 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 		return s;
 	}
 
-	private static void verifyInitialState(final State s, final State o, final TestFunction t) {
+	protected static void verifyInitialState(final State s, final State o, final TestFunction t) {
 		t.test(s.getFbNetwork().getNetworkElements().size(), 2);
 	}
 
@@ -66,14 +66,14 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 		return e.createEditPart(null, o);
 	}
 
-	private static State createSubApp(final State s) {
+	protected static State createSubApp(final State s) {
 		s.setCommand(
 				new NewSubAppCommand(s.getFbNetwork(),
 						List.of(asEditPart(s.getFbNetwork().getNetworkElements().get(1))), 0, 0));
 		return commandExecution(s);
 	}
 
-	private static void verifySubAppCreation(final State s, final State o, final TestFunction t) {
+	protected static void verifySubAppCreation(final State s, final State o, final TestFunction t) {
 		t.test(s.getFbNetwork().getNetworkElements().size(), 2);
 		t.test(!s.getFbNetwork().isSubApplicationNetwork());
 
@@ -87,7 +87,7 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 		t.test(!subapp.isNestedInSubApp());
 	}
 
-	private static void verifySubAppCreationWithConnections(final State s, final State o, final TestFunction t) {
+	protected static void verifySubAppCreationWithConnections(final State s, final State o, final TestFunction t) {
 		verifySubAppCreation(s, o, t);
 
 		// extract the functionblock in the outer network
