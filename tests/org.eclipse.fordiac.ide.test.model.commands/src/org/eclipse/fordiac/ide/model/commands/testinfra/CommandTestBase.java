@@ -42,7 +42,7 @@ import org.opentest4j.TestAbortedException;
 public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 
 	/** 
-         * Thread-Local storage for TestInfo from JUnit
+	 * Thread-Local storage for TestInfo from JUnit
 	 *
 	 * used to add information on what test was executed to the Exception
 	 */
@@ -62,13 +62,14 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * assertThat method to be used to validate the current state
 	 *
-	 * @throws AssertionError
+	 * @throws AssertionError signals that this test has failed because an assertion has failed
 	 *
+	 * @param <T> generic name of the type to be verified
 	 * @param reason  textual description of what is expected
 	 * @param actual  actual value to be compared
 	 * @param matcher matcher-object that does the comparison
 	 */
-	public static <T> void assertThat(final String reason, final T actual, final Matcher<T> matcher) {
+	private static <T> void assertThat(final String reason, final T actual, final Matcher<T> matcher) {
 		try {
 			if (null != testinfo.get()) {
 				org.hamcrest.MatcherAssert.assertThat(
@@ -86,13 +87,14 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * assumeThat method to be used to validate the current state
 	 *
-	 * @throws TestAbortedException
+	 * @throws TestAbortedException signals that this test will be skipped because an assertion has failed
 	 *
+	 * @param <T> generic name of the type to be verified
 	 * @param reason  textual description of what is expected
 	 * @param actual  actual value to be compared
 	 * @param matcher matcher-object that does the comparison
 	 */
-	public static <T> void assumeThat(final String reason, final T actual, final Matcher<T> matcher) {
+	private static <T> void assumeThat(final String reason, final T actual, final Matcher<T> matcher) {
 		try {
 			assertThat(reason, actual, matcher);
 		} catch (final AssertionError e) { // NOSONAR
@@ -106,7 +108,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 * remove everthing up to the call to the TestFunction-object from the callstack
 	 *
 	 * @param st stacktrace to be cleaned up
-	 * @return   cleaned stacktrace if a TestFunction was called, original stacktrace otherwise
+	 * @return cleaned stacktrace if a TestFunction was called, original stacktrace otherwise
 	 */
 	private static StackTraceElement[] removeInfraFromStacktrace(final StackTraceElement[] st) {
 		if (Arrays.stream(st)
@@ -121,6 +123,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * forwarding of the "is" hamcrest-core-matcher
 	 *
+	 * @param <T> generic name of the type to be matched
 	 * @param matcher matcher-object that does the comparison
 	 * @return matcher object
 	 */
@@ -131,6 +134,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * forwarding of the "is" hamcrest-core-matcher
 	 *
+	 * @param <T> generic name of the type to be matched
 	 * @param matcher value to compare against
 	 * @return matcher object
 	 */
@@ -141,6 +145,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * empty verification method
 	 *
+	 * @param <T> generic name of the state-description class
 	 * @param s current state description
 	 * @param o state description before the last state transition
 	 * @param t TestFunction object that selects either assert or assume
@@ -152,6 +157,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * undo method that expects that undo is possible
 	 *
+	 * @param <T> generic name of the state-description class
 	 * @param stateObj current state description
 	 * @return new state description
 	 */
@@ -167,6 +173,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * redo method that expects that redo is possible
 	 *
+	 * @param <T> generic name of the state-description class
 	 * @param stateObj current state description
 	 * @return new state description
 	 */
@@ -182,6 +189,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * redo method that expects that redo is possible
 	 *
+	 * @param <T> generic name of the state-description class
 	 * @param stateObj current state description
 	 * @return new state description
 	 */
@@ -199,6 +207,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * undo method that expects that undo is possible
 	 *
+	 * @param <T> generic name of the state-description class
 	 * @param stateObj current state description
 	 * @return new state description
 	 */
@@ -217,6 +226,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * undo method that expects that undo is not possible
 	 *
+	 * @param <T> generic name of the state-description class
 	 * @param stateObj current state description
 	 * @return new state description
 	 */
@@ -233,6 +243,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * redo method that expects that redo is not possible
 	 *
+	 * @param <T> generic name of the state-description class
 	 * @param stateObj current state description
 	 * @return new state description
 	 */
@@ -249,7 +260,8 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * execution method that expects that execution is not possible
 	 *
-	 * @param stateObj current state description
+	 * @param <T> generic name of the state-description class
+	 * @param state current state description
 	 * @return new state description
 	 */
 	protected static <T extends StateBase> T disabledCommandExecution(final T state) {
@@ -265,7 +277,8 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	/**
 	 * execution method that expects that execution is possible
 	 *
-	 * @param stateObj current state description
+	 * @param <T> generic name of the state-description class
+	 * @param state current state description
 	 * @return new state description
 	 */
 	protected static <T extends StateBase> T commandExecution(final T state) {
@@ -361,7 +374,10 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	protected interface TestFunction {
 		/**
 		 * assumeThat/assertThat method to be used to validate the current state
+		 * depending on the situation either AssertionError or TestAbortedException is thrown
+		 * This marks the test either as "Fail" or "Skip"
 		 *
+		 * @param <T> generic name of the type to be verified
 		 * @param message textual description of what is expected
 		 * @param actual  actual value to be compared
 		 * @param matcher matcher-object that does the comparison
@@ -371,6 +387,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		/**
 		 * assumeThat/assertThat method to be used to validate the current state
 		 *
+		 * @param <T> generic name of the type to be verified
 		 * @param actual  actual value to be compared
 		 * @param matcher matcher-object that does the comparison
 		 */
@@ -382,6 +399,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		/**
 		 * assumeEqual/assertEqual method to be used to validate the current state
 		 *
+		 * @param <T> generic name of the type to be verified
 		 * @param actual   actual value to be compared
 		 * @param expected expected value for the comparision
 		 */
@@ -391,6 +409,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 
 		/** assumeEqual/assertEqual method to be used to validate the current state for non-boxed integers
 		 *
+		 * @param <T> generic name of the type to be verified
 		 * @param actual   actual value to be compared
 		 * @param expected expected value for the comparision */
 		default <T> void test(final int actual, final int expected) { // NOSONAR
@@ -408,9 +427,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 
 		/**
 		 * assumeNotNull/assertNotNull method to check for non-null references
-		 *
-		 * @throws TestAbortedException
-		 *
+		 * 
 		 * @param notNull reference that should not be null
 		 */
 		default void test(final Object notNull) {
@@ -546,9 +563,9 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 		}
 
 		/**
-		 * @param state
-		 * @param verifier
-		 * @param before
+		 * @param state Current state description
+		 * @param verifier Verification method for the expected current state
+		 * @param before Reference to the previous state description
 		 */
 		public StateNode(final U state, final StateVerifier<U> verifier, final StateNode<U> before) {
 			this.state = state;
@@ -562,8 +579,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 				throw new RuntimeException("Encountered invalid State"); // NOSONAR //$NON-NLS-1$
 			}
 			@SuppressWarnings("unchecked")
-			final
-			U stateClone = (U) clone;
+			final U stateClone = (U) clone;
 
 			this.state = stateClone;
 			this.verifier = statenode.getVerifier();
@@ -575,16 +591,17 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 
 	/**
 	 * method to describe a command to the class
+	 * to be used inside a method "public static Collection&lt;Arguments&gt; data()"
+	 * This "data()" method is used to determine the testcases to be run
 	 *
 	 * @param description     textual description of the command
 	 * @param initializer     method to set initial state
 	 * @param initialVerifier method to verify the initial state
-	 * @param creator         method to prepare command infrastructure
 	 * @param commands        list of commands and verifiers to be executed (use
 	 *                        helper method commandList for creation)
 	 * @param undo            state transition that undoes a command
 	 * @param redo            state transition that redoes a command
-	 * @return
+	 * @return                a collection of generated parameters to be passed to testCommand
 	 */
 	protected static Collection<Arguments> describeCommand(final String description, final StateInitializer<?> initializer,
 			final StateVerifier<?> initialVerifier, final List<ExecutionDescription<?>> commands, final CommandExecutor<?> undo,
@@ -657,6 +674,17 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 	 * actual JUnit test case
 	 *
 	 * executes commands and adds redo/undo steps and adds a meaningful description
+	 * the paramters to be used are generated by a method "data", except for TestInfo 
+	 * which gets injected by JUnit
+	 *
+	 * @param description     textual description of the command
+	 * @param initializer     method to set initial state
+	 * @param initialVerifier method to verify the initial state
+	 * @param commands        list of commands and verifiers to be executed (use
+	 *                        helper method commandList for creation)
+	 * @param undo            state transition that undoes a command
+	 * @param redo            state transition that redoes a command
+	 * @param ti              TestInfo, injected by JUnit; contains the DisplayName of the test
 	 */
 	@ParameterizedTest(name = "{index}: {0}")
 	@MethodSource("data")
