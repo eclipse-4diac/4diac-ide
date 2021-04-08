@@ -13,10 +13,13 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -30,7 +33,7 @@ public class ConnectionHelper {
 
 	public static class ConnectionBuilder {
 
-		private EnumSet<ConnectionState> connectionState;
+		private Set<ConnectionState> connectionState;
 
 		private String destination;
 		private InterfaceList destInterfaceList;
@@ -142,7 +145,7 @@ public class ConnectionHelper {
 			return qualNames[0];
 		}
 
-		public EnumSet<ConnectionState> getConnectionState() {
+		public Set<ConnectionState> getConnectionState() {
 			return connectionState;
 		}
 
@@ -240,7 +243,7 @@ public class ConnectionHelper {
 			this.srcInterfaceList = srcInterfaceList;
 		}
 
-		public void setConnectionState(final EnumSet<ConnectionState> connectionState) {
+		public void setConnectionState(final Set<ConnectionState> connectionState) {
 			this.connectionState = connectionState;
 		}
 
@@ -264,7 +267,7 @@ public class ConnectionHelper {
 
 	public enum ConnectionState {
 		VALID, SOURCE_MISSING, SOURCE_ENDPOINT_MISSING, DEST_MISSING, DEST_ENDPOINT_MISSING, SOURCE_EXITS,
-		SOURCE_ENDPOINT_EXISTS, DEST_EXISTS, DEST_ENPOINT_EXITS
+		SOURCE_ENDPOINT_EXISTS, DEST_EXISTS, DEST_ENPOINT_EXITS, MISSING_TYPE
 	}
 
 	protected static ErrorMarkerFBNElement createErrorMarkerFB(final String name) {
@@ -284,16 +287,21 @@ public class ConnectionHelper {
 
 	public static IInterfaceElement createRepairInterfaceElement(final IInterfaceElement connection,
 			final String name) {
-		if (connection instanceof VarDeclaration) {
-			final VarDeclaration varDeclaration = InterfaceListCopier.copyVar((VarDeclaration) connection, false);
-			varDeclaration.setIsInput(!connection.isIsInput()); // this needs to be inverted for the dummy connection
-			varDeclaration.setName(name);
-			return varDeclaration;
+		IInterfaceElement repairIE = null;
+		// adapter check has to be first
+		if (connection instanceof AdapterDeclaration) {
+			repairIE = InterfaceListCopier.copyAdapter((AdapterDeclaration) connection);
+		} else if (connection instanceof VarDeclaration) {
+			repairIE = InterfaceListCopier.copyVar((VarDeclaration) connection, false);
+		} else if (connection instanceof Event) {
+			repairIE = InterfaceListCopier.copyEvent((Event) connection);
 		}
 
-		// TODO check other connettionstypes
-
-		return null;
+		if (null != repairIE) {
+			repairIE.setIsInput(!connection.isIsInput()); // this needs to be inverted for the dummy connection
+			repairIE.setName(name);
+		}
+		return repairIE;
 	}
 
 	public static ErrorMarkerInterface createErrorMarkerInterface(final IInterfaceElement source, final String name,

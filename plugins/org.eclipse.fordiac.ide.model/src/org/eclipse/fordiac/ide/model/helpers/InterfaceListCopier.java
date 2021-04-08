@@ -119,7 +119,7 @@ public final class InterfaceListCopier {
 
 	}
 
-	private static Event copyEvent(final Event srcEvent) {
+	public static Event copyEvent(final Event srcEvent) {
 		final Event copy = LibraryElementFactory.eINSTANCE.createEvent();
 		copy.setComment(srcEvent.getComment());
 		copy.setIsInput(srcEvent.isIsInput());
@@ -146,7 +146,7 @@ public final class InterfaceListCopier {
 
 	}
 
-	protected static AdapterDeclaration copyAdapter(final AdapterDeclaration adapter) {
+	public static AdapterDeclaration copyAdapter(final AdapterDeclaration adapter) {
 		final AdapterDeclaration copy = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
 		copy.setComment(adapter.getComment());
 		copy.setIsInput(adapter.isIsInput());
