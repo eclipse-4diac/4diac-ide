@@ -25,7 +25,7 @@ public class FlattenSubAppCommandTest extends NewSubAppCommandTest {
 
 	public static State flattenSubApp(final State s) {
 		final SubApp subapp = (SubApp) s.getFbNetwork().getNetworkElements().stream().filter(e -> e instanceof SubApp)
-				.findFirst().orElseGet(null);
+				.findFirst().orElse(null);
 		assertion.test(subapp);
 		s.setCommand(new FlattenSubAppCommand(subapp));
 		return commandExecution(s);
