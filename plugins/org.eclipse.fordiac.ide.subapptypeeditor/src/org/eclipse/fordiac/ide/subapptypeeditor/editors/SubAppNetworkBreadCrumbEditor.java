@@ -23,21 +23,20 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.subapptypeeditor.Activator;
 import org.eclipse.fordiac.ide.subapptypeeditor.providers.TypedSubappProviderAdapterFactory;
 import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -104,7 +103,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	protected EditorPart createEditorPart(final Object model) {
 		if (model instanceof SubApp) {
-			if (((SubApp) model).getType() != null) {
+			if (((SubApp) model).isTyped()) {
 				return new SubappInstanceViewer();
 			}
 			final UnTypedSubAppNetworkEditor editor = new UnTypedSubAppNetworkEditor();
@@ -113,7 +112,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			return editor;
 		}
 
-		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
+		if (model instanceof CFBInstance) {
 			return new CompositeInstanceViewer();
 		}
 
@@ -123,29 +122,17 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	protected IEditorInput createEditorInput(final Object model) {
 		if (model instanceof SubApp) {
-			if (((SubApp) model).getType() != null) {
-				return createSubappInstanceViewerInput(model);
+			final SubApp subApp = (SubApp) model;
+			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
+				return new CompositeAndSubAppInstanceViewerInput(subApp);
 			}
-			return new SubApplicationEditorInput((SubApp) model);
+			return new SubApplicationEditorInput(subApp);
 		}
 
-		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
-			return createCompositeInstanceViewerInput(model);
+		if (model instanceof CFBInstance) {
+			return new CompositeAndSubAppInstanceViewerInput((FB) model);
 		}
 		return null;
-	}
-
-	private static IEditorInput createSubappInstanceViewerInput(final Object model) {
-		final EditPart createEditPart = new SubappInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-				((FBNetworkElement) model).getType().getName());
-
-	}
-
-	private static IEditorInput createCompositeInstanceViewerInput(final Object model) {
-		final EditPart createEditPart = new CompositeInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-				((FBNetworkElement) model).getType().getName());
 	}
 
 	@Override
@@ -216,7 +203,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			}
 			getBreadcrumb().setInput(selectedElement);
 			if (null != refElement) {
-				BreadcrumbUtil.selectElement(refElement, getActiveEditor());
+				HandlerHelper.selectElement(refElement, getActiveEditor());
 			}
 			return true;
 		}

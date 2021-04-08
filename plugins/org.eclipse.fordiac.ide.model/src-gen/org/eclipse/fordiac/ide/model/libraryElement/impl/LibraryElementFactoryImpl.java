@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
@@ -56,6 +57,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -271,6 +274,12 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			return createMultiplexer();
 		case LibraryElementPackage.LOCAL_VARIABLE:
 			return createLocalVariable();
+		case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT:
+			return createErrorMarkerFBNElement();
+		case LibraryElementPackage.ERROR_MARKER_INTERFACE:
+			return createErrorMarkerInterface();
+		case LibraryElementPackage.CFB_INSTANCE:
+			return createCFBInstance();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -928,6 +937,33 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public LocalVariable createLocalVariable() {
 		LocalVariableImpl localVariable = new LocalVariableImpl();
 		return localVariable;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public ErrorMarkerFBNElement createErrorMarkerFBNElement() {
+		ErrorMarkerFBNElementImpl errorMarkerFBNElement = new ErrorMarkerFBNElementImpl();
+		return errorMarkerFBNElement;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public ErrorMarkerInterface createErrorMarkerInterface() {
+		ErrorMarkerInterfaceImpl errorMarkerInterface = new ErrorMarkerInterfaceImpl();
+		return errorMarkerInterface;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public CFBInstance createCFBInstance() {
+		CFBInstanceImpl cfbInstance = new CFBInstanceImpl();
+		return cfbInstance;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

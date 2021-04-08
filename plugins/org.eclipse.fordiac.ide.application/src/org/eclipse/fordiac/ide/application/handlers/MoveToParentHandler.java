@@ -18,9 +18,9 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
-import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.getCommandStack;
-import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.getFBNetwork;
-import static org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil.openEditor;
+import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.getCommandStack;
+import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.getFBNetwork;
+import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.openEditor;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -97,9 +97,9 @@ public class MoveToParentHandler extends AbstractHandler {
 			final IEditorPart parent) {
 		if (!getFBNetwork(parent).equals(subappNetwork)) {
 			// source subapp editor, subapp content is not open
-			return BreadcrumbUtil.getViewer(openEditor(subappNetwork.eContainer()));
+			return HandlerHelper.getViewer(openEditor(subappNetwork.eContainer()));
 		}
-		return BreadcrumbUtil.getViewer(parent);
+		return HandlerHelper.getViewer(parent);
 	}
 
 	@Override

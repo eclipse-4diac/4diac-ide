@@ -13,21 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
-import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.gef.EditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
-import org.eclipse.gef.editpolicies.SelectionEditPolicy;
-import org.eclipse.gef.requests.CreateRequest;
 
 /**
  * Edit Part for the visualization of Composite Networks.
@@ -36,76 +27,15 @@ import org.eclipse.gef.requests.CreateRequest;
  */
 public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 
-	private FBNetworkElement fbInstance;
-
-	// the CompositeNetworkEditPart which contained the instance of the
-	// composite FB this editor visualizes
-	private CompositeNetworkViewerEditPart parentInstanceViewerEditPart;
-
-	public CompositeNetworkViewerEditPart getparentInstanceViewerEditPart() {
-		return parentInstanceViewerEditPart;
-	}
-
-	public void setparentInstanceViewerEditPart(final CompositeNetworkViewerEditPart parentEditPart) {
-		this.parentInstanceViewerEditPart = parentEditPart;
-	}
-
-	public FBNetworkElement getFbInstance() {
-		return fbInstance;
-	}
-
-	public void setFbInstance(final FBNetworkElement fbInstance) {
-		this.fbInstance = fbInstance;
+	@Override
+	protected InterfaceList getInterfaceList() {
+		return ((FBNetworkElement) getModel().eContainer()).getInterface();
 	}
 
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new LayoutEditPolicy() {
-
-			@Override
-			protected Command getCreateCommand(final CreateRequest request) {
-				return null;
-			}
-
-			@Override
-			protected EditPolicy createChildEditPolicy(final EditPart child) {
-				/*
-				 * a simple selection edit policy which will show a rounded rectangle around the
-				 * host
-				 */
-				return new SelectionEditPolicy() {
-					private ModifiedMoveHandle handle = null;
-
-					private ModifiedMoveHandle getHandle() {
-						if (null == handle) {
-							handle = new ModifiedMoveHandle((GraphicalEditPart) getHost(), new Insets(2), 14);
-						}
-						return handle;
-					}
-
-					@Override
-					protected void hideSelection() {
-						if (handle != null) {
-							final IFigure layer = getLayer(LayerConstants.HANDLE_LAYER);
-							layer.remove(handle);
-						}
-					}
-
-					@Override
-					protected void showSelection() {
-						final IFigure layer = getLayer(LayerConstants.HANDLE_LAYER);
-						layer.add(getHandle());
-					}
-
-				};
-			}
-
-			@Override
-			protected Command getMoveChildrenCommand(final Request request) {
-				return null;
-			}
-		});
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new NetworkViewerLayoutPolicy());
 	}
 
 	@Override

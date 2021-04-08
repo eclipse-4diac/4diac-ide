@@ -52,7 +52,7 @@ import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
-implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
+		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private ValueEditPart referencedPart;
 	private int mouseState;
 
@@ -301,10 +301,11 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		if (request.getType() == RequestConstants.REQ_MOVE) {
 			// TODO: move parent editpart??
 		}
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
+				|| (request.getType() == RequestConstants.REQ_OPEN)) {
 			final ValueEditPart part = getReferencedValueEditPart();
 			if ((part != null) && (isVariable()) && (!(getModel() instanceof AdapterDeclaration))) {
-				part.performDirectEdit();
+				part.performRequest(request);
 			}
 		} else {
 			super.performRequest(request);
@@ -312,7 +313,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	public ValueEditPart getReferencedValueEditPart() {
-		if (null == referencedPart && getModel() instanceof VarDeclaration) {
+		if ((null == referencedPart) && (getModel() instanceof VarDeclaration)) {
 			final Object temp = getViewer().getEditPartRegistry().get(((VarDeclaration) getModel()).getValue());
 			if (temp instanceof ValueEditPart) {
 				referencedPart = (ValueEditPart) temp;

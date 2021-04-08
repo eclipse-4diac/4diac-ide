@@ -78,7 +78,7 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> CommandTestBase.verifyNothing(state, oldState, t), //
+				(StateVerifier<State>) CommandTestBase::verifyNothing, //
 				executionDescriptions //
 		));
 
@@ -89,10 +89,11 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Try setting to invalid name", //$NON-NLS-1$
-						(State s) -> executeCommand(s, "1bla", false), //
+						(State s) -> executeCommand(s, "1bla", false), // //$NON-NLS-1$
 						ChangeNameCommandTest::verifyMessages //
-				), new ExecutionDescription<>("Try setting to valid name", //$NON-NLS-1$
-						(State s) -> executeCommand(s, "bla", true), //
+				), //
+				new ExecutionDescription<>("Try setting to valid name", //$NON-NLS-1$
+						(State s) -> executeCommand(s, "bla", true), // //$NON-NLS-1$
 						CommandTestBase::verifyNothing //
 				)//
 		);

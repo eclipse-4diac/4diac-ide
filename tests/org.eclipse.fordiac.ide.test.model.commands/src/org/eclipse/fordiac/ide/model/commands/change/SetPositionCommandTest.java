@@ -59,7 +59,7 @@ public class SetPositionCommandTest extends FBNetworkTestBase {
 
 	// parameter creation function
 	public static Collection<Arguments> data() {
-		final String MOVE_FB = "Move Functionblock ({0})";
+		final String MOVE_FB = "Move Functionblock ({0})"; //$NON-NLS-1$
 
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$

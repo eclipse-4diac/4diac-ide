@@ -122,6 +122,16 @@ public interface InterfaceList extends EObject {
 	 * @generated */
 	EList<VarDeclaration> getOutputVars();
 
+	/** Returns the value of the '<em><b>Error Marker</b></em>' containment reference list. The list contents are of
+	 * type {@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
+	 * @return the value of the '<em>Error Marker</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getInterfaceList_ErrorMarker()
+	 * @model containment="true" extendedMetaData="kind='element' name='ErrorMarker' namespace='##targetNamespace'"
+	 * @generated */
+	EList<IInterfaceElement> getErrorMarker();
+
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" required="true" many="false"

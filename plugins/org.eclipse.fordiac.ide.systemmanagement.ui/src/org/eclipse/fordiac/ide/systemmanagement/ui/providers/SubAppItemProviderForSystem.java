@@ -12,16 +12,14 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *               - added defensive checks when the fbnetwork is null
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
+package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
 
 import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
@@ -39,50 +37,50 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 
 	private FBNetworkItemProvider subAppNetworkItemProvider = null;
 
-	public SubAppItemProviderForSystem(AdapterFactory adapterFactory) {
+	public SubAppItemProviderForSystem(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
-		subAppNetworkItemProvider = new FBNetworkItemProvider(adapterFactory) {
-
-			@Override
-			public void fireNotifyChanged(Notification notification) {
-				FBNetwork network = (FBNetwork) notification.getNotifier();
-				Notification wrappedNotification = ViewerNotification.wrapNotification(notification,
-						network.eContainer());
-				super.fireNotifyChanged(wrappedNotification);
-			}
-
-		};
+		subAppNetworkItemProvider = new FBNetworkItemProviderForSystem(adapterFactory);
 	}
 
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		FBNetwork fbNetwork = getFBNetwork(object);
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
+		final FBNetwork fbNetwork = getFBNetwork(object);
 		return (null != fbNetwork) ? subAppNetworkItemProvider.getChildrenFeatures(fbNetwork) : Collections.emptyList();
 	}
 
 	@Override
-	public Collection<?> getChildren(Object object) {
-		FBNetwork fbNetwork = getFBNetwork(object);
+	public Collection<?> getChildren(final Object object) {
+		final FBNetwork fbNetwork = getFBNetwork(object);
 		return (null != fbNetwork) ? subAppNetworkItemProvider.getChildren(fbNetwork) : Collections.emptyList();
 	}
 
 	@Override
-	public boolean hasChildren(Object object) {
-		FBNetwork fbNetwork = getFBNetwork(object);
+	public boolean hasChildren(final Object object) {
+		if (((SubApp) object).isTyped()) {
+			// if we are typed subapp we always say we have children, avoids early copying of type network
+			return true;
+		}
+		final FBNetwork fbNetwork = getFBNetwork(object);
 		return ((null != fbNetwork) && subAppNetworkItemProvider.hasChildren(fbNetwork));
 	}
 
 	@Override
-	public Object getParent(Object object) {
-		EObject cont = ((SubApp) object).eContainer();
+	public Object getParent(final Object object) {
+		final EObject cont = ((SubApp) object).eContainer();
 		if (cont instanceof FBNetwork) {
 			return ((FBNetwork) cont).eContainer();
 		}
 		return super.getParent(object);
 	}
 
-	private FBNetwork getFBNetwork(Object object) {
-		FBNetwork subAppNetwork = ((SubApp) object).getSubAppNetwork();
+	private FBNetwork getFBNetwork(final Object object) {
+		final SubApp subapp = ((SubApp) object);
+		FBNetwork subAppNetwork = subapp.getSubAppNetwork();
+		if ((null == subAppNetwork) && subapp.isTyped()) {
+			// the subapp currently does not have a subappnetwork and it is typed, copy the subapp network from the type
+			// to the instance
+			subAppNetwork = subapp.loadSubAppNetwork();
+		}
 		if (null != subAppNetwork && !subAppNetwork.eAdapters().contains(subAppNetworkItemProvider)) {
 			// register to the subappnetwork changes so that the viewer is updated
 			subAppNetwork.eAdapters().add(subAppNetworkItemProvider);

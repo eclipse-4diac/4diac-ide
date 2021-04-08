@@ -41,7 +41,7 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	@Override
 	protected String[] fillTypeCombo() {
 		final List<String> list = new ArrayList<>();
-		if (null != getType()) {
+		if ((null != getType()) && (null != getPalette())) {
 			getPalette().getAdapterTypesSorted().forEach(adpType -> list.add(adpType.getLabel()));
 		}
 		return list.toArray(new String[list.size()]);

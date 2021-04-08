@@ -24,8 +24,8 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IEditorPart;
 
-public final class BreadcrumbUtil {
-	private BreadcrumbUtil() {
+public final class HandlerHelper {
+	private HandlerHelper() {
 		// do not instantiate this class
 	}
 
@@ -75,8 +75,8 @@ public final class BreadcrumbUtil {
 		return OpenListenerManager.openEditor(parentModel);
 	}
 
-	public static boolean isEditableSubApp(SubApp subApp) {
-		if ((null == subApp) || (null != subApp.getType())) {
+	public static boolean isEditableSubApp(final SubApp subApp) {
+		if ((null == subApp) || (subApp.isTyped())) {
 			return false;
 		}
 

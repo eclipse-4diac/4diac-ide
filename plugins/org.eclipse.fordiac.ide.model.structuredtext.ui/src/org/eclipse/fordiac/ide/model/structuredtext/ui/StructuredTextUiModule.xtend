@@ -19,6 +19,7 @@ import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor
 import org.eclipse.xtext.ui.editor.model.ResourceForIEditorInputFactory
 import org.eclipse.xtext.ui.resource.SimpleResourceSetProvider
 import org.eclipse.xtext.ui.shared.Access
+import org.eclipse.xtext.ui.editor.autoedit.DefaultAutoEditStrategyProvider
 
 /** 
  * Use this class to register components to be used within the IDE.
@@ -65,7 +66,7 @@ class StructuredTextUiModule extends AbstractStructuredTextUiModule {
 			PreferenceInitializer.AUTO_INSERT);
 
 		if (autoInsert && autoInsert == true) {
-			return StructuredTextAutoEditStrategyProvider;
+			return DefaultAutoEditStrategyProvider;
 		}
 		return EmptyAutoEditStrategyProvider;
 	}

@@ -17,8 +17,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.AutomationSystemItemProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.SystemConfigurationItemProvider;
-import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.ApplicationItemProviderForSystem;
-import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SubAppItemProviderForSystem;
 
 public class AutomationSystemProviderAdapterFactory extends LibraryElementItemProviderAdapterFactory {
 
@@ -52,6 +50,14 @@ public class AutomationSystemProviderAdapterFactory extends LibraryElementItemPr
 			subAppItemProvider = new SubAppItemProviderForSystem(this);
 		}
 		return subAppItemProvider;
+	}
+
+	@Override
+	public Adapter createCFBInstanceAdapter() {
+		if (cfbInstanceItemProvider == null) {
+			cfbInstanceItemProvider = new CFBInstanceItemProviderForSystem(this);
+		}
+		return cfbInstanceItemProvider;
 	}
 
 }

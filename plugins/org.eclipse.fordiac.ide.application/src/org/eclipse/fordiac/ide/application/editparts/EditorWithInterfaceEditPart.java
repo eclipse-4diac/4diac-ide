@@ -357,11 +357,6 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		}
 	}
 
-	public void enableElkLayouting(final InterfaceEditPart part) {
-		removeChildVisual(part);
-		getContentPane().add(part.getFigure());
-	}
-
 	/**
 	 * Removes the childEditParts figures from the correct container.
 	 *

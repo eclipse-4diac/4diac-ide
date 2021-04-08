@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -74,7 +75,7 @@ class FBNetworkExporter extends CommonElementExporter {
 				addCommentAttribute(fbnElement);
 				addXYAttributes(fbnElement);
 
-				if ((fbnElement instanceof SubApp) && (null == ((SubApp) fbnElement).getType())) {
+				if ((fbnElement instanceof SubApp) && (!((SubApp) fbnElement).isTyped())) {
 					// we have an untyped subapp therefore add the subapp contents to it
 					createUntypedSubAppcontents((SubApp) fbnElement);
 				}
@@ -119,19 +120,24 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private void addConnection(final Connection connection, final FBNetwork fbNetwork) throws XMLStreamException {
 		addEmptyStartElement(LibraryElementTags.CONNECTION_ELEMENT);
-		if ((connection.getSource() != null) && (connection.getSource().eContainer() instanceof InterfaceList)) {
+		if (isExportableConnectionEndpoint(connection.getSource())) {
 			getWriter().writeAttribute(LibraryElementTags.SOURCE_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getSource(), fbNetwork));
 		}
 
-		if ((connection.getDestination() != null)
-				&& (connection.getDestination().eContainer() instanceof InterfaceList)) {
+		if (isExportableConnectionEndpoint(connection.getDestination())) {
 			getWriter().writeAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getDestination(), fbNetwork));
 		}
 		addCommentAttribute(connection);
 		addConnectionCoordinates(connection);
 	}
+
+	private static boolean isExportableConnectionEndpoint(final IInterfaceElement endPoint) {
+		return (endPoint != null) && !(endPoint.getFBNetworkElement() instanceof ErrorMarkerFBNElement)
+				&& (endPoint.eContainer() instanceof InterfaceList);
+	}
+
 
 	private static String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement, final FBNetwork fbNetwork) {
 		String retVal = ""; //$NON-NLS-1$

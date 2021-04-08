@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateComman
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -288,6 +289,8 @@ public class UpdateFBTypeCommand extends Command {
 		} else if (entry instanceof AdapterTypePaletteEntry) {
 			copy = LibraryElementFactory.eINSTANCE.createAdapterFB();
 			((AdapterFB) copy).setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
+		} else if (entry.getType() instanceof CompositeFBType) {
+			copy = LibraryElementFactory.eINSTANCE.createCFBInstance();
 		} else {
 			copy = LibraryElementFactory.eINSTANCE.createFB();
 		}

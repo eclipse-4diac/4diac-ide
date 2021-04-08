@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 TU Wien, ACIN, 
+ * Copyright (c) 2019 TU Wien, ACIN,
  * 				 2019-2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
@@ -47,16 +47,14 @@ public abstract class AbstractCodeMetricAnalyzer {
 
 	public abstract List<MetricResult> getResults();
 
-	protected MetricData analyzeSubApp(SubApp subApp, boolean calcAvg) {
-		if (null != subApp.getType()) {
+	protected MetricData analyzeSubApp(final SubApp subApp, final boolean calcAvg) {
+		if (subApp.isTyped()) {
 			return analyzeFBNetwork(subApp.getType().getFBNetwork(), true);
-		} else {
-			return analyzeFBNetwork(subApp.getSubAppNetwork(), calcAvg);
-
 		}
+		return analyzeFBNetwork(subApp.getSubAppNetwork(), calcAvg);
 	}
 
-	protected MetricData analyzeFBType(FBType type) {
+	protected MetricData analyzeFBType(final FBType type) {
 		MetricData tempData = null;
 		if (type instanceof BasicFBType) {
 			tempData = analyzeBFB((BasicFBType) type);
@@ -66,12 +64,12 @@ public abstract class AbstractCodeMetricAnalyzer {
 		return tempData;
 	}
 
-	protected MetricData analyzeFBNetwork(FBNetwork fbNetwork, boolean calcAvg) {
-		MetricData tempData = createDataType();
+	protected MetricData analyzeFBNetwork(final FBNetwork fbNetwork, final boolean calcAvg) {
+		final MetricData tempData = createDataType();
 		int cnt = 0;
-		for (FBNetworkElement fb : fbNetwork.getNetworkElements()) {
+		for (final FBNetworkElement fb : fbNetwork.getNetworkElements()) {
 			if (fb instanceof SubApp) {
-				MetricData tempData2 = analyzeSubApp((SubApp) fb, false);
+				final MetricData tempData2 = analyzeSubApp((SubApp) fb, false);
 				if (tempData2.cnt == 0) {
 					cnt++;
 				} else {
@@ -93,8 +91,8 @@ public abstract class AbstractCodeMetricAnalyzer {
 
 	protected abstract MetricData analyzeBFB(BasicFBType basicFBType);
 
-	protected MetricData analyzeCFB(CompositeFBType compositeFBType) {
-		return analyzeFBNetwork(((CompositeFBType) compositeFBType).getFBNetwork(), true);
+	protected MetricData analyzeCFB(final CompositeFBType compositeFBType) {
+		return analyzeFBNetwork(compositeFBType.getFBNetwork(), true);
 	}
 
 	protected abstract MetricData createDataType();

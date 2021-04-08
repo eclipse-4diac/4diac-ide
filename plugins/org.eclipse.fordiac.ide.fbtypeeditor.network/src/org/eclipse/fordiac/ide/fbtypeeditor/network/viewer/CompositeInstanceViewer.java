@@ -15,27 +15,31 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.gef.EditPartFactory;
 
 public class CompositeInstanceViewer extends AbstractFbNetworkInstanceViewer {
 
 	@Override
 	public EditPartFactory getEditPartFactory() {
-		return new CompositeViewerEditPartFactory(this, fbNetworkElement, fbEditPart);
+		return new CompositeViewerEditPartFactory(this, getFbNetworkElement());
+	}
+
+
+	@Override
+	public FBNetwork getModel() {
+		FBNetwork network = getFbNetworkElement().getCfbNetwork();
+		if (null == network) {
+			// the contained network has not been loaded yet, load it now.
+			network = getFbNetworkElement().loadCFBNetwork();
+		}
+		return network;
 	}
 
 	@Override
-	protected CompositeFBType createFbType(final CompositeFBType type,
-			final InterfaceList interfaceList) {
-		final CompositeFBType typeCopy = LibraryElementFactory.eINSTANCE.createCompositeFBType();
-		typeCopy.setInterfaceList(EcoreUtil.copy(interfaceList));
-		typeCopy.setFBNetwork(FBNetworkHelper.copyFBNetWork(type.getFBNetwork(), typeCopy.getInterfaceList()));
-		return typeCopy;
+	protected CFBInstance getFbNetworkElement() {
+		return (CFBInstance) super.getFbNetworkElement();
 	}
 
 }

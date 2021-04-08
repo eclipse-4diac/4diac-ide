@@ -11,7 +11,7 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
+package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.ecore.EObject;
@@ -49,9 +49,9 @@ public class SystemElementItemProviderAdapterFactory extends LibraryElementItemP
 				 * special getparent
 				 */
 				@Override
-				public Object getParent(Object object) {
+				public Object getParent(final Object object) {
 
-					EObject cont = ((FB) object).eContainer();
+					final EObject cont = ((FB) object).eContainer();
 					if (cont instanceof FBNetwork) {
 						return ((FBNetwork) cont).eContainer();
 					}
@@ -60,6 +60,14 @@ public class SystemElementItemProviderAdapterFactory extends LibraryElementItemP
 			};
 		}
 		return fbItemProvider;
+	}
+
+	@Override
+	public Adapter createCFBInstanceAdapter() {
+		if (cfbInstanceItemProvider == null) {
+			cfbInstanceItemProvider = new CFBInstanceItemProviderForSystem(this);
+		}
+		return cfbInstanceItemProvider;
 	}
 
 }

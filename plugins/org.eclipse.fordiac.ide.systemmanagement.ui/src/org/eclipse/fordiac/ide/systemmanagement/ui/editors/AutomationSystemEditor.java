@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -59,7 +59,6 @@ import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -139,16 +138,14 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return new SystemEditor();
 		}
 
-		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
+		if (model instanceof CFBInstance) {
 			return new CompositeInstanceViewer();
 		}
 
 		if (model instanceof SubApp) {
-
-			if (((SubApp) model).getType() != null) {
+			if ((((SubApp) model).isTyped()) || (((SubApp) model).isContainedInTypedInstance())) {
 				return new SubappInstanceViewer();
 			}
-
 			return new SubAppNetworkEditor();
 		}
 
@@ -174,14 +171,15 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return getEditorInput();
 		}
 		if (model instanceof SubApp) {
-			if (((SubApp) model).getType() != null) {
-				return createSubappInstanceViewer(model);
+			final SubApp subApp = (SubApp) model;
+			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
+				return new CompositeAndSubAppInstanceViewerInput(subApp);
 			}
-			return new SubApplicationEditorInput((SubApp) model);
+			return new SubApplicationEditorInput(subApp);
 		}
 
-		if (model instanceof FB && ((FB) model).getType() instanceof CompositeFBType) {
-			return createCompositeInstanceViewer(model);
+		if (model instanceof CFBInstance) {
+			return new CompositeAndSubAppInstanceViewerInput((FB) model);
 		}
 
 		if (model instanceof Application) {
@@ -197,19 +195,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return new ResourceEditorInput((Resource) model);
 		}
 		return null;
-	}
-
-	private static IEditorInput createSubappInstanceViewer(final Object model) {
-		final EditPart createEditPart = new SubappInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-				((FBNetworkElement) model).getType().getName());
-
-	}
-
-	private static IEditorInput createCompositeInstanceViewer(final Object model) {
-		final EditPart createEditPart = new CompositeInstanceViewer().getEditPartFactory().createEditPart(null, model);
-		return new CompositeAndSubAppInstanceViewerInput(createEditPart, model,
-				((FBNetworkElement) model).getType().getName());
 	}
 
 	@Override
@@ -348,12 +333,34 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		for (final String element : path) {
 			retVal = network.getElementNamed(element);
 			if (retVal instanceof SubApp) {
-				network = ((SubApp) retVal).getSubAppNetwork();
+				network = getSubAppNetwork((SubApp) retVal);
+			} else if (retVal instanceof CFBInstance) {
+				network = getCFBNetwork((CFBInstance) retVal);
 			} else {
+				return null;
+			}
+			if (null == network) {
+				// we couldn't load the network, memento seems to be broken
 				return null;
 			}
 		}
 		return retVal;
+	}
+
+	private static FBNetwork getSubAppNetwork(final SubApp subApp) {
+		FBNetwork network = subApp.getSubAppNetwork();
+		if (null == network) {
+			network = subApp.loadSubAppNetwork();
+		}
+		return network;
+	}
+
+	private static FBNetwork getCFBNetwork(final CFBInstance cfb) {
+		FBNetwork network = cfb.getCfbNetwork();
+		if (null == network) {
+			network = cfb.loadCFBNetwork();
+		}
+		return network;
 	}
 
 	@Override

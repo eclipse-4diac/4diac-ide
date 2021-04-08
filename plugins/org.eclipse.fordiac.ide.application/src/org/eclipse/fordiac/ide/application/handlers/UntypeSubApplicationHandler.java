@@ -18,11 +18,11 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.application.commands.UntypeSubAppCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.model.commands.change.UntypeSubAppCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
@@ -32,26 +32,26 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class UntypeSubApplicationHandler extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		final SubApp subApp = getSelectedSubApp(selection);
 		if (null != subApp) {
-			BreadcrumbUtil.getCommandStack(editor).execute(new UntypeSubAppCommand(subApp));
-			BreadcrumbUtil.getViewer(editor).deselectAll();
-			BreadcrumbUtil.selectElement(subApp, BreadcrumbUtil.getViewer(editor));
+			HandlerHelper.getCommandStack(editor).execute(new UntypeSubAppCommand(subApp));
+			HandlerHelper.getViewer(editor).deselectAll();
+			HandlerHelper.selectElement(subApp, HandlerHelper.getViewer(editor));
 		}
 		return Status.OK_STATUS;
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final SubApp subApp = getSelectedSubApp(selection);
-		setBaseEnabled((null != subApp) && (null != subApp.getType()));
+		setBaseEnabled((null != subApp) && (!subApp.isTyped()));
 	}
 
-	private static SubApp getSelectedSubApp(Object selection) {
+	private static SubApp getSelectedSubApp(final Object selection) {
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structSel = ((IStructuredSelection) selection);
 			if (!structSel.isEmpty() && (structSel.size() == 1)) {
@@ -61,7 +61,7 @@ public class UntypeSubApplicationHandler extends AbstractHandler {
 		return null;
 	}
 
-	private static SubApp getSubApp(Object currentElement) {
+	private static SubApp getSubApp(final Object currentElement) {
 		if (currentElement instanceof SubApp) {
 			return (SubApp) currentElement;
 		} else if (currentElement instanceof SubAppForFBNetworkEditPart) {

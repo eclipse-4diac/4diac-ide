@@ -18,18 +18,16 @@ package org.eclipse.fordiac.ide.model.ui.actions;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.ui.Activator;
 import org.eclipse.fordiac.ide.model.ui.Messages;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPart;
 //import org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.AbstractEditorLinkHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -52,19 +50,20 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 		if (selection.size() != 1) {
 			return false;
 		}
+
 		final Object model = convertFromEditPart(getStructuredSelection().getFirstElement());
+		customizeOpenMenu(model);
 
-		if ((model instanceof Device) || (model instanceof SystemConfiguration) || (model instanceof Application)
-				|| (model instanceof SubApp) || model instanceof Resource) {
-			return true;
+		return ((model instanceof Device) || (model instanceof SystemConfiguration) || (model instanceof Application)
+				|| (model instanceof SubApp) || (model instanceof CFBInstance) || (model instanceof Resource));
+	}
+
+	private void customizeOpenMenu(final Object model) {
+		if (isTypedSubAppOrCFBInstance(model)) {
+			setText(Messages.OpenEditorAction_viewertext);
+		} else {
+			setText(Messages.OpenEditorAction_text);
 		}
-
-		if (model instanceof FB) {
-			// if we have an Fb check if it is in a subapp or application
-			return isFBInAppOrSubApp((FB) model);
-
-		}
-		return false;
 	}
 
 	@Override
@@ -72,36 +71,31 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 		Object selected = convertFromEditPart(getStructuredSelection().getFirstElement());
 
 		Object refObject = null;
-		if (selected instanceof FB && !isTypedComposite(selected)) {
-			refObject = selected;
-			selected = getFBRootNode((FBNetworkElement) selected);
-		} else if (selected instanceof Device) {
-			refObject = selected;
-			selected = ((Device) selected).getSystemConfiguration();
-		} else if (selected instanceof Segment) {
-			refObject = selected;
-			selected = ((Segment) refObject).eContainer();
+		if (!(selected instanceof FB) || isTypedComposite(selected)) {
+			if (selected instanceof Device) {
+				refObject = selected;
+				selected = ((Device) selected).getSystemConfiguration();
+			} else if (selected instanceof Segment) {
+				refObject = selected;
+				selected = ((Segment) refObject).eContainer();
+			}
 		}
 		final IEditorPart editor = OpenListenerManager.openEditor((EObject) selected);
-		BreadcrumbUtil.selectElement(refObject, editor);
+		HandlerHelper.selectElement(refObject, editor);
+	}
+
+	private static boolean isTypedSubAppOrCFBInstance(final Object obj) {
+		if (obj instanceof SubApp) {
+			return ((SubApp) obj).isTyped() || ((SubApp) obj).isContainedInTypedInstance();
+		} else if (obj instanceof FB) {
+			return isTypedComposite(obj);
+		} else {
+			return false;
+		}
 	}
 
 	private static boolean isTypedComposite(final Object obj) {
-		return ((FB) obj).getType() instanceof CompositeFBType;
-	}
-
-	private static boolean isFBInAppOrSubApp(final FB fb) {
-		final EObject rootNode = getFBRootNode(fb);
-		return ((rootNode instanceof Application) || (rootNode instanceof SubApp));
-	}
-
-	private static EObject getFBRootNode(final FBNetworkElement fb) {
-		final EObject fbCont = fb.eContainer();
-		EObject rootNode = null;
-		if (fbCont instanceof FBNetwork) {
-			rootNode = ((FBNetwork) fbCont).eContainer();
-		}
-		return rootNode;
+		return (obj instanceof CFBInstance);
 	}
 
 	private static Object convertFromEditPart(Object model) {

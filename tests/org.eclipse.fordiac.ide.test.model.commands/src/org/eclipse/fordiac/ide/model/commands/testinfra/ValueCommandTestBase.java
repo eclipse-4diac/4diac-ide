@@ -56,13 +56,13 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
+				(StateVerifier<State>) ValueCommandTestBase::verifyDefaultInitialValues, //
 				executionDescriptions //
 		));
 
 		commands.addAll(describeCommand("Start from set values", // //$NON-NLS-1$
-				() -> setInitialValues(), //
-				(State state, State oldState, TestFunction t) -> verifySetInitialValues(state, oldState, t), //
+				ValueCommandTestBase::setInitialValues, //
+				(StateVerifier<State>) ValueCommandTestBase::verifySetInitialValues, //
 				executionDescriptions //
 		));
 		return commands;

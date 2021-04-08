@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -47,7 +47,7 @@ public class FocusOnPredecessor extends AbstractHandler {
 		getPredecessorFBNetworkElements(getSelectedFBElement(event), elementToHighlight);
 
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		final Map<?, ?> map = BreadcrumbUtil.getViewer(editor).getEditPartRegistry();
+		final Map<?, ?> map = HandlerHelper.getViewer(editor).getEditPartRegistry();
 		for (final Entry<?, ?> entry : map.entrySet()) {
 			final Object obj = entry.getKey();
 			final Object editPartAsObject = entry.getValue();

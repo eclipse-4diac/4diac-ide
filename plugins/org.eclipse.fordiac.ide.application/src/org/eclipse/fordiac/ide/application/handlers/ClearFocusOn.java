@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -38,7 +38,7 @@ public class ClearFocusOn extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		final IEditorPart part = HandlerUtil.getActiveEditor(event);
-		final GraphicalViewer viewer = BreadcrumbUtil.getViewer(part);
+		final GraphicalViewer viewer = HandlerHelper.getViewer(part);
 		final Map<?, ?> map = viewer.getEditPartRegistry();
 		for (final Entry<?, ?> entry : map.entrySet()) {
 			final Object obj = entry.getKey();

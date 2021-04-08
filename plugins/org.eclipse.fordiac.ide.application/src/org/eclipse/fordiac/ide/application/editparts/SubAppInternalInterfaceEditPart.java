@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.editors.BreadcrumbUtil;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
@@ -109,9 +109,9 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 	}
 
 	private void goToParent() {
-		final IEditorPart newEditor = BreadcrumbUtil.openParentEditor(getModel().getFBNetworkElement());
+		final IEditorPart newEditor = HandlerHelper.openParentEditor(getModel().getFBNetworkElement());
 		final GraphicalViewer viewer = newEditor.getAdapter(GraphicalViewer.class);
-		BreadcrumbUtil.selectElement(getModel(), viewer);
+		HandlerHelper.selectElement(getModel(), viewer);
 	}
 
 	private FBNetwork getSubappNetwork() {

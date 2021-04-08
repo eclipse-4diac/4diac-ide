@@ -53,7 +53,7 @@ public class UnexecutableCommandTest extends CommandTestBase<CommandTestBase.Sta
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> CommandTestBase.verifyNothing(state, oldState, t), //
+				(StateVerifier<State>) CommandTestBase::verifyNothing, //
 				executionDescriptions //
 		));
 

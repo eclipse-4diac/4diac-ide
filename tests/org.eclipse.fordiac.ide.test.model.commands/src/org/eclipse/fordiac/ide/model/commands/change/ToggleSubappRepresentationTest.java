@@ -76,7 +76,7 @@ public class ToggleSubappRepresentationTest extends CommandTestBase<State> {
 		// test series 1
 		commands.addAll(describeCommand("Toggling Attribute", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
+				(StateVerifier<State>) ToggleSubappRepresentationTest::verifyDefaultInitialValues, //
 				executionDescriptions //
 		));
 		return commands;

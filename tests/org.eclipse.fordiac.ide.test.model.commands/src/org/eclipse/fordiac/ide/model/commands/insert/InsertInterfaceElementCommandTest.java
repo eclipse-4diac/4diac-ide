@@ -192,7 +192,7 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 
 		commands.addAll(describeCommand("Start with Functionblock, disabled undo&redo", // //$NON-NLS-1$
 				() -> FBCreateCommandTest.executeCommand(new State()), //
-				(final State s, final State o, final TestFunction t) -> FBCreateCommandTest.verifyState(s, o, t), //
+				(StateVerifier<State>) FBCreateCommandTest::verifyState, //
 				unexecutableDescriptions, //
 				CommandTestBase::disabledUndoCommand, //
 				CommandTestBase::disabledRedoCommand //

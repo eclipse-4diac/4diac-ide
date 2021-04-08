@@ -46,8 +46,8 @@ public class UnfoldedSubappContentNetwork implements FBNetwork {
 
 	private final FBNetwork subappContent;
 
-	public UnfoldedSubappContentNetwork(SubApp unfoldedSubapp) {
-		if (unfoldedSubapp.getType() != null) {
+	public UnfoldedSubappContentNetwork(final SubApp unfoldedSubapp) {
+		if (unfoldedSubapp.isTyped()) {
 			subappContent = unfoldedSubapp.getType().getFBNetwork();
 		} else {
 			subappContent = unfoldedSubapp.getSubAppNetwork();
@@ -104,32 +104,32 @@ public class UnfoldedSubappContentNetwork implements FBNetwork {
 	}
 
 	@Override
-	public Object eGet(EStructuralFeature feature) {
+	public Object eGet(final EStructuralFeature feature) {
 		return subappContent.eGet(feature);
 	}
 
 	@Override
-	public Object eGet(EStructuralFeature feature, boolean resolve) {
+	public Object eGet(final EStructuralFeature feature, final boolean resolve) {
 		return subappContent.eGet(feature, resolve);
 	}
 
 	@Override
-	public void eSet(EStructuralFeature feature, Object newValue) {
+	public void eSet(final EStructuralFeature feature, final Object newValue) {
 		subappContent.eSet(feature, newValue);
 	}
 
 	@Override
-	public boolean eIsSet(EStructuralFeature feature) {
+	public boolean eIsSet(final EStructuralFeature feature) {
 		return subappContent.eIsSet(feature);
 	}
 
 	@Override
-	public void eUnset(EStructuralFeature feature) {
+	public void eUnset(final EStructuralFeature feature) {
 		subappContent.eUnset(feature);
 	}
 
 	@Override
-	public Object eInvoke(EOperation operation, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(final EOperation operation, final EList<?> arguments) throws InvocationTargetException {
 		return subappContent.eInvoke(operation, arguments);
 	}
 
@@ -144,12 +144,12 @@ public class UnfoldedSubappContentNetwork implements FBNetwork {
 	}
 
 	@Override
-	public void eSetDeliver(boolean deliver) {
+	public void eSetDeliver(final boolean deliver) {
 		subappContent.eSetDeliver(deliver);
 	}
 
 	@Override
-	public void eNotify(Notification notification) {
+	public void eNotify(final Notification notification) {
 		subappContent.eNotify(notification);
 	}
 
@@ -174,12 +174,12 @@ public class UnfoldedSubappContentNetwork implements FBNetwork {
 	}
 
 	@Override
-	public void addConnection(Connection connection) {
+	public void addConnection(final Connection connection) {
 		subappContent.addConnection(connection);
 	}
 
 	@Override
-	public void removeConnection(Connection connection) {
+	public void removeConnection(final Connection connection) {
 		subappContent.removeConnection(connection);
 	}
 
@@ -214,17 +214,17 @@ public class UnfoldedSubappContentNetwork implements FBNetwork {
 	}
 
 	@Override
-	public FB getFBNamed(String name) {
+	public FB getFBNamed(final String name) {
 		return subappContent.getFBNamed(name);
 	}
 
 	@Override
-	public SubApp getSubAppNamed(String name) {
+	public SubApp getSubAppNamed(final String name) {
 		return subappContent.getSubAppNamed(name);
 	}
 
 	@Override
-	public FBNetworkElement getElementNamed(String name) {
+	public FBNetworkElement getElementNamed(final String name) {
 		return subappContent.getElementNamed(name);
 	}
 }

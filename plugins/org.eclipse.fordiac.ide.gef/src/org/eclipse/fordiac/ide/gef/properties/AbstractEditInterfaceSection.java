@@ -269,7 +269,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		final String type = ((IInterfaceElement) element).getTypeName();
 		final List<String> items = Arrays
 				.asList(((ComboBoxCellEditor) viewer.getCellEditors()[TYPE_COLUMN_INDEX]).getItems());
-		return items.indexOf(type);
+		return Integer.valueOf(items.indexOf(type));
 	}
 
 	// subclasses need to override this method if they use a different type dropdown
@@ -340,11 +340,17 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	}
 
 	protected Palette getPalette() {
-		return getTypeLibrary().getBlockTypeLib();
+		if (getTypeLibrary() != null) {
+			return getTypeLibrary().getBlockTypeLib();
+		}
+		return null;
 	}
 
 	protected DataTypeLibrary getDataTypeLib() {
-		return getTypeLibrary().getDataTypeLibrary();
+		if (getTypeLibrary() != null) {
+			return getTypeLibrary().getDataTypeLibrary();
+		}
+		return null;
 	}
 
 	protected class InterfaceCellModifier implements ICellModifier {

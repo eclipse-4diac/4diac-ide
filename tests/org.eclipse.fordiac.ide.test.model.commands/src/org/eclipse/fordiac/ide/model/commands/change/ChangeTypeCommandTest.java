@@ -51,15 +51,15 @@ public class ChangeTypeCommandTest extends FBNetworkTestBase {
 	// parameter creation function
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
-				new ExecutionDescription<State>("Prepare Functionblocks", //$NON-NLS-1$
+				new ExecutionDescription<>("Prepare Functionblocks", //$NON-NLS-1$
 						WithCreateTest::createInterfaceElements, //
 						WithCreateTest::verifyFBCreation //
 				), //
-				new ExecutionDescription<State>("Change Datatype of DataInput of FBType", //$NON-NLS-1$
+				new ExecutionDescription<>("Change Datatype of DataInput of FBType", //$NON-NLS-1$
 						ChangeTypeCommandTest::changeDataInputType, //
 						ChangeTypeCommandTest::validateDataInputType //
 				), //
-				new ExecutionDescription<State>("Update FBType to Network elements", //$NON-NLS-1$
+				new ExecutionDescription<>("Update FBType to Network elements", //$NON-NLS-1$
 						WithCreateTest::updateNetworkElements, //
 						ChangeTypeCommandTest::validateDataInputTypeNetworkElements //
 				) //
