@@ -16,26 +16,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
@@ -130,31 +123,6 @@ public class InterfaceElementSection extends AbstractSection {
 		}
 	}
 
-	private TypeLibrary getTypeLib() {
-		final EObject root = EcoreUtil.getRootContainer(getType());
-
-		if (root instanceof FBType) {
-			return ((FBType) root).getTypeLibrary();
-		} else if (root instanceof AutomationSystem) {
-			return ((AutomationSystem) root).getPalette().getTypeLibrary();
-		}
-		return null;
-	}
-
-	private DataTypeLibrary getDataTypeLib() {
-		if (null != getTypeLib()) {
-			return getTypeLib().getDataTypeLibrary();
-		}
-		return new DataTypeLibrary();
-	}
-
-	private Palette getPalette() {
-		if (null != getTypeLib()) {
-			return getTypeLib().getBlockTypeLib();
-		}
-		return null;
-	}
-
 	@Override
 	public void refresh() {
 		final CommandStack commandStackBuffer = commandStack;
@@ -225,9 +193,11 @@ public class InterfaceElementSection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
+		// currently nothing needs to be done here
 	}
 
 	@Override
 	protected void setInputCode() {
+		// currently nothing needs to be done here
 	}
 }

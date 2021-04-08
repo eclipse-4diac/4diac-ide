@@ -63,17 +63,17 @@ public class CreateConnectionSection extends AbstractSection {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected List<IInterfaceElement> getInputType(Object input) {
-		List<IInterfaceElement> editParts = new ArrayList<>();
+	protected List<IInterfaceElement> getInputType(final Object input) {
+		final List<IInterfaceElement> editParts = new ArrayList<>();
 		if (input instanceof IStructuredSelection
 				&& ((IStructuredSelection) input).getFirstElement() instanceof EditPart
 				&& ((EditPart) ((IStructuredSelection) input).getFirstElement())
-						.getModel() instanceof IInterfaceElement) {
+				.getModel() instanceof IInterfaceElement) {
 
-			List<Object> selectionList = ((IStructuredSelection) input).toList();
+			final List<Object> selectionList = ((IStructuredSelection) input).toList();
 
-			IInterfaceElement first = (IInterfaceElement) ((EditPart) selectionList.get(0)).getModel();
-			IInterfaceElement second = (IInterfaceElement) ((EditPart) selectionList.get(1)).getModel();
+			final IInterfaceElement first = (IInterfaceElement) ((EditPart) selectionList.get(0)).getModel();
+			final IInterfaceElement second = (IInterfaceElement) ((EditPart) selectionList.get(1)).getModel();
 			editParts.add(second);
 			editParts.add(first);
 		}
@@ -91,7 +91,7 @@ public class CreateConnectionSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 		parent.setLayout(new GridLayout(2, false));
 		parent.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		Composite composite = getWidgetFactory().createComposite(parent);
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, org.eclipse.fordiac.ide.gef.Messages.ConnectionSection_Source);
@@ -101,18 +101,18 @@ public class CreateConnectionSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, org.eclipse.fordiac.ide.gef.Messages.ConnectionSection_Comment);
 		commentText = createGroupText(composite, true);
 
-		Button createConnectionButton = getWidgetFactory().createButton(parent,
+		final Button createConnectionButton = getWidgetFactory().createButton(parent,
 				Messages.CreateConnectionSection_CreateConnection, SWT.PUSH);
 		createConnectionButton.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
 		createConnectionButton
-				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+		.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createConnectionButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				AbstractConnectionCreateCommand cmd = null;
-				IInterfaceElement source = getSelectionList().get(0);
-				IInterfaceElement dest = getSelectionList().get(1);
-				FBNetwork nw = getFBNetwork(source, dest);
+				final IInterfaceElement source = getSelectionList().get(0);
+				final IInterfaceElement dest = getSelectionList().get(1);
+				final FBNetwork nw = getFBNetwork(source, dest);
 				if (source instanceof Event) {
 					cmd = new EventConnectionCreateCommand(nw);
 				} else if (source instanceof AdapterDeclaration) {
@@ -128,7 +128,7 @@ public class CreateConnectionSection extends AbstractSection {
 		});
 	}
 
-	private static FBNetwork getFBNetwork(IInterfaceElement source, IInterfaceElement dest) {
+	private static FBNetwork getFBNetwork(final IInterfaceElement source, final IInterfaceElement dest) {
 		if (source.eContainer().eContainer() instanceof CompositeFBType) {
 			return ((CompositeFBType) source.eContainer().eContainer()).getFBNetwork();
 		} else if ((source.getFBNetworkElement().getFbNetwork() != dest.getFBNetworkElement().getFbNetwork())
@@ -137,9 +137,8 @@ public class CreateConnectionSection extends AbstractSection {
 			if (((SubApp) source.getFBNetworkElement()).getSubAppNetwork() == dest.getFBNetworkElement()
 					.getFbNetwork()) {
 				return dest.getFBNetworkElement().getFbNetwork();
-			} else {
-				return source.getFBNetworkElement().getFbNetwork();
 			}
+			return source.getFBNetworkElement().getFbNetwork();
 		}
 		return source.getFBNetworkElement().getFbNetwork();
 	}
@@ -158,7 +157,7 @@ public class CreateConnectionSection extends AbstractSection {
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			sourceText.setText(getInterfaceName(true));
@@ -167,19 +166,19 @@ public class CreateConnectionSection extends AbstractSection {
 		commandStack = commandStackBuffer;
 	}
 
-	private IInterfaceElement getInterfaceElement(boolean source) {
+	private IInterfaceElement getInterfaceElement(final boolean source) {
 		if (source) {
 			return (IInterfaceElement) ((List<?>) type).get(0);
 		}
 		return (IInterfaceElement) ((List<?>) type).get(1);
 	}
 
-	private String getInterfaceName(boolean source) {
-		Object element = getInterfaceElement(source);
+	private String getInterfaceName(final boolean source) {
+		final Object element = getInterfaceElement(source);
 		return getFBName((INamedElement) element) + "." + ((INamedElement) element).getName(); //$NON-NLS-1$
 	}
 
-	private static String getFBName(INamedElement element) {
+	private static String getFBName(final INamedElement element) {
 		return ((INamedElement) element.eContainer().eContainer()).getName();
 	}
 

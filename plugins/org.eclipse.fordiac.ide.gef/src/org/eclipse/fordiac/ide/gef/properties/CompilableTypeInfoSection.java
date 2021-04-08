@@ -102,7 +102,7 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 			}
 		}
 
-		private Object getLanguageIndex(String language) {
+		private Object getLanguageIndex(final String language) {
 			switch (language) {
 			case LANGUAGE_JAVA:
 				return LANGUAGE_JAVA_INDEX;
@@ -117,16 +117,16 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 
 		@Override
 		public void modify(final Object element, final String property, final Object value) {
-			TableItem tableItem = (TableItem) element;
-			Compiler data = (Compiler) tableItem.getData();
-			Command cmd = getModificationCommand(property, value, data);
+			final TableItem tableItem = (TableItem) element;
+			final Compiler data = (Compiler) tableItem.getData();
+			final Command cmd = getModificationCommand(property, value, data);
 			if (null != cmd) {
 				executeCommand(cmd);
 				compilerViewer.refresh(data);
 			}
 		}
 
-		private Command getModificationCommand(final String property, final Object value, Compiler data) {
+		private Command getModificationCommand(final String property, final Object value, final Compiler data) {
 			Command cmd = null;
 			switch (property) {
 			case COMPILER_LANGUAGE:
@@ -161,7 +161,8 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		}
 	}
 
-	public CompilableTypeInfoSection() {
+	protected CompilableTypeInfoSection() {
+		// nothing to be done here
 	}
 
 	@Override
@@ -170,12 +171,12 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		createCompilerInfoGroup(getRightComposite());
 	}
 
-	private void createCompilerInfoGroup(Composite parent) {
-		Group compilerInfoGroup = getWidgetFactory().createGroup(parent, FordiacMessages.CompilerInfo);
+	private void createCompilerInfoGroup(final Composite parent) {
+		final Group compilerInfoGroup = getWidgetFactory().createGroup(parent, FordiacMessages.CompilerInfo);
 		compilerInfoGroup.setLayout(new GridLayout(1, false));
 		compilerInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
-		Composite composite = getWidgetFactory().createComposite(compilerInfoGroup, SWT.NONE);
+		final Composite composite = getWidgetFactory().createComposite(compilerInfoGroup, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false));
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Header + ":"); //$NON-NLS-1$
@@ -186,21 +187,21 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		classdefText = createGroupText(composite, true);
 		classdefText.addModifyListener(
 				e -> executeCommand(new ChangeCompilerInfoClassdefCommand((FBType) type, classdefText.getText())));
-		Composite compositeBottom = getWidgetFactory().createComposite(compilerInfoGroup);
+		final Composite compositeBottom = getWidgetFactory().createComposite(compilerInfoGroup);
 		compositeBottom.setLayout(new GridLayout(2, false));
 		compositeBottom.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
-		AddDeleteWidget buttons = new AddDeleteWidget();
+		final AddDeleteWidget buttons = new AddDeleteWidget();
 		buttons.createControls(compositeBottom, getWidgetFactory());
 
 		compilerViewer = TableWidgetFactory.createPropertyTableViewer(compositeBottom);
-		Table table = compilerViewer.getTable();
+		final Table table = compilerViewer.getTable();
 		configureTableLayout(table);
 		compilerViewer.setContentProvider(new CompilerContentProvider());
 		compilerViewer.setLabelProvider(new CompilerLabelProvider());
 		compilerViewer
-				.setCellEditors(new CellEditor[] { ComboBoxWidgetFactory.createComboBoxCellEditor(table, VALUE_SET),
-						new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) });
+		.setCellEditors(new CellEditor[] { ComboBoxWidgetFactory.createComboBoxCellEditor(table, VALUE_SET),
+				new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) });
 		compilerViewer.setColumnProperties(
 				new String[] { COMPILER_LANGUAGE, COMPILER_VENDOR, COMPILER_PRODUCT, COMPILER_VERSION });
 
@@ -211,15 +212,15 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	}
 
 	private static void configureTableLayout(final Table table) {
-		TableColumn column1 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText(FordiacMessages.Language);
-		TableColumn column2 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column2 = new TableColumn(table, SWT.LEFT);
 		column2.setText(FordiacMessages.Vendor);
-		TableColumn column3 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column3 = new TableColumn(table, SWT.LEFT);
 		column3.setText(FordiacMessages.Product);
-		TableColumn column4 = new TableColumn(table, SWT.LEFT);
+		final TableColumn column4 = new TableColumn(table, SWT.LEFT);
 		column4.setText(FordiacMessages.Version);
-		TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(25, 80));
 		layout.addColumnData(new ColumnWeightData(25, 100));
 		layout.addColumnData(new ColumnWeightData(25, 100));
@@ -242,15 +243,15 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	@Override
 	public void refresh() {
 		super.refresh();
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if ((type instanceof FBType) && (null != ((FBType) type).getCompilerInfo())) {
 			headerText.setText(null != ((FBType) type).getCompilerInfo().getHeader()
 					? ((FBType) type).getCompilerInfo().getHeader()
-					: ""); //$NON-NLS-1$
+							: ""); //$NON-NLS-1$
 			classdefText.setText(null != ((FBType) type).getCompilerInfo().getClassdef()
 					? ((FBType) type).getCompilerInfo().getClassdef()
-					: ""); //$NON-NLS-1$
+							: ""); //$NON-NLS-1$
 			compilerViewer.setInput(type);
 		}
 		commandStack = commandStackBuffer;

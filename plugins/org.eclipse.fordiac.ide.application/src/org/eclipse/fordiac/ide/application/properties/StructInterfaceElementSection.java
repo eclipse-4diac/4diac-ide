@@ -103,9 +103,8 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 				final String newStructName = typeCombo.getItem(index);
 				disableButtonForAnyType();
 				final boolean newStructSelected = !newStructName.contentEquals(getStructuredType().getName());
-				if (newStructSelected && (null != getStructManipulator().getTypeLibrary().getDataTypeLibrary())) {
-					final StructuredType newStruct = getStructManipulator().getTypeLibrary().getDataTypeLibrary()
-							.getStructuredType(newStructName);
+				if (newStructSelected) {
+					final StructuredType newStruct = getDataTypeLib().getStructuredType(newStructName);
 					final ChangeStructCommand cmd = new ChangeStructCommand(getStructManipulator(), newStruct);
 					commandStack.execute(cmd);
 					selectNewStructPin(cmd.getNewMux());
@@ -199,8 +198,7 @@ public class StructInterfaceElementSection extends org.eclipse.fordiac.ide.gef.p
 		if (null != structManipulator) {
 			final String structName = structManipulator.getStructType().getName();
 			typeCombo.removeAll();
-			for (final StructuredType dtp : structManipulator.getTypeLibrary().getDataTypeLibrary()
-					.getStructuredTypesSorted()) {
+			for (final StructuredType dtp : getDataTypeLib().getStructuredTypesSorted()) {
 				typeCombo.add(dtp.getName());
 				if (dtp.getName().contentEquals(structName)) {
 					typeCombo.select(typeCombo.getItemCount() - 1);

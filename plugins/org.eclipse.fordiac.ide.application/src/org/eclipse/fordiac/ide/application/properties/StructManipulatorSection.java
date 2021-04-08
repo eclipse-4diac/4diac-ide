@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.EditPart;
@@ -65,7 +64,7 @@ public class StructManipulatorSection extends AbstractSection {
 	protected Button openEditorButton;
 
 	@Override
-	protected FBNetworkElement getInputType(Object input) {
+	protected FBNetworkElement getInputType(final Object input) {
 		if (input instanceof StructManipulatorEditPart) {
 			return ((StructManipulatorEditPart) input).getModel();
 		}
@@ -83,11 +82,11 @@ public class StructManipulatorSection extends AbstractSection {
 		return null;
 	}
 
-	private void disableOpenEditorForAnyType(String newStructName) {
+	private void disableOpenEditorForAnyType(final String newStructName) {
 		openEditorButton.setEnabled(!"ANY_STRUCT".contentEquals(newStructName)); //$NON-NLS-1$
 	}
 
-	private void createStructSelector(Composite composite) {
+	private void createStructSelector(final Composite composite) {
 		final Composite structComp = getWidgetFactory().createComposite(composite);
 		structComp.setLayout(new GridLayout(3, false));
 		structComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
@@ -98,36 +97,16 @@ public class StructManipulatorSection extends AbstractSection {
 		muxStructSelector.addFocusListener(new FocusListener() {
 
 			@Override
-			public void focusGained(FocusEvent e) {
+			public void focusGained(final FocusEvent e) {
 				fillStructTypeCombo();
 			}
 
 			@Override
-			public void focusLost(FocusEvent e) {
+			public void focusLost(final FocusEvent e) {
+				// nothing to be done
 			}
 		});
-		muxStructSelector.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (null != getType()) {
-					final int index = muxStructSelector.getSelectionIndex();
-					final String newStructName = muxStructSelector.getItem(index);
-					disableOpenEditorForAnyType(newStructName);
-					final boolean newStructSelected = !newStructName.contentEquals(getType().getStructType().getName());
-					if (newStructSelected && (null != getDatatypeLibrary())) {
-						final StructuredType newStruct = getDatatypeLibrary().getStructuredType(newStructName);
-						final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
-						commandStack.execute(cmd);
-						selectNewStructManipulatorFB(cmd.getNewMux());
-						refresh();
-					}
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
+		muxStructSelector.addListener(SWT.Selection, e -> handleStructSelectionChanged());
 
 		openEditorButton = new Button(structComp, SWT.PUSH);
 		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
@@ -135,7 +114,23 @@ public class StructManipulatorSection extends AbstractSection {
 				e -> OpenStructMenu.openStructEditor(getType().getStructType().getPaletteEntry().getFile()));
 	}
 
-	protected void selectNewStructManipulatorFB(StructManipulator newMux) {
+	private void handleStructSelectionChanged() {
+		if (null != getType()) {
+			final int index = muxStructSelector.getSelectionIndex();
+			final String newStructName = muxStructSelector.getItem(index);
+			disableOpenEditorForAnyType(newStructName);
+			final boolean newStructSelected = !newStructName.contentEquals(getType().getStructType().getName());
+			if (newStructSelected) {
+				final StructuredType newStruct = getDataTypeLib().getStructuredType(newStructName);
+				final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
+				commandStack.execute(cmd);
+				selectNewStructManipulatorFB(cmd.getNewMux());
+				refresh();
+			}
+		}
+	}
+
+	protected void selectNewStructManipulatorFB(final StructManipulator newMux) {
 		final GraphicalViewer viewer = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor().getAdapter(GraphicalViewer.class);
 		if (null != viewer) {
@@ -161,7 +156,7 @@ public class StructManipulatorSection extends AbstractSection {
 		memberVarGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 	}
 
-	private void createMemberVariableViewer(Composite parent) {
+	private void createMemberVariableViewer(final Composite parent) {
 		memberVarViewer = createTreeViewer(parent);
 		configureTreeLayout(memberVarViewer);
 		memberVarViewer.setContentProvider(new TreeContentProvider());
@@ -171,16 +166,16 @@ public class StructManipulatorSection extends AbstractSection {
 		createContextMenu(memberVarViewer.getControl());
 	}
 
-	protected TreeViewer createTreeViewer(Composite parent) {
+	protected TreeViewer createTreeViewer(final Composite parent) {
 		return new TreeViewer(parent);
 	}
 
-	private void createContextMenu(Control ctrl) {
+	private void createContextMenu(final Control ctrl) {
 		final Menu openEditorMenu = new Menu(memberVarViewer.getTree());
 		final MenuItem openItem = new MenuItem(openEditorMenu, SWT.NONE);
 		openItem.addSelectionListener(new SelectionListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				final StructuredType sel = getSelectedStructuredType();
 				if (sel != null) {
 					OpenStructMenu.openStructEditor(sel.getPaletteEntry().getFile());
@@ -188,7 +183,7 @@ public class StructManipulatorSection extends AbstractSection {
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 				widgetSelected(e);
 			}
 		});
@@ -196,13 +191,14 @@ public class StructManipulatorSection extends AbstractSection {
 
 		openEditorMenu.addMenuListener(new MenuListener() {
 			@Override
-			public void menuShown(MenuEvent e) {
+			public void menuShown(final MenuEvent e) {
 				openItem.setEnabled((getSelectedStructuredType() != null)
 						&& !getSelectedStructuredType().getName().contentEquals("ANY_STRUCT")); //$NON-NLS-1$
 			}
 
 			@Override
-			public void menuHidden(MenuEvent e) {
+			public void menuHidden(final MenuEvent e) {
+				// nothing to be done here
 			}
 		});
 		ctrl.setMenu(openEditorMenu);
@@ -217,7 +213,7 @@ public class StructManipulatorSection extends AbstractSection {
 		return null;
 	}
 
-	private static void configureTreeLayout(TreeViewer viewer) {
+	private static void configureTreeLayout(final TreeViewer viewer) {
 		final TreeViewerColumn col1 = new TreeViewerColumn(viewer, SWT.LEFT);
 		final TreeViewerColumn col2 = new TreeViewerColumn(viewer, SWT.LEFT);
 		final TreeViewerColumn col3 = new TreeViewerColumn(viewer, SWT.LEFT);
@@ -242,7 +238,7 @@ public class StructManipulatorSection extends AbstractSection {
 		memberVarViewer.setInput(getType());
 		final String structName = getType().getStructType().getName();
 		muxStructSelector.removeAll();
-		for (final StructuredType dtp : getDatatypeLibrary().getStructuredTypesSorted()) {
+		for (final StructuredType dtp : getDataTypeLib().getStructuredTypesSorted()) {
 			muxStructSelector.add(dtp.getName());
 			if (dtp.getName().contentEquals(structName)) {
 				muxStructSelector.select(muxStructSelector.getItemCount() - 1);
@@ -251,7 +247,7 @@ public class StructManipulatorSection extends AbstractSection {
 	}
 
 	@Override
-	public void setInput(IWorkbenchPart part, ISelection selection) {
+	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
 		final Object input = ((IStructuredSelection) selection).getFirstElement();
 		commandStack = getCommandStack(part, input);
@@ -262,14 +258,6 @@ public class StructManipulatorSection extends AbstractSection {
 		}
 		setType(input);
 		disableOpenEditorForAnyType(getType().getStructType().getName());
-	}
-
-	private DataTypeLibrary getDatatypeLibrary() {
-		try {
-			return getType().getFbNetwork().getAutomationSystem().getPalette().getTypeLibrary().getDataTypeLibrary();
-		} catch (final NullPointerException e) {
-			return null;
-		}
 	}
 
 	public static class TreeContentProvider implements ITreeContentProvider {
@@ -289,19 +277,19 @@ public class StructManipulatorSection extends AbstractSection {
 		}
 
 		@Override
-		public Object[] getChildren(Object parentElement) {
+		public Object[] getChildren(final Object parentElement) {
 			final VarDeclaration parentVar = ((TreeNode) parentElement).getVariable();
 			return getMemberVariableNodes((StructuredType) parentVar.getType(),
 					((TreeNode) parentElement).getPathName());
 		}
 
 		@Override
-		public Object getParent(Object element) {
+		public Object getParent(final Object element) {
 			return null;
 		}
 
 		@Override
-		public boolean hasChildren(Object element) {
+		public boolean hasChildren(final Object element) {
 			return ((TreeNode) element).getVariable().getType() instanceof StructuredType;
 		}
 	}
@@ -336,7 +324,7 @@ public class StructManipulatorSection extends AbstractSection {
 		private final String parentVarName;
 		private final String pathName;
 
-		public TreeNode(VarDeclaration variable, String parentVarName, String pathName) {
+		public TreeNode(final VarDeclaration variable, final String parentVarName, final String pathName) {
 			this.variable = variable;
 			this.parentVarName = parentVarName;
 			this.pathName = pathName == null ? variable.getName() : (pathName + "." + variable.getName()); //$NON-NLS-1$
@@ -357,14 +345,12 @@ public class StructManipulatorSection extends AbstractSection {
 
 	@Override
 	protected void setInputCode() {
-		// TODO Auto-generated method stub
-
+		// Currently nothing needs to be done here
 	}
 
 	@Override
 	protected void setInputInit() {
-		// TODO Auto-generated method stub
-
+		// Currently nothing needs to be done here
 	}
 
 }

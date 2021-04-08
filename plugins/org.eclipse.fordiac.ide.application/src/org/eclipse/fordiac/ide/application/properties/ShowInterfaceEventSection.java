@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  * Copyright (c) 2020 Primetals Technologies Germany GmbH
  *
@@ -97,7 +96,7 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 
 		@Override
 		public void modify(final Object element, final String property, final Object value) {
-
+			// nothing to be done here
 		}
 
 	}

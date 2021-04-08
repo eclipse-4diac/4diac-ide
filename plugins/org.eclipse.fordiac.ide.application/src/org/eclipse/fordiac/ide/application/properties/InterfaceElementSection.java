@@ -238,18 +238,16 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 
 			connectionsViewer.setInput(getType());
-			if (getType().getFBNetworkElement().isContainedInTypedInstance()) {
-				currentParameterText.setEditable(false);
-				currentParameterText.setEnabled(false);
-				deleteButton.setVisibleDeleteButton(false);
-			} else {
-				currentParameterText.setEditable(true);
-				currentParameterText.setEnabled(true);
-				deleteButton.setVisibleDeleteButton(true);
-			}
+			setEditable(!getType().getFBNetworkElement().isContainedInTypedInstance());
 		}
 
 		commandStack = commandStackBuffer;
+	}
+
+	private void setEditable(final boolean editable) {
+		currentParameterText.setEditable(editable);
+		currentParameterText.setEnabled(editable);
+		deleteButton.setVisibleDeleteButton(editable);
 	}
 
 	protected String setParameterAndType() {

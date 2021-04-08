@@ -13,8 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.emf.common.util.EMap;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFbTypeCommand;
@@ -61,7 +59,6 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 	private static final String FB_COMMENT = "COMMENT"; //$NON-NLS-1$
 
 	private TableViewer internalFbsViewer;
-	private EMap<String, FBTypePaletteEntry> typeLib;
 
 	@Override
 	protected BaseFBType getType() {
@@ -101,11 +98,13 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 	}
 
 	private PaletteEntry getFBTypePaletteEntry() {
-		return (null != getLastSelectedFB()) ? getLastSelectedFB().getType().getPaletteEntry() : null;
+		final FB fb = getLastSelectedFB();
+		return (null != fb) ? fb.getType().getPaletteEntry() : null;
 	}
 
 	private String getName() {
-		return (null != getLastSelectedFB()) ? getLastSelectedFB().getName() : null;
+		final FB fb = getLastSelectedFB();
+		return (null != fb) ? fb.getName() : null;
 	}
 
 	private int getInsertionIndex() {
@@ -143,7 +142,6 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 		((Text) fbNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
 		final TextCellEditor fbTypeEditor = new TextCellEditor(table);
 		((Text) fbTypeEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		// typeDropDown = new DataTypeDropdown(dataLib, internalFbsViewer);
 		return new CellEditor[] { fbNameEditor, fbTypeEditor, new TextCellEditor(table), new TextCellEditor(table),
 				new TextCellEditor(table) };
 	}
@@ -165,7 +163,6 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 
 	@Override
 	protected void setInputInit() {
-		typeLib = this.getType().getTypeLibrary().getBlockTypeLib().getFbTypes();
 		internalFbsViewer.setCellEditors(createCellEditors(internalFbsViewer.getTable()));
 	}
 
@@ -186,7 +183,7 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 			case FB_COMMENT:
 				return fb.getComment();
 			default:
-				return ""; //$NON-NLS-1$ }
+				return ""; //$NON-NLS-1$
 			}
 		}
 
@@ -200,7 +197,7 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 				cmd = new ChangeNameCommand(fb, value.toString());
 				break;
 			case FB_TYPE:
-				final PaletteEntry fbTypeEntry = typeLib.get(value);
+				final PaletteEntry fbTypeEntry = getPalette().getFBTypeEntry(value.toString());
 				if (null == fbTypeEntry) {
 					return;
 				}
@@ -222,12 +219,12 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 		return internalFbsViewer;
 	}
 
-	public Object getEntry(int index) {
+	public Object getEntry(final int index) {
 		return getType().getInternalFbs().get(index);
 	}
 
 	@Override
-	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof FB) {
 			final FBType fbTypeEntry = (FBType) entry;
 			cmd.add(new InsertFBCommand(getType().getInternalFbs(), fbTypeEntry, index));
@@ -235,14 +232,14 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 	}
 
 	@Override
-	public Object removeEntry(int index, CompoundCommand cmd) {
+	public Object removeEntry(final int index, final CompoundCommand cmd) {
 		final FB fbEntry = (FB) getEntry(index);
 		cmd.add(new DeleteInternalFBCommand(getType(), fbEntry));
 		return fbEntry;
 	}
 
 	@Override
-	public void executeCompoundCommand(CompoundCommand cmd) {
+	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
 		getViewer().refresh();
 	}

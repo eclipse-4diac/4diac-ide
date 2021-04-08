@@ -101,7 +101,7 @@ public class ConnectionSection extends AbstractSection {
 	}
 
 	@Override
-	protected Connection getInputType(Object input) {
+	protected Connection getInputType(final Object input) {
 		final Object inputHelper = input instanceof EditPart ? ((EditPart) input).getModel() : input;
 		if (inputHelper instanceof Connection) {
 			return ((Connection) inputHelper);
@@ -109,7 +109,7 @@ public class ConnectionSection extends AbstractSection {
 		return null;
 	}
 
-	private static String getFBNameFromIInterfaceElement(IInterfaceElement element) {
+	private static String getFBNameFromIInterfaceElement(final IInterfaceElement element) {
 		return element.eContainer().eContainer() instanceof FBNetworkElement
 				? ((FBNetworkElement) element.eContainer().eContainer()).getName()
 						: ""; //$NON-NLS-1$
@@ -117,9 +117,11 @@ public class ConnectionSection extends AbstractSection {
 
 	@Override
 	protected void setInputCode() {
+		// nothing needed to be done here
 	}
 
 	@Override
 	protected void setInputInit() {
+		// nothing needed to be done here
 	}
 }

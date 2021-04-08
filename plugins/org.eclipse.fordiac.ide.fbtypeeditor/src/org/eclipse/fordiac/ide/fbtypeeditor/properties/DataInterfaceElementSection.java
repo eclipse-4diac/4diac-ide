@@ -195,8 +195,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 				withEventsViewer.setInput(getType());
 				Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
 				getType().getWiths().stream().map(with -> withEventsViewer.testFindItem(with.eContainer()))
-				.filter(item -> (item instanceof TableItem))
-				.forEach(item -> ((TableItem) item).setChecked(true));
+						.filter(TableItem.class::isInstance).forEach(item -> ((TableItem) item).setChecked(true));
 			} else {
 				eventComposite.setVisible(false);
 			}
@@ -206,7 +205,6 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 
 	@Override
 	protected Collection<DataType> getTypes() {
-		final FBType fbType = (FBType) getType().eContainer().eContainer();
-		return fbType.getTypeLibrary().getDataTypeLibrary().getDataTypesSorted();
+		return getDataTypeLib().getDataTypesSorted();
 	}
 }
