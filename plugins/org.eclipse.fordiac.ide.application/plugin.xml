@@ -869,15 +869,19 @@
          </command>
          <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent">
           <visibleWhen checkEnabled="true">
-          		<or>
-                	<and> 
-						<with variable="activeEditor">
-							<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
-						</with>
-                    	<reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection" />
-                	</and>
-                	<test property="org.eclipse.fordiac.ide.application.properties.parentIsSubApp" />
-                </or>
+          		<and>
+          			<or>
+                		<and> 
+							<with variable="activeEditor">
+								<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+							</with>
+                    		<reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection" />
+                		</and>
+                		<test property="org.eclipse.fordiac.ide.application.properties.parentIsSubApp" />
+         				
+                	</or>
+                	<test property="org.eclipse.fordiac.ide.application.utilities.isSubapplication" />
+          		</and>       		
             </visibleWhen>
          </command>
          <command
@@ -1358,5 +1362,5 @@
           properties="isSubapplication"
           type="java.lang.Object">
     	</propertyTester>
- 	</extension> 
+ </extension> 
 </plugin>

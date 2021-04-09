@@ -13,22 +13,45 @@
 
 package org.eclipse.fordiac.ide.application.utilities;
 
+import java.util.List;
+
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.EditPart;
 import org.eclipse.ui.IEditorPart;
 
 public class IsSubapplicationTester extends PropertyTester {
 
 	@Override
-	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
 		final IEditorPart editor = EditorUtils.getCurrentActiveEditor();
 
 		if (null != editor) {
 			final FBNetwork fbnetwork = editor.getAdapter(FBNetwork.class);
-			return ((null != fbnetwork) && fbnetwork.isSubApplicationNetwork());
+			return ((null != fbnetwork) && fbnetwork.isSubApplicationNetwork()) || isSelectionMovable(receiver);
 		}
 		return false;
 	}
 
+	private static boolean isSelectionMovable(final Object receiver) {
+		if (receiver instanceof List) {
+			final List<?> selection = (List<?>) receiver;
+			return !selection.isEmpty() && selection.stream().allMatch(IsSubapplicationTester::isNestedInSubApp);
+		}
+		return false;
+	}
+
+	private static boolean isNestedInSubApp(final Object obj) {
+		if (obj instanceof EditPart) {
+			final Object model = ((EditPart) obj).getModel();
+			if (model instanceof FBNetworkElement) {
+				return ((FBNetworkElement) model).isNestedInSubApp();
+			}
+		}
+		return false;}
+
+
 }
+
