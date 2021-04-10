@@ -32,11 +32,11 @@ public final class Messages extends NLS {
 
 	public static String ExportStatusMessageDialog_WarningsNotEmpty;
 
-	public static String FordiacExportWizard_Class;
-
 	public static String FordiacExportWizard_DESCRIPTION_WizardPage;
 
 	public static String FordiacExportWizard_ERROR;
+
+	public static String FordiacExportWizard_ExportingCMakeLists;
 
 	public static String FordiacExportWizard_ExportingSelectedTypesUsingExporter;
 
