@@ -31,13 +31,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -65,7 +61,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 	}
 
 	@Override
-	protected ServiceSequence getInputType(Object input) {
+	protected ServiceSequence getInputType(final Object input) {
 		if (input instanceof ServiceSequenceEditPart) {
 			return ((ServiceSequenceEditPart) input).getCastedModel();
 		}
@@ -82,68 +78,59 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		createTransactionSection(getRightComposite());
 	}
 
-	private void createTypeAndCommentSection(Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
+	private void createTypeAndCommentSection(final Composite parent) {
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, Messages.ServiceSequenceSection_Name);
 		nameText = createGroupText(composite, true);
-		nameText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeSequenceNameCommand(nameText.getText(), getType()));
-				addContentAdapter();
-			}
+		nameText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeSequenceNameCommand(nameText.getText(), getType()));
+			addContentAdapter();
 		});
 		getWidgetFactory().createCLabel(composite, Messages.ServiceSequenceSection_Comment);
 		commentText = createGroupText(composite, true);
-		commentText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
-				addContentAdapter();
-			}
+		commentText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+			addContentAdapter();
 		});
 	}
 
-	private void createTransactionSection(Composite parent) {
-		Group transactionGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSequenceSection_Transaction);
+	private void createTransactionSection(final Composite parent) {
+		final Group transactionGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSequenceSection_Transaction);
 		transactionGroup.setLayout(new GridLayout(2, false));
 		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
 		transactionViewer = new TreeViewer(transactionGroup, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gridData.heightHint = 150;
 		gridData.widthHint = 80;
 		transactionViewer.getTree().setLayoutData(gridData);
 		transactionViewer.setContentProvider(new ServiceSequenceContentProvider());
 		transactionViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
 		new AdapterFactoryTreeEditor(transactionViewer.getTree(), getAdapterFactory());
-		transactionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-//				Object selection = ((IStructuredSelection) transactionViewer.getSelection()).getFirstElement();
-//				if(selection instanceof ServiceTransaction){
-//					selectNewSequence((ServiceSequence) ((ServiceTransaction) selection));
-//				}
-//				else if(selection instanceof InputPrimitive){
-//					selectNewSequence((ServiceSequence)((InputPrimitive) selection).eContainer());
-//				}
-//				else if(selection instanceof OutputPrimitive){
-//					selectNewSequence((ServiceSequence)((OutputPrimitive) selection).eContainer());
-//				}
-			}
+		transactionViewer.addSelectionChangedListener(event -> {
+			//				Object selection = ((IStructuredSelection) transactionViewer.getSelection()).getFirstElement();
+			//				if(selection instanceof ServiceTransaction){
+			//					selectNewSequence((ServiceSequence) ((ServiceTransaction) selection));
+			//				}
+			//				else if(selection instanceof InputPrimitive){
+			//					selectNewSequence((ServiceSequence)((InputPrimitive) selection).eContainer());
+			//				}
+			//				else if(selection instanceof OutputPrimitive){
+			//					selectNewSequence((ServiceSequence)((OutputPrimitive) selection).eContainer());
+			//				}
 		});
 
-		Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
+		final Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
 		transactionNew = getWidgetFactory().createButton(buttonComp, Messages.ServiceSequenceSection_New, SWT.PUSH);
 		transactionNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		transactionNew.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				executeCommand(new CreateTransactionCommand(getType()));
 				transactionViewer.refresh();
 			}
@@ -151,29 +138,22 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		transactionDelete = getWidgetFactory().createButton(buttonComp, Messages.ServiceSequenceSection_Delete,
 				SWT.PUSH);
 		transactionDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		transactionDelete.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				Object selection = ((TreeSelection) transactionViewer.getSelection()).getFirstElement();
-				if (selection instanceof ServiceTransaction) {
-					executeCommand(new DeleteTransactionCommand((ServiceTransaction) selection));
-				} else if (selection instanceof InputPrimitive) {
-					executeCommand(new DeleteInputPrimitiveCommand((InputPrimitive) selection));
-				} else if (selection instanceof OutputPrimitive) {
-					executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive) selection));
-				}
-				transactionViewer.refresh();
+		transactionDelete.addListener(SWT.Selection, e -> {
+			final Object selection = ((TreeSelection) transactionViewer.getSelection()).getFirstElement();
+			if (selection instanceof ServiceTransaction) {
+				executeCommand(new DeleteTransactionCommand((ServiceTransaction) selection));
+			} else if (selection instanceof InputPrimitive) {
+				executeCommand(new DeleteInputPrimitiveCommand((InputPrimitive) selection));
+			} else if (selection instanceof OutputPrimitive) {
+				executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive) selection));
 			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
+			transactionViewer.refresh();
 		});
 	}
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
@@ -192,5 +172,6 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 
 	@Override
 	protected void setInputInit() {
+		// currently nothing to be done here
 	}
 }

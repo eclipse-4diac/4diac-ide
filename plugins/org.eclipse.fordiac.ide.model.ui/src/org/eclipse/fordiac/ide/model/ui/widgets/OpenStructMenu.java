@@ -60,6 +60,7 @@ public final class OpenStructMenu {
 
 			@Override
 			public void menuHidden(final MenuEvent e) {
+				// currently nothing to be done here
 			}
 
 		});

@@ -75,15 +75,11 @@ public class AdjustConnectionCommand extends Command {
 	}
 
 	private Point getDestinationPoint() {
-		final Point destP = connection.getTargetAnchor().getLocation(connection.getTargetAnchor().getReferencePoint())
-				.getCopy();
-		return destP;
+		return connection.getTargetAnchor().getLocation(connection.getTargetAnchor().getReferencePoint()).getCopy();
 	}
 
 	private Point getSourcePoint() {
-		final Point sourceP = connection.getSourceAnchor().getLocation(connection.getSourceAnchor().getReferencePoint())
-				.getCopy();
-		return sourceP;
+		return connection.getSourceAnchor().getLocation(connection.getSourceAnchor().getReferencePoint()).getCopy();
 	}
 
 	@Override

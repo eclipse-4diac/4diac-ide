@@ -29,9 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -69,19 +67,19 @@ public class TransactionSection extends AbstractServiceSection {
 		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		createInputPrimitiveSection(parent);
-		Composite composite = getWidgetFactory().createComposite(parent);
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		createLeftOutputPrimitiveSection(composite);
 		createRightOutputPrimitiveSection(composite);
 	}
 
-	private void createInputPrimitiveSection(Composite parent) {
-		Group transactionGroup = getWidgetFactory().createGroup(parent, Messages.TransactionSection_InputPrimitive);
+	private void createInputPrimitiveSection(final Composite parent) {
+		final Group transactionGroup = getWidgetFactory().createGroup(parent, Messages.TransactionSection_InputPrimitive);
 		transactionGroup.setLayout(new GridLayout(1, false));
 		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.UP, true, false));
 
-		Composite inPrimitive = getWidgetFactory().createComposite(transactionGroup);
+		final Composite inPrimitive = getWidgetFactory().createComposite(transactionGroup);
 		inPrimitive.setLayout(new GridLayout(2, false));
 		inPrimitive.setLayoutData(new GridData(SWT.FILL, SWT.UP, true, false));
 		label = getWidgetFactory().createCLabel(inPrimitive, null);
@@ -89,7 +87,7 @@ public class TransactionSection extends AbstractServiceSection {
 		inputPrimitive.setEditable(false);
 		inputPrimitive.setEnabled(false);
 
-		Composite buttonComp = getWidgetFactory().createComposite(transactionGroup);
+		final Composite buttonComp = getWidgetFactory().createComposite(transactionGroup);
 		buttonComp.setLayout(new GridLayout(3, false));
 		buttonComp.setLayoutData(new GridData(SWT.CENTER, SWT.UP, true, false));
 		leftInputPrimitiveNew = getWidgetFactory().createButton(buttonComp,
@@ -97,7 +95,7 @@ public class TransactionSection extends AbstractServiceSection {
 		leftInputPrimitiveNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		leftInputPrimitiveNew.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				executeCommand(new CreateInputPrimitiveCommand(ServiceInterfacePaletteFactory.LEFT_INPUT_PRIMITIVE,
 						getType()));
 				refreshInputPrimitive();
@@ -106,7 +104,7 @@ public class TransactionSection extends AbstractServiceSection {
 		inputPrimitiveDelete = getWidgetFactory().createButton(buttonComp, Messages.TransactionSection_Delete,
 				SWT.PUSH);
 		inputPrimitiveDelete
-				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
+		.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		inputPrimitiveDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -117,10 +115,10 @@ public class TransactionSection extends AbstractServiceSection {
 		rightInputPrimitiveNew = getWidgetFactory().createButton(buttonComp,
 				Messages.TransactionSection_CreateRightPrimitive, SWT.PUSH);
 		rightInputPrimitiveNew
-				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+		.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		rightInputPrimitiveNew.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				executeCommand(new CreateInputPrimitiveCommand(ServiceInterfacePaletteFactory.RIGHT_INPUT_PRIMITIVE,
 						getType()));
 				refreshInputPrimitive();
@@ -128,15 +126,15 @@ public class TransactionSection extends AbstractServiceSection {
 		});
 	}
 
-	private void createLeftOutputPrimitiveSection(Composite parent) {
-		Group transactionGroup = getWidgetFactory().createGroup(parent,
+	private void createLeftOutputPrimitiveSection(final Composite parent) {
+		final Group transactionGroup = getWidgetFactory().createGroup(parent,
 				Messages.TransactionSection_LeftOutputPrimitives);
 		transactionGroup.setLayout(new GridLayout(2, false));
 		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		leftOutputPrimitivesViewer = new TreeViewer(transactionGroup,
 				SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gridData.heightHint = 60;
 		gridData.widthHint = 80;
 		leftOutputPrimitivesViewer.getTree().setLayoutData(gridData);
@@ -144,25 +142,22 @@ public class TransactionSection extends AbstractServiceSection {
 				new TransactionContentProvider(ServiceInterfacePaletteFactory.LEFT_OUTPUT_PRIMITIVE));
 		leftOutputPrimitivesViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
 		new AdapterFactoryTreeEditor(leftOutputPrimitivesViewer.getTree(), getAdapterFactory());
-		leftOutputPrimitivesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				Object selection = ((IStructuredSelection) leftOutputPrimitivesViewer.getSelection()).getFirstElement();
-				if (selection instanceof OutputPrimitive) {
-//					selectNewSequence((ServiceSequence)((OutputPrimitive) selection).eContainer());
-				}
+		leftOutputPrimitivesViewer.addSelectionChangedListener(event -> {
+			final Object selection = ((IStructuredSelection) leftOutputPrimitivesViewer.getSelection()).getFirstElement();
+			if (selection instanceof OutputPrimitive) {
+				//					selectNewSequence((ServiceSequence)((OutputPrimitive) selection).eContainer());
 			}
 		});
 
-		Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
+		final Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
 		leftOutputPrimitivesNew = getWidgetFactory().createButton(buttonComp, Messages.TransactionSection_New,
 				SWT.PUSH);
 		leftOutputPrimitivesNew
-				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+		.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		leftOutputPrimitivesNew.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				executeCommand(new CreateOutputPrimitiveCommand(ServiceInterfacePaletteFactory.LEFT_OUTPUT_PRIMITIVE,
 						getType(), null));
 				leftOutputPrimitivesViewer.refresh();
@@ -171,32 +166,25 @@ public class TransactionSection extends AbstractServiceSection {
 		leftOutputPrimitivesDelete = getWidgetFactory().createButton(buttonComp, Messages.TransactionSection_Delete,
 				SWT.PUSH);
 		leftOutputPrimitivesDelete
-				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		leftOutputPrimitivesDelete.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				Object selection = ((TreeSelection) leftOutputPrimitivesViewer.getSelection()).getFirstElement();
-				if (selection instanceof OutputPrimitive) {
-					executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive) selection));
-				}
-				leftOutputPrimitivesViewer.refresh();
+		.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
+		leftOutputPrimitivesDelete.addListener(SWT.Selection, e -> {
+			final Object selection = ((TreeSelection) leftOutputPrimitivesViewer.getSelection()).getFirstElement();
+			if (selection instanceof OutputPrimitive) {
+				executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive) selection));
 			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
+			leftOutputPrimitivesViewer.refresh();
 		});
 	}
 
-	private void createRightOutputPrimitiveSection(Composite parent) {
-		Group transactionGroup = getWidgetFactory().createGroup(parent,
+	private void createRightOutputPrimitiveSection(final Composite parent) {
+		final Group transactionGroup = getWidgetFactory().createGroup(parent,
 				Messages.TransactionSection_RightOutputPrimitives);
 		transactionGroup.setLayout(new GridLayout(2, false));
 		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		rightOutputPrimitivesViewer = new TreeViewer(transactionGroup,
 				SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gridData.heightHint = 60;
 		gridData.widthHint = 80;
 		rightOutputPrimitivesViewer.getTree().setLayoutData(gridData);
@@ -204,26 +192,23 @@ public class TransactionSection extends AbstractServiceSection {
 				new TransactionContentProvider(ServiceInterfacePaletteFactory.RIGHT_OUTPUT_PRIMITIVE));
 		rightOutputPrimitivesViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
 		new AdapterFactoryTreeEditor(rightOutputPrimitivesViewer.getTree(), getAdapterFactory());
-		rightOutputPrimitivesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				Object selection = ((IStructuredSelection) rightOutputPrimitivesViewer.getSelection())
-						.getFirstElement();
-				if (selection instanceof OutputPrimitive) {
-//					selectNewSequence((ServiceSequence)((OutputPrimitive) selection).eContainer());
-				}
+		rightOutputPrimitivesViewer.addSelectionChangedListener(event -> {
+			final Object selection = ((IStructuredSelection) rightOutputPrimitivesViewer.getSelection())
+					.getFirstElement();
+			if (selection instanceof OutputPrimitive) {
+				//					selectNewSequence((ServiceSequence)((OutputPrimitive) selection).eContainer());
 			}
 		});
 
-		Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
+		final Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
 		rightOutputPrimitivesNew = getWidgetFactory().createButton(buttonComp, Messages.TransactionSection_New,
 				SWT.PUSH);
 		rightOutputPrimitivesNew
-				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+		.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		rightOutputPrimitivesNew.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				executeCommand(new CreateOutputPrimitiveCommand(ServiceInterfacePaletteFactory.RIGHT_OUTPUT_PRIMITIVE,
 						getType(), null));
 				rightOutputPrimitivesViewer.refresh();
@@ -232,9 +217,9 @@ public class TransactionSection extends AbstractServiceSection {
 		rightOutputPrimitivesDelete = getWidgetFactory().createButton(buttonComp, Messages.TransactionSection_Delete,
 				SWT.PUSH);
 		rightOutputPrimitivesDelete
-				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
+		.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		rightOutputPrimitivesDelete.addListener(SWT.Selection, event -> {
-			Object selection = ((TreeSelection) rightOutputPrimitivesViewer.getSelection()).getFirstElement();
+			final Object selection = ((TreeSelection) rightOutputPrimitivesViewer.getSelection()).getFirstElement();
 			if (selection instanceof OutputPrimitive) {
 				executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive) selection));
 			}
@@ -250,7 +235,7 @@ public class TransactionSection extends AbstractServiceSection {
 	@Override
 	public void refresh() {
 		super.refresh();
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			leftOutputPrimitivesViewer.setInput(getType());
@@ -266,7 +251,7 @@ public class TransactionSection extends AbstractServiceSection {
 					|| getType().getInputPrimitive().getParameters().equals("") ? //$NON-NLS-1$
 							getType().getInputPrimitive().getEvent()
 							: getType().getInputPrimitive().getEvent() + "(" //$NON-NLS-1$
-									+ getType().getInputPrimitive().getParameters() + ")"); //$NON-NLS-1$
+							+ getType().getInputPrimitive().getParameters() + ")"); //$NON-NLS-1$
 			label.setImage(
 					isLeftInterface(getType().getInputPrimitive()) ? FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage()
 							: FordiacImage.ICON_RIGHT_INPUT_PRIMITIVE.getImage());
@@ -276,7 +261,7 @@ public class TransactionSection extends AbstractServiceSection {
 	}
 
 	@Override
-	protected Object getInputType(Object input) {
+	protected Object getInputType(final Object input) {
 		if (input instanceof TransactionEditPart) {
 			return ((TransactionEditPart) input).getCastedModel();
 		}
@@ -296,5 +281,6 @@ public class TransactionSection extends AbstractServiceSection {
 
 	@Override
 	protected void setInputInit() {
+		// currently nothing to be done here
 	}
 }

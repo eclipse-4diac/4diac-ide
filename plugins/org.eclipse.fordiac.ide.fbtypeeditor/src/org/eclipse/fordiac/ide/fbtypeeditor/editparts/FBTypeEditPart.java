@@ -109,12 +109,8 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 
 	@Override
 	public void setSelected(final int value) {
+		// nothing to be done here
 	}
-
-	//	@Override
-	//	public void refreshName() {
-	//		Display.getDefault().asyncExec(() -> getNameLabel().setText(getINamedElement().getName()));
-	//	}
 
 	@Override
 	protected List<Object> getModelChildren() {
@@ -234,7 +230,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 
 				@Override
 				public void controlMoved(final ControlEvent e) {
-
+					// nothing to be done here
 				}
 
 			};

@@ -52,13 +52,13 @@ import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
-		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
+implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private ValueEditPart referencedPart;
 	private int mouseState;
 
 	private Adapter contentAdapter = null;
 
-	public InterfaceEditPart() {
+	protected InterfaceEditPart() {
 		setConnectable(true);
 	}
 
@@ -214,6 +214,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
+		// don't show any children
 	}
 
 	private Adapter getContentAdapter() {

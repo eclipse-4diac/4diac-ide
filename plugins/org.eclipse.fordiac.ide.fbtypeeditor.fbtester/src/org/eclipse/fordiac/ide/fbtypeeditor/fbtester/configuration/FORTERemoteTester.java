@@ -187,7 +187,6 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 			@Override
 			public void newTestConf(final List<TestElement> variables, final List<String> values, final List<ValuedVarDecl> resultVars,
 					final Map<String, Object> params) {
-
 			}
 		};
 		loadLastIp();
@@ -338,7 +337,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				} else if (type.equals(SendType.forceValue)) {
 					final String forceResp = parseResponse(inputStream);
 					Activator.getDefault()
-							.logInfo(MessageFormat.format(Messages.FORTERemoteTester_ForceResponse, forceResp));
+					.logInfo(MessageFormat.format(Messages.FORTERemoteTester_ForceResponse, forceResp));
 					// normally nothing to do - as no response expected
 				}
 			}

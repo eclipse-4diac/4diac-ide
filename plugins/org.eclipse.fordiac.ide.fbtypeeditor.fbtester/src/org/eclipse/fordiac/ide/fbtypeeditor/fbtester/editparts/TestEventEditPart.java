@@ -39,6 +39,7 @@ public class TestEventEditPart extends TestEditPart implements SpecificLayerEdit
 
 	@Override
 	protected void createEditPolicies() {
+		// currently nothing to be done here
 	}
 
 	@Override

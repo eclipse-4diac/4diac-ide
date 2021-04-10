@@ -151,7 +151,7 @@ public class ResourceEditPart extends AbstractViewEditPart {
 	protected Adapter createContentAdapter() {
 		return new AdapterImpl() {
 			@Override
-			public void notifyChanged(Notification notification) {
+			public void notifyChanged(final Notification notification) {
 				refresh();
 				super.notifyChanged(notification);
 			}
@@ -174,7 +174,8 @@ public class ResourceEditPart extends AbstractViewEditPart {
 	}
 
 	@Override
-	protected void backgroundColorChanged(IFigure figure) {
+	protected void backgroundColorChanged(final IFigure figure) {
+		// currently nothing to be done here
 	}
 
 	@Override

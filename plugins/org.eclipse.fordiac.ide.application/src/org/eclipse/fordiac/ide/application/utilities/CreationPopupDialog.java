@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,8 +16,6 @@ package org.eclipse.fordiac.ide.application.utilities;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -28,14 +26,14 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class CreationPopupDialog extends PopupDialog {
 
-	private Object[] elements;
-	private LabelProvider labelProvider;
+	private final Object[] elements;
+	private final LabelProvider labelProvider;
 
-	private ICreationExecutor executor;
+	private final ICreationExecutor executor;
 
-	public CreationPopupDialog(Shell parent, int shellStyle, boolean takeFocusOnOpen, boolean persistSize,
-			boolean persistLocation, boolean showDialogMenu, boolean showPersistActions, String titleText,
-			String infoText, Object[] elements, LabelProvider labelProvider, ICreationExecutor executor) {
+	public CreationPopupDialog(final Shell parent, final int shellStyle, final boolean takeFocusOnOpen, final boolean persistSize,
+			final boolean persistLocation, final boolean showDialogMenu, final boolean showPersistActions, final String titleText,
+			final String infoText, final Object[] elements, final LabelProvider labelProvider, final ICreationExecutor executor) {
 		super(parent, shellStyle, takeFocusOnOpen, persistSize, persistLocation, showDialogMenu, showPersistActions,
 				titleText, infoText);
 		this.elements = elements.clone();
@@ -44,21 +42,21 @@ public class CreationPopupDialog extends PopupDialog {
 	}
 
 	@Override
-	protected Point getInitialLocation(Point initialSize) {
-		Display display = getShell().getDisplay();
+	protected Point getInitialLocation(final Point initialSize) {
+		final Display display = getShell().getDisplay();
 		return display.getCursorLocation();
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent) {
-		Table proposalTable = new Table(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+	protected Control createDialogArea(final Composite parent) {
+		final Table proposalTable = new Table(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 
 		proposalTable.setRedraw(false);
 		proposalTable.setItemCount(elements.length);
-		TableItem[] items = proposalTable.getItems();
+		final TableItem[] items = proposalTable.getItems();
 		for (int i = 0; i < items.length; i++) {
-			TableItem item = items[i];
-			Object proposal = elements[i];
+			final TableItem item = items[i];
+			final Object proposal = elements[i];
 			item.setText(labelProvider.getText(proposal));
 			item.setImage(labelProvider.getImage(proposal));
 			item.setData(proposal);
@@ -66,20 +64,12 @@ public class CreationPopupDialog extends PopupDialog {
 		proposalTable.setRedraw(true);
 
 		proposalTable.setHeaderVisible(false);
-		proposalTable.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (e.item instanceof TableItem) {
-					TableItem selected = (TableItem) e.item;
-					executor.execute(selected.getData());
-				}
-				close();
+		proposalTable.addListener(SWT.Selection, e -> {
+			if (e.item instanceof TableItem) {
+				final TableItem selected = (TableItem) e.item;
+				executor.execute(selected.getData());
 			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
+			close();
 		});
 
 		return proposalTable;

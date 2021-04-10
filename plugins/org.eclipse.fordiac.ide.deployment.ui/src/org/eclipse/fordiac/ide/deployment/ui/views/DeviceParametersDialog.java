@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009, 2011 Profactor GbmH, TU Wien ACIN
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,8 +20,6 @@ import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -38,28 +36,28 @@ public class DeviceParametersDialog extends org.eclipse.jface.dialogs.Dialog {
 
 	/**
 	 * Instantiates a new device parameters dialog.
-	 * 
+	 *
 	 * @param parent the parent
 	 */
-	public DeviceParametersDialog(Shell parent) {
+	public DeviceParametersDialog(final Shell parent) {
 		super(parent);
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
 	/**
 	 * Sets the device.
-	 * 
+	 *
 	 * @param device the new device
 	 */
-	public void setDevice(Device device) {
+	public void setDevice(final Device device) {
 		this.device = device;
 	}
 
-	private List<VarDeclaration> selectedProperties = new ArrayList<VarDeclaration>();
+	private List<VarDeclaration> selectedProperties = new ArrayList<>();
 
 	/**
 	 * Gets the selected properties.
-	 * 
+	 *
 	 * @return the selected properties
 	 */
 	public List<VarDeclaration> getSelectedProperties() {
@@ -67,16 +65,16 @@ public class DeviceParametersDialog extends org.eclipse.jface.dialogs.Dialog {
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent) {
-		Composite composite = (Composite) super.createDialogArea(parent);
-		Composite main = new Composite(composite, SWT.NONE);
+	protected Control createDialogArea(final Composite parent) {
+		final Composite composite = (Composite) super.createDialogArea(parent);
+		final Composite main = new Composite(composite, SWT.NONE);
 		main.setLayout(new GridLayout(1, false));
 		main.setLayoutData(new GridData(GridData.FILL_BOTH));
 		if (device != null) {
 			selectedProperties = DeploymentCoordinator.INSTANCE.getSelectedDeviceProperties(device);
 
-			for (VarDeclaration varDecl : device.getVarDeclarations()) {
-				Button bt = new Button(main, SWT.CHECK);
+			for (final VarDeclaration varDecl : device.getVarDeclarations()) {
+				final Button bt = new Button(main, SWT.CHECK);
 				bt.setData(varDecl);
 				bt.setText(varDecl.getName());
 				if (varDecl.getName().equals("MGR_ID")) { //$NON-NLS-1$
@@ -85,26 +83,17 @@ public class DeviceParametersDialog extends org.eclipse.jface.dialogs.Dialog {
 				if (selectedProperties != null) {
 					bt.setSelection(selectedProperties.contains(varDecl));
 				} else {
-					selectedProperties = new ArrayList<VarDeclaration>();
+					selectedProperties = new ArrayList<>();
 					bt.setSelection(false);
 				}
-				bt.addSelectionListener(new SelectionListener() {
 
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-
-						if (((Button) e.getSource()).getSelection()) {
-							selectedProperties.add((VarDeclaration) ((Button) e.getSource()).getData());
-						} else {
-							selectedProperties.remove(((Button) e.getSource()).getData());
-						}
-
+				bt.addListener(SWT.Selection, e -> {
+					if (bt.getSelection()) {
+						selectedProperties.add((VarDeclaration) bt.getData());
+					} else {
+						selectedProperties.remove(bt.getData());
 					}
 
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {
-
-					}
 				});
 
 			}
@@ -114,7 +103,7 @@ public class DeviceParametersDialog extends org.eclipse.jface.dialogs.Dialog {
 
 	/**
 	 * Gets the device.
-	 * 
+	 *
 	 * @return the device
 	 */
 	public Device getDevice() {

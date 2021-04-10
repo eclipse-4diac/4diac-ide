@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2016 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -24,9 +24,9 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 public class TransactionContentProvider implements ITreeContentProvider {
-	private String type;
+	private final String type;
 
-	public TransactionContentProvider(String type) {
+	public TransactionContentProvider(final String type) {
 		this.type = type;
 	}
 
@@ -47,10 +47,10 @@ public class TransactionContentProvider implements ITreeContentProvider {
 		return new Object[] {};
 	}
 
-	private Object[] getLeftOutputs(final Object inputElement) {
-		EList<Primitive> list = new BasicEList<Primitive>();
-		Service service = (Service) ((ServiceTransaction) inputElement).eContainer().eContainer();
-		for (OutputPrimitive primitive : ((ServiceTransaction) inputElement).getOutputPrimitive()) {
+	private static Object[] getLeftOutputs(final Object inputElement) {
+		final EList<Primitive> list = new BasicEList<>();
+		final Service service = (Service) ((ServiceTransaction) inputElement).eContainer().eContainer();
+		for (final OutputPrimitive primitive : ((ServiceTransaction) inputElement).getOutputPrimitive()) {
 			if (primitive.getInterface().getName().equals(service.getLeftInterface().getName())) {
 				list.add(primitive);
 			}
@@ -58,10 +58,10 @@ public class TransactionContentProvider implements ITreeContentProvider {
 		return list.toArray();
 	}
 
-	private Object[] getRightOutputs(final Object inputElement) {
-		EList<Primitive> list = new BasicEList<Primitive>();
-		Service service = (Service) ((ServiceTransaction) inputElement).eContainer().eContainer();
-		for (OutputPrimitive primitive : ((ServiceTransaction) inputElement).getOutputPrimitive()) {
+	private static Object[] getRightOutputs(final Object inputElement) {
+		final EList<Primitive> list = new BasicEList<>();
+		final Service service = (Service) ((ServiceTransaction) inputElement).eContainer().eContainer();
+		for (final OutputPrimitive primitive : ((ServiceTransaction) inputElement).getOutputPrimitive()) {
 			if (primitive.getInterface().getName().equals(service.getRightInterface().getName())) {
 				list.add(primitive);
 			}
@@ -71,25 +71,27 @@ public class TransactionContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
+		// currently nothing to be done here
 	}
 
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+		// currently nothing to be done here
 	}
 
 	@Override
-	public Object[] getChildren(Object parentElement) {
+	public Object[] getChildren(final Object parentElement) {
 		if (parentElement instanceof ServiceTransaction) {
-			EList<Primitive> list = new BasicEList<Primitive>();
+			final EList<Primitive> list = new BasicEList<>();
 			list.add(((ServiceTransaction) parentElement).getInputPrimitive());
 			list.addAll(((ServiceTransaction) parentElement).getOutputPrimitive());
 			return list.toArray();
 		}
-		return null;
+		return new Object[0];
 	}
 
 	@Override
-	public Object getParent(Object element) {
+	public Object getParent(final Object element) {
 		if (element instanceof ServiceTransaction) {
 			return ((ServiceTransaction) element).eContainer();
 		}
@@ -97,9 +99,9 @@ public class TransactionContentProvider implements ITreeContentProvider {
 	}
 
 	@Override
-	public boolean hasChildren(Object element) {
+	public boolean hasChildren(final Object element) {
 		if (element instanceof ServiceTransaction) {
-			return ((ServiceTransaction) element).getOutputPrimitive().size() > 0 ? true : false;
+			return (!((ServiceTransaction) element).getOutputPrimitive().isEmpty());
 		}
 		return false;
 	}

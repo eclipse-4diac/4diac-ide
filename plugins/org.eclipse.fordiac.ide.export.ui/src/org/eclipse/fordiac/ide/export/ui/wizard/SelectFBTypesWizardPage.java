@@ -61,7 +61,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	private static final String STORE_DIRECTORY_NAMES_ID = "SelectFBTypesWizardPage.STORE_DIRECTORY_NAMES_ID"; //$NON-NLS-1$
 
 	private static final String STORE_CURRENT_FILTER_SELECTION_ID = "SelectFBTypesWizardPage.STORE_CURRENT_FILTER_SELECTION_ID"; //$NON-NLS-1$
-	
+
 	private static final String STORE_OVERWRITE_CHECKBOX = "SelectFBTypesWizardPage.STORE_OVERWRITE_CHECKBOX"; //$NON-NLS-1$
 
 	/**
@@ -250,7 +250,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 			// Saves current export filter for next session.
 			getDialogSettings().put(STORE_CURRENT_FILTER_SELECTION_ID, getSelectedExportFilter().getAttribute(NAME));
-			
+
 			getDialogSettings().put(STORE_OVERWRITE_CHECKBOX, overwrite.getSelection());
 		}
 	}
@@ -265,7 +265,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		layout.numColumns = 3;
 		destinationSelectionGroup.setLayout(layout);
 		destinationSelectionGroup
-				.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
+		.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
 		destinationSelectionGroup.setFont(font);
 
 		final Label destinationLabel = new Label(destinationSelectionGroup, SWT.NONE);
@@ -326,6 +326,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 	@Override
 	public void handleEvent(final Event event) {
+		// currently nothing to be done here
 	}
 
 	@Override // this overide is needed to make it public for access by the wizard

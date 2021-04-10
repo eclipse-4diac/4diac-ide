@@ -43,9 +43,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class AdapterInterfaceEditPart extends InterfaceEditPart {
-	private Palette systemPalette;
+	private final Palette systemPalette;
 
-	AdapterInterfaceEditPart(Palette systemPalette) {
+	AdapterInterfaceEditPart(final Palette systemPalette) {
 		this.systemPalette = systemPalette;
 	}
 
@@ -68,29 +68,30 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 		private void setupMouseListener() {
 			addMouseMotionListener(new MouseMotionListener() {
 				@Override
-				public void mouseDragged(MouseEvent me) {
+				public void mouseDragged(final MouseEvent me) {
+					// Nothing to be done here
 				}
 
 				@Override
-				public void mouseEntered(MouseEvent me) {
+				public void mouseEntered(final MouseEvent me) {
 					if (0 != (me.getState() & SWT.CONTROL)) {
 						setDrawUnderline(true);
 					}
 				}
 
 				@Override
-				public void mouseExited(MouseEvent me) {
+				public void mouseExited(final MouseEvent me) {
 					setDrawUnderline(false);
 				}
 
 				@Override
-				public void mouseHover(MouseEvent me) {
+				public void mouseHover(final MouseEvent me) {
 					// currently mouseHover should be the same as mouse moved
 					mouseMoved(me);
 				}
 
 				@Override
-				public void mouseMoved(MouseEvent me) {
+				public void mouseMoved(final MouseEvent me) {
 					if (0 != (me.getState() & SWT.CONTROL)) {
 						if (!isDrawUnderline()) {
 							setDrawUnderline(true);
@@ -107,19 +108,20 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		AdapterInterfaceFigure fig = new AdapterInterfaceFigure();
+		final AdapterInterfaceFigure fig = new AdapterInterfaceFigure();
 		fig.addAncestorListener(new AncestorListener() {
 			@Override
-			public void ancestorRemoved(IFigure ancestor) {
+			public void ancestorRemoved(final IFigure ancestor) {
+				// Nothing to be done here
 			}
 
 			@Override
-			public void ancestorMoved(IFigure ancestor) {
+			public void ancestorMoved(final IFigure ancestor) {
 				update();
 			}
 
 			@Override
-			public void ancestorAdded(IFigure ancestor) {
+			public void ancestorAdded(final IFigure ancestor) {
 				update();
 			}
 
@@ -144,14 +146,14 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 	}
 
 	@Override
-	public DragTracker getDragTracker(Request request) {
+	public DragTracker getDragTracker(final Request request) {
 		if (request instanceof SelectionRequest) {
-			SelectionRequest selRequest = (SelectionRequest) request;
+			final SelectionRequest selRequest = (SelectionRequest) request;
 			if ((selRequest.getLastButtonPressed() == 1) && (selRequest.isControlKeyPressed())) {
 				// open the default editor for the adapter file
-				PaletteEntry entry = systemPalette.getAdapterTypeEntry(getAdapter().getType().getName());
+				final PaletteEntry entry = systemPalette.getAdapterTypeEntry(getAdapter().getType().getName());
 				if (null != entry) {
-					IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
+					final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 							.getDefaultEditor(entry.getFile().getName());
 					EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
 				}

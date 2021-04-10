@@ -31,7 +31,7 @@ import org.eclipse.gef.handles.RelativeHandleLocator;
 
 public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonResizeableEditPolicy {
 
-	public AbstractInterfaceSelectionEditPolicy(int cornerDim, Insets insets) {
+	protected AbstractInterfaceSelectionEditPolicy(final int cornerDim, final Insets insets) {
 		super(cornerDim, insets);
 	}
 
@@ -50,42 +50,46 @@ public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonRe
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected List createSelectionHandles() {
-		List list = super.createSelectionHandles();
-		InterfaceEditPart part = getInterfaceEditPart();
+		final List list = super.createSelectionHandles();
+		final InterfaceEditPart part = getInterfaceEditPart();
 
-		PlusHandle top = createHandle(part, PositionConstants.NORTH);
+		final PlusHandle top = createHandle(part, PositionConstants.NORTH);
 		list.add(top);
 		top.addMouseListener(new MouseListener() {
 
 			@Override
-			public void mousePressed(MouseEvent me) {
+			public void mousePressed(final MouseEvent me) {
 				createInterfaceElement(false);
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent me) {
+			public void mouseReleased(final MouseEvent me) {
+				// Nothing to be done here
 			}
 
 			@Override
-			public void mouseDoubleClicked(MouseEvent me) {
+			public void mouseDoubleClicked(final MouseEvent me) {
+				// Nothing to be done here
 			}
 		});
 
-		PlusHandle bottom = createHandle(part, PositionConstants.SOUTH);
+		final PlusHandle bottom = createHandle(part, PositionConstants.SOUTH);
 		list.add(bottom);
 		bottom.addMouseListener(new MouseListener() {
 
 			@Override
-			public void mousePressed(MouseEvent me) {
+			public void mousePressed(final MouseEvent me) {
 				createInterfaceElement(true);
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent me) {
+			public void mouseReleased(final MouseEvent me) {
+				//Nothing to be done here
 			}
 
 			@Override
-			public void mouseDoubleClicked(MouseEvent me) {
+			public void mouseDoubleClicked(final MouseEvent me) {
+				//Nothing to be done here
 			}
 		});
 		return list;
@@ -99,16 +103,16 @@ public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonRe
 		return (IInterfaceElement) getInterfaceEditPart().getModel();
 	}
 
-	private PlusHandle createHandle(InterfaceEditPart part, int direction) {
+	private PlusHandle createHandle(final InterfaceEditPart part, final int direction) {
 		return new PlusHandle(part, new RelativeHandleLocator(part.getFigure(), direction) {
 			@Override
-			public void relocate(IFigure target) {
+			public void relocate(final IFigure target) {
 				super.relocate(target);
 				// assure that handle is not in the middle of the border but outside of it
 				// TODO if this code has proven to work move it to 4diac specific locater in GEF
 				// plugin
-				Rectangle targetBounds = target.getBounds();
-				Dimension targetSize = target.getPreferredSize();
+				final Rectangle targetBounds = target.getBounds();
+				final Dimension targetSize = target.getPreferredSize();
 
 				targetBounds.x += ((targetSize.width + 1) / 4) * getXModifcation();
 
@@ -140,13 +144,13 @@ public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonRe
 		});
 	}
 
-	private void createInterfaceElement(boolean after) {
-		List<? extends IInterfaceElement> list = getInterfaceElementList();
+	private void createInterfaceElement(final boolean after) {
+		final List<? extends IInterfaceElement> list = getInterfaceElementList();
 		int ref = list.indexOf(getModel());
 		if (-1 != ref && after) {
 			ref++;
 		}
-		Command cmd = getIECreateCommand(getModel().getType(), ref);
+		final Command cmd = getIECreateCommand(getModel().getType(), ref);
 		if (null != cmd) {
 			AbstractDirectEditableEditPart.executeCommand(cmd);
 		}

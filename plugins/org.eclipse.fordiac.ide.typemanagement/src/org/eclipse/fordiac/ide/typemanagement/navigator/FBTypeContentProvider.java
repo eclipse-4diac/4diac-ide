@@ -41,19 +41,20 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 	}
 
 	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+		// nothing to be done here
 	}
 
 	@Override
-	public Object[] getElements(Object inputElement) {
+	public Object[] getElements(final Object inputElement) {
 		return getChildren(inputElement);
 	}
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof IFile) {
-			IFile element = (IFile) parentElement;
-			PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(element);
+			final IFile element = (IFile) parentElement;
+			final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(element);
 			if (null != entry) {
 				parentElement = entry.getType();
 				if (parentElement instanceof AdapterType) {
@@ -71,23 +72,23 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 	}
 
 	@Override
-	public Object getParent(Object element) {
+	public Object getParent(final Object element) {
 		Object retVal = null;
 		if (element instanceof IFile) {
 			return ((IResource) element).getParent();
 		} else {
 			retVal = super.getParent(element);
 			// FIXME check for the correct elements and return the IFile for them
-//			if(retval instanceof FBType){
-//
-//			}
+			//			if(retval instanceof FBType){
+			//
+			//			}
 
 		}
 		return retVal;
 	}
 
 	@Override
-	public boolean hasChildren(Object element) {
+	public boolean hasChildren(final Object element) {
 		if ((element instanceof AutomationSystem) || (element instanceof Application)
 				|| (element instanceof SystemConfiguration) || (element instanceof FB) || (element instanceof Device)
 				|| (element instanceof Resource) || (element instanceof SubApp)) {

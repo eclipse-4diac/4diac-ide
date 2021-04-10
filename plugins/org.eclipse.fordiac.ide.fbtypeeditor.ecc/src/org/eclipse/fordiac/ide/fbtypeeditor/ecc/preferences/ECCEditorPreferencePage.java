@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -57,11 +57,12 @@ public class ECCEditorPreferencePage extends FieldEditorPreferencePage implement
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	@Override
-	public void init(IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
+		// nothing to be done here
 	}
 
 }

@@ -26,26 +26,27 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class RerouteAction implements IObjectActionDelegate {
 
-	private List<Connection> connections = new ArrayList<>();
+	private final List<Connection> connections = new ArrayList<>();
 
 	@Override
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+	public void setActivePart(final IAction action, final IWorkbenchPart targetPart) {
+		// currently nothing to be done here
 	}
 
 	@Override
-	public void run(IAction action) {
-		for (Connection conn : connections) {
+	public void run(final IAction action) {
+		for (final Connection conn : connections) {
 			conn.revalidate();
 		}
 
 	}
 
 	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
+	public void selectionChanged(final IAction action, final ISelection selection) {
 		connections.clear();
 		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			for (Object obj : structuredSelection) {
+			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+			for (final Object obj : structuredSelection) {
 				if (obj instanceof ConnectionEditPart) {
 					connections.add((Connection) ((ConnectionEditPart) obj).getFigure());
 				}

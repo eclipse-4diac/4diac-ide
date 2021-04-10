@@ -35,8 +35,7 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -53,12 +52,12 @@ import org.eclipse.ui.part.FileEditorInput;
 public class OpenTypeHandler extends AbstractHandler {
 
 	ElementListSelectionDialog dialog;
-	private Set<PaletteEntry> entries = new HashSet<>();
-	private List<IContainer> projects = new ArrayList<>();
+	private final Set<PaletteEntry> entries = new HashSet<>();
+	private final List<IContainer> projects = new ArrayList<>();
 	private int selectedProject = 0;
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		clear();
 		collectProjects(ResourcesPlugin.getWorkspace().getRoot());
 		processContainer(ResourcesPlugin.getWorkspace().getRoot());
@@ -66,7 +65,7 @@ public class OpenTypeHandler extends AbstractHandler {
 		dialog.setElements(entries.toArray());
 		dialog.open();
 
-		Object result = dialog.getFirstResult();
+		final Object result = dialog.getFirstResult();
 		if (result instanceof PaletteEntry) {
 			openEditor(((PaletteEntry) result).getFile());
 		}
@@ -81,7 +80,7 @@ public class OpenTypeHandler extends AbstractHandler {
 	}
 
 	private void changeDialog() {
-		String searchString = dialog.getFilter();
+		final String searchString = dialog.getFilter();
 		dialog.close();
 		entries.clear();
 		processContainer(projects.get(selectedProject));
@@ -92,39 +91,29 @@ public class OpenTypeHandler extends AbstractHandler {
 	}
 
 	private ElementListSelectionDialog createDialog() {
-		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		ElementListSelectionDialog selDialog = new ElementListSelectionDialog(shell, new ResultListLabelProvider()) {
+		final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		final ElementListSelectionDialog selDialog = new ElementListSelectionDialog(shell, new ResultListLabelProvider()) {
 
 			@Override
-			protected Control createDialogArea(Composite parent) {
-				Composite container = (Composite) super.createDialogArea(parent);
-				ComboViewer viewer = new ComboViewer(container);
+			protected Control createDialogArea(final Composite parent) {
+				final Composite container = (Composite) super.createDialogArea(parent);
+				final ComboViewer viewer = new ComboViewer(container);
 				viewer.getCombo().setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, true, false));
 				viewer.setLabelProvider(new LabelProvider() {
 
 					@Override
-					public String getText(Object element) {
+					public String getText(final Object element) {
 						if (element instanceof IProject) {
-							IProject project = (IProject) element;
+							final IProject project = (IProject) element;
 							return project.getName();
 						}
 						return "All Projects";
 					}
 
 				});
-				viewer.getCombo().addSelectionListener(new SelectionListener() {
-
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						selectedProject = viewer.getCombo().getSelectionIndex();
-						changeDialog();
-					}
-
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {
-
-					}
-
+				viewer.getCombo().addListener(SWT.Selection, e -> {
+					selectedProject = viewer.getCombo().getSelectionIndex();
+					changeDialog();
 				});
 				viewer.add(projects.toArray());
 				viewer.getCombo().select(selectedProject);
@@ -136,7 +125,7 @@ public class OpenTypeHandler extends AbstractHandler {
 		return selDialog;
 	}
 
-	private void setDialogSettings(ElementListSelectionDialog dialog) {
+	private static void setDialogSettings(final ElementListSelectionDialog dialog) {
 		dialog.setMatchEmptyString(false);
 		dialog.setMultipleSelection(false);
 		dialog.setEmptyListMessage(Messages.OpenTypeHandler_NO_FILES_IN_WORKSPACE);
@@ -145,17 +134,17 @@ public class OpenTypeHandler extends AbstractHandler {
 		dialog.setStatusLineAboveButtons(true);
 	}
 
-	private void collectProjects(IContainer container) {
+	private void collectProjects(final IContainer container) {
 		// add "All Projects" entry to dropdown
 		projects.add(0, container);
 		IResource[] members;
 		try {
 			members = container.members();
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 			members = new IResource[0];
 		}
-		for (IResource member : members) {
+		for (final IResource member : members) {
 			if (member instanceof IProject && !((IProject) member).isOpen()) {
 				continue;
 			}
@@ -163,38 +152,39 @@ public class OpenTypeHandler extends AbstractHandler {
 		}
 	}
 
-	private void processContainer(IContainer container) {
+	private void processContainer(final IContainer container) {
 		IResource[] members;
 		try {
 			members = container.members();
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 			members = new IResource[0];
 		}
-		for (IResource member : members) {
+		for (final IResource member : members) {
 			if (member instanceof IProject && !((IProject) member).isOpen()) {
 				continue;
 			}
-			if (member instanceof IContainer)
+			if (member instanceof IContainer) {
 				processContainer((IContainer) member);
-			else if (member instanceof IFile)
+			} else if (member instanceof IFile) {
 				entries.add(TypeLibrary.getPaletteEntryForFile((IFile) member));
+			}
 		}
 
 	}
 
-	private void openEditor(IFile file) {
-		IWorkbench workbench = PlatformUI.getWorkbench();
+	private static void openEditor(final IFile file) {
+		final IWorkbench workbench = PlatformUI.getWorkbench();
 		if (workbench != null) {
-			IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+			final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 			if (activeWorkbenchWindow != null) {
-				IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+				final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+				final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
 				try {
 					activePage.openEditor(new FileEditorInput(file), desc.getId());
-				} catch (PartInitException e1) {
+				} catch (final PartInitException e1) {
 					Activator.getDefault().logError(e1.getMessage(), e1);
-					Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+					final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 					MessageDialog.openError(shell, Messages.OpenTypeHandler_OPEN_TYPE_ERROR_TITLE, Messages.OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE);
 				}
 			}

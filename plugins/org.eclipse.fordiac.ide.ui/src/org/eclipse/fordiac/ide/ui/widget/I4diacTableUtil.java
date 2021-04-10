@@ -31,23 +31,23 @@ public interface I4diacTableUtil extends ISelectionProvider {
 	void executeCompoundCommand(CompoundCommand cmd);
 
 	@Override
-	public default void addSelectionChangedListener(ISelectionChangedListener listener) {
-
+	default void addSelectionChangedListener(final ISelectionChangedListener listener) {
+		// currently nothing to be done here
 	}
 
 	@Override
-	public default ISelection getSelection() {
+	default ISelection getSelection() {
 		return new StructuredSelection(new Object[] {});
 	}
 
 	@Override
-	public default void removeSelectionChangedListener(ISelectionChangedListener listener) {
-
+	default void removeSelectionChangedListener(final ISelectionChangedListener listener) {
+		// currently nothing to be done here
 	}
 
 	@Override
-	public default void setSelection(ISelection selection) {
-
+	default void setSelection(final ISelection selection) {
+		// currently nothing to be done here
 	}
 
 }

@@ -34,8 +34,6 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -68,31 +66,28 @@ public class PrimitiveSection extends AbstractServiceSection {
 		createQISection(getRightComposite());
 	}
 
-	protected void createEventSection(Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
+	protected void createEventSection(final Composite parent) {
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreateEventSection_Event);
 		eventText = createGroupText(composite, true);
-		eventText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangePrimitiveEventCommand(getType(), eventText.getText()));
-				setRadioButton();
-				addContentAdapter();
-			}
+		eventText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangePrimitiveEventCommand(getType(), eventText.getText()));
+			setRadioButton();
+			addContentAdapter();
 		});
 	}
 
-	protected void createQISection(Composite parent) {
+	protected void createQISection(final Composite parent) {
 		qiGroup = getWidgetFactory().createGroup(parent, "QI"); //$NON-NLS-1$
 		qiGroup.setLayout(new RowLayout(SWT.VERTICAL));
 		qiGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 		buttonNone = getWidgetFactory().createButton(qiGroup, Messages.PrimitiveSection_None, SWT.RADIO);
 		buttonNone.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				changeEventText(Messages.PrimitiveSection_None);
 				refresh();
 			}
@@ -100,7 +95,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		buttonTrue = getWidgetFactory().createButton(qiGroup, "true", SWT.RADIO); //$NON-NLS-1$
 		buttonTrue.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				changeEventText("true"); //$NON-NLS-1$
 				refresh();
 			}
@@ -108,7 +103,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		buttonFalse = getWidgetFactory().createButton(qiGroup, "false", SWT.RADIO); //$NON-NLS-1$
 		buttonFalse.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				changeEventText("false"); //$NON-NLS-1$
 				refresh();
 			}
@@ -116,9 +111,9 @@ public class PrimitiveSection extends AbstractServiceSection {
 		qiGroup.setVisible(false);
 	}
 
-	private void changeEventText(String button) {
+	private void changeEventText(final String button) {
 		if (null != editPart) {
-			String event = getType().getEvent().replace("+", "").replace("-", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			final String event = getType().getEvent().replace("+", "").replace("-", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			switch (button) {
 			case "true": //$NON-NLS-1$
 				editPart.getNameLabel().setText(event + "+"); //$NON-NLS-1$
@@ -136,8 +131,8 @@ public class PrimitiveSection extends AbstractServiceSection {
 		}
 	}
 
-	protected void createPrimitiveSection(Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
+	protected void createPrimitiveSection(final Composite parent) {
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Interface);
@@ -151,25 +146,22 @@ public class PrimitiveSection extends AbstractServiceSection {
 		});
 		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Parameters);
 		parametersText = createGroupText(composite, true);
-		parametersText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangePrimitiveParameterCommand(getType(), parametersText.getText()));
-				addContentAdapter();
-			}
+		parametersText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangePrimitiveParameterCommand(getType(), parametersText.getText()));
+			addContentAdapter();
 		});
 	}
 
 	@Override
-	protected Primitive getInputType(Object input) {
+	protected Primitive getInputType(final Object input) {
 		if (input instanceof InputPrimitiveEditPart || input instanceof OutputPrimitiveEditPart) {
 			editPart = (PrimitiveEditPart) input;
 			return ((PrimitiveEditPart) input).getCastedModel();
 		}
 		if (input instanceof InputPrimitive || input instanceof OutputPrimitive) {
-			IEditorPart editor = EditorUtils.getCurrentActiveEditor();
-			GraphicalViewer view = editor.getAdapter(GraphicalViewer.class);
+			final IEditorPart editor = EditorUtils.getCurrentActiveEditor();
+			final GraphicalViewer view = editor.getAdapter(GraphicalViewer.class);
 			editPart = (PrimitiveEditPart) view.getEditPartRegistry().get(input);
 			return ((Primitive) input);
 		}
@@ -185,7 +177,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			parametersText.setText(getType().getParameters() != null ? getType().getParameters() : ""); //$NON-NLS-1$
@@ -215,13 +207,13 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 	protected boolean containsQI() {
 		if (type instanceof InputPrimitive) {
-			for (VarDeclaration var : getFB().getInterfaceList().getInputVars()) {
+			for (final VarDeclaration var : getFB().getInterfaceList().getInputVars()) {
 				if (var.getName().equals("QI")) { //$NON-NLS-1$
 					return true;
 				}
 			}
 		} else if (type instanceof OutputPrimitive) {
-			for (VarDeclaration var : getFB().getInterfaceList().getOutputVars()) {
+			for (final VarDeclaration var : getFB().getInterfaceList().getOutputVars()) {
 				if (var.getName().equals("QO")) { //$NON-NLS-1$
 					return true;
 				}
@@ -257,7 +249,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 	public void setServiceInterfaceDropdown() {
 		serviceInterfaceCombo.removeAll();
-		Service s = (Service) getType().eContainer().eContainer().eContainer();
+		final Service s = (Service) getType().eContainer().eContainer().eContainer();
 		serviceInterfaceCombo.add(s.getLeftInterface().getName());
 		serviceInterfaceCombo.add(s.getRightInterface().getName());
 		if (serviceInterfaceCombo.getItem(0).equals(getType().getInterface().getName())) {
@@ -269,5 +261,6 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 	@Override
 	protected void setInputInit() {
+		// currently nothing to be done here
 	}
 }

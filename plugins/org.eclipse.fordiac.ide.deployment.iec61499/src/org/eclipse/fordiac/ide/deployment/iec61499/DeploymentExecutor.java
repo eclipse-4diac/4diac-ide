@@ -161,10 +161,10 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	private static String encodeXMLChars(final String value) {
 		String retVal = value;
-		retVal = retVal.replaceAll("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
-		retVal = retVal.replaceAll("'", "&apos;"); //$NON-NLS-1$ //$NON-NLS-2$
-		retVal = retVal.replaceAll("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
-		retVal = retVal.replaceAll(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
+		retVal = retVal.replace("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
+		retVal = retVal.replace("'", "&apos;"); //$NON-NLS-1$ //$NON-NLS-2$
+		retVal = retVal.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
+		retVal = retVal.replace(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		return retVal;
 	}
 

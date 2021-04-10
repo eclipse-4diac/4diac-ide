@@ -21,15 +21,12 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.editpolicies.ConnectionEditPolicy;
 import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 
 public class WithEditPart extends AbstractConnectionEditPart {
 
@@ -38,13 +35,11 @@ public class WithEditPart extends AbstractConnectionEditPart {
 	}
 
 	private boolean isInput() {
-		With with = getCastedModel();
+		final With with = getCastedModel();
 		if (null != with) {
-			Event event = (Event) with.eContainer();
+			final Event event = (Event) with.eContainer();
 			if (null != event) {
 				return event.isIsInput();
-			} else {
-				return false;
 			}
 		}
 		return false;
@@ -52,9 +47,9 @@ public class WithEditPart extends AbstractConnectionEditPart {
 
 	private int calculateWithPos() {
 		int pos = 1;
-		With with = getCastedModel();
-		Event event = (Event) with.eContainer();
-		InterfaceList interfaceList = (InterfaceList) event.eContainer();
+		final With with = getCastedModel();
+		final Event event = (Event) with.eContainer();
+		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
 		if (null != interfaceList) {
 			pos += ((isInput()) ? interfaceList.getEventInputs() : interfaceList.getEventOutputs()).indexOf(event);
 		}
@@ -77,16 +72,16 @@ public class WithEditPart extends AbstractConnectionEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		PolylineConnection connection = (PolylineConnection) super.createFigure();
+		final PolylineConnection connection = (PolylineConnection) super.createFigure();
 		updateConnection(connection);
 		return connection;
 	}
 
-	private void updateConnection(PolylineConnection connection) {
-		int h = 15;
-		float scale = 0.2f;
-		PointList rect = new PointList();
-		int withPos = calculateWithPos();
+	private void updateConnection(final PolylineConnection connection) {
+		final int h = 15;
+		final float scale = 0.2f;
+		final PointList rect = new PointList();
+		final int withPos = calculateWithPos();
 		rect.addPoint(-h, -h);
 		rect.addPoint(-h, h);
 		rect.addPoint(h, h);
@@ -101,7 +96,7 @@ public class WithEditPart extends AbstractConnectionEditPart {
 			rect.addPoint(0, +h + 45);
 		}
 		rect.addPoint(0, -h);
-		PointList targetRect = new PointList();
+		final PointList targetRect = new PointList();
 		targetRect.addPoint(-h, -h);
 		targetRect.addPoint(-h, h);
 		targetRect.addPoint(h, h);
@@ -116,38 +111,16 @@ public class WithEditPart extends AbstractConnectionEditPart {
 			targetRect.addPoint(0, +h + 45 * withPos);
 		}
 		targetRect.addPoint(0, -h);
-		PolygonDecoration rectDec = new PolygonDecoration();
+		final PolygonDecoration rectDec = new PolygonDecoration();
 		rectDec.setTemplate(targetRect.getCopy());
 		rectDec.setScale(scale, scale);
 		rectDec.setFill(false);
 		connection.setTargetDecoration(rectDec);
-		PolygonDecoration rectDec2 = new PolygonDecoration();
+		final PolygonDecoration rectDec2 = new PolygonDecoration();
 		rectDec2.setTemplate(rect.getCopy());
 		rectDec2.setScale(scale, scale);
 		rectDec2.setFill(false);
 		connection.setSourceDecoration(rectDec2);
-	}
-
-	private final IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
-		@Override
-		public void propertyChange(PropertyChangeEvent event) {
-		}
-	};
-
-	@Override
-	public void activate() {
-		if (!isActive()) {
-			super.activate();
-			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
-		}
-	}
-
-	@Override
-	public void deactivate() {
-		if (isActive()) {
-			super.deactivate();
-			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
-		}
 	}
 
 	public void updateWithPos() {

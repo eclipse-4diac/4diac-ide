@@ -34,15 +34,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -74,7 +68,7 @@ public class ServiceSection extends AbstractServiceSection {
 	}
 
 	@Override
-	protected FBType getInputType(Object input) {
+	protected FBType getInputType(final Object input) {
 		if (input instanceof SequenceRootEditPart) {
 			return (FBType) ((SequenceRootEditPart) input).getCastedModel().eContainer();
 		}
@@ -91,153 +85,124 @@ public class ServiceSection extends AbstractServiceSection {
 		createSequencesSection(getRightComposite());
 	}
 
-	private void createServiceSection(Composite parent) {
-		Group leftServiceGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSection_LeftInterface);
+	private void createServiceSection(final Composite parent) {
+		final Group leftServiceGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSection_LeftInterface);
 		leftServiceGroup.setLayout(new GridLayout(2, false));
 		leftServiceGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 		getWidgetFactory().createCLabel(leftServiceGroup, Messages.ServiceSection_LeftInterface_Name);
 		leftNameText = createGroupText(leftServiceGroup, true);
-		leftNameText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeServiceInterfaceNameCommand(leftNameText.getText(), getType(), true));
-				addContentAdapter();
-			}
+		leftNameText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeServiceInterfaceNameCommand(leftNameText.getText(), getType(), true));
+			addContentAdapter();
 		});
 		getWidgetFactory().createCLabel(leftServiceGroup, Messages.ServiceSection_LeftInterface_Comment);
 		leftCommentText = createGroupText(leftServiceGroup, true);
-		leftCommentText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeServiceInterfaceCommentCommand(leftCommentText.getText(),
-						getType().getService(), true));
-				addContentAdapter();
-			}
+		leftCommentText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeServiceInterfaceCommentCommand(leftCommentText.getText(),
+					getType().getService(), true));
+			addContentAdapter();
 		});
 
-		Group rightServiceGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSection_RightInterface);
+		final Group rightServiceGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSection_RightInterface);
 		rightServiceGroup.setLayout(new GridLayout(2, false));
 		rightServiceGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 		getWidgetFactory().createCLabel(rightServiceGroup, Messages.ServiceSection_RightInterface_Name);
 		rightNameText = createGroupText(rightServiceGroup, true);
-		rightNameText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeServiceInterfaceNameCommand(rightNameText.getText(), getType(), false));
-				addContentAdapter();
-			}
+		rightNameText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeServiceInterfaceNameCommand(rightNameText.getText(), getType(), false));
+			addContentAdapter();
 		});
 		getWidgetFactory().createCLabel(rightServiceGroup, Messages.ServiceSection_RightInterface_Comment);
 		rightCommentText = createGroupText(rightServiceGroup, true);
-		rightCommentText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeServiceInterfaceCommentCommand(rightCommentText.getText(),
-						getType().getService(), false));
-				addContentAdapter();
-			}
+		rightCommentText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeServiceInterfaceCommentCommand(rightCommentText.getText(),
+					getType().getService(), false));
+			addContentAdapter();
 		});
 	}
 
-	private void createSequencesSection(Composite parent) {
-		Group transactionGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSection_ServiceSequences);
+	private void createSequencesSection(final Composite parent) {
+		final Group transactionGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSection_ServiceSequences);
 		transactionGroup.setLayout(new GridLayout(2, false));
 		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
 		sequencesViewer = new TreeViewer(transactionGroup, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gridData.heightHint = 150;
 		gridData.widthHint = 80;
 		sequencesViewer.getTree().setLayoutData(gridData);
 		sequencesViewer.setContentProvider(new AdapterFactoryContentProvider(getAdapterFactory()));
 		sequencesViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
 		new AdapterFactoryTreeEditor(sequencesViewer.getTree(), getAdapterFactory());
-		sequencesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-//				Object selection = ((IStructuredSelection) sequencesViewer.getSelection()).getFirstElement();
-//				if(selection instanceof ServiceSequence){
-//					selectNewSequence((ServiceSequence) selection);
-//				}
-//				else if(selection instanceof ServiceTransaction){
-//					selectNewSequence((ServiceSequence) ((ServiceTransaction) selection).eContainer());
-//				}
-//				else if(selection instanceof InputPrimitive){
-//					selectNewSequence((ServiceSequence)((InputPrimitive) selection).eContainer().eContainer());
-//				}
-//				else if(selection instanceof OutputPrimitive){
-//					selectNewSequence((ServiceSequence)((OutputPrimitive) selection).eContainer().eContainer());
-//				}
-			}
+		sequencesViewer.addSelectionChangedListener(event -> {
+			//				Object selection = ((IStructuredSelection) sequencesViewer.getSelection()).getFirstElement();
+			//				if(selection instanceof ServiceSequence){
+			//					selectNewSequence((ServiceSequence) selection);
+			//				}
+			//				else if(selection instanceof ServiceTransaction){
+			//					selectNewSequence((ServiceSequence) ((ServiceTransaction) selection).eContainer());
+			//				}
+			//				else if(selection instanceof InputPrimitive){
+			//					selectNewSequence((ServiceSequence)((InputPrimitive) selection).eContainer().eContainer());
+			//				}
+			//				else if(selection instanceof OutputPrimitive){
+			//					selectNewSequence((ServiceSequence)((OutputPrimitive) selection).eContainer().eContainer());
+			//				}
 		});
 
-		Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
+		final Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
 		sequenceNew = getWidgetFactory().createButton(buttonComp, Messages.ServiceSection_New, SWT.PUSH);
 		sequenceNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-		sequenceNew.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				executeCommand(new CreateServiceSequenceCommand(getType()));
-				sequencesViewer.refresh();
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
+		sequenceNew.addListener(SWT.Selection, e -> {
+			executeCommand(new CreateServiceSequenceCommand(getType()));
+			sequencesViewer.refresh();
 		});
 
 		sequenceDelete = getWidgetFactory().createButton(buttonComp, Messages.ServiceSection_Delete, SWT.PUSH);
 		sequenceDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		sequenceDelete.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				Object selection = ((TreeSelection) sequencesViewer.getSelection()).getFirstElement();
-				if (selection instanceof ServiceSequence) {
-					selectNewSequence(null); // clear the graphical viewer of the whole service sequence is deleted
-					executeCommand(new DeleteServiceSequenceCommand(getType(), (ServiceSequence) selection));
-				} else if (selection instanceof ServiceTransaction) {
-					executeCommand(new DeleteTransactionCommand((ServiceTransaction) selection));
-				} else if (selection instanceof InputPrimitive) {
-					executeCommand(new DeleteInputPrimitiveCommand((InputPrimitive) selection));
-				} else if (selection instanceof OutputPrimitive) {
-					executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive) selection));
-				}
-				sequencesViewer.refresh();
+		sequenceDelete.addListener(SWT.Selection, e -> {
+			final Object selection = ((TreeSelection) sequencesViewer.getSelection()).getFirstElement();
+			if (selection instanceof ServiceSequence) {
+				selectNewSequence(null); // clear the graphical viewer of the whole service sequence is deleted
+				executeCommand(new DeleteServiceSequenceCommand(getType(), (ServiceSequence) selection));
+			} else if (selection instanceof ServiceTransaction) {
+				executeCommand(new DeleteTransactionCommand((ServiceTransaction) selection));
+			} else if (selection instanceof InputPrimitive) {
+				executeCommand(new DeleteInputPrimitiveCommand((InputPrimitive) selection));
+			} else if (selection instanceof OutputPrimitive) {
+				executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive) selection));
 			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
+			sequencesViewer.refresh();
 		});
 	}
 
-	private void selectNewSequence(ServiceSequence selectedSequence) {
-//		sequenceRootEditPart.setSelectedSequence(selectedSequence);
+	private void selectNewSequence(final ServiceSequence selectedSequence) {
+		//		sequenceRootEditPart.setSelectedSequence(selectedSequence);
 	}
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			leftNameText.setText(null != getType().getService().getLeftInterface()
 					? getType().getService().getLeftInterface().getName()
-					: ""); //$NON-NLS-1$
+							: ""); //$NON-NLS-1$
 			leftCommentText.setText(null != getType().getService().getLeftInterface()
 					&& null != getType().getService().getLeftInterface().getComment()
-							? getType().getService().getLeftInterface().getComment()
+					? getType().getService().getLeftInterface().getComment()
 							: ""); //$NON-NLS-1$
 			rightNameText.setText(null != getType().getService().getRightInterface()
 					? getType().getService().getRightInterface().getName()
-					: ""); //$NON-NLS-1$
+							: ""); //$NON-NLS-1$
 			rightCommentText.setText(null != getType().getService().getRightInterface()
 					&& null != getType().getService().getRightInterface().getComment()
-							? getType().getService().getRightInterface().getComment()
+					? getType().getService().getRightInterface().getComment()
 							: ""); //$NON-NLS-1$
 			sequencesViewer.setInput(getType().getService());
 		}
@@ -255,6 +220,7 @@ public class ServiceSection extends AbstractServiceSection {
 
 	@Override
 	protected void setInputInit() {
+		// currently nothing to be done here
 	}
 
 }

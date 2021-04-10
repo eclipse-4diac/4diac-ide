@@ -210,6 +210,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 			@Override
 			public void dragFinished(final DragSourceEvent event) {
 				if (event.detail == DND.DROP_MOVE) {
+					// currently nothing to be done here
 				}
 			}
 
@@ -393,6 +394,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void setFocus() {
+		// currently nothing to be done here
 	}
 
 	@Override

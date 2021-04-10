@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,26 +23,27 @@ import org.eclipse.swt.graphics.Image;
 public class ToolLibraryLabelProvider implements ILabelProvider {
 
 	@Override
-	public void addListener(ILabelProviderListener listener) {
+	public void addListener(final ILabelProviderListener listener) {
+		// currently nothing to be done here
 	}
 
 	@Override
 	public void dispose() {
-
+		// currently nothing to be done here
 	}
 
 	@Override
-	public boolean isLabelProperty(Object element, String property) {
+	public boolean isLabelProperty(final Object element, final String property) {
 		return false;
 	}
 
 	@Override
-	public void removeListener(ILabelProviderListener listener) {
-
+	public void removeListener(final ILabelProviderListener listener) {
+		// currently nothing to be done here
 	}
 
 	@Override
-	public Image getImage(Object element) {
+	public Image getImage(final Object element) {
 		if (element instanceof IProject) {
 			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
 		} else if (element instanceof IFolder && ((IFolder) element).isLinked()) {
@@ -53,7 +54,7 @@ public class ToolLibraryLabelProvider implements ILabelProvider {
 	}
 
 	@Override
-	public String getText(Object element) {
+	public String getText(final Object element) {
 		return null;
 	}
 
