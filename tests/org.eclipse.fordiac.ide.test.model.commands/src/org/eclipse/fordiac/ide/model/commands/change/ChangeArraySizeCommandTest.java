@@ -34,7 +34,7 @@ public class ChangeArraySizeCommandTest extends ValueCommandTestBase {
 		return disabledCommandExecution(state);
 	}
 
-	private static void verifyState(State state, State oldState, TestFunction t, int newSize) {
+	private static void verifyState(State state, TestFunction t, int newSize) {
 		t.test(state.getVar().getArraySize(), newSize);
 		t.test(state.getVar().isArray(), (newSize > 0));
 	}
@@ -44,23 +44,23 @@ public class ChangeArraySizeCommandTest extends ValueCommandTestBase {
 		List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Change Array Size to empty String", // //$NON-NLS-1$
 						(State s) -> executeCommand(s, ""), // //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, 0) //
+						(State s, State o, TestFunction t) -> verifyState(s, t, 0) //
 				), //
 				new ExecutionDescription<>("Change Array Size to 2", // //$NON-NLS-1$
 						(State s) -> executeCommand(s, "2"), // //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, 2) //
+						(State s, State o, TestFunction t) -> verifyState(s, t, 2) //
 				), //
 				new ExecutionDescription<>("Change Array Size to 0", // //$NON-NLS-1$
 						(State s) -> executeCommand(s, "0"), // //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, 0) //
+						(State s, State o, TestFunction t) -> verifyState(s, t, 0) //
 				), //
 				new ExecutionDescription<>("Change Array Size to -1", // //$NON-NLS-1$
 						(State s) -> executeCommand(s, "-1"), // //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, 0) //
+						(State s, State o, TestFunction t) -> verifyState(s, t, 0) //
 				), //
 				new ExecutionDescription<>("Change Array Size to abc", // //$NON-NLS-1$
 						(State s) -> executeCommand(s, "abc"), // //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, 0) //
+						(State s, State o, TestFunction t) -> verifyState(s, t, 0) //
 				));
 
 		Collection<Arguments> unexecutable = describeCommand("Start from default values", // //$NON-NLS-1$

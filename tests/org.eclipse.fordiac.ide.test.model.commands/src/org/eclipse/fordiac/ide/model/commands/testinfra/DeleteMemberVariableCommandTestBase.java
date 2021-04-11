@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class DeleteMemberVariableCommandTestBase
-		extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
+extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
 	protected static DataTypeLibrary datatypeLib = new DataTypeLibrary();
 	protected static List<VarDeclaration> varList = new ArrayList<>();
 
@@ -49,28 +49,28 @@ public abstract class DeleteMemberVariableCommandTestBase
 
 		private void fillStruct() {
 			if (varList.isEmpty()) {
-				DataType bool = datatypeLib.getType(FordiacKeywords.BOOL);
-				VarDeclaration varDecl1 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+				final DataType bool = datatypeLib.getType(FordiacKeywords.BOOL);
+				final VarDeclaration varDecl1 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 				varDecl1.setName("VAR1"); //$NON-NLS-1$
 				varDecl1.setType(bool);
 				varList.add(varDecl1);
 
-				VarDeclaration varDecl2 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+				final VarDeclaration varDecl2 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 				varDecl2.setName("VAR2"); //$NON-NLS-1$
 				varDecl2.setType(bool);
 				varList.add(varDecl2);
 
-				VarDeclaration varDecl3 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+				final VarDeclaration varDecl3 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 				varDecl3.setName("VAR3"); //$NON-NLS-1$
 				varDecl3.setType(bool);
 				varList.add(varDecl3);
 
-				VarDeclaration struct1 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+				final VarDeclaration struct1 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 				struct1.setName("STRUCT1"); //$NON-NLS-1$
 				struct1.setType(datatypeLib.getStructuredType(FordiacKeywords.ANY_STRUCT));
 				varList.add(struct1);
 
-				VarDeclaration varDecl5 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+				final VarDeclaration varDecl5 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 				varDecl5.setName("VAR4"); //$NON-NLS-1$
 				varDecl5.setType(bool);
 				varList.add(varDecl5);
@@ -79,7 +79,7 @@ public abstract class DeleteMemberVariableCommandTestBase
 			getStructuredType().getMemberVariables().addAll(varList);
 		}
 
-		public State(State s) {
+		public State(final State s) {
 			struct = EcoreUtil.copy(s.struct);
 		}
 
@@ -89,27 +89,27 @@ public abstract class DeleteMemberVariableCommandTestBase
 		}
 	}
 
-	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
+	protected static Collection<Arguments> describeCommand(final String description, final StateInitializer<?> initializer,
+			final StateVerifier<?> initialVerifier, final List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
 				CommandTestBase::defaultRedoCommand);
 	}
 
-	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
+	protected static void verifyDefaultInitialValues(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getStructuredType());
 		t.test(state.getStructuredType().getMemberVariables().size(), varList.size());
 	}
 
 	// define here the list of test sequences
 	// multiple execution descriptions are possible -> define in test class
-	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> deletionExecutionDescriptions) {
-		Collection<Arguments> commands = new ArrayList<>();
+	protected static Collection<Arguments> createCommands(final List<ExecutionDescription<?>> deletionExecutionDescriptions) {
+		final Collection<Arguments> commands = new ArrayList<>();
 		// test series 1
 		commands.addAll(describeCommand("Autofilled Command", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
+				(StateVerifier<State>) DeleteMemberVariableCommandTestBase::verifyDefaultInitialValues, //
 				deletionExecutionDescriptions //
-		));
+				));
 		return commands;
 	}
 

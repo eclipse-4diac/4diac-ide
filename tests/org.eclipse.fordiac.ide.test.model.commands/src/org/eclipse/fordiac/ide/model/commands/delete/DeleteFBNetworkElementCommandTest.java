@@ -28,7 +28,7 @@ public class DeleteFBNetworkElementCommandTest extends FBNetworkTestBase {
 	 * @param stateObj current state description
 	 * @return new state description
 	 */
-	protected static State undoCommand(Object stateObj) {
+	protected static State undoCommand(final Object stateObj) {
 		final State state = (State) stateObj;
 		assumption.test(state.getCommand().canUndo());
 		state.getCommand().undo();
@@ -41,7 +41,7 @@ public class DeleteFBNetworkElementCommandTest extends FBNetworkTestBase {
 	 * @param stateObj current state description
 	 * @return new state description
 	 */
-	protected static State redoCommand(Object stateObj) {
+	protected static State redoCommand(final Object stateObj) {
 		final State state = (State) stateObj;
 		assumption.test(state.getCommand().canRedo());
 		state.getCommand().redo();
@@ -62,21 +62,21 @@ public class DeleteFBNetworkElementCommandTest extends FBNetworkTestBase {
 
 		return describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
-				(State state, State oldState, TestFunction t) -> verifyDefaultInitialValues(state, oldState, t), //
+				(StateVerifier<State>) FBNetworkTestBase::verifyDefaultInitialValues, //
 				List.of( //
 						new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 								FBCreateCommandTest::executeCommand, //
-								(State s, State o, TestFunction t) -> FBCreateCommandTest.verifyState(s, o, t) //
-						), //
+								FBCreateCommandTest::verifyState //
+								), //
 						new ExecutionDescription<>("Delete Functionblock from Network", //$NON-NLS-1$
 								DeleteFBNetworkElementCommandTest::executeDeleteCommand, //
 								DeleteFBNetworkElementCommandTest::verifyDeletedState //
-						) //
-							// TODO: add connections, add mapping
-				), //
+								) //
+						// TODO: add connections, add mapping
+						), //
 				DeleteFBNetworkElementCommandTest::undoCommand, //
 				DeleteFBNetworkElementCommandTest::redoCommand //
-		);
+				);
 
 	}
 

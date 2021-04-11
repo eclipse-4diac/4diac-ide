@@ -53,8 +53,7 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		return commandExecution(state);
 	}
 
-	private static void verifyStateWithAlgorithmIndex(State state, State oldState, TestFunction t, int index,
-			String algorithmName) {
+	private static void verifyStateWithAlgorithmIndex(State state, TestFunction t, int index, String algorithmName) {
 		final EList<Algorithm> algorithmList = ((BasicFBType) state.getFbNetwork().getNetworkElements().get(0)
 				.getType()).getAlgorithm();
 
@@ -71,7 +70,7 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 	}
 
 	private static void verifyState1(State state, State oldState, TestFunction t) {
-		verifyStateWithAlgorithmIndex(state, oldState, t, 0, ALGORITHM_NAME);
+		verifyStateWithAlgorithmIndex(state, t, 0, ALGORITHM_NAME);
 	}
 
 	private static State executeCommand2(State state) {
@@ -79,8 +78,8 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 	}
 
 	private static void verifyState2(State state, State oldState, TestFunction t) {
-		verifyStateWithAlgorithmIndex(state, oldState, t, 0, ALGORITHM2_NAME);
-		verifyStateWithAlgorithmIndex(state, oldState, t, 1, ALGORITHM_NAME);
+		verifyStateWithAlgorithmIndex(state, t, 0, ALGORITHM2_NAME);
+		verifyStateWithAlgorithmIndex(state, t, 1, ALGORITHM_NAME);
 	}
 
 	private static State executeCommand3(State state) {
@@ -89,7 +88,7 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 
 	private static void verifyState3(State state, State oldState, TestFunction t) {
 		verifyState2(state, oldState, t);
-		verifyStateWithAlgorithmIndex(state, oldState, t, 2, ALGORITHM3_NAME);
+		verifyStateWithAlgorithmIndex(state, t, 2, ALGORITHM3_NAME);
 	}
 
 	private static State executeReorder(State state, int index, boolean direction) {
@@ -100,11 +99,10 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		return commandExecution(state);
 	}
 
-	private static void verifyOrder(State state, State oldState, TestFunction t, String name1, String name2,
-			String name3) {
-		verifyStateWithAlgorithmIndex(state, oldState, t, 0, name1);
-		verifyStateWithAlgorithmIndex(state, oldState, t, 1, name2);
-		verifyStateWithAlgorithmIndex(state, oldState, t, 2, name3);
+	private static void verifyOrder(State state, TestFunction t, String name1, String name2, String name3) {
+		verifyStateWithAlgorithmIndex(state, t, 0, name1);
+		verifyStateWithAlgorithmIndex(state, t, 1, name2);
+		verifyStateWithAlgorithmIndex(state, t, 2, name3);
 	}
 
 	// parameter creation function
@@ -124,20 +122,16 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 				), //
 				new ExecutionDescription<>("move second algorithmn to third place", //$NON-NLS-1$
 						(State s) -> executeReorder(s, 1, false), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, ALGORITHM2_NAME, ALGORITHM3_NAME,
-								ALGORITHM_NAME)), //
+						(State s, State o, TestFunction t) -> verifyOrder(s, t, ALGORITHM2_NAME, ALGORITHM3_NAME, ALGORITHM_NAME)), //
 				new ExecutionDescription<>("move second algorithmn to first place", //$NON-NLS-1$
 						(State s) -> executeReorder(s, 1, true), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, ALGORITHM3_NAME, ALGORITHM2_NAME,
-								ALGORITHM_NAME)), //
+						(State s, State o, TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME, ALGORITHM2_NAME, ALGORITHM_NAME)), //
 				new ExecutionDescription<>("move first algorithmn past lower bound", //$NON-NLS-1$
 						(State s) -> executeReorder(s, 0, true), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, ALGORITHM3_NAME, ALGORITHM2_NAME,
-								ALGORITHM_NAME)), //
+						(State s, State o, TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME, ALGORITHM2_NAME, ALGORITHM_NAME)), //
 				new ExecutionDescription<>("move third algorithmn past upper bound", //$NON-NLS-1$
 						(State s) -> executeReorder(s, 2, false), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, ALGORITHM3_NAME, ALGORITHM2_NAME,
-								ALGORITHM_NAME)) //
+						(State s, State o, TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME, ALGORITHM2_NAME, ALGORITHM_NAME)) //
 		);
 
 		return createCommands(executionDescriptions);

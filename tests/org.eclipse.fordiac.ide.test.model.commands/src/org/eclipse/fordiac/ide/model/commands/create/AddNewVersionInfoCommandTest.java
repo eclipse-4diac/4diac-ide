@@ -26,14 +26,12 @@ import org.junit.jupiter.params.provider.Arguments;
 
 public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); //$NON-NLS-1$
-
 	private static Long millisBeforeFirstExecute;
-	private static final long DAY_IN_MILLISECONDS = 24l * 60l * 60l * 1000l;
+	private static final long DAY_IN_MILLISECONDS = 24L * 60L * 60L * 1000L;
 
-	public static State executeCommand(State state) {
+	public static State executeCommand(final State state) {
 		if (null == millisBeforeFirstExecute) {
-			millisBeforeFirstExecute = System.currentTimeMillis();
+			millisBeforeFirstExecute = Long.valueOf(System.currentTimeMillis());
 		}
 
 		state.setCommand(new AddNewVersionInfoCommand(state.getFbNetwork().getNetworkElements().get(0).getType()));
@@ -41,12 +39,12 @@ public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 		return commandExecution(state);
 	}
 
-	public static void verifyStateBefore(State state, State oldState, TestFunction t) {
+	public static void verifyStateBefore(final State state, final State oldState, final TestFunction t) {
 		FBCreateCommandTest.verifyState(state, oldState, t);
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getVersionInfo().isEmpty());
 	}
 
-	public static void verifyState(State state, State oldState, TestFunction t, int index, int expectedSize) {
+	public static void verifyState(final State state, final TestFunction t, final int index, final int expectedSize) {
 		final EList<VersionInfo> vinfo = state.getFbNetwork().getNetworkElements().get(0).getType().getVersionInfo();
 
 		t.test(vinfo.size(), expectedSize);
@@ -55,24 +53,25 @@ public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 		t.test(vinfo.get(index).getVersion(), "1.0"); //$NON-NLS-1$
 		t.test(vinfo.get(index).getRemarks(), ""); //$NON-NLS-1$
 
-		String dateBeforeFirstExecute = dateFormat.format(new Date(millisBeforeFirstExecute));
-		String dateDuringVerify = dateFormat.format(new Date());
+		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); //$NON-NLS-1$
+		final String dateBeforeFirstExecute = dateFormat.format(new Date(millisBeforeFirstExecute.longValue()));
+		final String dateDuringVerify = dateFormat.format(new Date());
 
 		// if this test skips here, this single test had a runtime (walltime) of more
 		// than one day. please fix the development system
-		assumption.test((System.currentTimeMillis() - millisBeforeFirstExecute) < DAY_IN_MILLISECONDS);
+		assumption.test((System.currentTimeMillis() - millisBeforeFirstExecute.longValue()) < DAY_IN_MILLISECONDS);
 
 		t.test(vinfo.get(index).getDate().equals(dateBeforeFirstExecute) || // this may skip across midnight, so we
-																			// allow both days around midnight
+				// allow both days around midnight
 				vinfo.get(index).getDate().equals(dateDuringVerify));
 	}
 
-	public static void verifyState(State state, State oldState, TestFunction t) {
-		verifyState(state, oldState, t, 0, 1);
+	public static void verifyState(final State state, final State oldState, final TestFunction t) {
+		verifyState(state, t, 0, 1);
 	}
 
-	public static void verifyState2(State state, State oldState, TestFunction t) {
-		verifyState(state, oldState, t, 1, 2);
+	public static void verifyState2(final State state, final State oldState, final TestFunction t) {
+		verifyState(state, t, 1, 2);
 	}
 
 	// parameter creation function
@@ -81,16 +80,16 @@ public class AddNewVersionInfoCommandTest extends FBNetworkTestBase {
 				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						AddNewVersionInfoCommandTest::verifyStateBefore //
-				), //
+						), //
 				new ExecutionDescription<>("Add VersionInfo", //$NON-NLS-1$
 						AddNewVersionInfoCommandTest::executeCommand, //
 						AddNewVersionInfoCommandTest::verifyState //
-				), //
+						), //
 				new ExecutionDescription<>("Add second VersionInfo", //$NON-NLS-1$
 						AddNewVersionInfoCommandTest::executeCommand, //
 						AddNewVersionInfoCommandTest::verifyState2 //
-				) //
-		);
+						) //
+				);
 
 		return createCommands(executionDescriptions);
 	}

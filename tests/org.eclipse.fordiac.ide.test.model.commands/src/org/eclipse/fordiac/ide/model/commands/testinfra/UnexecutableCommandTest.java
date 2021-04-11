@@ -26,14 +26,10 @@ public class UnexecutableCommandTest extends CommandTestBase<CommandTestBase.Sta
 
 		@Override
 		public Object getClone() {
-			return new State(this);
+			return new State(); // No need to copy, this command will not succeed in execution
 		}
 
 		public State() {
-			// currently nothing to be done here
-		}
-
-		private State(final State s) {
 			// currently nothing to be done here
 		}
 

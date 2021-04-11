@@ -31,7 +31,7 @@ public class ChangeApplicationDomainCommandTest extends FBNetworkTestBase {
 		return commandExecution(state);
 	}
 
-	public static void verifyState(State state, State oldState, TestFunction t, String expectedValue) {
+	public static void verifyState(State state, TestFunction t, String expectedValue) {
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getIdentification().getApplicationDomain(), expectedValue);
 	}
 
@@ -44,11 +44,11 @@ public class ChangeApplicationDomainCommandTest extends FBNetworkTestBase {
 				), //
 				new ExecutionDescription<>("Change Application domain", //$NON-NLS-1$
 						(State state) -> executeCommand(state, APPLICATION_DOMAIN_STRING), //
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, APPLICATION_DOMAIN_STRING) //
+						(State s, State o, TestFunction t) -> verifyState(s, t, APPLICATION_DOMAIN_STRING) //
 				), //
 				new ExecutionDescription<>("Change Application domain to null", //$NON-NLS-1$
 						(State state) -> executeCommand(state, null), //
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, "") //$NON-NLS-1$
+						(State s, State o, TestFunction t) -> verifyState(s, t, "") //$NON-NLS-1$
 				) //
 		);
 

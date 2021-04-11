@@ -77,7 +77,7 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 		t.test(s.getFbNetwork().getNetworkElements().size(), 2);
 		t.test(!s.getFbNetwork().isSubApplicationNetwork());
 
-		final SubApp subapp = (SubApp) s.getFbNetwork().getNetworkElements().stream().filter(e -> e instanceof SubApp)
+		final SubApp subapp = (SubApp) s.getFbNetwork().getNetworkElements().stream().filter(SubApp.class::isInstance)
 				.findFirst().orElse(null);
 		t.test(subapp);
 		t.test(subapp.getSubAppNetwork().getNetworkElements().size(), 1);
@@ -91,12 +91,12 @@ public class NewSubAppCommandTest extends FBNetworkTestBase {
 		verifySubAppCreation(s, o, t);
 
 		// extract the functionblock in the outer network
-		final FB fb = (FB) s.getFbNetwork().getNetworkElements().stream().filter(e -> e instanceof FB)
+		final FB fb = (FB) s.getFbNetwork().getNetworkElements().stream().filter(FB.class::isInstance)
 				.findFirst().orElse(null);
 		t.test(fb);
 
 		// get the subapp from the outer network
-		final SubApp subapp = (SubApp) s.getFbNetwork().getNetworkElements().stream().filter(e -> e instanceof SubApp)
+		final SubApp subapp = (SubApp) s.getFbNetwork().getNetworkElements().stream().filter(SubApp.class::isInstance)
 				.findFirst().orElse(null);
 		t.test(subapp);
 

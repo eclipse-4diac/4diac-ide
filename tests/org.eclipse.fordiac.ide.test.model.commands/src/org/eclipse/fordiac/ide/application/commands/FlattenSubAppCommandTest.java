@@ -24,7 +24,7 @@ import org.junit.jupiter.params.provider.Arguments;
 public class FlattenSubAppCommandTest extends NewSubAppCommandTest {
 
 	public static State flattenSubApp(final State s) {
-		final SubApp subapp = (SubApp) s.getFbNetwork().getNetworkElements().stream().filter(e -> e instanceof SubApp)
+		final SubApp subapp = (SubApp) s.getFbNetwork().getNetworkElements().stream().filter(SubApp.class::isInstance)
 				.findFirst().orElse(null);
 		assertion.test(subapp);
 		s.setCommand(new FlattenSubAppCommand(subapp));

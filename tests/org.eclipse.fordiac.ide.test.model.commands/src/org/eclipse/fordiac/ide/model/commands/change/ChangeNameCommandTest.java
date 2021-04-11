@@ -68,7 +68,7 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 	}
 
 	private static void verifyMessages(State s, State o, TestFunction t) {
-		if (!s.getViaUndo()) {
+		if (!s.isViaUndo()) {
 			t.test(s.getMessages().size(), 1);
 		}
 	}

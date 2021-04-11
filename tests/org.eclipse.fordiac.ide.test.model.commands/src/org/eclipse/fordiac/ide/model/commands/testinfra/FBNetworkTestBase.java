@@ -38,7 +38,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 
 		public static final String FUNCTIONBLOCK_NAME = "functionblock"; //$NON-NLS-1$
 
-		private FBTypePaletteEntry createFBType() {
+		private static FBTypePaletteEntry createFBType() {
 			final FBTypePaletteEntry pe = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
 			final TypeLibrary typelib = TypeLibrary.getTypeLibrary(null);
 			final BasicFBType functionBlock = LibraryElementFactory.eINSTANCE.createBasicFBType();
@@ -69,7 +69,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 			functionblock = createFBType();
 		}
 
-		private State(State s) {
+		private State(final State s) {
 			net = EcoreUtil.copy(s.net);
 			functionblock = EcoreUtil.copy(s.functionblock);
 			functionblock.setType(EcoreUtil.copy(s.functionblock.getFBType()));
@@ -81,27 +81,27 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 		}
 	}
 
-	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
+	protected static Collection<Arguments> describeCommand(final String description, final StateInitializer<?> initializer,
+			final StateVerifier<?> initialVerifier, final List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
 				CommandTestBase::defaultRedoCommand);
 	}
 
-	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
+	protected static void verifyDefaultInitialValues(final State state, final State oldState, final TestFunction t) {
 		t.test(!state.getFbNetwork().isCFBTypeNetwork());
 		t.test(!state.getFbNetwork().isResourceNetwork());
 		t.test(!state.getFbNetwork().isSubApplicationNetwork());
 		t.test(state.getFbNetwork().getNetworkElements().isEmpty());
 	}
 
-	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+	protected static Collection<Arguments> createCommands(final List<ExecutionDescription<?>> executionDescriptions) {
 		final Collection<Arguments> commands = new ArrayList<>();
 
 		commands.addAll(describeCommand("Start from default values", // //$NON-NLS-1$
 				State::new, //
 				(StateVerifier<State>) FBNetworkTestBase::verifyDefaultInitialValues, //
 				executionDescriptions //
-		));
+				));
 
 		return commands;
 	}

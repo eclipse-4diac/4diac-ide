@@ -78,23 +78,23 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 		return disabledCommandExecution(state);
 	}
 
-	public static void verifyStateNoDataInput(final State state, final State oldState, final TestFunction t) {
+	public static void verifyStateNoDataInput(final State state, final TestFunction t) {
 		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getInputVars().isEmpty());
 	}
 
-	public static void verifyStateNoDataOutput(final State state, final State oldState, final TestFunction t) {
+	public static void verifyStateNoDataOutput(final State state, final TestFunction t) {
 		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getOutputVars().isEmpty());
 	}
 
-	public static void verifyStateNoEventInput(final State state, final State oldState, final TestFunction t) {
+	public static void verifyStateNoEventInput(final State state, final TestFunction t) {
 		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getEventInputs().isEmpty());
 	}
 
-	public static void verifyStateNoEventOutput(final State state, final State oldState, final TestFunction t) {
+	public static void verifyStateNoEventOutput(final State state, final TestFunction t) {
 		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getEventOutputs().isEmpty());
 	}
 
-	public static void verifyStateHasDataInput(final State state, final State oldState, final TestFunction t) {
+	public static void verifyStateHasDataInput(final State state, final TestFunction t) {
 		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getInputVars().size(), 1);
 	}
 
@@ -108,15 +108,15 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 		t.test(c.getInterfaceElement());
 	}
 	
-	public static void verifyStateHasDataOutput(final State state, final State oldState, final TestFunction t) {
+	public static void verifyStateHasDataOutput(final State state, final TestFunction t) {
 		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getOutputVars().size(), 1);
 	}
 
-	public static void verifyStateHasEventInput(final State state, final State oldState, final TestFunction t) {
+	public static void verifyStateHasEventInput(final State state, final TestFunction t) {
 		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getEventInputs().size(), 1);
 	}
 
-	public static void verifyStateHasEventOutput(final State state, final State oldState, final TestFunction t) {
+	public static void verifyStateHasEventOutput(final State state, final TestFunction t) {
 		t.test(state.getFbNetwork().getFBNamed(State.FUNCTIONBLOCK_NAME).getInterface().getEventOutputs().size(), 1);
 	}
 
@@ -126,34 +126,34 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 				new ExecutionDescription<>("Add Input", //$NON-NLS-1$
 						(final State s) -> {final State result = executeCommand(s, FordiacKeywords.DWORD, true); verifyGetters(s,assertion); return result;}, //
 						(final State s, final State o, final TestFunction t) -> {
-							verifyStateHasDataInput(s, o, t);
-							verifyStateNoDataOutput(s, o, t);
-							verifyStateNoEventInput(s, o, t);
-							verifyStateNoEventOutput(s, o, t);
+							verifyStateHasDataInput(s, t);
+							verifyStateNoDataOutput(s, t);
+							verifyStateNoEventInput(s, t);
+							verifyStateNoEventOutput(s, t);
 						}), //
 				new ExecutionDescription<>("Add Output", //$NON-NLS-1$
 						(final State s) -> executeCommand(s, FordiacKeywords.DWORD, false), //
 						(final State s, final State o, final TestFunction t) -> {
-							verifyStateHasDataInput(s, o, t);
-							verifyStateHasDataOutput(s, o, t);
-							verifyStateNoEventInput(s, o, t);
-							verifyStateNoEventOutput(s, o, t);
+							verifyStateHasDataInput(s, t);
+							verifyStateHasDataOutput(s, t);
+							verifyStateNoEventInput(s, t);
+							verifyStateNoEventOutput(s, t);
 						}), //
 				new ExecutionDescription<>("Add Event Input", //$NON-NLS-1$
 						(final State s) -> executeEventCommand(s, true), //
 						(final State s, final State o, final TestFunction t) -> {
-							verifyStateHasDataInput(s, o, t);
-							verifyStateHasDataOutput(s, o, t);
-							verifyStateHasEventInput(s, o, t);
-							verifyStateNoEventOutput(s, o, t);
+							verifyStateHasDataInput(s, t);
+							verifyStateHasDataOutput(s, t);
+							verifyStateHasEventInput(s, t);
+							verifyStateNoEventOutput(s, t);
 						}), //
 				new ExecutionDescription<>("Add Event Output", //$NON-NLS-1$
 						(final State s) -> executeEventCommand(s, false), //
 						(final State s, final State o, final TestFunction t) -> {
-							verifyStateHasDataInput(s, o, t);
-							verifyStateHasDataOutput(s, o, t);
-							verifyStateHasEventInput(s, o, t);
-							verifyStateHasEventOutput(s, o, t);
+							verifyStateHasDataInput(s, t);
+							verifyStateHasDataOutput(s, t);
+							verifyStateHasEventInput(s, t);
+							verifyStateHasEventOutput(s, t);
 						}) //
 		);
 
@@ -163,10 +163,10 @@ public class InsertInterfaceElementCommandTest extends FBNetworkTestBase {
 				() -> FBCreateCommandTest.executeCommand(new State()), //
 				(final State s, final State o, final TestFunction t) -> {
 					FBCreateCommandTest.verifyState(s, o, t);
-					verifyStateNoDataInput(s, o, t);
-					verifyStateNoDataOutput(s, o, t);
-					verifyStateNoEventInput(s, o, t);
-					verifyStateNoEventOutput(s, o, t);
+					verifyStateNoDataInput(s, t);
+					verifyStateNoDataOutput(s, t);
+					verifyStateNoEventInput(s, t);
+					verifyStateNoEventOutput(s, t);
 				}, //
 				executionDescriptions //
 		));

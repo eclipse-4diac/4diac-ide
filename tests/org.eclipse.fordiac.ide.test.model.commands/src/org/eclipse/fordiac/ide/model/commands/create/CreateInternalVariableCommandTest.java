@@ -88,8 +88,7 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 		return commandExecution(state);
 	}
 
-	private static void verifyOrder(State state, State oldState, TestFunction t, String name1, String name2,
-			String name3) {
+	private static void verifyOrder(State state, TestFunction t, String name1, String name2, String name3) {
 		final BaseFBType baseFBType = getBaseFBType(state, t);
 		t.test(baseFBType.getInternalVars().size(), 3);
 		t.test(baseFBType.getInternalVars().get(0).getName(), name1);
@@ -130,23 +129,19 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 				), //
 				new ExecutionDescription<>("move second algorithmn to third place", //$NON-NLS-1$
 						(State s) -> executeReorder(s, 1, false), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, VARIABLE1_NAME, VARIABLE3_NAME,
-								VARIABLE2_NAME)//
+						(State s, State o, TestFunction t) -> verifyOrder(s, t, VARIABLE1_NAME, VARIABLE3_NAME, VARIABLE2_NAME)//
 				), //
 				new ExecutionDescription<>("move second algorithmn to first place", //$NON-NLS-1$
 						(State s) -> executeReorder(s, 1, true), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, VARIABLE3_NAME, VARIABLE1_NAME,
-								VARIABLE2_NAME)//
+						(State s, State o, TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME, VARIABLE1_NAME, VARIABLE2_NAME)//
 				), //
 				new ExecutionDescription<>("move first algorithmn past lower bound", //$NON-NLS-1$
 						(State s) -> executeReorder(s, 0, true), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, VARIABLE3_NAME, VARIABLE1_NAME,
-								VARIABLE2_NAME)//
+						(State s, State o, TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME, VARIABLE1_NAME, VARIABLE2_NAME)//
 				), //
 				new ExecutionDescription<>("move third algorithmn past upper bound", //$NON-NLS-1$
 						(State s) -> executeReorder(s, 2, false), //
-						(State s, State o, TestFunction t) -> verifyOrder(s, o, t, VARIABLE3_NAME, VARIABLE1_NAME,
-								VARIABLE2_NAME)//
+						(State s, State o, TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME, VARIABLE1_NAME, VARIABLE2_NAME)//
 				), //
 				new ExecutionDescription<>("delete first entry", //$NON-NLS-1$
 						CreateInternalVariableCommandTest::executeDeleteVariable, //

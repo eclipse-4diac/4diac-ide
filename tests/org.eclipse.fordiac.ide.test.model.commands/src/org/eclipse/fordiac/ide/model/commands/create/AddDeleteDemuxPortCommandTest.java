@@ -41,6 +41,18 @@ import org.junit.jupiter.params.provider.Arguments;
 public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 	private static final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(null);
 
+	private static final String OUTER_STRUCT_TYPE = "outerStruct"; //$NON-NLS-1$
+	private static final String INNER_STRUCT_TYPE = "innerStruct"; //$NON-NLS-1$
+	private static final String VARIABLE1 = "VAR1"; //$NON-NLS-1$
+	private static final String VARIABLE2 = "VAR2"; //$NON-NLS-1$
+	private static final String VARIABLE3 = "VAR3"; //$NON-NLS-1$
+	private static final String VARIABLE4 = "VAR4"; //$NON-NLS-1$
+	private static final String VARIABLE5 = "VAR5"; //$NON-NLS-1$
+	private static final String VARIABLE6 = "VAR6"; //$NON-NLS-1$
+	private static final String INNER_STRUCT_OBJECT1 = "innerstruct1"; //$NON-NLS-1$
+	private static final String INNER_STRUCT_OBJECT2 = "innerstruct2"; //$NON-NLS-1$
+	private static final String SEP = "."; //$NON-NLS-1$
+
 	protected static class State extends CommandTestBase.StateBase {
 
 		private Demultiplexer demux;
@@ -59,7 +71,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			demux = createDemultiplexer();
 		}
 
-		public void setDemultiplexer(Demultiplexer demux) {
+		public void setDemultiplexer(final Demultiplexer demux) {
 			this.demux = demux;
 		}
 
@@ -90,20 +102,20 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			return d;
 		}
 
-		public State(State s) {
+		public State(final State s) {
 			struct = EcoreUtil.copy(s.getStruct());
 			demux = EcoreUtil.copy(s.getDemultiplexer());
 		}
 
 		private static StructuredType createSampleStruct() {
-			final StructuredType outer = createSampleStructType("outerStruct"); //$NON-NLS-1$
-			final StructuredType inner = createSampleStructType("innerStruct"); //$NON-NLS-1$
+			final StructuredType outer = createSampleStructType(OUTER_STRUCT_TYPE);
+			final StructuredType inner = createSampleStructType(INNER_STRUCT_TYPE);
 
 			final VarDeclaration structVAR1 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-			structVAR1.setName("innerstruct1"); //$NON-NLS-1$
+			structVAR1.setName(INNER_STRUCT_OBJECT1);
 			structVAR1.setType(inner);
 			final VarDeclaration structVAR2 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-			structVAR2.setName("innerstruct2"); //$NON-NLS-1$
+			structVAR2.setName(INNER_STRUCT_OBJECT2);
 			structVAR2.setType(inner);
 			outer.getMemberVariables().add(structVAR1);
 			outer.getMemberVariables().add(structVAR2);
@@ -111,21 +123,21 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			return outer;
 		}
 
-		private static StructuredType createSampleStructType(String name) {
+		private static StructuredType createSampleStructType(final String name) {
 			final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
 			type.setName(name);
 			final VarDeclaration var1 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-			var1.setName("VAR1"); //$NON-NLS-1$
+			var1.setName(VARIABLE1);
 			final VarDeclaration var2 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-			var2.setName("VAR2"); //$NON-NLS-1$
+			var2.setName(VARIABLE2);
 			final VarDeclaration var3 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-			var3.setName("VAR3"); //$NON-NLS-1$
+			var3.setName(VARIABLE3);
 			final VarDeclaration var4 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-			var4.setName("VAR4"); //$NON-NLS-1$
+			var4.setName(VARIABLE4);
 			final VarDeclaration var5 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-			var5.setName("VAR5"); //$NON-NLS-1$
+			var5.setName(VARIABLE5);
 			final VarDeclaration var6 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-			var6.setName("VAR6"); //$NON-NLS-1$
+			var6.setName(VARIABLE6);
 			type.getMemberVariables().add(var1);
 			type.getMemberVariables().add(var2);
 			type.getMemberVariables().add(var3);
@@ -145,14 +157,14 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		}
 	}
 
-	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
+	protected static Collection<Arguments> describeCommand(final String description, final StateInitializer<?> initializer,
+			final StateVerifier<?> initialVerifier, final List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, s -> undoCommand((State) s),
 				s -> redoCommand((State) s));
 	}
 
 
-	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
+	protected static void verifyDefaultInitialValues(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getDemultiplexer());
 		t.test(state.getDemultiplexer().getAttribute(StructManipulation.CHILDREN_ATTRIBUTE) == null);
 		t.test(state.getDemultiplexer().getAttributeValue(StructManipulation.STRUCT_ATTRIBUTE)
@@ -161,7 +173,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 				state.getDemultiplexer().getInterface().getOutputVars().size());
 	}
 
-	protected static void verifyAdded(State state, State oldState, TestFunction t, String name) {
+	protected static void verifyAdded(final State state, final TestFunction t, final String name) {
 		t.test(state.getDemultiplexer());
 		t.test(!state.getDemultiplexer().getInterface().getOutputVars().stream()
 				.filter(out -> out.getName().equals(name)).findAny().isEmpty());
@@ -171,7 +183,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 				.contains(name));
 	}
 
-	protected static void verifyDeleted(State state, State oldState, TestFunction t, String name) {
+	protected static void verifyDeleted(final State state, final TestFunction t, final String name) {
 		t.test(state.getDemultiplexer());
 		t.test(state.getDemultiplexer().getInterface().getOutputVars().stream()
 				.filter(out -> out.getName().equals(name)).findAny().isEmpty());
@@ -181,7 +193,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 				.contains(name));
 	}
 
-	private static State executeDeleteCommand(State state, String name) {
+	private static State executeDeleteCommand(final State state, final String name) {
 		final DeleteDemuxPortCommand cmd = new DeleteDemuxPortCommand(state.getDemultiplexer(), name);
 		state.setCommand(cmd);
 		final State newState = commandExecution(state);
@@ -189,7 +201,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		return newState;
 	}
 
-	private static State executeAddCommand(State state, String name) {
+	private static State executeAddCommand(final State state, final String name) {
 		final AddDemuxPortCommand cmd = new AddDemuxPortCommand(state.getDemultiplexer(), name);
 		state.setCommand(cmd);
 		final State newState = commandExecution(state);
@@ -197,13 +209,13 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		return newState;
 	}
 
-	private static State undoCommand(State state) {
+	private static State undoCommand(final State state) {
 		final State newState = defaultUndoCommand(state);
 		newState.setDemultiplexer(getDemux(state));
 		return newState;
 	}
 
-	private static Demultiplexer getDemux(State state) {
+	private static Demultiplexer getDemux(final State state) {
 		Demultiplexer demux;
 		if (state.getCommand() instanceof DeleteDemuxPortCommand) {
 			demux = ((DeleteDemuxPortCommand) state.getCommand()).getType();
@@ -213,7 +225,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		return demux;
 	}
 
-	private static State redoCommand(State s) {
+	private static State redoCommand(final State s) {
 		final State newState = defaultRedoCommand(s);
 		newState.setDemultiplexer(getDemux(s));
 		return newState;
@@ -221,7 +233,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 
 	// define here the list of test sequences
 	// multiple execution descriptions are possible -> define in test class
-	protected static List<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
+	protected static List<Arguments> createCommands(final List<ExecutionDescription<?>> executionDescriptions) {
 		final List<Arguments> commands = new ArrayList<>();
 		// test series 1
 		commands.addAll(describeCommand("Starting from default values", // //$NON-NLS-1$
@@ -236,84 +248,90 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Add inner struct's variable", // //$NON-NLS-1$
-						(State s) -> executeAddCommand(s, "innerstruct1.VAR1"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyAdded(s, o, t, "innerstruct1.VAR1")), // //$NON-NLS-1$
-				new ExecutionDescription<>("Delete inner struct's variable", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "innerstruct1.VAR1"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "innerstruct1.VAR1")), // //$NON-NLS-1$
+						(final State s) -> executeAddCommand(s, INNER_STRUCT_OBJECT1 + SEP + VARIABLE1),
+						(final State s, final State o, final TestFunction t) -> verifyAdded(s, t,
+								INNER_STRUCT_OBJECT1 + SEP + VARIABLE1)), //
+				new ExecutionDescription<>("Delete inner struct's variable 1", // //$NON-NLS-1$
+						(final State s) -> executeDeleteCommand(s, INNER_STRUCT_OBJECT1 + SEP + VARIABLE1),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t,
+								INNER_STRUCT_OBJECT1 + SEP + VARIABLE1)), //
 				new ExecutionDescription<>("Delete first variable", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "VAR1"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "VAR1")), // //$NON-NLS-1$
+						(final State s) -> executeDeleteCommand(s, VARIABLE1),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t, VARIABLE1)), //
 				new ExecutionDescription<>("Delete second variable", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "VAR2"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "VAR2")), // //$NON-NLS-1$
+						(final State s) -> executeDeleteCommand(s, VARIABLE2),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t, VARIABLE2)), //
 				new ExecutionDescription<>("Add first variable", // //$NON-NLS-1$
-						(State s) -> executeAddCommand(s, "VAR1"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyAdded(s, o, t, "VAR1")), // //$NON-NLS-1$
+						(final State s) -> executeAddCommand(s, VARIABLE1),
+						(final State s, final State o, final TestFunction t) -> verifyAdded(s, t, VARIABLE1)), //
 				new ExecutionDescription<>("Add second variable", // //$NON-NLS-1$
-						(State s) -> executeAddCommand(s, "VAR2"), //
-						(State s, State o, TestFunction t) -> {// $NON-NLS-1$
-							verifyAdded(s, o, t, "VAR2");//$NON-NLS-1$
-							verifyAdded(s, o, t, "VAR1");//$NON-NLS-1$
+						(final State s) -> executeAddCommand(s, VARIABLE2), //
+						(final State s, final State o, final TestFunction t) -> {// $NON-NLS-1$
+							verifyAdded(s, t, VARIABLE2);
+							verifyAdded(s, t, VARIABLE1);
 						}),
-				new ExecutionDescription<>("Add first inner struct's variable", // //$NON-NLS-1$
-						(State s) -> executeAddCommand(s, "innerstruct1.VAR2"), //
-						(State s, State o, TestFunction t) -> {// $NON-NLS-1$
-							verifyAdded(s, o, t, "VAR2");//$NON-NLS-1$
-							verifyAdded(s, o, t, "VAR1");//$NON-NLS-1$
-							verifyAdded(s, o, t, "innerstruct1.VAR2"); //$NON-NLS-1$
+				new ExecutionDescription<>("Add first inner struct's variable 2", // //$NON-NLS-1$
+						(final State s) -> executeAddCommand(s, INNER_STRUCT_OBJECT1 + SEP + VARIABLE2), //
+						(final State s, final State o, final TestFunction t) -> {// $NON-NLS-1$
+							verifyAdded(s, t, VARIABLE2);
+							verifyAdded(s, t, VARIABLE1);
+							verifyAdded(s, t, INNER_STRUCT_OBJECT1 + SEP + VARIABLE2);
 						}),
-				new ExecutionDescription<>("Add second inner struct's variable", // //$NON-NLS-1$
-						(State s) -> executeAddCommand(s, "innerstruct2.VAR6"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> {
-							verifyAdded(s, o, t, "VAR2");//$NON-NLS-1$
-							verifyAdded(s, o, t, "VAR1");//$NON-NLS-1$
-							verifyAdded(s, o, t, "innerstruct1.VAR2"); //$NON-NLS-1$
-							verifyAdded(s, o, t, "innerstruct2.VAR6"); //$NON-NLS-1$
+				new ExecutionDescription<>("Add second inner struct's variable 6", // //$NON-NLS-1$
+						(final State s) -> executeAddCommand(s, INNER_STRUCT_OBJECT2 + SEP + VARIABLE6),
+						(final State s, final State o, final TestFunction t) -> {
+							verifyAdded(s, t, VARIABLE2);
+							verifyAdded(s, t, VARIABLE1);
+							verifyAdded(s, t, INNER_STRUCT_OBJECT1 + SEP + VARIABLE2);
+							verifyAdded(s, t, INNER_STRUCT_OBJECT2 + SEP + VARIABLE6);
 						}),
-				new ExecutionDescription<>("Delete inner struct's variable", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "innerstruct1.VAR2"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "innerstruct1.VAR2")), //$NON-NLS-1$
-				new ExecutionDescription<>("Delete inner struct's variable", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "innerstruct2.VAR6"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "innerstruct2.VAR6")),
+				new ExecutionDescription<>("Delete inner struct's variable 2", // //$NON-NLS-1$
+						(final State s) -> executeDeleteCommand(s, INNER_STRUCT_OBJECT1 + SEP + VARIABLE2),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t,
+								INNER_STRUCT_OBJECT1 + SEP + VARIABLE2)),
+				new ExecutionDescription<>("Delete inner struct's variable 6", // //$NON-NLS-1$
+						(final State s) -> executeDeleteCommand(s, INNER_STRUCT_OBJECT2 + SEP + VARIABLE6),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t,
+								INNER_STRUCT_OBJECT2 + SEP + VARIABLE6)),
 				// empty the output ports
 				new ExecutionDescription<>("Delete all: 1", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "VAR1"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "VAR1")), // //$NON-NLS-1$
+						(final State s) -> executeDeleteCommand(s, VARIABLE1),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t, VARIABLE1)), //
 				new ExecutionDescription<>("Delete all: 2", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "VAR2"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "VAR2")), // //$NON-NLS-1$
+						(final State s) -> executeDeleteCommand(s, VARIABLE2),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t, VARIABLE2)), //
 				new ExecutionDescription<>("Delete all: 3", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "VAR3"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "VAR3")), // //$NON-NLS-1$
+						(final State s) -> executeDeleteCommand(s, VARIABLE3),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t, VARIABLE3)), //
 				new ExecutionDescription<>("Delete all: 4", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "VAR4"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "VAR4")), // //$NON-NLS-1$
+						(final State s) -> executeDeleteCommand(s, VARIABLE4),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t, VARIABLE4)), //
 				new ExecutionDescription<>("Delete all: 5", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "VAR5"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "VAR5")), // //$NON-NLS-1$
+						(final State s) -> executeDeleteCommand(s, VARIABLE5),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t, VARIABLE5)), //
 				new ExecutionDescription<>("Delete all: 6", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "VAR6"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "VAR6")),
+						(final State s) -> executeDeleteCommand(s, VARIABLE6),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t, VARIABLE6)),
 				new ExecutionDescription<>("Delete all: innerstruct1", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "innerstruct1"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "innerstruct1")),
+						(final State s) -> executeDeleteCommand(s, INNER_STRUCT_OBJECT1),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t,
+								INNER_STRUCT_OBJECT1)),
 				new ExecutionDescription<>("Delete all: innerstruct2", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "innerstruct2"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> { //
+						(final State s) -> executeDeleteCommand(s, INNER_STRUCT_OBJECT2),
+						(final State s, final State o, final TestFunction t) -> { //
 							t.test(s.getDemultiplexer().getInterface().getOutputVars().isEmpty());
-							verifyDeleted(s, o, t, "innerstruct2"); // //$NON-NLS-1$
+							verifyDeleted(s, t, INNER_STRUCT_OBJECT2); //
 						}),
 				new ExecutionDescription<>("Add variable from empty", // //$NON-NLS-1$
-						(State s) -> executeAddCommand(s, "VAR1"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyAdded(s, o, t, "VAR1")), // //$NON-NLS-1$
+						(final State s) -> executeAddCommand(s, VARIABLE1),
+						(final State s, final State o, final TestFunction t) -> verifyAdded(s, t, VARIABLE1)), //
 				new ExecutionDescription<>("Delete all: 1", // //$NON-NLS-1$
-						(State s) -> executeDeleteCommand(s, "VAR1"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyDeleted(s, o, t, "VAR1")), // //$NON-NLS-1$
+						(final State s) -> executeDeleteCommand(s, VARIABLE1),
+						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t, VARIABLE1)), //
 				new ExecutionDescription<>("Add struct-type variable from empty", // //$NON-NLS-1$
-						(State s) -> executeAddCommand(s, "innerstruct1.VAR1"), //$NON-NLS-1$
-						(State s, State o, TestFunction t) -> verifyAdded(s, o, t, "innerstruct1.VAR1")) // //$NON-NLS-1$
+						(final State s) -> executeAddCommand(s, INNER_STRUCT_OBJECT1 + SEP + VARIABLE1),
+						(final State s, final State o, final TestFunction t) -> verifyAdded(s, t,
+								INNER_STRUCT_OBJECT1 + SEP + VARIABLE1)) //
 				); //
 
 		return createCommands(executionDescriptions);

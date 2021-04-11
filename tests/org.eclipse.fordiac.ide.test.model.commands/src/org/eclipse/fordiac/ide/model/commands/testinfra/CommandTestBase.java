@@ -324,7 +324,7 @@ public abstract class CommandTestBase<T extends CommandTestBase.StateBase> {
 			viaUndo = true;
 		}
 
-		public boolean getViaUndo() {
+		public boolean isViaUndo() {
 			return viaUndo;
 		}
 

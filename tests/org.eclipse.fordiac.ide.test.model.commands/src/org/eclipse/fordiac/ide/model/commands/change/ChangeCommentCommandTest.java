@@ -36,7 +36,7 @@ public class ChangeCommentCommandTest extends FBNetworkTestBase {
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getComment().isEmpty());
 	}
 
-	public static void verifyState(State state, State oldState, TestFunction t, String comment) {
+	public static void verifyState(State state, TestFunction t, String comment) {
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getType().getComment(), comment);
 	}
 
@@ -49,11 +49,11 @@ public class ChangeCommentCommandTest extends FBNetworkTestBase {
 				), //
 				new ExecutionDescription<>("Change comment", //$NON-NLS-1$
 						(State state) -> executeCommand(state, COMMENT1), //
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, COMMENT1) //
+						(State s, State o, TestFunction t) -> verifyState(s, t, COMMENT1) //
 				), //
 				new ExecutionDescription<>("Change comment", //$NON-NLS-1$
 						(State state) -> executeCommand(state, COMMENT2), //
-						(State s, State o, TestFunction t) -> verifyState(s, o, t, COMMENT2) //
+						(State s, State o, TestFunction t) -> verifyState(s, t, COMMENT2) //
 				) //
 		);
 

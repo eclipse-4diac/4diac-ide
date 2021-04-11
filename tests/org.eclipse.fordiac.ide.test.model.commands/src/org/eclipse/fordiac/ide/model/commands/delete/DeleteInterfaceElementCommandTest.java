@@ -75,34 +75,34 @@ public class DeleteInterfaceElementCommandTest extends FBNetworkTestBase {
 				new ExecutionDescription<State>("Delete Input", //$NON-NLS-1$
 						DeleteInterfaceElementCommandTest::executeCommandDeleteInput, //
 						(State s, State o, TestFunction t) -> {
-							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, o, t);
-							InsertInterfaceElementCommandTest.verifyStateHasDataOutput(s, o, t);
-							InsertInterfaceElementCommandTest.verifyStateHasEventInput(s, o, t);
-							InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, o, t);
+							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, t);
+							InsertInterfaceElementCommandTest.verifyStateHasDataOutput(s, t);
+							InsertInterfaceElementCommandTest.verifyStateHasEventInput(s, t);
+							InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
 						}), //
 				new ExecutionDescription<State>("Delete Output", //$NON-NLS-1$
 						DeleteInterfaceElementCommandTest::executeCommandDeleteOutput, //
 						(State s, State o, TestFunction t) -> {
-							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, o, t);
-							InsertInterfaceElementCommandTest.verifyStateNoDataOutput(s, o, t);
-							InsertInterfaceElementCommandTest.verifyStateHasEventInput(s, o, t);
-							InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, o, t);
+							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, t);
+							InsertInterfaceElementCommandTest.verifyStateNoDataOutput(s, t);
+							InsertInterfaceElementCommandTest.verifyStateHasEventInput(s, t);
+							InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
 						}), //
 				new ExecutionDescription<State>("Delete Event Input", //$NON-NLS-1$
 						DeleteInterfaceElementCommandTest::executeCommandDeleteEventInput, //
 						(State s, State o, TestFunction t) -> {
-							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, o, t);
-							InsertInterfaceElementCommandTest.verifyStateNoDataOutput(s, o, t);
-							InsertInterfaceElementCommandTest.verifyStateNoEventInput(s, o, t);
-							InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, o, t);
+							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, t);
+							InsertInterfaceElementCommandTest.verifyStateNoDataOutput(s, t);
+							InsertInterfaceElementCommandTest.verifyStateNoEventInput(s, t);
+							InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
 						}), //
 				new ExecutionDescription<State>("Delete Event Output", //$NON-NLS-1$
 						DeleteInterfaceElementCommandTest::executeCommandDeleteEventOutput, //
 						(State s, State o, TestFunction t) -> {
-							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, o, t);
-							InsertInterfaceElementCommandTest.verifyStateNoDataOutput(s, o, t);
-							InsertInterfaceElementCommandTest.verifyStateNoEventInput(s, o, t);
-							InsertInterfaceElementCommandTest.verifyStateNoEventOutput(s, o, t);
+							InsertInterfaceElementCommandTest.verifyStateNoDataInput(s, t);
+							InsertInterfaceElementCommandTest.verifyStateNoDataOutput(s, t);
+							InsertInterfaceElementCommandTest.verifyStateNoEventInput(s, t);
+							InsertInterfaceElementCommandTest.verifyStateNoEventOutput(s, t);
 						}) //
 		);
 
@@ -111,10 +111,10 @@ public class DeleteInterfaceElementCommandTest extends FBNetworkTestBase {
 		commands.addAll(describeCommand("Start with Functionblock", // //$NON-NLS-1$
 				() -> fbInitializer(), //
 				(State s, State o, TestFunction t) -> {
-					InsertInterfaceElementCommandTest.verifyStateHasDataInput(s, o, t);
-					InsertInterfaceElementCommandTest.verifyStateHasDataOutput(s, o, t);
-					InsertInterfaceElementCommandTest.verifyStateHasEventInput(s, o, t);
-					InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, o, t);
+					InsertInterfaceElementCommandTest.verifyStateHasDataInput(s, t);
+					InsertInterfaceElementCommandTest.verifyStateHasDataOutput(s, t);
+					InsertInterfaceElementCommandTest.verifyStateHasEventInput(s, t);
+					InsertInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
 				}, //
 				executionDescriptions //
 		));

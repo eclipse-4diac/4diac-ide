@@ -164,7 +164,7 @@ public class WithCreateTest extends FBNetworkTestBase {
 	}
 
 	private static void verifyAddExistingWith(State state, State oldState, TestFunction t) {
-		if (!state.getViaUndo()) {
+		if (!state.isViaUndo()) {
 			t.test(state.getMessages().size(), 1);
 			t.test(state.getMessages().get(0), Messages.WithExists);
 		}
