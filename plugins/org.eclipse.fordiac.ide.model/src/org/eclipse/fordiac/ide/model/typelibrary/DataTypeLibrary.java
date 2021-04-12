@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
@@ -95,12 +96,13 @@ public final class DataTypeLibrary {
 		if (null == name) {
 			return typeMap.get("ANY"); //$NON-NLS-1$
 		}
-		DataType type = typeMap.get(name.toUpperCase());
+		DataType type = typeMap.get(name);
 
 		if (null == type) {
 			type = getDerivedType(name);
 			if (null == type) {
 				// TODO reconsider if in this case a new type should be created
+				Activator.getDefault().logInfo("Missing Datatype: " + name); //$NON-NLS-1$
 				type = DataFactory.eINSTANCE.createElementaryType();
 				type.setName(name);
 				typeMap.put(name, type);

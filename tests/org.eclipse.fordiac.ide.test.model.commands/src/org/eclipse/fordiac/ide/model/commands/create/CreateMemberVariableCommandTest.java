@@ -34,8 +34,8 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 	private static final String STRUCT_NAME = "mystruct"; //$NON-NLS-1$
 	private static final String TESTMEMBER_NAME = "testmember"; //$NON-NLS-1$
 
-	private static State executeSimpleInsertion(State state) {
-		state.setCommand(new CreateMemberVariableCommand(state.getStructuredType(), datatypeLib));
+	private static State executeSimpleInsertion(final State state) {
+		state.setCommand(new CreateMemberVariableCommand(state.getStructuredType()));
 
 		final State result = commandExecution(state);
 
@@ -47,14 +47,14 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 		return result;
 	}
 
-	private static State executeAdvancedInsertion(State state, int index, String name, DataType type) {
-		state.setCommand(new CreateMemberVariableCommand(state.getStructuredType(), index, name, type, datatypeLib));
+	private static State executeAdvancedInsertion(final State state, final int index, final String name, final DataType type) {
+		state.setCommand(new CreateMemberVariableCommand(state.getStructuredType(), index, name, type));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyAdvancedInsertion(State state, State oldState, TestFunction t, int index, String name,
-			DataType type) {
+	private static void verifyAdvancedInsertion(final State state, final State oldState, final TestFunction t, final int index, final String name,
+			final DataType type) {
 		// verify that new variable is there at correct position
 		final VarDeclaration varDecl = state.getStructuredType().getMemberVariables().get(index);
 		// verify that old variables are also still there
@@ -78,7 +78,7 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 		}
 	}
 
-	private static void verifySimpleInsertion(State state, State oldState, TestFunction t) {
+	private static void verifySimpleInsertion(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getStructuredType().getMemberVariables()
 				.size(), (oldState.getStructuredType().getMemberVariables().size() + 1));
 		final VarDeclaration inserted = state.getStructuredType().getMemberVariables()
@@ -104,45 +104,45 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 				new ExecutionDescription<>("Create second default member var", // //$NON-NLS-1$
 						CreateMemberVariableCommandTest::executeSimpleInsertion, //
 						CreateMemberVariableCommandTest::verifySimpleInsertion //
-				) //
-		);
+						) //
+				);
 
 		final List<ExecutionDescription<?>> configuredExecutionDescriptions = List.of(
 				new ExecutionDescription<>("Create first configured member var", //$NON-NLS-1$
-						(State state) -> executeAdvancedInsertion(state, 0, "test1", //$NON-NLS-1$
+						(final State state) -> executeAdvancedInsertion(state, 0, "test1", //$NON-NLS-1$
 								datatypeLib.getType(FordiacKeywords.BOOL)), //
-						(State state, State oldState, TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 0,
+						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 0,
 								"test1", //$NON-NLS-1$
 								datatypeLib.getType(FordiacKeywords.BOOL))), //
 
 				new ExecutionDescription<>("Create second configured member var with same name", //$NON-NLS-1$
-						(State state) -> executeAdvancedInsertion(state, 1, "test1", //$NON-NLS-1$
+						(final State state) -> executeAdvancedInsertion(state, 1, "test1", //$NON-NLS-1$
 								datatypeLib.getType(FordiacKeywords.BOOL)), //
-						(State state, State oldState, TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 1,
+						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 1,
 								"test2", //$NON-NLS-1$
 								datatypeLib.getType(FordiacKeywords.BOOL))), //
 
 				new ExecutionDescription<>("Create first configured member var at pos 0", //$NON-NLS-1$
-						(State state) -> executeAdvancedInsertion(state, 0, "test3", //$NON-NLS-1$
+						(final State state) -> executeAdvancedInsertion(state, 0, "test3", //$NON-NLS-1$
 								datatypeLib.getType(FordiacKeywords.BOOL)), //
-						(State state, State oldState, TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 0,
+						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 0,
 								"test3", //$NON-NLS-1$
 								datatypeLib.getType(FordiacKeywords.BOOL))), //
 
 				new ExecutionDescription<>("Create first configured member struct at pos 0", //$NON-NLS-1$
-						(State state) -> executeAdvancedInsertion(state, 0, "test4", //$NON-NLS-1$
+						(final State state) -> executeAdvancedInsertion(state, 0, "test4", //$NON-NLS-1$
 								struct), //
-						(State state, State oldState, TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 0,
+						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 0,
 								"test4", //$NON-NLS-1$
 								struct)), //
 
 				new ExecutionDescription<>("Create first configured member var in the middle", //$NON-NLS-1$
-						(State state) -> executeAdvancedInsertion(state, 2, "test5", //$NON-NLS-1$
+						(final State state) -> executeAdvancedInsertion(state, 2, "test5", //$NON-NLS-1$
 								datatypeLib.getType(FordiacKeywords.BOOL)), //
-						(State state, State oldState, TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 2,
+						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 2,
 								"test5", //$NON-NLS-1$
 								datatypeLib.getType(FordiacKeywords.BOOL))) //
-		);
+				);
 
 		return createCommands(autofilledExecutionDescriptions, configuredExecutionDescriptions);
 	}

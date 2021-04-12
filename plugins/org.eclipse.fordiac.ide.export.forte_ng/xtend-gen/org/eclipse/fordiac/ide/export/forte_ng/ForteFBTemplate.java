@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
@@ -748,7 +749,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
     String _typeName = variable.getTypeName();
     if (_typeName != null) {
       switch (_typeName) {
-        case "STRING":
+        case FordiacKeywords.STRING:
           StringConcatenation _builder = new StringConcatenation();
           String _name = variable.getName();
           _builder.append(_name);
@@ -758,7 +759,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder.append("\";");
           _switchResult = _builder;
           break;
-        case "WSTRING":
+        case FordiacKeywords.WSTRING:
           StringConcatenation _builder_1 = new StringConcatenation();
           String _name_1 = variable.getName();
           _builder_1.append(_name_1);
@@ -778,7 +779,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder_2.append("\");");
           _switchResult = _builder_2;
           break;
-        case "TIME":
+        case FordiacKeywords.TIME:
           StringConcatenation _builder_3 = new StringConcatenation();
           String _name_3 = variable.getName();
           _builder_3.append(_name_3);
@@ -788,7 +789,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder_3.append("\");");
           _switchResult = _builder_3;
           break;
-        case "DATE":
+        case FordiacKeywords.DATE:
           StringConcatenation _builder_4 = new StringConcatenation();
           String _name_4 = variable.getName();
           _builder_4.append(_name_4);
@@ -798,7 +799,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder_4.append("\");");
           _switchResult = _builder_4;
           break;
-        case "TIME:OF_DAY":
+        case FordiacKeywords.TIME_OF_DAY:
           StringConcatenation _builder_5 = new StringConcatenation();
           String _name_5 = variable.getName();
           _builder_5.append(_name_5);
@@ -808,7 +809,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder_5.append("\");");
           _switchResult = _builder_5;
           break;
-        case "DATE_AND_TIME":
+        case FordiacKeywords.DATE_AND_TIME:
           StringConcatenation _builder_6 = new StringConcatenation();
           String _name_6 = variable.getName();
           _builder_6.append(_name_6);
@@ -818,7 +819,7 @@ public abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
           _builder_6.append("\");");
           _switchResult = _builder_6;
           break;
-        case "BOOL":
+        case FordiacKeywords.BOOL:
           StringConcatenation _builder_7 = new StringConcatenation();
           String _name_7 = variable.getName();
           _builder_7.append(_name_7);
