@@ -60,7 +60,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseClause;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseIfClause;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ExitStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FB_Call;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument;
@@ -570,7 +570,7 @@ public class STAlgorithmFilter {
     return this.generateExpression(stmt);
   }
   
-  protected CharSequence _generateStatement(final FB_Call fbCall) {
+  protected CharSequence _generateStatement(final FBCall fbCall) {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateInAssignments = this.generateInAssignments(fbCall);
     _builder.append(_generateInAssignments);
@@ -589,7 +589,7 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
-  public CharSequence generateInAssignments(final FB_Call call) {
+  public CharSequence generateInAssignments(final FBCall call) {
     CharSequence _xblockexpression = null;
     {
       final Iterable<InArgument> inArgs = Iterables.<InArgument>filter(call.getArgs(), InArgument.class);
@@ -630,7 +630,7 @@ public class STAlgorithmFilter {
     return null;
   }
   
-  public CharSequence generateOutAssignments(final FB_Call call) {
+  public CharSequence generateOutAssignments(final FBCall call) {
     CharSequence _xblockexpression = null;
     {
       final Iterable<OutArgument> outArgs = Iterables.<OutArgument>filter(call.getArgs(), OutArgument.class);
@@ -670,7 +670,7 @@ public class STAlgorithmFilter {
     return null;
   }
   
-  public Integer eventIndexFromName(final FB_Call fbCall) {
+  public Integer eventIndexFromName(final FBCall fbCall) {
     int index = 0;
     EList<Event> _eventInputs = fbCall.getFb().getInterface().getEventInputs();
     for (final Event inputEvent : _eventInputs) {
@@ -1457,8 +1457,8 @@ public class STAlgorithmFilter {
       return _generateStatement((ContinueStatement)stmt);
     } else if (stmt instanceof ExitStatement) {
       return _generateStatement((ExitStatement)stmt);
-    } else if (stmt instanceof FB_Call) {
-      return _generateStatement((FB_Call)stmt);
+    } else if (stmt instanceof FBCall) {
+      return _generateStatement((FBCall)stmt);
     } else if (stmt instanceof ForStatement) {
       return _generateStatement((ForStatement)stmt);
     } else if (stmt instanceof IfStatement) {

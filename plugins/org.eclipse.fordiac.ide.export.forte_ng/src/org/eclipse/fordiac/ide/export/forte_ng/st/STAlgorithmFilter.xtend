@@ -73,7 +73,7 @@ import org.eclipse.fordiac.ide.model.FordiacKeywords
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
 import java.text.MessageFormat
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FB_Call
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.OutArgument
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
@@ -266,13 +266,13 @@ class STAlgorithmFilter {
 		return stmt.generateExpression
 	}
 	
-	def protected dispatch generateStatement(FB_Call fbCall) '''
+	def protected dispatch generateStatement(FBCall fbCall) '''
 		«generateInAssignments(fbCall)»
 		mInternalFBs[«internalFbIndexFromName(fbCall.fb)»]->receiveInputEvent(«eventIndexFromName(fbCall)», nullptr);
 		«generateOutAssignments(fbCall)»
 	'''
 	
-	def generateInAssignments(FB_Call call) {
+	def generateInAssignments(FBCall call) {
 		val inArgs = call.args.filter(InArgument)
 		'''
 		«FOR inArg : inArgs»
@@ -292,7 +292,7 @@ class STAlgorithmFilter {
 		}
 	}
 	
-	def generateOutAssignments(FB_Call call) {
+	def generateOutAssignments(FBCall call) {
 		val outArgs = call.args.filter(OutArgument)
 		'''
 		«FOR outArg : outArgs»
@@ -312,7 +312,7 @@ class STAlgorithmFilter {
 		}
 	}
 	
-	def eventIndexFromName(FB_Call fbCall) {
+	def eventIndexFromName(FBCall fbCall) {
 		var index = 0;
 		for(inputEvent : fbCall.fb.interface.eventInputs) {
 			if(fbCall.event === inputEvent) {

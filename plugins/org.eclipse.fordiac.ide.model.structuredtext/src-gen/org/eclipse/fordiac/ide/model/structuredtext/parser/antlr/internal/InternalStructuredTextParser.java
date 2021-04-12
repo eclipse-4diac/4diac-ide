@@ -1512,7 +1512,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSubprog_Ctrl_Stmt"
-    // InternalStructuredTextParser.g:554:1: ruleSubprog_Ctrl_Stmt returns [EObject current=null] : (this_Func_Call_0= ruleFunc_Call | this_FB_Call_1= ruleFB_Call | ( () otherlv_3= SUPER otherlv_4= LeftParenthesis otherlv_5= RightParenthesis ) | ( () otherlv_7= RETURN ) ) ;
+    // InternalStructuredTextParser.g:554:1: ruleSubprog_Ctrl_Stmt returns [EObject current=null] : (this_Func_Call_0= ruleFunc_Call | this_FBCall_1= ruleFBCall | ( () otherlv_3= SUPER otherlv_4= LeftParenthesis otherlv_5= RightParenthesis ) | ( () otherlv_7= RETURN ) ) ;
     public final EObject ruleSubprog_Ctrl_Stmt() throws RecognitionException {
         EObject current = null;
 
@@ -1522,17 +1522,17 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         Token otherlv_7=null;
         EObject this_Func_Call_0 = null;
 
-        EObject this_FB_Call_1 = null;
+        EObject this_FBCall_1 = null;
 
 
 
         	enterRule();
 
         try {
-            // InternalStructuredTextParser.g:560:2: ( (this_Func_Call_0= ruleFunc_Call | this_FB_Call_1= ruleFB_Call | ( () otherlv_3= SUPER otherlv_4= LeftParenthesis otherlv_5= RightParenthesis ) | ( () otherlv_7= RETURN ) ) )
-            // InternalStructuredTextParser.g:561:2: (this_Func_Call_0= ruleFunc_Call | this_FB_Call_1= ruleFB_Call | ( () otherlv_3= SUPER otherlv_4= LeftParenthesis otherlv_5= RightParenthesis ) | ( () otherlv_7= RETURN ) )
+            // InternalStructuredTextParser.g:560:2: ( (this_Func_Call_0= ruleFunc_Call | this_FBCall_1= ruleFBCall | ( () otherlv_3= SUPER otherlv_4= LeftParenthesis otherlv_5= RightParenthesis ) | ( () otherlv_7= RETURN ) ) )
+            // InternalStructuredTextParser.g:561:2: (this_Func_Call_0= ruleFunc_Call | this_FBCall_1= ruleFBCall | ( () otherlv_3= SUPER otherlv_4= LeftParenthesis otherlv_5= RightParenthesis ) | ( () otherlv_7= RETURN ) )
             {
-            // InternalStructuredTextParser.g:561:2: (this_Func_Call_0= ruleFunc_Call | this_FB_Call_1= ruleFB_Call | ( () otherlv_3= SUPER otherlv_4= LeftParenthesis otherlv_5= RightParenthesis ) | ( () otherlv_7= RETURN ) )
+            // InternalStructuredTextParser.g:561:2: (this_Func_Call_0= ruleFunc_Call | this_FBCall_1= ruleFBCall | ( () otherlv_3= SUPER otherlv_4= LeftParenthesis otherlv_5= RightParenthesis ) | ( () otherlv_7= RETURN ) )
             int alt10=4;
             switch ( input.LA(1) ) {
             case RULE_ID:
@@ -1595,18 +1595,18 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalStructuredTextParser.g:571:3: this_FB_Call_1= ruleFB_Call
+                    // InternalStructuredTextParser.g:571:3: this_FBCall_1= ruleFBCall
                     {
 
-                    			newCompositeNode(grammarAccess.getSubprog_Ctrl_StmtAccess().getFB_CallParserRuleCall_1());
+                    			newCompositeNode(grammarAccess.getSubprog_Ctrl_StmtAccess().getFBCallParserRuleCall_1());
                     		
                     pushFollow(FOLLOW_2);
-                    this_FB_Call_1=ruleFB_Call();
+                    this_FBCall_1=ruleFBCall();
 
                     state._fsp--;
 
 
-                    			current = this_FB_Call_1;
+                    			current = this_FBCall_1;
                     			afterParserOrEnumRuleCall();
                     		
 
@@ -1696,25 +1696,25 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
     // $ANTLR end "ruleSubprog_Ctrl_Stmt"
 
 
-    // $ANTLR start "entryRuleFB_Call"
-    // InternalStructuredTextParser.g:619:1: entryRuleFB_Call returns [EObject current=null] : iv_ruleFB_Call= ruleFB_Call EOF ;
-    public final EObject entryRuleFB_Call() throws RecognitionException {
+    // $ANTLR start "entryRuleFBCall"
+    // InternalStructuredTextParser.g:619:1: entryRuleFBCall returns [EObject current=null] : iv_ruleFBCall= ruleFBCall EOF ;
+    public final EObject entryRuleFBCall() throws RecognitionException {
         EObject current = null;
 
-        EObject iv_ruleFB_Call = null;
+        EObject iv_ruleFBCall = null;
 
 
         try {
-            // InternalStructuredTextParser.g:619:48: (iv_ruleFB_Call= ruleFB_Call EOF )
-            // InternalStructuredTextParser.g:620:2: iv_ruleFB_Call= ruleFB_Call EOF
+            // InternalStructuredTextParser.g:619:47: (iv_ruleFBCall= ruleFBCall EOF )
+            // InternalStructuredTextParser.g:620:2: iv_ruleFBCall= ruleFBCall EOF
             {
-             newCompositeNode(grammarAccess.getFB_CallRule()); 
+             newCompositeNode(grammarAccess.getFBCallRule()); 
             pushFollow(FOLLOW_1);
-            iv_ruleFB_Call=ruleFB_Call();
+            iv_ruleFBCall=ruleFBCall();
 
             state._fsp--;
 
-             current =iv_ruleFB_Call; 
+             current =iv_ruleFBCall; 
             match(input,EOF,FOLLOW_2); 
 
             }
@@ -1729,12 +1729,12 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         }
         return current;
     }
-    // $ANTLR end "entryRuleFB_Call"
+    // $ANTLR end "entryRuleFBCall"
 
 
-    // $ANTLR start "ruleFB_Call"
-    // InternalStructuredTextParser.g:626:1: ruleFB_Call returns [EObject current=null] : ( ( (otherlv_0= RULE_ID ) ) otherlv_1= FullStop ( (otherlv_2= RULE_ID ) ) otherlv_3= LeftParenthesis ( ( (lv_args_4_0= ruleParam_Assign ) ) (otherlv_5= Comma ( (lv_args_6_0= ruleParam_Assign ) ) )* )? otherlv_7= RightParenthesis ) ;
-    public final EObject ruleFB_Call() throws RecognitionException {
+    // $ANTLR start "ruleFBCall"
+    // InternalStructuredTextParser.g:626:1: ruleFBCall returns [EObject current=null] : ( ( (otherlv_0= RULE_ID ) ) otherlv_1= FullStop ( (otherlv_2= RULE_ID ) ) otherlv_3= LeftParenthesis ( ( (lv_args_4_0= ruleParam_Assign ) ) (otherlv_5= Comma ( (lv_args_6_0= ruleParam_Assign ) ) )* )? otherlv_7= RightParenthesis ) ;
+    public final EObject ruleFBCall() throws RecognitionException {
         EObject current = null;
 
         Token otherlv_0=null;
@@ -1766,12 +1766,12 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
             {
 
             					if (current==null) {
-            						current = createModelElement(grammarAccess.getFB_CallRule());
+            						current = createModelElement(grammarAccess.getFBCallRule());
             					}
             				
             otherlv_0=(Token)match(input,RULE_ID,FOLLOW_23); 
 
-            					newLeafNode(otherlv_0, grammarAccess.getFB_CallAccess().getFbFBCrossReference_0_0());
+            					newLeafNode(otherlv_0, grammarAccess.getFBCallAccess().getFbFBCrossReference_0_0());
             				
 
             }
@@ -1781,7 +1781,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
             otherlv_1=(Token)match(input,FullStop,FOLLOW_6); 
 
-            			newLeafNode(otherlv_1, grammarAccess.getFB_CallAccess().getFullStopKeyword_1());
+            			newLeafNode(otherlv_1, grammarAccess.getFBCallAccess().getFullStopKeyword_1());
             		
             // InternalStructuredTextParser.g:651:3: ( (otherlv_2= RULE_ID ) )
             // InternalStructuredTextParser.g:652:4: (otherlv_2= RULE_ID )
@@ -1791,12 +1791,12 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
             {
 
             					if (current==null) {
-            						current = createModelElement(grammarAccess.getFB_CallRule());
+            						current = createModelElement(grammarAccess.getFBCallRule());
             					}
             				
             otherlv_2=(Token)match(input,RULE_ID,FOLLOW_21); 
 
-            					newLeafNode(otherlv_2, grammarAccess.getFB_CallAccess().getEventEventCrossReference_2_0());
+            					newLeafNode(otherlv_2, grammarAccess.getFBCallAccess().getEventEventCrossReference_2_0());
             				
 
             }
@@ -1806,7 +1806,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
             otherlv_3=(Token)match(input,LeftParenthesis,FOLLOW_24); 
 
-            			newLeafNode(otherlv_3, grammarAccess.getFB_CallAccess().getLeftParenthesisKeyword_3());
+            			newLeafNode(otherlv_3, grammarAccess.getFBCallAccess().getLeftParenthesisKeyword_3());
             		
             // InternalStructuredTextParser.g:668:3: ( ( (lv_args_4_0= ruleParam_Assign ) ) (otherlv_5= Comma ( (lv_args_6_0= ruleParam_Assign ) ) )* )?
             int alt12=2;
@@ -1826,7 +1826,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     // InternalStructuredTextParser.g:671:6: lv_args_4_0= ruleParam_Assign
                     {
 
-                    						newCompositeNode(grammarAccess.getFB_CallAccess().getArgsParam_AssignParserRuleCall_4_0_0());
+                    						newCompositeNode(grammarAccess.getFBCallAccess().getArgsParam_AssignParserRuleCall_4_0_0());
                     					
                     pushFollow(FOLLOW_25);
                     lv_args_4_0=ruleParam_Assign();
@@ -1835,7 +1835,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
                     						if (current==null) {
-                    							current = createModelElementForParent(grammarAccess.getFB_CallRule());
+                    							current = createModelElementForParent(grammarAccess.getFBCallRule());
                     						}
                     						add(
                     							current,
@@ -1867,7 +1867,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     	    {
                     	    otherlv_5=(Token)match(input,Comma,FOLLOW_20); 
 
-                    	    					newLeafNode(otherlv_5, grammarAccess.getFB_CallAccess().getCommaKeyword_4_1_0());
+                    	    					newLeafNode(otherlv_5, grammarAccess.getFBCallAccess().getCommaKeyword_4_1_0());
                     	    				
                     	    // InternalStructuredTextParser.g:693:5: ( (lv_args_6_0= ruleParam_Assign ) )
                     	    // InternalStructuredTextParser.g:694:6: (lv_args_6_0= ruleParam_Assign )
@@ -1876,7 +1876,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
                     	    // InternalStructuredTextParser.g:695:7: lv_args_6_0= ruleParam_Assign
                     	    {
 
-                    	    							newCompositeNode(grammarAccess.getFB_CallAccess().getArgsParam_AssignParserRuleCall_4_1_1_0());
+                    	    							newCompositeNode(grammarAccess.getFBCallAccess().getArgsParam_AssignParserRuleCall_4_1_1_0());
                     	    						
                     	    pushFollow(FOLLOW_25);
                     	    lv_args_6_0=ruleParam_Assign();
@@ -1885,7 +1885,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
 
                     	    							if (current==null) {
-                    	    								current = createModelElementForParent(grammarAccess.getFB_CallRule());
+                    	    								current = createModelElementForParent(grammarAccess.getFBCallRule());
                     	    							}
                     	    							add(
                     	    								current,
@@ -1917,7 +1917,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
 
             otherlv_7=(Token)match(input,RightParenthesis,FOLLOW_2); 
 
-            			newLeafNode(otherlv_7, grammarAccess.getFB_CallAccess().getRightParenthesisKeyword_5());
+            			newLeafNode(otherlv_7, grammarAccess.getFBCallAccess().getRightParenthesisKeyword_5());
             		
 
             }
@@ -1938,7 +1938,7 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         }
         return current;
     }
-    // $ANTLR end "ruleFB_Call"
+    // $ANTLR end "ruleFBCall"
 
 
     // $ANTLR start "entryRuleSelection_Stmt"
