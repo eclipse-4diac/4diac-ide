@@ -71,6 +71,12 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	}
 
 	@Override
+	public boolean canRedo() {
+		// this should be always possible
+		return true;
+	}
+
+	@Override
 	public void execute() {
 		final Connection con = (Connection) request.getConnectionEditPart().getModel();
 		deleteConnectionCmd = new DeleteConnectionCommand(con);

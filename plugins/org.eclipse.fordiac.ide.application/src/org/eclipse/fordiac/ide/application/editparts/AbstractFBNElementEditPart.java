@@ -23,6 +23,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
@@ -30,6 +31,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteFBNElementEditPolicy;
@@ -83,6 +85,36 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		super();
 	}
 
+	private Adapter interfaceAdapter;
+
+	private Adapter getInterfaceAdapter() {
+		if (null == interfaceAdapter) {
+			interfaceAdapter = createInterfaceAdapter();
+			Assert.isNotNull(interfaceAdapter);
+		}
+		return interfaceAdapter;
+	}
+
+	protected Adapter createInterfaceAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				switch (notification.getEventType()) {
+				case Notification.ADD:
+				case Notification.ADD_MANY:
+				case Notification.MOVE:
+				case Notification.REMOVE:
+				case Notification.REMOVE_MANY:
+					refreshChildren();
+					break;
+				default:
+					break;
+				}
+			}
+		};
+	}
+
 	@Override
 	public FBNetworkElementFigure getFigure() {
 		return (FBNetworkElementFigure) super.getFigure();
@@ -131,6 +163,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		super.activate();
 		updateDeviceListener();
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
+		if ((null != getModel()) && !getModel().getInterface().eAdapters().contains(getInterfaceAdapter())) {
+			getModel().getInterface().eAdapters().add(getInterfaceAdapter());
+		}
 	}
 
 	@Override
@@ -140,6 +175,10 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			referencedDevice.eAdapters().remove(colorChangeListener);
 		}
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
+
+		if (null != getModel()) {
+			getModel().getInterface().eAdapters().remove(getInterfaceAdapter());
+		}
 	}
 
 	private IPropertyChangeListener getFontChangeListener() {
