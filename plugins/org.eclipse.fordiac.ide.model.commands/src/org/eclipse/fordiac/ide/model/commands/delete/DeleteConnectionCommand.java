@@ -15,17 +15,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
+
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 
 public class DeleteConnectionCommand extends Command {
 	private IInterfaceElement source;
@@ -34,8 +32,7 @@ public class DeleteConnectionCommand extends Command {
 	private final FBNetwork connectionParent;
 	private boolean performMappingCheck;
 	private DeleteConnectionCommand deleteMapped = null;
-	private DeleteInterfaceCommand deleteErrorMarkerIECmd;
-	private DeleteFBNetworkElementCommand deleteErrorMarkerFBN;
+	private final CompoundCommand deleteErrorMarkers;
 
 	public DeleteConnectionCommand(final Connection connection) {
 		super(Messages.DeleteConnectionCommand_DeleteConnection);
@@ -46,6 +43,7 @@ public class DeleteConnectionCommand extends Command {
 			connectionParent = null;
 		}
 		performMappingCheck = true;
+		deleteErrorMarkers = new CompoundCommand();
 	}
 
 	public Connection getConnectionView() {
@@ -68,22 +66,14 @@ public class DeleteConnectionCommand extends Command {
 	}
 
 	private void handleErrorMarker() {
-		deleteErrorMarkerFBN = null;
-		deleteErrorMarkerIECmd = null;
 		checkErrorMarker();
+		deleteErrorMarkers.execute();
 	}
 
 	@Override
 	public void redo() {
 		deleteConnection();
-
-		if (deleteErrorMarkerIECmd != null) {
-			deleteErrorMarkerIECmd.redo();
-		}
-
-		if (deleteErrorMarkerFBN != null) {
-			deleteErrorMarkerFBN.redo();
-		}
+		deleteErrorMarkers.redo();
 	}
 
 	private void deleteConnection() {
@@ -99,14 +89,7 @@ public class DeleteConnectionCommand extends Command {
 
 	@Override
 	public void undo() {
-
-		if (deleteErrorMarkerFBN != null) {
-			deleteErrorMarkerFBN.undo();
-		}
-		if (deleteErrorMarkerIECmd != null) {
-			deleteErrorMarkerIECmd.undo();
-		}
-
+		deleteErrorMarkers.undo();
 		connection.setSource(source);
 		connection.setDestination(destination);
 		if (connectionParent != null) {
@@ -115,6 +98,7 @@ public class DeleteConnectionCommand extends Command {
 		if (null != deleteMapped) {
 			deleteMapped.undo();
 		}
+
 
 	}
 
@@ -152,28 +136,10 @@ public class DeleteConnectionCommand extends Command {
 
 	private void checkErrorMarker() {
 		if (source instanceof ErrorMarkerInterface) {
-			deleteErrorMarkerIECmd = new DeleteInterfaceCommand(source);
-			deleteErrorMarker(source);
+			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source));
 		}
 		if (destination instanceof ErrorMarkerInterface) {
-			deleteErrorMarkerIECmd = new DeleteInterfaceCommand(destination);
-			deleteErrorMarker(destination);
-		}
-	}
-
-	private void deleteErrorMarker(final IInterfaceElement interfaceElement) {
-		if (deleteErrorMarkerIECmd != null) {
-			final FBNetworkElement fbNetworkElement = interfaceElement.getFBNetworkElement();
-			final GraphicalViewer viewer = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
-			final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(fbNetworkElement);
-			deleteErrorMarkerIECmd.execute();
-			if (fbNetworkElement instanceof ErrorMarkerFBNElement
-					&& fbNetworkElement.getInterface().getErrorMarker().isEmpty()) {
-				deleteErrorMarkerFBN = new DeleteFBNetworkElementCommand(fbNetworkElement);
-				deleteErrorMarkerFBN.execute();
-			} else {
-				editPart.refresh();
-			}
+			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination));
 		}
 	}
 

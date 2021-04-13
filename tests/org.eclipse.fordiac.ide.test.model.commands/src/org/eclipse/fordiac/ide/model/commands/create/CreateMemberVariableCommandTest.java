@@ -39,7 +39,7 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 	private static final String VARIABLE5 = "test5"; //$NON-NLS-1$
 
 	private static State executeSimpleInsertion(final State state) {
-		state.setCommand(new CreateMemberVariableCommand(state.getStructuredType(), datatypeLib));
+		state.setCommand(new CreateMemberVariableCommand(state.getStructuredType()));
 
 		final State result = commandExecution(state);
 
@@ -52,7 +52,7 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 	}
 
 	private static State executeAdvancedInsertion(final State state, final int index, final String name, final DataType type) {
-		state.setCommand(new CreateMemberVariableCommand(state.getStructuredType(), index, name, type, datatypeLib));
+		state.setCommand(new CreateMemberVariableCommand(state.getStructuredType(), index, name, type));
 
 		return commandExecution(state);
 	}

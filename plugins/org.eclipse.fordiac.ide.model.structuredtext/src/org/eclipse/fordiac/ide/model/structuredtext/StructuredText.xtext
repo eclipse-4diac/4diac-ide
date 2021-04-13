@@ -63,14 +63,14 @@ Assign_Stmt returns AssignmentStatement:
 
 Subprog_Ctrl_Stmt returns Statement:
 	Func_Call |
-	FB_Call |
+	FBCall |
 	//Invocation |
 	{SuperStatement} 'SUPER' '(' ')' |
 	{ReturnStatement} 'RETURN'
 ;
 
-FB_Call:
-	fb=[libraryElement::FB]'.'event=[libraryElement::Event]'(' (args += Param_Assign (',' args += Param_Assign)*)? ')'
+FBCall:
+	fb=[libraryElement::FB]'.'event=ID '(' (args += Param_Assign (',' args += Param_Assign)*)? ')'
 ;
 
 Selection_Stmt returns Statement:
@@ -201,11 +201,11 @@ Param_Assign returns Argument:
 ;
 
 Param_Assign_In returns InArgument:
-	((var=[libraryElement::VarDeclaration] ':=')? expr=Expression)
+	((var=ID ':=')? expr=Expression)
 ;
 
 Param_Assign_Out returns OutArgument:
-	not?='NOT'? var=[libraryElement::VarDeclaration] '=>' expr=Variable
+	not?='NOT'? var=ID '=>' expr=Variable
 ;
 
 Variable returns Variable:

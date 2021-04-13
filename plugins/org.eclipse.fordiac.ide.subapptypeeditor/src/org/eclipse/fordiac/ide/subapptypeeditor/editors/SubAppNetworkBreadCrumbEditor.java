@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
@@ -192,20 +193,24 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	@Override
 	public boolean outlineSelectionChanged(Object selectedElement) {
-		if (selectedElement instanceof FBNetwork) {
-			selectedElement = ((FBNetwork) selectedElement).eContainer();
-		}
-		if ((selectedElement instanceof FBNetworkElement) || (selectedElement instanceof SubAppType)) {
-			EObject refElement = null;
-			if (selectedElement instanceof FB) {
-				refElement = (FB) selectedElement;
-				selectedElement = refElement.eContainer().eContainer();
+		if ((selectedElement instanceof EObject)
+				&& (EcoreUtil.isAncestor(getSubAppType().getFBNetwork(), (EObject) selectedElement))) {
+			// an selected element is only valid if it is a child of the FBNetwork of the subapp or the fbnetwork
+			if (selectedElement instanceof FBNetwork) {
+				selectedElement = ((FBNetwork) selectedElement).eContainer();
 			}
-			getBreadcrumb().setInput(selectedElement);
-			if (null != refElement) {
-				HandlerHelper.selectElement(refElement, getActiveEditor());
+			if ((selectedElement instanceof FBNetworkElement) || (selectedElement instanceof SubAppType)) {
+				EObject refElement = null;
+				if (selectedElement instanceof FB) {
+					refElement = (FB) selectedElement;
+					selectedElement = refElement.eContainer().eContainer();
+				}
+				getBreadcrumb().setInput(selectedElement);
+				if (null != refElement) {
+					HandlerHelper.selectElement(refElement, getActiveEditor());
+				}
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}

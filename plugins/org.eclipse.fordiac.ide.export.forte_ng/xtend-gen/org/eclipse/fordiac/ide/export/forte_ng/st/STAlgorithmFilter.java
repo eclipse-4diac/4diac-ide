@@ -38,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.StructuredTextParser;
@@ -60,7 +59,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseClause;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseIfClause;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ExitStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FB_Call;
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ForStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument;
@@ -570,7 +569,7 @@ public class STAlgorithmFilter {
     return this.generateExpression(stmt);
   }
   
-  protected CharSequence _generateStatement(final FB_Call fbCall) {
+  protected CharSequence _generateStatement(final FBCall fbCall) {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _generateInAssignments = this.generateInAssignments(fbCall);
     _builder.append(_generateInAssignments);
@@ -589,23 +588,26 @@ public class STAlgorithmFilter {
     return _builder;
   }
   
-  public CharSequence generateInAssignments(final FB_Call call) {
+  public CharSequence generateInAssignments(final FBCall call) {
     CharSequence _xblockexpression = null;
     {
       final Iterable<InArgument> inArgs = Iterables.<InArgument>filter(call.getArgs(), InArgument.class);
       StringConcatenation _builder = new StringConcatenation();
       {
         for(final InArgument inArg : inArgs) {
-          _builder.append("mInternalFBs[");
+          _builder.append("*static_cast<CIEC_");
+          String _type = this.getType(call.getFb(), inArg);
+          _builder.append(_type);
+          _builder.append("*>(mInternalFBs[");
           Integer _internalFbIndexFromName = this.internalFbIndexFromName(call.getFb());
           _builder.append(_internalFbIndexFromName);
           _builder.append("]->getDI(");
-          Integer _inputIndex = this.getInputIndex(inArg.getVar());
+          Integer _inputIndex = this.getInputIndex(call.getFb(), inArg.getVar());
           _builder.append(_inputIndex);
-          _builder.append(")->setValue(");
+          _builder.append(")) = ");
           CharSequence _generateExpression = this.generateExpression(inArg.getExpr());
           _builder.append(_generateExpression);
-          _builder.append(");");
+          _builder.append(";");
           _builder.newLineIfNotEmpty();
         }
       }
@@ -614,14 +616,27 @@ public class STAlgorithmFilter {
     return _xblockexpression;
   }
   
-  public Integer getInputIndex(final VarDeclaration varDeclaration) {
-    EObject _eContainer = varDeclaration.eContainer();
-    final InterfaceList interfaceList = ((InterfaceList) _eContainer);
+  public String getType(final FB fb, final InArgument argument) {
+    EList<VarDeclaration> _inputVars = fb.getInterface().getInputVars();
+    for (final VarDeclaration input : _inputVars) {
+      String _name = input.getName();
+      String _var = argument.getVar();
+      boolean _equals = Objects.equal(_name, _var);
+      if (_equals) {
+        return input.getTypeName();
+      }
+    }
+    return null;
+  }
+  
+  public Integer getInputIndex(final FB fb, final String varName) {
     int index = 0;
-    EList<VarDeclaration> _inputVars = interfaceList.getInputVars();
+    EList<VarDeclaration> _inputVars = fb.getInterface().getInputVars();
     for (final VarDeclaration input : _inputVars) {
       {
-        if ((input == varDeclaration)) {
+        String _name = input.getName();
+        boolean _equals = Objects.equal(_name, varName);
+        if (_equals) {
           return Integer.valueOf(index);
         }
         index++;
@@ -630,7 +645,7 @@ public class STAlgorithmFilter {
     return null;
   }
   
-  public CharSequence generateOutAssignments(final FB_Call call) {
+  public CharSequence generateOutAssignments(final FBCall call) {
     CharSequence _xblockexpression = null;
     {
       final Iterable<OutArgument> outArgs = Iterables.<OutArgument>filter(call.getArgs(), OutArgument.class);
@@ -643,7 +658,7 @@ public class STAlgorithmFilter {
           Integer _internalFbIndexFromName = this.internalFbIndexFromName(call.getFb());
           _builder.append(_internalFbIndexFromName);
           _builder.append("]->getDO(");
-          Integer _outputIndex = this.getOutputIndex(outArg.getVar());
+          Integer _outputIndex = this.getOutputIndex(call.getFb(), outArg.getVar());
           _builder.append(_outputIndex);
           _builder.append("));");
           _builder.newLineIfNotEmpty();
@@ -654,14 +669,14 @@ public class STAlgorithmFilter {
     return _xblockexpression;
   }
   
-  public Integer getOutputIndex(final VarDeclaration varDeclaration) {
-    EObject _eContainer = varDeclaration.eContainer();
-    final InterfaceList interfaceList = ((InterfaceList) _eContainer);
+  public Integer getOutputIndex(final FB fb, final String varName) {
     int index = 0;
-    EList<VarDeclaration> _outputVars = interfaceList.getOutputVars();
-    for (final VarDeclaration input : _outputVars) {
+    EList<VarDeclaration> _outputVars = fb.getInterface().getOutputVars();
+    for (final VarDeclaration output : _outputVars) {
       {
-        if ((input == varDeclaration)) {
+        String _name = output.getName();
+        boolean _equals = Objects.equal(_name, varName);
+        if (_equals) {
           return Integer.valueOf(index);
         }
         index++;
@@ -670,14 +685,15 @@ public class STAlgorithmFilter {
     return null;
   }
   
-  public Integer eventIndexFromName(final FB_Call fbCall) {
+  public Integer eventIndexFromName(final FBCall fbCall) {
     int index = 0;
     EList<Event> _eventInputs = fbCall.getFb().getInterface().getEventInputs();
     for (final Event inputEvent : _eventInputs) {
       {
-        Event _event = fbCall.getEvent();
-        boolean _tripleEquals = (_event == inputEvent);
-        if (_tripleEquals) {
+        String _event = fbCall.getEvent();
+        String _name = inputEvent.getName();
+        boolean _equals = Objects.equal(_event, _name);
+        if (_equals) {
           return Integer.valueOf(index);
         }
         index++;
@@ -1340,8 +1356,7 @@ public class STAlgorithmFilter {
       CharSequence _xblockexpression = null;
       {
         final VarDeclaration lastvar = variable.getVar();
-        _xblockexpression = this.generateBitaccess(lastvar, lastvar.getType().getName(), this.extractTypeInformation(variable), 
-          variable.getPart().getIndex());
+        _xblockexpression = this.generateBitaccess(lastvar, lastvar.getType().getName(), this.extractTypeInformation(variable), variable.getPart().getIndex());
       }
       _xifexpression = _xblockexpression;
     }
@@ -1457,8 +1472,8 @@ public class STAlgorithmFilter {
       return _generateStatement((ContinueStatement)stmt);
     } else if (stmt instanceof ExitStatement) {
       return _generateStatement((ExitStatement)stmt);
-    } else if (stmt instanceof FB_Call) {
-      return _generateStatement((FB_Call)stmt);
+    } else if (stmt instanceof FBCall) {
+      return _generateStatement((FBCall)stmt);
     } else if (stmt instanceof ForStatement) {
       return _generateStatement((ForStatement)stmt);
     } else if (stmt instanceof IfStatement) {

@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -102,7 +103,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (!dataList.isEmpty()) {
 			return dataList.get(dataList.size() - 1).getType();
 		}
-		return getDataTypeLib().getType("bool");//$NON-NLS-1$ // bool is default
+		return IecTypes.ElementaryTypes.BOOL; // bool is default
 	}
 
 	@Override

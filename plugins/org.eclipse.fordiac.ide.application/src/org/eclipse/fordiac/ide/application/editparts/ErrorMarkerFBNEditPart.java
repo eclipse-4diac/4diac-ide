@@ -22,7 +22,6 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 
 	private ErrorMarkerFBNeworkElementFigure errorMarkerFBNeworkElementFigure;
 
-
 	@Override
 	public ErrorMarkerFBNElement getModel() {
 		return (ErrorMarkerFBNElement) super.getModel();
@@ -33,7 +32,7 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 		errorMarkerFBNeworkElementFigure = new ErrorMarkerFBNeworkElementFigure(getModel(), this);
 		errorMarkerFBNeworkElementFigure.setOpaque(false);
 		errorMarkerFBNeworkElementFigure.setBackgroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
-		setText("Error Marker");
+		setText("Error Marker"); //$NON-NLS-1$
 		return errorMarkerFBNeworkElementFigure;
 	}
 
