@@ -19,17 +19,18 @@ package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import java.util.List
+import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter
+import org.eclipse.fordiac.ide.model.FordiacKeywords
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
-import org.eclipse.fordiac.ide.model.libraryElement.With
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
-import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.With
 
 abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 
@@ -273,14 +274,14 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 	
 	def protected generateInitialAssignment(VarDeclaration variable) {
 		switch variable.typeName {
-			case "STRING":  '''«variable.name»() = "«variable.value.value»";'''
-			case "WSTRING":  '''«variable.name»() = "«variable.value.value»";'''
+			case FordiacKeywords.STRING:  '''«variable.name»() = "«variable.value.value»";'''
+			case FordiacKeywords.WSTRING:  '''«variable.name»() = "«variable.value.value»";'''
 			case "ARRAY":  '''«variable.name»().fromString("«variable.value.value»");'''
-			case "TIME":  '''«variable.name»().fromString("«variable.value.value»");'''
-			case "DATE":  '''«variable.name»().fromString("«variable.value.value»");'''
-			case "TIME:OF_DAY":  '''«variable.name»().fromString("«variable.value.value»");'''
-			case "DATE_AND_TIME":  '''«variable.name»().fromString("«variable.value.value»");'''
-			case "BOOL":  '''«variable.name»() = "«variable.value.value.toLowerCase»";'''
+			case FordiacKeywords.TIME:  '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.DATE:  '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.TIME_OF_DAY:  '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.DATE_AND_TIME:  '''«variable.name»().fromString("«variable.value.value»");'''
+			case FordiacKeywords.BOOL:  '''«variable.name»() = "«variable.value.value.toLowerCase»";'''
 			default: '''«variable.name»() = «variable.value.value»;'''
 		}
 	}

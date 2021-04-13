@@ -102,8 +102,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		showTable(parent);
 
 		buttons.bindToTableViewer(structViewer, this,
-				ref -> new CreateMemberVariableCommand(getType(), getInsertionIndex(), getVarName(), getDataType(),
-						dataTypeLibrary),
+				ref -> new CreateMemberVariableCommand(getType(), getInsertionIndex(), getVarName(), getDataType()),
 				ref -> new DeleteMemberVariableCommand(getType(), (VarDeclaration) ref),
 				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, true),
 				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, false));
