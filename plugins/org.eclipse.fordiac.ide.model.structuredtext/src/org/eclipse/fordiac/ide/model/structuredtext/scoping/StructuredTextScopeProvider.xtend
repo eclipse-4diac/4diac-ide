@@ -74,12 +74,6 @@ class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvider {
 			Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), false)
 	}
 
-	def scope_FBCall_event(FBCall fbCall, EReference ref) {
-		val candidates = fbCall.fb.interface.eventInputs
-		new SimpleScope(
-			Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), false)
-	}
-
 	def getType(AdapterVariable variable) {
 		val head = variable.curr;
 		switch (head) {

@@ -551,9 +551,9 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
-  public EReference getFBCall_Event()
+  public EAttribute getFBCall_Event()
   {
-    return (EReference)fbCallEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)fbCallEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -947,9 +947,9 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * @generated
    */
   @Override
-  public EReference getArgument_Var()
+  public EAttribute getArgument_Var()
   {
-    return (EReference)argumentEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)argumentEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1658,7 +1658,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
 
     fbCallEClass = createEClass(FB_CALL);
     createEReference(fbCallEClass, FB_CALL__FB);
-    createEReference(fbCallEClass, FB_CALL__EVENT);
+    createEAttribute(fbCallEClass, FB_CALL__EVENT);
     createEReference(fbCallEClass, FB_CALL__ARGS);
 
     ifStatementEClass = createEClass(IF_STATEMENT);
@@ -1705,7 +1705,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     createEReference(callEClass, CALL__ARGS);
 
     argumentEClass = createEClass(ARGUMENT);
-    createEReference(argumentEClass, ARGUMENT__VAR);
+    createEAttribute(argumentEClass, ARGUMENT__VAR);
 
     inArgumentEClass = createEClass(IN_ARGUMENT);
     createEReference(inArgumentEClass, IN_ARGUMENT__EXPR);
@@ -1871,7 +1871,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
 
     initEClass(fbCallEClass, FBCall.class, "FBCall", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFBCall_Fb(), theLibraryElementPackage.getFB(), null, "fb", null, 0, 1, FBCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getFBCall_Event(), theLibraryElementPackage.getEvent(), null, "event", null, 0, 1, FBCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFBCall_Event(), ecorePackage.getEString(), "event", null, 0, 1, FBCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFBCall_Args(), this.getArgument(), null, "args", null, 0, -1, FBCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(ifStatementEClass, IfStatement.class, "IfStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1918,7 +1918,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
     initEReference(getCall_Args(), this.getArgument(), null, "args", null, 0, -1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(argumentEClass, Argument.class, "Argument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getArgument_Var(), theLibraryElementPackage.getVarDeclaration(), null, "var", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getArgument_Var(), ecorePackage.getEString(), "var", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(inArgumentEClass, InArgument.class, "InArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getInArgument_Expr(), this.getExpression(), null, "expr", null, 0, 1, InArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

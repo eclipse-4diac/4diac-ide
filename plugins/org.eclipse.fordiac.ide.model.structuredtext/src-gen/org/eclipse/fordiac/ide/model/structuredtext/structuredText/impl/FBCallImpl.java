@@ -18,7 +18,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument;
@@ -53,14 +52,24 @@ public class FBCallImpl extends StatementImpl implements FBCall
   protected FB fb;
 
   /**
-   * The cached value of the '{@link #getEvent() <em>Event</em>}' reference.
+   * The default value of the '{@link #getEvent() <em>Event</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getEvent()
    * @generated
    * @ordered
    */
-  protected Event event;
+  protected static final String EVENT_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getEvent() <em>Event</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getEvent()
+   * @generated
+   * @ordered
+   */
+  protected String event = EVENT_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getArgs() <em>Args</em>}' containment reference list.
@@ -144,27 +153,7 @@ public class FBCallImpl extends StatementImpl implements FBCall
    * @generated
    */
   @Override
-  public Event getEvent()
-  {
-    if (event != null && event.eIsProxy())
-    {
-      InternalEObject oldEvent = (InternalEObject)event;
-      event = (Event)eResolveProxy(oldEvent);
-      if (event != oldEvent)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, StructuredTextPackage.FB_CALL__EVENT, oldEvent, event));
-      }
-    }
-    return event;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Event basicGetEvent()
+  public String getEvent()
   {
     return event;
   }
@@ -175,9 +164,9 @@ public class FBCallImpl extends StatementImpl implements FBCall
    * @generated
    */
   @Override
-  public void setEvent(Event newEvent)
+  public void setEvent(String newEvent)
   {
-    Event oldEvent = event;
+    String oldEvent = event;
     event = newEvent;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.FB_CALL__EVENT, oldEvent, event));
@@ -228,8 +217,7 @@ public class FBCallImpl extends StatementImpl implements FBCall
         if (resolve) return getFb();
         return basicGetFb();
       case StructuredTextPackage.FB_CALL__EVENT:
-        if (resolve) return getEvent();
-        return basicGetEvent();
+        return getEvent();
       case StructuredTextPackage.FB_CALL__ARGS:
         return getArgs();
     }
@@ -251,7 +239,7 @@ public class FBCallImpl extends StatementImpl implements FBCall
         setFb((FB)newValue);
         return;
       case StructuredTextPackage.FB_CALL__EVENT:
-        setEvent((Event)newValue);
+        setEvent((String)newValue);
         return;
       case StructuredTextPackage.FB_CALL__ARGS:
         getArgs().clear();
@@ -275,7 +263,7 @@ public class FBCallImpl extends StatementImpl implements FBCall
         setFb((FB)null);
         return;
       case StructuredTextPackage.FB_CALL__EVENT:
-        setEvent((Event)null);
+        setEvent(EVENT_EDEFAULT);
         return;
       case StructuredTextPackage.FB_CALL__ARGS:
         getArgs().clear();
@@ -297,11 +285,28 @@ public class FBCallImpl extends StatementImpl implements FBCall
       case StructuredTextPackage.FB_CALL__FB:
         return fb != null;
       case StructuredTextPackage.FB_CALL__EVENT:
-        return event != null;
+        return EVENT_EDEFAULT == null ? event != null : !EVENT_EDEFAULT.equals(event);
       case StructuredTextPackage.FB_CALL__ARGS:
         return args != null && !args.isEmpty();
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (event: ");
+    result.append(event);
+    result.append(')');
+    return result.toString();
   }
 
 } //FBCallImpl

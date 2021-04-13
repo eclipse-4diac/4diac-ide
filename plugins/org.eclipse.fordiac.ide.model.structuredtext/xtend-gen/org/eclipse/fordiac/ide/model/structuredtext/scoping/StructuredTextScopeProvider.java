@@ -26,12 +26,10 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
 import org.eclipse.xtext.naming.QualifiedName;
@@ -82,16 +80,6 @@ public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvide
       if (_isEmpty) {
         return IScope.NULLSCOPE;
       }
-      Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
-      _xblockexpression = new SimpleScope(_scopedElementsFor, false);
-    }
-    return _xblockexpression;
-  }
-  
-  public SimpleScope scope_FBCall_event(final FBCall fbCall, final EReference ref) {
-    SimpleScope _xblockexpression = null;
-    {
-      final EList<Event> candidates = fbCall.getFb().getInterface().getEventInputs();
       Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
       _xblockexpression = new SimpleScope(_scopedElementsFor, false);
     }

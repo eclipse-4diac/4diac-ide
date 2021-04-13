@@ -94,24 +94,24 @@ class STAlgorithmFilter {
 		// create resource for function block and add copy
 		val fbResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION))
 		fbResource.contents.add(fbType)
-		fbType.interfaceList.sockets.forEach[adp | createAdapterResource(resourceSet, adp)];
-		fbType.interfaceList.plugs.forEach[adp | createAdapterResource(resourceSet, adp)];
-		fbType.interfaceList.inputVars.forEach[v | createStructResource(resourceSet, v)];
-		fbType.interfaceList.outputVars.forEach[v | createStructResource(resourceSet, v)];
-		fbType.internalVars.forEach[v | createStructResource(resourceSet, v)];
+		fbType.interfaceList.sockets.forEach[adp|createAdapterResource(resourceSet, adp)];
+		fbType.interfaceList.plugs.forEach[adp|createAdapterResource(resourceSet, adp)];
+		fbType.interfaceList.inputVars.forEach[v|createStructResource(resourceSet, v)];
+		fbType.interfaceList.outputVars.forEach[v|createStructResource(resourceSet, v)];
+		fbType.internalVars.forEach[v|createStructResource(resourceSet, v)];
 	}
 
 	def void createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
 		val adapterResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
 		adapterResource.contents.add(adapter.type.adapterFBType);
 	}
-	
+
 	def void createStructResource(XtextResourceSet resourceSet, VarDeclaration variable) {
 		if (variable.type instanceof StructuredType) {
 			val structResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
 			val type = variable.type as StructuredType;
 			structResource.contents.add(type);
-			type.memberVariables.forEach[v | createStructResource(resourceSet, v)];
+			type.memberVariables.forEach[v|createStructResource(resourceSet, v)];
 		}
 	}
 
@@ -132,14 +132,14 @@ class STAlgorithmFilter {
 		val resource = resourceSet.createResource(resourceSet.computeUnusedUri(ST_URI_EXTENSION)) as XtextResource
 		resource.load(new LazyStringInputStream(alg.text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
 		val stalg = resource.parseResult.rootASTElement as StructuredTextAlgorithm
-		stalg.localVariables.forEach[v | createStructResource(resourceSet, v)]
+		stalg.localVariables.forEach[v|createStructResource(resourceSet, v)]
 		return resource
 	}
 
 	def generateLocalVariables(STAlgorithm alg) {
 		val parseResult = alg.parseAlgorithm.parseResult
 		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
-		stalg.localVariables.forEach[v | v.typeName = v.type.name]
+		stalg.localVariables.forEach[v|v.typeName = v.type.name]
 		return stalg.localVariables
 	}
 
@@ -149,7 +149,9 @@ class STAlgorithmFilter {
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
 		if (!issues.empty) {
-			errors.addAll(issues.map[MessageFormat.format("{0}, Line {1}: {2}", alg.name, Long.toString(it.lineNumber), it.message)])
+			errors.addAll(issues.map [
+				MessageFormat.format("{0}, Line {1}: {2}", alg.name, Long.toString(it.lineNumber), it.message)
+			])
 			return null
 		}
 		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
@@ -265,68 +267,74 @@ class STAlgorithmFilter {
 	def protected dispatch generateStatement(Call stmt) {
 		return stmt.generateExpression
 	}
-	
+
 	def protected dispatch generateStatement(FBCall fbCall) '''
 		«generateInAssignments(fbCall)»
 		mInternalFBs[«internalFbIndexFromName(fbCall.fb)»]->receiveInputEvent(«eventIndexFromName(fbCall)», nullptr);
 		«generateOutAssignments(fbCall)»
 	'''
-	
+
 	def generateInAssignments(FBCall call) {
 		val inArgs = call.args.filter(InArgument)
 		'''
-		«FOR inArg : inArgs»
-		mInternalFBs[«internalFbIndexFromName(call.fb)»]->getDI(«getInputIndex(inArg.^var)»)->setValue(«inArg.expr.generateExpression»);
-		«ENDFOR»
+			«FOR inArg : inArgs»
+				*static_cast<CIEC_«getType(call.fb, inArg)»*>(mInternalFBs[«internalFbIndexFromName(call.fb)»]->getDI(«getInputIndex(call.fb, inArg.^var)»)) = «inArg.expr.generateExpression»;
+			«ENDFOR»
 		'''
 	}
 	
-	def getInputIndex(VarDeclaration varDeclaration) {
-		val interfaceList = varDeclaration.eContainer as InterfaceList
+	def getType(FB fb, InArgument argument) {
+		for (input : fb.interface.inputVars) {
+			if (input.name == argument.^var) {
+				return input.typeName
+			}
+		}
+	}
+
+	def getInputIndex(FB fb, String varName) {
 		var index = 0
-		for(input : interfaceList.inputVars) {
-			if(input === varDeclaration) {
+		for (input : fb.interface.inputVars) {
+			if (input.name == varName) {
 				return index
 			}
 			index++
 		}
 	}
-	
+
 	def generateOutAssignments(FBCall call) {
 		val outArgs = call.args.filter(OutArgument)
 		'''
-		«FOR outArg : outArgs»
-		«outArg.expr.generateExpression».setValue(*mInternalFBs[«internalFbIndexFromName(call.fb)»]->getDO(«getOutputIndex(outArg.^var)»));
-		«ENDFOR»
+			«FOR outArg : outArgs»
+				«outArg.expr.generateExpression».setValue(*mInternalFBs[«internalFbIndexFromName(call.fb)»]->getDO(«getOutputIndex(call.fb, outArg.^var)»));
+			«ENDFOR»
 		'''
 	}
-	
-		def getOutputIndex(VarDeclaration varDeclaration) {
-		val interfaceList = varDeclaration.eContainer as InterfaceList
+
+	def getOutputIndex(FB fb, String varName) {
 		var index = 0
-		for(input : interfaceList.outputVars) {
-			if(input === varDeclaration) {
+		for (output : fb.interface.outputVars) {
+			if (output.name == varName) {
 				return index
 			}
 			index++
 		}
 	}
-	
+
 	def eventIndexFromName(FBCall fbCall) {
 		var index = 0;
-		for(inputEvent : fbCall.fb.interface.eventInputs) {
-			if(fbCall.event === inputEvent) {
+		for (inputEvent : fbCall.fb.interface.eventInputs) {
+			if (fbCall.event == inputEvent.name) {
 				return index;
 			}
 			index++;
 		}
 	}
-	
+
 	def internalFbIndexFromName(FB fb) {
 		val fbType = fb.eContainer as BaseFBType
 		var index = 0;
-		for(internalFb: fbType.internalFbs) {
-			if(fb === internalFb) {
+		for (internalFb : fbType.internalFbs) {
+			if (fb === internalFb) {
 				return index;
 			}
 			index++;
@@ -441,7 +449,7 @@ class STAlgorithmFilter {
 		}
 	}
 
-	def protected dispatch generateExpression(TimeLiteral expr){
+	def protected dispatch generateExpression(TimeLiteral expr) {
 		'''«new DatetimeLiteral(expr.literal)»'''
 	}
 
@@ -460,14 +468,13 @@ class STAlgorithmFilter {
 		«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»«index.generateExpression»«ENDFOR»
 	'''
 
-	def protected dispatch CharSequence generateExpression(AdapterVariable expr)
-		'''«expr.curr.generateExpression».«expr.^var.name»()«if(!(expr.eContainer instanceof AdapterVariable))expr.generateBitaccess»'''
+	def protected dispatch CharSequence generateExpression(
+		AdapterVariable expr) '''«expr.curr.generateExpression».«expr.^var.name»()«if(!(expr.eContainer instanceof AdapterVariable))expr.generateBitaccess»'''
 
-	def protected dispatch CharSequence generateExpression(AdapterRoot expr) 
-		'''«expr.adapter.generateVarAccess»'''
+	def protected dispatch CharSequence generateExpression(AdapterRoot expr) '''«expr.adapter.generateVarAccess»'''
 
-	def generateStructAdapterVarAccess(EList<VarDeclaration> list)
-		'''«FOR variable : list BEFORE '.' SEPARATOR '.' »«variable.name»()«ENDFOR»'''
+	def generateStructAdapterVarAccess(
+		EList<VarDeclaration> list) '''«FOR variable : list BEFORE '.' SEPARATOR '.'»«variable.name»()«ENDFOR»'''
 
 	def protected dispatch CharSequence generateExpression(
 		PrimaryVariable expr) '''«expr.^var.generateVarAccess»«expr.generateBitaccess»'''
@@ -475,7 +482,7 @@ class STAlgorithmFilter {
 	def protected generateVarAccessLocal(LocalVariable variable) '''«EXPORT_PREFIX»«variable.name»'''
 
 	def protected dispatch generateVarAccess(VarDeclaration variable) {
-		if(variable.eContainer.eContainer instanceof AdapterFBType){
+		if (variable.eContainer.eContainer instanceof AdapterFBType) {
 			'''«variable.name»()'''
 		} else {
 			'''«EXPORT_PREFIX»«variable.name»()'''
@@ -491,8 +498,7 @@ class STAlgorithmFilter {
 	def protected generateBitaccess(AdapterVariable variable) {
 		if (null !== variable.part) {
 			val lastvar = variable.^var
-			generateBitaccess(lastvar, lastvar.type.name, variable.extractTypeInformation,
-				variable.part.index)
+			generateBitaccess(lastvar, lastvar.type.name, variable.extractTypeInformation, variable.part.index)
 		}
 	}
 
@@ -544,7 +550,7 @@ class STAlgorithmFilter {
 	}
 
 	def protected dispatch extractTypeInformation(VarDeclaration variable) {
-		variable.type.name 
+		variable.type.name
 	}
 
 }

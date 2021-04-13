@@ -201,7 +201,7 @@ public interface StructuredTextPackage extends EPackage
   int FB_CALL__FB = STATEMENT_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Event</b></em>' reference.
+   * The feature id for the '<em><b>Event</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -635,7 +635,7 @@ public interface StructuredTextPackage extends EPackage
   int ARGUMENT = 15;
 
   /**
-   * The feature id for the '<em><b>Var</b></em>' reference.
+   * The feature id for the '<em><b>Var</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -663,7 +663,7 @@ public interface StructuredTextPackage extends EPackage
   int IN_ARGUMENT = 16;
 
   /**
-   * The feature id for the '<em><b>Var</b></em>' reference.
+   * The feature id for the '<em><b>Var</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -700,7 +700,7 @@ public interface StructuredTextPackage extends EPackage
   int OUT_ARGUMENT = 17;
 
   /**
-   * The feature id for the '<em><b>Var</b></em>' reference.
+   * The feature id for the '<em><b>Var</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1731,15 +1731,15 @@ public interface StructuredTextPackage extends EPackage
   EReference getFBCall_Fb();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall#getEvent <em>Event</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall#getEvent <em>Event</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Event</em>'.
+   * @return the meta object for the attribute '<em>Event</em>'.
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall#getEvent()
    * @see #getFBCall()
    * @generated
    */
-  EReference getFBCall_Event();
+  EAttribute getFBCall_Event();
 
   /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall#getArgs <em>Args</em>}'.
@@ -2116,15 +2116,15 @@ public interface StructuredTextPackage extends EPackage
   EClass getArgument();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument#getVar <em>Var</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument#getVar <em>Var</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Var</em>'.
+   * @return the meta object for the attribute '<em>Var</em>'.
    * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument#getVar()
    * @see #getArgument()
    * @generated
    */
-  EReference getArgument_Var();
+  EAttribute getArgument_Var();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument <em>In Argument</em>}'.
@@ -2883,12 +2883,12 @@ public interface StructuredTextPackage extends EPackage
     EReference FB_CALL__FB = eINSTANCE.getFBCall_Fb();
 
     /**
-     * The meta object literal for the '<em><b>Event</b></em>' reference feature.
+     * The meta object literal for the '<em><b>Event</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference FB_CALL__EVENT = eINSTANCE.getFBCall_Event();
+    EAttribute FB_CALL__EVENT = eINSTANCE.getFBCall_Event();
 
     /**
      * The meta object literal for the '<em><b>Args</b></em>' containment reference list feature.
@@ -3193,12 +3193,12 @@ public interface StructuredTextPackage extends EPackage
     EClass ARGUMENT = eINSTANCE.getArgument();
 
     /**
-     * The meta object literal for the '<em><b>Var</b></em>' reference feature.
+     * The meta object literal for the '<em><b>Var</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ARGUMENT__VAR = eINSTANCE.getArgument_Var();
+    EAttribute ARGUMENT__VAR = eINSTANCE.getArgument_Var();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl.InArgumentImpl <em>In Argument</em>}' class.

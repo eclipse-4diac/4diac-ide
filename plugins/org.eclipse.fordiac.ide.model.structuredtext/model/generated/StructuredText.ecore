@@ -22,7 +22,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FBCall" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="fb" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//FB"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="event" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="event" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="args" upperBound="-1" eType="#//Argument"
         containment="true"/>
   </eClassifiers>
@@ -114,7 +114,7 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Argument">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="var" eType="ecore:EClass platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="var" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InArgument" eSuperTypes="#//Argument">
     <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expression"
