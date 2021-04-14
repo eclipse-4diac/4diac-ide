@@ -50,6 +50,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -351,7 +352,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				return interfaceList.getInputVars().indexOf(interfaceEditPart.getModel());
 			}
 			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
-				return interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
+				final int indexOf = interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
+				return indexOf - (int) interfaceList.getErrorMarker().subList(0, indexOf).stream()
+						.filter(e -> !e.isIsInput()).count();
 			}
 		} else {
 			if (interfaceEditPart.isEvent()) {
@@ -364,7 +367,10 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				return interfaceList.getOutputVars().indexOf(interfaceEditPart.getModel());
 			}
 			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
-				return interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
+				final int indexOf = interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
+				return indexOf - (int) interfaceList.getErrorMarker().subList(0, indexOf).stream()
+						.filter(IInterfaceElement::isIsInput).count();
+
 			}
 		}
 		return -1;
