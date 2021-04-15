@@ -563,7 +563,6 @@
 	               </iterate>
          		</with>  
 			</activeWhen>
-
       </handler>      
       <handler
             class="org.eclipse.fordiac.ide.application.handlers.ClearFocusOn"
@@ -579,6 +578,7 @@
             	<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
             </activeWhen>
       </handler>
+     
       <handler
             class="org.eclipse.fordiac.ide.application.handlers.MoveToParentHandler"
             commandId="org.eclipse.fordiac.ide.application.commands.moveToParent">
@@ -600,7 +600,6 @@
             	</with>
             </activeWhen>
       </handler>
-     
       <handler 
             class="org.eclipse.fordiac.ide.application.handlers.NewSubApplication"
             commandId="org.eclipse.fordiac.ide.application.commands.newSubApp">
@@ -1011,12 +1010,9 @@
                commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
                icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png">
             <visibleWhen checkEnabled="true">
-            	<or>
-		            <with variable="activeEditor">
-		            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
-		            </with>
-		            <reference definitionId="org.eclipse.fordiac.ide.application.interfaceSelectionInViewer" />
-            	</or>
+		       <with variable="activeEditor">
+		          <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+		       </with>
             </visibleWhen>
          </command>
          <command
@@ -1358,6 +1354,13 @@
           id="org.eclipse.fordiac.ide.application.utilities.viewerPropertyTester"
           namespace="org.eclipse.fordiac.ide.application.utilities"
           properties="isViewer"
+          type="java.lang.Object">
+    	</propertyTester>
+    	<propertyTester
+          class="org.eclipse.fordiac.ide.application.utilities.IsSubapplicationTester"
+          id="org.eclipse.fordiac.ide.application.utilities.isSubapplicationTester"
+          namespace="org.eclipse.fordiac.ide.application.utilities"
+          properties="isSubapplication"
           type="java.lang.Object">
     	</propertyTester>
  	</extension> 
