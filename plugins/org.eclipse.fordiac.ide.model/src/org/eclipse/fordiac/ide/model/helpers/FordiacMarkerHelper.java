@@ -19,10 +19,12 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public final class FordiacMarkerHelper {
@@ -87,7 +89,7 @@ public final class FordiacMarkerHelper {
 		}
 		final StringBuilder builder = new StringBuilder();
 		createHierarchicalName(container, builder);
-		builder.deleteCharAt(builder.length() - 1); // remove the last dot
+
 		return builder.toString();
 	}
 
@@ -102,6 +104,19 @@ public final class FordiacMarkerHelper {
 		if (runner instanceof Application) {
 			builder.insert(0, '.');
 			builder.insert(0, ((Application) runner).getName());
+		}
+
+		if (runner instanceof Resource) {
+			builder.insert(0, '.');
+			builder.insert(0, ((Resource) runner).getName());
+			if (runner.eContainer() != null) {
+				builder.insert(0, '.');
+				builder.insert(0, ((Device) runner.eContainer()).getName());
+			}
+		}
+
+		if (builder.length() > 0) {
+			builder.deleteCharAt(builder.length() - 1); // remove the last dot
 		}
 	}
 

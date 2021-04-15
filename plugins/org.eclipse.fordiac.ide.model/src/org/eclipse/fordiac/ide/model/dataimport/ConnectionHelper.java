@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import java.util.EnumSet;
 import java.util.Set;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -51,8 +52,6 @@ public class ConnectionHelper {
 
 		public void validate() {
 
-
-
 			if (sourceEndpoint != null && destinationEndpoint != null) {
 				return;
 			}
@@ -71,7 +70,6 @@ public class ConnectionHelper {
 				connectionState.remove(ConnectionState.VALID);
 			}
 
-
 			if (destinationEndpoint != null) {
 				connectionState.add(ConnectionState.DEST_ENPOINT_EXITS);
 			} else {
@@ -86,7 +84,6 @@ public class ConnectionHelper {
 				connectionState.remove(ConnectionState.VALID);
 			}
 		}
-
 
 		protected static InterfaceList getInterfaceFromQualString(final String source, final FBNetwork fbNetwork) {
 			if (source == null) {
@@ -176,7 +173,7 @@ public class ConnectionHelper {
 
 		public boolean isMissingConnectionDestinationEndpoint() {
 			return connectionState.containsAll(EnumSet.of(ConnectionState.DEST_ENDPOINT_MISSING,
-					ConnectionState.SOURCE_EXITS, ConnectionState.DEST_EXISTS));
+					ConnectionState.SOURCE_EXITS, ConnectionState.SOURCE_ENDPOINT_EXISTS, ConnectionState.DEST_EXISTS));
 		}
 
 		public boolean isMissingConnectionSource() {
@@ -186,9 +183,13 @@ public class ConnectionHelper {
 		}
 
 		public boolean isMissingConnectionSourceEndpoint() {
-			return connectionState.containsAll(
-					EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING, ConnectionState.SOURCE_EXITS,
-							ConnectionState.DEST_ENPOINT_EXITS));
+			return connectionState.containsAll(EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING,
+					ConnectionState.SOURCE_EXITS, ConnectionState.DEST_EXISTS, ConnectionState.DEST_ENPOINT_EXITS));
+		}
+
+		public boolean isMissingSourceAndDestEndpoint() {
+			return connectionState.containsAll(EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING,
+					ConnectionState.DEST_ENDPOINT_MISSING, ConnectionState.SOURCE_EXITS, ConnectionState.DEST_EXISTS));
 		}
 
 		public String getSourcePinName() {
@@ -284,7 +285,6 @@ public class ConnectionHelper {
 		return createErrorMarkerFBNElement;
 	}
 
-
 	public static IInterfaceElement createRepairInterfaceElement(final IInterfaceElement connection,
 			final String name) {
 		IInterfaceElement repairIE = null;
@@ -304,13 +304,13 @@ public class ConnectionHelper {
 		return repairIE;
 	}
 
-	public static ErrorMarkerInterface createErrorMarkerInterface(final IInterfaceElement source, final String name,
+	public static ErrorMarkerInterface createErrorMarkerInterface(final DataType type, final String name,
 			final boolean isInput) {
 		final ErrorMarkerInterface errorMarkerInterface = LibraryElementFactory.eINSTANCE.createErrorMarkerInterface();
 		errorMarkerInterface.setName(name);
 		errorMarkerInterface.setIsInput(isInput);
-		errorMarkerInterface.setType(source.getType());
-		errorMarkerInterface.setTypeName(source.getName());
+		errorMarkerInterface.setType(type);
+		errorMarkerInterface.setTypeName(type.getName());
 		return errorMarkerInterface;
 	}
 

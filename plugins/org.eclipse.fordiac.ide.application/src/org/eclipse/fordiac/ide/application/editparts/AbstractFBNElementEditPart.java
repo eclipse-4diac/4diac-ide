@@ -351,7 +351,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				return interfaceList.getInputVars().indexOf(interfaceEditPart.getModel());
 			}
 			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
-				return interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
+				return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
 			}
 		} else {
 			if (interfaceEditPart.isEvent()) {
@@ -364,10 +364,18 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				return interfaceList.getOutputVars().indexOf(interfaceEditPart.getModel());
 			}
 			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
-				return interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
+				return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
+
 			}
 		}
 		return -1;
+	}
+
+	private static int calcErrorMarkerINdex(final InterfaceEditPart interfaceEditPart,
+			final InterfaceList interfaceList) {
+		final int indexOf = interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
+		return indexOf - (int) interfaceList.getErrorMarker().subList(0, indexOf).stream()
+				.filter(e -> interfaceEditPart.isInput() ? !e.isIsInput() : e.isIsInput()).count();
 	}
 
 	@Override
