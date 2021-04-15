@@ -49,15 +49,14 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 	private final Adapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)) {
 				p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
 				p.x -= 40;
 				getChildren().forEach(ep->((EditPart)ep).refresh());
 			} else {
+				super.notifyChanged(notification);
 				if(getModel().getNetworkElements().size() != childrenNumber) {
-					super.notifyChanged(notification);
 					childrenNumber = getModel().getNetworkElements().size();
 					p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
 					p.x -= 40;

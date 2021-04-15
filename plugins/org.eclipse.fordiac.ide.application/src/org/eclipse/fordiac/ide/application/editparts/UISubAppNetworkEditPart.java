@@ -32,7 +32,7 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
 public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
-	private Adapter contentAdapter = new AdapterImpl() {
+	private final Adapter contentAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -53,9 +53,10 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 		}
 	};
 
-	private Adapter subAppInterfaceAdapter = new EContentAdapter() {
+	private final Adapter subAppInterfaceAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
 			switch (notification.getEventType()) {
 			case Notification.ADD:
 			case Notification.ADD_MANY:
@@ -99,10 +100,10 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		if (childEditPart instanceof SpecificLayerEditPart) {
-			String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
-			IFigure layerFig = getLayer(layer);
+			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
+			final IFigure layerFig = getLayer(layer);
 			if (layerFig != null) {
-				IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 				layerFig.add(child);
 			} else { // if layer does not exist use default layer
 				super.addChildVisual(childEditPart, index);
@@ -115,10 +116,10 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		if (childEditPart instanceof SpecificLayerEditPart) {
-			String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
-			IFigure layerFig = getLayer(layer);
+			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
+			final IFigure layerFig = getLayer(layer);
 			if (layerFig != null) {
-				IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 				layerFig.remove(child);
 			} else { // if layer does not exist use default layer
 				super.removeChildVisual(childEditPart);

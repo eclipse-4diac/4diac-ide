@@ -111,6 +111,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	private final Adapter contentAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
 			if (null != getType() && getType().eAdapters().contains(contentAdapter) && !blockRefresh) {
 				leftComposite.getDisplay().asyncExec(() -> {
 					if (!leftComposite.isDisposed()) {

@@ -34,17 +34,18 @@ public class FBTypeContentOutline extends ContentOutlinePage implements IAdaptab
 
 	private TreeViewer contentOutlineViewer;
 
-	private LibraryElementItemProviderAdapterFactory adapterFactory = new LibraryElementItemProviderAdapterFactory();
-	private DataItemProviderAdapterFactory dataFactory = new DataItemProviderAdapterFactory();
+	private final LibraryElementItemProviderAdapterFactory adapterFactory = new LibraryElementItemProviderAdapterFactory();
+	private final DataItemProviderAdapterFactory dataFactory = new DataItemProviderAdapterFactory();
 
-	private ComposedAdapterFactory caf = new ComposedAdapterFactory();
-	private CommandStack commandStack;
-	private FBType fbType;
+	private final ComposedAdapterFactory caf = new ComposedAdapterFactory();
+	private final CommandStack commandStack;
+	private final FBType fbType;
 
 	private final EContentAdapter adapter = new EContentAdapter() {
 
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
 			if (!getTreeViewer().getControl().isDisposed()) {
 				Display.getDefault().asyncExec(() -> {
 					if (!getTreeViewer().getControl().isDisposed()) {
@@ -56,20 +57,20 @@ public class FBTypeContentOutline extends ContentOutlinePage implements IAdaptab
 	};
 
 	@Override
-	public <T> T getAdapter(Class<T> adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == CommandStack.class) {
 			return adapter.cast(commandStack);
 		}
 		return null;
 	}
 
-	FBTypeContentOutline(FBType fbType, FBTypeEditor editor) {
+	FBTypeContentOutline(final FBType fbType, final FBTypeEditor editor) {
 		this.fbType = fbType;
 		this.commandStack = editor.getCommandStack();
 	}
 
 	@Override
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		super.createControl(parent);
 
 		caf.addAdapterFactory(adapterFactory);
