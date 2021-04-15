@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor;
+import org.eclipse.swt.widgets.Display;
 
 public class DataTypeListener implements IResourceChangeListener {
 	IPath file;
@@ -39,7 +40,7 @@ public class DataTypeListener implements IResourceChangeListener {
 		if ((delta != null) && (delta.getKind() == IResourceDelta.REMOVED)) {
 			if ((delta.getFlags() & IResourceDelta.MOVED_TO) != 0) {
 				file = delta.getMovedToPath();
-				editor.updateDataType(file);
+				Display.getDefault().asyncExec(() -> editor.updateDataType(file));
 			}
 		}
 	}
