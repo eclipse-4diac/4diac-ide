@@ -50,7 +50,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -352,9 +351,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				return interfaceList.getInputVars().indexOf(interfaceEditPart.getModel());
 			}
 			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
-				final int indexOf = interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
-				return indexOf - (int) interfaceList.getErrorMarker().subList(0, indexOf).stream()
-						.filter(e -> !e.isIsInput()).count();
+				return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
 			}
 		} else {
 			if (interfaceEditPart.isEvent()) {
@@ -367,13 +364,18 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				return interfaceList.getOutputVars().indexOf(interfaceEditPart.getModel());
 			}
 			if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
-				final int indexOf = interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
-				return indexOf - (int) interfaceList.getErrorMarker().subList(0, indexOf).stream()
-						.filter(IInterfaceElement::isIsInput).count();
+				return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
 
 			}
 		}
 		return -1;
+	}
+
+	private static int calcErrorMarkerINdex(final InterfaceEditPart interfaceEditPart,
+			final InterfaceList interfaceList) {
+		final int indexOf = interfaceList.getErrorMarker().indexOf(interfaceEditPart.getModel());
+		return indexOf - (int) interfaceList.getErrorMarker().subList(0, indexOf).stream()
+				.filter(e -> interfaceEditPart.isInput() ? !e.isIsInput() : e.isIsInput()).count();
 	}
 
 	@Override
