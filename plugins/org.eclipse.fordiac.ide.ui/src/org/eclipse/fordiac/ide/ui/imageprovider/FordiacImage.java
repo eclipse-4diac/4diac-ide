@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.ListResourceBundle;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -67,7 +68,21 @@ public enum FordiacImage {
 
 	private static final String IMAGES_DIRECTORY = "images"; //$NON-NLS-1$
 	private static final String FORDIAC_IMAGE_PROPERTIES = "fordiacimages"; //$NON-NLS-1$
-	private static ResourceBundle foridacImageProperties = ResourceBundle.getBundle(FORDIAC_IMAGE_PROPERTIES);
+	private static ResourceBundle foridacImageProperties = getFordiacImageProperties();
+
+	private static final ResourceBundle getFordiacImageProperties() {
+		try {
+			return ResourceBundle.getBundle(FORDIAC_IMAGE_PROPERTIES);
+		} catch (final MissingResourceException e) {
+			UIPlugin.getDefault().logWarning("Unable to load fordiacimages.properties from image-fragment.", e); //$NON-NLS-1$
+			return new ListResourceBundle() {
+				@Override
+				protected Object[][] getContents() {
+					return new Object[][] {};
+				}
+			};
+		}
+	}
 
 	private static Map<Image, Image> errorImages = new HashMap<>();
 	private static int count = 0;
