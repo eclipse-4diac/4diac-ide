@@ -101,7 +101,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 		// connections/interface elements are executed immediately
 	}
 
-	private void removeElementFromSubapp(FBNetworkElement element) {
+	private void removeElementFromSubapp(final FBNetworkElement element) {
 		oldPos.put(element, element.getPosition());
 		if (element.isMapped()) {
 			final UnmapCommand cmd = new UnmapCommand(element);
@@ -122,7 +122,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 		connsMovedToParent.forEach(destinationNetwork::addConnection);
 	}
 
-	private void addElementToDestination(FBNetworkElement element) {
+	private void addElementToDestination(final FBNetworkElement element) {
 		destinationNetwork.getNetworkElements().add(element);
 
 		// ensure unique name in new network
@@ -144,7 +144,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 		deleteConnectionsAndInterfaceElements.redo();
 	}
 
-	private void redoRemoveElementFromSubapp(FBNetworkElement element) {
+	private void redoRemoveElementFromSubapp(final FBNetworkElement element) {
 		sourceSubApp.getSubAppNetwork().getNetworkElements().remove(element);
 	}
 
@@ -156,7 +156,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 		connsMovedToParent.forEach(destinationNetwork::addConnection);
 	}
 
-	private void redoAddElementToDestination(FBNetworkElement element) {
+	private void redoAddElementToDestination(final FBNetworkElement element) {
 		destinationNetwork.getNetworkElements().add(element);
 		element.setPosition(newPos.get(element));
 	}
@@ -173,7 +173,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 		unmappingCmds.undo();
 	}
 
-	private void undoRemoveElementFromSubapp(FBNetworkElement element) {
+	private void undoRemoveElementFromSubapp(final FBNetworkElement element) {
 		newPos.put(element, element.getPosition());
 		sourceSubApp.getSubAppNetwork().getNetworkElements().add(element);
 	}
@@ -185,7 +185,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 		connsMovedToParent.forEach(sourceSubApp.getFbNetwork()::addConnection);
 	}
 
-	private void undoAddElementToDestination(FBNetworkElement element) {
+	private void undoAddElementToDestination(final FBNetworkElement element) {
 		destinationNetwork.getNetworkElements().remove(element);
 		element.setPosition(oldPos.get(element));
 		createSubAppInterfaceElementCommands.undo();
@@ -228,7 +228,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 		}
 	}
 
-	private boolean connIsPartOfMovedNetwork(IInterfaceElement opposite) {
+	private boolean connIsPartOfMovedNetwork(final IInterfaceElement opposite) {
 		return elements.contains(opposite.getFBNetworkElement());
 	}
 

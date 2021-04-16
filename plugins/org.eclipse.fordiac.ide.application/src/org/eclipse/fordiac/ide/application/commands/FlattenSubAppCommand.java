@@ -66,7 +66,7 @@ public class FlattenSubAppCommand extends Command {
 	@Override
 	public void execute() {
 		elements.addAll(subapp.getSubAppNetwork().getNetworkElements());
-		FBNetworkHelper.moveFBNetworkByOffset(elements, getOriginalPositionX(), getOriginalPositionY());
+		FBNetworkHelper.moveFBNetworkByOffset(elements, -getOriginalPositionX(), -getOriginalPositionY());
 
 		checkConnections();
 		createMapCommands();
@@ -97,7 +97,7 @@ public class FlattenSubAppCommand extends Command {
 		deleteCommands.redo();
 		subapp.getSubAppNetwork().getNetworkElements().removeAll(elements);
 		parent.getNetworkElements().addAll(elements);
-		FBNetworkHelper.moveFBNetworkByOffset(elements, getOriginalPositionX(), getOriginalPositionY());
+		FBNetworkHelper.moveFBNetworkByOffset(elements, -getOriginalPositionX(), -getOriginalPositionY());
 
 		subapp.getSubAppNetwork().getEventConnections().removeAll(transferEventConnections);
 		parent.getEventConnections().addAll(transferEventConnections);
@@ -155,7 +155,8 @@ public class FlattenSubAppCommand extends Command {
 		}
 	}
 
-	private <T extends Connection> void checkConnectionList(final List<T> connectionList, final List<T> transferConnectionList) {
+	private <T extends Connection> void checkConnectionList(final List<T> connectionList,
+			final List<T> transferConnectionList) {
 		for (final T connection : connectionList) {
 			if ((connection.getSourceElement() != subapp) && (connection.getDestinationElement() != subapp)) {
 				// it is an internal connection transfer it
@@ -166,7 +167,7 @@ public class FlattenSubAppCommand extends Command {
 					for (final Connection inboundConn : connection.getSource().getInputConnections()) {
 						for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
 							createCommands
-							.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
+									.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
 						}
 					}
 				} else if (connection.getSourceElement() == subapp) {
