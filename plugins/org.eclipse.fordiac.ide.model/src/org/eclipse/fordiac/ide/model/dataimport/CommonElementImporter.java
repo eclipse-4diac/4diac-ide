@@ -20,7 +20,9 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.XMLInputFactory;
@@ -126,6 +128,7 @@ abstract class CommonElementImporter {
 	private final IFile file;
 	private final TypeLibrary typeLibrary;
 	private LibraryElement element;
+	protected final List<ErrorMarkerAttribute> errorMarkerAttributes;
 
 	protected IFile getFile() {
 		return file;
@@ -162,6 +165,7 @@ abstract class CommonElementImporter {
 		Assert.isNotNull(file);
 		this.file = file;
 		typeLibrary = TypeLibrary.getTypeLibrary(file.getProject());
+		errorMarkerAttributes = new ArrayList<>();
 	}
 
 	protected CommonElementImporter(final CommonElementImporter importer) {
@@ -169,6 +173,7 @@ abstract class CommonElementImporter {
 		reader = importer.reader;
 		file = importer.file;
 		typeLibrary = importer.typeLibrary;
+		errorMarkerAttributes = importer.errorMarkerAttributes;
 	}
 
 	public void loadElement() {
@@ -181,45 +186,42 @@ abstract class CommonElementImporter {
 		} catch (final Exception e) {
 			Activator.getDefault().logWarning("Type Loading issue", e);
 			createErrorMarker(e.getMessage());
+		}finally {
+			buildErrorMarker(file);
 		}
 	}
-
 	protected void createErrorMarker(final String message) {
-		final Map<String, String> attrs = new HashMap<>();
+		final Map<String, Object> attrs = new HashMap<>();
 		attrs.put(IMarker.MESSAGE, message);
-		createErrorMarker(attrs);
+		createErrorMarkerAtrribute(attrs);
 	}
 
 	protected void createErrorMarker(final String message, final INamedElement errorLocation) {
-		final Map<String, String> attrs = new HashMap<>();
+		final Map<String, Object> attrs = new HashMap<>();
 		attrs.put(IMarker.MESSAGE, message);
 		FordiacMarkerHelper.addLocation(errorLocation, attrs);
 		FordiacMarkerHelper.addTargetIdentifier(errorLocation, attrs);
-		createErrorMarker(attrs);
+		createErrorMarkerAtrribute(attrs);
 	}
 
-	protected void createErrorMarker(final Map<String, String> attrs) {
+	protected ErrorMarkerAttribute createErrorMarkerAtrribute(final Map<String, Object> attrs) {
 		final int lineNumber = reader.getLocation().getLineNumber();
-		final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) {
+		final ErrorMarkerAttribute e = new ErrorMarkerAttribute(lineNumber, attrs, null);
+		errorMarkerAttributes.add(e);
+		return e;
+
+	}
+
+	private void buildErrorMarker(final IFile file) {
+		final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) { //$NON-NLS-1$
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				try {
-					final IMarker marker = file.createMarker(IMarker.PROBLEM);
-					if (marker.exists()) {
-						marker.setAttributes(attrs);
-						marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
-						marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
-						marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-					}
-				} catch (final CoreException e) {
-					Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
-				}
+				errorMarkerAttributes.stream().forEach(a -> FordiacMarkerHelper.createMarker(a, file));
 				return Status.OK_STATUS;
 			}
 		};
 		job.setRule(file.getProject());
 		job.schedule();
-
 	}
 
 	protected abstract LibraryElement createRootModelElement();

@@ -15,8 +15,12 @@ package org.eclipse.fordiac.ide.model.helpers;
 
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerAttribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -38,14 +42,14 @@ public final class FordiacMarkerHelper {
 		return FB_NETWORK_ELEMENT_TARGET.equals(attrs.get(TARGET_TYPE));
 	}
 
-	public static void addTargetIdentifier(final INamedElement element, final Map<String, String> attrs) {
+	public static void addTargetIdentifier(final INamedElement element, final Map<String, Object> attrs) {
 		final String targetIdentifier = getTargetIdentifier(element);
 		if (null != targetIdentifier) {
 			attrs.put(TARGET_TYPE, targetIdentifier);
 		}
 	}
 
-	public static void addLocation(final INamedElement element, final Map<String, String> attrs) {
+	public static void addLocation(final INamedElement element, final Map<String, Object> attrs) {
 		final String location = getLocation(element);
 		if (null != location) {
 			attrs.put(IMarker.LOCATION, location);
@@ -117,6 +121,17 @@ public final class FordiacMarkerHelper {
 
 		if (builder.length() > 0) {
 			builder.deleteCharAt(builder.length() - 1); // remove the last dot
+		}
+	}
+
+	public static void createMarker(final ErrorMarkerAttribute errorMarker, final IFile file) {
+		try {
+			final IMarker marker = file.createMarker(IMarker.PROBLEM, errorMarker.getAttributes());
+			if (marker.exists()) {
+				errorMarker.addId(marker.getId());
+			}
+		} catch (final CoreException e) {
+			Activator.getDefault().logError("could not create error marker", e); //$NON-NLS-1$
 		}
 	}
 
