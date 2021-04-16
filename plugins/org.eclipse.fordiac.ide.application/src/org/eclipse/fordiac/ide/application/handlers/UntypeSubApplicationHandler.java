@@ -48,7 +48,7 @@ public class UntypeSubApplicationHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final SubApp subApp = getSelectedSubApp(selection);
-		setBaseEnabled((null != subApp) && (!subApp.isTyped()));
+		setBaseEnabled((null != subApp) && (subApp.isTyped()));
 	}
 
 	private static SubApp getSelectedSubApp(final Object selection) {
