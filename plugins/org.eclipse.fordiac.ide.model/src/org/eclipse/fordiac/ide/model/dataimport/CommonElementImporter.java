@@ -204,9 +204,10 @@ abstract class CommonElementImporter {
 		createErrorMarkerAtrribute(attrs);
 	}
 
+	@SuppressWarnings("boxing")
 	protected ErrorMarkerAttribute createErrorMarkerAtrribute(final Map<String, Object> attrs) {
-		final int lineNumber = reader.getLocation().getLineNumber();
-		final ErrorMarkerAttribute e = new ErrorMarkerAttribute(lineNumber, attrs, null);
+		attrs.put(IMarker.LINE_NUMBER, reader.getLocation().getLineNumber());
+		final ErrorMarkerAttribute e = new ErrorMarkerAttribute(attrs, null);
 		errorMarkerAttributes.add(e);
 		return e;
 

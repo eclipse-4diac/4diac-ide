@@ -15,28 +15,32 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 
 public class ErrorMarkerAttribute {
-	private final int lineNumber;
-	private final Map<String, Object> attributes;
+
+	private Map<String, Object> attributes;
 	private ErrorMarkerRef errorMarkerRef;
 
 	@SuppressWarnings("boxing")
-	protected ErrorMarkerAttribute(final int lineNumber, final Map<String, Object> attributes,
-			final ErrorMarkerInterface errorMarkerIe) {
-		super();
-		this.lineNumber = lineNumber;
+	public ErrorMarkerAttribute(final Map<String, Object> attributes, final ErrorMarkerRef errorMarkerIe) {
 		this.attributes = attributes;
-		this.attributes.put(IMarker.LINE_NUMBER, lineNumber);
 		this.attributes.put(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
 		this.attributes.put(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 		this.errorMarkerRef = errorMarkerIe;
 	}
 
-	public int getLineNumber() {
-		return lineNumber;
+	public ErrorMarkerAttribute(final IMarker marker, final ErrorMarkerRef errorMarkerRef) {
+		this.errorMarkerRef = errorMarkerRef;
+		try {
+			this.attributes = marker.getAttributes();
+		} catch (final CoreException e) {
+			Activator.getDefault().getLog().error("Error Marker not found", e); //$NON-NLS-1$
+		}
+
+
 	}
 
 	public Map<String, Object> getAttributes() {
@@ -47,8 +51,8 @@ public class ErrorMarkerAttribute {
 		return errorMarkerRef;
 	}
 
-	public void setErrorMarkerIe(final ErrorMarkerInterface errorMarkerIe) {
-		this.errorMarkerRef = errorMarkerIe;
+	public void setErrorMarkerIe(final ErrorMarkerRef errorMarkerRef) {
+		this.errorMarkerRef = errorMarkerRef;
 	}
 
 	public void addId(final long id) {

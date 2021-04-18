@@ -17,13 +17,21 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerAttribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -124,7 +132,14 @@ public final class FordiacMarkerHelper {
 		}
 	}
 
+	public static void createMarker(final ErrorMarkerAttribute errorMarker) {
+		final IFile file = getFileFromRef(errorMarker.getErrorMarkerRef());
+		createMarker(errorMarker, file);
+
+	}
+
 	public static void createMarker(final ErrorMarkerAttribute errorMarker, final IFile file) {
+		Assert.isNotNull(file);
 		try {
 			final IMarker marker = file.createMarker(IMarker.PROBLEM, errorMarker.getAttributes());
 			if (marker.exists()) {
@@ -138,4 +153,42 @@ public final class FordiacMarkerHelper {
 	private FordiacMarkerHelper() {
 		throw new UnsupportedOperationException("FordiacMarkerHelper should not be instantiated"); //$NON-NLS-1$
 	}
+
+	public static ErrorMarkerAttribute deleteErrorMarker(final ErrorMarkerRef ie) {
+
+		final IFile file = getFileFromRef(ie);
+
+		return deleteMarkerInJob(file, ie);
+
+	}
+
+	private static IFile getFileFromRef(final ErrorMarkerRef ie) {
+		final EObject rootContainer = EcoreUtil.getRootContainer(ie);
+		if (rootContainer instanceof AutomationSystem) {
+			return ((AutomationSystem) rootContainer).getSystemFile();
+		} else if (rootContainer instanceof FBType) {
+			return ((FBType) rootContainer).getPaletteEntry().getFile();
+		}
+		return null;
+	}
+
+	private static ErrorMarkerAttribute deleteMarkerInJob(final IFile f, final ErrorMarkerRef ie) {
+		final IMarker marker = f.getMarker(ie.getFileMarkerId());
+		final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + f.getName()) { //$NON-NLS-1$
+			@Override
+			public IStatus runInWorkspace(final IProgressMonitor monitor) {
+				try {
+					marker.delete();
+				} catch (final CoreException e) {
+					Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		final ErrorMarkerAttribute errorMarkerAttribute = new ErrorMarkerAttribute(marker, ie);
+		job.setRule(f.getProject());
+		job.schedule();
+		return errorMarkerAttribute;
+	}
+
 }
