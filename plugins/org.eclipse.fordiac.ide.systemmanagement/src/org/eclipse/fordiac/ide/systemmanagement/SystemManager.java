@@ -191,10 +191,6 @@ public enum SystemManager {
 		systemExporter.saveSystem(file);
 	}
 
-	public List<AutomationSystem> getSystems() {
-		return Collections.emptyList();
-	}
-
 	public synchronized AutomationSystem getSystem(final IFile systemFile) {
 		final Map<IFile, AutomationSystem> projectSystems = getProjectSystems(systemFile.getProject());
 		return projectSystems.computeIfAbsent(systemFile, sysFile -> {

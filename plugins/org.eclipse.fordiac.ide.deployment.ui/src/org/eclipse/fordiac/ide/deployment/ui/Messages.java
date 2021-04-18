@@ -49,6 +49,8 @@ public final class Messages extends NLS {
 
 	public static String CreateBootFilesWizardPage_DestinationNotSelected;
 
+	public static String CreateBootFilesWizardPage_NoSystemSelected;
+
 	public static String CreateBootFilesWizardPage_NothingSelectedForBootFileGeneration;
 
 	public static String DeleteResourceHandler_DeleteResourceError;
