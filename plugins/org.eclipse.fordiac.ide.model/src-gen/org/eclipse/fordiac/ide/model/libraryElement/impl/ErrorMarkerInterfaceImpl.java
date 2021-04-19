@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -150,6 +151,22 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 * @generated
 	 * @ordered */
 	protected String typeName = TYPE_NAME_EDEFAULT;
+
+	/** The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @see #getFileMarkerId()
+	 * @generated
+	 * @ordered */
+	protected static final long FILE_MARKER_ID_EDEFAULT = 0L;
+
+	/** The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
+	 * @see #getFileMarkerId()
+	 * @generated
+	 * @ordered */
+	protected long fileMarkerId = FILE_MARKER_ID_EDEFAULT;
 
 	/** The cached value of the '{@link #getRepairedEndpoint() <em>Repaired Endpoint</em>}' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -314,6 +331,26 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE_NAME, oldTypeName, typeName));
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public long getFileMarkerId() {
+		return fileMarkerId;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public void setFileMarkerId(long newFileMarkerId) {
+		long oldFileMarkerId = fileMarkerId;
+		fileMarkerId = newFileMarkerId;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID, oldFileMarkerId, fileMarkerId));
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -525,6 +562,38 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 		default:
 			return super.eIsSet(featureID);
 		}
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == ErrorMarkerRef.class) {
+			switch (derivedFeatureID) {
+			case LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID:
+				return LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID;
+			default:
+				return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == ErrorMarkerRef.class) {
+			switch (baseFeatureID) {
+			case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID:
+				return LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID;
+			default:
+				return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

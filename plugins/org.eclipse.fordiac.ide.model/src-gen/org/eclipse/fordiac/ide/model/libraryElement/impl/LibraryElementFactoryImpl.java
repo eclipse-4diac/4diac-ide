@@ -59,6 +59,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -280,6 +281,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			return createErrorMarkerInterface();
 		case LibraryElementPackage.CFB_INSTANCE:
 			return createCFBInstance();
+		case LibraryElementPackage.ERROR_MARKER_REF:
+			return createErrorMarkerRef();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -964,6 +967,15 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public CFBInstance createCFBInstance() {
 		CFBInstanceImpl cfbInstance = new CFBInstanceImpl();
 		return cfbInstance;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public ErrorMarkerRef createErrorMarkerRef() {
+		ErrorMarkerRefImpl errorMarkerRef = new ErrorMarkerRefImpl();
+		return errorMarkerRef;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

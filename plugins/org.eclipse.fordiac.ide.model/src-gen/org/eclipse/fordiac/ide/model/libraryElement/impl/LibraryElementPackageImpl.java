@@ -72,6 +72,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -521,6 +522,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * 
 	 * @generated */
 	private EClass cfbInstanceEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	private EClass errorMarkerRefEClass = null;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -2489,6 +2495,22 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * 
 	 * @generated */
 	@Override
+	public EClass getErrorMarkerRef() {
+		return errorMarkerRefEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public EAttribute getErrorMarkerRef_FileMarkerId() {
+		return (EAttribute) errorMarkerRefEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
 	public EEnum getLanguage() {
 		return languageEEnum;
 	}
@@ -2860,6 +2882,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		cfbInstanceEClass = createEClass(CFB_INSTANCE);
 		createEReference(cfbInstanceEClass, CFB_INSTANCE__CFB_NETWORK);
 
+		errorMarkerRefEClass = createEClass(ERROR_MARKER_REF);
+		createEAttribute(errorMarkerRefEClass, ERROR_MARKER_REF__FILE_MARKER_ID);
+
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
 
@@ -2965,6 +2990,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		localVariableEClass.getESuperTypes().add(this.getVarDeclaration());
 		errorMarkerFBNElementEClass.getESuperTypes().add(this.getFBNetworkElement());
 		errorMarkerInterfaceEClass.getESuperTypes().add(this.getIInterfaceElement());
+		errorMarkerInterfaceEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		cfbInstanceEClass.getESuperTypes().add(this.getFB());
 
 		// Initialize classes and features; add operations and parameters
@@ -3883,6 +3909,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(cfbInstanceEClass, this.getFBNetwork(), "loadCFBNetwork", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(cfbInstanceEClass, this.getCompositeFBType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(errorMarkerRefEClass, ErrorMarkerRef.class, "ErrorMarkerRef", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+				IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getErrorMarkerRef_FileMarkerId(), ecorePackage.getELong(), "fileMarkerId", null, 0, 1, //$NON-NLS-1$
+				ErrorMarkerRef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$
