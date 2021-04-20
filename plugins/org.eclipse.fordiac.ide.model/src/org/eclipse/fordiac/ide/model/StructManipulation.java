@@ -174,7 +174,7 @@ public class StructManipulation {
 		List<VarDeclaration> members = struct.getMemberVariables();
 		VarDeclaration found = null;
 		for (final String subname : subnames) { //
-			final Object[] findings = members.stream().filter(var -> var.getName().equals(subname)).toArray();
+			final Object[] findings = members.stream().filter(memVar -> memVar.getName().equals(subname)).toArray();
 			if (findings.length > 0) {
 				found = (VarDeclaration) findings[0];
 			}

@@ -38,11 +38,11 @@ public abstract class DeleteVariableCommand extends Command {
 	 * Instantiates a command to remove a variable from a list.
 	 *
 	 * @param type the type from which the var is deleted
-	 * @param var  the var that should be deleted
+	 * @param varToDelete  the var that should be deleted
 	 */
-	protected DeleteVariableCommand(final LibraryElement type, final VarDeclaration var) {
+	protected DeleteVariableCommand(final LibraryElement type, final VarDeclaration varToDelete) {
 		this.type = type;
-		this.varToDelete = var;
+		this.varToDelete = varToDelete;
 	}
 
 	/*

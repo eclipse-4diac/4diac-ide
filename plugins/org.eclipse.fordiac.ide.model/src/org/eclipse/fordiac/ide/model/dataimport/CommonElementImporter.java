@@ -113,15 +113,15 @@ public abstract class CommonElementImporter {
 
 	private static VarDeclaration createVarDecl(final InterfaceList interfaceList, final String varName,
 			final boolean input) {
-		final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		var.setName(varName);
-		var.setIsInput(input);
+		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		variable.setName(varName);
+		variable.setIsInput(input);
 		if (input) {
-			interfaceList.getInputVars().add(var);
+			interfaceList.getInputVars().add(variable);
 		} else {
-			interfaceList.getOutputVars().add(var);
+			interfaceList.getOutputVars().add(variable);
 		}
-		return var;
+		return variable;
 	}
 
 	protected XMLStreamReader reader;
@@ -435,11 +435,11 @@ public abstract class CommonElementImporter {
 	}
 
 	protected VarDeclaration parseParameter() throws TypeImportException, XMLStreamException {
-		final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		if (null != name) {
-			var.setName(name);
+			variable.setName(name);
 		} else {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterNotSet);
 		}
@@ -448,16 +448,16 @@ public abstract class CommonElementImporter {
 		if (null != value) {
 			final Value val = LibraryElementFactory.eINSTANCE.createValue();
 			val.setValue(value);
-			var.setValue(val);
+			variable.setValue(val);
 		} else {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterValueNotSet);
 		}
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
-			var.setComment(comment);
+			variable.setComment(comment);
 		}
 		proceedToEndElementNamed(LibraryElementTags.PARAMETER_ELEMENT);
-		return var;
+		return variable;
 	}
 
 	protected String getAttributeValue(final String attributeName) {

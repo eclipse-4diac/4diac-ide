@@ -34,10 +34,10 @@ public class ForceHandler extends AbstractMonitoringHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		super.execute(event);
 		StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		VarDeclaration var = getVariable(selection.getFirstElement());
-		if (null != var) {
+		VarDeclaration variable = getVariable(selection.getFirstElement());
+		if (null != variable) {
 			MonitoringManager manager = MonitoringManager.getInstance();
-			MonitoringBaseElement element = manager.getMonitoringElement(var);
+			MonitoringBaseElement element = manager.getMonitoringElement(variable);
 			if (element instanceof MonitoringElement) {
 				MonitoringElement monitoringElement = (MonitoringElement) element;
 
@@ -64,8 +64,8 @@ public class ForceHandler extends AbstractMonitoringHandler {
 
 			if (1 == sel.size()) {
 				// only allow to force a value if only one element is selected
-				VarDeclaration var = getVariable(sel.getFirstElement());
-				if ((null != var) && manager.containsPort(var)) {
+				VarDeclaration variable = getVariable(sel.getFirstElement());
+				if ((null != variable) && manager.containsPort(variable)) {
 					needToAdd = true;
 				}
 			}

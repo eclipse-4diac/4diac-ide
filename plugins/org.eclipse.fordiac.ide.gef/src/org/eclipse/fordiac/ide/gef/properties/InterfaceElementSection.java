@@ -133,12 +133,12 @@ public class InterfaceElementSection extends AbstractSection {
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			String itype = ""; //$NON-NLS-1$
 			if (getType() instanceof VarDeclaration) {
-				final VarDeclaration var = (VarDeclaration) getType();
-				itype = var.getType() != null ? var.getType().getName() : ""; //$NON-NLS-1$
+				final VarDeclaration variable = (VarDeclaration) getType();
+				itype = variable.getType() != null ? variable.getType().getName() : ""; //$NON-NLS-1$
 				if (getType().isIsInput()) {
 					parameterText.setVisible(true);
 					valueCLabel.setVisible(true);
-					parameterText.setText((var.getValue() != null) ? var.getValue().getValue() : ""); //$NON-NLS-1$
+					parameterText.setText((variable.getValue() != null) ? variable.getValue().getValue() : ""); //$NON-NLS-1$
 				} else {
 					valueCLabel.setVisible(false);
 					parameterText.setVisible(false);

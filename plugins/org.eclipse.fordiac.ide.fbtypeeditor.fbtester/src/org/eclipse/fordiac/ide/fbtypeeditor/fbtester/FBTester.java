@@ -526,8 +526,8 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 			dataLine.append(event.getWith().size()).append(";");//$NON-NLS-1$ // nr of inputs are the number of
 			// connected withs
 			for (final With with : event.getWith()) {
-				final VarDeclaration var = with.getVariables();
-				dataLine.append(var.getName()).append(";val;"); //$NON-NLS-1$
+				final VarDeclaration variable = with.getVariables();
+				dataLine.append(variable.getName()).append(";val;"); //$NON-NLS-1$
 			}
 			dataLine.append(event.getName()).append(";"); //$NON-NLS-1$
 		}
@@ -541,8 +541,8 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		if (!type.getInterfaceList().getOutputVars().isEmpty()) {
 			dataLine.append(type.getInterfaceList().getOutputVars().size());
 			dataLine.append(";"); //$NON-NLS-1$
-			for (final VarDeclaration var : type.getInterfaceList().getOutputVars()) {
-				dataLine.append(var.getName()).append(";val;"); //$NON-NLS-1$
+			for (final VarDeclaration variable : type.getInterfaceList().getOutputVars()) {
+				dataLine.append(variable.getName()).append(";val;"); //$NON-NLS-1$
 			}
 		}
 		final TestData testData = createTestData(dataLine.toString());

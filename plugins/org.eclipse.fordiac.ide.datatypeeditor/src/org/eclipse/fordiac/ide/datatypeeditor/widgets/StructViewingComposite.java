@@ -131,21 +131,21 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private DataType getDataType() {
-		final VarDeclaration var = getLastSelectedVariable();
-		return (null != var) ? var.getType() : null;
+		final VarDeclaration memVar = getLastSelectedVariable();
+		return (null != memVar) ? memVar.getType() : null;
 	}
 
 	private String getVarName() {
-		final VarDeclaration var = getLastSelectedVariable();
-		return (null != var) ? var.getName() : null;
+		final VarDeclaration memVar = getLastSelectedVariable();
+		return (null != memVar) ? memVar.getName() : null;
 	}
 
 	private int getInsertionIndex() {
-		final VarDeclaration alg = getLastSelectedVariable();
-		if (null == alg) {
+		final VarDeclaration memVar = getLastSelectedVariable();
+		if (null == memVar) {
 			return getType().getMemberVariables().size();
 		}
-		return getType().getMemberVariables().indexOf(alg) + 1;
+		return getType().getMemberVariables().indexOf(memVar) + 1;
 	}
 
 	private VarDeclaration getLastSelectedVariable() {
@@ -206,18 +206,18 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			final VarDeclaration var = (VarDeclaration) element;
+			final VarDeclaration memVar = (VarDeclaration) element;
 			switch (property) {
 			case NAME:
-				return var.getName();
+				return memVar.getName();
 			case TYPE:
-				return var.getTypeName();
+				return memVar.getTypeName();
 			case COMMENT:
-				return var.getComment();
+				return memVar.getComment();
 			case INIT:
-				return (var.getValue() == null) ? "" : var.getValue().getValue(); //$NON-NLS-1$
+				return (memVar.getValue() == null) ? "" : memVar.getValue().getValue(); //$NON-NLS-1$
 			case ARRAY:
-				return (var.getArraySize() > 0) ? Integer.toString(var.getArraySize()) : ""; //$NON-NLS-1$
+				return (memVar.getArraySize() > 0) ? Integer.toString(memVar.getArraySize()) : ""; //$NON-NLS-1$
 			default:
 				return "Could not load"; //$NON-NLS-1$
 			}

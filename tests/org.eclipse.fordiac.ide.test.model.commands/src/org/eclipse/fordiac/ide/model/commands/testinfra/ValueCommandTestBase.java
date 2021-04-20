@@ -28,15 +28,15 @@ public abstract class ValueCommandTestBase extends CommandTestBase<ValueCommandT
 
 	// create a state description that fits our purpose
 	public static class State extends CommandTestBase.StateBase {
-		private final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		private final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
 		public State() {
 			super();
-			var.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			variable.setValue(LibraryElementFactory.eINSTANCE.createValue());
 		}
 
 		public VarDeclaration getVar() {
-			return var;
+			return variable;
 		}
 
 		@Override

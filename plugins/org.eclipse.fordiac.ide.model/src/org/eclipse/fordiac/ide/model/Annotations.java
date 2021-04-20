@@ -273,14 +273,14 @@ public final class Annotations {
 	}
 
 	public static VarDeclaration getVariable(final InterfaceList il, final String name) {
-		for (final VarDeclaration var : il.getInputVars()) {
-			if (var.getName().equals(name)) {
-				return var;
+		for (final VarDeclaration inVar : il.getInputVars()) {
+			if (inVar.getName().equals(name)) {
+				return inVar;
 			}
 		}
-		for (final VarDeclaration var : il.getOutputVars()) {
-			if (var.getName().equals(name)) {
-				return var;
+		for (final VarDeclaration outVar : il.getOutputVars()) {
+			if (outVar.getName().equals(name)) {
+				return outVar;
 			}
 		}
 		return null;

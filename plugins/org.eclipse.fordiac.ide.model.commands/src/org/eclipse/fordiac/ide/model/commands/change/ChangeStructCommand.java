@@ -210,16 +210,16 @@ public class ChangeStructCommand extends Command {
 	}
 
 	private void createValues() {
-		for (final VarDeclaration var : newMux.getInterface().getInputVars()) {
-			var.setValue(LibraryElementFactory.eINSTANCE.createValue());
-			checkSourceParam(var);
+		for (final VarDeclaration inVar : newMux.getInterface().getInputVars()) {
+			inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			checkSourceParam(inVar);
 		}
 	}
 
-	private void checkSourceParam(final VarDeclaration var) {
-		final VarDeclaration srcVar = oldMux.getInterface().getVariable(var.getName());
+	private void checkSourceParam(final VarDeclaration variable) {
+		final VarDeclaration srcVar = oldMux.getInterface().getVariable(variable.getName());
 		if ((null != srcVar) && (null != srcVar.getValue())) {
-			var.getValue().setValue(srcVar.getValue().getValue());
+			variable.getValue().setValue(srcVar.getValue().getValue());
 		}
 	}
 

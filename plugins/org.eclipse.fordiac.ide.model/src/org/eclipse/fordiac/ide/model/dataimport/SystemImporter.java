@@ -369,15 +369,15 @@ public class SystemImporter extends CommonElementImporter {
 		}
 	}
 
-	private static VarDeclaration getTypeVariable(final VarDeclaration var) {
+	private static VarDeclaration getTypeVariable(final VarDeclaration variable) {
 		EList<VarDeclaration> varList = null;
-		if (var.eContainer() instanceof Device) {
-			final Device dev = (Device) var.eContainer();
+		if (variable.eContainer() instanceof Device) {
+			final Device dev = (Device) variable.eContainer();
 			if (null != dev.getType()) {
 				varList = dev.getType().getVarDeclaration();
 			}
-		} else if (var.eContainer() instanceof Resource) {
-			final Resource res = (Resource) var.eContainer();
+		} else if (variable.eContainer() instanceof Resource) {
+			final Resource res = (Resource) variable.eContainer();
 			if (null != res.getType()) {
 				varList = res.getType().getVarDeclaration();
 			}
@@ -385,7 +385,7 @@ public class SystemImporter extends CommonElementImporter {
 
 		if (null != varList) {
 			for (final VarDeclaration typeVar : varList) {
-				if (typeVar.getName().equals(var.getName())) {
+				if (typeVar.getName().equals(variable.getName())) {
 					return typeVar;
 				}
 			}

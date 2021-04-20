@@ -479,15 +479,15 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	private static VarDeclaration createVarDecl(final InterfaceList interfaceList, final String varName,
 			final boolean input) {
-		final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		var.setName(varName);
-		var.setIsInput(input);
+		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		variable.setName(varName);
+		variable.setIsInput(input);
 		if (input) {
-			interfaceList.getInputVars().add(var);
+			interfaceList.getInputVars().add(variable);
 		} else {
-			interfaceList.getOutputVars().add(var);
+			interfaceList.getOutputVars().add(variable);
 		}
-		return var;
+		return variable;
 	}
 
 	/** returns an valid dx, dy integer value

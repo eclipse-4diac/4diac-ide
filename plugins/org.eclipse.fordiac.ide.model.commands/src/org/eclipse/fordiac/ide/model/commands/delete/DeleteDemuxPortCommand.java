@@ -33,7 +33,7 @@ import org.eclipse.gef.commands.Command;
 public class DeleteDemuxPortCommand extends Command {
 
 	private Demultiplexer type;
-	private final VarDeclaration var;
+	private final VarDeclaration variable;
 	private final String name;
 	private String oldVisibleChildren;
 	private String newVisibleChildren;
@@ -44,14 +44,14 @@ public class DeleteDemuxPortCommand extends Command {
 	public DeleteDemuxPortCommand(Demultiplexer type, String name) {
 		this.type = type;
 		this.name = name;
-		this.var = (VarDeclaration) type.getInterfaceElement(name);
+		this.variable = (VarDeclaration) type.getInterfaceElement(name);
 		this.oldVisibleChildren = type.getAttributeValue(DEMUX_VISIBLE_CHILDREN);
 	}
 
 	private String getNewAttributeValue() {
 		if (null == oldVisibleChildren) {
 			final StringBuilder sb = new StringBuilder();
-			type.getStructType().getMemberVariables().forEach(var -> sb.append(var.getName() + VARIABLE_SEPARATOR));
+			type.getStructType().getMemberVariables().forEach(memVar -> sb.append(memVar.getName() + VARIABLE_SEPARATOR));
 			if (!type.getStructType().getMemberVariables().isEmpty()) {
 				sb.deleteCharAt(sb.length() - 1);
 			}
@@ -98,7 +98,7 @@ public class DeleteDemuxPortCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return var != null;
+		return variable != null;
 	}
 
 	@Override

@@ -327,16 +327,16 @@ public class UpdateFBTypeCommand extends Command {
 	}
 
 	private void createValues() {
-		for (final VarDeclaration var : newElement.getInterface().getInputVars()) {
-			var.setValue(LibraryElementFactory.eINSTANCE.createValue());
-			checkSourceParam(var);
+		for (final VarDeclaration inVar : newElement.getInterface().getInputVars()) {
+			inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			checkSourceParam(inVar);
 		}
 	}
 
-	private void checkSourceParam(final VarDeclaration var) {
-		final VarDeclaration srcVar = oldElement.getInterface().getVariable(var.getName());
+	private void checkSourceParam(final VarDeclaration variable) {
+		final VarDeclaration srcVar = oldElement.getInterface().getVariable(variable.getName());
 		if ((null != srcVar) && (null != srcVar.getValue())) {
-			var.getValue().setValue(srcVar.getValue().getValue());
+			variable.getValue().setValue(srcVar.getValue().getValue());
 		}
 	}
 

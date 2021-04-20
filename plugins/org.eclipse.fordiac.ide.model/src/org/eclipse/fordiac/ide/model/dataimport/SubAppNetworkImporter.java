@@ -65,9 +65,9 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			parseUntypedSubapp(subApp);
 		}
 
-		for (final VarDeclaration var : subApp.getInterface().getInputVars()) {
-			if (null == var.getValue()) {
-				var.setValue(LibraryElementFactory.eINSTANCE.createValue());
+		for (final VarDeclaration inVar : subApp.getInterface().getInputVars()) {
+			if (null == inVar.getValue()) {
+				inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			}
 		}
 		fbNetworkElementMap.put(subApp.getName(), subApp);

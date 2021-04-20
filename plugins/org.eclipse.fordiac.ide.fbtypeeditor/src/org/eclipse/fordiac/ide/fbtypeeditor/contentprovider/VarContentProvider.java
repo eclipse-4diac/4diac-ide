@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2016, 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.contentprovider;
 
 import java.util.ArrayList;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -24,22 +25,17 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 public class VarContentProvider implements IStructuredContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
-		ArrayList<VarDeclaration> vars = new ArrayList<VarDeclaration>();
+		final ArrayList<VarDeclaration> vars = new ArrayList<>();
 		if (inputElement instanceof IInterfaceElement) {
-			IInterfaceElement ielem = (IInterfaceElement) inputElement;
-			FBType fbtype = (FBType) ielem.eContainer().eContainer();
+			final IInterfaceElement ielem = (IInterfaceElement) inputElement;
+			final FBType fbtype = (FBType) ielem.eContainer().eContainer();
 			// filter adapter elements as the are not allowed to be connected by with
-			if (ielem.isIsInput()) {
-				for (VarDeclaration var : fbtype.getInterfaceList().getInputVars()) {
-					if (!(var.getType() instanceof AdapterType)) {
-						vars.add(var);
-					}
-				}
-			} else {
-				for (VarDeclaration var : fbtype.getInterfaceList().getOutputVars()) {
-					if (!(var.getType() instanceof AdapterType)) {
-						vars.add(var);
-					}
+			final EList<VarDeclaration> sourceVarList = (ielem.isIsInput()) ? fbtype.getInterfaceList().getInputVars()
+					: fbtype.getInterfaceList().getOutputVars();
+
+			for (final VarDeclaration variable : sourceVarList) {
+				if (!(variable.getType() instanceof AdapterType)) {
+					vars.add(variable);
 				}
 			}
 		}
