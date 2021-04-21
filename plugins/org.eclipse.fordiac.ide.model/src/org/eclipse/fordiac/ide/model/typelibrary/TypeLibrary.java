@@ -49,12 +49,16 @@ public final class TypeLibrary implements TypeLibraryTags {
 	// !> Holds type libraries of all open 4diac IDE projects
 	private static Map<IProject, TypeLibrary> typeLibraryList = new HashMap<>();
 
-	public static synchronized TypeLibrary getTypeLibrary(final IProject proj) {
-		return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
+	public static TypeLibrary getTypeLibrary(final IProject proj) {
+		synchronized (typeLibraryList) {
+			return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
+		}
 	}
 
 	public static void removeProject(final IProject project) {
-		typeLibraryList.remove(project);
+		synchronized (typeLibraryList) {
+			typeLibraryList.remove(project);
+		}
 	}
 
 	private final Palette blockTypeLib = PaletteFactory.eINSTANCE.createPalette();
@@ -145,8 +149,10 @@ public final class TypeLibrary implements TypeLibraryTags {
 	}
 
 	public static synchronized void loadToolLibrary() {
-		final IProject toolLibProject = getToolLibProject();
-		typeLibraryList.computeIfAbsent(toolLibProject, TypeLibrary::createToolLibrary);
+		synchronized (typeLibraryList) {
+			final IProject toolLibProject = getToolLibProject();
+			typeLibraryList.computeIfAbsent(toolLibProject, TypeLibrary::createToolLibrary);
+		}
 	}
 
 	private static TypeLibrary createToolLibrary(final IProject toolLibProject) {

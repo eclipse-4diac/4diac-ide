@@ -1,22 +1,27 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.util.Switch;
+
 import org.eclipse.fordiac.ide.model.data.DataType;
+
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -1180,17 +1185,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-	/** Returns the result of interpreting the object as an instance of '<em>FB Network</em>'. <!-- begin-user-doc -->
-	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>FB Network</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated */
-	public T caseFBNetwork(FBNetwork object) {
-		return null;
-	}
-
 	/** Returns the result of interpreting the object as an instance of '<em>FB</em>'. <!-- begin-user-doc --> This
 	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
 	 * 
@@ -1211,6 +1205,17 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated */
 	public T caseFBNetworkElement(FBNetworkElement object) {
+		return null;
+	}
+
+	/** Returns the result of interpreting the object as an instance of '<em>Sub App</em>'. <!-- begin-user-doc --> This
+	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
+	 * 
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Sub App</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated */
+	public T caseSubApp(SubApp object) {
 		return null;
 	}
 
@@ -1307,6 +1312,17 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 		return null;
 	}
 
+	/** Returns the result of interpreting the object as an instance of '<em>Attribute</em>'. <!-- begin-user-doc -->
+	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
+	 * 
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Attribute</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated */
+	public T caseAttribute(Attribute object) {
+		return null;
+	}
+
 	/** Returns the result of interpreting the object as an instance of '<em>Resource</em>'. <!-- begin-user-doc -->
 	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
 	 * 
@@ -1400,14 +1416,14 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-	/** Returns the result of interpreting the object as an instance of '<em>Sub App</em>'. <!-- begin-user-doc --> This
-	 * implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
+	/** Returns the result of interpreting the object as an instance of '<em>FB Network</em>'. <!-- begin-user-doc -->
+	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
 	 * 
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Sub App</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>FB Network</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated */
-	public T caseSubApp(SubApp object) {
+	public T caseFBNetwork(FBNetwork object) {
 		return null;
 	}
 
@@ -1863,17 +1879,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated */
 	public T caseLocalVariable(LocalVariable object) {
-		return null;
-	}
-
-	/** Returns the result of interpreting the object as an instance of '<em>Attribute</em>'. <!-- begin-user-doc -->
-	 * This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 * 
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Attribute</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated */
-	public T caseAttribute(Attribute object) {
 		return null;
 	}
 

@@ -26,17 +26,6 @@ public enum NamedElementComparator implements Comparator<INamedElement> {
 
 	@Override
 	public int compare(final INamedElement o1, final INamedElement o2) {
-		if (o1 == null) {
-			Activator.getDefault()
-					.logError("o1 was null, o2 value: " + o2 + " name: " + ((null != o2) ? o2.getName() : "Also null")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		}
-		if (o2 == null) {
-			Activator.getDefault()
-					.logError("o2 was null, o1 value: " + o1 + " name: " + ((null != o1) ? o1.getName() : "Also null")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		}
-		if (col == null) {
-			Activator.getDefault().logError("col2 was null"); //$NON-NLS-1$
-		}
 		return col.compare(o1.getName(), o2.getName());
 	}
 }
