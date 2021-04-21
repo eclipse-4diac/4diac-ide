@@ -23,28 +23,38 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.commands.change.AttributeChangeCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AttributeCreateCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 
 public class LayoutCommand extends Command {
-	
-	final Map<FBNetworkElement, Position> positions;
-	final Map<Connection, PointList> connPoints;
+
+	private final Map<FBNetworkElement, Position> positions;
+	private final Map<Connection, PointList> connPoints;
 	private final Map<FBNetworkElement, FBNetworkElementFigure> fbFigures;
+	private final Map<IInterfaceElement, Integer> pins;
 
 	private final Map<FBNetworkElement, Position> oldPositions = new HashMap<>();
 	private final Map<Connection, ConnectionRoutingData> oldRoutingData = new HashMap<>();
 
-	public LayoutCommand(Map<FBNetworkElement, Position> positions, Map<Connection, PointList> connPoints,
-			Map<FBNetworkElement, FBNetworkElementFigure> fbFigures) {
+	private final CompoundCommand pinPositionAttrCommand = new CompoundCommand();
+
+	public LayoutCommand(final Map<FBNetworkElement, Position> positions, final Map<Connection, PointList> connPoints,
+			final Map<FBNetworkElement, FBNetworkElementFigure> fbFigures, final Map<IInterfaceElement, Integer> pins) {
 		super();
 		this.positions = positions;
 		this.connPoints = connPoints;
 		this.fbFigures = fbFigures;
+		this.pins = pins;
 	}
 
 	@Override
@@ -52,12 +62,17 @@ public class LayoutCommand extends Command {
 		saveDataForUndo();
 		updateModelElements();
 		updateFigures();
+		if (pinPositionAttrCommand.canExecute()) {
+			pinPositionAttrCommand.execute();
+		}
 	}
-
 	@Override
 	public void redo() {
 		updateModelElements();
 		updateFigures();
+		if (pinPositionAttrCommand.canExecute()) {
+			pinPositionAttrCommand.redo();
+		}
 	}
 
 	@Override
@@ -68,6 +83,9 @@ public class LayoutCommand extends Command {
 			final Position pos = oldPositions.get(elem);
 			fig.setLocation(new Point(pos.getX(), pos.getY()));
 		});
+		if (pinPositionAttrCommand.canExecute()) {
+			pinPositionAttrCommand.undo();
+		}
 	}
 
 	private void saveDataForUndo() {
@@ -78,6 +96,19 @@ public class LayoutCommand extends Command {
 	private void updateModelElements() {
 		positions.forEach(FBNetworkElement::setPosition);
 		connPoints.forEach(LayoutCommand::updateModel);
+		pins.forEach(this::updatePositionAttribute);
+	}
+
+	private void updatePositionAttribute(final IInterfaceElement ie, final Integer y) {
+		final Command cmd;
+		final String attrValue = y.toString();
+		final Attribute attr = ie.getAttribute(FordiacKeywords.INTERFACE_Y_POSITION);
+		if (attr == null) {
+			cmd = new AttributeCreateCommand(ie, FordiacKeywords.INTERFACE_Y_POSITION, "", attrValue); //$NON-NLS-1$
+		} else {
+			cmd = new AttributeChangeCommand(attr, attrValue);
+		}
+		pinPositionAttrCommand.add(cmd);
 	}
 
 	private void updateFigures() {

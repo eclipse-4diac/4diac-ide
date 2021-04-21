@@ -18,14 +18,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.gef.commands.Command;
 
 public class AttributeChangeCommand extends Command {
-	private Attribute attribute;
-	private String name;
+	private final Attribute attribute;
+	private final String name;
 	private String nameOld;
-	private String value;
+	private final String value;
 	private String valueOld;
-	private String comment;
+	private final String comment;
 	private String commentOld;
-	private BaseType1 type;
+	private final BaseType1 type;
 	private BaseType1 typeOld;
 
 	public AttributeChangeCommand(Attribute attribute, String name, String value, BaseType1 type, String comment) {
@@ -34,6 +34,14 @@ public class AttributeChangeCommand extends Command {
 		this.value = value;
 		this.name = name;
 		this.type = type;
+	}
+
+	public AttributeChangeCommand(Attribute attribute, String value) {
+		this.attribute = attribute;
+		this.value = value;
+		this.comment = attribute.getComment();
+		this.name = attribute.getName();
+		this.type = attribute.getType();
 	}
 
 	@Override

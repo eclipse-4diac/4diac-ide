@@ -24,6 +24,7 @@ import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.options.Direction;
 import org.eclipse.elk.core.options.EdgeRouting;
 import org.eclipse.elk.core.options.PortConstraints;
+import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.service.DiagramLayoutEngine;
 import org.eclipse.elk.graph.ElkConnectableShape;
 import org.eclipse.elk.graph.ElkEdge;
@@ -32,8 +33,10 @@ import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
+import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 
 public class FordiacLayoutFactory {
 
@@ -68,8 +71,15 @@ public class FordiacLayoutFactory {
 
 	public static ElkPort createFordiacLayoutPort(InterfaceEditPart editPart, ElkNode parent, Point point) {
 		final ElkPort port = ElkGraphUtil.createPort(parent);
-		port.setLocation(point.preciseX() - parent.getX(), point.preciseY() - parent.getY());
 		port.setDimensions(0, 0);
+		if (editPart.getParent() instanceof EditorWithInterfaceEditPart) {
+			/* "FIXED_ORDER" port constraint, needs an index and the side */
+			port.setProperty(CoreOptions.PORT_SIDE, editPart.isInput() ? PortSide.EAST : PortSide.WEST);
+			port.setProperty(CoreOptions.PORT_INDEX, getLayoutInterfaceIndex(editPart));
+		} else {
+			/* "FIXED_POS" port constraint, needs the absolute position */
+			port.setLocation(point.preciseX() - parent.getX(), point.preciseY() - parent.getY());
+		}
 		return port;
 	}
 	
@@ -81,9 +91,10 @@ public class FordiacLayoutFactory {
 			.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_STRATEGY, NodePlacementStrategy.NETWORK_SIMPLEX)
 			.setProperty(LayeredMetaDataProvider.CROSSING_MINIMIZATION_STRATEGY,CrossingMinimizationStrategy.INTERACTIVE)
 			.setProperty(LayeredMetaDataProvider.THOROUGHNESS, 10)
-			.setProperty(CoreOptions.PADDING, new ElkPadding(100.0, 19.0)); // specific height padding to compensate for instance comment
+			.setProperty(CoreOptions.PADDING, new ElkPadding(100.0, 19.0)) // specific height padding to compensate for instance comment
+			.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_ORDER);
 		configureSpacing(graph);
-		configureNode(graph); // port constraints in case of editor with interfaces
+		
 	}
 	
 	private static void configureNode(ElkNode node) {
@@ -117,6 +128,44 @@ public class FordiacLayoutFactory {
 
 	private static LayoutConfigurator createConfigurator() {
 		return new LayoutConfigurator();
+	}
+
+	/** @param ep InterfaceEditPart of the Editor
+	 * @return index of the InterfaceElement in the editors sidebar, goes clockwise starting at the top right interface
+	 *         element */
+	public static int getLayoutInterfaceIndex(InterfaceEditPart ep) {
+		final InterfaceList ifList = (InterfaceList) ep.getModel().eContainer();
+		int index = 0;
+		if (ep.getModel().isIsInput()) { // use model isInput! because EditPart.isInput treats inputs as
+			// outputs for visual appearance
+			final int rightSideIndices = ifList.getEventOutputs().size() + ifList.getOutputVars().size()
+					+ ifList.getPlugs().size();
+			if (ep.isEvent()) {
+				index = ifList.getEventInputs().size() - ifList.getEventInputs().indexOf(ep.getModel()) - 1;
+				index += ifList.getInputVars().size();
+				index += ifList.getSockets().size();
+				index += rightSideIndices;
+			} else if (ep.isAdapter()) {
+				index = ifList.getSockets().size() - ifList.getSockets().indexOf(ep.getModel()) - 1;
+				index += rightSideIndices;
+			} else {
+				index = ifList.getInputVars().size() - ifList.getInputVars().indexOf(ep.getModel()) - 1;
+				index += ifList.getSockets().size();
+				index += rightSideIndices;
+			}
+		} else {
+			if (ep.isEvent()) {
+				index = ifList.getEventOutputs().indexOf(ep.getModel());
+			} else if (ep.isAdapter()) {
+				index = ifList.getPlugs().indexOf(ep.getModel());
+				index += ifList.getEventOutputs().size();
+				index += ifList.getOutputVars().size();
+			} else {
+				index = ifList.getOutputVars().indexOf(ep.getModel());
+				index += ifList.getEventOutputs().size();
+			}
+		}
+		return index;
 	}
 
 }

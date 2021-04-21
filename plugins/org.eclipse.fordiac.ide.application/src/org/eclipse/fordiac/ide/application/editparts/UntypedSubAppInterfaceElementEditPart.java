@@ -21,7 +21,7 @@ import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
@@ -38,6 +38,32 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
+	protected class UntypedSubappIEAdapter extends EContentAdapter {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			final Object feature = notification.getFeature();
+			if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
+				refresh();
+			} else if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
+				updateConnectorBorderColor();
+				refreshToolTip();
+			}
+			super.notifyChanged(notification);
+		}
+
+		private void updateConnectorBorderColor() {
+			final Border border = getFigure().getBorder();
+			if (border instanceof ConnectorBorder) {
+				((ConnectorBorder) border).updateColor();
+				getFigure().repaint();
+			}
+
+		}
+	}
+
 	private DirectEditManager manager;
 
 	@Override
@@ -79,31 +105,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 	@Override
 	protected Adapter createContentAdapter() {
-		return new AdapterImpl() {
-			@Override
-			public void notifyChanged(final Notification notification) {
-				final Object feature = notification.getFeature();
-				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
-					refresh();
-				} else if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
-					updateConnectorBorderColor();
-					refreshToolTip();
-				}
-				super.notifyChanged(notification);
-			}
-
-			private void updateConnectorBorderColor() {
-				final Border border = getFigure().getBorder();
-				if (border instanceof ConnectorBorder) {
-					((ConnectorBorder) border).updateColor();
-					getFigure().repaint();
-				}
-
-			}
-		};
+		return new UntypedSubappIEAdapter();
 	}
 
 	@Override
