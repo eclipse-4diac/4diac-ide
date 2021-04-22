@@ -54,6 +54,13 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		return fbNetworkElement;
 	}
 
+	@Override
+	public Object getAdapter(final Class adapter) {
+		if (FBNetworkElement.class == adapter) {
+			return getFbNetworkElement();
+		}
+		return super.getAdapter(adapter);
+	}
 
 	@Override
 	protected void initializeGraphicalViewer() {
