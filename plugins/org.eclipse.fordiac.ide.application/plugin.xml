@@ -1018,30 +1018,25 @@
          <command
                commandId="org.eclipse.fordiac.ide.application.commands.followConnection" >
             <visibleWhen checkEnabled="true">
-            <or>
+            <and>
             	<with variable="selection">
                    <count value="1"/>
                    <iterate>
                       <or>
-                        <instanceof value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork" />
-                        <instanceof value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart" />
+                        <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
                       </or>
                    </iterate>
                 </with>
-                <!-- if we have a connection inside an instance viewer -->
-               	<and> 
-	                <with variable="selection">
-	                   <count value="1"/>
-	                   <iterate>
-	                      <or>
-	                        <instanceof value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork" />
-	                        <instanceof value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart" />
-	                      </or>
-	                   </iterate>
-	                </with>
-					<reference definitionId="org.eclipse.fordiac.ide.application.interfaceSelectionInViewer" />
-            	</and>
-            </or>
+                <!-- we are in an application or subapp editor or in a subapp/cfb viewer -->
+               	<or> 
+	                <with variable="activeEditor">
+		            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+		            </with>
+		            <with variable="activeEditor">
+		            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+		            </with>
+            	</or>
+            </and>
             </visibleWhen>
          </command>
       </menuContribution>
