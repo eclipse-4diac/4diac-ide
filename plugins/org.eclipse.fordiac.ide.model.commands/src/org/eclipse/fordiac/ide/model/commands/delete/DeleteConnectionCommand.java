@@ -15,7 +15,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
-
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -99,7 +98,6 @@ public class DeleteConnectionCommand extends Command {
 			deleteMapped.undo();
 		}
 
-
 	}
 
 	private DeleteConnectionCommand checkAndDeleteMirroredConnection() {
@@ -135,14 +133,16 @@ public class DeleteConnectionCommand extends Command {
 	}
 
 	private void checkErrorMarker() {
-		if (source instanceof ErrorMarkerInterface) {
+		if (source instanceof ErrorMarkerInterface && getConnectionCount(source) == 0) {
 			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source));
 		}
-		if (destination instanceof ErrorMarkerInterface) {
+		if (destination instanceof ErrorMarkerInterface && getConnectionCount(destination) == 0) {
 			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination));
 		}
 	}
 
-
+	private static int getConnectionCount(final IInterfaceElement ie) {
+		return ie.isIsInput() ? ie.getInputConnections().size() : ie.getOutputConnections().size();
+	}
 
 }

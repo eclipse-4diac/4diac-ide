@@ -19,20 +19,20 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 
-public class ErrorMarkerAttribute {
+public class ErrorMarkerBuilder {
 
 	private Map<String, Object> attributes;
 	private ErrorMarkerRef errorMarkerRef;
 
 	@SuppressWarnings("boxing")
-	public ErrorMarkerAttribute(final Map<String, Object> attributes, final ErrorMarkerRef errorMarkerIe) {
+	public ErrorMarkerBuilder(final Map<String, Object> attributes, final ErrorMarkerRef errorMarkerIe) {
 		this.attributes = attributes;
 		this.attributes.put(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
 		this.attributes.put(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 		this.errorMarkerRef = errorMarkerIe;
 	}
 
-	public ErrorMarkerAttribute(final IMarker marker, final ErrorMarkerRef errorMarkerRef) {
+	public ErrorMarkerBuilder(final IMarker marker, final ErrorMarkerRef errorMarkerRef) {
 		this.errorMarkerRef = errorMarkerRef;
 		try {
 			this.attributes = marker.getAttributes();

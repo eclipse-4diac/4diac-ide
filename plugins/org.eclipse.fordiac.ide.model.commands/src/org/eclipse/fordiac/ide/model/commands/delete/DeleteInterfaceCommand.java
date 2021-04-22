@@ -14,7 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
-import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerAttribute;
+import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -34,7 +34,7 @@ public class DeleteInterfaceCommand extends Command {
 	private CompoundCommand cmds;
 	private InterfaceList parent;
 	private int oldIndex;
-	private ErrorMarkerAttribute oldErrorMarker;
+	private ErrorMarkerBuilder oldErrorMarker;
 
 	public DeleteInterfaceCommand(final IInterfaceElement interfaceElement) {
 		this.interfaceElement = interfaceElement;

@@ -21,6 +21,7 @@ import javax.xml.stream.XMLStreamException;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -80,10 +81,12 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			subApp.setPaletteEntry(subEntry);
 			subApp.setInterface(subEntry.getSubApplicationType().getInterfaceList().copy());
 		} else {
-			createErrorMarker(
-					MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", typeName,
+			final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarker(
+					MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", typeName, //$NON-NLS-1$
 							subApp.getName()),
-					subApp);
+					subApp, reader.getLocation().getLineNumber());
+			errorMarkerAttributes.add(e);
+
 			// put an empty interface list so that the system can load
 			subApp.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		}

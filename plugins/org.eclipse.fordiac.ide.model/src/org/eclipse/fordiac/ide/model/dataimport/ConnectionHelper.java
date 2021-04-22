@@ -305,12 +305,19 @@ public class ConnectionHelper {
 	}
 
 	public static ErrorMarkerInterface createErrorMarkerInterface(final DataType type, final String name,
-			final boolean isInput) {
+			final boolean isInput, final InterfaceList ieList) {
+		return (ErrorMarkerInterface) ieList.getErrorMarker().stream().filter(e -> e.getName().equals(name)).findAny()
+				.orElseGet(() -> createErrorMarker(type, name, isInput, ieList));
+	}
+
+	private static ErrorMarkerInterface createErrorMarker(final DataType type, final String name, final boolean isInput,
+			final InterfaceList ieList) {
 		final ErrorMarkerInterface errorMarkerInterface = LibraryElementFactory.eINSTANCE.createErrorMarkerInterface();
 		errorMarkerInterface.setName(name);
 		errorMarkerInterface.setIsInput(isInput);
 		errorMarkerInterface.setType(type);
 		errorMarkerInterface.setTypeName(type.getName());
+		ieList.getErrorMarker().add(errorMarkerInterface);
 		return errorMarkerInterface;
 	}
 

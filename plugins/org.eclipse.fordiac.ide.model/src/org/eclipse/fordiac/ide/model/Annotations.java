@@ -294,6 +294,12 @@ public final class Annotations {
 		if (element == null) {
 			element = il.getAdapter(name);
 		}
+
+		if (element == null) {
+			element = il.getErrorMarker().stream().filter(e -> e.getName().equals(name)).findAny()
+					.orElse(null);
+		}
+
 		return element;
 	}
 

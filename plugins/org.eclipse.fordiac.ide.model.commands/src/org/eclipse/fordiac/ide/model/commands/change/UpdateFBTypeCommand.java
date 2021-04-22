@@ -30,11 +30,14 @@ import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper;
+import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -115,10 +118,11 @@ public class UpdateFBTypeCommand extends Command {
 
 		// Create new FB
 		copyFB();
-		replaceFBs(oldElement, newElement);
 
+		network.getNetworkElements().add(newElement);
 		// Find connections which should be reconnected
 		handleApplicationConnections();
+		network.getNetworkElements().remove(oldElement);
 
 		// Change name
 		newElement.setName(oldElement.getName());
@@ -222,14 +226,24 @@ public class UpdateFBTypeCommand extends Command {
 			// FB
 			IInterfaceElement interfaceElement = newElement.getInterfaceElement(oldInterface.getName());
 			if (interfaceElement == null) {
-				interfaceElement = ConnectionHelper.createErrorMarkerInterface(oldInterface.getType(),
-						oldInterface.getName(), oldInterface.isIsInput());
-				newElement.getInterface().getErrorMarker().add(interfaceElement);
+				interfaceElement = createErrorMarker(newElement, oldInterface);
 			}
 
 			return interfaceElement;
 		}
 		return oldInterface;
+	}
+
+	private static IInterfaceElement createErrorMarker(final FBNetworkElement newElement,
+			final IInterfaceElement oldInterface) {
+		IInterfaceElement interfaceElement;
+		interfaceElement = ConnectionHelper.createErrorMarkerInterface(oldInterface.getType(),
+				oldInterface.getName(), oldInterface.isIsInput(), newElement.getInterface());
+		final ErrorMarkerBuilder createErrorMarker = FordiacMarkerHelper.createErrorMarker(
+				"Pin " + interfaceElement.getName() + " not found after Type update", newElement, 0); //$NON-NLS-1$ //$NON-NLS-2$
+		createErrorMarker.setErrorMarkerIe((ErrorMarkerRef) interfaceElement);
+		FordiacMarkerHelper.createMarker(createErrorMarker);
+		return interfaceElement;
 	}
 
 	private void doReconnect(final Connection oldConn, final IInterfaceElement source, final IInterfaceElement dest) {

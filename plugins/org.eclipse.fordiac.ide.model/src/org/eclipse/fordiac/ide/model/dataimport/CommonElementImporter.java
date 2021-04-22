@@ -124,11 +124,11 @@ public abstract class CommonElementImporter {
 		return var;
 	}
 
-	private XMLStreamReader reader;
+	protected XMLStreamReader reader;
 	private final IFile file;
 	private final TypeLibrary typeLibrary;
 	private LibraryElement element;
-	protected final List<ErrorMarkerAttribute> errorMarkerAttributes;
+	protected final List<ErrorMarkerBuilder> errorMarkerAttributes;
 
 	protected IFile getFile() {
 		return file;
@@ -190,27 +190,14 @@ public abstract class CommonElementImporter {
 			buildErrorMarker(file);
 		}
 	}
-	protected void createErrorMarker(final String message) {
+
+	protected ErrorMarkerBuilder createErrorMarker(final String message) {
 		final Map<String, Object> attrs = new HashMap<>();
 		attrs.put(IMarker.MESSAGE, message);
-		createErrorMarkerAtrribute(attrs);
-	}
-
-	protected void createErrorMarker(final String message, final INamedElement errorLocation) {
-		final Map<String, Object> attrs = new HashMap<>();
-		attrs.put(IMarker.MESSAGE, message);
-		FordiacMarkerHelper.addLocation(errorLocation, attrs);
-		FordiacMarkerHelper.addTargetIdentifier(errorLocation, attrs);
-		createErrorMarkerAtrribute(attrs);
-	}
-
-	@SuppressWarnings("boxing")
-	protected ErrorMarkerAttribute createErrorMarkerAtrribute(final Map<String, Object> attrs) {
-		attrs.put(IMarker.LINE_NUMBER, reader.getLocation().getLineNumber());
-		final ErrorMarkerAttribute e = new ErrorMarkerAttribute(attrs, null);
+		final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarkerBuilder(attrs,
+				reader.getLocation().getLineNumber());
 		errorMarkerAttributes.add(e);
 		return e;
-
 	}
 
 	private void buildErrorMarker(final IFile file) {

@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -26,7 +27,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
-import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerAttribute;
+import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
@@ -132,13 +134,13 @@ public final class FordiacMarkerHelper {
 		}
 	}
 
-	public static void createMarker(final ErrorMarkerAttribute errorMarker) {
+	public static void createMarker(final ErrorMarkerBuilder errorMarker) {
 		final IFile file = getFileFromRef(errorMarker.getErrorMarkerRef());
 		createMarker(errorMarker, file);
 
 	}
 
-	public static void createMarker(final ErrorMarkerAttribute errorMarker, final IFile file) {
+	public static void createMarker(final ErrorMarkerBuilder errorMarker, final IFile file) {
 		Assert.isNotNull(file);
 		try {
 			final IMarker marker = file.createMarker(IMarker.PROBLEM, errorMarker.getAttributes());
@@ -154,7 +156,7 @@ public final class FordiacMarkerHelper {
 		throw new UnsupportedOperationException("FordiacMarkerHelper should not be instantiated"); //$NON-NLS-1$
 	}
 
-	public static ErrorMarkerAttribute deleteErrorMarker(final ErrorMarkerRef ie) {
+	public static ErrorMarkerBuilder deleteErrorMarker(final ErrorMarkerRef ie) {
 
 		final IFile file = getFileFromRef(ie);
 
@@ -162,17 +164,7 @@ public final class FordiacMarkerHelper {
 
 	}
 
-	private static IFile getFileFromRef(final ErrorMarkerRef ie) {
-		final EObject rootContainer = EcoreUtil.getRootContainer(ie);
-		if (rootContainer instanceof AutomationSystem) {
-			return ((AutomationSystem) rootContainer).getSystemFile();
-		} else if (rootContainer instanceof FBType) {
-			return ((FBType) rootContainer).getPaletteEntry().getFile();
-		}
-		return null;
-	}
-
-	private static ErrorMarkerAttribute deleteMarkerInJob(final IFile f, final ErrorMarkerRef ie) {
+	private static ErrorMarkerBuilder deleteMarkerInJob(final IFile f, final ErrorMarkerRef ie) {
 		final IMarker marker = f.getMarker(ie.getFileMarkerId());
 		final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + f.getName()) { //$NON-NLS-1$
 			@Override
@@ -185,10 +177,52 @@ public final class FordiacMarkerHelper {
 				return Status.OK_STATUS;
 			}
 		};
-		final ErrorMarkerAttribute errorMarkerAttribute = new ErrorMarkerAttribute(marker, ie);
+		final ErrorMarkerBuilder errorMarkerAttribute = new ErrorMarkerBuilder(marker, ie);
 		job.setRule(f.getProject());
 		job.schedule();
 		return errorMarkerAttribute;
+	}
+
+	private static IFile getFileFromRef(final ErrorMarkerRef ie) {
+		final EObject rootContainer = EcoreUtil.getRootContainer(ie);
+		IFile systemFile = null;
+		if (rootContainer instanceof AutomationSystem) {
+			systemFile = ((AutomationSystem) rootContainer).getSystemFile();
+		} else if (rootContainer instanceof FBType) {
+			systemFile = ((FBType) rootContainer).getPaletteEntry().getFile();
+		}
+		Assert.isNotNull(systemFile);
+		return systemFile;
+	}
+
+	@SuppressWarnings("boxing")
+	public static ErrorMarkerBuilder createErrorMarkerBuilder(final Map<String, Object> attrs, final int lineNumber) {
+		attrs.put(IMarker.LINE_NUMBER, lineNumber);
+		return new ErrorMarkerBuilder(attrs, null);
+
+	}
+
+	public static ErrorMarkerBuilder createConnectionErrorMarkerBuilder(final String message, final FBNetwork fbNetwork,
+			final String sourceIdentifier, final String destinationIdentifier, final int lineNumber) {
+		final Map<String, Object> attrs = new HashMap<>();
+		attrs.put(IMarker.MESSAGE, message);
+
+		// use a dummy connection to get target identifier
+		FordiacMarkerHelper.addTargetIdentifier(LibraryElementFactory.eINSTANCE.createDataConnection(), attrs);
+		final String location = FordiacMarkerHelper.getLocation(fbNetwork) + "." + sourceIdentifier + " -> " //$NON-NLS-1$ //$NON-NLS-2$
+				+ destinationIdentifier;
+		attrs.put(IMarker.LOCATION, location);
+		return createErrorMarkerBuilder(attrs, lineNumber);
+
+	}
+
+	public static ErrorMarkerBuilder createErrorMarker(final String message, final INamedElement errorLocation,
+			final int lineNumber) {
+		final Map<String, Object> attrs = new HashMap<>();
+		attrs.put(IMarker.MESSAGE, message);
+		FordiacMarkerHelper.addLocation(errorLocation, attrs);
+		FordiacMarkerHelper.addTargetIdentifier(errorLocation, attrs);
+		return createErrorMarkerBuilder(attrs, lineNumber);
 	}
 
 }
