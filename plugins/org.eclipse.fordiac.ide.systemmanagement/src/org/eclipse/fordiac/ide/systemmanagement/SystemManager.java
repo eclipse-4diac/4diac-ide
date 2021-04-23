@@ -38,7 +38,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -190,10 +189,6 @@ public enum SystemManager {
 	public static void saveSystem(final AutomationSystem system, final IFile file) {
 		final SystemExporter systemExporter = new SystemExporter(system);
 		systemExporter.saveSystem(file);
-	}
-
-	public List<AutomationSystem> getSystems() {
-		return Collections.emptyList();
 	}
 
 	public synchronized AutomationSystem getSystem(final IFile systemFile) {

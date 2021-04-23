@@ -28,10 +28,8 @@ public final class Messages extends NLS {
 	public static String AnnotationMarkerAccess_LABEL_ErrorAnnotation;
 	public static String AnnotationMarkerAccess_LABEL_WarningAnnotation;
 	public static String CreateFMUWizard_FMUCreationError;
-	public static String CreateFMUWizardPage_DestinationNotSelecte;
 	public static String CreateFMUWizardPage_IncludeTheFollowingLibrariesInExportedFMU;
 	public static String CreateFMUWizardPage_NoLibrariesSelectedToInclude;
-	public static String CreateFMUWizardPage_NothingselectedForFMUGeneration;
 	public static String CreateFMUWizardPage_SaveSelectedLibrariesForFutureFMUExports;
 	public static String FMUDeviceManagementCommunicationHandler_BinaryDirectoryDoesNotExist;
 	public static String FMUDeviceManagementCommunicationHandler_CouldNotCreateTheComponentsInsideTheTemporaryFolder;

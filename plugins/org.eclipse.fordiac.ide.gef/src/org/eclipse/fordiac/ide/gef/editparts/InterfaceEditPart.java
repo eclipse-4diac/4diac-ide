@@ -259,12 +259,12 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
-		return new FixedAnchor(getFigure(), isInput(), this);
+		return new FixedAnchor(getFigure(), isInput());
 	}
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
-		return new FixedAnchor(getFigure(), isInput(), this);
+		return new FixedAnchor(getFigure(), isInput());
 	}
 
 	@Override
