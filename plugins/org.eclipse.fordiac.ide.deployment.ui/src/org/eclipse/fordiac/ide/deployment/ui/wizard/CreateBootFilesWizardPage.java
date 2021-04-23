@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2017 fortiss GmbH
- * 
+ * Copyright (c) 2014, 2021 fortiss GmbH, Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,111 +8,128 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *               - updated bootfile exporting for new project layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.wizard;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTree;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.DirectoryChooserControl;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.dialogs.WizardExportResourcesPage;
 
-public class CreateBootFilesWizardPage extends WizardPage {
+public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 
 	private static final String SETTING_CURRENT_DIR = "currentDir"; //$NON-NLS-1$
-	private IStructuredSelection selection;
+	private final IStructuredSelection selection;
 	private DirectoryChooserControl dcc;
 	private DownloadSelectionTree systemTree;
 
-	public CreateBootFilesWizardPage(IStructuredSelection selection) {
-		super(Messages.FordiacCreateBootfilesWizard_PageName);
+	public CreateBootFilesWizardPage(final IStructuredSelection selection) {
+		this(Messages.FordiacCreateBootfilesWizard_PageName, selection);
+	}
 
+	protected CreateBootFilesWizardPage(final String pageName, final IStructuredSelection selection) {
+		super(pageName, createResourceSelection(selection));
 		this.selection = selection;
-
-		setDescription(Messages.FordiacCreateBootfilesWizard_PageDESCRIPTION);
-		setTitle(Messages.FordiacCreateBootfilesWizard_PageTITLE);
 	}
 
 	@Override
-	public void createControl(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NULL);
-		composite.setFont(parent.getFont());
-
-		initializeDialogUnits(parent);
-
-		composite.setLayout(new GridLayout());
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		createSystemsContainer(composite);
-		createDestinationGroup(composite);
-
-		setPageComplete(validatePage());
-		// Show description on opening
-		setErrorMessage(null);
-		setMessage(null);
-		setControl(composite);
+	public void createControl(final Composite parent) {
+		super.createControl(parent);
+		getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		setDescription(Messages.FordiacCreateBootfilesWizard_PageDESCRIPTION);
+		setTitle(Messages.FordiacCreateBootfilesWizard_PageTITLE);
+		checkSelectedElements();
+		updatePageCompletion();
 	}
 
 	public Object[] getSelectedElements() {
 		return systemTree.getCheckedElements();
 	}
 
-	private void createSystemsContainer(Composite composite) {
-		systemTree = new DownloadSelectionTree(composite,
-				SWT.FULL_SELECTION | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
-
-		GridData fillBoth = new GridData();
-		fillBoth.horizontalAlignment = GridData.FILL;
-		fillBoth.grabExcessHorizontalSpace = true;
-		fillBoth.verticalAlignment = GridData.FILL;
-		fillBoth.grabExcessVerticalSpace = true;
-		systemTree.getTree().setLayoutData(fillBoth);
-
-		systemTree.setInput(this); // the systemTree needs this only as reference
-
-		systemTree.addCheckStateListener(event -> setPageComplete(validatePage()));
-
-		checkSelectedElements();
+	@Override
+	protected void createOptionsGroup(final Composite parent) {
+		// don't show the option group for this wizard page
 	}
 
-	/**
-	 * Creates the file name group.
-	 * 
-	 * @param composite the composite
-	 */
-	private void createDestinationGroup(final Composite composite) {
+	@Override
+	protected void createDestinationGroup(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NULL);
+		composite.setLayout(new GridLayout());
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		composite.setFont(parent.getFont());
 
-		GridData stretch = new GridData();
+		createSystemsContainer(composite);
+		createDestinationDirectorySelection(composite);
+	}
+
+	private void createSystemsContainer(final Composite composite) {
+		systemTree = new DownloadSelectionTree(composite,
+				SWT.FULL_SELECTION | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
+		systemTree.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		systemTree.addCheckStateListener(event -> updatePageCompletion());
+	}
+
+	private void createDestinationDirectorySelection(final Composite composite) {
+
+		final GridData stretch = new GridData();
 		stretch.grabExcessHorizontalSpace = true;
 		stretch.horizontalAlignment = SWT.FILL;
 
 		dcc = new DirectoryChooserControl(composite, SWT.NONE, Messages.CreateBootFilesWizardPage_Destination);
-		dcc.addDirectoryChangedListener(newDirectory -> {
-			saveDir(newDirectory);
-			setPageComplete(validatePage());
-		});
-
+		dcc.addDirectoryChangedListener(newDirectory -> updatePageCompletion());
 		dcc.setLayoutData(stretch);
-		loadDir();
 	}
 
-	/**
-	 * Returns whether this page's controls currently all contain valid values.
-	 * 
-	 * @return <code>true</code> if all controls are valid, and <code>false</code>
-	 *         if at least one is invalid
-	 */
-	private boolean validatePage() {
-		if (dcc.getDirectory() == null || dcc.getDirectory().equals("")) { //$NON-NLS-1$
+	@Override
+	protected void updateWidgetEnablements() {
+		// will be called when the resource group changes selection
+		checkSelectedResources();
+		super.updateWidgetEnablements();
+	}
+
+	private void checkSelectedResources() {
+		systemTree.setInput(getSelectedSystems());
+	}
+
+	private List<AutomationSystem> getSelectedSystems() {
+		final SystemManager manager = SystemManager.INSTANCE;
+		return (List<AutomationSystem>) getSelectedResources().stream().filter(SystemManager::isSystemFile)
+				.map(el -> manager.getSystem((IFile) el)).filter(Objects::nonNull).collect(Collectors.toList());
+	}
+
+	@Override
+	protected boolean validateSourceGroup() {
+		if (getSelectedSystems().isEmpty()) {
+			setErrorMessage(Messages.CreateBootFilesWizardPage_NoSystemSelected);
+			return false;
+		}
+		return super.validateSourceGroup();
+	}
+
+	@Override
+	protected boolean validateDestinationGroup() {
+		if (dcc.getDirectory() == null || "".equals(dcc.getDirectory())) { //$NON-NLS-1$
 			setErrorMessage(Messages.CreateBootFilesWizardPage_DestinationNotSelected);
 			return false;
 		}
@@ -121,26 +138,30 @@ public class CreateBootFilesWizardPage extends WizardPage {
 			setErrorMessage(Messages.CreateBootFilesWizardPage_NothingSelectedForBootFileGeneration);
 			return false;
 		}
-
-		setErrorMessage(null);
-		return true;
+		return super.validateDestinationGroup();
 	}
 
-	/**
-	 * Loads cached directory, if available.
-	 */
-	private void loadDir() {
+	@Override
+	protected void restoreWidgetValues() {
+		super.restoreWidgetValues();
+		// Loads cached directory, if available.
 		if (getDialogSettings() != null) {
-			String cachedDir = getDialogSettings().get(SETTING_CURRENT_DIR);
+			final String cachedDir = getDialogSettings().get(SETTING_CURRENT_DIR);
 			if (cachedDir != null) {
 				setDirectory(cachedDir);
 			}
 		}
 	}
 
+	@Override
+	protected void internalSaveWidgetValues() {
+		super.internalSaveWidgetValues();
+		getDialogSettings().put(SETTING_CURRENT_DIR, getDirectory());
+	}
+
 	/**
 	 * Sets the directory.
-	 * 
+	 *
 	 * @param dir the new directory
 	 */
 	public void setDirectory(final String dir) {
@@ -151,19 +172,10 @@ public class CreateBootFilesWizardPage extends WizardPage {
 		return dcc.getDirectory();
 	}
 
-	/**
-	 * Saves current directory for next session.
-	 * 
-	 * @param currentDir the current dir
-	 */
-	private void saveDir(final String currentDir) {
-		getDialogSettings().put(SETTING_CURRENT_DIR, currentDir);
-	}
 
 	private void checkSelectedElements() {
-
 		// first expand all selected elements
-		for (Object obj : selection.toArray()) {
+		for (final Object obj : selection.toArray()) {
 			if (obj instanceof AutomationSystem) {
 				expandSystem(obj);
 			} else if (obj instanceof Device) {
@@ -175,21 +187,45 @@ public class CreateBootFilesWizardPage extends WizardPage {
 
 		// second select them and then check them.
 		systemTree.setSelection(selection);
-
 		systemTree.setCheckedElements(selection.toArray());
 	}
 
-	private void expandResource(Resource obj) {
+	private void expandResource(final Resource obj) {
 		expandDevice(obj.getDevice());
 	}
 
-	private void expandDevice(Device obj) {
+	private void expandDevice(final Device obj) {
 		expandSystem(obj.getAutomationSystem());
 		systemTree.setExpandedState(obj, true);
 	}
 
-	private void expandSystem(Object obj) {
+	private void expandSystem(final Object obj) {
 		systemTree.setExpandedState(obj, true);
+	}
+
+	@Override
+	public void handleEvent(final Event event) {
+		// currently nothing to be done here
+	}
+
+	private static IStructuredSelection createResourceSelection(final IStructuredSelection selection) {
+		final Set<IFile> selectedASFiles = new HashSet<>();
+		selection.toList().forEach(obj -> {
+			if (SystemManager.isSystemFile(obj)) {
+				selectedASFiles.add((IFile) obj);
+			}
+			if (obj instanceof AutomationSystem) {
+				selectedASFiles.add(((AutomationSystem) obj).getSystemFile());
+			} else if (obj instanceof Device) {
+				selectedASFiles.add(((Device) obj).getAutomationSystem().getSystemFile());
+			} else if (obj instanceof Resource) {
+				selectedASFiles.add(((Resource) obj).getAutomationSystem().getSystemFile());
+			} else if (obj instanceof SystemConfiguration) {
+				selectedASFiles.add(((SystemConfiguration) obj).getAutomationSystem().getSystemFile());
+			}
+		});
+
+		return new StructuredSelection(selectedASFiles.toArray());
 	}
 
 }

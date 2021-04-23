@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -27,7 +27,7 @@ public class AdvancedFixedAnchor extends FixedAnchor {
 
 	/**
 	 * Instantiates a new advanced fixed anchor.
-	 * 
+	 *
 	 * @param owner   the owner
 	 * @param isInput the is input
 	 * @param moveX   the move x
@@ -41,23 +41,16 @@ public class AdvancedFixedAnchor extends FixedAnchor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.draw2d.ConnectionAnchor#getLocation(org.eclipse.draw2d.geometry.
 	 * Point)
 	 */
 	@Override
 	public Point getLocation(final Point reference) {
-		Point location = new Point();
-		if (isInput()) {
-			Point p1 = getBox().getLeft();
-			location.x = p1.x + moveX;
-			location.y = p1.y + moveY;
-		} else {
-			Point p1 = getBox().getRight();
-			location.x = p1.x + moveX;
-			location.y = p1.y + moveY;
-		}
+		final Point location = super.getLocation(reference);
+		location.x += moveX;
+		location.y += moveY;
 		return location;
 	}
 

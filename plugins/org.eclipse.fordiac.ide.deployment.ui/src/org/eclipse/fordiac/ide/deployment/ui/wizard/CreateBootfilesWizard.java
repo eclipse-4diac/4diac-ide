@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014 fortiss GmbH
- * 
+ * Copyright (c) 2014, 2021 fortiss GmbH, Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,13 +8,12 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *               - updated bootfile exporting for new project layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.wizard;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.deployment.ui.Activator;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -43,11 +41,17 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 	private static final String FORDIAC_CREATE_BOOTFILES_SECTION = "4DIAC_CREATE_BOOTFILES_SECTION"; //$NON-NLS-1$
 
 	private IStructuredSelection selection;
-	private CreateBootFilesWizardPage page;
+	private CreateBootFilesWizardPage bootFilePage;
 
 	public CreateBootfilesWizard() {
+		// nothing to be done here
+	}
+
+	@Override
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
+		this.selection = new StructuredSelection(selection.toList());
 		setWindowTitle(Messages.FordiacCreateBootfilesWizard_LABEL_Window_Title);
-		IDialogSettings settings = Activator.getDefault().getDialogSettings();
+		final IDialogSettings settings = Activator.getDefault().getDialogSettings();
 
 		if (null != settings.getSection(FORDIAC_CREATE_BOOTFILES_SECTION)) {
 			// if section does not exist create it
@@ -57,43 +61,34 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 	}
 
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		this.selection = new StructuredSelection(selection.toList());
-	}
-
-	@Override
 	public void addPages() {
 		super.addPages();
-		page = new CreateBootFilesWizardPage(selection);
-		addPage(page);
+		bootFilePage = new CreateBootFilesWizardPage(selection);
+		addPage(bootFilePage);
 	}
 
 	@Override
 	public boolean performFinish() {
-		IRunnableWithProgress iop = new IRunnableWithProgress() {
+		final IRunnableWithProgress iop = monitor -> {
+			final String outputDirectory = bootFilePage.getDirectory();
+			final Map<Device, List<Object>> workLoad = prepareWorkload();
+			monitor.beginTask(Messages.CreateBootfilesWizard_GeneratingBootFilesForTheSelectedResources,
+					workLoad.size());
+			for (final Entry<Device, List<Object>> entry : workLoad.entrySet()) {
+				final String fileName = MessageFormat.format(Messages.CreateBootfilesWizard_IProgressMonitorMonitor,
+						outputDirectory, File.separatorChar, entry.getKey().getAutomationSystem().getName(),
+						entry.getKey().getName());
 
-			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				String outputDirectory = page.getDirectory();
-				Map<Device, List<Object>> workLoad = prepareWorkload();
-				monitor.beginTask(Messages.CreateBootfilesWizard_GeneratingBootFilesForTheSelectedResources,
-						workLoad.size());
-				for (Entry<Device, List<Object>> entry : workLoad.entrySet()) {
-					String fileName = MessageFormat.format(Messages.CreateBootfilesWizard_IProgressMonitorMonitor,
-							outputDirectory, File.separatorChar, entry.getKey().getAutomationSystem().getName(),
-							entry.getKey().getName());
-
-					BootFileDeviceManagementCommunicationHandler.createBootFile(entry.getValue(), fileName, getShell());
-					monitor.worked(1);
-				}
-				monitor.done();
+				BootFileDeviceManagementCommunicationHandler.createBootFile(entry.getValue(), fileName, getShell());
+				monitor.worked(1);
 			}
+			monitor.done();
 		};
 
 		try {
 			new ProgressMonitorDialog(getShell()).run(false, false, iop);
-		} catch (Exception e) {
-			MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
+		} catch (final Exception e) {
+			final MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
 			msg.setMessage(Messages.CreateBootfilesWizard_BootFileCreationError + e.getMessage());
 			msg.open();
 			Activator.getDefault().logError(msg.getMessage(), e);
@@ -103,10 +98,10 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 	}
 
 	private Map<Device, List<Object>> prepareWorkload() {
-		Object[] selectedElements = page.getSelectedElements();
-		Map<Device, List<Object>> workLoad = new HashMap<>();
+		final Object[] selectedElements = bootFilePage.getSelectedElements();
+		final Map<Device, List<Object>> workLoad = new HashMap<>();
 
-		for (Object object : selectedElements) {
+		for (final Object object : selectedElements) {
 			if (object instanceof Resource) {
 				insertResource(workLoad, (Resource) object);
 			} else if (object instanceof Device) {
@@ -118,16 +113,13 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 		return workLoad;
 	}
 
-	private static void insertResource(Map<Device, List<Object>> workLoad, Resource res) {
-		List<Object> resList = getWorkLoadEntryList(workLoad, res.getDevice());
+	private static void insertResource(final Map<Device, List<Object>> workLoad, final Resource res) {
+		final List<Object> resList = getWorkLoadEntryList(workLoad, res.getDevice());
 		resList.add(res);
 	}
 
-	private static List<Object> getWorkLoadEntryList(Map<Device, List<Object>> workLoad, Device device) {
-		if (!workLoad.containsKey(device)) {
-			workLoad.put(device, new ArrayList<Object>());
-		}
-		return workLoad.get(device);
+	private static List<Object> getWorkLoadEntryList(final Map<Device, List<Object>> workLoad, final Device device) {
+		return workLoad.computeIfAbsent(device, dev -> new ArrayList<>());
 	}
 
 }

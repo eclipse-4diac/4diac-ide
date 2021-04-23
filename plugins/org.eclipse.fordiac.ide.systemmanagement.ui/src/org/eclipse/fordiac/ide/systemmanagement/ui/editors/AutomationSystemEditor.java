@@ -275,6 +275,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			}
 			return adapter.cast(outlinePage);
 		}
+		if (adapter == AutomationSystem.class) {
+			return adapter.cast(system);
+		}
 		return super.getAdapter(adapter);
 	}
 

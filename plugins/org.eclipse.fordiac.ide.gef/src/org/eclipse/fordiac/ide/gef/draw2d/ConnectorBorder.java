@@ -31,19 +31,22 @@ import org.eclipse.swt.graphics.Color;
 
 public class ConnectorBorder extends AbstractBorder {
 
-	private static final int LR_MARGIN = 5;
+	private static final int CONNECTOR_SIZE = 5;
+	private static final int ADAPTER_SIZE = 9;
+
+	private static final int LR_MARGIN = CONNECTOR_SIZE + 1;
 	private static final int LR_ADAPTER_MARGIN = 11;
 
 	private final IInterfaceElement editPartModelOject;
 	private Color connectorColor;
 
-	public ConnectorBorder(IInterfaceElement editPartModelOject) {
+	public ConnectorBorder(final IInterfaceElement editPartModelOject) {
 		super();
 		this.editPartModelOject = editPartModelOject;
 		updateColor();
 	}
 
-	public void updateColor() {
+	public final void updateColor() {
 		if (isEvent()) {
 			connectorColor = PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR);
 		} else if (isAdapter()) {
@@ -53,40 +56,41 @@ public class ConnectorBorder extends AbstractBorder {
 		}
 	}
 
-	protected static void createAdapterSymbolMiniFBrotated(final Graphics graphics, Rectangle where, int width,
-			boolean filled) {
+	protected static void createAdapterSymbolMiniFBrotated(final Graphics graphics, final Rectangle where, final int width,
+			final boolean filled) {
 		graphics.setLineWidth(1);
 		graphics.setAntialias(1);
-		PointList points = new PointList();
-		int offest = 4;
-		points.addPoint(width + where.x, where.y + offest);
+		where.x += width;
+		where.y += (where.height - ADAPTER_SIZE) / 2;
+		final PointList points = new PointList();
+		points.addPoint(where.x, where.y);
 		if (filled) {
-			points.addPoint(width + where.x + 2, where.y + offest);
-			points.addPoint(width + where.x + 2, where.y + offest + 2);
-			points.addPoint(width + where.x + 4, where.y + offest + 2);
-			points.addPoint(width + where.x + 4, where.y + offest);
-			points.addPoint(width + where.x + 8, where.y + offest);
-			points.addPoint(width + where.x + 8, where.y + offest + 8);
-			points.addPoint(width + where.x + 4, where.y + offest + 8);
-			points.addPoint(width + where.x + 4, where.y + offest + 6);
-			points.addPoint(width + where.x + 2, where.y + offest + 6);
-			points.addPoint(width + where.x + 2, where.y + offest + 8);
-			points.addPoint(width + where.x, where.y + offest + 8);
-			points.addPoint(width + where.x, where.y + offest);
+			points.addPoint(where.x + 2, where.y);
+			points.addPoint(where.x + 2, where.y + 2);
+			points.addPoint(where.x + 4, where.y + 2);
+			points.addPoint(where.x + 4, where.y);
+			points.addPoint(where.x + 8, where.y);
+			points.addPoint(where.x + 8, where.y + 8);
+			points.addPoint(where.x + 4, where.y + 8);
+			points.addPoint(where.x + 4, where.y + 6);
+			points.addPoint(where.x + 2, where.y + 6);
+			points.addPoint(where.x + 2, where.y + 8);
+			points.addPoint(where.x, where.y + 8);
+			points.addPoint(where.x, where.y);
 			graphics.fillPolygon(points);
 		} else {
-			points.addPoint(width + where.x + 4, where.y + offest);
-			points.addPoint(width + where.x + 4, where.y + offest + 2);
-			points.addPoint(width + where.x + 6, where.y + offest + 2);
-			points.addPoint(width + where.x + 6, where.y + offest);
-			points.addPoint(width + where.x + 8, where.y + offest);
-			points.addPoint(width + where.x + 8, where.y + offest + 7);
-			points.addPoint(width + where.x + 6, where.y + offest + 7);
-			points.addPoint(width + where.x + 6, where.y + offest + 5);
-			points.addPoint(width + where.x + 4, where.y + offest + 5);
-			points.addPoint(width + where.x + 4, where.y + offest + 7);
-			points.addPoint(width + where.x, where.y + offest + 7);
-			points.addPoint(width + where.x, where.y + offest);
+			points.addPoint(where.x + 4, where.y);
+			points.addPoint(where.x + 4, where.y + 2);
+			points.addPoint(where.x + 6, where.y + 2);
+			points.addPoint(where.x + 6, where.y);
+			points.addPoint(where.x + 8, where.y);
+			points.addPoint(where.x + 8, where.y + 8);
+			points.addPoint(where.x + 6, where.y + 8);
+			points.addPoint(where.x + 6, where.y + 6);
+			points.addPoint(where.x + 4, where.y + 6);
+			points.addPoint(where.x + 4, where.y + 8);
+			points.addPoint(where.x, where.y + 8);
+			points.addPoint(where.x, where.y);
 			graphics.drawPolygon(points);
 		}
 	}
@@ -96,20 +100,23 @@ public class ConnectorBorder extends AbstractBorder {
 		graphics.setForegroundColor(connectorColor);
 		graphics.setBackgroundColor(connectorColor);
 
-		Rectangle where = getPaintRectangle(figure, insets);
+		final Rectangle where = getPaintRectangle(figure, insets);
 		Rectangle r = null;
 		if (isInput()) {
 			if (isAdapter()) {
 				createAdapterSymbolMiniFBrotated(graphics, where, 0, false);
 			} else {
-				r = new Rectangle(where.x, where.y + (where.height / 2) - 1, 4, 4);
+				r = new Rectangle(where.x, where.y + (where.height - CONNECTOR_SIZE) / 2, CONNECTOR_SIZE,
+						CONNECTOR_SIZE);
 				graphics.fillRectangle(r);
 			}
 		} else {
 			if (isAdapter()) {
-				createAdapterSymbolMiniFBrotated(graphics, where, where.width - 9, true);// 16
+				createAdapterSymbolMiniFBrotated(graphics, where, where.width - ADAPTER_SIZE + 1, true);
 			} else {
-				r = new Rectangle(where.width + where.x - 4, where.y + (where.height / 2) - 1, 4, 4);
+				r = new Rectangle(where.width + where.x - CONNECTOR_SIZE,
+						where.y + (where.height - CONNECTOR_SIZE) / 2,
+						CONNECTOR_SIZE, CONNECTOR_SIZE);
 				graphics.fillRectangle(r);
 			}
 		}
@@ -117,7 +124,7 @@ public class ConnectorBorder extends AbstractBorder {
 
 	@Override
 	public Insets getInsets(final IFigure figure) {
-		int lrMargin = (isAdapter()) ? LR_ADAPTER_MARGIN : LR_MARGIN;
+		final int lrMargin = (isAdapter()) ? LR_ADAPTER_MARGIN : LR_MARGIN;
 		return new Insets(0, lrMargin, 0, lrMargin);
 	}
 
@@ -125,11 +132,11 @@ public class ConnectorBorder extends AbstractBorder {
 		return editPartModelOject.isIsInput();
 	}
 
-	public boolean isEvent() {
+	public final boolean isEvent() {
 		return editPartModelOject instanceof Event;
 	}
 
-	public boolean isAdapter() {
+	public final boolean isAdapter() {
 		return editPartModelOject instanceof AdapterDeclaration;
 	}
 }

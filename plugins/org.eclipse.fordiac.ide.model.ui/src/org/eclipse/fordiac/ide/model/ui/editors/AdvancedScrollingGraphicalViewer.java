@@ -117,8 +117,11 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 	 * @param me mouse event of the drag movement
 	 */
 	public void checkScrollPositionDuringDrag(final MouseEvent me) {
-		if (!getControl().getBounds().contains(me.x, me.y)) {
-			final Point newLocation = getNewScrollPosition(me);
+		final org.eclipse.swt.graphics.Rectangle controlBounds = getControl().getBounds();
+		// mousecoordinates are given releativ to control origin, translate for correct handling
+		final Point relativePos = new Point(me.x + controlBounds.x, me.y + controlBounds.y);
+		if (!controlBounds.contains(relativePos.x, relativePos.y)) {
+			final Point newLocation = getNewScrollPosition(relativePos);
 			getFigureCanvas().scrollSmoothTo(newLocation.x, newLocation.y);
 		}
 	}
@@ -154,10 +157,10 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 		return retVal;
 	}
 
-	private Point getNewScrollPosition(final MouseEvent me) {
+	private Point getNewScrollPosition(final Point pos) {
 		final Point newLocation = getViewLocation();
-		newLocation.x += getScrollDelta(me.x, getControl().getBounds().x, getControl().getBounds().width);
-		newLocation.y += getScrollDelta(me.y, getControl().getBounds().y, getControl().getBounds().height);
+		newLocation.x += getScrollDelta(pos.x, getControl().getBounds().x, getControl().getBounds().width);
+		newLocation.y += getScrollDelta(pos.y, getControl().getBounds().y, getControl().getBounds().height);
 		return newLocation;
 	}
 
