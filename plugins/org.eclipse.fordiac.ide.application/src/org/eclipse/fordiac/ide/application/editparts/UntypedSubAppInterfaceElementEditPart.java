@@ -29,18 +29,13 @@ import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
-import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
-import org.eclipse.ui.IEditorPart;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
 	private DirectEditManager manager;
@@ -63,27 +58,12 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 	@Override
 	public void performRequest(final Request request) {
-		if (request.getType() == RequestConstants.REQ_OPEN) {
-			// REQ_OPEN -> doubleclick
-			goIntoSubapp();
-		} else if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
 			// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 			getManager().show();
 		} else {
 			super.performRequest(request);
 		}
-	}
-
-	private void goIntoSubapp() {
-		SubApp subApp = (SubApp) getModel().getFBNetworkElement();
-		if ((null == subApp.getSubAppNetwork()) && subApp.isMapped()) {
-			// we are mapped and the mirrored subapp located in the resource, get the one
-			// from the application
-			subApp = (SubApp) subApp.getOpposite();
-		}
-		final IEditorPart newEditor = OpenListenerManager.openEditor(subApp);
-		final GraphicalViewer viewer = newEditor.getAdapter(GraphicalViewer.class);
-		HandlerHelper.selectElement(getModel(), viewer);
 	}
 
 	private DirectEditManager getManager() {
