@@ -53,6 +53,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 		synchronized (typeLibraryList) {
 			return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
 		}
+
 	}
 
 	public static void removeProject(final IProject project) {
@@ -89,11 +90,10 @@ public final class TypeLibrary implements TypeLibraryTags {
 	public PaletteEntry getPaletteEntry(final IFile typeFile) {
 		if (isDataTypeFile(typeFile)) {
 			return dataTypeLib.getDerivedDataTypes().get(TypeLibrary.getTypeNameFromFile(typeFile));
-		} else {
-			final EMap<String, ? extends PaletteEntry> typeEntryList = getTypeList(typeFile);
-			if (null != typeEntryList) {
-				return typeEntryList.get(TypeLibrary.getTypeNameFromFile(typeFile));
-			}
+		}
+		final EMap<String, ? extends PaletteEntry> typeEntryList = getTypeList(typeFile);
+		if (null != typeEntryList) {
+			return typeEntryList.get(TypeLibrary.getTypeNameFromFile(typeFile));
 		}
 		return null;
 	}
@@ -148,7 +148,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 		}
 	}
 
-	public static synchronized void loadToolLibrary() {
+	public static void loadToolLibrary() {
 		synchronized (typeLibraryList) {
 			final IProject toolLibProject = getToolLibProject();
 			typeLibraryList.computeIfAbsent(toolLibProject, TypeLibrary::createToolLibrary);
@@ -173,9 +173,6 @@ public final class TypeLibrary implements TypeLibraryTags {
 	private void loadPaletteFolderMembers(final IContainer container) {
 		IResource[] members;
 		try {
-			if (!ResourcesPlugin.getWorkspace().isTreeLocked()) {
-				container.refreshLocal(IResource.DEPTH_ONE, null);
-			}
 			members = container.members();
 
 			for (final IResource iResource : members) {
