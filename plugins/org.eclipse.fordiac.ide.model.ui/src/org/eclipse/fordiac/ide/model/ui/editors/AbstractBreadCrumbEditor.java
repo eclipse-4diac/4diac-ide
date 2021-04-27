@@ -25,9 +25,12 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.ui.Activator;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
 import org.eclipse.gef.GraphicalViewer;
@@ -180,9 +183,25 @@ INavigationLocationProvider, IPersistableEditor {
 			final Map<String, Object> attrs = marker.getAttributes();
 			if (FordiacMarkerHelper.markerTargetsFBNetworkElement(attrs)) {
 				gotoFBNetworkElement(attrs.get(IMarker.LOCATION));
+			} else if (FordiacMarkerHelper.markerTargetsConnection(attrs)) {
+				gotoConnection(marker);
 			}
 		} catch (final CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
+		}
+	}
+
+	protected void gotoConnection(final IMarker marker) {
+		@SuppressWarnings("boxing")
+		final ErrorMarkerRef ie = FordiacMarkerHelper.getMarkerRefById(marker.getId());
+		final EObject parent = ie instanceof ErrorMarkerInterface ? ((ErrorMarkerInterface) ie).getFBNetworkElement()
+				: null;
+
+		if (null != parent) {
+			final EObject toView = parent.eContainer().eContainer();
+			getBreadcrumb().setInput(toView);
+			final IEditorPart editor = HandlerHelper.openEditor(toView);
+			HandlerHelper.selectElement(ie, editor);
 		}
 	}
 

@@ -184,7 +184,6 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 		// TODO implement fb search and select
 	}
 
-
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		// TODO Auto-generated method stub

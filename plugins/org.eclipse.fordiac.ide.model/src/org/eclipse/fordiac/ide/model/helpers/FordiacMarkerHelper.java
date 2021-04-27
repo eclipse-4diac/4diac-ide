@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.helpers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -48,8 +49,18 @@ public final class FordiacMarkerHelper {
 	private static final String FB_NETWORK_ELEMENT_TARGET = "FBNetworkElement"; //$NON-NLS-1$
 	private static final String CONNECTION_TARGET = "Connection"; //$NON-NLS-1$
 
+	private static final Map<Long, ErrorMarkerRef> markers = new ConcurrentHashMap<>();
+
+	public static ErrorMarkerRef getMarkerRefById(final Long id) {
+		return markers.get(id);
+	}
+
 	public static boolean markerTargetsFBNetworkElement(final Map<String, Object> attrs) {
 		return FB_NETWORK_ELEMENT_TARGET.equals(attrs.get(TARGET_TYPE));
+	}
+
+	public static boolean markerTargetsConnection(final Map<String, Object> attrs) {
+		return CONNECTION_TARGET.equals(attrs.get(TARGET_TYPE));
 	}
 
 	public static void addTargetIdentifier(final INamedElement element, final Map<String, Object> attrs) {
@@ -140,11 +151,13 @@ public final class FordiacMarkerHelper {
 
 	}
 
+	@SuppressWarnings("boxing")
 	public static void createMarker(final ErrorMarkerBuilder errorMarker, final IFile file) {
 		Assert.isNotNull(file);
 		try {
 			final IMarker marker = file.createMarker(IMarker.PROBLEM, errorMarker.getAttributes());
 			if (marker.exists()) {
+				markers.put(marker.getId(), errorMarker.getErrorMarkerRef());
 				errorMarker.addId(marker.getId());
 			}
 		} catch (final CoreException e) {
@@ -167,9 +180,11 @@ public final class FordiacMarkerHelper {
 	private static ErrorMarkerBuilder deleteMarkerInJob(final IFile f, final ErrorMarkerRef ie) {
 		final IMarker marker = f.getMarker(ie.getFileMarkerId());
 		final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + f.getName()) { //$NON-NLS-1$
+			@SuppressWarnings("boxing")
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
 				try {
+					markers.remove(marker.getId());
 					marker.delete();
 				} catch (final CoreException e) {
 					Activator.getDefault().logError("Could not delete error marker", e); //$NON-NLS-1$
