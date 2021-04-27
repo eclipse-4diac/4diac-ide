@@ -11,7 +11,7 @@
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement;
+package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
 /**
  * The Interface DistributedSystemListener.

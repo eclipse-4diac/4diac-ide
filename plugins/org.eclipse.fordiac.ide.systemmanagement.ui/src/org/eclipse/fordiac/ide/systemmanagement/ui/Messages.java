@@ -59,11 +59,7 @@ public final class Messages extends NLS {
 
 	public static String SystemNameNotValid;
 
-	public static String AutomationSystemEditor_Title;
-	public static String AutomationSystemEditor_Info;
-	public static String AutomationSystemEditor_Discard_Changes;
-	public static String AutomationSystemEditor_Save_Changes;
-	public static String AutomationSystemEditor_Overwrite_Changes;
+
 
 	static {
 		// initialize resource bundle
