@@ -38,7 +38,6 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.SelectionRequest;
-import org.eclipse.gef.tools.MarqueeDragTracker;
 import org.eclipse.gef.tools.MarqueeSelectionTool;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.swt.graphics.Point;
@@ -49,8 +48,8 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	private class FBNetworkMarqueeDragTracker extends AdvancedMarqueeDragTracker {
 
 		@Override
-		protected Collection<Object> calculateMarqueeSelectedEditParts() {
-			final Collection<Object> marqueeSelectedEditParts = super.calculateMarqueeSelectedEditParts();
+		protected Collection<EditPart> calculateMarqueeSelectedEditParts() {
+			final Collection<EditPart> marqueeSelectedEditParts = super.calculateMarqueeSelectedEditParts();
 			// only report connections and fbelements, isMarqueeslectable can not be used
 			// for that as it affects connection selection in the wrong way
 			return marqueeSelectedEditParts.stream()
@@ -73,7 +72,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 
 	@Override
 	public DragTracker getDragTracker(final Request req) {
-		final MarqueeDragTracker dragTracker = new FBNetworkMarqueeDragTracker();
+		final FBNetworkMarqueeDragTracker dragTracker = new FBNetworkMarqueeDragTracker();
 		dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 		return dragTracker;
 	}
