@@ -70,7 +70,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 /**
  * The Class CommonElementImporter.
  */
-abstract class CommonElementImporter {
+public abstract class CommonElementImporter {
 
 	private static class ImporterStreams implements AutoCloseable {
 		private final InputStream inputStream;

@@ -1,16 +1,18 @@
-/********************************************************************************
- * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.Palette;
 
 import org.eclipse.emf.ecore.EFactory;
@@ -32,11 +34,18 @@ public interface PaletteFactory extends EFactory {
 	 * @generated */
 	Palette createPalette();
 
-	/** Returns a new object of class '<em>FB Type Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** Returns a new object of class '<em>Adapter Type Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
-	 * @return a new object of class '<em>FB Type Palette Entry</em>'.
+	 * @return a new object of class '<em>Adapter Type Palette Entry</em>'.
 	 * @generated */
-	FBTypePaletteEntry createFBTypePaletteEntry();
+	AdapterTypePaletteEntry createAdapterTypePaletteEntry();
+
+	/** Returns a new object of class '<em>Data Type Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return a new object of class '<em>Data Type Palette Entry</em>'.
+	 * @generated */
+	DataTypePaletteEntry createDataTypePaletteEntry();
 
 	/** Returns a new object of class '<em>Device Type Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -44,6 +53,12 @@ public interface PaletteFactory extends EFactory {
 	 * @return a new object of class '<em>Device Type Palette Entry</em>'.
 	 * @generated */
 	DeviceTypePaletteEntry createDeviceTypePaletteEntry();
+
+	/** Returns a new object of class '<em>FB Type Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return a new object of class '<em>FB Type Palette Entry</em>'.
+	 * @generated */
+	FBTypePaletteEntry createFBTypePaletteEntry();
 
 	/** Returns a new object of class '<em>Resource Type Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -58,25 +73,18 @@ public interface PaletteFactory extends EFactory {
 	 * @generated */
 	SegmentTypePaletteEntry createSegmentTypePaletteEntry();
 
-	/** Returns a new object of class '<em>Adapter Type Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 * 
-	 * @return a new object of class '<em>Adapter Type Palette Entry</em>'.
-	 * @generated */
-	AdapterTypePaletteEntry createAdapterTypePaletteEntry();
-
-	/** Returns a new object of class '<em>Data Type Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return a new object of class '<em>Data Type Palette Entry</em>'.
-	 * @generated */
-	DataTypePaletteEntry createDataTypePaletteEntry();
-
 	/** Returns a new object of class '<em>Sub Application Type Palette Entry</em>'. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
 	 * @return a new object of class '<em>Sub Application Type Palette Entry</em>'.
 	 * @generated */
 	SubApplicationTypePaletteEntry createSubApplicationTypePaletteEntry();
+
+	/** Returns a new object of class '<em>System Palette Entry</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return a new object of class '<em>System Palette Entry</em>'.
+	 * @generated */
+	SystemPaletteEntry createSystemPaletteEntry();
 
 	/** Returns the package supported by this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
