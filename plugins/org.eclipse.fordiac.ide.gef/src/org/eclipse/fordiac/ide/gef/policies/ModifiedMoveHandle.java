@@ -36,20 +36,51 @@ import org.eclipse.swt.widgets.Display;
  */
 public class ModifiedMoveHandle extends MoveHandle {
 
+	static class SelectionBorder extends AbstractBorder {
+
+		private int arc;
+
+		public SelectionBorder(final int arc) {
+			this.arc = arc;
+		}
+
+		public void setArc(final int arc) {
+			this.arc = arc;
+		}
+
+		@Override
+		public void paint(final IFigure figure, final Graphics g, final Insets insets) {
+			Rectangle rect = getPaintRectangle(figure, insets);
+			g.setLineStyle(Graphics.LINE_SOLID);
+			g.setLineWidth(SELECTION_BORDER_WIDTH);
+			g.setXORMode(false);
+			g.setForegroundColor(getSelectionColor());
+			g.setBackgroundColor(getSelectionColor());
+			rect = rect.getShrinked(1, 1);
+			g.drawRoundRectangle(rect, arc, arc);
+			g.setAlpha(SELECTION_FILL_ALPHA);
+			g.fillRoundRectangle(rect, arc, arc);
+		}
+
+		@Override
+		public Insets getInsets(final IFigure figure) {
+			return figure.getInsets();
+		}
+	}
+
 	public static final int SELECTION_FILL_ALPHA = 50;
 	public static final int SELECTION_BORDER_WIDTH = 2;
 	private static Color selectionColor = null;
 
 	public static Color getSelectionColor() {
 		if (null == selectionColor) {
-			Display display = Display.getCurrent();
+			final Display display = Display.getCurrent();
 			selectionColor = display.getSystemColor(SWT.COLOR_LIST_SELECTION);
 		}
 		return selectionColor;
 	}
 
 	private final Insets insets;
-	private final int arc;
 
 	/**
 	 * Instantiates a new modified move handle.
@@ -58,10 +89,11 @@ public class ModifiedMoveHandle extends MoveHandle {
 	 * @param insets the insets
 	 * @param arc    the arc
 	 */
-	public ModifiedMoveHandle(GraphicalEditPart owner, Insets insets, int arc) {
+	public ModifiedMoveHandle(final GraphicalEditPart owner, final Insets insets, final int arc) {
 		super(owner);
 		this.insets = insets;
-		this.arc = arc;
+		// super constructor calls initialize therefore we have to reset arc here.
+		((SelectionBorder) getBorder()).setArc(arc);
 	}
 
 	/**
@@ -70,26 +102,12 @@ public class ModifiedMoveHandle extends MoveHandle {
 	@Override
 	protected void initialize() {
 		setOpaque(false);
-		setBorder(new AbstractBorder() {
-			@Override
-			public void paint(IFigure figure, Graphics g, Insets insets) {
-				Rectangle rect = getPaintRectangle(figure, insets);
-				g.setLineStyle(Graphics.LINE_SOLID);
-				g.setLineWidth(SELECTION_BORDER_WIDTH);
-				g.setXORMode(false);
-				g.setForegroundColor(getSelectionColor());
-				g.setBackgroundColor(getSelectionColor());
-				rect = rect.getShrinked(1, 1);
-				g.drawRoundRectangle(rect, arc, arc);
-				g.setAlpha(SELECTION_FILL_ALPHA);
-				g.fillRoundRectangle(rect, arc, arc);
-			}
-
-			@Override
-			public Insets getInsets(IFigure figure) {
-				return insets;
-			}
-		});
+		setBorder(new SelectionBorder(0));
 		setCursor(Cursors.SIZEALL);
+	}
+
+	@Override
+	public Insets getInsets() {
+		return insets;
 	}
 }
