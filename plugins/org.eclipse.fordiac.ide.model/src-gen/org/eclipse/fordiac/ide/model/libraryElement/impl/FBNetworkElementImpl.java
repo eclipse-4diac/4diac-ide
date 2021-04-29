@@ -45,8 +45,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
  *
  * @generated */
 public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implements FBNetworkElement {
-	/** The cached value of the '{@link #getPosition() <em>Position</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * 
 	 * @see #getPosition()
 	 * @generated
@@ -93,6 +93,15 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 			InternalEObject oldPosition = (InternalEObject) position;
 			position = (Position) eResolveProxy(oldPosition);
 			if (position != oldPosition) {
+				InternalEObject newPosition = (InternalEObject) position;
+				NotificationChain msgs = oldPosition.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION, null, null);
+				if (newPosition.eInternalContainer() == null) {
+					msgs = newPosition.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION, null, msgs);
+				}
+				if (msgs != null)
+					msgs.dispatch();
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION, oldPosition, position));
@@ -111,13 +120,39 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	@Override
-	public void setPosition(Position newPosition) {
+	public NotificationChain basicSetPosition(Position newPosition, NotificationChain msgs) {
 		Position oldPosition = position;
 		position = newPosition;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION, oldPosition, newPosition);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public void setPosition(Position newPosition) {
+		if (newPosition != position) {
+			NotificationChain msgs = null;
+			if (position != null)
+				msgs = ((InternalEObject) position).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION, null, msgs);
+			if (newPosition != null)
+				msgs = ((InternalEObject) newPosition).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION, null, msgs);
+			msgs = basicSetPosition(newPosition, msgs);
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION,
-					oldPosition, position));
+					newPosition, newPosition));
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -358,6 +393,8 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+		case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
+			return basicSetPosition(null, msgs);
 		case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
 			return basicSetInterface(null, msgs);
 		default:

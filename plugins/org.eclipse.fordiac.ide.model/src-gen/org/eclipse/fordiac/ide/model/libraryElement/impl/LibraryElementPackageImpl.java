@@ -3817,8 +3817,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(positionableElementEClass, PositionableElement.class, "PositionableElement", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPositionableElement_Position(), this.getPosition(), null, "position", null, 1, 1, //$NON-NLS-1$
-				PositionableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+				PositionableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		op = addEOperation(positionableElementEClass, null, "updatePosition", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theXMLTypePackage.getInt(), "x", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
@@ -4209,6 +4209,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		});
 		addAnnotation(getPrimitive_Parameters(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
 				"name", "Parameters" //$NON-NLS-1$ //$NON-NLS-2$
+		});
+		addAnnotation(getPositionableElement_Position(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+				"name", "Position", //$NON-NLS-1$ //$NON-NLS-2$
+				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
 		});
 		addAnnotation(getSimpleFBType_Algorithm(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 				"name", "Algorithm", //$NON-NLS-1$ //$NON-NLS-2$

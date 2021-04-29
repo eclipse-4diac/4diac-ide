@@ -46,7 +46,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEntry {
 	/** The default value of the '{@link #getLabel() <em>Label</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getLabel()
 	 * @generated
 	 * @ordered */
@@ -54,7 +54,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 
 	/** The cached value of the '{@link #getLabel() <em>Label</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getLabel()
 	 * @generated
 	 * @ordered */
@@ -78,7 +78,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 
 	/** The default value of the '{@link #getLastModificationTimestamp() <em>Last Modification Timestamp</em>}'
 	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getLastModificationTimestamp()
 	 * @generated
 	 * @ordered */
@@ -86,7 +86,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 
 	/** The cached value of the '{@link #getLastModificationTimestamp() <em>Last Modification Timestamp</em>}'
 	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getLastModificationTimestamp()
 	 * @generated
 	 * @ordered */
@@ -102,7 +102,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 
 	/** The cached value of the '{@link #getPalette() <em>Palette</em>}' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getPalette()
 	 * @generated
 	 * @ordered */
@@ -202,11 +202,10 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 			}
 		} else if (((null == type) && (null != getFile()))
 				|| (getFile() != null && getFile().getModificationStamp() != IResource.NULL_STAMP
-				&& getFile().getModificationStamp() != lastModificationTimestamp)) {
+						&& getFile().getModificationStamp() != lastModificationTimestamp)) {
 			lastModificationTimestamp = getFile().getModificationStamp();
 			setType(loadType());
 		}
-
 
 		return type;
 	}

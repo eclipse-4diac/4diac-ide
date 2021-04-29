@@ -1081,7 +1081,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int DEVICE__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -1317,7 +1318,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int EC_STATE__COMMENT = INAMED_ELEMENT__COMMENT;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -1365,7 +1367,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	int POSITIONABLE_ELEMENT = 63;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -1386,7 +1389,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	int EC_TRANSITION = 14;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -1542,7 +1546,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int FB_NETWORK_ELEMENT__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -1601,7 +1606,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int FB__PALETTE_ENTRY = FB_NETWORK_ELEMENT__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -1659,7 +1665,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int SUB_APP__PALETTE_ENTRY = FB_NETWORK_ELEMENT__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -2304,7 +2311,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int SEGMENT__PALETTE_ENTRY = TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -3165,7 +3173,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int RESOURCE_TYPE_FB__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -3474,7 +3483,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ADAPTER_FB__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -3791,7 +3801,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int STRUCT_MANIPULATOR__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -3856,7 +3867,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int DEMULTIPLEXER__PALETTE_ENTRY = STRUCT_MANIPULATOR__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -3921,7 +3933,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int MULTIPLEXER__PALETTE_ENTRY = STRUCT_MANIPULATOR__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -4083,7 +4096,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int ERROR_MARKER_FBN_ELEMENT__PALETTE_ENTRY = FB_NETWORK_ELEMENT__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -4246,7 +4260,8 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered */
 	int CFB_INSTANCE__PALETTE_ENTRY = FB__PALETTE_ENTRY;
 
-	/** The feature id for the '<em><b>Position</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Position</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered */
@@ -6203,11 +6218,11 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated */
 	EClass getPositionableElement();
 
-	/** Returns the meta object for the reference
+	/** Returns the meta object for the containment reference
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getPosition <em>Position</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @return the meta object for the reference '<em>Position</em>'.
+	 * @return the meta object for the containment reference '<em>Position</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.PositionableElement#getPosition()
 	 * @see #getPositionableElement()
 	 * @generated */
@@ -7942,8 +7957,8 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated */
 		EClass POSITIONABLE_ELEMENT = eINSTANCE.getPositionableElement();
 
-		/** The meta object literal for the '<em><b>Position</b></em>' reference feature. <!-- begin-user-doc --> <!--
-		 * end-user-doc -->
+		/** The meta object literal for the '<em><b>Position</b></em>' containment reference feature. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
 		 * 
 		 * @generated */
 		EReference POSITIONABLE_ELEMENT__POSITION = eINSTANCE.getPositionableElement_Position();

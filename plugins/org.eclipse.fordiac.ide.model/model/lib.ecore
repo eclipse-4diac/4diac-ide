@@ -1219,7 +1219,13 @@
       <eParameters name="newPos" lowerBound="1" eType="#//Point"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="position" lowerBound="1"
-        eType="#//Position"/>
+        eType="#//Position" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Position"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Position">
     <eOperations name="asPoint" lowerBound="1" eType="#//Point">
