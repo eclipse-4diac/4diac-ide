@@ -49,12 +49,17 @@ public final class TypeLibrary implements TypeLibraryTags {
 	// !> Holds type libraries of all open 4diac IDE projects
 	private static Map<IProject, TypeLibrary> typeLibraryList = new HashMap<>();
 
-	public static synchronized TypeLibrary getTypeLibrary(final IProject proj) {
-		return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
+	public static TypeLibrary getTypeLibrary(final IProject proj) {
+		synchronized (typeLibraryList) {
+			return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
+		}
+
 	}
 
 	public static void removeProject(final IProject project) {
-		typeLibraryList.remove(project);
+		synchronized (typeLibraryList) {
+			typeLibraryList.remove(project);
+		}
 	}
 
 	private final Palette blockTypeLib = PaletteFactory.eINSTANCE.createPalette();
@@ -85,11 +90,10 @@ public final class TypeLibrary implements TypeLibraryTags {
 	public PaletteEntry getPaletteEntry(final IFile typeFile) {
 		if (isDataTypeFile(typeFile)) {
 			return dataTypeLib.getDerivedDataTypes().get(TypeLibrary.getTypeNameFromFile(typeFile));
-		} else {
-			final EMap<String, ? extends PaletteEntry> typeEntryList = getTypeList(typeFile);
-			if (null != typeEntryList) {
-				return typeEntryList.get(TypeLibrary.getTypeNameFromFile(typeFile));
-			}
+		}
+		final EMap<String, ? extends PaletteEntry> typeEntryList = getTypeList(typeFile);
+		if (null != typeEntryList) {
+			return typeEntryList.get(TypeLibrary.getTypeNameFromFile(typeFile));
 		}
 		return null;
 	}
@@ -144,9 +148,11 @@ public final class TypeLibrary implements TypeLibraryTags {
 		}
 	}
 
-	public static synchronized void loadToolLibrary() {
-		final IProject toolLibProject = getToolLibProject();
-		typeLibraryList.computeIfAbsent(toolLibProject, TypeLibrary::createToolLibrary);
+	public static void loadToolLibrary() {
+		synchronized (typeLibraryList) {
+			final IProject toolLibProject = getToolLibProject();
+			typeLibraryList.computeIfAbsent(toolLibProject, TypeLibrary::createToolLibrary);
+		}
 	}
 
 	private static TypeLibrary createToolLibrary(final IProject toolLibProject) {
@@ -167,9 +173,6 @@ public final class TypeLibrary implements TypeLibraryTags {
 	private void loadPaletteFolderMembers(final IContainer container) {
 		IResource[] members;
 		try {
-			if (!ResourcesPlugin.getWorkspace().isTreeLocked()) {
-				container.refreshLocal(IResource.DEPTH_ONE, null);
-			}
 			members = container.members();
 
 			for (final IResource iResource : members) {
