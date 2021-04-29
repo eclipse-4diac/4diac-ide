@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
-import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
+import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Data Type Palette Entry</b></em>'. <!--
@@ -31,14 +31,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * @generated */
 public class DataTypePaletteEntryImpl extends PaletteEntryImpl implements DataTypePaletteEntry {
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected DataTypePaletteEntryImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -46,11 +46,11 @@ public class DataTypePaletteEntryImpl extends PaletteEntryImpl implements DataTy
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public AnyDerivedType getType() {
-		LibraryElement type = super.getType();
+		final LibraryElement type = super.getType();
 		if (type instanceof AnyDerivedType) {
 			return (AnyDerivedType) type;
 		}
@@ -58,7 +58,7 @@ public class DataTypePaletteEntryImpl extends PaletteEntryImpl implements DataTy
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setType(final LibraryElement type) {
@@ -67,7 +67,7 @@ public class DataTypePaletteEntryImpl extends PaletteEntryImpl implements DataTy
 		} else {
 			super.setType(null);
 			if (null != type) {
-				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+				final Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
 						"tried to set no AnyDerivedType as type entry for DataTypePaletteEntry"); //$NON-NLS-1$
 				Activator.getDefault().getLog().log(exception);
 			}
@@ -75,10 +75,10 @@ public class DataTypePaletteEntryImpl extends PaletteEntryImpl implements DataTy
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
-	public TypeImporter getTypeImporter() {
+	public CommonElementImporter getImporter() {
 		return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter(getFile());
 	}
 

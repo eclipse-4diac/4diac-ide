@@ -15,34 +15,19 @@
  */
 package org.eclipse.fordiac.ide.model.Palette;
 
-import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
-
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Data Type Palette Entry</b></em>'. <!--
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>System Palette Entry</b></em>'. <!--
  * end-user-doc -->
  *
  *
- * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getDataTypePaletteEntry()
+ * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getSystemPaletteEntry()
  * @model
  * @generated */
-public interface DataTypePaletteEntry extends PaletteEntry {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @model kind="operation" required="true"
-	 * @generated */
-	@Override
-	AnyDerivedType getType();
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @model
-	 * @generated */
-	@Override
-	void setType(LibraryElement type);
-
+public interface SystemPaletteEntry extends PaletteEntry {
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.CommonElementImporter"
@@ -50,4 +35,16 @@ public interface DataTypePaletteEntry extends PaletteEntry {
 	@Override
 	CommonElementImporter getImporter();
 
-} // DataTypePaletteEntry
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation" required="true"
+	 * @generated */
+	AutomationSystem getSystem();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model
+	 * @generated */
+	void setSystem(LibraryElement system);
+
+} // SystemPaletteEntry

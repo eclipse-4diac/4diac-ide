@@ -19,21 +19,21 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.Activator;
-import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
+import org.eclipse.fordiac.ide.model.Palette.SystemPaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Device Type Palette Entry</b></em>'. <!--
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>System Palette Entry</b></em>'. <!--
  * end-user-doc -->
  *
  * @generated */
-public class DeviceTypePaletteEntryImpl extends PaletteEntryImpl implements DeviceTypePaletteEntry {
+public class SystemPaletteEntryImpl extends PaletteEntryImpl implements SystemPaletteEntry {
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	protected DeviceTypePaletteEntryImpl() {
+	protected SystemPaletteEntryImpl() {
 		super();
 	}
 
@@ -42,17 +42,25 @@ public class DeviceTypePaletteEntryImpl extends PaletteEntryImpl implements Devi
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
-		return PalettePackage.Literals.DEVICE_TYPE_PALETTE_ENTRY;
+		return PalettePackage.Literals.SYSTEM_PALETTE_ENTRY;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
 	@Override
-	public DeviceType getDeviceType() {
+	public CommonElementImporter getImporter() {
+		return new org.eclipse.fordiac.ide.model.dataimport.SystemImporter(getFile());
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public AutomationSystem getSystem() {
 		final LibraryElement type = getType();
-		if (type instanceof DeviceType) {
-			return (DeviceType) type;
+		if (type instanceof AutomationSystem) {
+			return (AutomationSystem) type;
 		}
 		return null;
 	}
@@ -61,25 +69,17 @@ public class DeviceTypePaletteEntryImpl extends PaletteEntryImpl implements Devi
 	 *
 	 * @generated */
 	@Override
-	public void setType(final LibraryElement type) {
-		if (type instanceof DeviceType) {
-			super.setType(type);
+	public void setSystem(final LibraryElement system) {
+		if (system instanceof AutomationSystem) {
+			super.setType(system);
 		} else {
 			super.setType(null);
 			if (null != type) {
 				final Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-						"tried to set no DeviceType as type entry for DeviceTypePaletteEntry");  //$NON-NLS-1$
+						"tried to set no AutomationSystem as type entry for SystemPaletteEntry");//$NON-NLS-1$
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public CommonElementImporter getImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(getFile());
-	}
-
-} // DeviceTypePaletteEntryImpl
+} // SystemPaletteEntryImpl
