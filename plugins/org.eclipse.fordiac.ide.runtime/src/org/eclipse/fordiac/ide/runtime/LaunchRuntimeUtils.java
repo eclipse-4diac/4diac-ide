@@ -65,6 +65,7 @@ public final class LaunchRuntimeUtils {
 			try {
 				Thread.sleep(1000);
 			} catch (final InterruptedException e) {
+				Thread.currentThread().interrupt();  // mark interruption
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 		} catch (final CoreException e) {

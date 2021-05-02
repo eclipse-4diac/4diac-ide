@@ -87,14 +87,21 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 				page.overwriteWithoutWarning());
 		try {
 			new ProgressMonitorDialog(getShell()).run(false, false, exporter);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();  // mark interruption
+			showExceptionErrorDialog(e);
 		} catch (final Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-			final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-			msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
-			msg.open();
+			showExceptionErrorDialog(e);
 		}
 
 		return true;
+	}
+
+	protected static void showExceptionErrorDialog(final Exception e) {
+		Activator.getDefault().logError(e.getMessage(), e);
+		final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
+		msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
+		msg.open();
 	}
 
 	private final List<LibraryElement> collectExportees() {

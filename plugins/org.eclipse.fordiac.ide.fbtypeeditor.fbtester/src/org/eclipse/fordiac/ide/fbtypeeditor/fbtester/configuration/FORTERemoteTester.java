@@ -152,6 +152,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 					} catch (final IOException e1) {
 						Activator.getDefault().logError(e1.getMessage(), e1);
 					} catch (final InterruptedException ex) {
+						Thread.currentThread().interrupt();  // mark interruption
 						Activator.getDefault().logError(Messages.FORTERemoteTester_ThreadInterrupted, ex);
 					}
 				} else {
@@ -264,6 +265,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				try {
 					Thread.sleep(500);
 				} catch (final InterruptedException e) {
+					Thread.currentThread().interrupt();  // mark interruption
 					setRunning(false);
 				}
 				final String request = MessageFormat.format(DeploymentExecutor.READ_WATCHES, i);
