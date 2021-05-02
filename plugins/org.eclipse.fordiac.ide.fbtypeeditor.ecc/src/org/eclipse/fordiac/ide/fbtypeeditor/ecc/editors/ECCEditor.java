@@ -281,7 +281,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	public void gotoMarker(final IMarker marker) {
 		final Map<?, ?> map = getGraphicalViewer().getEditPartRegistry();
 		final String lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, "Unknown");
-		if (!lineNumber.equals("Unknown")) {
+		if (!"Unknown".equals(lineNumber)) {
 			final int hashCode = Integer.parseInt(lineNumber);
 			for (final Object key : map.keySet()) {
 				if (key.hashCode() == hashCode) {
@@ -297,9 +297,6 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
-		if (marker.getAttribute(IMarker.LOCATION, "Unknown").startsWith("ECC")) {
-			return true;
-		}
-		return false;
+		return marker.getAttribute(IMarker.LOCATION, "Unknown").startsWith("ECC"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }

@@ -31,7 +31,7 @@ public class WithCreateCommand extends Command {
 	public WithCreateCommand() {
 	}
 
-	public WithCreateCommand(Event event, VarDeclaration varDeclaration) {
+	public WithCreateCommand(final Event event, final VarDeclaration varDeclaration) {
 		this.event = event;
 		this.varDeclaration = varDeclaration;
 	}
@@ -61,17 +61,13 @@ public class WithCreateCommand extends Command {
 			ErrorMessenger.popUpErrorMessage(Messages.AdapterConnectionNotAllowed);
 			return false;
 		}
-		for (With w : varDeclaration.getWiths()) {
+		for (final With w : varDeclaration.getWiths()) {
 			if (w.eContainer().equals(event)) {
 				ErrorMessenger.popUpErrorMessage(Messages.WithExists);
 				return false;
 			}
 		}
-		if ((varDeclaration.isIsInput() && event.isIsInput()) || (!varDeclaration.isIsInput() && !event.isIsInput())) {
-			return true;
-		}
-		return false;
-
+		return (varDeclaration.isIsInput() == event.isIsInput());
 	}
 
 	@Override

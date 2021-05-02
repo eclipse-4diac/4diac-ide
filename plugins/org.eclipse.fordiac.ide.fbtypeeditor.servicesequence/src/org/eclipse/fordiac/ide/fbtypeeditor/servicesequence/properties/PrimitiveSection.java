@@ -241,10 +241,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 	}
 
 	protected boolean isLeftInterfaceSelected() {
-		if (serviceInterfaceCombo.getText().equals(serviceInterfaceCombo.getItem(0))) {
-			return true;
-		}
-		return false;
+		return (serviceInterfaceCombo.getText().equals(serviceInterfaceCombo.getItem(0)));
 	}
 
 	public void setServiceInterfaceDropdown() {

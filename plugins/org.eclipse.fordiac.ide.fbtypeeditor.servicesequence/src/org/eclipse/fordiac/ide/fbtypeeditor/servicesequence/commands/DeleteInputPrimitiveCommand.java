@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2014 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -25,23 +25,17 @@ import org.eclipse.gef.commands.Command;
 public class DeleteInputPrimitiveCommand extends Command {
 
 	private final InputPrimitive primitive;
-	private ServiceTransaction parent;
+	private final ServiceTransaction parent;
 	private DeleteTransactionCommand deleteTransactionCmd = null;
 
-	public DeleteInputPrimitiveCommand(InputPrimitive primitive) {
+	public DeleteInputPrimitiveCommand(final InputPrimitive primitive) {
 		this.primitive = primitive;
 		this.parent = (ServiceTransaction) primitive.eContainer();
 	}
 
 	@Override
 	public boolean canExecute() {
-		if (null == primitive) {
-			return false;
-		}
-		if (primitive.eContainer() == null || !(primitive.eContainer() instanceof ServiceTransaction)) {
-			return false;
-		}
-		return true;
+		return (null != primitive) && (primitive.eContainer() instanceof ServiceTransaction);
 	}
 
 	@Override
