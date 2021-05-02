@@ -95,11 +95,6 @@ public class ConnectionHelper {
 				return null;
 			}
 
-			/* final EObject parent = fbNetwork.eContainer();
-			 *
-			 * if (parent instanceof SubApp || ((FBNetworkElement) parent).getType() instanceof CompositeFBType) {
-			 * return (FBNetworkElement) parent; } */
-
 			final FBNetworkElement fbNetworkElement = fbNetwork.getElementNamed(qualNames[0]);
 			if (fbNetworkElement == null) {
 				return getElementFromType(fbNetwork);
@@ -275,7 +270,6 @@ public class ConnectionHelper {
 		final ErrorMarkerFBNElement createErrorMarkerFBNElement = LibraryElementFactory.eINSTANCE
 				.createErrorMarkerFBNElement();
 		createErrorMarkerFBNElement.getTypeLibrary();
-		// String createUniqueName = NameRepository.createUniqueName(createErrorMarkerFBNElement, name);
 		createErrorMarkerFBNElement.setName(name);
 		createErrorMarkerFBNElement.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		final Position position = LibraryElementFactory.eINSTANCE.createPosition();

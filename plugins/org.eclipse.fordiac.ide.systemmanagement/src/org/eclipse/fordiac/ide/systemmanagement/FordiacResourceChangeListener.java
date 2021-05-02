@@ -135,7 +135,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private boolean handleResourceMovedFrom(final IResourceDelta delta) {
 		if (IResource.FILE == delta.getResource().getType()) {
 			handleFileMove(delta);
-			// return false;
 		}
 		return true;
 	}
