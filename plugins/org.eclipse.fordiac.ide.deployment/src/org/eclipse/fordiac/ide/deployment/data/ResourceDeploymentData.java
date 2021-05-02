@@ -86,7 +86,7 @@ public class ResourceDeploymentData {
 
 	public ResourceDeploymentData(final Resource res) {
 		this.res = res;
-		addFBNetworkElements(new ArrayDeque<SubApp>(), res.getFBNetwork(), ""); //$NON-NLS-1$
+		addFBNetworkElements(new ArrayDeque<>(), res.getFBNetwork(), ""); //$NON-NLS-1$
 	}
 
 	private void addFBNetworkElements(final Deque<SubApp> subAppHierarchy, final FBNetwork fbNetwork, final String prefix) {

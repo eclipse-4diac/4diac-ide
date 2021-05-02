@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2012 Profactor GbmH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -31,7 +31,7 @@ public class TransferDataSelectionOfFb {
 		return fbTypeName;
 	}
 
-	public void setFbTypeName(String fbTypeName) {
+	public void setFbTypeName(final String fbTypeName) {
 		this.fbTypeName = fbTypeName;
 	}
 
@@ -39,7 +39,7 @@ public class TransferDataSelectionOfFb {
 		return typePaletteEntry;
 	}
 
-	public void setTypePaletteEntry(FBTypePaletteEntry typePaletteEntry) {
+	public void setTypePaletteEntry(final FBTypePaletteEntry typePaletteEntry) {
 		this.typePaletteEntry = typePaletteEntry;
 	}
 
@@ -47,7 +47,7 @@ public class TransferDataSelectionOfFb {
 		return selectionLabel;
 	}
 
-	public void setSelectionLabel(String selectionLabel) {
+	public void setSelectionLabel(final String selectionLabel) {
 		this.selectionLabel = selectionLabel;
 	}
 
@@ -55,7 +55,7 @@ public class TransferDataSelectionOfFb {
 		return selectionImage;
 	}
 
-	public void setSelectionImage(Image selectionImage) {
+	public void setSelectionImage(final Image selectionImage) {
 		this.selectionImage = selectionImage;
 	}
 
@@ -63,7 +63,7 @@ public class TransferDataSelectionOfFb {
 		return fbParameters;
 	}
 
-	public void setFbParameters(List<TransferDataSelectionFBParameter> fbParameters) {
+	public void setFbParameters(final List<TransferDataSelectionFBParameter> fbParameters) {
 		this.fbParameters = fbParameters;
 	}
 
@@ -71,6 +71,6 @@ public class TransferDataSelectionOfFb {
 		typePaletteEntry = null;
 		selectionLabel = null;
 		selectionImage = null;
-		fbParameters = new ArrayList<TransferDataSelectionFBParameter>();
+		fbParameters = new ArrayList<>();
 	}
 }

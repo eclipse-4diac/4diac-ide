@@ -41,18 +41,18 @@ public final class TestingManager {
 	private final Map<String, TestElement> testElements = new HashMap<>();
 	private final Map<String, TestElement> triggerElements = new HashMap<>();
 
-	public void addTriggerElement(TestElement element) {
+	public void addTriggerElement(final TestElement element) {
 		triggerElements.put(generateElementString(element), element);
 	}
 
-	private static String generateElementString(TestElement element) {
+	private static String generateElementString(final TestElement element) {
 		return element.getFBString() + "_RES." + element.getFBString() + "." + element.getInterfaceElement().getName(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public Map<String, TestElement> getTriggerElements(FBType type) {
-		Map<String, TestElement> elements = new HashMap<>();
-		for (Entry<String, TestElement> entry : triggerElements.entrySet()) {
-			TestElement element = entry.getValue();
+	public Map<String, TestElement> getTriggerElements(final FBType type) {
+		final Map<String, TestElement> elements = new HashMap<>();
+		for (final Entry<String, TestElement> entry : triggerElements.entrySet()) {
+			final TestElement element = entry.getValue();
 			if ((element.getFb().getType().equals(type)) && (element.getInterfaceElement() instanceof Event)) {
 				elements.put(entry.getKey(), element);
 			}
@@ -60,15 +60,15 @@ public final class TestingManager {
 		return elements;
 	}
 
-	public void addTestElement(TestElement element) {
+	public void addTestElement(final TestElement element) {
 		testElements.put(generateElementString(element), element);
 	}
 
-	public Map<String, TestElement> getTestElements(FBType type, ISetValueListener valueListener,
-			ITriggerEventListener eventListener) {
-		Map<String, TestElement> elements = new HashMap<>();
-		for (Entry<String, TestElement> entry : testElements.entrySet()) {
-			TestElement element = entry.getValue();
+	public Map<String, TestElement> getTestElements(final FBType type, final ISetValueListener valueListener,
+			final ITriggerEventListener eventListener) {
+		final Map<String, TestElement> elements = new HashMap<>();
+		for (final Entry<String, TestElement> entry : testElements.entrySet()) {
+			final TestElement element = entry.getValue();
 			if (element.getFb().getType().equals(type)) {
 				element.addSetValueListener(valueListener);
 				element.addTriggerEventListener(eventListener);
@@ -83,14 +83,14 @@ public final class TestingManager {
 		return elements;
 	}
 
-	public Map<String, TestElement> getTestElements(FBType type) {
-		Map<String, TestElement> elements = new HashMap<String, TestElement>();
-		for (Entry<String, TestElement> entry : testElements.entrySet()) {
-			TestElement element = entry.getValue();
+	public Map<String, TestElement> getTestElements(final FBType type) {
+		final Map<String, TestElement> elements = new HashMap<>();
+		for (final Entry<String, TestElement> entry : testElements.entrySet()) {
+			final TestElement element = entry.getValue();
 			if (element.getFb().getType().equals(type)) {
 				if ((element.getInterfaceElement() instanceof VarDeclaration)
-						|| ((element.getInterfaceElement() instanceof Event
-								&& !element.getInterfaceElement().isIsInput()))) {
+						|| ((element.getInterfaceElement() instanceof Event)
+								&& (!element.getInterfaceElement().isIsInput()))) {
 					elements.put(entry.getKey(), element);
 				}
 			}
