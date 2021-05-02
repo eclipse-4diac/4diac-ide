@@ -28,12 +28,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public abstract class AbstractTypeExporter extends CommonElementExporter {
 	private final LibraryElement type;
 
-	public AbstractTypeExporter(LibraryElement type) {
+	protected AbstractTypeExporter(final LibraryElement type) {
 		super();
 		this.type = type;
 	}
 
-	protected AbstractTypeExporter(CommonElementExporter parent) {
+	protected AbstractTypeExporter(final CommonElementExporter parent) {
 		super(parent);
 		type = null;
 	}
@@ -57,13 +57,13 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	protected void addCompilerInfo(final CompilerInfo compilerInfo) throws XMLStreamException {
 		if (null != compilerInfo) {
 			addStartElement(LibraryElementTags.COMPILER_INFO_ELEMENT);
-			if ((null != compilerInfo.getHeader()) && !compilerInfo.getHeader().equals("")) { //$NON-NLS-1$
+			if ((null != compilerInfo.getHeader()) && !"".equals(compilerInfo.getHeader())) { //$NON-NLS-1$
 				getWriter().writeAttribute(LibraryElementTags.HEADER_ATTRIBUTE, compilerInfo.getHeader());
 			}
-			if ((null != compilerInfo.getClassdef()) && !compilerInfo.getClassdef().equals("")) { //$NON-NLS-1$
+			if ((null != compilerInfo.getClassdef()) && !"".equals(compilerInfo.getClassdef())) { //$NON-NLS-1$
 				getWriter().writeAttribute(LibraryElementTags.CLASSDEF_ATTRIBUTE, compilerInfo.getClassdef());
 			}
-			for (org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler : compilerInfo.getCompiler()) {
+			for (final org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler : compilerInfo.getCompiler()) {
 				addCompiler(compiler);
 			}
 			addEndElement();

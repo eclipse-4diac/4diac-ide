@@ -32,7 +32,8 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	private DeleteConnectionCommand deleteConnectionCmd;
 	private AbstractConnectionCreateCommand connectionCreateCmd;
 
-	public AbstractReconnectConnectionCommand(final String label, final ReconnectRequest request, final FBNetwork parent) {
+	protected AbstractReconnectConnectionCommand(final String label, final ReconnectRequest request,
+			final FBNetwork parent) {
 		super(label);
 		this.request = request;
 		this.parent = parent;

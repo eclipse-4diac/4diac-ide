@@ -50,14 +50,16 @@ public abstract class TextDirectEditManager extends DirectEditManager {
 	private IAction delete;
 
 	@SuppressWarnings("rawtypes")
-	public TextDirectEditManager(GraphicalEditPart source, Class editorType, CellEditorLocator locator) {
+	protected TextDirectEditManager(final GraphicalEditPart source, final Class editorType,
+			final CellEditorLocator locator) {
 		super(source, editorType, locator);
 		Assert.isTrue(TextCellEditor.class.isAssignableFrom(editorType));
 	}
 
 	@SuppressWarnings("rawtypes")
-	public TextDirectEditManager(GraphicalEditPart source, Class editorType, CellEditorLocator locator,
-			Object feature) {
+	protected TextDirectEditManager(final GraphicalEditPart source, final Class editorType,
+			final CellEditorLocator locator,
+			final Object feature) {
 		super(source, editorType, locator, feature);
 		Assert.isTrue(TextCellEditor.class.isAssignableFrom(editorType));
 	}
@@ -95,7 +97,7 @@ public abstract class TextDirectEditManager extends DirectEditManager {
 		}
 	}
 
-	private void restoreSavedActions(IActionBars actionBars) {
+	private void restoreSavedActions(final IActionBars actionBars) {
 		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), copy);
 		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), paste);
 		actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), delete);
@@ -106,7 +108,7 @@ public abstract class TextDirectEditManager extends DirectEditManager {
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redo);
 	}
 
-	private void saveCurrentActions(IActionBars actionBars) {
+	private void saveCurrentActions(final IActionBars actionBars) {
 		copy = actionBars.getGlobalActionHandler(ActionFactory.COPY.getId());
 		paste = actionBars.getGlobalActionHandler(ActionFactory.PASTE.getId());
 		delete = actionBars.getGlobalActionHandler(ActionFactory.DELETE.getId());

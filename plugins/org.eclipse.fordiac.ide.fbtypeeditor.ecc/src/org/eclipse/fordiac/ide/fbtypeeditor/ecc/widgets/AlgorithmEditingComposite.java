@@ -61,8 +61,8 @@ public abstract class AlgorithmEditingComposite {
 	private CLabel commentLabel;
 	private Text commentText;
 	private Composite codeEditors;
-	private StackLayout stack;
-	private Map<String, IAlgorithmEditor> editors = new HashMap<>();
+	private final StackLayout stack;
+	private final Map<String, IAlgorithmEditor> editors = new HashMap<>();
 	private IAlgorithmEditor currentAlgEditor;
 	private CommandStack commandStack;
 	private Algorithm currentAlgorithm;
@@ -84,12 +84,12 @@ public abstract class AlgorithmEditingComposite {
 		}
 	};
 
-	public AlgorithmEditingComposite() {
+	protected AlgorithmEditingComposite() {
 		stack = new StackLayout();
 	}
 
 	public void createControls(final Composite parent, final FormToolkit toolkit) {
-		Composite langAndComments = toolkit.createComposite(parent);
+		final Composite langAndComments = toolkit.createComposite(parent);
 		langAndComments.setLayout(new GridLayout(4, false));
 		langAndComments.setLayoutData(new GridData(GridData.FILL, 0, true, false));
 
@@ -99,7 +99,7 @@ public abstract class AlgorithmEditingComposite {
 		languageCombo = ComboBoxWidgetFactory.createCombo(langAndComments);
 		fillLanguageDropDown();
 		languageCombo.addListener(SWT.Selection, event -> {
-			AbstractChangeAlgorithmTypeCommand changeAlgorithmTypeCommand = getChangeAlgorithmTypeCommand(getFBType(),
+			final AbstractChangeAlgorithmTypeCommand changeAlgorithmTypeCommand = getChangeAlgorithmTypeCommand(getFBType(),
 					getAlgorithm(), languageCombo.getText());
 			executeCommand(changeAlgorithmTypeCommand);
 			setAlgorithm(changeAlgorithmTypeCommand.getNewAlgorithm());
@@ -115,7 +115,7 @@ public abstract class AlgorithmEditingComposite {
 		commentText.addListener(SWT.Modify,
 				e -> executeCommand(new ChangeCommentCommand(getAlgorithm(), commentText.getText())));
 
-		GridData codeEditorsGridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final GridData codeEditorsGridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		codeEditorsGridData.horizontalSpan = 1;
 		codeEditorsGridData.minimumHeight = 250;
 		codeEditors = new Group(parent, SWT.SHADOW_NONE);
@@ -137,7 +137,7 @@ public abstract class AlgorithmEditingComposite {
 		return currentAlgorithm;
 	}
 
-	protected void executeCommand(Command cmd) {
+	protected void executeCommand(final Command cmd) {
 		if (null != currentAlgorithm && getCommandStack() != null) {
 			blockUpdates = true;
 			getCommandStack().execute(cmd);
@@ -145,39 +145,39 @@ public abstract class AlgorithmEditingComposite {
 		}
 	}
 
-	public void initialize(BaseFBType fbType, CommandStack commandStack) {
+	public void initialize(final BaseFBType fbType, final CommandStack commandStack) {
 		this.setCommandStack(commandStack);
 		loadEditors(fbType);
 	}
 
-	private void loadEditors(BaseFBType basicFBType) {
+	private void loadEditors(final BaseFBType basicFBType) {
 		editors.clear();
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.ecc.algorithmEditor"); //$NON-NLS-1$
-		IExtension[] extensions = point.getExtensions();
-		for (IExtension extension : extensions) {
-			IConfigurationElement[] elements = extension.getConfigurationElements();
-			for (IConfigurationElement element : elements) {
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.ecc.algorithmEditor"); //$NON-NLS-1$
+		final IExtension[] extensions = point.getExtensions();
+		for (final IExtension extension : extensions) {
+			final IConfigurationElement[] elements = extension.getConfigurationElements();
+			for (final IConfigurationElement element : elements) {
 				Object obj = null;
 				try {
 					obj = element.createExecutableExtension("class"); //$NON-NLS-1$
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}
 				if (obj instanceof IAlgorithmEditorCreator) {
-					IAlgorithmEditor editor = ((IAlgorithmEditorCreator) obj).createAlgorithmEditor(codeEditors,
+					final IAlgorithmEditor editor = ((IAlgorithmEditorCreator) obj).createAlgorithmEditor(codeEditors,
 							basicFBType);
-					String lang = element.getAttribute("language"); //$NON-NLS-1$
+					final String lang = element.getAttribute("language"); //$NON-NLS-1$
 					editors.put(lang, editor);
 				}
 			}
 		}
 	}
 
-	public void setAlgorithm(Algorithm algorithm) {
+	public void setAlgorithm(final Algorithm algorithm) {
 		if (!blockUpdates) {
 			// set commandStack to null so that an update will not lead to a changed type
-			CommandStack commandStackBuffer = getCommandStack();
+			final CommandStack commandStackBuffer = getCommandStack();
 			setCommandStack(null);
 			if (this.currentAlgorithm != algorithm) {
 				currentAlgorithm = algorithm;
@@ -210,7 +210,7 @@ public abstract class AlgorithmEditingComposite {
 	}
 
 	protected void updateAlgFields() {
-		Algorithm alg = getAlgorithm();
+		final Algorithm alg = getAlgorithm();
 		commentText.setText((null != alg) ? alg.getComment() : ""); //$NON-NLS-1$
 		languageCombo.select((null != alg) ? languageCombo.indexOf(getAlgorithmTypeString(getAlgorithm())) : 0);
 		if (alg instanceof TextAlgorithm) {
@@ -222,7 +222,7 @@ public abstract class AlgorithmEditingComposite {
 		if (null != currentAlgEditor) {
 			currentAlgEditor.removeDocumentListener(listener);
 		}
-		String algType = getAlgorithmTypeString(getAlgorithm());
+		final String algType = getAlgorithmTypeString(getAlgorithm());
 		currentAlgEditor = editors.get(algType);
 		if (null != currentAlgEditor) {
 			stack.topControl = currentAlgEditor.getControl();
@@ -231,7 +231,7 @@ public abstract class AlgorithmEditingComposite {
 		codeEditors.layout();
 	}
 
-	protected static String getAlgorithmTypeString(Algorithm algorithm) {
+	protected static String getAlgorithmTypeString(final Algorithm algorithm) {
 		if (algorithm instanceof STAlgorithm) {
 			return "ST"; //$NON-NLS-1$
 		}
@@ -243,7 +243,7 @@ public abstract class AlgorithmEditingComposite {
 
 	protected void fillLanguageDropDown() {
 		languageCombo.removeAll();
-		for (String alg : ECCSection.getLanguages()) {
+		for (final String alg : ECCSection.getLanguages()) {
 			languageCombo.add(alg);
 		}
 	}
@@ -255,7 +255,7 @@ public abstract class AlgorithmEditingComposite {
 		return commandStack;
 	}
 
-	private void setCommandStack(CommandStack commandStack) {
+	private void setCommandStack(final CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
 }
