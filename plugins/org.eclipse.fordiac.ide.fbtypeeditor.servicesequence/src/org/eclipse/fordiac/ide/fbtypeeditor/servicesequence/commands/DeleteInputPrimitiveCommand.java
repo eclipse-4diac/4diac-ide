@@ -42,7 +42,7 @@ public class DeleteInputPrimitiveCommand extends Command {
 	public void execute() {
 		if (null != parent) {
 			parent.setInputPrimitive(null);
-			if (parent.getOutputPrimitive().size() == 0) {
+			if (parent.getOutputPrimitive().isEmpty()) {
 				deleteTransactionCmd = new DeleteTransactionCommand(parent);
 				deleteTransactionCmd.execute();
 			}

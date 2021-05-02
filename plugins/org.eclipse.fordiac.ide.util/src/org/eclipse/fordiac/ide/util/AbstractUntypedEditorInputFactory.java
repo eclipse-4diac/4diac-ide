@@ -30,20 +30,24 @@ public abstract class AbstractUntypedEditorInputFactory implements IElementFacto
 	private static final String TAG_AUTOMATION_SYSTEM = "SYSTEM"; //$NON-NLS-1$
 	private static final String TAG_PROJECT = "PROJECT"; //$NON-NLS-1$
 
-	protected static void saveAutomationSystem(IMemento memento, AutomationSystem system) {
+	protected AbstractUntypedEditorInputFactory() {
+		// protected default constructor avoiding to create an instance of this class
+	}
+
+	protected static void saveAutomationSystem(final IMemento memento, final AutomationSystem system) {
 		if (null != system) {
 			memento.putString(TAG_AUTOMATION_SYSTEM, system.getSystemFile().getProjectRelativePath().toString());
 			memento.putString(TAG_PROJECT, system.getSystemFile().getProject().getName());
 		}
 	}
 
-	protected static AutomationSystem loadAutomationSystemName(IMemento memento) {
-		String projectName = memento.getString(TAG_PROJECT);
-		String systemPath = memento.getString(TAG_AUTOMATION_SYSTEM);
+	protected static AutomationSystem loadAutomationSystemName(final IMemento memento) {
+		final String projectName = memento.getString(TAG_PROJECT);
+		final String systemPath = memento.getString(TAG_AUTOMATION_SYSTEM);
 
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		if (null != project) {
-			IFile file = project.getFile(systemPath);
+			final IFile file = project.getFile(systemPath);
 			return SystemManager.INSTANCE.getSystem(file);
 		}
 		return null;

@@ -73,8 +73,8 @@ public final class TestingManager {
 				element.addSetValueListener(valueListener);
 				element.addTriggerEventListener(eventListener);
 				if ((element.getInterfaceElement() instanceof VarDeclaration)
-						|| ((element.getInterfaceElement() instanceof Event
-								&& !element.getInterfaceElement().isIsInput()))) {
+						|| ((element.getInterfaceElement() instanceof Event)
+								&& (!element.getInterfaceElement().isIsInput()))) {
 					elements.put(entry.getKey(), element);
 				}
 

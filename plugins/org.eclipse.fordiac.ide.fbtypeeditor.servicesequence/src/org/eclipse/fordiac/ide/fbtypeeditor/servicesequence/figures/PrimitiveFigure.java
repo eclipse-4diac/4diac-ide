@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,40 +21,40 @@ import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.PositionConstants;
 
 public class PrimitiveFigure extends Layer {
-	private Label nameLabel;
-	private Label emptyLabel;
-	private Figure centerFigure;
-	private Figure leftFigure;
-	private Figure rightFigure;
+	private final Label nameLabel;
+	private final Label emptyLabel;
+	private final Figure centerFigure;
+	private final Figure leftFigure;
+	private final Figure rightFigure;
 
-	public PrimitiveFigure(boolean isLeftInterface, String name) {
-		GridLayout mainLayout;
-		setLayoutManager(mainLayout = new GridLayout(5, false));
+	public PrimitiveFigure(final boolean isLeftInterface, final String name) {
+		final GridLayout mainLayout = new GridLayout(5, false);
+		setLayoutManager(mainLayout);
 		mainLayout.marginHeight = 0;
 		mainLayout.marginWidth = 0;
 		mainLayout.horizontalSpacing = 0;
 
 		centerFigure = new Figure();
-		GridData spaceData = new GridData();
+		final GridData spaceData = new GridData();
 		spaceData.widthHint = 37;
 
 		nameLabel = new Label();
-		GridData nameLabelData = new GridData();
+		final GridData nameLabelData = new GridData();
 		nameLabelData.widthHint = 100;
 		nameLabelData.grabExcessHorizontalSpace = true;
 		nameLabelData.horizontalAlignment = GridData.FILL;
 
 		emptyLabel = new Label();
-		GridData emptyLabelData = new GridData();
+		final GridData emptyLabelData = new GridData();
 		emptyLabelData.widthHint = 100;
 		emptyLabelData.grabExcessHorizontalSpace = true;
 		emptyLabelData.horizontalAlignment = GridData.FILL;
 
-		GridData arrowLeftData = new GridData();
+		final GridData arrowLeftData = new GridData();
 		arrowLeftData.widthHint = 50;
 		leftFigure = new Figure();
 
-		GridData arrowRightData = new GridData();
+		final GridData arrowRightData = new GridData();
 		arrowRightData.widthHint = 50;
 		rightFigure = new Figure();
 
@@ -68,8 +68,8 @@ public class PrimitiveFigure extends Layer {
 		setConstraint(nameLabel, nameLabelData);
 	}
 
-	public void setInterfaceDirection(boolean interfaceDirection) {
-		if (this.getChildren().size() > 0) {
+	public void setInterfaceDirection(final boolean interfaceDirection) {
+		if (!this.getChildren().isEmpty()) {
 			this.getChildren().clear();
 		}
 		if (interfaceDirection) {
@@ -93,7 +93,7 @@ public class PrimitiveFigure extends Layer {
 		return nameLabel;
 	}
 
-	public void setLabelText(String name) {
+	public void setLabelText(final String name) {
 		this.nameLabel.setText(null != name ? name : ""); //$NON-NLS-1$
 	}
 

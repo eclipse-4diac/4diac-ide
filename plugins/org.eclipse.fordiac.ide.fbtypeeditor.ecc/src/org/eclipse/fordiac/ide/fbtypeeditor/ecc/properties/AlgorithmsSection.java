@@ -43,7 +43,7 @@ public class AlgorithmsSection extends AbstractSection implements I4diacTableUti
 	}
 
 	@Override
-	protected Object getInputType(Object input) {
+	protected Object getInputType(final Object input) {
 		return ECCSection.getECCInputType(input);
 	}
 
@@ -56,19 +56,19 @@ public class AlgorithmsSection extends AbstractSection implements I4diacTableUti
 	}
 
 	public void createAlgorithmControls(final Composite parent) {
-		SashForm view = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
+		final SashForm view = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
 		view.setLayout(new FillLayout());
 		algorithmList = new AlgorithmList(view, getWidgetFactory());
 		setLeftComposite(algorithmList.getComposite());
 
 		getAlgorithmList().getViewer().addSelectionChangedListener(event -> {
-			Object selection = ((IStructuredSelection) getAlgorithmList().getViewer().getSelection()).getFirstElement();
+			final Object selection = ((IStructuredSelection) getAlgorithmList().getViewer().getSelection()).getFirstElement();
 			algorithmGroup.setAlgorithm((selection instanceof Algorithm) ? (Algorithm) selection : null);
 		});
 
 		setRightComposite(getWidgetFactory().createComposite(view));
 		getRightComposite().setLayout(new GridLayout());
-		view.setWeights(new int[] { 1, 1 });
+		view.setWeights(1, 1);
 		view.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		algorithmGroup.createControls(getRightComposite(), getWidgetFactory());
@@ -99,26 +99,26 @@ public class AlgorithmsSection extends AbstractSection implements I4diacTableUti
 		return algorithmList.getViewer();
 	}
 
-	public Object getEntry(int index) {
+	public Object getEntry(final int index) {
 		return getAlgorithmList().getType().getAlgorithm().get(index);
 	}
 
 	@Override
-	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof Algorithm) {
 			cmd.add(new InsertAlgorithmCommand(getAlgorithmList().getType(), (Algorithm) entry, index));
 		}
 	}
 
 	@Override
-	public Object removeEntry(int index, CompoundCommand cmd) {
-		Algorithm entry = (Algorithm) getEntry(index);
+	public Object removeEntry(final int index, final CompoundCommand cmd) {
+		final Algorithm entry = (Algorithm) getEntry(index);
 		cmd.add(new DeleteAlgorithmCommand(getAlgorithmList().getType(), entry));
 		return entry;
 	}
 
 	@Override
-	public void executeCompoundCommand(CompoundCommand cmd) {
+	public void executeCompoundCommand(final CompoundCommand cmd) {
 		getAlgorithmList().executeCommand(cmd);
 		getViewer().refresh();
 	}

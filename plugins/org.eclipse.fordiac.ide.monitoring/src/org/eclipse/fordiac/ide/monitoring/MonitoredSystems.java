@@ -37,14 +37,14 @@ public class MonitoredSystems extends CompoundContributionItem {
 	private static final class SystemMonitoringSelectionAdapter extends SelectionAdapter {
 		private final AutomationSystem system;
 
-		private SystemMonitoringSelectionAdapter(AutomationSystem system) {
+		private SystemMonitoringSelectionAdapter(final AutomationSystem system) {
 			this.system = system;
 		}
 
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			MenuItem menuItem = (MenuItem) e.getSource();
-			MonitoringManager manager = MonitoringManager.getInstance();
+		public void widgetSelected(final SelectionEvent e) {
+			final MenuItem menuItem = (MenuItem) e.getSource();
+			final MonitoringManager manager = MonitoringManager.getInstance();
 
 			if (menuItem.getSelection()) {
 				manager.enableSystem(system);
@@ -58,18 +58,18 @@ public class MonitoredSystems extends CompoundContributionItem {
 	private static class MonitorSystemContribution extends ContributionItem {
 		private final AutomationSystem system;
 
-		MonitorSystemContribution(AutomationSystem system) {
+		MonitorSystemContribution(final AutomationSystem system) {
 			super();
 			this.system = system;
 		}
 
 		@Override
-		public void fill(Menu menu, int index) {
+		public void fill(final Menu menu, final int index) {
 			createSystemMonitoringMenuEntry(system, menu, index);
 		}
 
-		private static void createSystemMonitoringMenuEntry(AutomationSystem system, Menu menu, int index) {
-			MenuItem item = (index == -1) ? new MenuItem(menu, SWT.CHECK) : new MenuItem(menu, SWT.CHECK, index);
+		private static void createSystemMonitoringMenuEntry(final AutomationSystem system, final Menu menu, final int index) {
+			final MenuItem item = (index == -1) ? new MenuItem(menu, SWT.CHECK) : new MenuItem(menu, SWT.CHECK, index);
 			item.setText(system.getName());
 			item.setSelection(true);
 			item.addSelectionListener(new SystemMonitoringSelectionAdapter(system));
@@ -80,8 +80,8 @@ public class MonitoredSystems extends CompoundContributionItem {
 	private static class EmptyMonitoringContribution extends ContributionItem {
 
 		@Override
-		public void fill(Menu menu, int index) {
-			MenuItem item = (index == -1) ? new MenuItem(menu, SWT.None) : new MenuItem(menu, SWT.None, index);
+		public void fill(final Menu menu, final int index) {
+			final MenuItem item = (index == -1) ? new MenuItem(menu, SWT.None) : new MenuItem(menu, SWT.None, index);
 			item.setText(FordiacMessages.EmptyField);
 			item.setEnabled(false); // indicate that this item is not clickable
 		}
@@ -89,12 +89,12 @@ public class MonitoredSystems extends CompoundContributionItem {
 
 	@Override
 	protected IContributionItem[] getContributionItems() {
-		ArrayList<ContributionItem> menuList = new ArrayList<>();
-		Set<AutomationSystem> systems = MonitoringManager.getInstance().getMonitoredSystems();
+		final ArrayList<ContributionItem> menuList = new ArrayList<>();
+		final Set<AutomationSystem> systems = MonitoringManager.getInstance().getMonitoredSystems();
 		if (systems.isEmpty()) {
 			menuList.add(new EmptyMonitoringContribution());
 		} else {
-			for (AutomationSystem system : MonitoringManager.getInstance().getMonitoredSystems()) {
+			for (final AutomationSystem system : MonitoringManager.getInstance().getMonitoredSystems()) {
 				menuList.add(new MonitorSystemContribution(system));
 			}
 		}
@@ -102,11 +102,11 @@ public class MonitoredSystems extends CompoundContributionItem {
 	}
 
 	public static void refreshSystemTree() {
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IViewPart view = page.findView("org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"); //$NON-NLS-1$
+		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		final IViewPart view = page.findView("org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"); //$NON-NLS-1$
 
-		if ((null != view) && (view instanceof CommonNavigator)) {
-			CommonNavigator treeView = (CommonNavigator) view;
+		if (view instanceof CommonNavigator) {
+			final CommonNavigator treeView = (CommonNavigator) view;
 			treeView.getCommonViewer().refresh();
 		}
 

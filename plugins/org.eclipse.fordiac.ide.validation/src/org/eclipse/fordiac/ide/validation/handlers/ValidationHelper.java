@@ -35,7 +35,8 @@ import org.eclipse.fordiac.ide.validation.Activator;
 import org.eclipse.ocl.ecore.Constraint;
 import org.eclipse.ocl.expressions.Variable;
 
-public class ValidationHelper {
+public final class ValidationHelper {
+
 	public static void validate(final INamedElement namedElement) {
 		final List<Constraint> constraints = OCLParser.loadOCLConstraints(namedElement);
 		final IResource iresource = getFile(namedElement);
@@ -157,5 +158,9 @@ public class ValidationHelper {
 			builder.insert(0, ((Application) runner).getName());
 		}
 		return builder.toString();
+	}
+
+	private ValidationHelper() {
+		throw new UnsupportedOperationException();
 	}
 }

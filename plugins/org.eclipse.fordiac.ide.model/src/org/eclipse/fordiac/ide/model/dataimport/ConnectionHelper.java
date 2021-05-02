@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class ConnectionHelper {
+public final class ConnectionHelper {
 
 	public static class ConnectionBuilder {
 
@@ -313,6 +313,10 @@ public class ConnectionHelper {
 		errorMarkerInterface.setTypeName(type.getName());
 		ieList.getErrorMarker().add(errorMarkerInterface);
 		return errorMarkerInterface;
+	}
+
+	private ConnectionHelper() {
+		throw new UnsupportedOperationException();
 	}
 
 }

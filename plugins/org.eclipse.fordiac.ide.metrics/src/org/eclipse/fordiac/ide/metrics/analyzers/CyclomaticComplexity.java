@@ -92,7 +92,7 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 				if (cond.equals("REPEAT")) {
 					saveIndex = algText.indexOf(cond + "\r\n", lastIndex);
 				} else {
-					saveIndex = algText.toString().indexOf(cond + " ", lastIndex);
+					saveIndex = algText.indexOf(cond + " ", lastIndex);
 				}
 				if (0 != saveIndex) {
 					lastIndex = saveIndex;

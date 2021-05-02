@@ -40,31 +40,26 @@ import org.eclipse.ui.handlers.HandlerUtil;
  */
 public class ShowFBInApp extends AbstractHandler {
 
-	/**
-	 * The constructor.
-	 */
-	public ShowFBInApp() {
-	}
 
 	/**
 	 * the command has been executed, so extract extract the needed information from
 	 * the application context.
 	 */
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof IStructuredSelection) {
-			Object first = ((IStructuredSelection) selection).getFirstElement();
+			final Object first = ((IStructuredSelection) selection).getFirstElement();
 			if (first instanceof AbstractFBNElementEditPart) {
-				FBNetworkElement fb = ((AbstractFBNElementEditPart) first).getModel();
-				FBNetworkElement appFB = fb.getOpposite();
-				Application app = getApplication(appFB);
+				final FBNetworkElement fb = ((AbstractFBNElementEditPart) first).getModel();
+				final FBNetworkElement appFB = fb.getOpposite();
+				final Application app = getApplication(appFB);
 				if (app != null && appFB != null) {
-					IEditorPart editor = OpenListenerManager.openEditor(app);
+					final IEditorPart editor = OpenListenerManager.openEditor(app);
 					if (editor instanceof FBNetworkEditor) {
-						AdvancedScrollingGraphicalViewer viewer = ((FBNetworkEditor) editor).getViewer();
+						final AdvancedScrollingGraphicalViewer viewer = ((FBNetworkEditor) editor).getViewer();
 						if (viewer != null) {
-							Object fbToSelect = viewer.getEditPartRegistry().get(appFB);
+							final Object fbToSelect = viewer.getEditPartRegistry().get(appFB);
 							if (fbToSelect instanceof EditPart) {
 								viewer.selectAndRevealEditPart((EditPart) fbToSelect);
 							}
@@ -82,7 +77,7 @@ public class ShowFBInApp extends AbstractHandler {
 	 * @param fbView
 	 * @return the application of the fbView if available
 	 */
-	private static Application getApplication(FBNetworkElement fb) {
+	private static Application getApplication(final FBNetworkElement fb) {
 		if (fb != null) {
 			return fb.getFbNetwork().getApplication();
 		}
@@ -90,20 +85,20 @@ public class ShowFBInApp extends AbstractHandler {
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
-		IEvaluationContext ctx = (IEvaluationContext) evaluationContext;
+	public void setEnabled(final Object evaluationContext) {
+		final IEvaluationContext ctx = (IEvaluationContext) evaluationContext;
 		Object obj = ctx.getDefaultVariable();
 
 		if (obj instanceof List) {
-			List<?> list = (List<?>) obj;
+			final List<?> list = (List<?>) obj;
 			if (!list.isEmpty()) {
 				obj = list.get(0);
 			}
 		}
 		if (obj instanceof AbstractFBNElementEditPart) {
-			FBNetworkElement fb = ((AbstractFBNElementEditPart) obj).getModel();
-			FBNetworkElement appFB = fb.getOpposite();
-			Application app = getApplication(appFB);
+			final FBNetworkElement fb = ((AbstractFBNElementEditPart) obj).getModel();
+			final FBNetworkElement appFB = fb.getOpposite();
+			final Application app = getApplication(appFB);
 			setBaseEnabled((app != null && appFB != null));
 		} else {
 			setBaseEnabled(false);

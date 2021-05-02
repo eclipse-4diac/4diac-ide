@@ -42,7 +42,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class OpenConnectionOppositeResource extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof IStructuredSelection) {
 			final Object first = ((IStructuredSelection) selection).getFirstElement();
@@ -57,7 +57,7 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		final IEvaluationContext ctx = (IEvaluationContext) evaluationContext;
 		Object obj = ctx.getDefaultVariable();
 
@@ -74,18 +74,16 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 		}
 	}
 
-	private static IInterfaceElement getOppositeMappedIE(VirtualInOutputEditPart vIOEditPart) {
+	private static IInterfaceElement getOppositeMappedIE(final VirtualInOutputEditPart vIOEditPart) {
 		final IInterfaceElement ie = vIOEditPart.getModel().getReferencedInterfaceElement();
 		final EList<Connection> ieConnections = ConnectionsHelper.getConnections(ie);
 		if (!ieConnections.isEmpty()) {
-			final IInterfaceElement oppositeMappedIE = ConnectionsHelper.getOppositeInterfaceElement(ie,
-					ieConnections.get(0));
-			return oppositeMappedIE;
+			return ConnectionsHelper.getOppositeInterfaceElement(ie, ieConnections.get(0));
 		}
 		return null;
 	}
 
-	private static void openResource(IInterfaceElement oppositeMappedIE) {
+	private static void openResource(final IInterfaceElement oppositeMappedIE) {
 		final Resource res = oppositeMappedIE.getFBNetworkElement().getResource();
 
 		if (null != res) {

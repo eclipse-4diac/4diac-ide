@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2014 Profactor GbmH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -32,7 +32,7 @@ import org.eclipse.jface.text.source.AnnotationModel;
  * with that class is registered with a component using the component's
  * <code>addLogListener<code> method. When the log event occurs, that object's
  * appropriate method is invoked.
- * 
+ *
  * @see LogEvent
  */
 public class LogListener implements IDocumentListener {
@@ -42,7 +42,7 @@ public class LogListener implements IDocumentListener {
 
 	/**
 	 * The Constructor.
-	 * 
+	 *
 	 * @param annotationModel the annotation model
 	 */
 	public LogListener(final AnnotationModel annotationModel) {
@@ -51,7 +51,7 @@ public class LogListener implements IDocumentListener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.text.IDocumentListener#documentAboutToBeChanged(org.eclipse
 	 * .jface.text.DocumentEvent)
@@ -63,7 +63,7 @@ public class LogListener implements IDocumentListener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.text.IDocumentListener#documentChanged(org.eclipse.jface.
 	 * text.DocumentEvent)
@@ -71,8 +71,8 @@ public class LogListener implements IDocumentListener {
 	@Override
 	public void documentChanged(final DocumentEvent event) {
 		try {
-			IDocument doc = event.getDocument();
-			FindReplaceDocumentAdapter search = new FindReplaceDocumentAdapter(doc);
+			final IDocument doc = event.getDocument();
+			final FindReplaceDocumentAdapter search = new FindReplaceDocumentAdapter(doc);
 			int offset = event.getOffset();
 			if (event.getDocument().getLength() > 0) {
 				IRegion region;
@@ -84,7 +84,7 @@ public class LogListener implements IDocumentListener {
 					if (region != null) {
 						// find end of "Reason" Argument in Mgr-Response = end
 						// of "Response" tag
-						IRegion msg = search.find(region.getOffset(), "/", //$NON-NLS-1$
+						final IRegion msg = search.find(region.getOffset(), "/", //$NON-NLS-1$
 								true, true, false, true);
 						String s;
 						ErrorAnnotation errorAnnotation;
@@ -93,7 +93,7 @@ public class LogListener implements IDocumentListener {
 							// extract Reason Code from Mgr-Response
 							s = doc.get(region.getOffset() + 8, msg.getOffset() - region.getOffset() - 10);
 							errorAnnotation = new ErrorAnnotation(doc.getLineOfOffset(region.getOffset()),
-									MessageFormat.format(Messages.LogListener_ReturnedError, new Object[] { s }));
+									MessageFormat.format(Messages.LogListener_ReturnedError, s));
 						} else {
 							errorAnnotation = new ErrorAnnotation(doc.getLineOfOffset(region.getOffset()),
 									Messages.LogListener_ErrorAnnotation);
@@ -111,7 +111,7 @@ public class LogListener implements IDocumentListener {
 					if (region != null) {
 						// find end of "Reason" Argument in Mgr-Response = end
 						// of "Response" tag
-						IRegion msg = search.find(region.getOffset(), "/", //$NON-NLS-1$
+						final IRegion msg = search.find(region.getOffset(), "/", //$NON-NLS-1$
 								true, true, false, true);
 						String s;
 						ErrorAnnotation errorAnnotation;
@@ -120,7 +120,7 @@ public class LogListener implements IDocumentListener {
 							// extract Reason Code from Mgr-Response
 							s = doc.get(region.getOffset() + 8, msg.getOffset() - region.getOffset() - 10);
 							errorAnnotation = new ErrorAnnotation(doc.getLineOfOffset(region.getOffset()),
-									MessageFormat.format(Messages.LogListener_ReturnedError, new Object[] { s }));
+									MessageFormat.format(Messages.LogListener_ReturnedError, s));
 						} else {
 							errorAnnotation = new ErrorAnnotation(doc.getLineOfOffset(region.getOffset()),
 									Messages.LogListener_ErrorAnnotation);
@@ -138,7 +138,7 @@ public class LogListener implements IDocumentListener {
 					if (region != null) {
 						// find end of "Reason" Argument in Mgr-Response = end
 						// of "Response" tag
-						IRegion msg = search.find(region.getOffset(), "/", //$NON-NLS-1$
+						final IRegion msg = search.find(region.getOffset(), "/", //$NON-NLS-1$
 								true, true, false, true);
 						String s;
 						WarningAnnotation warningAnnotation;
@@ -147,7 +147,7 @@ public class LogListener implements IDocumentListener {
 							// extract Reason Code from Mgr-Response
 							s = doc.get(region.getOffset(), msg.getOffset() - region.getOffset() - 10);
 							warningAnnotation = new WarningAnnotation(doc.getLineOfOffset(region.getOffset()),
-									MessageFormat.format(Messages.LogListener_ReturnedError, new Object[] { s }));
+									MessageFormat.format(Messages.LogListener_ReturnedError, s));
 						} else {
 							warningAnnotation = new WarningAnnotation(doc.getLineOfOffset(region.getOffset()),
 									Messages.LogListener_MalformedError);
@@ -158,7 +158,7 @@ public class LogListener implements IDocumentListener {
 					}
 				} while (region != null);
 			}
-		} catch (BadLocationException e) {
+		} catch (final BadLocationException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 

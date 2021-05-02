@@ -195,14 +195,12 @@ public class RuntimeLauncherView {
 			// needed to update label text and size:
 		});
 
-		launcher.addPathPreferenceChangeListener(ev -> {
-			Display.getDefault().asyncExec(() -> {
-				if (!configuredRuntimeComposite.isDisposed()) {
-					setRuntimePathLink(launcher, configuredRuntimePathLabel);
-					configuredRuntimeComposite.getParent().layout();
-				}
-			});
-		});
+		launcher.addPathPreferenceChangeListener(ev -> Display.getDefault().asyncExec(() -> {
+			if (!configuredRuntimeComposite.isDisposed()) {
+				setRuntimePathLink(launcher, configuredRuntimePathLabel);
+				configuredRuntimeComposite.getParent().layout();
+			}
+		}));
 	}
 
 	private static void setRuntimePathLink(final IRuntimeLauncher launcher, final Link configuredRuntimePathLabel) {

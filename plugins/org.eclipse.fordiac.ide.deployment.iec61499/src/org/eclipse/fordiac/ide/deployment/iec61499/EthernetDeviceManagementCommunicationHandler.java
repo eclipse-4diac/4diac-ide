@@ -41,7 +41,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 
 	private static class MgrInformation {
 		private String iP;
-		private Integer port;
+		private int port;
 
 		@Override
 		public String toString() {
@@ -79,8 +79,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 			socket.close();
 			Thread.sleep(MS_SLEEP_IN_DISCONNECT); // TODO check this sleep!
 		} catch (final IOException e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.DeploymentExecutor_DisconnectFailed, new Object[] {}), e);
+			throw new DeploymentException(Messages.DeploymentExecutor_DisconnectFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();  // mark interruption
 			Activator.getDefault().logError(e.getMessage(), e);
@@ -139,7 +138,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 		if (null != mgrID) {
 			final String id = trimQuoutes(mgrID);
 			final String[] splitID = id.split(":"); //$NON-NLS-1$
-			Integer port;
+			int port;
 			final MgrInformation mgrInfo = new MgrInformation();
 			if (splitID.length == 2) {
 				try {

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2016, 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -24,20 +24,19 @@ import org.eclipse.gef.requests.CreateRequest;
 public class SubAppTypeFBNetworkLayoutEditPolicy extends CompositeFBNetworkLayoutEditPolicy {
 
 	@Override
-	protected Command getCreateCommand(CreateRequest request) {
+	protected Command getCreateCommand(final CreateRequest request) {
 		if (request == null) {
 			return null;
 		}
-		Object childClass = request.getNewObjectType();
-		Rectangle constraint = (Rectangle) getConstraintFor(request);
+		final Object childClass = request.getNewObjectType();
+		final Rectangle constraint = (Rectangle) getConstraintFor(request);
 		if (childClass instanceof SubApplicationTypePaletteEntry) {
-			SubApplicationTypePaletteEntry type = (SubApplicationTypePaletteEntry) request.getNewObjectType();
+			final SubApplicationTypePaletteEntry type = (SubApplicationTypePaletteEntry) request.getNewObjectType();
 
 			if (getHost().getModel() instanceof FBNetwork) {
-				FBNetwork fbNetwork = (FBNetwork) getHost().getModel();
-				CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(type, fbNetwork,
-						constraint.getLocation().x, constraint.getLocation().y);
-				return cmd;
+				final FBNetwork fbNetwork = (FBNetwork) getHost().getModel();
+				return new CreateSubAppInstanceCommand(type, fbNetwork, constraint.getLocation().x,
+						constraint.getLocation().y);
 			}
 		}
 		return super.getCreateCommand(request);

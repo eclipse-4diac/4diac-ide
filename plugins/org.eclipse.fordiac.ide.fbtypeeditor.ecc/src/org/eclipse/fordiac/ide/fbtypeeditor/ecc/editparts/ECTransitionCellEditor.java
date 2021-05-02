@@ -42,42 +42,42 @@ public class ECTransitionCellEditor extends TextCellEditor {
 		super();
 	}
 
-	public ECTransitionCellEditor(Composite parent) {
+	public ECTransitionCellEditor(final Composite parent) {
 		this(parent, SWT.NONE);
 	}
 
-	public ECTransitionCellEditor(Composite parent, int style) {
+	public ECTransitionCellEditor(final Composite parent, final int style) {
 		super(parent, style);
 	}
 
 	@Override
-	protected Control createControl(Composite parent) {
+	protected Control createControl(final Composite parent) {
 		container = createContainer(parent);
 		createComboBox(container);
 		createText(container);
 		return container;
 	}
 
-	private void createComboBox(Composite parent) {
+	private void createComboBox(final Composite parent) {
 		comboBox = new CCombo(parent, getStyle());
 		comboBox.setFont(parent.getFont());
 		comboBox.setEditable(false);
 
 		comboBox.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetDefaultSelected(SelectionEvent event) {
+			public void widgetDefaultSelected(final SelectionEvent event) {
 				applyEditorValueAndDeactivate();
 			}
 
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				checkTextEnabled();
 				editText();
 			}
 		});
 		comboBox.addFocusListener(new FocusAdapter() {
 			@Override
-			public void focusLost(FocusEvent e) {
+			public void focusLost(final FocusEvent e) {
 				super.focusLost(e);
 				if (!insideAnyEditorArea(e)) {
 					ECTransitionCellEditor.this.focusLost();
@@ -104,16 +104,16 @@ public class ECTransitionCellEditor extends TextCellEditor {
 		}
 	}
 
-	private void createText(Composite parent) {
-		CLabel label1 = new CLabel(parent, getStyle());
+	private void createText(final Composite parent) {
+		final CLabel label1 = new CLabel(parent, getStyle());
 		label1.setText("[");
 		text = new Text(parent, SWT.SINGLE);
-		CLabel label2 = new CLabel(parent, getStyle());
+		final CLabel label2 = new CLabel(parent, getStyle());
 		label2.setText("]");
 		parent.setBackground(label2.getBackground());
 		text.addFocusListener(new FocusAdapter() {
 			@Override
-			public void focusLost(FocusEvent e) {
+			public void focusLost(final FocusEvent e) {
 				if (!insideAnyEditorArea(e)) {
 					ECTransitionCellEditor.this.focusLost();
 				}
@@ -133,16 +133,16 @@ public class ECTransitionCellEditor extends TextCellEditor {
 		});
 	}
 
-	private boolean insideAnyEditorArea(FocusEvent e) {
-		Point cursorLocation = e.display.getCursorLocation();
-		Point containerRelativeCursor = container.getParent().toControl(cursorLocation);
+	private boolean insideAnyEditorArea(final FocusEvent e) {
+		final Point cursorLocation = e.display.getCursorLocation();
+		final Point containerRelativeCursor = container.getParent().toControl(cursorLocation);
 		return container.getBounds().contains(containerRelativeCursor);
 	}
 
-	private void populateComboBoxItems(List<String> eventNames) {
+	private void populateComboBoxItems(final List<String> eventNames) {
 		if (comboBox != null && eventNames != null) {
 			comboBox.removeAll();
-			for (String item : eventNames) {
+			for (final String item : eventNames) {
 				comboBox.add(item);
 			}
 			setValueValid(true);
@@ -153,10 +153,10 @@ public class ECTransitionCellEditor extends TextCellEditor {
 		if (null == transition) {
 			return;
 		}
-		List<String> eventNames = ECCContentAndLabelProvider
+		final List<String> eventNames = ECCContentAndLabelProvider
 				.getTransitionConditionEventNames(transition.getECC().getBasicFBType());
 
-		int selected = getIndexToSelect(eventNames);
+		final int selected = getIndexToSelect(eventNames);
 
 		populateComboBoxItems(eventNames);
 		comboBox.select(selected);
@@ -199,7 +199,7 @@ public class ECTransitionCellEditor extends TextCellEditor {
 	// the EditPart needs to get the selection and the conditionExpression,
 	// but the CellEditor needs the ECTransition to work.
 	@Override
-	protected void doSetValue(Object value) {
+	protected void doSetValue(final Object value) {
 		Assert.isTrue((value instanceof ECTransition));
 		this.transition = (ECTransition) value;
 		initData();
@@ -217,18 +217,18 @@ public class ECTransitionCellEditor extends TextCellEditor {
 	}
 
 	@Override
-	protected void handleDefaultSelection(SelectionEvent event) {
+	protected void handleDefaultSelection(final SelectionEvent event) {
 		if (!((Text) event.getSource()).getText().isEmpty()) {
 			super.handleDefaultSelection(event);
 		}
 	}
 
-	private Composite createContainer(Composite parent) {
-		Composite newContainer = new Composite(parent, SWT.NONE);
+	private static Composite createContainer(final Composite parent) {
+		final Composite newContainer = new Composite(parent, SWT.NONE);
 		newContainer.setBackground(parent.getBackground());
 		newContainer.setForeground(parent.getForeground());
 		// set layout with minimal space to keep the cell editor compact
-		GridLayout contLayout = new GridLayout(4, false);
+		final GridLayout contLayout = new GridLayout(4, false);
 		contLayout.horizontalSpacing = 0;
 		contLayout.marginTop = 0;
 		contLayout.marginBottom = 0;
@@ -248,9 +248,9 @@ public class ECTransitionCellEditor extends TextCellEditor {
 	void applyEditorValueAndDeactivate() {
 		// must set the selection before getting value
 
-		Object newValue = doGetValue();
+		final Object newValue = doGetValue();
 		markDirty();
-		boolean isValid = isCorrect(newValue);
+		final boolean isValid = isCorrect(newValue);
 		setValueValid(isValid);
 
 		if (!isValid) {
@@ -262,8 +262,8 @@ public class ECTransitionCellEditor extends TextCellEditor {
 	}
 
 	protected void handleInvalidSelection() {
-		int selection = comboBox.getSelectionIndex();
-		String[] items = comboBox.getItems();
+		final int selection = comboBox.getSelectionIndex();
+		final String[] items = comboBox.getItems();
 		// Only format if the 'index' is valid
 		if (items.length > 0 && selection >= 0 && selection < items.length) {
 			// try to insert the current value into the error message.
@@ -272,7 +272,7 @@ public class ECTransitionCellEditor extends TextCellEditor {
 			// Since we don't have a valid index, assume we're using an
 			// 'edit'
 			// combo so format using its text value
-			setErrorMessage(MessageFormat.format(getErrorMessage(), new Object[] { comboBox.getText() }));
+			setErrorMessage(MessageFormat.format(getErrorMessage(), comboBox.getText()));
 		}
 	}
 

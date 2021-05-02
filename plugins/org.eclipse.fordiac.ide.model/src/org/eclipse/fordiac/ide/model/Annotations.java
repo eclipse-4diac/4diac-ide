@@ -128,9 +128,8 @@ public final class Annotations {
 
 	public static boolean isResourceConnection(final Connection c) {
 		// if source element is null it is a connection from a CFB interface element
-		return ((null != c.getSourceElement()) && (null != c.getSourceElement().getFbNetwork()))
-				? (c.getSourceElement().getFbNetwork().eContainer() instanceof Resource)
-						: false;
+		return ((null != c.getSourceElement()) && (null != c.getSourceElement().getFbNetwork())
+				&& (c.getSourceElement().getFbNetwork().eContainer() instanceof Resource));
 	}
 
 	public static FBNetwork getFBNetwork(final Connection c) {

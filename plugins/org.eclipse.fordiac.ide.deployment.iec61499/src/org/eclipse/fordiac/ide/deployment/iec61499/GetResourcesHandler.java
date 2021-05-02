@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -30,17 +31,17 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class GetResourcesHandler extends AbstractHandler {
-	@SuppressWarnings("unchecked")
-	private static List<Object> getDeviceList(ExecutionEvent event) {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
+
+	private static List<Object> getDeviceList(final ExecutionEvent event) {
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof StructuredSelection) {
 			return ((StructuredSelection) selection).toList();
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		for (Object object : getDeviceList(event)) {
 			Device device = null;
 			if (object instanceof EditPart) {
@@ -54,20 +55,20 @@ public class GetResourcesHandler extends AbstractHandler {
 		return null;
 	}
 
-	private static void fetchResources(Device device) {
-		IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE
+	private static void fetchResources(final Device device) {
+		final IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE
 				.getDeviceManagementInteractor(device);
 		if (interactor instanceof DynamicTypeLoadDeploymentExecutor) {
 			DeploymentCoordinator.INSTANCE.enableOutput(interactor);
 			try {
 				interactor.connect();
 				((DynamicTypeLoadDeploymentExecutor) interactor).queryResourcesWithNetwork(device);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			} finally {
 				try {
 					interactor.disconnect();
-				} catch (DeploymentException e) {
+				} catch (final DeploymentException e) {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}
 			}

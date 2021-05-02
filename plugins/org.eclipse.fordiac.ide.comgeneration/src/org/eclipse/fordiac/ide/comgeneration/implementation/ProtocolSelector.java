@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2015 Luka Lednicki, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -26,23 +26,23 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 
 public final class ProtocolSelector {
 
-	public static void doAutomatedProtocolSelection(CommunicationModel model) {
-		for (CommunicationChannel channel : model.getChannels().values()) {
-			List<Segment> commonSegments = new ArrayList<>();
+	public static void doAutomatedProtocolSelection(final CommunicationModel model) {
+		for (final CommunicationChannel channel : model.getChannels().values()) {
+			final List<Segment> commonSegments = new ArrayList<>();
 			Iterator<CommunicationChannelDestination> destinationIterator = channel.getDestinations().iterator();
 
 			CommunicationChannelDestination destination = destinationIterator.next();
-			for (CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
+			for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
 				commonSegments.add(mediaInfo.getSegment());
 			}
 
 			while (destinationIterator.hasNext()) {
 				destination = destinationIterator.next();
-				Iterator<Segment> segmentIterator = commonSegments.iterator();
+				final Iterator<Segment> segmentIterator = commonSegments.iterator();
 				while (segmentIterator.hasNext()) {
-					Segment segment = segmentIterator.next();
+					final Segment segment = segmentIterator.next();
 					boolean containsSegment = false;
-					for (CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
+					for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
 						if (mediaInfo.getSegment() == segment) {
 							containsSegment = true;
 						}
@@ -66,18 +66,18 @@ public final class ProtocolSelector {
 				Segment selectedSegment = selectedCommonSegment;
 
 				if (selectedSegment == null) {
-					ArrayList<Segment> availableSegments = new ArrayList<Segment>();
-					for (CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
+					final ArrayList<Segment> availableSegments = new ArrayList<>();
+					for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
 						availableSegments.add(mediaInfo.getSegment());
 					}
 					sortSegments(availableSegments);
-					if (availableSegments.size() > 0) {
+					if (!availableSegments.isEmpty()) {
 						selectedSegment = availableSegments.get(0);
 					}
 				}
 
 				if (selectedSegment != null) {
-					for (CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
+					for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
 						if (mediaInfo.getSegment() == selectedSegment) {
 							destination.setSelectedMedia(mediaInfo);
 							destination.setSelectedProtocolId(getProtocolIdForMetiaType(mediaInfo.getSegment()));
@@ -92,7 +92,7 @@ public final class ProtocolSelector {
 		}
 	}
 
-	private static String getProtocolIdForMetiaType(Segment segment) {
+	private static String getProtocolIdForMetiaType(final Segment segment) {
 		if (segment.getType().getName().equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
 			return EthernetPubSubGenerator.PROTOCOL_ID;
 		} else if (segment.getType().getName().equalsIgnoreCase("Can")) { //$NON-NLS-1$
@@ -101,10 +101,10 @@ public final class ProtocolSelector {
 		return null;
 	}
 
-	private static void sortSegments(List<Segment> segmentList) {
-		Collections.sort(segmentList, (Segment o1, Segment o2) -> {
-			String name1 = o1.getType().getName();
-			String name2 = o2.getType().getName();
+	private static void sortSegments(final List<Segment> segmentList) {
+		Collections.sort(segmentList, (final Segment o1, final Segment o2) -> {
+			final String name1 = o1.getType().getName();
+			final String name2 = o2.getType().getName();
 
 			if (name1.equalsIgnoreCase("Can")) { //$NON-NLS-1$
 				if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$

@@ -26,23 +26,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.jface.viewers.Viewer;
 
 public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 
 	public FBTypeContentProvider() {
 		super(FBTypeComposedAdapterFactory.getAdapterFactory());
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-		// TODO add resource monitoring
-	}
-
-	@Override
-	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-		// nothing to be done here
 	}
 
 	@Override
@@ -66,7 +54,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 				|| (parentElement instanceof SystemConfiguration) || (parentElement instanceof FB)
 				|| (parentElement instanceof Device) || (parentElement instanceof Resource)
 				|| (parentElement instanceof SubApp)) {
-			return null;
+			return new Object[0];
 		}
 		return super.getChildren(parentElement);
 	}

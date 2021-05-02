@@ -143,8 +143,7 @@ public class UnfoldedSubappContentEditPart extends FBNetworkEditPart {
 		final IFigure figure = new Figure() {
 			@Override
 			public Dimension getPreferredSize(final int wHint, final int hHint) {
-				final Dimension dim = super.getPreferredSize(wHint, hHint);
-				return dim;
+				return super.getPreferredSize(wHint, hHint);
 			}
 		};
 

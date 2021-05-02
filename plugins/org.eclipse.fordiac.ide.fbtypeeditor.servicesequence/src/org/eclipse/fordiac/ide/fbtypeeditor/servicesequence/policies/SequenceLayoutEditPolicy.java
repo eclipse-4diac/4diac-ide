@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2015 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -24,24 +24,23 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gef.requests.DropRequest;
 
 public class SequenceLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 
 	@Override
-	protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
+	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child, final Object constraint) {
 		EditPart after;
 		if (child instanceof TransactionEditPart) {
-			ServiceSequence target = (ServiceSequence) getHost().getModel();
-			after = getInsertionReference(((DropRequest) request).getLocation());
+			final ServiceSequence target = (ServiceSequence) getHost().getModel();
+			after = getInsertionReference(request.getLocation());
 			int newindex = -1;
 			if (after != null) {
 				if (after.getModel() instanceof ServiceTransaction) {
-					ServiceTransaction refElement = ((TransactionEditPart) after).getCastedModel();
+					final ServiceTransaction refElement = (ServiceTransaction) after.getModel();
 					newindex = target.getServiceTransaction().indexOf(refElement);
 				} else {
 					if (after.getModel() instanceof Primitive) {
-						ServiceTransaction refElement = ((TransactionEditPart) after.getParent()).getCastedModel();
+						final ServiceTransaction refElement = ((TransactionEditPart) after.getParent()).getCastedModel();
 						newindex = target.getServiceTransaction().indexOf(refElement);
 					}
 				}
@@ -56,7 +55,7 @@ public class SequenceLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
-		Object model = getHost().getModel();
+		final Object model = getHost().getModel();
 		if (model instanceof ServiceSequence) {
 			return new CreateTransactionCommand((ServiceSequence) model);
 		}

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009  Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,7 +22,7 @@ import org.eclipse.gef.commands.Command;
  * DeleteOutputPrimitiveCommand removes an OutputPrimitve from its parent. If
  * the primitive is the last one of the parent (and also no InputPrimitive is
  * available), then also the parent (ServiceTransaction) is removed.
- * 
+ *
  * @author gebenh
  */
 public class DeleteOutputPrimitiveCommand extends Command {
@@ -34,27 +34,27 @@ public class DeleteOutputPrimitiveCommand extends Command {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param primitive the primitive
 	 */
-	public DeleteOutputPrimitiveCommand(OutputPrimitive primitive) {
+	public DeleteOutputPrimitiveCommand(final OutputPrimitive primitive) {
 		this.primitive = primitive;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
 	public void execute() {
-		EObject parentObject = primitive.eContainer();
+		final EObject parentObject = primitive.eContainer();
 		if (parentObject instanceof ServiceTransaction) {
 			parent = (ServiceTransaction) parentObject;
 			index = parent.getOutputPrimitive().indexOf(primitive);
 			parent.getOutputPrimitive().remove(primitive);
 
-			if (parent.getInputPrimitive() == null && parent.getOutputPrimitive().size() == 0) {
+			if (parent.getInputPrimitive() == null && parent.getOutputPrimitive().isEmpty()) {
 				deleteTransactionCmd = new DeleteTransactionCommand(parent);
 				deleteTransactionCmd.execute();
 			}
@@ -65,7 +65,7 @@ public class DeleteOutputPrimitiveCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -78,7 +78,7 @@ public class DeleteOutputPrimitiveCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override
