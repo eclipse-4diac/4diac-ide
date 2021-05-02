@@ -30,17 +30,17 @@ public class ComboBoxWidgetFactory {
 		private final StringBuilder keySequence = new StringBuilder();
 		private long lastKeyTimeStamp = 0;
 
-		private ComboTypeaheadKeyListener(CCombo combo) {
+		private ComboTypeaheadKeyListener(final CCombo combo) {
 			this.combo = combo;
 		}
 
 		@Override
-		public void keyReleased(KeyEvent e) {
+		public void keyReleased(final KeyEvent e) {
 			// Nothing to do here
 		}
 
 		@Override
-		public void keyPressed(KeyEvent keyEvent) {
+		public void keyPressed(final KeyEvent keyEvent) {
 			if (Character.isLetterOrDigit(keyEvent.character)) {
 				// only process the key press when it is a letter or digit, ignore, e.g., arrow
 				// keys
@@ -50,16 +50,16 @@ public class ComboBoxWidgetFactory {
 			}
 		}
 
-		public void findMatchingEntry(String currentSequence, KeyEvent keyEvent) {
+		public void findMatchingEntry(final String currentSequence, final KeyEvent keyEvent) {
 			int index = 0;
-			for (String item : combo.getItems()) {
+			for (final String item : combo.getItems()) {
 				if (item.toLowerCase().startsWith(currentSequence)) {
 					// Prevent any other handler to use that key
 					keyEvent.doit = false;
-					int oldIndex = combo.getSelectionIndex();
+					final int oldIndex = combo.getSelectionIndex();
 					if (oldIndex != index) {
 						combo.select(index);
-						Event e = new Event();
+						final Event e = new Event();
 						e.time = keyEvent.time;
 						e.stateMask = keyEvent.stateMask;
 						combo.notifyListeners(SWT.Selection, e);
@@ -71,7 +71,7 @@ public class ComboBoxWidgetFactory {
 		}
 
 		public void checkTime() {
-			long now = System.currentTimeMillis();
+			final long now = System.currentTimeMillis();
 			if ((now - lastKeyTimeStamp) > SEQUENCE_CLEAR_TIME_OUT) {
 				keySequence.setLength(0);
 			}
@@ -90,35 +90,35 @@ public class ComboBoxWidgetFactory {
 	 * @param style the style of the combobox cell editor
 	 * @return the newly created combobox cell editor
 	 */
-	public static ComboBoxCellEditor createComboBoxCellEditor(Composite parent, final String[] items, int style) {
-		ComboBoxCellEditor cellEditor = new ComboBoxCellEditor(parent, items, style);
+	public static ComboBoxCellEditor createComboBoxCellEditor(final Composite parent, final String[] items, final int style) {
+		final ComboBoxCellEditor cellEditor = new ComboBoxCellEditor(parent, items, style);
 		cellEditor.setActivationStyle(
 				ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION | ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION
-						| ComboBoxCellEditor.DROP_DOWN_ON_PROGRAMMATIC_ACTIVATION
-						| ComboBoxCellEditor.DROP_DOWN_ON_TRAVERSE_ACTIVATION);
+				| ComboBoxCellEditor.DROP_DOWN_ON_PROGRAMMATIC_ACTIVATION
+				| ComboBoxCellEditor.DROP_DOWN_ON_TRAVERSE_ACTIVATION);
 
 		configureTypeaheadHandling((CCombo) cellEditor.getControl());
 
 		return cellEditor;
 	}
 
-	public static void configureTypeaheadHandling(CCombo combo) {
+	public static void configureTypeaheadHandling(final CCombo combo) {
 		combo.addKeyListener(new ComboTypeaheadKeyListener(combo));
 	}
 
-	public static CCombo createCombo(TabbedPropertySheetWidgetFactory factory, Composite parent) {
-		CCombo combo = factory.createCCombo(parent, SWT.SINGLE | SWT.READ_ONLY);
+	public static CCombo createCombo(final TabbedPropertySheetWidgetFactory factory, final Composite parent) {
+		final CCombo combo = factory.createCCombo(parent, SWT.SINGLE | SWT.READ_ONLY);
 		configureTypeaheadHandling(combo);
 		return combo;
 	}
 
-	public static CCombo createCombo(Composite parent) {
-		CCombo combo = new CCombo(parent, SWT.SINGLE | SWT.READ_ONLY);
+	public static CCombo createCombo(final Composite parent) {
+		final CCombo combo = new CCombo(parent, SWT.SINGLE | SWT.READ_ONLY);
 		configureTypeaheadHandling(combo);
 		return combo;
 	}
 
-	public static ComboBoxCellEditor createComboBoxCellEditor(Composite parent, String[] items) {
+	public static ComboBoxCellEditor createComboBoxCellEditor(final Composite parent, final String[] items) {
 		return createComboBoxCellEditor(parent, items, SWT.NONE);
 	}
 

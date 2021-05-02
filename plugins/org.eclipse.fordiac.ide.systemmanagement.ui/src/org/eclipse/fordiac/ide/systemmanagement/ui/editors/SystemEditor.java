@@ -57,6 +57,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -65,7 +66,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 
 public class SystemEditor extends EditorPart
-		implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISelectionListener {
+implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISelectionListener {
 
 	private static final ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 
@@ -78,22 +79,22 @@ public class SystemEditor extends EditorPart
 	private TreeViewer sysConfTreeViewer;
 
 	private ActionRegistry actionRegistry;
-	private List<String> selectionActions = new ArrayList<>();
-	private List<String> stackActions = new ArrayList<>();
-	private List<String> propertyActions = new ArrayList<>();
+	private final List<String> selectionActions = new ArrayList<>();
+	private final List<String> stackActions = new ArrayList<>();
+	private final List<String> propertyActions = new ArrayList<>();
 
-	private Adapter appListener = new AdapterImpl() {
+	private final Adapter appListener = new AdapterImpl() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			if ((null != appTreeViewer) && (!appTreeViewer.getControl().isDisposed())) {
 				appTreeViewer.refresh();
 			}
 		}
 	};
 
-	private Adapter sysConfListener = new AdapterImpl() {
+	private final Adapter sysConfListener = new AdapterImpl() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			if ((null != sysConfTreeViewer) && (!sysConfTreeViewer.getControl().isDisposed())) {
 				sysConfTreeViewer.refresh();
 			}
@@ -101,7 +102,7 @@ public class SystemEditor extends EditorPart
 	};
 
 	@Override
-	public void stackChanged(CommandStackEvent event) {
+	public void stackChanged(final CommandStackEvent event) {
 		updateActions(stackActions);
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
@@ -124,13 +125,13 @@ public class SystemEditor extends EditorPart
 	}
 
 	@Override
-	protected void firePropertyChange(int property) {
+	protected void firePropertyChange(final int property) {
 		super.firePropertyChange(property);
 		updateActions(propertyActions);
 	}
 
 	@Override
-	public void doSave(IProgressMonitor monitor) {
+	public void doSave(final IProgressMonitor monitor) {
 		if (null != system) {
 			SystemManager.saveSystem(system);
 			getCommandStack().markSaveLocation();
@@ -140,12 +141,11 @@ public class SystemEditor extends EditorPart
 
 	@Override
 	public void doSaveAs() {
-		// TODO implement save as new data type method, update isSaveAsAllowed()
-		// accordingly
+		// with the breadcrumb based automation system editor this editor should not support a save as method
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInput(input);
 		setSite(site);
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
@@ -166,9 +166,9 @@ public class SystemEditor extends EditorPart
 		}
 	}
 
-	private void setActionHandlers(IEditorSite site) {
-		ActionRegistry registry = getActionRegistry();
-		IActionBars bars = site.getActionBars();
+	private void setActionHandlers(final IEditorSite site) {
+		final ActionRegistry registry = getActionRegistry();
+		final IActionBars bars = site.getActionBars();
 		String id = ActionFactory.UNDO.getId();
 		bars.setGlobalActionHandler(id, registry.getAction(id));
 		id = ActionFactory.REDO.getId();
@@ -188,27 +188,27 @@ public class SystemEditor extends EditorPart
 		return false;
 	}
 
-	public void executeCommand(Command cmd) {
-		CommandStack commandStack = getCommandStack();
+	public void executeCommand(final Command cmd) {
+		final CommandStack commandStack = getCommandStack();
 		if (null != commandStack && cmd.canExecute()) {
 			commandStack.execute(cmd);
 		}
 	}
 
 	@Override
-	public void createPartControl(Composite parent) {
-		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+	public void createPartControl(final Composite parent) {
+		final FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 
 		form = toolkit.createForm(parent);
 		form.getBody().setLayout(new GridLayout(1, true));
 
-		SashForm sash = new SashForm(form.getBody(), SWT.VERTICAL);
+		final SashForm sash = new SashForm(form.getBody(), SWT.VERTICAL);
 		toolkit.adapt(sash);
 		sash.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		createInfoSection(toolkit, sash);
 
-		Composite bottomComp = toolkit.createComposite(sash);
+		final Composite bottomComp = toolkit.createComposite(sash);
 		bottomComp.setLayout(new GridLayout(2, true));
 		bottomComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -224,42 +224,48 @@ public class SystemEditor extends EditorPart
 		}
 	}
 
-	private void createInfoSection(FormToolkit toolkit, SashForm sash) {
-		Section infoSection = toolkit.createSection(sash, Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED);
-		infoSection.setText("System Information:");
+	private void createInfoSection(final FormToolkit toolkit, final SashForm sash) {
+		final Section infoSection = createExpandableSection(toolkit, sash, "System Information:");
 		infoSection.setLayout(new GridLayout(1, true));
-		infoSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
 		typeInfo = new TypeInfoWidget(toolkit);
-		Composite typeInfoRoot = typeInfo.createControls(infoSection);
+		final Composite typeInfoRoot = typeInfo.createControls(infoSection);
 		infoSection.setClient(typeInfoRoot);
 	}
 
-	private void createApplicationsSection(FormToolkit toolkit, Composite bottomComp) {
-		Section appSection = toolkit.createSection(bottomComp, Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED);
-		appSection.setText("Applications:");
-		appSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+	private static Section createExpandableSection(final FormToolkit toolkit, final Composite parent,
+			final String text) {
+		final Section section = toolkit.createSection(parent,
+				ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
+		section.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		section.setText(text);
+		return section;
+	}
 
-		Composite appSecComposite = toolkit.createComposite(appSection);
+	private void createApplicationsSection(final FormToolkit toolkit, final Composite bottomComp) {
+		final Section appSection = createExpandableSection(toolkit, bottomComp, "Applications:");
+
+		final Composite appSecComposite = toolkit.createComposite(appSection);
 		appSecComposite.setLayout(new GridLayout(2, false));
 		appSection.setClient(appSecComposite);
 
-		Tree tree = toolkit.createTree(appSecComposite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		final Tree tree = toolkit.createTree(appSecComposite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		appTreeViewer = new TreeViewer(tree);
 		appTreeViewer.setContentProvider(new AdapterFactoryContentProvider(systemAdapterFactory) {
 			@Override
-			public boolean hasChildren(Object element) {
+			public boolean hasChildren(final Object element) {
 				return (element instanceof EList<?>) || super.hasChildren(element);
 			}
 
 			@Override
-			public Object[] getElements(Object inputElement) {
+			public Object[] getElements(final Object inputElement) {
 				return getChildren(inputElement);
 			}
 
 			@Override
-			public Object[] getChildren(Object parentElement) {
+			public Object[] getChildren(final Object parentElement) {
 				if (parentElement instanceof EList<?>) {
 					return ((EList<?>) parentElement).toArray();
 				}
@@ -270,17 +276,15 @@ public class SystemEditor extends EditorPart
 		appTreeViewer.setLabelProvider(new AdapterFactoryLabelProvider(systemAdapterFactory));
 	}
 
-	private void createSysconfSection(FormToolkit toolkit, Composite bottomComp) {
-		Section sysConfSection = toolkit.createSection(bottomComp,
-				Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED);
-		sysConfSection.setText("System Configuration:");
+	private void createSysconfSection(final FormToolkit toolkit, final Composite bottomComp) {
+		final Section sysConfSection = createExpandableSection(toolkit, bottomComp, "System Configuration:");
 		sysConfSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		Composite sysConfSecComposite = toolkit.createComposite(sysConfSection);
+		final Composite sysConfSecComposite = toolkit.createComposite(sysConfSection);
 		sysConfSecComposite.setLayout(new GridLayout(2, false));
 		sysConfSection.setClient(sysConfSecComposite);
 
-		Tree tree = toolkit.createTree(sysConfSecComposite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		final Tree tree = toolkit.createTree(sysConfSecComposite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		sysConfTreeViewer = new TreeViewer(tree);
@@ -298,7 +302,7 @@ public class SystemEditor extends EditorPart
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor())) {
 			updateActions(selectionActions);
 			firePropertyChange(IEditorPart.PROP_DIRTY);
@@ -306,7 +310,7 @@ public class SystemEditor extends EditorPart
 	}
 
 	private void createActions() {
-		ActionRegistry registry = getActionRegistry();
+		final ActionRegistry registry = getActionRegistry();
 		IAction action;
 
 		action = new UndoAction(this);
@@ -319,7 +323,7 @@ public class SystemEditor extends EditorPart
 	}
 
 	@Override
-	public <T> T getAdapter(Class<T> adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == org.eclipse.ui.views.properties.IPropertySheetPage.class) {
 			return adapter.cast(new UndoablePropertySheetPage(getCommandStack(),
 					getActionRegistry().getAction(ActionFactory.UNDO.getId()),
@@ -344,10 +348,10 @@ public class SystemEditor extends EditorPart
 		updateActions(stackActions);
 	}
 
-	private void updateActions(List<String> actionIds) {
-		ActionRegistry registry = getActionRegistry();
+	private void updateActions(final List<String> actionIds) {
+		final ActionRegistry registry = getActionRegistry();
 		actionIds.forEach(id -> {
-			IAction action = registry.getAction(id);
+			final IAction action = registry.getAction(id);
 			if (action instanceof UpdateAction) {
 				((UpdateAction) action).update();
 			}
@@ -362,7 +366,7 @@ public class SystemEditor extends EditorPart
 	}
 
 	private static List<AdapterFactory> createFactoryList() {
-		ArrayList<AdapterFactory> factories = new ArrayList<>(2);
+		final ArrayList<AdapterFactory> factories = new ArrayList<>(2);
 		factories.add(new SystemElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());
 		return factories;
