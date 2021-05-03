@@ -36,8 +36,10 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.ECCItemProvider;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DragTracker;
@@ -298,5 +300,16 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
 		return marker.getAttribute(IMarker.LOCATION, "Unknown").startsWith("ECC"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	@Override
+	public void reloadType(final FBType type) {
+		if (type instanceof BasicFBType) {
+			fbType = (BasicFBType) type;
+			getGraphicalViewer().setContents(type);
+		} else {
+			EditorUtils.CloseEditor.run(this);
+		}
+
 	}
 }

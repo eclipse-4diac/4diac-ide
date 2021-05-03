@@ -17,7 +17,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
 import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.metrics.analyzers.AbstractCodeMetricAnalyzer;
 import org.eclipse.fordiac.ide.metrics.analyzers.MetricResult;
@@ -143,15 +142,15 @@ public class MetricsView extends ViewPart {
 		data.clear();
 		final IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
-		if (activeEditor instanceof FBTypeEditor) {
-			final FBType type = ((FBTypeEditor) activeEditor).getFBType();
 
-			if ((type instanceof BasicFBType)) {
-				currentBlock.setText(type.getName());
-				calculateMetrics(((FBTypeEditor) activeEditor).getFBType(), data);
-			}
+		final FBType type = activeEditor.getAdapter(FBType.class);
 
+		if ((type instanceof BasicFBType)) {
+			currentBlock.setText(type.getName());
+			calculateMetrics(type, data);
 		}
+
+
 		if (data.isEmpty()) {
 			currentBlock.setText(Messages.SpiderChartBFBError);
 		}

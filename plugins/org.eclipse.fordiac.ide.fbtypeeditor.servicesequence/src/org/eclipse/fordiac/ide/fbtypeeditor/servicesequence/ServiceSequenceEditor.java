@@ -65,7 +65,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInputWithNotify(input);
 		if (input instanceof FBTypeEditorInput) {
-			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			fbType = untypedInput.getContent();
 		}
 		setSite(site);
@@ -78,36 +78,36 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
-		ScalableFreeformRootEditPart root = new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry());
+		final ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
+		final ScalableFreeformRootEditPart root = new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry());
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(new ServiceSequenceEditPartFactory(this));
 		// configure the context menu provider
-		ContextMenuProvider cmProvider = new FordiacContextMenuProvider(viewer, root.getZoomManager(),
+		final ContextMenuProvider cmProvider = new FordiacContextMenuProvider(viewer, root.getZoomManager(),
 				getActionRegistry()) {
 			@Override
-			public void buildContextMenu(IMenuManager menu) {
+			public void buildContextMenu(final IMenuManager menu) {
 				super.buildContextMenu(menu);
-				IAction action = getRegistry().getAction(ActionFactory.DELETE.getId());
+				final IAction action = getRegistry().getAction(ActionFactory.DELETE.getId());
 				menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 			}
 		};
 		viewer.setContextMenu(cmProvider);
 		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
-		KeyHandler viewerKeyHandler = new GraphicalViewerKeyHandler(viewer).setParent(getCommonKeyHandler());
+		final KeyHandler viewerKeyHandler = new GraphicalViewerKeyHandler(viewer).setParent(getCommonKeyHandler());
 		viewer.setKeyHandler(viewerKeyHandler);
 	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		Composite graphicaEditor = new Composite(parent, SWT.NONE);
+		final Composite graphicaEditor = new Composite(parent, SWT.NONE);
 		graphicaEditor.setLayout(new FillLayout());
 		super.createPartControl(graphicaEditor);
 	}
 
 	@Override
 	protected void initializeGraphicalViewer() {
-		GraphicalViewer viewer = getGraphicalViewer();
+		final GraphicalViewer viewer = getGraphicalViewer();
 		viewer.setContents(fbType);
 	}
 
@@ -130,10 +130,12 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		super.selectionChanged(part, selection);
 		// If not in FBTypeEditor ignore selection changed
+
+		// TODO move to IFBTEditor as method
 		if (part.getSite().getPage().getActiveEditor() instanceof FBTypeEditor) {
 			updateActions(getSelectionActions());
 			if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
-				IStructuredSelection sel = (IStructuredSelection) selection;
+				final IStructuredSelection sel = (IStructuredSelection) selection;
 				if (sel.getFirstElement() instanceof SequenceRootEditPart) {
 					((FBType) ((SequenceRootEditPart) sel.getFirstElement()).getModel()).getService();
 				} else if (sel.getFirstElement() instanceof OutputPrimitiveEditPart) {
@@ -156,9 +158,9 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 	}
 
 	@Override
-	public boolean outlineSelectionChanged(Object selectedElement) {
+	public boolean outlineSelectionChanged(final Object selectedElement) {
 		if (null != selectedElement) {
-			Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
+			final Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
 			getGraphicalViewer().flush();
 			if (editpart instanceof EditPart && ((EditPart) editpart).isSelectable()) {
 				getGraphicalViewer().select((EditPart) editpart);
@@ -172,19 +174,25 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 	}
 
 	@Override
-	public void setCommonCommandStack(CommandStack commandStack) {
+	public void setCommonCommandStack(final CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
 
 	@Override
-	public void gotoMarker(IMarker marker) {
+	public void gotoMarker(final IMarker marker) {
 		// For now we don't handle markers in this editor
 	}
 
 	@Override
-	public boolean isMarkerTarget(IMarker marker) {
+	public boolean isMarkerTarget(final IMarker marker) {
 		// For now we don't handle markers in this editor
 		return false;
+	}
+
+	@Override
+	public void reloadType(final FBType type) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

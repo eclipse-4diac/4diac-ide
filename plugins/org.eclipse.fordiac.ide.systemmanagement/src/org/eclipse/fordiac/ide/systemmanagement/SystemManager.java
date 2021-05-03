@@ -205,6 +205,7 @@ public enum SystemManager {
 	}
 
 	public static void saveSystem(final AutomationSystem system, final IFile file) {
+		system.getPaletteEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
 		final SystemExporter systemExporter = new SystemExporter(system);
 		systemExporter.saveSystem(file);
 	}

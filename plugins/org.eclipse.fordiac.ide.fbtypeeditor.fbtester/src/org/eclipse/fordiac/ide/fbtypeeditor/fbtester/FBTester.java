@@ -597,4 +597,12 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		return false;
 	}
 
+	@Override
+	public void reloadType(final FBType type) {
+		this.type = type;
+		final FBTypeEditorInput fbTypeEditorInput = (FBTypeEditorInput) getEditorInput();
+		fbTypeEditorInput.setFbType(type);
+		getGraphicalViewer().setContents(fbTypeEditorInput);
+	}
+
 }

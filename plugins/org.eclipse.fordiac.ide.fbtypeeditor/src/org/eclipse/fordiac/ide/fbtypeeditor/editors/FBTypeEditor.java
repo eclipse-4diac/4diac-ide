@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -79,7 +80,8 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class FBTypeEditor extends FormEditor
-implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker {
+implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker,
+IEditorFileChangeListener {
 
 	private Collection<IFBTEditorPart> editors;
 	private PaletteEntry paletteEntry;
@@ -385,5 +387,22 @@ implements ISelectionListener, CommandStackEventListener, ITabbedPropertySheetPa
 			}
 			i++;
 		}
+	}
+
+	@Override
+	public void reloadFile() {
+		if ((fbType != null) && fbType.eAdapters().contains(adapter)) {
+			fbType.eAdapters().remove(adapter);
+		}
+		fbType = (FBType) paletteEntry.getType();
+		editors.stream().forEach(e -> e.reloadType(fbType));
+		getCommandStack().flush();
+		fbType.eAdapters().add(adapter);
+
+	}
+
+	@Override
+	public IFile getFile() {
+		return paletteEntry != null ? paletteEntry.getFile() : null;
 	}
 }

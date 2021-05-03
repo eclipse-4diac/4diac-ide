@@ -63,7 +63,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 					getFigure().updateVersionInfoLabel();
 				}
 
-				Display.getDefault().asyncExec(() -> {
+				Display.getDefault().syncExec(() -> {
 					if ((null != getParent()) && (null != getFigure()) && (getFigure().isShowing())) {
 						refresh();
 					}
@@ -82,8 +82,12 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	@Override
 	public void deactivate() {
 		super.deactivate();
+		if (controlListener != null) {
+			getParent().getViewer().getControl().removeControlListener(controlListener);
+		}
 		getModel().eAdapters().remove(adapter);
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
+
 	}
 
 	private IPropertyChangeListener getFontChangeListener() {

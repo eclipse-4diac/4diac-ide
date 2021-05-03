@@ -176,4 +176,11 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 		return false;
 	}
 
+	@Override
+	public void reloadType(final FBType type) {
+		fbType = type;
+		getGraphicalViewer().setContents(fbType);
+
+	}
+
 }

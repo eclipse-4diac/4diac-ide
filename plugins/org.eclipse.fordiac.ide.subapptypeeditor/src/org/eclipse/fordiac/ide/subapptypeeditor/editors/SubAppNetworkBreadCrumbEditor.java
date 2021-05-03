@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
@@ -37,6 +38,7 @@ import org.eclipse.fordiac.ide.subapptypeeditor.providers.TypedSubappProviderAda
 import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
@@ -57,7 +59,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		if (!(input instanceof FBTypeEditorInput)) {
-			throw new IllegalArgumentException("SubAppNetworkBreadCrumbEditor is only suitable for FBTypeEditorInputs");
+			throw new IllegalArgumentException("SubAppNetworkBreadCrumbEditor is only suitable for FBTypeEditorInputs"); //$NON-NLS-1$
 		}
 
 		IEditorSite siteToUse = site;
@@ -68,7 +70,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 		super.init(siteToUse, input);
 
 		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
-		setPartName("FB Network");
+		setPartName("FB Network"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -227,6 +229,19 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			Activator.getDefault().logError("Could not get marker attributes", e); //$NON-NLS-1$
 		}
 		return false;
+	}
+
+	@Override
+	public void reloadType(final FBType type) {
+		if (type instanceof SubAppType) {
+			getEditorInput().setFbType(type);
+			removePage(getActivePage());
+			createPages();
+			getBreadcrumb().setInput(type);
+		} else {
+			EditorUtils.CloseEditor.run(this);
+		}
+
 	}
 
 }
