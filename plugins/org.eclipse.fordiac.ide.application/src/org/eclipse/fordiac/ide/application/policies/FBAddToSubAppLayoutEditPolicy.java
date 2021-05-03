@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2016 AIT, fortiss GmbH
  * 				 2018 Johannes Kepler University
+ * 				 2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Reworked this policy to confirm to latest model and to readd
  *                 the AddtoSubapp functionality.
+ *   Michael Oberlehner, Lukas Wais
+ *   	- implemented drag and drop, added move to parent
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
@@ -49,39 +52,40 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 
 		if (isDragAndDropRequestFromSubAppToSubApp(request, getTargetEditPart(request))) {
 			final List editParts = ((ChangeBoundsRequest) request).getEditParts();
-
+			final SubAppForFBNetworkEditPart dropEditPart = (SubAppForFBNetworkEditPart) getTargetEditPart(request);
 			final CompoundCommand commandos = new CompoundCommand();
 			for (final Object editPart : editParts) {
 				if (((editPart instanceof EditPart)
 						&& (((EditPart) editPart).getModel() instanceof FBNetworkElement))) {
 					final FBNetworkElement dragEditPartModel = (FBNetworkElement) ((EditPart) editPart).getModel();
-					final SubAppForFBNetworkEditPart dropEditPart = (SubAppForFBNetworkEditPart) getTargetEditPart(
-							request);
+
 					if (dragEditPartModel.isNestedInSubApp()
 							&& isChildFromDropTarget(dragEditPartModel, dropEditPart)) {
 						final Rectangle bounds = getOuterSubappEditPart(editPart).getFigure().getBounds();
-						commandos.add(new MoveElementFromSubAppCommand(dragEditPartModel,
-								bounds, MoveOperation.DRAG_AND_DROP_TO_SUBAPP));
-					} else {
-						commandos.add(new AddElementsToSubAppCommand(dropEditPart.getModel(), editParts));
+						commandos.add(new MoveElementFromSubAppCommand(dragEditPartModel, bounds,
+								MoveOperation.DRAG_AND_DROP_TO_SUBAPP));
 					}
 				}
 			}
-			return commandos;
 
+			if (commandos.isEmpty()) {
+				return new AddElementsToSubAppCommand(dropEditPart.getModel(), editParts);
+			}
+			return commandos;
 		}
 		return super.getAddCommand(request);
 	}
 
-	private SubAppForFBNetworkEditPart getOuterSubappEditPart(final Object editPart) {
+	private static SubAppForFBNetworkEditPart getOuterSubappEditPart(final Object editPart) {
 		return (SubAppForFBNetworkEditPart) ((AbstractFBNElementEditPart) editPart).getParent().getParent();
 	}
 
-	public boolean isDragAndDropRequestFromSubAppToSubApp(Request generic, EditPart targetEditPart) {
+	public static boolean isDragAndDropRequestFromSubAppToSubApp(Request generic, EditPart targetEditPart) {
 		return (generic instanceof ChangeBoundsRequest) && (targetEditPart instanceof SubAppForFBNetworkEditPart);
 	}
 
-	private boolean isChildFromDropTarget(FBNetworkElement dragEditPartModel, SubAppForFBNetworkEditPart dropEditPart) {
+	private static boolean isChildFromDropTarget(FBNetworkElement dragEditPartModel,
+			SubAppForFBNetworkEditPart dropEditPart) {
 		if ((dragEditPartModel.getOuterFBNetworkElement() == null)
 				|| (dragEditPartModel.getOuterFBNetworkElement().getOuterFBNetworkElement() == null)) {
 			return false;
